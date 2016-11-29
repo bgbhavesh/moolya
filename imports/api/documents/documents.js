@@ -22,9 +22,9 @@ Documents.schema = new SimpleSchema({
     type: String,
     label: 'The title of the document.',
   },
-  body: {
+  url: {
     type: String,
-    label: 'The body of the document.',
+    label: 'The url of the document.',
   },
 });
 
@@ -32,5 +32,5 @@ Documents.attachSchema(Documents.schema);
 
 Factory.define('document', Documents, {
   title: () => 'Factory Title',
-  body: () => 'Factory Body',
+  url: () => 'Factory Body',
 });

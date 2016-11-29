@@ -8,7 +8,7 @@ export const upsertDocument = new ValidatedMethod({
   validate: new SimpleSchema({
     _id: { type: String, optional: true },
     title: { type: String, optional: true },
-    body: { type: String, optional: true },
+    url: { type: String, optional: true },
   }).validator(),
   run(document) {
     return Documents.upsert({ _id: document._id }, { $set: document });

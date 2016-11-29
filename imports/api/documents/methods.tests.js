@@ -18,11 +18,11 @@ describe('Documents methods', function () {
   it('inserts a document into the Documents collection', function () {
     upsertDocument.call({
       title: 'You can\'t arrest me, I\'m the Cake Boss!',
-      body: 'They went nuts!',
+      url: 'They went nuts!',
     });
 
     const getDocument = Documents.findOne({ title: 'You can\'t arrest me, I\'m the Cake Boss!' });
-    assert.equal(getDocument.body, 'They went nuts!');
+    assert.equal(getDocument.url, 'They went nuts!');
   });
 
   it('updates a document in the Documents collection', function () {
@@ -31,7 +31,7 @@ describe('Documents methods', function () {
     upsertDocument.call({
       _id,
       title: 'You can\'t arrest me, I\'m the Cake Boss!',
-      body: 'They went nuts!',
+      url: 'They went nuts!',
     });
 
     const getDocument = Documents.findOne(_id);

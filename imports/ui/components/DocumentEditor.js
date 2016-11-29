@@ -22,18 +22,19 @@ export default class DocumentEditor extends React.Component {
           type="text"
           name="title"
           defaultValue={ doc && doc.title }
-          placeholder="Oh, The Places You'll Go!"
+          placeholder="This will be scrolled on home page"
         />
       </FormGroup>
       <FormGroup>
-        <ControlLabel>Body</ControlLabel>
+        <ControlLabel>News Url</ControlLabel>
         <FormControl
-          componentClass="textarea"
-          name="body"
-          defaultValue={ doc && doc.body }
-          placeholder="Congratulations! Today is your day. You're off to Great Places! You're off and away!"
+          type="text"
+          name="url"
+          defaultValue={ doc && doc.url }
+          placeholder="Url on cliking the scrolling"
         />
       </FormGroup>
+
       <Button type="submit" bsStyle="success">
         { doc && doc._id ? 'Save Changes' : 'Add Document' }
       </Button>

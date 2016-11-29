@@ -1,17 +1,9 @@
-# The Meteor Chef - Base
-A starting point for Meteor apps.
+# The Meteor Moolya - Admin
+Based on :
 
-<table>
-  <tbody>
-    <tr>
-      <th>Base Version</th>
-      <td>v4.10.0</td>
-    </tr>
-    <tr>
-      <th>Meteor Version</th>
-      <td>v1.4.2.3</td>
-    </tr>
-  </tbody>
-</table>
+1. Meteor v1.4
+1. React
+1. ECMAScript 6
 
-[Read the Documentation](http://themeteorchef.com/base)
+
+Forked from [Meteor Chef](http://themeteorchef.com/base)

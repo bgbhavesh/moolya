@@ -5,5 +5,19 @@ Based on :
 1. React
 1. ECMAScript 6
 
+## Steps to start project ##
+1. `meteor npm install`
+
+1. `meteor npm start`
+
+To pass a different settings file other than settingss-development.json, use `meteor settings --settings-file.json`
+
+
+## Tests ##
+Run tests with `meteor npm test`
+
+visit http://localhost:5000 to see test results
+
+---
 
 Forked from [Meteor Chef](http://themeteorchef.com/base)

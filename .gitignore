@@ -1,6 +1,7 @@
 .DS_Store
-settings-development.json
+.meteor
 settings-production.json
 npm-debug.log
 
 node_modules
+.idea/workspace.xml

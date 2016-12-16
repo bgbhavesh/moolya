@@ -1,8 +1,9 @@
-# The Meteor Moolya - Admin
+# The Meteor Moolya - App
 Based on :
 
 1. Meteor v1.4
 1. React
+1. Flow router
 1. ECMAScript 6
 
 ## Steps to start project ##

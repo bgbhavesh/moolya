@@ -18,7 +18,32 @@ Step1=React.createClass({
     },
 
 
-    componentDidMount() {},
+  componentWillMount() {
+    var step1res=localStorage.getItem('step1')
+    if(step1res==undefined){
+      var self=this;
+      self.setState({
+        name:'',
+        email: '',
+        contact:'',
+        city:''
+      });
+
+      return self;
+    }else{
+      var step1=JSON.parse(step1res)
+      var self=this;
+      self.setState({
+        name: step1.name,
+        email: step1.email,
+        contact:step1.contact,
+        city: step1.city,
+      });
+
+      return self;
+    }
+
+    },
 
     componentWillUnmount() {},
 
@@ -124,8 +149,8 @@ Step1=React.createClass({
             }
 
         return (
-            <div className="step1">
-                <div className="row">
+            <div className="step1" >
+                <div className="row" >
                     <form id="Form" className="form-horizontal">
                         <div className="form-group col-md-12">
                             <label className="control-label col-md-4">

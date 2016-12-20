@@ -19,8 +19,36 @@ Step2=React.createClass({
 
         return this;
     },
+  componentWillMount() {
+    var step2res=localStorage.getItem('step2')
+    if(step2res==undefined){
+      var self=this;
+      self.setState({
+        register: '',
+        username:'',
+        password:'',
+        companyurl:'',
+        companyname:''
+      });
 
-    componentDidMount() {},
+      return self;
+    }else{
+      var step2=JSON.parse(step2res)
+      var self=this;
+      self.setState({
+        register: step2.register,
+        username:step2.username,
+        password:step2.password,
+        companyurl:step2.companyurl,
+        companyname:step2.companyname,
+      });
+
+      return self;
+    }
+
+  },
+
+
 
     componentWillUnmount() {},
 

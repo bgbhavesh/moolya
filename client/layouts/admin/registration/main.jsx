@@ -130,8 +130,8 @@ export default class StepZilla extends Component {
     }
     _finish(){
         if ((typeof this.refs.activeComponent.isFinished())||this.refs.activeComponent.isValidated()){
-            alert("thank you")
-            this._setNavState(this.props.steps.length -this.props.steps.length);
+           // alert("thank you")
+            //this._setNavState(this.props.steps.length -this.props.steps.length);
 
         }
 

@@ -14,8 +14,16 @@ AdminLeftNavContent = React.createClass({
                 <a href="/admin/users">
                   <i className="sidemenu-icon fa fa-tachometer"></i> Users
                 </a>
+
+              </h4><br></br>
+              <h4 className="panel-title">
+                <a href="/admin/registration">
+                  <i className="sidemenu-icon fa fa-tachometer"></i> Registration
+                </a>
+
               </h4>
             </div>
+
           </div>
           {/*<div className="menu-links panel panel-default">*/}
             {/*<div className="panel-heading">*/}

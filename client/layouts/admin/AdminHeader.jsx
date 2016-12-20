@@ -13,7 +13,7 @@ AdminHeaderContent = React.createClass({
           <div className="row offset10">
             <div className="col-lg-6 col-md-6 col-sm-6 offset0">
               <a href="">
-                <img src="assets/images/moolya_logo.png" alt="moolya" className="moolya-logo img-responsive"/>
+                <img src="/assets/images/moolya_logo.png" alt="moolya" className="moolya-logo img-responsive"/>
               </a>
             </div>
             <div className="col-lg-6 col-md-6 col-sm-6 text-right">
@@ -26,7 +26,7 @@ AdminHeaderContent = React.createClass({
               </div>
               <span className="fa fa-bell-o alerts-icon"><span className="fa fa-circle alert-note"></span></span>
               <a href="" className="dropdown" data-toggle="dropdown" aria-expanded="true">
-                <span className="profile-pic"><img src="assets/images/profile-pic.png" alt="" /></span>
+                <span className="profile-pic"><img src="/assets/images/profile-pic.png" alt="" /></span>
               </a>
               <ul className="dropdown-menu">
                 <li><a id="userProfile" className="menu_links">User Profile</a></li>

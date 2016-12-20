@@ -19,7 +19,7 @@ LoginContent = React.createClass({
     return this;
   },
 
-  loginSubmit(){
+    loginSubmit(){
     console.log(this.state.username);
     console.log(this.state.password);
 

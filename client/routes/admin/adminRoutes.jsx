@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import {mount} from 'react-mounter';
 
 import adminlayout from '../../layouts/admin/admin';
+import registerlayout from '../../layouts/admin/registration/registration.jsx';
 
 adminSection = FlowRouter.group({
   prefix: "/admin"
@@ -25,3 +26,11 @@ adminSection.route('/users', {
     mount(AdminContent, {children:(<AdminUsersContent/>)})
   }
 });
+adminSection.route('/registration', {
+  action(){
+    mount(RegistrationLayout, {
+      content:(<RegistrationContent/>)
+    })
+  }
+});
+

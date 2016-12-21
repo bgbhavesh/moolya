@@ -6,7 +6,7 @@ Step3=React.createClass({
   getInitialState: function() {
     this.state = {
       remarks: '',
-      referedBy: '',
+      refferedBy: '',
       upload:'',
     };
      //   this.validationCheck = this._validationCheck.bind(this);

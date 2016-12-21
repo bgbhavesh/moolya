@@ -14,7 +14,20 @@ AdminUsersContent = React.createClass({
         // Session.set("users", resp);
         let usersobj = resp
         let users = usersobj.map(function(user){
-            return <tr><td>{user.userName || user.eMail}</td></tr>;
+            return <tr>
+              <td>{user.userName}</td>
+              <td>{user.mobileNumber}</td>
+              <td>{user.eMail}</td>
+              <td>{user.city}</td>
+              <td>{user.regType}</td>
+              <td>{user.userName}</td>
+              <td>{user.password}</td>
+              <td>{user.companyName}</td>
+              <td>{user.companyUrl}</td>
+              <td>{user.remarks}</td>
+              <td>{user.referralType}</td>
+              <td>{user.uploadFile}</td>
+            </tr>;
         })
         self.setState({users:users})
     })
@@ -28,11 +41,22 @@ AdminUsersContent = React.createClass({
         return null;
 
       return(
-        <div className="col-md-8 col-sm-8 content-display">
-            <div className="panel panel-default adminPannel">
-              <table>
+        <div className="col-md-9 col-sm-9 content-display">
+            <div className="adminPannel">
+              <table style={{width: "100%"}}>
                 <tr>
-                  <th>Email</th>
+                  <th>fullName</th>
+                  <th>mobileNumber</th>
+                  <th>eMail</th>
+                  <th>city</th>
+                  <th>regType</th>
+                  <th>userName</th>
+                  <th>password</th>
+                  <th>companyName</th>
+                  <th>companyUrl</th>
+                  <th>remarks</th>
+                  <th>referralType</th>
+                  <th>uploadFile</th>
                 </tr>
                 {this.state.users}
               </table>

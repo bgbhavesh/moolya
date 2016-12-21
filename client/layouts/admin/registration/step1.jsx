@@ -19,9 +19,9 @@ Step1=React.createClass({
 
 
   componentWillMount() {
-    var step1res=localStorage.getItem('step1')
+    let step1res=localStorage.getItem('step1')
     if(step1res==undefined){
-      var self=this;
+      let self=this;
       self.setState({
         name:'',
         email: '',
@@ -31,8 +31,8 @@ Step1=React.createClass({
 
       return self;
     }else{
-      var step1=JSON.parse(step1res)
-      var self=this;
+      let step1=JSON.parse(step1res)
+      let self=this;
       self.setState({
         name: step1.name,
         email: step1.email,

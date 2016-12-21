@@ -20,9 +20,9 @@ Step2=React.createClass({
         return this;
     },
   componentWillMount() {
-    var step2res=localStorage.getItem('step2')
+    let step2res=localStorage.getItem('step2')
     if(step2res==undefined){
-      var self=this;
+      let self=this;
       self.setState({
         register: '',
         username:'',
@@ -33,8 +33,8 @@ Step2=React.createClass({
 
       return self;
     }else{
-      var step2=JSON.parse(step2res)
-      var self=this;
+      let step2=JSON.parse(step2res)
+      let self=this;
       self.setState({
         register: step2.register,
         username:step2.username,

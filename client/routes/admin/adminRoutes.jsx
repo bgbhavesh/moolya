@@ -28,8 +28,8 @@ adminSection.route('/users', {
 });
 adminSection.route('/registration', {
   action(){
-    mount(RegistrationLayout, {
-      content:(<RegistrationContent/>)
+    mount(AdminContent, {children:(<RegistrationContent/>)
+
     })
   }
 });

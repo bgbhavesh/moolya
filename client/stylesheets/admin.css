@@ -42,3 +42,9 @@ th, td {
   padding: 5px;
   text-align: left;
 }
+.step-progress{
+  margin: 70px;
+}
+.regPanel{
+  width: 100%;
+}

@@ -1,43 +1,52 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import FixedDataTable from 'fixed-data-table';
 
 const {Table, Column, Cell} = FixedDataTable;
 
-
-const TextCell =({rowIndex, data, col, ...props})=> {
-
-  return (<Cell {...props}>
+const DateCell = ({rowIndex, data, col, ...props}) => (
+  <Cell {...props}>
     {data[rowIndex][col]}
-  </Cell>)
-}
+  </Cell>
+);
+
+const LinkCell = ({rowIndex, data, col, ...props}) => (
+  <Cell {...props}>
+    <a href="#">{data[rowIndex][col]}</a>
+  </Cell>
+);
+
+const TextCell = ({rowIndex, data, col, ...props}) => (
+  <Cell {...props}>
+    {data[rowIndex][col]}
+  </Cell>
+);
+
+export default class ObjectDataExample extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      users: []
+    };
 
 
-
-
-AdminUsersContent = React.createClass({
-  getInitialState(){
-
-    this.state = {users:[]};
-    return this;
-  },
-  componentWillMount(){
+  }
+  componentDidMount(){
     let self = this;
     Meteor.call('reterieveAllUsers', function (err, resp) {
       let usersobj = resp;
       self.setState({users:usersobj})
     })
-  },
+  }
+
   render() {
     var {users} = this.state;
     return (
-      <div style={{paddingTop:'70px' }}>
       <Table
         rowHeight={50}
         headerHeight={50}
         /*rowsCount={dataList.getSize()}*/
-        rowsCount={users?users.length:0}
+        rowsCount={users.length}
         width={1000}
         height={500}
         {...this.props}>
@@ -78,9 +87,6 @@ AdminUsersContent = React.createClass({
         />
 
       </Table>
-      </div>
     );
   }
-
-})
-
+}

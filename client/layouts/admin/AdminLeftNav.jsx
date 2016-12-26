@@ -28,6 +28,13 @@ AdminLeftNavContent = React.createClass({
                 </a>
 
               </h4>
+              <br></br>
+              <h4 className="panel-title">
+                <a href="/admin/multiselectdropdown">
+                  <i className="sidemenu-icon fa fa-tachometer"></i> Multiselectdropdown
+                </a>
+
+              </h4>
             </div>
 
           </div>

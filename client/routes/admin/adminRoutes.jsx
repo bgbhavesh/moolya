@@ -6,6 +6,8 @@ import {mount} from 'react-mounter';
 import adminlayout from '../../layouts/admin/admin';
 import registerlayout from '../../layouts/admin/registration/registration.jsx';
 import MoolyaDropDown from '../../components/dropdown.jsx'
+import MoolyaMultiSelectDropDown from '../../components/multiselectdropdown.jsx'
+
 
 
 adminSection = FlowRouter.group({
@@ -68,4 +70,16 @@ adminSection.route('/dropdown', {
   }
 
 });
+
+let multiselectOnChange = function(multiselect){
+  alert("multiple selcected values:"+multiselect)
+}
+
+adminSection.route('/multiselectdropdown', {
+  action(){
+    mount(AdminContent, {children:( <MoolyaMultiSelectDropDown id='myDropdown' options={options} value='c' labelField='description' valueField='code' customChange={multiselectOnChange}/>)})
+  }
+
+});
+
 

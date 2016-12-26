@@ -24,15 +24,6 @@ browser-policy@1.0.9
 
 fourseven:scss
 aldeed:collection2
-alanning:roles
 themeteorchef:bert
-static-html@1.1.11
-xolvio:cleaner
-practicalmeteor:mocha
-xolvio:backdoor
-mdg:validated-method
-dburles:factory@1.0.0
-ddp-rate-limiter@1.0.6
-shell-server@0.2.1
 kadira:flow-router
 chrismbeckett:toastr

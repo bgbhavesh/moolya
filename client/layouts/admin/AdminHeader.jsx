@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 
+import {loginContainer} from '../../datacontainers/login'
 import {logout} from '../utils'
 
 
@@ -30,7 +31,7 @@ AdminHeaderContent = React.createClass({
               </a>
               <ul className="dropdown-menu">
                 <li><a id="userProfile" className="menu_links">User Profile</a></li>
-                <li><a href="" id="logout" className="menu_links" data-content="" rel="popover" onClick={logout}>Logout </a></li>
+                <li><a href="" id="logout" className="menu_links" data-content="" rel="popover" onClick={loginContainer.logout}>Logout </a></li>
               </ul>
             </div>
           </div>

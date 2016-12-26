@@ -2,6 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 
+import {loginContainer} from '../datacontainers/login'
+
 
 LoginLayout = React.createClass({
   render(){
@@ -20,23 +22,17 @@ LoginContent = React.createClass({
   },
 
     loginSubmit(){
-    console.log(this.state.username);
-    console.log(this.state.password);
+        console.log(this.state.username);
+        console.log(this.state.password);
+        loginContainer.login(this.state.username, this.state.password, function (result) {
+              if(result && result.error){
+              }
+              else if(result && result.profile && result.profile.isAdmin){
+                  FlowRouter.go("/admin");
+              }
+        });
 
-    Meteor.loginWithPassword({username:this.state.username},this.state.password, function (result) {
-        if(result && result.error){
-
-        }
-
-        else{
-
-          var user = Meteor.user();
-          if(user && user.profile && user.profile.isAdmin){
-              FlowRouter.go("/admin");
-          }
-        }
-    })
-  },
+    },
 
   validationCheck() {
     const userInput = this.grabUserInput(); // grab user entered vals

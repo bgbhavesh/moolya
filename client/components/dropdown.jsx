@@ -78,7 +78,7 @@ export default class MoolyaDropDown extends Component {
         <select id={this.state.id}
                 className='form-control'
                 value={this.state.selected}
-                onChange={this.onChange.bind(this)} >
+                onChange={this.onChange.bind(this)} style={{width:"200px"}}>
           {options}
         </select>
         </div>

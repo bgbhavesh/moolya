@@ -3,12 +3,12 @@ import React, { Component, PropTypes } from 'react';
 
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import StepZilla from './main';
+import StepZilla from '../../../common/components/stepzilla/StepZilla';
 import step1 from './step1';
 import step2 from './step2';
 import step3 from './step3';
 
-RegistrationContent = React.createClass({
+export default RegistrationContent = React.createClass({
 
     render(){
         const steps =

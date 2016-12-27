@@ -10,12 +10,10 @@ Step3=React.createClass({
       upload:'',
     };
      //   this.validationCheck = this._validationCheck.bind(this);
-        this.isFinished = this._isFinished.bind(this);
-
         return this;
     },
 
-    _isFinished(){
+    isFinished(){
 
         var step3={
             "remarks":$('#remarks').val(),

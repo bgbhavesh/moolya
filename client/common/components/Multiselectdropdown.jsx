@@ -65,7 +65,7 @@ export default class MoolyaMultiSelectDropDown extends Component {
     return (
 
       <div style={{padding: "70px"}}>
-        <div class="col-md-4" >
+        <div className  ="col-md-4" >
 
            <select id="multidropdown"    style={{width: "200px"}}   multiple>
             {options}

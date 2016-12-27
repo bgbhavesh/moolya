@@ -2,8 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 
-import {loginContainer} from '../../datacontainers/login'
-import {logout} from '../utils'
+import {loginContainer} from '../../common/containers/login'
+import {logout} from '../../common/containers/logout'
 
 
 AdminHeaderContent = React.createClass({

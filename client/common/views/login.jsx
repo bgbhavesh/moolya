@@ -2,14 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 
-import {loginContainer} from '../datacontainers/login'
+import {loginContainer} from '../containers/login'
 
-
-LoginLayout = React.createClass({
-  render(){
-    return <main>{this.props.content}</main>
-  }
-})
 
 LoginContent = React.createClass({
   getInitialState(){

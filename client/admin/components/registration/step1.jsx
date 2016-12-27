@@ -10,10 +10,7 @@ Step1=React.createClass({
            contact:'',
             city:''
         };
-
-        this.validationCheck = this._validationCheck.bind(this);
-        this.isValidated = this._isValidated.bind(this);
-
+    
         return this;
     },
 
@@ -47,7 +44,7 @@ Step1=React.createClass({
 
     componentWillUnmount() {},
 
-    _isValidated() {
+    isValidated() {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
         let isDataValid = false;
@@ -70,7 +67,7 @@ Step1=React.createClass({
         return isDataValid;
     },
 
-    _validationCheck() {
+    validationCheck() {
         if (!this._validateOnDemand)
             return;
 

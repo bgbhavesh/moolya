@@ -3,10 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {mount} from 'react-mounter';
 
-import adminlayout from '../../layouts/admin/admin';
-import registerlayout from '../../layouts/admin/registration/registration.jsx';
-import MoolyaDropDown from '../../components/dropdown.jsx'
-import MoolyaMultiSelectDropDown from '../../components/multiselectdropdown.jsx'
+import AdminLayout from '../../admin/layouts/AdminLayout';
+import RegistrationContent from '../../admin/components/registration/registration.jsx';
+import MoolyaDropDown from '../../common/components/Dropdown.jsx'
+import MoolyaMultiSelectDropDown from '../../common/components/Multiselectdropdown.jsx'
 
 
 

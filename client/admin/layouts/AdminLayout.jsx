@@ -1,9 +1,9 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import MoolyaLeftNav  from '../../components/Navbar/leftNav'
+import MoolyaLeftNav  from '../../common/components/navbar/LeftNav'
 
-AdminLayout = React.createClass({
+export default AdminLayout = React.createClass({
   render(){
     return <main>{this.props.content}</main>
   }

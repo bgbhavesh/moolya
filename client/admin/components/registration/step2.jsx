@@ -13,10 +13,7 @@ Step2=React.createClass({
             companyname:''
 
         };
-
-        this.validationCheck = this._validationCheck.bind(this);
-        this.isValidated = this._isValidated.bind(this);
-
+    
         return this;
     },
   componentWillMount() {
@@ -52,7 +49,7 @@ Step2=React.createClass({
 
     componentWillUnmount() {},
 
-    _isValidated() {
+    isValidated() {
         const userInput = this._grabUserInput(); // grab user entered vals
         const validateNewInput = this._validateData(userInput); // run the new input against the validator
         let isDataValid = false;
@@ -71,7 +68,7 @@ Step2=React.createClass({
         return isDataValid;
     },
 
-    _validationCheck() {
+    validationCheck() {
         if (!this._validateOnDemand)
             return;
 

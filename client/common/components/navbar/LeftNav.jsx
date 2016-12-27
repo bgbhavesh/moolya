@@ -19,7 +19,7 @@ constructor(props){
     let navOptions = self.state.navOptions.map(function(option) {
 
       return (
-        <div>
+        <div key={option.name}>
         <h4 className={"panel-title"}>
         <a href={option[self.state.linkField]}>
         <i className={`sidemenu-icon fa fa-${option[self.state.iconField]} `}></i> {option[self.state.nameField]}

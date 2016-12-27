@@ -17,7 +17,7 @@ MoolyaContent = React.createClass({
           <source src="images/bg_video.mp4"/>
         </video>
         <img className="logo" src="images/moolya_logo.png" />
-        <a href="/home" className="moolya_btn">let’s get you started</a>
+        <a href="/admin" className="moolya_btn">let’s get you started</a>
       </div>
     )
   }

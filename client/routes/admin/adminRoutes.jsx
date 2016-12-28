@@ -6,7 +6,8 @@ import {mount} from 'react-mounter';
 import AdminLayout from '../../admin/layouts/AdminLayout';
 import RegistrationContent from '../../admin/components/registration/registration.jsx';
 import MoolyaDropDown from '../../common/components/Dropdown.jsx'
-import MoolyaMultiSelectDropDown from '../../common/components/Multiselectdropdown.jsx'
+import MoolyaMultiSelectDropDown from '../../common/components/Multiselectdropdown.jsx';
+import UsersListContainer from '../../admin/containers/users/UsersListContainer'
 
 
 
@@ -27,7 +28,7 @@ adminSection.route('/', {
 
 adminSection.route('/users', {
   action(){
-    mount(AdminContent, {children:(<AdminUsersContent/>)})
+    mount(AdminContent, {children:(<UsersListContainer/>)})
   }
 });
 adminSection.route('/registration', {

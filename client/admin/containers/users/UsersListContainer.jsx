@@ -8,6 +8,8 @@ function composer(props,onData){
     let users = resp;
      onData(null,{users});
   });
+
+
 }
 
 export default UsersListContainer=compose(composer)(AdminUsersContent);

@@ -1,5 +1,7 @@
 import React from 'react';
-
+import MoolyaDatepicker from '../../../common/components/Datepicker.jsx'
+import Select from 'react-select';
+import 'react-select/dist/react-select.css'
 Step1=React.createClass({
 
 
@@ -8,9 +10,10 @@ Step1=React.createClass({
             name:'',
             email: '',
            contact:'',
-            city:''
+            city:'',
+      selectedDate:'',
         };
-    
+
         return this;
     },
 
@@ -23,7 +26,9 @@ Step1=React.createClass({
         name:'',
         email: '',
         contact:'',
-        city:''
+        city:'',
+        selectedDate:'',
+        date:''
       });
 
       return self;
@@ -35,6 +40,7 @@ Step1=React.createClass({
         email: step1.email,
         contact:step1.contact,
         city: step1.city,
+        selectedDate: step1.date
       });
 
       return self;
@@ -99,23 +105,27 @@ Step1=React.createClass({
         return errMsgs;
     },
 
-    _grabUserInput() {
+
+  _grabUserInput() {
 
         return {
             name: this.refs.name.value,
             email: this.refs.email.value,
             contact: this.refs.contact.value,
            city:this.refs.city.value,
+          date:this.state.selectedDate
+
         };
     },
+  selectDate(date){
+  //  alert(date)
+    this.setState({selectedDate:date})
+  },
 
     render() {
         // explicit class assigning based on validation
         let notValidClasses = {};
-
-
-
-            if (typeof this.state.nameVal == 'undefined' || this.state.nameVal) {
+          if (typeof this.state.nameVal == 'undefined' || this.state.nameVal) {
                 notValidClasses.nameCls = 'no-error col-md-8';
             }
             else {
@@ -188,6 +198,15 @@ Step1=React.createClass({
                                 <input ref="city" autoComplete="off" type="text" placeholder="city" className="form-control" defaultValue={this.state.city} required onBlur={this.validationCheck} />
                             </div>
                         </div>
+                      <div className="form-group col-md-12">
+                        <label className="control-label col-md-4">
+                          <div className={notValidClasses.dateValGrpCls}>{this.state.dateValMsg}</div>
+                         Date
+                        </label>
+                          <div className="no-error col-md-8">
+                          <MoolyaDatepicker dateformate="dd/mm/yy" value={this.state.selectedDate} customSelect={this.selectDate}  />
+                        </div>
+                      </div>
                     </form>
                 </div>
             </div>

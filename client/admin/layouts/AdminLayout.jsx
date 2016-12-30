@@ -29,6 +29,11 @@ let navOptions=[
     icon: 'tachometer',
     link: '/admin/multiselectdropdown',
     name: 'Multiselectdropdown'
+  },
+  {
+    icon: 'calendar',
+    link: '/admin/datepicker',
+    name: 'Datepicker'
   }
 
 ]

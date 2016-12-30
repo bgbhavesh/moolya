@@ -7,40 +7,25 @@ export default class MoolyaMultiSelectDropDown extends Component {
 
 
     this.state = {
-      id: props.id,
       options: props.options,
       value: props.value,
       labelField: props.labelField,
       valueField: props.valueField,
       customChange: props.customChange,
-      selected: 'select',
-      buttonValue:[],
-      showResults: false,
-      value:[],
-
-
-  };
-
-
-
+      styles: props.styles,
+    };
     return this;
 
   }
-
-
-  getDefaultstate(){
-    return {
-      value: null,
-      valueField: 'value',
-      labelField: 'label',
-      customChange: null
-    };
+  handleChange() {
+    alert("Selction has been changed!");
   }
-
-
-
   componentDidMount() {
     $("#multidropdown").select2();
+    $(this.refs['mySelect']).select2({
+      change: this.handleChange
+    });
+  //  alert($("#multidropdown option:selected").text())
    // $select = $("#multidropdown").off("change");
     //alert("Selected value is: "+$("#multidropdown").val());
   }
@@ -57,25 +42,14 @@ export default class MoolyaMultiSelectDropDown extends Component {
         </option>
       )
     });
-    $('#multidropdown').trigger('change.select2-selection',function(e){
-      alert("safsa")
-    });
 
 
     return (
 
-      <div style={{padding: "70px"}}>
-        <div className  ="col-md-4" >
-
-           <select id="multidropdown"    style={{width: "200px"}}   multiple>
-            {options}
-
+      <div style={this.state.styles}>
+        <select ref='mySelect' id="multidropdown"  className="form-control" placeholder="select" multiple>
+        {options}
           </select>
-
-
-        </div>
-
-
       </div>
 
     )
@@ -85,16 +59,10 @@ export default class MoolyaMultiSelectDropDown extends Component {
 
 };
 MoolyaMultiSelectDropDown.propTypes={
-  id: React.PropTypes.string.isRequired,
   options: React.PropTypes.array.isRequired,
-  value: React.PropTypes.oneOfType(
-    [
-      React.PropTypes.number,
-      React.PropTypes.string
-    ]
-  ),
   valueField: React.PropTypes.string,
   labelField: React.PropTypes.string,
-  customChange:React.PropTypes.func
+  customChange:React.PropTypes.func,
+
 }
 

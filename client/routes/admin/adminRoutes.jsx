@@ -96,7 +96,7 @@ let styleOptions={
 }
 adminSection.route('/datepicker', {
   action(){
-    mount(AdminContent, {children:( <MoolyaDatepicker defaultValue="1/1/2000" dateformate="dd/mm/yy" customSelect={selectDate} styles={styleOptions}/>)})
+    mount(AdminContent, {children:( <MoolyaDatepicker dateformate="dd/mm/yy" customSelect={selectDate} styles={styleOptions}/>)})
   }
 
 });

@@ -27,7 +27,7 @@ Step2=React.createClass({
         username:'',
         password:'',
         companyurl:'',
-        companyname:''
+        companyname:'',
       });
 
       return self;
@@ -103,7 +103,7 @@ Step2=React.createClass({
 
     _grabUserInput() {
         return {
-           register: this.state.selectedValue.value,
+           register: this.state.selectedValue,
             username: this.refs.username.value,
             password: this.refs.password.value,
             companyname: this.refs.companyname.value,
@@ -112,8 +112,8 @@ Step2=React.createClass({
     },
   registrationSelect(val) {
 
-    console.log(val)
-    this.setState({ selectedValue: val });
+    console.log(val.value)
+    this.setState({ selectedValue: val.value });
   },
 
     render() {
@@ -166,7 +166,7 @@ Step2=React.createClass({
                                 Registration type
                             </label>
                             <div className="no-error col-md-8">
-                              <Select options={registrationOption} value={this.state.selectedValue}  onChange={this.registrationSelect}
+                              <Select options={registrationOption}  value={this.state.selectedValue}  onChange={this.registrationSelect}
                               />
                             </div>
                         </div>

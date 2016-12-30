@@ -6,7 +6,6 @@ export default class MoolyaDatepicker extends Component {
     this.state = {
       dateformate: props.dateformate,
       customSelect:props.customSelect,
-      selectedDate:'',
       styles:props.styles,
     };
 
@@ -21,13 +20,19 @@ export default class MoolyaDatepicker extends Component {
   // alert($("#mdatepicker").val())
 
   }*/
+  componentDidMount() {
+   // $("#mdatepicker").datepicker({ format: this.state.dateformate }).datepicker("setDate", new Date());
+  }
+
   selectedDate(e){
+   // $("#mdatepicker").datepicker("setDate", new Date());
     $("#mdatepicker").datepicker({ format: this.state.dateformate });
     this.props.customSelect(e.target.value);
-    this.setState({selectedDate : e.target.value });
   }
   calenderClick(){
+
     $("#mdatepicker").focus();
+
   }
 
 
@@ -38,7 +43,7 @@ export default class MoolyaDatepicker extends Component {
 
         <div  style={this.state.styles}  >
           <div className="input-group">
-            <input type="text"  id="mdatepicker" value={this.state.selectedDate} onSelect={this.selectedDate.bind(this)} className="form-control" placeholder="Select Date" />
+            <input type="text"  id="mdatepicker" onSelect={this.selectedDate.bind(this)} className="form-control" placeholder="Select Date" />
             <span className="input-group-addon" id="btn" onClick={this.calenderClick} style={{cursor:"pointer"}}>
                     <span><i className="fa fa-calendar"></i></span>
             </span>

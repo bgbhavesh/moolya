@@ -28,7 +28,6 @@ Step1=React.createClass({
         contact:'',
         city:'',
         selectedDate:'',
-        date:''
       });
 
       return self;
@@ -40,7 +39,7 @@ Step1=React.createClass({
         email: step1.email,
         contact:step1.contact,
         city: step1.city,
-        selectedDate: step1.date
+        selectedDate: step1.selectedDate
       });
 
       return self;
@@ -113,12 +112,12 @@ Step1=React.createClass({
             email: this.refs.email.value,
             contact: this.refs.contact.value,
            city:this.refs.city.value,
-          date:this.state.selectedDate
+          selectedDate:this.state.selectedDate,
 
         };
     },
   selectDate(date){
-  //  alert(date)
+  //alert(date)
     this.setState({selectedDate:date})
   },
 

@@ -29,6 +29,11 @@ let navOptions=[
     icon: 'tachometer',
     link: '/admin/multiselectdropdown',
     name: 'Multiselectdropdown'
+  },
+  {
+    icon: 'map',
+    link: '/admin/map',
+    name: 'Map'
   }
 
 ]

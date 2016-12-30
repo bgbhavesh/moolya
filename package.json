@@ -66,6 +66,8 @@
     "bcrypt": "^0.8.7",
     "bootstrap": "^3.3.7",
     "fixed-data-table": "^0.6.3",
+    "google-map-react": "^0.22.0",
+    "http-proxy": "^1.16.2",
     "jquery": "^2.2.4",
     "jquery-validation": "^1.15.1",
     "meteor-node-stubs": "^0.2.4",
@@ -73,9 +75,11 @@
     "react-addons-pure-render-mixin": "^15.3.2",
     "react-bootstrap": "^0.30.5",
     "react-bootstrap-table": "^2.8.0",
+    "react-controllables": "^0.6.0",
     "react-dom": "^15.4.1",
     "react-komposer": "^2.0.0",
     "react-mounter": "^1.2.0",
+    "react-pure-render": "^1.0.2",
     "react-stepzilla": "^1.9.2",
     "react-utils": "^1.0.0"
   }

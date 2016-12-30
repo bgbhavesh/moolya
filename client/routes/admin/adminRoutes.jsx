@@ -8,6 +8,7 @@ import RegistrationContent from '../../admin/components/registration/registratio
 import MoolyaDropDown from '../../common/components/Dropdown.jsx'
 import MoolyaMultiSelectDropDown from '../../common/components/Multiselectdropdown.jsx';
 import UsersListContainer from '../../admin/containers/users/UsersListContainer'
+import MoolyaMapComponent from '../../common/components/mapComponent/mapComponent'
 
 
 
@@ -79,6 +80,13 @@ let multiselectOnChange = function(multiselect){
 adminSection.route('/multiselectdropdown', {
   action(){
     mount(AdminContent, {children:( <MoolyaMultiSelectDropDown id='myDropdown' options={options} value='c' labelField='description' valueField='code' customChange={multiselectOnChange}/>)})
+  }
+
+});
+
+adminSection.route('/map', {
+  action(){
+    mount(AdminContent, {children:( <MoolyaMapComponent/>)})
   }
 
 });

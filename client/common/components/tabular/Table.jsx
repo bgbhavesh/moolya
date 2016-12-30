@@ -37,6 +37,11 @@ export default class ObjectDataExample extends React.Component {
       let usersobj = resp;
       self.setState({users:usersobj})
     })
+
+    // Meteor.call('sendEmail', function (err, resp) {
+    //
+    // })
+
   }
 
   render() {

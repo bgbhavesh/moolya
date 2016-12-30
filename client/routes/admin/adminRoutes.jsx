@@ -8,6 +8,8 @@ import RegistrationContent from '../../admin/components/registration/registratio
 import MoolyaDropDown from '../../common/components/Dropdown.jsx'
 import MoolyaMultiSelectDropDown from '../../common/components/Multiselectdropdown.jsx'
 import MoolyaDatepicker from '../../common/components/Datepicker.jsx'
+import UsersListContainer from '../../admin/containers/users/UsersListContainer'
+
 
 
 adminSection = FlowRouter.group({
@@ -27,7 +29,7 @@ adminSection.route('/', {
 
 adminSection.route('/users', {
   action(){
-    mount(AdminContent, {children:(<AdminUsersContent/>)})
+    mount(AdminContent, {children:(<UsersListContainer/>)})
   }
 });
 adminSection.route('/registration', {

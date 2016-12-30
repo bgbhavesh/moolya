@@ -16,21 +16,9 @@ const TextCell =({rowIndex, data, col, ...props})=> {
 
 
 
-AdminUsersContent = React.createClass({
-  getInitialState(){
-
-    this.state = {users:[]};
-    return this;
-  },
-  componentWillMount(){
-    let self = this;
-    Meteor.call('reterieveAllUsers', function (err, resp) {
-      let usersobj = resp;
-      self.setState({users:usersobj})
-    })
-  },
+export default AdminUsersContent = React.createClass({
   render() {
-    var {users} = this.state;
+    var {users} = this.props;
     return (
       <div style={{paddingTop:'70px' }}>
       <Table

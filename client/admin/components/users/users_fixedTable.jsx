@@ -16,7 +16,7 @@ const TextCell =({rowIndex, data, col, ...props})=> {
 
 
 
-export default AdminUsersContent = React.createClass({
+export default AdminUsersContent_old = React.createClass({
   render() {
     var {users} = this.props;
     return (

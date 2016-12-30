@@ -12,6 +12,7 @@ export default class MoolyaDropDown extends Component {
       labelField: props.labelField,
       valueField: props.valueField,
       customChange: props.customChange,
+      styles:props.styles,
      selected: selected,
     };
 
@@ -73,16 +74,13 @@ export default class MoolyaDropDown extends Component {
       });
       return (
 
-        <div style={{padding: "70px"}}>
-          <div className="col-md-4" >
-        <select id={this.state.id}
-                className='form-control'
-                value={this.state.selected}
-                onChange={this.onChange.bind(this)} style={{width:"200px"}}>
-          {options}
-        </select>
-        </div>
-
+        <div style={this.state.styles}>
+          <select id={this.state.id}
+                  className='form-control'
+                  value={this.state.selected}
+                  onChange={this.onChange.bind(this)} style={{width:"200px"}}>
+            {options}
+          </select>
         </div>
 
       )
@@ -102,6 +100,7 @@ MoolyaDropDown.propTypes={
   ),
     valueField: React.PropTypes.string,
     labelField: React.PropTypes.string,
-  customChange:React.PropTypes.func
+  customChange:React.PropTypes.func,
+  styles:React.PropTypes.json,
 }
 

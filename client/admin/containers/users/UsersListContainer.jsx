@@ -23,6 +23,8 @@ function composer(props,onData){
     let totalDataSize=resp&&resp.recordsCount>0?resp.recordsCount:0;
      onData(null,{data,totalDataSize,sizePerPage,currentPage,onPageChange,onSizePerPageList});
   });
+
+
 }
 
 export default UsersListContainer=composeWithTracker(composer)(AdminUsersContent);

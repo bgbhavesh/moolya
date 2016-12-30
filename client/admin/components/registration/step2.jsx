@@ -1,5 +1,6 @@
 import React from 'react';
-
+import Select from 'react-select';
+import 'react-select/dist/react-select.css'
 Step2=React.createClass({
 
 
@@ -10,10 +11,11 @@ Step2=React.createClass({
             username:'',
             password:'',
             companyurl:'',
-            companyname:''
+            companyname:'',
+      selectedValue: '',
 
         };
-    
+
         return this;
     },
   componentWillMount() {
@@ -25,7 +27,7 @@ Step2=React.createClass({
         username:'',
         password:'',
         companyurl:'',
-        companyname:''
+        companyname:'',
       });
 
       return self;
@@ -101,16 +103,33 @@ Step2=React.createClass({
 
     _grabUserInput() {
         return {
-           register: this.refs.register.value,
+           register: this.state.selectedValue,
             username: this.refs.username.value,
             password: this.refs.password.value,
             companyname: this.refs.companyname.value,
             companyurl: this.refs.companyurl.value,
         };
     },
+  registrationSelect(val) {
+
+    console.log(val.value)
+    this.setState({ selectedValue: val.value });
+  },
 
     render() {
-        // explicit class assigning based on validation
+
+      let registrationOption = [
+        { value: '0', label: 'simplybrowsing' },
+        { value: '1', label: 'ideator' },
+        { value: '2', label: 'startup' },
+        { value: '3', label: 'company' },
+        { value: '4', label: 'funder/investor' },
+        { value: '5', label: 'institution' },
+        { value: '6', label: 'service provider' },
+        { value: '7', label: 'iam not sure' },
+      ];
+
+      // explicit class assigning based on validation
         let notValidClasses = {};
 
         if (typeof this.state.usernameVal == 'undefined' || this.state.usernameVal) {
@@ -147,16 +166,8 @@ Step2=React.createClass({
                                 Registration type
                             </label>
                             <div className="no-error col-md-8">
-                                <select ref="register" autoComplete="off" className="form-control" defaultValue={this.state.register} required onBlur={this.validationCheck}>
-                                        <option value="0">simplybrowsing</option>
-                                        <option value="1">ideator</option>
-                                        <option value="2">startup</option>
-                                        <option value="3">company</option>
-                                        <option value="4">funder/investor</option>
-                                        <option value="5">institution</option>
-                                        <option value="6">service provider</option>
-                                        <option value="7">iam not sure</option>
-                                </select>
+                              <Select options={registrationOption}  value={this.state.selectedValue}  onChange={this.registrationSelect}
+                              />
                             </div>
                         </div>
                         <div className="form-group col-md-12">

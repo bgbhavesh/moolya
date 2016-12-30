@@ -1,5 +1,6 @@
 import React from 'react';
-
+import Select from 'react-select';
+import 'react-select/dist/react-select.css'
 Step3=React.createClass({
 
 
@@ -8,6 +9,7 @@ Step3=React.createClass({
       remarks: '',
       refferedBy: '',
       upload:'',
+      selectedValue: [],
     };
      //   this.validationCheck = this._validationCheck.bind(this);
         return this;
@@ -17,7 +19,7 @@ Step3=React.createClass({
 
         var step3={
             "remarks":$('#remarks').val(),
-            "refferedBy":$('#refferedBy').val(),
+            "refferedBy":this.state.selectedValue,
             "upload":$('#upload').val()
 
         }
@@ -27,12 +29,14 @@ Step3=React.createClass({
       var step1=JSON.parse(step1res)
       var step2res=localStorage.getItem('step2')
       var step2=JSON.parse(step2res)
+
       var regiterUser={
 
              fullName:step1.name,
              mobileNumber:step1.contact,
                eMail:step1.email,
                city:step1.city,
+        registrationDate:step1.selectedDate,
                regType:step2.register,
                userName:step2.username,
                password:step2.password,
@@ -58,10 +62,26 @@ Step3=React.createClass({
       return true;
 
     },
-
+  refferedBySelect(val) {
+    let refSelected=[]
+    console.log(val)
+    for(let i=0;i<val.length;i++){
+      refSelected.push(val[i].value)
+    }
+    console.log(refSelected)
+    this.setState({ selectedValue: refSelected });
+  },
 
     render() {
-
+      let refferedByOption = [
+        { value: '0', label: 'friends/collegues reference' },
+        { value: '1', label: 'google/searching' },
+        { value: '2', label: 'newspaper' },
+        { value: '3', label: 'hoarding' },
+        { value: '4', label: 'event' },
+        { value: '5', label: 'radio' },
+        { value: '6', label: 'i over heard it' },
+      ];
         return (
 
             <div className="step3">
@@ -82,16 +102,8 @@ Step3=React.createClass({
                                 How did you know about this?
                             </label>
                             <div >
-                                <select  autoComplete="off" id="refferedBy" className="form-control"   >
-                                    <option value="0">friends/collegues reference</option>
-                                    <option value="1">google/searching</option>
-                                    <option value="2">newspaper</option>
-                                    <option value="3">hoarding</option>
-                                    <option value="4">event</option>
-                                    <option value="5">radio</option>
-                                    <option value="6">i over heard it</option>
-                                </select>
 
+                              <Select multi={true} options={refferedByOption} value={this.state.selectedValue}  onChange={this.refferedBySelect}/>
                             </div>
 
                             <label className="control-label col-md-4">

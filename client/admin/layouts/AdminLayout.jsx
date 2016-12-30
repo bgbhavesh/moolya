@@ -34,6 +34,11 @@ let navOptions=[
     icon: 'map',
     link: '/admin/map',
     name: 'Map'
+  },
+  {
+    icon: 'calendar',
+    link: '/admin/datepicker',
+    name: 'Datepicker'
   }
 
 ]

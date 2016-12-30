@@ -6,7 +6,8 @@ import {mount} from 'react-mounter';
 import AdminLayout from '../../admin/layouts/AdminLayout';
 import RegistrationContent from '../../admin/components/registration/registration.jsx';
 import MoolyaDropDown from '../../common/components/Dropdown.jsx'
-import MoolyaMultiSelectDropDown from '../../common/components/Multiselectdropdown.jsx';
+import MoolyaMultiSelectDropDown from '../../common/components/Multiselectdropdown.jsx'
+import MoolyaDatepicker from '../../common/components/Datepicker.jsx'
 import UsersListContainer from '../../admin/containers/users/UsersListContainer'
 import MoolyaMapComponent from '../../common/components/mapComponent/mapComponent'
 
@@ -63,12 +64,14 @@ let dropDownOnChange = function(change) {
   alert('onChangevalue: '
     + change.newValue);
 };
-
+let dropdownStyles={
+  padding:"70px"
+}
 
 
 adminSection.route('/dropdown', {
   action(){
-    mount(AdminContent, {children:( <MoolyaDropDown id='myDropdown' options={options} value='b' labelField='description' valueField='code' customChange={dropDownOnChange}/>)})
+    mount(AdminContent, {children:( <MoolyaDropDown id='myDropdown' options={options} value='b' labelField='description' valueField='code' customChange={dropDownOnChange} styles={dropdownStyles}/> )})
   }
 
 });
@@ -76,10 +79,25 @@ adminSection.route('/dropdown', {
 let multiselectOnChange = function(multiselect){
   alert("multiple selcected values:"+multiselect)
 }
-
+let multiselectStyles={
+  padding:"70px"
+}
 adminSection.route('/multiselectdropdown', {
   action(){
-    mount(AdminContent, {children:( <MoolyaMultiSelectDropDown id='myDropdown' options={options} value='c' labelField='description' valueField='code' customChange={multiselectOnChange}/>)})
+    mount(AdminContent, {children:( <MoolyaMultiSelectDropDown id='myDropdown' options={options} value='c' labelField='description' valueField='code' customChange={multiselectOnChange} styles={multiselectStyles}/>)})
+  }
+
+});
+let selectDate=function(datepicker){
+  alert("selected date:"+datepicker)
+}
+let styleOptions={
+  padding: "70px",
+
+}
+adminSection.route('/datepicker', {
+  action(){
+    mount(AdminContent, {children:( <MoolyaDatepicker dateformate="dd/mm/yy" customSelect={selectDate} styles={styleOptions}/>)})
   }
 
 });

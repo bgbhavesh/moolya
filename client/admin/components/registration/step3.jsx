@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css'
+import moment from 'moment'
 Step3=React.createClass({
 
 
@@ -23,31 +24,29 @@ Step3=React.createClass({
             "upload":$('#upload').val()
 
         }
-
         localStorage.setItem( 'step3', JSON.stringify(step3) );
       var step1res=localStorage.getItem('step1')
       var step1=JSON.parse(step1res)
       var step2res=localStorage.getItem('step2')
       var step2=JSON.parse(step2res)
-
-      var regiterUser={
+      var registerUser={
 
              fullName:step1.name,
              mobileNumber:step1.contact,
                eMail:step1.email,
                city:step1.city,
-        registrationDate:step1.selectedDate,
+        registrationDate: moment(step1.Date, "DD-MM-YY").toDate(),
                regType:step2.register,
                userName:step2.username,
                password:step2.password,
                companyName:step2.companyname,
                companyUrl:step2.companyurl,
                 remarks:step3.remarks,
-               referralType:step3.refferedBy,
+        referralType:step3.refferedBy,
                uploadFile:step3.upload
       }
 
-      Meteor.call('insertUser', regiterUser, function (err, res) {
+      Meteor.call('insertUser', registerUser, function (err, res) {
         if(err){
          var title="error";
           var msg=err

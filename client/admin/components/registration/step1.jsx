@@ -39,7 +39,7 @@ Step1=React.createClass({
         email: step1.email,
         contact:step1.contact,
         city: step1.city,
-        selectedDate: step1.selectedDate
+        selectedDate: step1.Date,
       });
 
       return self;
@@ -112,7 +112,7 @@ Step1=React.createClass({
             email: this.refs.email.value,
             contact: this.refs.contact.value,
            city:this.refs.city.value,
-          selectedDate:this.state.selectedDate,
+          Date:this.state.selectedDate,
 
         };
     },

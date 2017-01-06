@@ -10,6 +10,7 @@ export default class MoolyaTabView extends Component {
       linkField: props.linkField,
       nameField: props.nameField,
     }
+    return this;
   }
 
   render(){
@@ -19,8 +20,8 @@ export default class MoolyaTabView extends Component {
     let tabOptions = self.state.tabOptions.map(function(option) {
 
       return (
-        <li>
-        <div className={"moolya_btn"}><a href={option[self.state.linkField]} className={"moolya_btn moolya_btn_in"}>  {option[self.state.nameField]} </a> </div>
+        <li key={option.name}>
+        <div className={"moolya_btn"} ><a href={option[self.state.linkField]} className={"moolya_btn moolya_btn_in"}>  {option[self.state.nameField]} </a> </div>
         </li>
       )
     });

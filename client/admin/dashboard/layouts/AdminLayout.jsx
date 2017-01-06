@@ -9,7 +9,7 @@ export default class AdminLayout extends Component {
         <div className="moolya_admin">
           {this.props.adminHeader}
           {this.props.adminLeftNav}
-
+          {this.props.adminView}
         </div>
       </div>
     )

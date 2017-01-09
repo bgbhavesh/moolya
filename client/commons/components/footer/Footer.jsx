@@ -8,28 +8,42 @@ export default class MoolyaFooter extends Component {
   }
   componentDidMount()
   {
-
+    $('.actions_switch').click(function(){
+      $('.bottom_actions_block').toggleClass('show_block');
+      $(this).toggleClass('show_act');
+    });
   }
 
+
   render(){
+    let routerPath=this.props.routerPath;
+    let imagePath=this.props.imagePath;
+    let footerView = this.props.footerOptions.map(function(option) {
+      return (
+        <div className={"hex_btn"}  >
+        <a href={option[routerPath]} key={option.name} className={"hex_btn hex_btn_in"}>
+          <img src={option[imagePath]}/>
+        </a></div>
+      )
+    })
+
     return(
 
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap no_padding ">
-        <span className="actions_switch"></span>
-        <div className="bottom_actions_block">
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="/admin/createcluster" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
-          </div>
+      <div>
+        <span className="actions_switch" ></span>
+        <div className="bottom_actions_block ">
+          {footerView}
         </div>
       </div>
-
 
     )
   }
 
 }
+
+MoolyaFooter.PropTypes={
+  routerPath:React.PropTypes.string,
+  imagePath:React.PropTypes.string
+}
+
 

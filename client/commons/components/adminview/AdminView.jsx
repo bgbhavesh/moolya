@@ -5,6 +5,7 @@ import  $ from 'jquery'
 import MoolyaInfinityView from '../infinityView/InfinityView'
 import MoolyaListView from '../list/ListView'
 import MoolyaMapView from '../map/MapView'
+import MoolyaFooter from '../footer/Footer'
 export default class MoolyaAdminView extends Component {
   constructor(props){
     super(props);
@@ -24,11 +25,12 @@ export default class MoolyaAdminView extends Component {
       let showInfinity = true;
       let viewMode = this.props.viewMode;
       let infinityViewProps = {viewMode: this.props.viewMode, onViewModeChange:this.props.onViewModeChange};
-
+      let listViewProps={clusterListOptions:this.props.clusterListOptions,imageLink:this.props.imageLink,nameField:this.props.nameField,statusField:this.props.statusField}
+      let footerProps={footerOptions:this.props.footerOptions,routerPath:this.props.routerPath,imagePath:this.props.imagePath}
       return (
         <div>
           <div className="admin_main_wrap">
-            {viewMode ? <MoolyaMapView/> : <MoolyaListView/>}
+            {viewMode ? <MoolyaMapView/> : <div><MoolyaListView {...listViewProps}/><MoolyaFooter {...footerProps}/></div> }
             {showInfinity && (<MoolyaInfinityView {...infinityViewProps} />)}
           </div>
         </div>

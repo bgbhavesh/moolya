@@ -45,7 +45,7 @@ export default class MoolyaInfinityView extends Component {
 }
 MoolyaInfinityView.propTypes={
  onViewModeChange: React.PropTypes.func,
-  viewMode:React.PropTypes.string
+  viewMode:React.PropTypes.bool
 }
 
 

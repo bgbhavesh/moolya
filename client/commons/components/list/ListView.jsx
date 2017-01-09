@@ -5,12 +5,28 @@ import  $ from 'jquery'
 export default class MoolyaListView extends Component {
 
   render(){
+    let imagelink=this.props.imageLink;
+    let namefield=this.props.nameField;
+    let statusfield=this.props.statusField;
+    let clusterListView = this.props.clusterListOptions.map(function(option) {
 
+      return (
+        <div className={"col-md-2"}  key={option.name}>
+        <div className={"list_block"}>
+        <div className={`cluster_status ${option[statusfield]}_cl `}></div>
+        <div className={"hex_outer"}><img src={option[imagelink]}/></div>
+        <h3>{option[namefield]}</h3>
+        </div>
+        </div>
+      )
+      })
     return(
       <div className="list_view_block">
       <div className="col-md-12">
         <div className="row">
-        <div className="col-md-2">
+          {clusterListView}
+
+        {/*<div className="col-md-2">
           <div className="list_block">
             <div className="cluster_status active_cl"></div>
             <div className="hex_outer"><img src="/images/afghanistan.png"/></div>
@@ -44,7 +60,7 @@ export default class MoolyaListView extends Component {
             <div className="hex_outer"><img src="/images/india.png"/></div>
             <h3>India</h3>
           </div>
-        </div>
+        </div>*/}
         </div>
       </div>
       </div>
@@ -52,3 +68,9 @@ export default class MoolyaListView extends Component {
   }
 
 }
+MoolyaListView.propTypes={
+  nameField:React.PropTypes.string,
+  imageLink:React.PropTypes.string,
+  statusField:React.PropTypes.string
+}
+

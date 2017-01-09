@@ -80,11 +80,44 @@ let onClickViewMOde = function(className){
     alert(className)
   }
 }
-let config={
-  viewModeChange:true
-}
+
+ let  clusterListOptions=[
+   {
+     image: '/images/afghanistan.png',
+     name: 'Afghanistan',
+     status: 'active'
+   },
+   {
+     image: '/images/australia.png',
+     name: 'Australia',
+     status: 'inactive'
+   }
+ ]
+let footerOptions=[{
+  imagefield:'/images/edit_icon.png',
+  route:'/admin/dashboard',
+},
+  {
+    imagefield:'/images/act_add_icon.png',
+    route:'/admin/dashboard',
+  },
+  {
+    imagefield:'/images/act_logout_icon.png',
+    route:'/admin/dashboard',
+  },
+  {
+    imagefield:'/images/act_progress_icon.png',
+    route:'/admin/dashboard',
+  },
+  {
+    imagefield:'/images/act_select_icon.png',
+    route:'/admin/dashboard',
+  }
+]
+
+
 adminSection.route('/dashboard', {
   action(){
-    mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer {...config}/>})
+    mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} nameField="name" imageLink="image" statusField="status"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})
   }
 });

@@ -8,26 +8,23 @@ import MoolyaMapView from '../map/MapView'
 export default class MoolyaAdminView extends Component {
   constructor(props){
     super(props);
-    this.state={
+   /* this.state={
       viewMode:true
-    }
+    }*/
 
 
   }
-  componentDidMount()
-  {
 
-  }
-
-  viewModeChange(mode){
+ /* viewModeChange(mode){
     this.setState({'viewMode':mode});
-  }
+  }*/
 
   render()
     {
       let showInfinity = true;
-      let viewMode = this.state.viewMode;
-      let infinityViewProps = {viewMode: this.state.viewMode, onViewModeChange:this.viewModeChange.bind(this)};
+      let viewMode = this.props.viewMode;
+      let infinityViewProps = {viewMode: this.props.viewMode, onViewModeChange:this.props.onViewModeChange};
+
       return (
         <div>
           <div className="admin_main_wrap">

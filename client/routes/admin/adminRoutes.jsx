@@ -5,9 +5,8 @@ import {mount} from 'react-mounter';
 import MoolyaLeftNav from '../../commons/components/leftNavbar/LeftNav'
 import  MoolyaHeader from '../../commons/components/header/Header'
 import AdminLayout from '../../admin/dashboard/layouts/AdminLayout'
-import MoolyaFooter from '../../commons/components/footer/Footer'
-import MoolyaAdminView from '../../commons/components/view/View'
-import MoolyaInfinityView from '../../commons/components/infinityView/InfinityView'
+import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer.jsx'
+
 adminSection = FlowRouter.group({
   prefix: "/admin"
 });
@@ -81,8 +80,11 @@ let onClickViewMOde = function(className){
     alert(className)
   }
 }
+let config={
+  viewModeChange:true
+}
 adminSection.route('/dashboard', {
   action(){
-    mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminView/>})
+    mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer {...config}/>})
   }
 });

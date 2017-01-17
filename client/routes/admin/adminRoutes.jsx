@@ -85,14 +85,16 @@ let onClickViewMOde = function(className){
 
  let  clusterListOptions=[
    {
-     image: '/images/afghanistan.png',
-     name: 'Afghanistan',
-     status: 'active'
+     imageLink: '/images/afghanistan.png',
+     nameField: 'Afghanistan',
+     statusField: 'active',
+     listRouterPath:'/admin/dashboard'
    },
    {
-     image: '/images/australia.png',
-     name: 'Australia',
-     status: 'inactive'
+     imageLink: '/images/australia.png',
+     nameField: 'Australia',
+     statusField: 'inactive',
+     listRouterPath:'/admin/dashboard'
    }
  ]
 let footerOptions=[
@@ -123,6 +125,9 @@ adminSection.route('/dashboard', {
     action(){
       mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} nameField="name" imageLink="image" statusField="status"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})
     }
+  action(){
+    mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})
+  }
 });
 
 adminSection.route('/login', {

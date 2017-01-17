@@ -25,7 +25,7 @@ export default class MoolyaAdminView extends Component {
       let showInfinity = true;
       let viewMode = this.props.viewMode;
       let infinityViewProps = {viewMode: this.props.viewMode, onViewModeChange:this.props.onViewModeChange};
-      let listViewProps={clusterListOptions:this.props.clusterListOptions,imageLink:this.props.imageLink,nameField:this.props.nameField,statusField:this.props.statusField}
+      let listViewProps={clusterListOptions:this.props.clusterListOptions,listRouterPath:this.props.listRouterPath,imageLink:this.props.imageLink,nameField:this.props.nameField,statusField:this.props.statusField}
       let footerProps={footerOptions:this.props.footerOptions,routerPath:this.props.routerPath,imagePath:this.props.imagePath}
       return (
         <div>

@@ -28,3 +28,7 @@ wylio:mandrill
 
 force-ssl
 aldeed:simple-schema
+meteorhacks:npm
+
+
+npm-container

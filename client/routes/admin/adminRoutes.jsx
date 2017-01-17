@@ -5,7 +5,9 @@ import {mount} from 'react-mounter';
 import MoolyaLeftNav from '../../commons/components/leftNavbar/LeftNav'
 import  MoolyaHeader from '../../commons/components/header/Header'
 import AdminLayout from '../../admin/dashboard/layouts/AdminLayout'
+import MoolyaLoginLayout from '../../login/layouts/login'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer.jsx'
+import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 
 adminSection = FlowRouter.group({
   prefix: "/admin"
@@ -93,10 +95,11 @@ let onClickViewMOde = function(className){
      status: 'inactive'
    }
  ]
-let footerOptions=[{
-  imagefield:'/images/edit_icon.png',
-  route:'/admin/dashboard',
-},
+let footerOptions=[
+  {
+    imagefield:'/images/edit_icon.png',
+    route:'/admin/dashboard',
+  },
   {
     imagefield:'/images/act_add_icon.png',
     route:'/admin/dashboard',
@@ -117,7 +120,13 @@ let footerOptions=[{
 
 
 adminSection.route('/dashboard', {
-  action(){
-    mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} nameField="name" imageLink="image" statusField="status"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})
-  }
+    action(){
+      mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} nameField="name" imageLink="image" statusField="status"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})
+    }
+});
+
+adminSection.route('/login', {
+    action(){
+        mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
+    }
 });

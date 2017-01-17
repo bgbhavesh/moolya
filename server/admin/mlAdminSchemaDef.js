@@ -27,7 +27,22 @@ const testMutattion2 =
         incrementCount(id: String): String 
     }`
 
-
-const MlSchemaDef = mergeStrings([testMutattion, testMutattion2, testSchema1, testSchema2])
+const typeDefinitions = `
+type mlLeftNav {
+  image: String
+  link: String
+  name: String
+  id:String
+  isLink:Boolean
+  isMenu:Boolean
+}
+type LeftNavQuery {
+  mlLeftNav(image: String, link: String, name: String,id: String,isLink: Boolean,isMenu: Boolean ): [mlLeftNav]
+}
+schema {
+  query: LeftNavQuery
+}
+`;
+const MlSchemaDef = mergeStrings([testMutattion, testMutattion2, testSchema1, testSchema2, typeDefinitions])
 
 module.exports = MlSchemaDef;

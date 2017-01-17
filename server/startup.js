@@ -6,17 +6,17 @@ import s3Client from './commons/mlS3'
 
 Meteor.startup(function ()
 {
-    console.log("Insider SSL start!!!!");
-    let sslCert = "/etc/nginx_test/ssl/nginx.crt";
-    let sslKey = "/etc/nginx_test/ssl/nginx.key";
-    let sslPort = 4444;
-    console.log("sslCert "+sslCert);
-    console.log("sslKey "+sslKey);
-    if (sslCert && sslKey) {
-      let port = sslPort ? sslPort : 4443;
-      console.log("Port is :" + port);
-      SSL(sslKey, sslCert, port);
-    }
+    // console.log("Insider SSL start!!!!");
+    // let sslCert = "/etc/nginx_test/ssl/nginx.crt";
+    // let sslKey = "/etc/nginx_test/ssl/nginx.key";
+    // let sslPort = 4444;
+    // console.log("sslCert "+sslCert);
+    // console.log("sslKey "+sslKey);
+    // if (sslCert && sslKey) {
+    //   let port = sslPort ? sslPort : 4443;
+    //   console.log("Port is :" + port);
+    //   SSL(sslKey, sslCert, port);
+    // }
     mlEmail = new moolyaEmail();
     mlS3Client = new s3Client();
 })

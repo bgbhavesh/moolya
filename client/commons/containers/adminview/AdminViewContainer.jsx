@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import dataComposer from './AdminViewContainer'
 import MoolyaAdminView from "../../components/adminview/AdminView";
 //const AdminViewComposer = dataComposer(MoolyaAdminView);
-export default class MoolyaAdminViewContainer extends Component {
+export default class MoolyaAdminViewComponent extends Component {
 constructor(props) {
   super(props);
   this.state = {
@@ -14,7 +14,8 @@ constructor(props) {
     clusterListOptions:props.clusterListOptions,
     footerOptions:props.footerOptions,
     routerPath:props.routerPath,
-    imagePath:props.imagePath
+    imagePath:props.imagePath,
+    listRouterPath:props.listRouterPath
   }
   this.viewModeChange.bind(this);
 }

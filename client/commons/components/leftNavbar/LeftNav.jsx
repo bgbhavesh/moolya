@@ -24,10 +24,26 @@ constructor(props){
   }
 
   render(){
-
+    var data=this.props.data&&this.props.data[this.props.dataKey]?this.props.data[this.props.dataKey]:{};
+   console.log(data)
     let self = this;
+    let subMenu=data.subMenu||[];
 
-    let navOptions = self.state.navOptions.map(function(option) {
+ let navOptions= subMenu.map(function(dataItem) {
+
+      return (
+        <li className={"menu_item"} key={dataItem.name}>
+          <a href={dataItem.link}>
+            <div className={"menu_in"}>
+              <img src={dataItem.image}/>
+              {dataItem.name}
+            </div>
+            <div className={"menu_item menu_item_in"}></div>
+          </a>
+        </li>
+      )
+    });
+ /* let navOptions = self.state.navOptions.map(function(option) {
 
       return (
         <li className={"menu_item"} key={option.name}>
@@ -40,7 +56,7 @@ constructor(props){
         </a>
         </li>
       )
-    });
+    });*/
     return(
       <div className="admin_menu">
         <ScrollArea
@@ -49,7 +65,7 @@ constructor(props){
           smoothScrolling={true}
         >
           <ul>
-            {navOptions}
+            {navOptions }
 
             <li className="menu_item">
               <div className="menu_item menu_item_in"> </div>
@@ -63,8 +79,8 @@ constructor(props){
 
 }
 MoolyaLeftNav.propTypes={
-  navOptions: React.PropTypes.array.isRequired,
-  imageField: React.PropTypes.string,
-  linkField: React.PropTypes.string,
-  nameField: React.PropTypes.string,
+ // navOptions: React.PropTypes.array.isRequired,
+ // imageField: React.PropTypes.string,
+ // linkField: React.PropTypes.string,
+ // nameField: React.PropTypes.string,
 }

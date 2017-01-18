@@ -28,16 +28,29 @@ const testMutattion2 =
     }`
 
 const typeDefinitions = `
-type mlLeftNav {
+type menu {
   image: String
-  link: String
-  name: String
+  link:String
+  name:String
   id:String
   isLink:Boolean
   isMenu:Boolean
+  subMenu:[menu]
+  
 }
+
 type LeftNavQuery {
-  mlLeftNav(image: String, link: String, name: String,id: String,isLink: Boolean,isMenu: Boolean ): [mlLeftNav]
+  mlLeftNav( name: String): mlLeftNav
+}
+
+type mlLeftNav{
+  image: String
+  link:String
+  name:String
+  id:String
+  isLink:Boolean
+  isMenu:Boolean
+  subMenu:[menu]
 }
 schema {
   query: LeftNavQuery

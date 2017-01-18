@@ -3,8 +3,8 @@
  */
 const MlResolver={
   LeftNavQuery: {
-  mlLeftNav() {
-    return MlLeftNavModel.find().fetch();
+  mlLeftNav(_, { name }, ctx) {
+    return MlLeftNavModel.findOne({name});
   },
 }
 };

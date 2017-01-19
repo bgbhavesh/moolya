@@ -16,7 +16,7 @@ var app = express().use('*',cors());
 
 const executableSchema = makeExecutableSchema({
     typeDefs: MlSchemaDef,
-    resolvers: MlResolver
+    resolvers: {Query: MlResolver}
 });
 
 
@@ -25,18 +25,18 @@ app.use('/graphql', bodyParser.json(), apolloExpress({
     graphiql: true,
 }));
 
-app.post('/login', function(req, res)
-{
-    utils.authenticate(req.body.username, req.body.password, function(err, doc){
-        if(err || doc == null)
-            res.json({ success: false, message: 'Authentication failed' });
-        else{
-            var token = jwt.sign(doc, globals.secret);
-            res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, x-access-token");
-            res.json({success: true,token: token,userInfo: doc});
-        }
-    })
-});
+// app.post('/login', function(req, res)
+// {
+//     utils.authenticate(req.body.username, req.body.password, function(err, doc){
+//         if(err || doc == null)
+//             res.json({ success: false, message: 'Authentication failed' });
+//         else{
+//             var token = jwt.sign(doc, globals.secret);
+//             res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, x-access-token");
+//             res.json({success: true,token: token,userInfo: doc});
+//         }
+//     })
+// });
 
 
 app.listen(8090);

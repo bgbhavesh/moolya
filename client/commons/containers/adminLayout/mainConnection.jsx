@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import LeftNavContainer from './LeftNavContainer'
+import AdminLayoutContainer from './AdminLayoutContainer'
 
 import {ApolloClient,createNetworkInterface} from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 
-export default  class LeftNavConnection extends React.Component {
+export default  class AdminLayoutConnection extends React.Component {
 
     constructor(...args) {
         super(...args);
@@ -15,11 +15,24 @@ export default  class LeftNavConnection extends React.Component {
             networkInterface,
             dataIdFromObject: r => r.id,
         });
+
+   /*     networkInterface.useAfter([{
+          applyAfterware({ response }, next) {
+
+              setTimeout(function () {
+                  console.log(response)
+              }, 1000)
+            if (response.status === 401) {
+              logout();
+            }
+            next();
+          }
+        }]);*/
     }
     render() {
         return (
             <ApolloProvider client={this.client}>
-                <LeftNavContainer/>
+                <AdminLayoutContainer/>
             </ApolloProvider>
         );
     }

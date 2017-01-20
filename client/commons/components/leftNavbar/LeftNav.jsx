@@ -22,18 +22,20 @@ constructor(props){
 
 
   }
+  onClickItem(e){
+      console.log(e.target.id)
+  }
 
-  render(){
-    var data=this.props.data&&this.props.data[this.props.dataKey]?this.props.data[this.props.dataKey]:{};
-   console.log(data)
-    let self = this;
-    let subMenu=data.subMenu||[];
-
- let navOptions= subMenu.map(function(dataItem) {
-
+  render()
+  {
+      let data = this.props.data && this.props.data.data? this.props.data.data: {};
+      console.log(data)
+      let menu = data.menu||[];
+      //localStorage.setItem("leftNavSubMenu", JSON.stringify(subMenu));
+      let navOptions= menu.map(function(dataItem) {
       return (
         <li className={"menu_item"} key={dataItem.name}>
-          <a href={dataItem.link}>
+          <a href={dataItem.link} id={dataItem.id} >
             <div className={"menu_in"}>
               <img src={dataItem.image}/>
               {dataItem.name}

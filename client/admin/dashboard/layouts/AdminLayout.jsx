@@ -7,9 +7,9 @@ export default class AdminLayout extends Component {
     return (
       <div>
         <div className="moolya_admin">
-          {this.props.adminHeader}
-          {this.props.adminLeftNav}
-          {this.props.adminView}
+          {this.props.adminContent}
+          {/*{this.props.adminLeftNav}
+          {this.props.adminView}*/}
         </div>
       </div>
     )

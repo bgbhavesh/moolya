@@ -14,17 +14,25 @@ export default class MoolyaTabView extends Component {
   }
 
   render(){
-
+    console.log(this.props.tabOptions)
     let self = this;
-
+   // let tabOptions
     let tabOptions = self.state.tabOptions.map(function(option) {
+
+      return (
+        <li key={option.name}>
+          <div className={"moolya_btn"} ><a href={option[self.state.linkField]} className={"moolya_btn moolya_btn_in"}>  {option[self.state.nameField]} </a> </div>
+        </li>
+      )
+    });
+ /* let tabOptions = self.state.tabOptions.map(function(option) {
 
       return (
         <li key={option.name}>
         <div className={"moolya_btn"} ><a href={option[self.state.linkField]} className={"moolya_btn moolya_btn_in"}>  {option[self.state.nameField]} </a> </div>
         </li>
       )
-    });
+    });*/
     return(
 
           <ul className="swiping_filters">
@@ -37,7 +45,7 @@ export default class MoolyaTabView extends Component {
 
 }
 MoolyaTabView.propTypes={
-  tabOptions: React.PropTypes.array.isRequired,
-  linkField: React.PropTypes.string,
-  nameField: React.PropTypes.string,
+ // tabOptions: React.PropTypes.array.isRequired,
+ // linkField: React.PropTypes.string,
+ // nameField: React.PropTypes.string,
 }

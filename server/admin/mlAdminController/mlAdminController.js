@@ -15,7 +15,7 @@ const { makeExecutableSchema } = require('graphql-tools');
 var app = express().use('*',cors());
 
 const executableSchema = makeExecutableSchema({
-    typeDefs: MlSchemaDef,
+    typeDefs: MlSchemaDef['schema'],
     resolvers: {Query: MlResolver}
 });
 

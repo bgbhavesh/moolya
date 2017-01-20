@@ -12,13 +12,16 @@ export default class MoolyaHeader extends Component {
   }
 
   render(){
+    let data = this.props.data && this.props.data.data? this.props.data.data: {}
+    console.log(data)
+    let subMenu = data.menu||[];
     return (
       <div className="admin_header">
         <div className="header_top"> <img className="pull-left home" src="/images/home_icon.png"/> <img className="logo" src="/images/logo.png" /> <img className="pull-right user" src="/images/user.png"/>
         <MoolyaSearch/>
         </div>
         <div className="header_bottom">
-          <MoolyaTabView tabOptions={this.props.tabOptions}  linkField="link" nameField="name"/>
+          <MoolyaTabView tabOptions={subMenu}  linkField="link" nameField="name"/>
         </div>
       </div>
 

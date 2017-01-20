@@ -12,7 +12,7 @@ if(Meteor.isServer){
         "subMenu" : [
           {
             "link" : "/admin/dashboard/clusters",
-            "name" : "clusters",
+            "name" : "Clusters",
             "id" : "clusters",
             "isLink" : true,
             "isMenu" : true,
@@ -30,33 +30,60 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/dashboard/chapter",
-            "name" : "chapters",
+            "name" : "Chapters",
             "id" : "chapters",
             "isLink" : true,
             "image" : ""
           },
           {
-            "link" : "/admin/dashboard/chapter",
-            "name" : "communities",
+            "link" : "/admin/dashboard/communities",
+            "name" : "Communities",
             "id" : "communities",
             "isLink" : true,
             "image" : ""
           },
-          {
-            "link" : "/admin/dashboard/chapter",
-            "name" : "users",
-            "id" : "users",
-            "isLink" : true,
-            "image" : ""
-          }
+
         ]
       },
       {
         "image" : "/images/cluster_icon.png",
         "link" : "/admin/cluster",
         "name" : "cluster",
+        "id"   :"cluster",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "subMenu" : [
+          {
+            "link" : "/admin/cluster/clusters",
+            "name" : "Clusters",
+            "id" : "clusters",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+          },
+          {
+            "link" : "/admin/cluster/chapter",
+            "name" : "Chapters",
+            "id" : "chapters",
+            "isLink" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/cluster/communities",
+            "name" : "Communities",
+            "id" : "communities",
+            "isLink" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/cluster/internal_users",
+            "name" : "Internal Users",
+            "id" : "Internal_Users",
+            "isLink" : true,
+            "image" : ""
+          },
+
+        ]
       },
       {
         "image" : "/images/chapter_icon.png",

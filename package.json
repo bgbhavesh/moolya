@@ -78,6 +78,7 @@
     "http-proxy-middleware": "^0.17.3",
     "jquery": "^2.2.4",
     "jquery-mousewheel": "^3.1.13",
+    "lodash": "^4.17.4",
     "meteor-node-stubs": "^0.2.4",
     "react": "^15.4.2",
     "react-apollo": "^0.8.1",

@@ -21,6 +21,11 @@ adminSection.route('/dashboard', {
   mount(AdminLayout,{adminContent:<AdminLayoutConnection/>})
   }
 });
+adminSection.route('/cluster', {
+  action(){
+    mount(AdminLayout,{adminContent:<AdminLayoutConnection/>})
+  }
+});
 
 adminSection.route('/login', {
     action(){

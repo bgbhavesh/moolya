@@ -27,22 +27,30 @@ constructor(props){
   }
 
   render()
-  {
+  {    let path=FlowRouter.current().path
+    //console.log(path)
+    if (path === this.href) {
+      return 'active';
+    }
       let data = this.props.data && this.props.data.data? this.props.data.data: {};
-      console.log(data)
+      //console.log(data)
       let menu = data.menu||[];
       //localStorage.setItem("leftNavSubMenu", JSON.stringify(subMenu));
       let navOptions= menu.map(function(dataItem) {
+        let activeClass
+        if(path==dataItem.link){
+          activeClass='active_menu'
+        }
       return (
-        <li className={"menu_item"} key={dataItem.name}>
-          <a href={dataItem.link} id={dataItem.id} >
-            <div className={"menu_in"}>
-              <img src={dataItem.image}/>
-              {dataItem.name}
-            </div>
-            <div className={"menu_item menu_item_in"}></div>
-          </a>
-        </li>
+          <li className={`menu_item ${activeClass} `} key={dataItem.name}>
+            <a href={dataItem.link} id={dataItem.id} >
+              <div className={"menu_in"}>
+                <img src={dataItem.image}/>
+                {dataItem.name}
+              </div>
+              <div className={"menu_item menu_item_in"}></div>
+            </a>
+          </li>
       )
     });
  /* let navOptions = self.state.navOptions.map(function(option) {

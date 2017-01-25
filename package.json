@@ -78,6 +78,7 @@
     "http-proxy-middleware": "^0.17.3",
     "jquery": "^2.2.4",
     "jquery-mousewheel": "^3.1.13",
+    "loadash": "0.0.1",
     "lodash": "^4.17.4",
     "meteor-node-stubs": "^0.2.4",
     "react": "^15.4.2",
@@ -86,6 +87,7 @@
     "react-komposer": "^1.13.1",
     "react-mounter": "^1.2.0",
     "react-scrollbar": "^0.5.1",
+    "react-select": "^1.0.0-rc.2",
     "react-utils": "^1.0.0",
     "redux": "^3.6.0",
     "s3": "^4.4.0"

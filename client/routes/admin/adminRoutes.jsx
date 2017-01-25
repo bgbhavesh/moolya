@@ -9,6 +9,7 @@ import MoolyaLoginLayout from '../../login/layouts/login'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer.jsx'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import AdminLayoutConnection from '../../commons/containers/adminLayout/mainConnection'
+import MlSelect from '../../commons/components/select/Select'
 adminSection = FlowRouter.group({
   prefix: "/admin"
 });
@@ -31,4 +32,9 @@ adminSection.route('/login', {
     action(){
         mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
     }
+});
+adminSection.route('/select', {
+  action(){
+    mount(AdminLayout, {adminContent:<MlSelect/>})
+  }
 });

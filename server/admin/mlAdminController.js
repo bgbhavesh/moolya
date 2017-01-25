@@ -4,8 +4,8 @@
 import { Meteor } from 'meteor/meteor';
 import cors from 'cors';
 import proxyMiddleware from 'http-proxy-middleware';
-import MlResolver from '../mlAdminResolverDef';
-import MlSchemaDef from '../mlAdminSchemaDef';
+import MlResolver from './mlAdminResolverDef';
+import MlSchemaDef from './mlAdminSchemaDef';
 
 var express = require('express');
 var {apolloExpress, graphiqlExpress} = require('apollo-server')

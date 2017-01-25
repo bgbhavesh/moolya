@@ -19,6 +19,6 @@ const schema = `
   }
 `
 
-const MlSchemaDef={'schema':schema};
+MlSchemaDef={'schema':schema};
 
 module.exports= MlSchemaDef;

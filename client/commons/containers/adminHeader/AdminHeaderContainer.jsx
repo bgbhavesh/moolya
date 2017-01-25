@@ -9,7 +9,7 @@ export default class AdminHeaderContainer extends Component {
   constructor() {
     super()
     this.state = {
-      name: 'mlAdminMenu'
+      name: 'mlAdminMenu',
     }
   }
   /* updateName(name) {
@@ -56,7 +56,19 @@ export default class AdminHeaderContainer extends Component {
        
       }`
 
+    const rolequery = gql`
+        query RoleQuery($name: String!) {
+        data:FetchRole(name: $name){
+            name
+            role{
+                  roleName,
+                  roleValue
+                }
+            }
+       
+      }`
     let config={'component':Header,'query':query, 'options':{options: { variables: { name: this.state.name }}}};
+   // let roleconfig={'component':Header,'query':rolequery, 'options':{options: { variables: { name: this.state.rolename }}}};
     let subMenu = JSON.parse(localStorage.getItem("leftNavSubMenu"))
     // if(subMenu && subMenu.length > 0){
     //     const data = {data:subMenu}

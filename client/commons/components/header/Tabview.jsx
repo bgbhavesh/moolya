@@ -45,7 +45,7 @@ export default class MoolyaTabView extends Component {
           return (
             <li key={option.name}>
               <div className={menuStatus}
-                  onclick={this.subMenuClick}><a href={option.link} className={"moolya_btn moolya_btn_in"}>  {option.name} </a> </div>
+                  onClick={this.subMenuClick}><a href={option.link} className={"moolya_btn moolya_btn_in"}>  {option.name} </a> </div>
             </li>
           )
         });

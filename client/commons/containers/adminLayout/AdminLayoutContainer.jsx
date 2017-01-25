@@ -5,6 +5,7 @@ import MoolyaAdminViewContainer from '../adminview/AdminViewContainer.jsx'
 import  MoolyaHeader from '../../components/header/Header'
 import LeftNavContainer from '../adminLeftNav/LeftNavContainer'
 import AdminHeaderContainer from '../adminHeader/AdminHeaderContainer'
+import AdminSelectContainer from '../adminSelect/AdminSelectContainer'
 import  $ from 'jquery'
 export default class MoolyaAdminLayoutContainer extends Component {
   constructor(props){
@@ -127,6 +128,7 @@ export default class MoolyaAdminLayoutContainer extends Component {
       <div>
         <AdminHeaderContainer module="dashboard" tabOptions={tabOptions}/>
         <LeftNavContainer />
+        {/*<AdminSelectContainer/>*/}
         <MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>
       </div>
 

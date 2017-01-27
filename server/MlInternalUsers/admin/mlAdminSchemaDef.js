@@ -40,10 +40,21 @@ const leftNav = `
       name: String
       id:String
       isLink:Boolean
-      isMenu:Boolean
+      isMenu:Boolean 
+      subMenu:[menu]
     }
+    type menu {
+        image: String
+        link:String
+        name:String
+        id:String
+        isLink:Boolean
+        isMenu:Boolean
+        subMenu:[menu]
+    }
+
     type Query {
-        LeftNav(image: String, link: String, name: String, id: String, isLink: Boolean, isMenu: Boolean): [MlLeftNav]
+        LeftNav(name: String): MlLeftNav
     }
 `
 

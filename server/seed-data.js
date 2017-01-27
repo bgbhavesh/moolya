@@ -8,18 +8,26 @@
 /*********************************** Default Moolya Admin Creation <Start> ********************************************/
 
 var adminPassword = "Admin@123";
+var module = ["*"]
 var options = {
     profile:{
-        email: 'admin@moolya.com',
-        isAdmin:true,
-        isApproved:true,
-        isMoolyaBackend:true
+        isInternaluser : "yes",
+        isExternaluser : "no",
+        email: 'systemadmin@moolya.com',
+        InternalUprofile:{
+            moolyaProfile:{
+                email:"systemadmin@moolya.com",
+                phoneNumber:"9999999999",
+                hiearchy:10
+            },
+            accessprofile:[{module}]
+        }
     },
-    username: 'admin@moolya.com',
-    password: adminPassword
+    username: 'systemadmin@moolya.com',
+    password: adminPassword,
 };
 
-var userObj = Meteor.users.findOne({username: "admin@moolya.com"});
+var userObj = Meteor.users.findOne({username: "systemadmin@moolya.com"});
 if(!userObj){
     console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
     Accounts.createUser(options);

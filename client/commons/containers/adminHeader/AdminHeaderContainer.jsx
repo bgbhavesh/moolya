@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 //import { createFragment } from 'apollo-client';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Header from '../../components/header/Header';
+import Header from '../../components/header/MoolyaHeader';
 import AdminLayoutComposer from '../adminLayout/AdminLayoutComposer';
 export default class AdminHeaderContainer extends Component {
   constructor() {

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MoolyaAdminViewContainer from '../adminview/AdminViewContainer.jsx'
-import  MoolyaHeader from '../../components/header/Header'
+import  MoolyaHeader from '../../components/header/MoolyaHeader'
 import LeftNavContainer from '../adminLeftNav/LeftNavContainer'
 import AdminHeaderContainer from '../adminHeader/AdminHeaderContainer'
 import AdminSelectContainer from '../adminSelect/AdminSelectContainer'

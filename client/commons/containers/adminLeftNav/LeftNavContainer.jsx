@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 //import { createFragment } from 'apollo-client';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import LeftNav from '../../components/leftNavbar/LeftNav';
+import LeftNav from '../../components/leftNavbar/MoolyaLeftNav';
 import AdminLayoutComposer from '../adminLayout/AdminLayoutComposer';
 export default class LeftNavContainer extends Component {
     constructor() {

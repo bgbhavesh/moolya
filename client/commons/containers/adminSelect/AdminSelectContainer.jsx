@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 //import { createFragment } from 'apollo-client';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Select from '../../components/select/Select';
+import Select from '../../components/select/MoolyaSelect';
 import AdminLayoutComposer from '../adminLayout/AdminLayoutComposer';
 export default class AdminSelectContainer extends Component {
   constructor() {

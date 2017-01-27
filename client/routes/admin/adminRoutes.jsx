@@ -2,14 +2,14 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {mount} from 'react-mounter';
-import MoolyaLeftNav from '../../commons/components/leftNavbar/LeftNav'
-import  MoolyaHeader from '../../commons/components/header/Header'
+import MoolyaLeftNav from '../../commons/components/leftNavbar/MoolyaLeftNav'
+import  MoolyaHeader from '../../commons/components/header/MoolyaHeader'
 import AdminLayout from '../../admin/dashboard/layouts/AdminLayout'
 import MoolyaLoginLayout from '../../login/layouts/login'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer.jsx'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import AdminLayoutConnection from '../../commons/containers/adminLayout/mainConnection'
-import MlSelect from '../../commons/components/select/Select'
+import MlSelect from '../../commons/components/select/MoolyaSelect'
 adminSection = FlowRouter.group({
   prefix: "/admin"
 });

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import Moolyaselect from '../select/Select'
+import Moolyaselect from '../select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 export default class MoolyaSearch extends Component {

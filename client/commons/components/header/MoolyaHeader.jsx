@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MoolyaTabView from  '../header/Tabview'
-import MoolyaSearch from  '../header/Search'
+import MoolyaSearch from  './MoolyaSearch'
 export default class MoolyaHeader extends Component {
   constructor(props){
     super(props);

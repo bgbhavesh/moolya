@@ -66,7 +66,7 @@ export default class MoolyaSelect extends Component {
       console.log(this);
       console.log(data);
       console.log(options);
-      var callbackHandler=data.variables&&data.variables.callBackHandler?data.variables.callBackHandler:null;
+      let callbackHandler=data.variables&&data.variables.callBackHandler?data.variables.callBackHandler:null;
       if(data.loading===false&&callbackHandler){
         callbackHandler(data.data);
       }
@@ -82,7 +82,7 @@ export default class MoolyaSelect extends Component {
      // console.log(this);
     //  console.log(data);
      // console.log(options);
-      var callbackHandler=data.variables&&data.variables.callBackHandler?data.variables.callBackHandler:null;
+      let callbackHandler=data.variables&&data.variables.callBackHandler?data.variables.callBackHandler:null;
       if(data.loading===false&&callbackHandler){
         callbackHandler(data.data);
       }

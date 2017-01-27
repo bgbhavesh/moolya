@@ -36,7 +36,7 @@ export default class MoolyaTabView extends Component {
     let menus=this.props.tabOptions
     let subMenu,tabOptions
     menuStatus='moolya_btn'
-    for(let i=0;i<menus.length;i++){
+   for(let i=0;i<menus.length;i++){
       menuid="/admin/"+menus[i].id
       if(menuid==path){
         subMenu=menus[i].subMenu

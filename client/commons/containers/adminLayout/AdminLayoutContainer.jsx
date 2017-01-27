@@ -4,14 +4,23 @@ import { render } from 'react-dom';
 import MoolyaAdminViewContainer from '../adminview/AdminViewContainer.jsx'
 import  MoolyaHeader from '../../components/header/MoolyaHeader'
 import LeftNavContainer from '../adminLeftNav/LeftNavContainer'
-import AdminHeaderContainer from '../adminHeader/AdminHeaderContainer'
+//import AdminHeaderContainer from '../adminHeader/AdminHeaderContainer'
 import AdminSelectContainer from '../adminSelect/AdminSelectContainer'
 import  $ from 'jquery'
+import MoolyaloginContainer from '../../../login/container/loginContainer'
 export default class MoolyaAdminLayoutContainer extends Component {
   constructor(props){
     super(props);
+    this.onlogout=this.onlogout.bind(this);
+    return this;
   }
 
+  onlogout(logout){
+    if(logout){
+      let loginContainer=MoolyaloginContainer.loginContainer
+      loginContainer.logout()
+    }
+  }
 
 
   render(){
@@ -122,11 +131,18 @@ export default class MoolyaAdminLayoutContainer extends Component {
         route:'/admin/dashboard',
       }
     ]
+    logoutUser=function(logout){
+      alert()
+    }
+
+
+
 
     return(
 
       <div>
-        <AdminHeaderContainer module="dashboard" tabOptions={tabOptions}/>
+        {/*<AdminHeaderContainer module="dashboard" tabOptions={tabOptions}  logoutProfile={logoutProfile}/>*/}
+        <MoolyaHeader  onlogout={this.onlogout.bind(this)}/>
         <LeftNavContainer />
         {/*<AdminSelectContainer/>*/}
         <MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>

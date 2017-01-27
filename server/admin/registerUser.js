@@ -10,5 +10,16 @@ Meteor.methods({
     }
 
 
+  },
+
+  loginWithPassword(data){
+    check(data,Object);
+    try{
+      var loginUser= MlSoftRegistration.findOne(data).fetch();
+      return loginUser;
+    }catch(e){
+      throw new Meteor.Error(403,"invalid email or password");
+    }
   }
+
 })

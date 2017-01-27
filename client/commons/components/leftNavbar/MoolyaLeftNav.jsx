@@ -35,7 +35,7 @@ constructor(props){
       let data = this.props.data && this.props.data.data? this.props.data.data: {};
       //console.log(data)
       let menu = data.menu||[];
-      //localStorage.setItem("leftNavSubMenu", JSON.stringify(subMenu));
+      localStorage.setItem("leftNavSubMenu", JSON.stringify(menu));
       let navOptions= menu.map(function(dataItem) {
         let activeClass
         if(path==dataItem.link){

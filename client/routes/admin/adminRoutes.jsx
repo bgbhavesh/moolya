@@ -33,8 +33,9 @@ adminSection.route('/login', {
         mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
     }
 });
-adminSection.route('/select', {
+adminSection.route('/chapter', {
   action(){
-    mount(AdminLayout, {adminContent:<MlSelect/>})
+    mount(AdminLayout,{adminContent:<MoolyaToaster/>})
   }
 });
+

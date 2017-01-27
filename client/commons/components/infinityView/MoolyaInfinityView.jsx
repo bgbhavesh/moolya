@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import  $ from 'jquery'
 import MoolyaFooter from '../footer/Footer'
-import MoolyaMapView from '../map/MapView'
+import MoolyaMapView from '../map/MoolyaMapView'
 import MoolyaListView from '../list/ListView'
 export default class MoolyaInfinityView extends Component {
   constructor(props){

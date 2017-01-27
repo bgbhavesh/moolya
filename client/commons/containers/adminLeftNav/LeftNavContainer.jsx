@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 //import { createFragment } from 'apollo-client';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import LeftNav from '../../components/leftNavbar/LeftNav';
-import LeftNavComposer from './LeftNavComposer';
+import LeftNav from '../../components/leftNavbar/MoolyaLeftNav';
+import AdminLayoutComposer from '../adminLayout/AdminLayoutComposer';
 export default class LeftNavContainer extends Component {
     constructor() {
         super()
@@ -28,7 +28,7 @@ mlLeftNav{
   id
 }
 }`*/
-      const query = gql`fragment subMenu on menu{
+      const query = gql`fragment subMenu on Menu{
                   id
                   isLink
                   isMenu
@@ -38,9 +38,9 @@ mlLeftNav{
               }
               
               query LeftNavQuery($name: String!) {
-        mlLeftNav(name: $name){
+        data:FetchMenu(name: $name){
             name
-            subMenu{
+            menu{
               ...subMenu 
                  subMenu{
                   ...subMenu
@@ -56,13 +56,14 @@ mlLeftNav{
        
       }`
 
-      let config={'component':LeftNav,'query':query, 'dataKey':'mlLeftNav', 'options':{options: { variables: { name: this.state.name }}}};
-        return (
-            <div >
-                <LeftNavComposer {...config}/>
-
-            </div>
-        )
+      let config={'component':LeftNav,'query':query, 'options':{options: { variables: { name: this.state.name }}}};
+      let subMenu = JSON.parse(localStorage.getItem("leftNavSubMenu"))
+      // if(subMenu && subMenu.length > 0){
+      //     const data = {data:subMenu}
+      //     return (<LeftNav {...data}/>)
+      // }
+      // else
+        return(<div><AdminLayoutComposer {...config}/></div>)
     }
 }
 

@@ -4,6 +4,7 @@
 
 import MlResolver from '../mlAdminResolverDef'
 
-MlResolver['LeftNav'] = () =>{
-    return MlLeftNav.find().fetch();
+
+MlResolver['FetchMenu'] = (_,{name},context) =>{
+    return MlMenus.findOne({name});
 }

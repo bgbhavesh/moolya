@@ -2,9 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import  $ from 'jquery'
-import MoolyaInfinityView from '../infinityView/InfinityView'
+import MoolyaInfinityView from '../infinityView/MoolyaInfinityView'
 import MoolyaListView from '../list/ListView'
-import MoolyaMapView from '../map/MapView'
+import MoolyaMapView from '../map/MoolyaMapView'
 import MoolyaFooter from '../footer/Footer'
 export default class MoolyaAdminView extends Component {
   constructor(props){

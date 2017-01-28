@@ -4,7 +4,7 @@
 // let hierarchies = ["community", "chapter", "cluster", "Platform"];
 
 let hierarchies = ["systemadmin", "clusteradmin", "chapteradmin", "communityadmin", "teamLead"];
-let mlHierarchyCount = 10;
+let mlHierarchyCount = Meteor.settings.private.HierarchyCount;
 
 Meteor.startup(function () {
     for(i = 0; i < hierarchies.length; i++){

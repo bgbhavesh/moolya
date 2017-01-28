@@ -1,22 +1,23 @@
 {
   "public": {
-    "MONGO_URL":"mongodb://localhost:27017"
+      "MONGO_URL":"mongodb://localhost:27017"
   },
   "private": {
-    "emailConfig":{
-      "username": "raksanconsulting",
-      "key": "IMRne62ShKE6Q8zU0NJBsQ"
-    },
-    "aws":{
-      "s3Config":{
-        "accessKeyId":"",
-        "secretAccessKey":"",
-        "maxAsyncS3":20,
-        "s3RetryCount":3,
-        "s3RetryDelay":1000,
-        "multipartUploadThreshold": 20971520,
-        "multipartUploadSize": 15728640
+      "HierarchyCount": 10,
+      "emailConfig":{
+        "username": "raksanconsulting",
+        "key": "IMRne62ShKE6Q8zU0NJBsQ"
+      },
+      "aws":{
+        "s3Config":{
+          "accessKeyId":"",
+          "secretAccessKey":"",
+          "maxAsyncS3":20,
+          "s3RetryCount":3,
+          "s3RetryDelay":1000,
+          "multipartUploadThreshold": 20971520,
+          "multipartUploadSize": 15728640
+        }
       }
-    }
   }
 }

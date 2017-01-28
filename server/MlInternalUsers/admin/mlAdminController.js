@@ -6,6 +6,10 @@ import cors from 'cors';
 import proxyMiddleware from 'http-proxy-middleware';
 import MlResolver from './mlAdminResolverDef';
 import MlSchemaDef from './mlAdminSchemaDef';
+import { graphqlExpress } from 'graphql-server-express';
+import getContext from './mlAuthContext'
+import './mlAuthoverrideDDP'
+
 
 var express = require('express');
 var {apolloExpress, graphiqlExpress} = require('apollo-server')
@@ -19,11 +23,18 @@ const executableSchema = makeExecutableSchema({
   resolvers: {Query: MlResolver.MlQueryResolver}
 });
 
+const expressServer = graphqlExpress((req) => {
+  var context = {};
+  context = getContext({req});
+  context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  return {
+    schema: executableSchema,
+    graphiql: true,
+    context:context
+  }
+})
 
-app.use('/graphql', bodyParser.json(), apolloExpress({
-  schema: executableSchema,
-  graphiql: true,
-}));
+app.use('/graphql', bodyParser.json(), Meteor.bindEnvironment(expressServer));
 
 // app.post('/login', function(req, res)
 // {
@@ -41,6 +52,8 @@ app.use('/graphql', bodyParser.json(), apolloExpress({
 
 app.listen(8090);
 console.log('Running a GraphQL API server at localhost:8090/graphql');
+// This binds the specified paths to the Express server running Apollo + GraphiQL
+WebApp.connectHandlers.use(Meteor.bindEnvironment(app));
 
 WebApp.rawConnectHandlers.use(proxyMiddleware(`http://localhost:8090/graphql`));
 

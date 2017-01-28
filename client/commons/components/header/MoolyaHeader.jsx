@@ -26,11 +26,11 @@ export default class MoolyaHeader extends Component {
   }
 
   render(){
-   // let data = this.props.data && this.props.data.data? this.props.data.data: {}
+    let data = this.props.data && this.props.data.data? this.props.data.data: {}
    // console.log(data)
-    //let subMenu = data.menu||[];
-      let subMenu=localStorage.getItem("leftNavSubMenu")
-      subMenu=JSON.parse(subMenu)
+    let subMenu = data.menu||[];
+     // let subMenu=localStorage.getItem("leftNavSubMenu")
+     // subMenu=JSON.parse(subMenu)
     return (
       <div className="admin_header">
         <div className="header_top"> <img className="pull-left home" src="/images/home_icon.png"/> <img className="logo" src="/images/logo.png" />

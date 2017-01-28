@@ -11,6 +11,20 @@ export default  class AdminLayoutConnection extends React.Component {
         super(...args);
 
         const networkInterface = createNetworkInterface('http://localhost:8090/graphql');
+
+       networkInterface.use([{
+           applyMiddleware(req, next) {
+             if (!req.options.headers) {
+               req.options.headers = {};  // Create the header object if needed.
+            }
+
+          // get the authentication token from local storage if it exists
+          const token = localStorage.getItem('Meteor.loginToken');
+          req.options.headers.authorization = token ? token : null;
+          next();
+        }
+      }]);
+
         this.client = new ApolloClient({
             networkInterface,
             dataIdFromObject: r => r.id,

@@ -33,7 +33,7 @@ constructor(props){
       return 'active';
     }
       let data = this.props.data && this.props.data.data? this.props.data.data: {};
-      //console.log(data)
+        //console.log(data)
       let menu = data.menu||[];
       localStorage.setItem("leftNavSubMenu", JSON.stringify(menu));
       let navOptions= menu.map(function(dataItem) {

@@ -2,11 +2,11 @@
 import MlResolver from '../mlAdminResolverDef'
 
 
-MlResolver['FetchRole'] = (_,{name},context) =>{
+MlResolver.MlQueryResolver['FetchRole'] = (_,{name},context) =>{
   return MlRoles.findOne({name});
 }
 
-MlResolver['FetchRoles'] = (_,{name,searchQuery},context) =>{
+MlResolver.MlQueryResolver['FetchRoles'] = (_,{name,searchQuery},context) =>{
   let role=null;
   if(searchQuery){
      role= MlRoles.findOne({name:name,"role.roleName":{ $regex:"^"+searchQuery, $options: "si" }});

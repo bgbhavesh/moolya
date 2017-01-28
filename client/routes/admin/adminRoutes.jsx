@@ -17,23 +17,34 @@ adminSection.route('/dashboard', {
     // action(){
     //   mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<MoolyaLeftNav navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} nameField="name" imageLink="image" statusField="status"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})
     // }
+  name: 'dashboard',
   action(){
    /* mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<LeftNavConnection navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})*/
   mount(AdminLayout,{adminContent:<AdminLayoutConnection/>})
   }
 });
+adminSection.route('/dashboard/clusters', {
+  name: 'dashboard_clusters',
+  action(){
+    mount(AdminLayout,{adminContent:<AdminLayoutConnection/>})
+  }
+});
 adminSection.route('/cluster', {
+  name: 'cluster',
   action(){
     mount(AdminLayout,{adminContent:<AdminLayoutConnection/>})
   }
 });
 
+
 adminSection.route('/login', {
+  name: 'admin',
     action(){
         mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
     }
 });
 adminSection.route('/chapter', {
+  name: 'chapter',
   action(){
     mount(AdminLayout,{adminContent:<MoolyaToaster/>})
   }

@@ -13,16 +13,26 @@ if(Meteor.isServer){
           {
             "link" : "/admin/dashboard/clusters",
             "name" : "Clusters",
-            "id" : "clusters",
+            "id" : "dashboard_clusters",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
-            "submenu" : [
+            "subMenu" : [
               {
                 "dynamicLink" : true,
                 "dynamicLinkHandler" : "",
-                "name" : "cluster Details",
-                "id" : "clusterDetails",
+                "name" : "cluster_Details",
+                "link":"",
+                "id" : "dashboard_clusterDetails",
+                "isMenu" : true,
+                "image" : ""
+              },
+              {
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "name" : "chapter Details",
+                "link":"",
+                "id" : "dashboard_chapterDetails",
                 "isMenu" : true,
                 "image" : ""
               }
@@ -31,14 +41,14 @@ if(Meteor.isServer){
           {
             "link" : "/admin/dashboard/chapter",
             "name" : "Chapters",
-            "id" : "chapters",
+            "id" : "dashboard_chapters",
             "isLink" : true,
             "image" : ""
           },
           {
             "link" : "/admin/dashboard/communities",
             "name" : "Communities",
-            "id" : "communities",
+            "id" : "dashboard_communities",
             "isLink" : true,
             "image" : ""
           },
@@ -56,7 +66,7 @@ if(Meteor.isServer){
           {
             "link" : "/admin/cluster/clusters",
             "name" : "Clusters",
-            "id" : "clusters",
+            "id" : "cluster_clusters",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
@@ -64,21 +74,21 @@ if(Meteor.isServer){
           {
             "link" : "/admin/cluster/chapter",
             "name" : "Chapters",
-            "id" : "chapters",
+            "id" : "cluster_chapters",
             "isLink" : true,
             "image" : ""
           },
           {
             "link" : "/admin/cluster/communities",
             "name" : "Communities",
-            "id" : "communities",
+            "id" : "cluster_communities",
             "isLink" : true,
             "image" : ""
           },
           {
             "link" : "/admin/cluster/internal_users",
             "name" : "Internal Users",
-            "id" : "Internal_Users",
+            "id" : "cluster_Internal_Users",
             "isLink" : true,
             "image" : ""
           },

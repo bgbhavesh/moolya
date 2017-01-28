@@ -1,6 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
-let Chapter = `
+let ChapterSchema = `
     type Chapter{
       clusterId:String
       chapterName: String
@@ -10,9 +10,24 @@ let Chapter = `
       id:String
       state:String
       email:String
-      status:Boolean
+      isActive:Boolean
       showOnMap:Boolean
+    }
+    
+    
+     type Mutation {
+      createChapter (
+        clusterId:String
+        chapterName: String
+        diplayName: String
+        about:String
+        link:String
+        id:String
+        state:String
+        email:String
+        showOnMap:Boolean
+    ):String
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Chapter]);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],ChapterSchema]);

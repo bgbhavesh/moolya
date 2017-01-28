@@ -20,7 +20,7 @@ var app = express().use('*',cors());
 
 const executableSchema = makeExecutableSchema({
   typeDefs: MlSchemaDef['schema'],
-  resolvers: {Query: MlResolver.MlQueryResolver}
+  resolvers: {Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver}
 });
 
 const expressServer = graphqlExpress((req) => {

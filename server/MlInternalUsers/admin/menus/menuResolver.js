@@ -6,5 +6,5 @@ import MlResolver from '../mlAdminResolverDef'
 
 
 MlResolver.MlQueryResolver['FetchMenu'] = (_,{name},context) =>{
-    return MlMenus.findOne({name});
+  return MlMenus.findOne({name});
 }

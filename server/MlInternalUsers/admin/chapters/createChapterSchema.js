@@ -15,4 +15,4 @@ let Chapter = `
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],Chapter]);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Chapter]);

@@ -1,6 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
-let Cluster = `
+let ClusterSchema = `
     type Chapter{
       countryId :String
       displayName :String
@@ -11,11 +11,11 @@ let Cluster = `
       showOnMap : Boolean
     }
     type Mutation {
-    createCluster(input: MessageInput): Message
+        createCluster(input: MessageInput): Message
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],Cluster]);
+// MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],ClusterSchema]);
 
 class Cluster {
   constructor(id, {countryId, displayName,about,link,email,showOnMap}) {

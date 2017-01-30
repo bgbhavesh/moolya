@@ -15,7 +15,7 @@ export default class MoolyaTabView extends Component {
   render(){
     let path=FlowRouter.current().route.name;
    // const dashboard=path&&path.indexOf('dashboard')>=0?true:false;
-    let menus=this.props.tabOptions
+    let menus=this.props.tabOptions||[];
     let subMenu,tabOptions;
     //subMenu=_.find(menus, function(o) { return o.id == path; });
 

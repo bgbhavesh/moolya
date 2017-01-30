@@ -51,7 +51,7 @@ export default class MoolyaSearch extends Component {
     return (
       <div className="form-control pull-right" >
       {/*  <input type="text" className="form-control pull-right"   />*/}
-      <Moolyaselect multiSelect={true} selectedValue={this.state.selectedValue} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={this.optionsBySelect.bind(this)} />
+      <Moolyaselect multiSelect={true} valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedValue} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={this.optionsBySelect.bind(this)} />
 
     </div>
     )

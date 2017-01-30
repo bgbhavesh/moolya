@@ -79,9 +79,6 @@ export default class MoolyaSelect extends Component {
   render(){
 
     let QueryHandler=({data})=> {
-     // console.log(this);
-    //  console.log(data);
-     // console.log(options);
       let callbackHandler=data.variables&&data.variables.callBackHandler?data.variables.callBackHandler:null;
       if(data.loading===false&&callbackHandler){
         callbackHandler(data.data);
@@ -91,12 +88,14 @@ export default class MoolyaSelect extends Component {
 
 // You can also use `graphql` for GraphQL mutations
    const options=this.state.options?this.state.options:[];
-    const executeQuery=this.state.executeQuery;
+   const executeQuery=this.state.executeQuery;
    const isDynamic=this.props.isDynamic;
    const query=this.props.query;
+   const labelKey=this.props.labelKey||'label';
+   const valueKey=this.props.valueKey||'value';
    let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{}}};
-   console.log(queryOptions)
-    queryOptions.options.variables.searchQuery=this.state.searchTerm
+    console.log(queryOptions)
+    queryOptions.options.variables.searchQuery=this.state.searchTerm;
     console.log(queryOptions)
    let QueryExecutor=null;
    if(isDynamic&&query&&executeQuery){
@@ -106,7 +105,7 @@ export default class MoolyaSelect extends Component {
     return(
       <div>
         {executeQuery&&<QueryExecutor />}
-        {<Select multi={this.props.multiSelect} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
+        {<Select multi={this.props.multiSelect} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
       </div>
     )
   }

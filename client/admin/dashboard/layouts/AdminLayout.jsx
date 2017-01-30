@@ -8,8 +8,6 @@ export default class AdminLayout extends Component {
       <div>
         <div className="moolya_admin">
           {this.props.adminContent}
-          {/*{this.props.adminLeftNav}
-          {this.props.adminView}*/}
         </div>
       </div>
     )

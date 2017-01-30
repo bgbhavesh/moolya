@@ -1,6 +1,6 @@
-import React, {Component, PropTypes} from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
+import React, { Component, PropTypes } from 'react';
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
 import _ from 'lodash'
 export default class MoolyaTabView extends Component {
   constructor(props) {

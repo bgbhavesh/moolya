@@ -10,6 +10,7 @@ import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminVi
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import AdminLayoutConnection from '../../commons/containers/adminLayout/mainConnection'
 import MlSelect from '../../commons/components/select/MoolyaSelect'
+import MoolyaAddCluster from '../../admin/cluster/components/MoolyaAddCluster'
 adminSection = FlowRouter.group({
   prefix: "/admin"
 });
@@ -35,7 +36,18 @@ adminSection.route('/cluster', {
     mount(AdminLayout,{adminContent:<AdminLayoutConnection/>})
   }
 });
-
+adminSection.route('/cluster/clusters', {
+  name: 'cluster',
+  action(){
+    mount(AdminLayout,{adminContent:<AdminLayoutConnection/>})
+  }
+});
+adminSection.route('/addCluster', {
+  name: 'addCluster',
+  action(){
+    mount(AdminLayout,{adminContent:<MoolyaAddCluster/>})
+  }
+});
 
 adminSection.route('/login', {
   name: 'admin',

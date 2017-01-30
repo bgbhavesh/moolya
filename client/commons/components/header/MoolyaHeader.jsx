@@ -29,9 +29,10 @@ export default class MoolyaHeader extends Component {
  //   let data = this.props.data && this.props.data.data? this.props.data.data: {}
    // console.log(data)
     //let subMenu = data.menu||[];
+    let tabsubMenu;
      let subMenu=localStorage.getItem("leftNavSubMenu")
     if(subMenu){
-      subMenu=JSON.parse(subMenu)
+    tabsubMenu=JSON.parse(subMenu)
     }
 
     return (
@@ -50,7 +51,7 @@ export default class MoolyaHeader extends Component {
           </div>
         </div>
         <div className="header_bottom">
-          <MoolyaTabView tabOptions={subMenu}  linkField="link" nameField="name"/>
+          <MoolyaTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>
         </div>
       </div>
 

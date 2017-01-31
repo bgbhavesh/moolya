@@ -2,6 +2,7 @@
  * Created by mohdmohasin on 29/1/17.
  */
 import React, { Component } from 'react';
+import hoistNonReactStatic from 'hoist-non-react-statics';
 
 function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';

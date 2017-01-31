@@ -11,23 +11,31 @@ function getDisplayName(WrappedComponent) {
 export default function formHandler() {
   return (SourceComponent) => {
     class MlFormHandler extends Component {
+
       constructor(props) {
         super(props);
         this.state = {
-          loading: false,
-          error: '',
+          loading: false, error: ''
         };
-        return;
+        this.handler.bind(this);
+        this.callBackHandler.bind(this);
+        return this;
       }
 
-      handler(handleMethod,handleSuccess,handleError){
+      async callBackHandler(){
+        this.setState({ loading: false, error: '' });
+      }
+
+      async handler(handleMethod,handleSuccess,handleError){
         if(handleMethod){
             this.setState({ loading: true, error: '' });
 
             try{
-              let resp=handleMethod();
+              let resp=await handleMethod();
+             this.setState({ loading: false, error: '' });
+              var that=this;
               if(handleSuccess){
-                handleSuccess();
+                handleSuccess(resp);
               }
 
             }catch(error){
@@ -47,7 +55,7 @@ export default function formHandler() {
         return (
           <div>
           {showLoader===true? (<div>Loading...</div>) :
-            (<SourceComponent {...this.props} handler={this.handler}/>)
+            (<SourceComponent {...this.props} handler={this.handler.bind(this)}/>)
           }
         </div>
         )
@@ -57,7 +65,7 @@ export default function formHandler() {
     }
 
     MlFormHandler.displayName = `MlFormHandler(${getDisplayName(SourceComponent)})`;
-    hoistNonReactStatic(MlFormHandler, SourceComponent);
+    hoistNonReactStatic(this.MlFormHandler, SourceComponent);
     return MlFormHandler;
   }
 };

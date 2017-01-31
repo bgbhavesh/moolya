@@ -26,7 +26,10 @@ export default function formHandler() {
 
             try{
               let resp=handleMethod();
-              handleSuccess();
+              if(handleSuccess){
+                handleSuccess();
+              }
+
             }catch(error){
               this.setState({ loading: false, error: '' });
               if(handleError){

@@ -2,7 +2,7 @@ import React from 'react';
 import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
 /*import {createClusterActionHandler} from '../actions/createCluster'*/
-import MoolyaActionComponent from '../../../commons/components/footer/ActionComponent'
+import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
 class MlAddChapterFormComponent extends React.Component {
   constructor(props) {
@@ -124,7 +124,7 @@ class MlAddChapterFormComponent extends React.Component {
 
           </form>
         </div>
-        <MoolyaActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
         />
       </div>
     )

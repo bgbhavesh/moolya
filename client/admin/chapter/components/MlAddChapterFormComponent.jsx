@@ -1,10 +1,10 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
-import {createClusterActionHandler} from '../actions/createCluster'
+/*import {createClusterActionHandler} from '../actions/createCluster'*/
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
- class MlAddClusterFormComponent extends React.Component {
+class MlAddChapterFormComponent extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -23,15 +23,15 @@ import formHandler from '../../../commons/containers/MlFormHandler';
   }
 
   async addEventHandler() {
-     this.createCluster()
+    this.createCluster()
   }
 
   async handleSuccess(response){
-   FlowRouter.go("/admin/cluster");
+    FlowRouter.go("/admin/cluster");
   };
-   async  createCluster(){
+  async  createCluster(){
 
-      clusterName=this.refs.clusterName.value,
+    clusterName=this.refs.clusterName.value,
       displayName=this.refs.displayName.value,
       about=this.refs.about.value,
       uploadImage=this.refs.uploadImage.value,
@@ -39,7 +39,7 @@ import formHandler from '../../../commons/containers/MlFormHandler';
       ismapShow=this.refs.ismapShow.value,
       status=this.refs.status.value;
 
-   const response = await createClusterActionHandler({clusterName,displayName,about,uploadImage,email,ismapShow,status})
+    const response = await createClusterActionHandler({clusterName,displayName,about,uploadImage,email,ismapShow,status})
 
   }
 
@@ -125,10 +125,10 @@ import formHandler from '../../../commons/containers/MlFormHandler';
           </form>
         </div>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-                               />
+        />
       </div>
     )
   }
 };
 
-export default MoolyaAddCluster=formHandler()(MlAddClusterFormComponent);
+export default MoolyaAddCluster=formHandler()(MlAddChapterFormComponent);

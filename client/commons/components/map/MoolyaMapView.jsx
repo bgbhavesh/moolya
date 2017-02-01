@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import  $ from 'jquery'
-import MoolyaFooter from '../footer/ActionComponent'
 export default class MoolyaCluster extends Component {
 
   render(){

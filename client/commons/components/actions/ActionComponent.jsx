@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import  $ from 'jquery';
 import _ from 'lodash';
-export default class MoolyaActionComponent extends Component {
+export default class MlActionComponent extends Component {
   constructor(props){
     super(props);
   return this;
@@ -80,7 +80,7 @@ export default class MoolyaActionComponent extends Component {
 
 }
 
-MoolyaActionComponent.PropTypes={
+MlActionComponent.PropTypes={
   routerPath:React.PropTypes.string,
   imagePath:React.PropTypes.string
 }

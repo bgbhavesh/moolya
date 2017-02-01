@@ -3,8 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {client} from '../apolloConnection';
 import {ApolloProvider} from 'react-apollo';
-import  MlAdminHeader from '../../../commons/components/header/MlAdminHeader'
-import MlAdminLeftNav from '../../../commons/components/leftNavbar/MlAdminLeftNav'
+import  MlAdminHeader from '../../layouts/header/MlAdminHeader'
+import MlAdminLeftNav from '../../layouts/leftnav/MlAdminLeftNav'
 import MlAppContextProvider from './MlAppContextProvider';
 import { graphql,compose } from 'react-apollo';
 import gql from 'graphql-tag'
@@ -36,7 +36,7 @@ class MlAdminAppComponent extends Component {
     const showLoader=this.state.loading;
     const MlComponent=function(props){
       if (props.showLoader) {
-        return <div>Loading</div>;
+        return <div className="loader_wrap"></div>;
       }
 
       return (<MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language}>

@@ -5,7 +5,7 @@ import  $ from 'jquery'
 import MoolyaInfinityView from '../infinityView/MoolyaInfinityView'
 import MoolyaListView from '../list/ListView'
 import MoolyaMapView from '../map/MoolyaMapView'
-import MoolyaFooter from '../footer/ActionComponent'
+import MlActionComponent from '../actions/ActionComponent'
 export default class MoolyaAdminView extends Component {
   constructor(props){
     super(props);
@@ -30,7 +30,7 @@ export default class MoolyaAdminView extends Component {
       return (
         <div>
           <div className="admin_main_wrap">
-            {viewMode ? <MoolyaMapView/> : <div><MoolyaListView {...listViewProps}/><MoolyaFooter {...footerProps}/></div> }
+            {viewMode ? <MoolyaMapView/> : <div><MoolyaListView {...listViewProps}/><MlActionComponent {...footerProps}/></div> }
             {showInfinity && (<MoolyaInfinityView {...infinityViewProps} />)}
           </div>
         </div>

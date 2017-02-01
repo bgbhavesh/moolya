@@ -1,8 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MoolyaAdminViewContainer from '../adminview/AdminViewContainer.jsx'
-import  MoolyaHeader from '../../components/header/MlAdminHeader'
-import LeftNavContainer from '../adminLeftNav/MlLeftNavContainer'
 import AdminLayout1 from '../../../admin/core/components/MlAdminApp';
 import AdminLayoutComposer from './AdminLayoutComposer'
 import MoolyaloginContainer from '../../../login/container/loginContainer'
@@ -171,17 +168,6 @@ export default class MoolyaAdminLayoutContainer extends Component {
     let config={'component':AdminLayout1,'query':query, 'options':{options: { variables: { name: this.state.name }}},'options1':{options: { variables: { name: 'mlAdminMenu1' }}}};
 
     return(<div><AdminLayoutComposer {...config}/></div>)
-
-   /* return(
-
-      <div>
-
-        <MoolyaHeader  onlogout={this.onlogout.bind(this)}/>
-        <LeftNavContainer />
-        <MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>
-      </div>
-
-    )*/
   }
 
 }

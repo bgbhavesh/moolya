@@ -5,7 +5,7 @@ import  $ from 'jquery'
 import MoolyaInfinityView from '../infinityView/MoolyaInfinityView'
 import MoolyaListView from '../list/ListView'
 import MoolyaMapView from '../map/MoolyaMapView'
-import MoolyaFooter from '../footer/Footer'
+import MoolyaFooter from '../footer/ActionComponent'
 export default class MoolyaAdminView extends Component {
   constructor(props){
     super(props);

@@ -20,7 +20,8 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) =>{
         if(id){
             let code = 200;
             let result = {clusterid: id}
-            return new MlRespPayload().successPayload(result, code);
+            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            return response
         }
     }
 }

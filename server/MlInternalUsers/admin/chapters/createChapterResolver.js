@@ -1,12 +1,25 @@
 import MlResolver from '../mlAdminResolverDef'
 
+import MlRespPayload from '../../../commons/mlPayload'
 
-MlResolver.MlMutationResolver['createChapter'] = (_,{clusterId,chapterName,diplayName,about,link,state,email,showOnMap},context) =>{
-   //Check Chapter exists
-   if(MlChapters.find(clusterId)){
-     throw new Error("Entry found in DB");
-   }else{
-     MlChapters.insert({ clusterId,chapterName,diplayName,about,link,state,email,showOnMap });
-   }
-   return "Success";
+MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
+  check(args, Object)
+  check(args.clusterId, String)
+  check(args.chapterName, String)
+  check(args.diplayName, String)
+  check(args.about, String)
+  check(args.link, String)
+  check(args.state, String)
+  check(args.email, String)
+  check(args.showOnMap, Boolean)
+  check(args.isActive, Boolean)
+    // TODO : Duplicate Cluster Identification
+    // TODO : Authorization
+    let id = MlChapters.insert(args);
+    if(id){
+      let code = 200;
+      let result = {chapterId: id}
+      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+      return response;
+  }
 }

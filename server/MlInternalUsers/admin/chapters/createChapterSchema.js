@@ -26,6 +26,7 @@ let ChapterSchema = `
         state:String
         email:String
         showOnMap:Boolean
+        isActive:Boolean
     ):String
     }
 `

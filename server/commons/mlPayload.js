@@ -4,7 +4,6 @@
 "use strict";
 
 
-
 module.exports = class MlRespPayload{
     constructor(){
     }
@@ -16,7 +15,7 @@ module.exports = class MlRespPayload{
             result:object
         }
 
-        return result;
+        return JSON.stringify(result);
 
     }
 
@@ -27,6 +26,6 @@ module.exports = class MlRespPayload{
             code: code,
             result:{error:errMsg}
         }
-        return result;
+        return JSON.stringify(result);
     }
 }

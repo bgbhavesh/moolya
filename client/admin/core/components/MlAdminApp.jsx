@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {client} from '../apolloConnection';
 import {ApolloProvider} from 'react-apollo';
-import  MlAdminHeader from '../../../commons/components/header/MlAdminHeader'
+import  MlAdminHeader from '../../layouts/header/MlAdminHeader'
 import MlAdminLeftNav from '../../layouts/leftnav/MlAdminLeftNav'
 import MlAppContextProvider from './MlAppContextProvider';
 import { graphql,compose } from 'react-apollo';

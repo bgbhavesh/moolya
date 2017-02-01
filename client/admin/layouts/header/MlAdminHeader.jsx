@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import MoolyaTabView from  '../header/Tabview'
-import MoolyaSearch from  './MoolyaSearch'
+import MlTabView from  './MlAdminTabView'
+import MlAdminSearch from  './MlAdminSearch'
 import MoolyaloginContainer from '../../../login/container/loginContainer'
 export default class MlAdminHeader extends Component {
   constructor(props,context){
@@ -33,7 +33,7 @@ export default class MlAdminHeader extends Component {
     return (
       <div className="admin_header">
         <div className="header_top"> <img className="pull-left home" src="/images/home_icon.png"/> <img className="logo" src="/images/logo.png" />
-        <MoolyaSearch/>
+       {/* <MlAdminSearch/>*/}
           <div className="ml_profile" role="navigation">
             <h1 id="NavLbl" className=""></h1>
             <ol>
@@ -46,7 +46,7 @@ export default class MlAdminHeader extends Component {
           </div>
         </div>
         <div className="header_bottom">
-          <MoolyaTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>
+          <MlTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>
         </div>
       </div>
 

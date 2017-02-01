@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import Moolyaselect from '../select/MoolyaSelect'
+import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-export default class MoolyaSearch extends Component {
+export default class MlAdminSearch extends Component {
   constructor(props){
     super(props);
     this.state={selectedValue:null};

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import AdminLayout1 from '../../../admin/core/components/MlAdminApp';
-import AdminLayoutComposer from './AdminLayoutComposer'
+import MlGenericDataComposer from '../MlGenericDataComposer'
 import MoolyaloginContainer from '../../../login/container/loginContainer'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
@@ -167,7 +167,7 @@ export default class MoolyaAdminLayoutContainer extends Component {
 
     let config={'component':AdminLayout1,'query':query, 'options':{options: { variables: { name: this.state.name }}},'options1':{options: { variables: { name: 'mlAdminMenu1' }}}};
 
-    return(<div><AdminLayoutComposer {...config}/></div>)
+    return(<div><MlGenericDataComposer {...config}/></div>)
   }
 
 }

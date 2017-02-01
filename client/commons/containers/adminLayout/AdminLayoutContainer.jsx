@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import MoolyaAdminViewContainer from '../adminview/AdminViewContainer.jsx'
 import  MoolyaHeader from '../../components/header/MlAdminHeader'
 import LeftNavContainer from '../adminLeftNav/MlLeftNavContainer'
-import AdminLayout1 from '../../../admin/dashboard/layouts/MlAdminApp';
+import AdminLayout1 from '../../../admin/core/components/MlAdminApp';
 import AdminLayoutComposer from './AdminLayoutComposer'
 import MoolyaloginContainer from '../../../login/container/loginContainer'
 import { graphql } from 'react-apollo';

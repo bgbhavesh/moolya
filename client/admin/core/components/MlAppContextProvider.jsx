@@ -1,10 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {client} from '../../../commons/containers/adminLayout/apolloConnection';
 import {ApolloProvider} from 'react-apollo';
-import  MlAdminHeader from '../../../commons/components/header/MlAdminHeader'
-import MlAdminLeftNav from '../../../commons/components/leftNavbar/MlAdminLeftNav'
 import Menu from './Menu';
 import Theme from './Theme';
 export default class MlAppContextProvider extends Component {

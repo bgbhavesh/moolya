@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../commons/containers/adminLayout/mainConnection';
+import {client} from '../../core/apolloConnection';
 
 export async function createClusterActionHandler({clusterName, displayName, about, uploadImage, email, ismapShow, status}) {
   const result = await client.mutate({

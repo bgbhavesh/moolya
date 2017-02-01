@@ -1,10 +1,8 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {mount} from 'react-mounter';
 import AdminLayout from '../../admin/layouts/AdminLayout'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
-import AdminLayoutConnection from '../../commons/containers/adminLayout/mainConnection'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer'
 import  MlAddClusterFormComponent from '../../admin/cluster/components/MoolyaAddClusterAction'
 import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapterFormComponent'

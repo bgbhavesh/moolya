@@ -12,15 +12,9 @@ let ClusterSchema = `
     }
    
     
-    type Mutation {
-      createCluster (
-      countryId: String
-      displayName: String
-      about : String
-      link: String
-      email:String
-      showOnMap : Boolean
-    ):String
+    type Mutation 
+    {
+        createCluster(countryId:String, displayName:String, about:String, email:String, showOnMap:Boolean, isActive:Boolean):String
     }
     
 `

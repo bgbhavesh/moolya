@@ -6,6 +6,8 @@ import AdminLayout from '../../admin/layouts/AdminLayout'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import AdminLayoutConnection from '../../commons/containers/adminLayout/mainConnection'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer'
+import  MlAddClusterFormComponent from '../../admin/cluster/components/MoolyaAddClusterAction'
+import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapterFormComponent'
 adminSection = FlowRouter.group({
   prefix: "/admin"
 });
@@ -32,6 +34,18 @@ adminSection.route('/cluster/clusters', {
   name: 'cluster',
   action(){
     mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer />})
+  }
+});
+adminSection.route('/cluster/addCluster', {
+  name: 'cluster',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddClusterFormComponent/>})
+  }
+});
+adminSection.route('/chapter/addChapter', {
+  name: 'cluster',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddChapterFormComponent/>})
   }
 });
 

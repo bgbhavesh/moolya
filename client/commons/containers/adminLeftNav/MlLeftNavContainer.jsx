@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 //import { createFragment } from 'apollo-client';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import LeftNav from '../../components/leftNavbar/MoolyaLeftNav';
+import LeftNav from '../../components/leftNavbar/MlAdminLeftNav';
 import AdminLayoutComposer from '../adminLayout/AdminLayoutComposer';
 export default class LeftNavContainer extends Component {
     constructor() {
@@ -12,22 +12,7 @@ export default class LeftNavContainer extends Component {
         name: 'mlAdminMenu'
       }
     }
-   /* updateName(name) {
-        console.log(name.target.value)
-        let nameval=name.target.value
-        this.setState({
-            name:nameval
-        })
-    }*/
     render () {
-      /*const query = gql`query{
-mlLeftNav{
-  name,
-  image,
-  link,
-  id
-}
-}`*/
       const query = gql`fragment subMenu on Menu{
                   id
                   isLink

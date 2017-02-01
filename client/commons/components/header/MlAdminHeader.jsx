@@ -4,9 +4,9 @@ import { render } from 'react-dom';
 import MoolyaTabView from  '../header/Tabview'
 import MoolyaSearch from  './MoolyaSearch'
 import MoolyaloginContainer from '../../../login/container/loginContainer'
-export default class MoolyaHeader extends Component {
-  constructor(props){
-    super(props);
+export default class MlAdminHeader extends Component {
+  constructor(props,context){
+    super(props,context);
     this.state={
       tabOptions:props.tabOptions,
     }
@@ -16,23 +16,18 @@ export default class MoolyaHeader extends Component {
     $('.ml_profile h1').click(function(){
       $(this).parent('.ml_profile').toggleClass('profile_open');
     });
-   /* $(function() {
-      $('.float-label').jvFloat();
-    });*/
-
   }
   logoutUser(){
    this.props.onlogout(true);
   }
 
   render(){
- //   let data = this.props.data && this.props.data.data? this.props.data.data: {}
-   // console.log(data)
-    //let subMenu = data.menu||[];
+    let subMenu = this.context.menu.menu||[];
     let tabsubMenu;
-     let subMenu=localStorage.getItem("leftNavSubMenu")
+     //let subMenu=localStorage.getItem("leftNavSubMenu")
     if(subMenu){
-    tabsubMenu=JSON.parse(subMenu)
+    //tabsubMenu=JSON.parse(subMenu)
+      tabsubMenu=subMenu;
     }
 
     return (
@@ -58,3 +53,7 @@ export default class MoolyaHeader extends Component {
     )
   }
 }
+
+MlAdminHeader.contextTypes = {
+  menu: React.PropTypes.object
+};

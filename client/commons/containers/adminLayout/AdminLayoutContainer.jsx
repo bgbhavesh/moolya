@@ -1,12 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import MoolyaAdminViewContainer from '../adminview/AdminViewContainer.jsx'
-import  MoolyaHeader from '../../components/header/MoolyaHeader'
-import LeftNavContainer from '../adminLeftNav/LeftNavContainer'
+import  MoolyaHeader from '../../components/header/MlAdminHeader'
+import LeftNavContainer from '../adminLeftNav/MlLeftNavContainer'
+import AdminLayout1 from '../../../admin/dashboard/layouts/MlAdminApp';
+import AdminLayoutComposer from './AdminLayoutComposer'
 import MoolyaloginContainer from '../../../login/container/loginContainer'
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag'
+
 export default class MoolyaAdminLayoutContainer extends Component {
   constructor(props){
     super(props);
+    this.state = {
+      name: 'mlAdminMenu'
+    }
     this.onlogout=this.onlogout.bind(this);
     return this;
   }
@@ -132,19 +140,48 @@ export default class MoolyaAdminLayoutContainer extends Component {
     }
 
 
+    const query = gql`fragment subMenu on Menu{
+                  id
+                  isLink
+                  isMenu
+                  name 
+                  image
+                  link
+              }
+              
+              query LeftNavQuery($name: String!) {
+        data:FetchMenu(name: $name){
+            name
+            menu{
+              ...subMenu 
+                 subMenu{
+                  ...subMenu
+                    subMenu{
+                      ...subMenu
+                          subMenu{
+                             ...subMenu
+                                 }
+                           }
+                      }
+                   }
+            }
+       
+      }`
 
+    let config={'component':AdminLayout1,'query':query, 'options':{options: { variables: { name: this.state.name }}},'options1':{options: { variables: { name: 'mlAdminMenu1' }}}};
 
-    return(
+    return(<div><AdminLayoutComposer {...config}/></div>)
+
+   /* return(
 
       <div>
-        {/*<AdminHeaderContainer module="dashboard" tabOptions={tabOptions}  logoutProfile={logoutProfile}/>*/}
+
         <MoolyaHeader  onlogout={this.onlogout.bind(this)}/>
         <LeftNavContainer />
-        {/*<AdminSelectContainer/>*/}
         <MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>
       </div>
 
-    )
+    )*/
   }
 
 }

@@ -5,7 +5,7 @@ import ScrollArea from 'react-scrollbar'
 import $ from 'jquery'
 import _ from 'lodash'
 
-export default class MoolyaLeftNav extends Component {
+export default class MlAdminLeftNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,8 +31,8 @@ export default class MoolyaLeftNav extends Component {
   render() {
     let path = FlowRouter.current().route.name;
 
-    let data = this.props.data && this.props.data.data ? this.props.data.data : {};
-
+    //let data = this.props.data && this.props.data.data ? this.props.data.data : {};
+    let data = this.context.menu||{};
     let menu = data.menu || [];
     let parentKey = find(path, menu)
 
@@ -52,7 +52,7 @@ export default class MoolyaLeftNav extends Component {
       }
     }
 
-    localStorage.setItem("leftNavSubMenu", JSON.stringify(menu));
+    //localStorage.setItem("leftNavSubMenu", JSON.stringify(menu));
 
     let navOptions = menu.map(function (dataItem) {
       let activeClass
@@ -93,3 +93,7 @@ export default class MoolyaLeftNav extends Component {
   }
 
 }
+
+MlAdminLeftNav.contextTypes = {
+  menu: React.PropTypes.object
+};

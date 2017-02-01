@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {client} from '../../commons/containers/adminLayout/apolloConnection';
+import {client} from '../core/apolloConnection';
 import {ApolloProvider} from 'react-apollo';
 import MlAdminApp from '../core/components/MlAdminApp';
 export default class AdminLayout extends Component {

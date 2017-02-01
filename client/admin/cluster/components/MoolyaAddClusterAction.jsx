@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import {createClusterActionHandler} from '../actions/createCluster'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
- class MlAddClusterFormComponent extends React.Component {
+class MlAddClusterFormComponent extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -16,30 +16,38 @@ import formHandler from '../../../commons/containers/MlFormHandler';
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
+        $(this).val(true)
       } else {
         $(this).parent('.switch').removeClass('on');
+        $(this).val(false)
       }
     });
   }
 
   async addEventHandler() {
-     this.createCluster()
+    this.createCluster()
   }
 
-  async handleSuccess(response){
-   FlowRouter.go("/admin/cluster");
+  async handleError(response) {
+    alert(response)
   };
-   async  createCluster(){
 
-      clusterName=this.refs.clusterName.value,
-      displayName=this.refs.displayName.value,
-      about=this.refs.about.value,
-      uploadImage=this.refs.uploadImage.value,
-      email=this.refs.email.value,
-      ismapShow=this.refs.ismapShow.value,
-      status=this.refs.status.value;
+  async handleSuccess(response) {
 
-   const response = await createClusterActionHandler({clusterName,displayName,about,uploadImage,email,ismapShow,status})
+    FlowRouter.go("/admin/cluster");
+  };
+
+  async  createCluster() {
+    let clusterDetails = {
+      clusterName: this.refs.clusterName.value,
+      displayName: this.refs.displayName.value,
+      about: this.refs.about.value,
+      uploadImage: this.refs.uploadImage.value,
+      email: this.refs.email.value,
+      ismapShow: this.refs.ismapShow.checked,
+      status: this.refs.status.checked
+    }
+    const response = await createClusterActionHandler(clusterDetails)
 
   }
 
@@ -48,12 +56,12 @@ import formHandler from '../../../commons/containers/MlFormHandler';
       {
         actionName: 'edit',
         showAction: true,
-        handler:null
+        handler: null
       },
       {
         showAction: true,
         actionName: 'add',
-        handler: async (event) =>this.props.handler(this.addEventHandler.bind(this),this.handleSuccess.bind(this))
+        handler: async(event) => this.props.handler(this.addEventHandler.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -125,10 +133,11 @@ import formHandler from '../../../commons/containers/MlFormHandler';
           </form>
         </div>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-                               />
+        />
       </div>
     )
   }
-};
+}
+;
 
-export default MoolyaAddCluster=formHandler()(MlAddClusterFormComponent);
+export default MoolyaAddCluster = formHandler()(MlAddClusterFormComponent);

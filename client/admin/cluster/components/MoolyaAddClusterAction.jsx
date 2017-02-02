@@ -25,7 +25,8 @@ class MlAddClusterFormComponent extends React.Component {
   }
 
   async addEventHandler() {
-    this.createCluster()
+   const resp=await this.createCluster();
+    return resp;
   }
 
   async handleError(response) {
@@ -48,6 +49,7 @@ class MlAddClusterFormComponent extends React.Component {
       status: this.refs.status.checked
     }
     const response = await createClusterActionHandler(clusterDetails)
+    return response;
 
   }
 
@@ -61,7 +63,7 @@ class MlAddClusterFormComponent extends React.Component {
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.addEventHandler.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.createCluster.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,

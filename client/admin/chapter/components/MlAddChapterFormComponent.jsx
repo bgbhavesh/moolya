@@ -1,7 +1,7 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
-/*import {createClusterActionHandler} from '../actions/createCluster'*/
+import {createChapterActionHandler} from '../actions/createChapterFormAction'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
 class MlAddChapterFormComponent extends React.Component {
@@ -26,21 +26,25 @@ class MlAddChapterFormComponent extends React.Component {
     this.createCluster()
   }
 
-  async handleSuccess(response){
-    FlowRouter.go("/admin/cluster");
+  async handleSuccess(response) {
+    FlowRouter.go("/admin/dashboard");
   };
-  async  createCluster(){
 
-    clusterName=this.refs.clusterName.value,
-      displayName=this.refs.displayName.value,
-      about=this.refs.about.value,
-      uploadImage=this.refs.uploadImage.value,
-      email=this.refs.email.value,
-      ismapShow=this.refs.ismapShow.value,
-      status=this.refs.status.value;
+  async  createCluster() {
+    let chapterDetails = {
+      clusterName: this.refs.clusterName.value,
+      chapterName: this.refs.chapterName.value,
+      displayName: this.refs.displayName.value,
+      about: this.refs.about.value,
+      chapterImage: this.refs.chapterImage.value,
+      state: this.refs.state.value,
+      email: this.refs.email.value,
+      ismapShow: this.refs.showOnMap.checked,
+      status: this.refs.status.checked
+    }
 
-    const response = await createClusterActionHandler({clusterName,displayName,about,uploadImage,email,ismapShow,status})
-
+    console.log(chapterDetails)
+    const response = await createChapterActionHandler(chapterDetails)
   }
 
   render() {
@@ -48,12 +52,12 @@ class MlAddChapterFormComponent extends React.Component {
       {
         actionName: 'edit',
         showAction: true,
-        handler:null
+        handler: null
       },
       {
         showAction: true,
         actionName: 'add',
-        handler: async (event) =>this.props.handler(this.addEventHandler.bind(this),this.handleSuccess.bind(this))
+        handler: async(event) => this.props.handler(this.addEventHandler.bind(this), this.handleSuccess.bind(this))
       },
       {
         showAction: true,
@@ -65,70 +69,72 @@ class MlAddChapterFormComponent extends React.Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <form >
-            <h2>Add Cluster</h2>
+          <form>
+            <h2>Create chapter details</h2>
             <div className="col-md-6">
               <div className="form_bg">
-                <div className="form-group">
+                <div className="form-group ">
                   <input type="text" ref="clusterName" placeholder="Cluster Name" className="form-control float-label"
-                         id=""/>
+                         id="cluster_name"/>
+
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="chapterName" placeholder="Chapter Name" className="form-control float-label"
+                         id="chapter_name"/>
 
                 </div>
                 <div className="form-group">
                   <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"
-                         id=""/>
+                         id="displayname"/>
 
                 </div>
                 <div className="form-group">
-                  <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
+    <textarea ref="about" placeholder="About" className="form-control float-label" id="cl_about">
+    </textarea>
 
                 </div>
               </div>
             </div>
             <div className="col-md-6">
               <div className="form_bg">
-                {/* <form>*/}
-                <div className="form-group ">
-
-                  <div className="fileUpload mlUpload_btn">
-                    <span>Upload Image</span>
-                    <input type="file" ref="uploadImage" className="upload"/>
-                  </div>
-                  <div className="previewImg">
-                    <img src="/images/india.png"/>
-                  </div>
+                <div className="form-group">
+                  <input type="text" ref="chapterImage" placeholder="Chapter image" className="form-control float-label"
+                         id="ch_image"/>
 
                 </div>
-                <br className="brclear"/>
-                <div className="form-group ">
-                  <input type="text" id="email" ref="email" placeholder="email" className="form-control float-label"/>
+                <div className="form-group">
+                  <input type="text" ref="state" id="state" placeholder="State" className="form-control float-label"/>
+
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="email" id="email" placeholder="Chapter Email ID"
+                         className="form-control float-label"/>
 
                 </div>
                 <div className="form-group switch_wrap">
                   <label>Show on map</label><br/>
                   <label className="switch">
-                    <input type="checkbox" ref="ismapShow"/>
+                    <input ref="showOnMap" type="checkbox"/>
                     <div className="slider"></div>
                   </label>
                 </div>
                 <div className="form-group switch_wrap">
                   <label>Status</label><br/>
                   <label className="switch">
-                    <input type="checkbox" ref="status"/>
+                    <input ref="status" type="checkbox"/>
                     <div className="slider"></div>
                   </label>
                 </div>
-                {/* </form>*/}
               </div>
             </div>
-
           </form>
         </div>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-        />
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+
       </div>
     )
   }
-};
+}
+;
 
-export default MoolyaAddCluster=formHandler()(MlAddChapterFormComponent);
+export default MlAddChapter = formHandler()(MlAddChapterFormComponent);

@@ -39,9 +39,10 @@ export default function formHandler() {
               }
 
             }catch(error){
+              console.log(error);
               this.setState({ loading: false, error: '' });
               if(handleError){
-                handleError();
+                handleError(error);
               }
             }
         }

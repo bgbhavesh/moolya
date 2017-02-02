@@ -6,6 +6,7 @@ import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer'
 import  MlAddClusterFormComponent from '../../admin/cluster/components/MoolyaAddClusterAction'
 import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapterFormComponent'
+import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 adminSection = FlowRouter.group({
   prefix: "/admin"
 });
@@ -40,10 +41,16 @@ adminSection.route('/cluster/addCluster', {
     mount(AdminLayout,{adminContent:< MlAddClusterFormComponent/>})
   }
 });
-adminSection.route('/chapter/addChapter', {
-  name: 'cluster',
+adminSection.route('/chapter', {
+  name: 'chapter',
   action(){
     mount(AdminLayout,{adminContent:< MlAddChapterFormComponent/>})
+  }
+});
+adminSection.route('/community', {
+  name: 'community',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
   }
 });
 
@@ -53,10 +60,5 @@ adminSection.route('/login', {
         mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
     }
 });
-adminSection.route('/chapter', {
-  name: 'chapter',
-  action(){
-    mount(AdminLayout,{adminContent:<MoolyaToaster/>})
-  }
-});
+
 

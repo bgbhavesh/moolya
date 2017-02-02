@@ -64,7 +64,7 @@ if(Meteor.isServer){
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/cluster/clusters",
+            "link" : "/admin/cluster/addCluster",
             "name" : "Clusters",
             "id" : "cluster_clusters",
             "isLink" : true,
@@ -98,16 +98,38 @@ if(Meteor.isServer){
       {
         "image" : "/images/chapter_icon.png",
         "link" : "/admin/chapter",
+        "id" : "chapter",
         "name" : "chapter",
         "isLink" : "true",
-        "isMenu" : true
+        "isMenu" : true,
+        "subMenu" : [
+          {
+            "link" : "/admin/chapter/chapters",
+            "name" : "Chapters",
+            "id" : "chapter_chapters",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+          },
+        ]
       },
       {
         "image" : "/images/community_icon.png",
         "link" : "/admin/community",
+        "id" : "community",
         "name" : "community",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "subMenu" : [
+          {
+            "link" : "/admichapters/comminty/communities",
+            "name" : "communities",
+            "id" : "community_communities",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+          },
+        ]
       },
       {
         "image" : "/images/documents_icon.png",

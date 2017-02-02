@@ -58,6 +58,7 @@ const query = gql`fragment subMenu on Menu{
                   name
                   image
                   link
+                  dynamicLink
               }
 
               query LeftNavQuery($name: String!) {

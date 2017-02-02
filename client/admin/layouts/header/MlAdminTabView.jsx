@@ -15,6 +15,8 @@ export default class MlTabView extends Component {
 
   render() {
     let path = FlowRouter.current().route.name;
+    let params = FlowRouter.current().params;
+    let queryParams = FlowRouter.current().queryParams;
     let menus = this.props.tabOptions||[];
     let subMenu, tabOptions;
 
@@ -35,20 +37,38 @@ export default class MlTabView extends Component {
       }
     }
 
+    function dynamicLinkHandler(path,params,queryParams){
+      const menuLinkHandlerConfig={
+        "editCluster":function(params,queryParams){
+              return '/admin/cluster/'+params.cluserId;
+        }
+      }
+      let menuLinkHandler=menuLinkHandlerConfig[path];
+          if(menuLinkHandler){
+            let link=menuLinkHandler(params,queryParams);
+            return link;
+          }
+      return "";
+    }
 
     if (subMenu != undefined) {
       console.log(subMenu.subMenu)
-      let tabSubMenu = subMenu.subMenu
+      let tabSubMenu = subMenu.subMenu||[];
 
       tabOptions = tabSubMenu.map(function (option,index) {
         let activeClass;
         if(index==0){
           activeClass = 'active_btn'
         }
+        let isDynamicLink=option.dynamicLink||false;
+        let menuLink=option.link;
+        if(isDynamicLink){
+          menuLink=dynamicLinkHandler(option.id,params,queryParams);
+        }
         return (
           <li key={option.name}>
             <div className={`moolya_btn ${activeClass} `}
-                 onClick={this.subMenuClick}><a href={option.link}
+                 onClick={this.subMenuClick}><a href={menuLink}
                                                 className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>
           </li>
         )

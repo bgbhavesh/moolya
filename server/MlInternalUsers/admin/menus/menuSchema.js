@@ -9,6 +9,7 @@ let Menu = `
       isLink:Boolean
       isMenu:Boolean
       subMenu:[Menu]
+      dynamicLink:Boolean
     }
     type MlMenu 
     {

@@ -1,5 +1,5 @@
 if(Meteor.isServer){
-  mlClusters.upsert({countryId:"c101"},{$set: {
+  MlClusters.upsert({countryId:"c101"},{$set: {
     "countryId": "c101",
     "countryFlag": "https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png",
     "about": "India",
@@ -8,10 +8,10 @@ if(Meteor.isServer){
     "latitude": "20.593684",
     "longitude": "78.962880",
     "email": "moolya@moolya.in",
-    "showOnMap": "false",
-    "isActive": "false"
+    "showOnMap": false,
+    "isActive": false
   }});
-  mlClusters.upsert({countryId:"c109"},{$set: {
+  MlClusters.upsert({countryId:"c109"},{$set: {
     "countryId": "c109",
     "countryFlag": "https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png",
     "about": "UAE",
@@ -20,10 +20,10 @@ if(Meteor.isServer){
     "latitude": "23.424076",
     "longitude": "53.847818",
     "email": "moolya@moolya.in",
-    "showOnMap": "false",
-    "isActive": "false"
+    "showOnMap": false,
+    "isActive": false
   }});
-  mlClusters.upsert({countryId:"c229"},{$set: {
+  MlClusters.upsert({countryId:"c229"},{$set: {
     "countryId": "c229",
     "countryFlag":  "https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png",
     "about": "Japan",
@@ -32,7 +32,7 @@ if(Meteor.isServer){
     "latitude": "36.204824",
     "longitude": "138.252924",
     "email": "moolya@moolya.in",
-    "showOnMap": "false",
-    "isActive": "false"
+    "showOnMap": false,
+    "isActive": false
   }});
 }

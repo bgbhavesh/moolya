@@ -1,7 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
 let ClusterSchema = `
-    type Chapter{
+    type Cluster{
       countryId :String
       displayName :String
       about: String

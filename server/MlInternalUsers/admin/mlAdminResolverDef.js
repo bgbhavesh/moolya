@@ -3,5 +3,6 @@
  */
 const MlQueryResolver = {};
 const MlMutationResolver = {};
-const MlResolver = {MlQueryResolver, MlMutationResolver}
+const MlUnionResolver={};
+const MlResolver = {MlQueryResolver, MlMutationResolver,MlUnionResolver}
 module.exports = MlResolver;

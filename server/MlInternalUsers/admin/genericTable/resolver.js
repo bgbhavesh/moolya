@@ -10,3 +10,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       }
       return null;
 }
+
+MlResolver.MlUnionResolver['SearchResult']= {
+  __resolveType(data, context, info){
+
+    if (data.countryId) {
+      return 'Cluster';
+    }
+
+    if (data.chapterName) {
+      return 'Chapter';
+    }
+
+    return null;
+  }
+}

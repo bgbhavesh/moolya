@@ -9,7 +9,7 @@ import MlSchemaDef from './mlAdminSchemaDef';
 import { graphqlExpress } from 'graphql-server-express';
 import getContext from './mlAuthContext'
 import './mlAuthoverrideDDP'
-
+import _ from 'lodash';
 
 var express = require('express');
 var {apolloExpress, graphiqlExpress} = require('apollo-server')
@@ -18,9 +18,12 @@ const { makeExecutableSchema } = require('graphql-tools');
 
 var app = express().use('*',cors());
 
+
+const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
+//console.log(resolvers);
 const executableSchema = makeExecutableSchema({
   typeDefs: MlSchemaDef['schema'],
-  resolvers: {Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver}
+  resolvers: resolvers
 });
 
 const expressServer = graphqlExpress((req) => {

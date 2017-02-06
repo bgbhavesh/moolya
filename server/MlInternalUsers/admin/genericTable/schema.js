@@ -26,8 +26,12 @@ let moolya = `
 let search = `
 union SearchResult = Cluster | Chapter
 
+type SearchResp {
+  totalRecords:Int,
+  data:[SearchResult]
+}
 type Query {
-  SearchQuery(text: String!): [SearchResult]!
+  SearchQuery(text: String!): SearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);

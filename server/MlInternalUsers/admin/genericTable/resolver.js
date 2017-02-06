@@ -1,14 +1,17 @@
 import MlResolver from '../mlAdminResolverDef'
 
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
-      if(args.text=="Clusters"){
-        return MlClusters.find().fetch();
-      }
+    let totalRecords=0;
+  if(args.text=="Clusters"){
+    data= MlClusters.find().fetch();
+    totalRecords=MlClusters.find().count();
+  }
 
-      if(args.text=="Chapters"){
-        return MlChapters.find().fetch();
-      }
-      return null;
+  if(args.text=="Chapters"){
+    data= MlChapters.find().fetch();
+    totalRecords=MlChapters.find().count();
+  }
+  return {'totalRecords':totalRecords,'data':data};
 }
 
 MlResolver.MlUnionResolver['SearchResult']= {

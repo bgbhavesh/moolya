@@ -13,7 +13,7 @@ let Role = `
     type Query {
         FetchRole(roleName: String, roleValue: String,name: String): MlRole
         FetchRoles(name: String,searchQuery:String): [Role]
-    }
+    }   
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Role]);

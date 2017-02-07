@@ -25,6 +25,7 @@ const mlClusterDashboardListConfig=new MlViewer.View({
                               id
                               email
                               showOnMap
+                              countryFlag
                           }
                       }
               }

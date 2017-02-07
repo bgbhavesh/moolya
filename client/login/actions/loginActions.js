@@ -4,15 +4,15 @@
 import MoolyaloginContainer from '../container/loginContainer'
 export let loginActionHandler = {
     onLoginFormSubmit(details,callback){
-      let logincontainer=MoolyaloginContainer.loginContainer
-      logincontainer.login(details.username, details.password, function (result) {
-        if(result && result.error){
-            console.log(result.reason)
-            callback(result.reason)
-        }
-        else if(result && result.profile && user.profile.isInternaluser){
-            FlowRouter.go("/admin/dashboard");
-        }
-      });
+        let logincontainer=MoolyaloginContainer.loginContainer
+        logincontainer.login(details.username, details.password, function (result) {
+            if(result && result.error){
+                console.log(result.reason)
+                callback(result.reason)
+            }
+            else if(result && result.profile && result.profile.isInternaluser == "yes"){
+                FlowRouter.go("/admin/dashboard");
+            }
+        });
     }
 }

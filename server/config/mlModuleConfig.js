@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 28/1/17.
  */
 
-let modules = ["community", "chapter", "cluster", "Platform"];
+let modules = ["community", "chapter", "subchapter", "cluster", "department", "subdepartment", "roles", "users", "settings", "documents", "conversations"];
 
 Meteor.startup(function () {
     for(i = 0; i < modules.length; i++){

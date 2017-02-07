@@ -39,20 +39,6 @@ const expressServer = graphqlExpress((req) => {
 
 app.use('/graphql', bodyParser.json(), Meteor.bindEnvironment(expressServer));
 
-// app.post('/login', function(req, res)
-// {
-//     utils.authenticate(req.body.username, req.body.password, function(err, doc){
-//         if(err || doc == null)
-//             res.json({ success: false, message: 'Authentication failed' });
-//         else{
-//             var token = jwt.sign(doc, globals.secret);
-//             res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, x-access-token");
-//             res.json({success: true,token: token,userInfo: doc});
-//         }
-//     })
-// });
-
-
 app.listen(8090);
 console.log('Running a GraphQL API server at localhost:8090/graphql');
 // This binds the specified paths to the Express server running Apollo + GraphiQL

@@ -1,8 +1,12 @@
 import MlResolver from '../mlAdminResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
+import MlAuthorizationLayer from '../../../mlAuthorization/mlAuthorization'
 
 
-MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) =>{
+MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) =>
+{
+
+    let authStatus = MlAuthorizationLayer.validteAuthorization(userId, moduleId, context, action)
     check(args, Object)
     check(args.countryId, String)
     check(args.displayName, String)

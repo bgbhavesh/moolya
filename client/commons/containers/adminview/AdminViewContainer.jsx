@@ -11,7 +11,20 @@ constructor(props) {
     nameField:props.nameField,
     statusField:props.statusField,
     imageLink:props.imageLink,
-    clusterListOptions:props.clusterListOptions,
+    clusterListOptions:[
+      {
+        imageLink: '/images/afghanistan.png',
+        nameField: 'Afghanistan',
+        statusField: 'active',
+        listRouterPath:'/admin/dashboard'
+      },
+      {
+        imageLink: '/images/australia.png',
+        nameField: 'Australia',
+        statusField: 'inactive',
+        listRouterPath:'/admin/dashboard'
+      }
+    ],
     footerOptions:props.footerOptions,
     routerPath:props.routerPath,
     imagePath:props.imagePath,
@@ -26,6 +39,42 @@ constructor(props) {
 
 
 render() {
+  let  clusterListOptions=[
+    {
+      imageLink: '/images/afghanistan.png',
+      nameField: 'Afghanistan',
+      statusField: 'active',
+      listRouterPath:'/admin/dashboard'
+    },
+    {
+      imageLink: '/images/australia.png',
+      nameField: 'Australia',
+      statusField: 'inactive',
+      listRouterPath:'/admin/dashboard'
+    }
+  ]
+  let footerOptions=[
+    {
+      imagefield:'/images/edit_icon.png',
+      route:'/admin/dashboard',
+    },
+    {
+      imagefield:'/images/act_add_icon.png',
+      route:'/admin/dashboard',
+    },
+    {
+      imagefield:'/images/act_logout_icon.png',
+      route:'/admin/dashboard',
+    },
+    {
+      imagefield:'/images/act_progress_icon.png',
+      route:'/admin/dashboard',
+    },
+    {
+      imagefield:'/images/act_select_icon.png',
+      route:'/admin/dashboard',
+    }
+  ]
   let config=this.props;
   return (
     <MoolyaAdminView {...config} footerOptions={this.state.footerOptions} routerPath={this.state.routerPath} imagePath={this.state.imagePath} viewMode={this.state.viewMode} nameField={this.state.nameField} statusField={this.state.statusField}  imageLink={this.state.imageLink} clusterListOptions={this.state.clusterListOptions} onViewModeChange={this.viewModeChange.bind(this)} />

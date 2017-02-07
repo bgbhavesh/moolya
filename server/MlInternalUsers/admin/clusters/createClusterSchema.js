@@ -9,6 +9,7 @@ let ClusterSchema = `
       id:String
       email:String
       showOnMap : Boolean
+      countryFlag:String
     }
    
     

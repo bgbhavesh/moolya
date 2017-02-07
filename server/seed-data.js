@@ -15,8 +15,7 @@ var options = {
             moolyaProfile:{
                 email:"platformadmin@moolya.com",
                 phoneNumber:"9999999999",
-                department:"*",
-                subDepartment:"*"
+                userProfiles:[]
             }
         }
     },
@@ -33,7 +32,6 @@ if(!userObj){
     console.log("Admin password set from settings file");
 }
 
-// var role = Meteor.
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(!role){
     let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
@@ -52,8 +50,7 @@ if(!role){
         clusterId:"*",
         userRoles:userRoles,
     }]
-    userObj.userProfiles = userProfiles
-    Meteor.users.upsert({userObj})
+    Meteor.users.update({_id:platformAdminId}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":userProfiles}})
 }
 
 /*********************************** Default Moolya Admin Creation <End> **********************************************/

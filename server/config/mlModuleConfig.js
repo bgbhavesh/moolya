@@ -6,9 +6,9 @@ let modules = ["community", "chapter", "subchapter", "cluster", "department", "s
 
 Meteor.startup(function () {
     for(i = 0; i < modules.length; i++){
-        let module = MlModules.findOne({moduleName: modules[i]});
+        let module = MlModules.findOne({name: modules[i]});
         if(!module){
-          module = {roleName:modules[i], isActive:true};
+          module = {name:modules[i], displayName:modules[i], code:modules[i].toUpperCase(), isActive:true};
           MlModules.insert(module);
         }
     }

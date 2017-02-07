@@ -22,9 +22,9 @@ export default class  MlListViewComposer extends Component {
               if (!fetchMoreResult.data) {
                 return prev;
               }
-              return Object.assign({}, prev, {
-                data: [...fetchMoreResult.data.data],
-              });
+              return {
+                data: fetchMoreResult.data.data
+              };
             },
           }),
         })

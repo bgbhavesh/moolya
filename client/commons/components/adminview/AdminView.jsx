@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import  $ from 'jquery'
-import MoolyaInfinityView from '../infinityView/MoolyaInfinityView'
+import MlInfinityView from '../infinityView/MlInfinityView'
 import MoolyaListView from '../list/ListView'
 import MoolyaMapView from '../map/MoolyaMapView'
 import MlActionComponent from '../actions/ActionComponent'
@@ -30,8 +30,8 @@ export default class MoolyaAdminView extends Component {
       return (
         <div>
           <div className="admin_main_wrap">
-            {viewMode ? <MoolyaMapView/> : <div><MoolyaListView {...listViewProps}/><MlActionComponent {...footerProps}/></div> }
-            {showInfinity && (<MoolyaInfinityView {...infinityViewProps} />)}
+            {viewMode ? <MoolyaMapView/> : <div><MoolyaListView {...listViewProps}/></div> }
+            {showInfinity && (<MlInfinityView {...infinityViewProps} />)}
           </div>
         </div>
 

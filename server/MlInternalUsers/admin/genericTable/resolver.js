@@ -2,12 +2,12 @@ import MlResolver from '../mlAdminResolverDef'
 
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
-  if(args.text=="Clusters"){
+  if(args.module=="cluster"){
     data= MlClusters.find().fetch();
     totalRecords=MlClusters.find().count();
   }
 
-  if(args.text=="Chapters"){
+  if(args.module=="chapter"){
     data= MlChapters.find().fetch();
     totalRecords=MlChapters.find().count();
   }

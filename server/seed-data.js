@@ -36,13 +36,14 @@ if(!userObj){
 // var role = Meteor.
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(!role){
-    var assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
-    var permissions = [{actionId:"*", moduleId:"*", isActive:true, }]
+    let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
+    let permissions = [{actionId:"*", isActive:true, }]
+    let modules = [{moduleId:"*", permissions:permissions}]
     role = {
         roleName:"platformadmin",
         displayName:"Platform Admin",
         assignRoles: assignRoles,
-        permissions:permissions,
+        modules:modules,
         isActive:true
     }
     var roleId = MlRoles.insert(role);

@@ -7,9 +7,8 @@ export let loginContainer = {
             }
              else{
                 var user = Meteor.user();
-                 if(user && user.profile && user.profile.isAdmin){
+                 if(user && user.profile && user.profile.isInternaluser){
                     callback(user);
-                   //FlowRouter.go("/admin/dashboard");
                }
              }
          })

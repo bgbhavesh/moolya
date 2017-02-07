@@ -7,11 +7,11 @@ export let loginActionHandler = {
       let logincontainer=MoolyaloginContainer.loginContainer
       logincontainer.login(details.username, details.password, function (result) {
         if(result && result.error){
-          console.log(result.reason)
-          callback(result.reason)
+            console.log(result.reason)
+            callback(result.reason)
         }
-        else if(result && result.profile && result.profile.isAdmin){
-          FlowRouter.go("/admin/dashboard");
+        else if(result && result.profile && user.profile.isInternaluser){
+            FlowRouter.go("/admin/dashboard");
         }
       });
     }

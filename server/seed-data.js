@@ -1,39 +1,58 @@
 /**
- * Created by venkatasrinag on 17/1/17.
- */
-/**
  * Created by venkatasrinag on 19/12/16.
  */
 
 /*********************************** Default Moolya Admin Creation <Start> ********************************************/
 
 var adminPassword = "Admin@123";
-var module = ["*"]
+var platformAdminId;
 var options = {
     profile:{
         isInternaluser : "yes",
         isExternaluser : "no",
-        email: 'systemadmin@moolya.com',
+        email: 'platformadmin@moolya.com',
         InternalUprofile:{
             moolyaProfile:{
-                email:"systemadmin@moolya.com",
+                email:"platformadmin@moolya.com",
                 phoneNumber:"9999999999",
-                hiearchy:10
-            },
-            accessprofile:[{module}]
+                department:"*",
+                subDepartment:"*"
+            }
         }
     },
-    username: 'systemadmin@moolya.com',
+    username: 'platformadmin@moolya.com',
     password: adminPassword,
 };
 
-var userObj = Meteor.users.findOne({username: "systemadmin@moolya.com"});
+var userObj = Meteor.users.findOne({username: "platformadmin@moolya.com"});
 if(!userObj){
     console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
-    Accounts.createUser(options);
+    platformAdminId = Accounts.createUser(options);
 }else{
     Accounts.setPassword(userObj._id, adminPassword);
     console.log("Admin password set from settings file");
+}
+
+// var role = Meteor.
+var role = MlRole.findOne({roleName:"platformadmin"})
+if(!role){
+    var assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
+    var permissions = [{actionId:"*", moduleId:"*", isActive:true, }]
+    role = {
+        roleName:"platformadmin",
+        displayName:"Platform Admin",
+        assignRoles: assignRoles,
+        permissions:permissions,
+        isActive:true
+    }
+    var roleId = MlRole.insert(role);
+    var userRoles = [{roleId:roleId, chapterId:"*", subchapterId:"*", communityId:"*", hiearchy:10}]
+    var userProfiles = [{
+        clusterId:"*",
+        userRoles:userRoles,
+    }]
+    userObj.userProfiles = userProfiles
+    Meteor.users.upsert({userObj})
 }
 
 /*********************************** Default Moolya Admin Creation <End> **********************************************/

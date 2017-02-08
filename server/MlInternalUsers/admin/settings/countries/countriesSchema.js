@@ -1,15 +1,17 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let Countries = `    
+let Countries = `   
+   
     type MlCountries 
-    {     
+    {  
+     _id : String  
      country : String
      countryCode : String
      url : String
      isActive : Boolean
     }
     type Query {
-        FetchCountries(input: String): [MlCountries]
+        FetchCountries(input: String): [MlCountries]       
     }
 `
 

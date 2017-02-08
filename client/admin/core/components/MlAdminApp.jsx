@@ -52,7 +52,7 @@ class MlAdminAppComponent extends Component {
 }
 
 const query = gql`fragment subMenu on Menu{
-                  id
+                  uniqueId
                   isLink
                   isMenu
                   name

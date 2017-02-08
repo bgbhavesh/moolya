@@ -22,14 +22,14 @@ export default class MlTabView extends Component {
 
      subMenu = find(path, menus);
 
-    function find(id, menus) {
+    function find(uniqueId, menus) {
       var i = 0, found;
 
       for (; i < menus.length; i++) {
-        if (menus[i].id === id) {
+        if (menus[i].uniqueId === uniqueId) {
           return menus[i];
         } else if (_.isArray(menus[i].subMenu)) {
-          found = find(id, menus[i].subMenu);
+          found = find(uniqueId, menus[i].subMenu);
           if (found) {
             return found;
           }
@@ -63,7 +63,7 @@ export default class MlTabView extends Component {
         let isDynamicLink=option.dynamicLink||false;
         let menuLink=option.link;
         if(isDynamicLink){
-          menuLink=dynamicLinkHandler(option.id,params,queryParams);
+          menuLink=dynamicLinkHandler(option.uniqueId,params,queryParams);
         }
         return (
           <li key={option.name}>

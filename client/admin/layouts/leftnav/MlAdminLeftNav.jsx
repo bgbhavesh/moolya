@@ -36,16 +36,16 @@ export default class MlAdminLeftNav extends Component {
     let menu = data.menu || [];
     let parentKey = find(path, menu)
 
-    function find(id, menus) {
+    function find(uniqueId, menus) {
       var i = 0, found;
       for (; i < menus.length; i++) {
-        if (menus[i].id === id) {
-          var res = menus[i].id
+        if (menus[i].uniqueId === uniqueId) {
+          var res = menus[i].uniqueId
           return res;
         } else if (_.isArray(menus[i].subMenu)) {
-          found = find(id, menus[i].subMenu)
+          found = find(uniqueId, menus[i].subMenu)
           if (found) {
-            return menus[i].id
+            return menus[i].uniqueId
           }
 
         }
@@ -56,12 +56,12 @@ export default class MlAdminLeftNav extends Component {
 
     let navOptions = menu.map(function (dataItem) {
       let activeClass
-      if (parentKey == dataItem.id) {
+      if (parentKey == dataItem.uniqueId) {
         activeClass = 'active_menu'
       }
       return (
         <li className={`menu_item ${activeClass} `} key={dataItem.name}>
-          <a href={dataItem.link} id={dataItem.id}>
+          <a href={dataItem.link} id={dataItem.uniqueId}>
             <div className={"menu_in"}>
               <img src={dataItem.image}/>
               {dataItem.name}

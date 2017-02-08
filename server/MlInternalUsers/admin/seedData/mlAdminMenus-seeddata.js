@@ -6,14 +6,14 @@ if(Meteor.isServer){
         "image" : "/images/db_icon.png",
         "link" : "/admin/dashboard",
         "name" : "dashboard",
-        "id" : "dashboard",
+        "uniqueId" : "dashboard",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
             "link" : "/admin/dashboard/clusters",
             "name" : "Clusters",
-            "id" : "dashboard_clusters",
+            "uniqueId" : "dashboard_clusters",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
@@ -23,7 +23,7 @@ if(Meteor.isServer){
                 "dynamicLinkHandler" : "",
                 "name" : "cluster_Details",
                 "link":"",
-                "id" : "dashboard_clusterDetails",
+                "uniqueId" : "dashboard_clusterDetails",
                 "isMenu" : true,
                 "image" : ""
               },
@@ -32,7 +32,7 @@ if(Meteor.isServer){
                 "dynamicLinkHandler" : "",
                 "name" : "chapter Details",
                 "link":"",
-                "id" : "dashboard_chapterDetails",
+                "uniqueId" : "dashboard_chapterDetails",
                 "isMenu" : true,
                 "image" : ""
               }
@@ -41,14 +41,14 @@ if(Meteor.isServer){
           {
             "link" : "/admin/dashboard/chapter",
             "name" : "Chapters",
-            "id" : "dashboard_chapters",
+            "uniqueId" : "dashboard_chapters",
             "isLink" : true,
             "image" : ""
           },
           {
             "link" : "/admin/dashboard/communities",
             "name" : "Communities",
-            "id" : "dashboard_communities",
+            "uniqueId" : "dashboard_communities",
             "isLink" : true,
             "image" : ""
           },
@@ -59,14 +59,14 @@ if(Meteor.isServer){
         "image" : "/images/cluster_icon.png",
         "link" : "/admin/cluster",
         "name" : "cluster",
-        "id"   :"cluster",
+        "uniqueId"   :"cluster",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
             "link" : "/admin/cluster/addCluster",
             "name" : "Clusters",
-            "id" : "cluster_clusters",
+            "uniqueId" : "cluster_clusters",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
@@ -74,21 +74,21 @@ if(Meteor.isServer){
           {
             "link" : "/admin/cluster/chapter",
             "name" : "Chapters",
-            "id" : "cluster_chapters",
+            "uniqueId" : "cluster_chapters",
             "isLink" : true,
             "image" : ""
           },
           {
             "link" : "/admin/cluster/communities",
             "name" : "Communities",
-            "id" : "cluster_communities",
+            "uniqueId" : "cluster_communities",
             "isLink" : true,
             "image" : ""
           },
           {
             "link" : "/admin/cluster/internal_users",
             "name" : "Internal Users",
-            "id" : "cluster_Internal_Users",
+            "uniqueId" : "cluster_Internal_Users",
             "isLink" : true,
             "image" : ""
           },
@@ -98,7 +98,7 @@ if(Meteor.isServer){
       {
         "image" : "/images/chapter_icon.png",
         "link" : "/admin/chapter",
-        "id" : "chapter",
+        "uniqueId" : "chapter",
         "name" : "chapter",
         "isLink" : "true",
         "isMenu" : true,
@@ -106,7 +106,7 @@ if(Meteor.isServer){
           {
             "link" : "/admin/chapter/chapters",
             "name" : "Chapters",
-            "id" : "chapter_chapters",
+            "uniqueId" : "chapter_chapters",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
@@ -116,7 +116,7 @@ if(Meteor.isServer){
       {
         "image" : "/images/community_icon.png",
         "link" : "/admin/community",
-        "id" : "community",
+        "uniqueId" : "community",
         "name" : "community",
         "isLink" : true,
         "isMenu" : true,
@@ -124,7 +124,7 @@ if(Meteor.isServer){
           {
             "link" : "/admichapters/comminty/communities",
             "name" : "communities",
-            "id" : "community_communities",
+            "uniqueId" : "community_communities",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
@@ -147,10 +147,93 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/settings_icon.png",
-        "link" : "/admin/services",
+        "link" : "/admin/settings/departmentsList",
         "name" : "settings",
+        "uniqueId" : "settings",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "subMenu" : [
+          {
+            "link" : "/admin/settings/departmentsList",
+            "name" : "Departments",
+            "uniqueId" : "settings_departments",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/subDepartmentsList",
+            "name" : "Sub Departments",
+            "uniqueId" : "settings_subDepartments",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/permissionList",
+            "name" : "Permission",
+            "uniqueId" : "settings_permission",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/rolesList",
+            "name" : "Roles",
+            "uniqueId" : "settings_roles",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/internalUsersList",
+            "name" : "Internal Users",
+            "uniqueId" : "settings_internalUsers",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/requestTypesList",
+            "name" : "Request Types",
+            "uniqueId" : "settings_requestTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/filtersList",
+            "name" : "Filters",
+            "uniqueId" : "settings_filters",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/countriesList",
+            "name" : "Countries",
+            "uniqueId" : "settings_countries",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/statesList",
+            "name" : "States",
+            "uniqueId" : "settings_states",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          },
+          {
+            "link" : "/admin/settings/citiesList",
+            "name" : "Cities",
+            "uniqueId" : "settings_cities",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : ""
+          }
+        ]
       }
     ]
   }});

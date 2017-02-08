@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
+import {addDepartmentActionHandler} from '../actions/addDepartmentAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 class MlAddDepartment extends React.Component{
@@ -11,17 +12,6 @@ class MlAddDepartment extends React.Component{
     return this;
   }
 
-  componentDidMount() {
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-        $(this).val(true)
-      } else {
-        $(this).parent('.switch').removeClass('on');
-        $(this).val(false)
-      }
-    });
-  }
 
   async addEventHandler() {
     const resp=await this.createDepartment();
@@ -34,12 +24,12 @@ class MlAddDepartment extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/cluster");
+    FlowRouter.go("/admin/dashboard");
   };
 
   async  createDepartment() {
     let DepartmentDetails = {
-      clusterName: this.refs.departmentName.value,
+      departmentName: this.refs.departmentName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
       selectCluster: this.refs.selectCluster.value,
@@ -48,8 +38,8 @@ class MlAddDepartment extends React.Component{
     }
     console.log(DepartmentDetails)
 
-    //const response = await createClusterActionHandler(clusterDetails)
-   return DepartmentDetails;
+    const response = await addDepartmentActionHandler(DepartmentDetails)
+   return response;
 
   }
 

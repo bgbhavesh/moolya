@@ -10,6 +10,7 @@ import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import MlAddDepartment from '../../admin/settings/departments/component/MlAddDepartment'
+import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin"
@@ -74,6 +75,12 @@ adminSection.route('/settings/addDepartment', {
   name: 'settings_departments',
   action(){
     mount(AdminLayout,{adminContent:< MlAddDepartment/>})
+  }
+});
+adminSection.route('/settings/editDepartment', {
+  name: 'settings_departments',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEditDepartment/>})
   }
 });
 adminSection.route('/settings/subDepartmentsList', {

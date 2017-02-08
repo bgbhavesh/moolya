@@ -11,7 +11,9 @@ let Countries = `
      isActive : Boolean
     }
     type Query {
-        FetchCountries(input: String): [MlCountries]       
+        FetchCountries(input: String): [MlCountries]    
+        FetchCountry(countryCode: String): MlCountries
+        FetchCountriesSearch(searchQuery:String): [MlCountries]
     }
 `
 

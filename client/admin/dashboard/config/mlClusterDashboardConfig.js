@@ -22,7 +22,7 @@ const mlClusterDashboardListConfig=new MlViewer.View({
                               displayName
                               about
                               link
-                              id
+                              id:_id
                               email
                               showOnMap
                               countryFlag

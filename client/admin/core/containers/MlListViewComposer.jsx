@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { graphql,compose } from 'react-apollo';
-import MlListView from "../component/MlListView"
+import MlListView from "../components/MlListView"
 
 const DataComposerType='graphQl';
 export default class  MlListViewComposer extends Component {

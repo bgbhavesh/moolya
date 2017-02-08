@@ -9,6 +9,7 @@ import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapt
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
+import MlDepartmentsList from "../../admin/settings/departments/component/MlDepartmentsList";
 import MlAddDepartment from '../../admin/settings/departments/component/MlAddDepartment'
 import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
@@ -70,7 +71,7 @@ adminSection.route('/internalusers', {
 adminSection.route('/settings/departmentsList', {
   name: 'settings_departments',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlDepartmentsList />})
   }
 });
 adminSection.route('/settings/addDepartment', {

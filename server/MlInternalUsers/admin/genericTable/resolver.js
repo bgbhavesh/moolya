@@ -11,6 +11,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlChapters.find().fetch();
     totalRecords=MlChapters.find().count();
   }
+
+  if(args.module=="department"){
+    data= MlDepartments.find().fetch();
+    totalRecords=MlDepartments.find().count();
+  }
+
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -23,6 +29,10 @@ MlResolver.MlUnionResolver['SearchResult']= {
 
     if (data.chapterName) {
       return 'Chapter';
+    }
+
+    if (data.departmentName) {
+      return 'Department';
     }
 
     return null;

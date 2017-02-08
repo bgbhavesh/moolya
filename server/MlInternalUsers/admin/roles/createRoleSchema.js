@@ -3,19 +3,19 @@ import MlSchemaDef from '../mlAdminSchemaDef'
 let CreateRole = `    
     input AssignRole 
     {
-    cluster : String
-    chapter : String
-    subChapter : String
-    department : String
-    subDepartment : String
-    isActive : Boolean
+        cluster : String
+        chapter : String
+        subChapter : String
+        department : String
+        subDepartment : String
+        isActive : Boolean
     }
     
     input Permission{
-    permissionId : String
-    validFrom : String
-    validTo : String
-    isActive : Boolean
+        permissionId : String
+        validFrom : String
+        validTo : String
+        isActive : Boolean
     }
     
     type Mutation{

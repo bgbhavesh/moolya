@@ -39,17 +39,30 @@ class MlAddClusterFormComponent extends React.Component {
   };
 
   async  createCluster() {
-    let clusterDetails = {
-      clusterName: this.refs.clusterName.value,
-      displayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      uploadImage: this.refs.uploadImage.value,
-      email: this.refs.email.value,
-      ismapShow: this.refs.ismapShow.checked,
-      status: this.refs.status.checked
-    }
-    const response = await createClusterActionHandler(clusterDetails)
-    return response;
+      // let clusterDetails = {
+      //   clusterName: this.refs.clusterName.value,
+      //   displayName: this.refs.displayName.value,
+      //   about: this.refs.about.value,
+      //   uploadImage: this.refs.uploadImage.value,
+      //   email: this.refs.email.value,
+      //   ismapShow: this.refs.ismapShow.checked,
+      //   status: this.refs.status.checked
+      // }
+
+      let clusterDetails = {
+          "countryId": "c101",
+          "countryFlag": "https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png",
+          "about": "India",
+          "displayName": "India",
+          "email": "moolya@moolya.in",
+          "showOnMap": false,
+          "isActive": false,
+          "moduleName": "CLUSTER",
+          "actionName": "CREATE"
+      }
+
+      const response = await createClusterActionHandler(clusterDetails)
+      return response;
 
   }
 

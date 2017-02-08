@@ -69,6 +69,8 @@
     "body-parser": "^1.16.0",
     "bootstrap": "^3.3.7",
     "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "geocoder": "^0.2.2",
     "express": "^4.14.1",
     "google-map-react": "^0.22.3",
     "gql-merge": "0.0.4",

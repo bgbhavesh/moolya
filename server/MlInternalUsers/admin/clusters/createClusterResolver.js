@@ -1,31 +1,33 @@
 import MlResolver from '../mlAdminResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
-import MlAuthorizationLayer from '../../../mlAuthorization/mlAuthorization'
+import MlAuthorization from '../../../mlAuthorization/mlAuthorization'
+import geocoder from 'geocoder'
 
 
 MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) =>
 {
+    let isValidAuth = new MlAuthorization().validteAuthorization(context.userId, args.moduleName, args.actionName);
+    if(!isValidAuth)
+        return "Not Authorized"
 
-    let authStatus = MlAuthorizationLayer.validteAuthorization(userId, moduleId, context, action)
-    check(args, Object)
-    check(args.countryId, String)
-    check(args.displayName, String)
-    check(args.link, String)
-    check(args.about, String)
-    check(args.email, String)
-    check(args.showOnMap, Boolean)
-    check(args.isActive, Boolean)
-    if(MlClusters.find({countryId:args.countryId}).count()>0){
+    if(MlClusters.find({countryId:args.countryId}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else{
-        // TODO : Authorization
-        let id = MlClusters.insert(args);
-        if(id){
-            let code = 200;
-            let result = {clusterid: id}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-            return response
-        }
+
+        geocoder.geocode(args.displayName, function ( err, data ) {
+            // do something with data
+            args.latitude = data.results[0].geometry.location.lat;
+            args.longitude = data.results[0].geometry.location.lng;
+            let id = MlClusters.insert(args);
+            if(id){
+                let code = 200;
+                let result = {clusterid: id}
+                let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+                return response
+            }
+        });
+
+
     }
 }

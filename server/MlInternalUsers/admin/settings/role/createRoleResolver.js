@@ -2,7 +2,7 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 
-MlResolver.MlMutationResolver['CreateRole'] = (obj, args, context, info) =>{
+MlResolver.MlMutationResolver['CreateRole'] = (obj, args, context, info) => {
         // TODO : Authorization
         let id = MlRole.insert(args);
         if(id){

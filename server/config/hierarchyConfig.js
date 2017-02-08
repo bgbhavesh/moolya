@@ -1,9 +1,8 @@
 /**
  * Created by venkatasrinag on 25/1/17.
  */
-// let hierarchies = ["community", "chapter", "cluster", "Platform"];
 
-let hierarchies = ["systemadmin", "clusteradmin", "chapteradmin", "communityadmin", "teamLead"];
+let hierarchies = ["platformadmin", "clusteradmin", "chapteradmin", "subchapteradmin", "communityadmin", "teamLead"];
 let mlHierarchyCount = Meteor.settings.private.HierarchyCount;
 
 Meteor.startup(function () {

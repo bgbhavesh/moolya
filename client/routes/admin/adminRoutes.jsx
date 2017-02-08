@@ -10,6 +10,7 @@ import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import MlAddDepartment from '../../admin/settings/departments/component/MlAddDepartment'
+import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
@@ -76,6 +77,12 @@ adminSection.route('/settings/addDepartment', {
   name: 'settings_departments',
   action(){
     mount(AdminLayout,{adminContent:< MlAddDepartment/>})
+  }
+});
+adminSection.route('/settings/editDepartment', {
+  name: 'settings_departments',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEditDepartment/>})
   }
 });
 adminSection.route('/settings/subDepartmentsList', {

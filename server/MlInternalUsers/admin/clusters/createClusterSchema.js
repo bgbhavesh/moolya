@@ -15,9 +15,8 @@ let ClusterSchema = `
     
     type Mutation 
     {
-        createCluster(countryId:String,displayName:String,about:String,link:String,email:String,showOnMap:Boolean,isActive:Boolean):String
-    }
-    
+        createCluster(countryId:String, displayName:String, about:String, link:String, email:String, showOnMap:Boolean, isActive:Boolean, moduleName:String, actionName:String):String
+    }    
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],ClusterSchema]);

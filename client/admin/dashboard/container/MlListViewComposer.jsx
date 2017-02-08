@@ -18,6 +18,9 @@ export default class  MlListViewComposer extends Component {
           loading,
           data,
           fetchMore: () => fetchMore({
+            variables: {
+              offset: data,
+            },
            updateQuery: (prev, {fetchMoreResult}) => {
               if (!fetchMoreResult.data) {
                 return prev;

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-export default class MlInfinityView extends Component {
+export default class MlInfinity extends Component {
   constructor(props){
     super(props);
 
@@ -38,7 +38,7 @@ export default class MlInfinityView extends Component {
   }
 
 }
-MlInfinityView.propTypes={
+MlInfinity.propTypes={
  onViewModeChange: React.PropTypes.func,
   viewMode:React.PropTypes.bool
 }

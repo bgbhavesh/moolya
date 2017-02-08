@@ -1,5 +1,5 @@
-import MlResolver from '../mlAdminResolverDef'
-import MlRespPayload from '../../../commons/mlPayload'
+import MlResolver from '../../mlAdminResolverDef'
+import MlRespPayload from '../../../../commons/mlPayload'
 
 
 MlResolver.MlMutationResolver['CreateRole'] = (obj, args, context, info) => {

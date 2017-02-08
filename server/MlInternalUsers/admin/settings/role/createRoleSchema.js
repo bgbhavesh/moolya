@@ -1,21 +1,23 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef'
+import MlSchemaDef from '../../mlAdminSchemaDef'
 let CreateRole = `    
     input AssignRole 
     {
-        cluster : String
-        chapter : String
-        subChapter : String
-        department : String
-        subDepartment : String
-        isActive : Boolean
+    cluster : String
+    chapter : String
+    subChapter : String
+    department : String
+    subDepartment : String
+    isActive : Boolean
     }
     
     input Permission{
-        permissionId : String
-        validFrom : String
-        validTo : String
-        isActive : Boolean
+    actionId : String
+    moduleId : String
+    fieldRestrictions : String
+    validFrom : String
+    validTo : String
+    isActive : Boolean
     }
     
     type Mutation{

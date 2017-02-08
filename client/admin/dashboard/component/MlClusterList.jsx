@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-export default class MlClusterListView extends Component {
+export default class MlClusterList extends Component {
 
   render(){
     const data=this.props.data||[];

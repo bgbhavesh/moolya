@@ -1,5 +1,5 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
-import MlClusterListView from '../component/MlClusterListVIew'
+import MlClusterList from '../component/MlClusterList'
 import React from 'react';
 import gql from 'graphql-tag'
 const mlClusterDashboardListConfig=new MlViewer.View({
@@ -11,7 +11,7 @@ const mlClusterDashboardListConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:true,
   sort:true,
-  viewComponent:<MlClusterListView />,
+  viewComponent:<MlClusterList />,
   graphQlQuery:gql`
               query{
               data:SearchQuery(module:"cluster"){

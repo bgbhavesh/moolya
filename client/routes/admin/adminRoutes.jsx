@@ -8,6 +8,8 @@ import  MlAddClusterFormComponent from '../../admin/cluster/components/MoolyaAdd
 import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapterFormComponent'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
+import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
+import MlAddDepartment from '../../admin/settings/departments/component/MlAddDepartment'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin"
@@ -53,6 +55,79 @@ adminSection.route('/community', {
   name: 'community',
   action(){
     mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
+  }
+});
+adminSection.route('/internalusers', {
+  name: 'community',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+
+adminSection.route('/settings/departmentsList', {
+  name: 'settings_departments',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/addDepartment', {
+  name: 'settings_departments',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDepartment/>})
+  }
+});
+adminSection.route('/settings/subDepartmentsList', {
+  name: 'settings_subDepartments',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/permissionList', {
+  name: 'settings_permission',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/rolesList', {
+  name: 'settings_roles',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/internalUsersList', {
+  name: 'settings_internalUsers',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/requestTypesList', {
+  name: 'settings_requestTypes',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/filtersList', {
+  name: 'settings_filters',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/countriesList', {
+  name: 'settings_countries',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/statesList', {
+  name: 'settings_states',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/citiesList', {
+  name: 'settings_cities',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
   }
 });
 

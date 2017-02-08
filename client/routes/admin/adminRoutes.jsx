@@ -8,6 +8,7 @@ import  MlAddClusterFormComponent from '../../admin/cluster/components/MoolyaAdd
 import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapterFormComponent'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
+import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin"
@@ -53,6 +54,12 @@ adminSection.route('/community', {
   name: 'community',
   action(){
     mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
+  }
+});
+adminSection.route('/internalusers', {
+  name: 'community',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
   }
 });
 

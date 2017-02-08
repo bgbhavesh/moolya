@@ -1,5 +1,5 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef'
+import MlSchemaDef from '../../mlAdminSchemaDef'
 let CreateRole = `    
     input AssignRole 
     {
@@ -12,7 +12,9 @@ let CreateRole = `
     }
     
     input Permission{
-    permissionId : String
+    actionId : String
+    moduleId : String
+    fieldRestrictions : String
     validFrom : String
     validTo : String
     isActive : Boolean

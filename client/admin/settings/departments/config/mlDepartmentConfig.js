@@ -3,14 +3,14 @@ import React from 'react';
 import gql from 'graphql-tag'
 const mlDepartmentTableConfig=new MlViewer.View({
   name:"departmentTable",
-  module:"department",
+  module:"department",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["departmentName","displayName","isActive"],
   searchFields:["departmentName","displayName","isActive"],
   throttleRefresh:false,
-  pagination:false,
-  selectRow:true,
+  pagination:false,//To display pagination
+  selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "departmentName", title: "Department Name",dataSort:true},

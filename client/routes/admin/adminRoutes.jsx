@@ -10,6 +10,8 @@ import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import MlAddDepartment from '../../admin/settings/departments/component/MlAddDepartment'
+import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
+import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin"
@@ -80,6 +82,18 @@ adminSection.route('/settings/subDepartmentsList', {
   name: 'settings_subDepartments',
   action(){
     mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+adminSection.route('/settings/addSubDepartment', {
+  name: 'settings_subDepartments',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
+  }
+});
+adminSection.route('/settings/editSubDepartment', {
+  name: 'settings_subDepartments',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEditSubDepartment/>})
   }
 });
 adminSection.route('/settings/permissionList', {

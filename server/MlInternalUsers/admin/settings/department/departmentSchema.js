@@ -24,6 +24,9 @@ let CreateDepartment = `
     type Mutation{
         CreateDepartment(_id:String,departmentName:String,displayName:String,departmentDesc:String,isActive:Boolean,isMoolya:Boolean,depatmentAvailable:[DepatmentAvailable]):String
     }
+    type Query{
+        FindDepartment(_id:String):Department
+    }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],CreateDepartment]);

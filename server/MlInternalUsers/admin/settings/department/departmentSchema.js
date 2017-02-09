@@ -1,19 +1,17 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let CreateDepartment = `        
-    
-    
     input DepatmentAvailable{
-    cluster : String
-    chapter : String
-    subChapter : String
-    email : String
-    notify : Boolean
-    isActive : Boolean
+        cluster : String
+        chapter : String
+        subChapter : String
+        email : String
+        notify : Boolean
+        isActive : Boolean
     }
     
     type Mutation{
-        CreateDepartment(departmentName:String,displayName:String,departmentDesc:String,isActive:Boolean,isMoolya:Boolean,depatmentAvailable:[DepatmentAvailable]):String
+        createDepartment(departmentName:String, displayName:String, departmentDesc:String, isActive:Boolean, isMoolya:Boolean, depatmentAvailable:[DepatmentAvailable]):String
     }
 `
 

@@ -1,20 +1,23 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addDepartmentActionHandler} from '../actions/addDepartmentAction'
+import {addSubDepartmentActionHandler} from '../actions/addSubDepartmentAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-class MlAddDepartment extends React.Component{
+class MlAddSubDepartment extends React.Component{
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
-    this.createDepartment.bind(this)
+    this.createSubDepartment.bind(this)
     return this;
   }
 
+  componentDidMount() {
+
+  }
 
   async addEventHandler() {
-    const resp=await this.createDepartment();
+    const resp=await this.createSubDepartment();
     return resp;
   }
 
@@ -24,22 +27,22 @@ class MlAddDepartment extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/dashboard");
+    FlowRouter.go("/admin/cluster");
   };
 
-  async  createDepartment() {
-    let DepartmentDetails = {
-      departmentName: this.refs.departmentName.value,
+  async  createSubDepartment() {
+    let SubDepartmentDetails = {
+      subDepartmentName: this.refs.subDepartmentName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
       selectCluster: this.refs.selectCluster.value,
       email: this.refs.email.value,
       status: this.refs.status.checked
     }
-    console.log(DepartmentDetails)
+    console.log(SubDepartmentDetails)
 
-    const response = await addDepartmentActionHandler(DepartmentDetails)
-   return response;
+    const response = await addSubDepartmentActionHandler(SubDepartmentDetails);
+    return response;
 
   }
 
@@ -53,7 +56,7 @@ class MlAddDepartment extends React.Component{
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createDepartment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.createSubDepartment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -65,11 +68,12 @@ class MlAddDepartment extends React.Component{
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Create Department</h2>
+          <h2>Create Sub Department</h2>
           <div className="col-md-6">
             <div className="form_bg">
+              <form>
                 <div className="form-group">
-                  <input type="text" ref="departmentName" placeholder="Department Name" className="form-control float-label" id=""/>
+                  <input type="text" ref="subDepartmentName" placeholder="Sub Department Name" className="form-control float-label" id=""/>
 
                 </div>
                 <div className="form-group">
@@ -77,13 +81,15 @@ class MlAddDepartment extends React.Component{
 
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="email" placeholder="Department Email ID" className="form-control float-label" id=""/>
+                  <input type="text" ref="email" placeholder="Sub Department Email ID" className="form-control float-label" id=""/>
 
                 </div>
+              </form>
             </div>
           </div>
           <div className="col-md-6">
             <div className="form_bg">
+              <form>
                 <div className="form-group">
                   <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
 
@@ -97,20 +103,21 @@ class MlAddDepartment extends React.Component{
                 <div className="form-group switch_wrap">
                   <label>Status</label><br/>
                   <label className="switch">
-                    <input type="checkbox" ref="status" />
+                    <input type="checkbox" ref="status"/>
                     <div className="slider"></div>
                   </label>
                 </div>
+              </form>
             </div>
           </div>
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
+          />
         </div>
 
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-        />
 
       </div>
     )
   }
 };
 
-export default MoolyaAddDepartment = formHandler()(MlAddDepartment);
+export default MoolyaAddSubDepartment = formHandler()(MlAddSubDepartment);

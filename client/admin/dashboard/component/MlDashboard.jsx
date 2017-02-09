@@ -1,7 +1,7 @@
 import React from 'react';
 import MlInfinity from "./MlInfinity";
 import MlMapView from "../component/MlMapView";
-import MlListViewContainer from "../container/MlListViewContainer";
+import MlListViewContainer from "../../core/containers/MlListViewContainer";
 export default class MlDashboard extends React.Component {
   constructor(props) {
     super(props);

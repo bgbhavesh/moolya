@@ -6,7 +6,7 @@ let ClusterSchema = `
       displayName :String
       about: String
       link: String
-      id:String
+      _id:String
       email:String
       showOnMap : Boolean
       countryFlag:String

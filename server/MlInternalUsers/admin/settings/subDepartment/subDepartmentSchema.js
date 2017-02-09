@@ -5,7 +5,7 @@ let SubDepartment = `
     type SubDepartment{
       subDepartmentName :String
       displayName :String
-      departmentDesc: String
+      aboutSubDepartment: String
       _id:String
       isActive:Boolean
       isMoolya : Boolean
@@ -23,6 +23,9 @@ let SubDepartment = `
     
     type Mutation{
         CreateSubDepartment(_id:String,subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
+    }
+    type Query{
+      FindSubDepartment(_id: String):SubDepartment
     }
 `
 

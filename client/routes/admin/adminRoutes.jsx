@@ -10,6 +10,7 @@ import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import MlDepartmentsList from "../../admin/settings/departments/component/MlDepartmentsList";
+import MlSubDepartmentsList from "../../admin/settings/subDepartments/component/MlSubDepartmentsList";
 import MlAddDepartment from '../../admin/settings/departments/component/MlAddDepartment'
 import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
@@ -89,7 +90,7 @@ adminSection.route('/settings/editDepartment', {
 adminSection.route('/settings/subDepartmentsList', {
   name: 'settings_subDepartments',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlSubDepartmentsList/>})
   }
 });
 adminSection.route('/settings/addSubDepartment', {
@@ -98,10 +99,10 @@ adminSection.route('/settings/addSubDepartment', {
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
   }
 });
-adminSection.route('/settings/editSubDepartment', {
+adminSection.route('/settings/editSubDepartment/:id', {
   name: 'settings_subDepartments',
-  action(){
-    mount(AdminLayout,{adminContent:< MlEditSubDepartment/>})
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditSubDepartment config={params.id}/>})
   }
 });
 adminSection.route('/settings/permissionList', {

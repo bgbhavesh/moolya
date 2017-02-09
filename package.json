@@ -85,6 +85,7 @@
     "meteor-node-stubs": "^0.2.5",
     "react": "^15.4.2",
     "react-apollo": "^0.8.3",
+    "react-bootstrap-table": "^2.11.2",
     "react-dom": "^15.4.2",
     "react-komposer": "^1.13.1",
     "react-mounter": "^1.2.0",

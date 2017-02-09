@@ -41,9 +41,9 @@ export default class MlTableView extends Component {
 
   handleRowSelect(row, isSelected, e){
      if(isSelected){
-       this.set({"selectedRow":row});
+       this.setState({"selectedRow":row});
      }else{
-       this.set({"selectedRow":null});
+       this.setState({"selectedRow":null});
      }
   }
 
@@ -58,13 +58,21 @@ export default class MlTableView extends Component {
     let data=this.props.data&&this.props.data.data?this.props.data.data:[];
     let loading=this.props.loading;
     let config=this.props;
-     config["handleRowSelect"]=this.handleRowSelect.bind(this);
+    config["handleRowSelect"]=this.handleRowSelect.bind(this);
+
+    let that=this;
+    let actionConfigration=config.actionConfiguration
+    actionConfigration.forEach(function (action) {
+
+      action.handler=that.actionHandlerProxy.bind(that,action.handler)
+    })
+    config["actionConfiguration"]=actionConfigration;
     return(<div>{loading?(<div className="loader_wrap"></div>):(
-       <div>
-       <MlTable {...config} data={data}></MlTable>
-       {config.showActionComponent===true && <MlActionComponent ActionOptions={config.actionConfiguration} />}
-       </div>
-      )}</div>)
+      <div>
+        <MlTable {...config } handleRowSelect={that.handleRowSelect.bind(this)} data={data}></MlTable>
+        {config.showActionComponent===true && <MlActionComponent ActionOptions={config.actionConfiguration} />}
+      </div>
+    )}</div>)
   }
 
 }

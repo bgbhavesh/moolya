@@ -2,6 +2,15 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let SubDepartment = `        
     
+    type SubDepartment{
+      subDepartmentName :String
+      displayName :String
+      departmentDesc: String
+      _id:String
+      isActive:Boolean
+      isMoolya : Boolean
+      countryFlag:String
+    }
     
     input SubDepatmentAvailable{
     cluster : String

@@ -3,24 +3,24 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
+import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
 class MlEditDepartment extends React.Component{
   constructor(props) {
     super(props);
-    this.state={
-      departmentName:'',
-      displayName:'',
-      about:'',
-      selectCluster:'',
-      email:'',
-      status:false,
-      }
+    this.state = {loading:true,data:{}};
     this.addEventHandler.bind(this);
     this.editDepartment.bind(this)
+    this.findDepartment.bind(this);
     return this;
   }
 
   componentWillMount() {
-    this.setState({departmentName:'manager',displayName:'Manager', about:'moolya manger ', selectCluster:'Select Cluster', email:'manger@moolya', status:true})
+
+    const resp=this.findDepartment();
+    return resp;
+
+
+    //this.setState({departmentName:'manager',displayName:'Manager', about:'moolya manger ', selectCluster:'Select Cluster', email:'manger@moolya', status:true})
 
   }
   componentDidMount(){
@@ -42,7 +42,13 @@ class MlEditDepartment extends React.Component{
 
     FlowRouter.go("/admin/dashboard");
   };
-
+  async findDepartment(){
+      let departmentId=this.props.config
+      console.log(departmentId)
+      const response = await findDepartmentActionHandler(departmentId);
+    this.setState({loading:false,data:response});
+      //return response;
+    }
   async  editDepartment() {
     let DepartmentDetails = {
       departmentName: this.refs.departmentName.value,
@@ -76,24 +82,27 @@ class MlEditDepartment extends React.Component{
         actionName: 'logout',
         handler: null
       }
-    ]
+    ];
+
+    const showLoader=this.state.loading;
 
     return (
-      <div className="admin_main_wrap">
+      <div>
+      {showLoader===true?( <div className="loader_wrap"></div>):( <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Edit Department</h2>
           <div className="col-md-6">
             <div className="form_bg">
               <div className="form-group">
-                <input type="text" ref="departmentName" defaultValue={this.state.departmentName} placeholder="Department Name" className="form-control float-label" id=""/>
+                <input type="text" ref="departmentName" defaultValue={this.state.data&&this.state.data.departmentName} placeholder="Department Name" className="form-control float-label" id=""/>
 
               </div>
               <div className="form-group">
-                <textarea ref="about" defaultValue={this.state.about} placeholder="About" className="form-control float-label" id=""></textarea>
+                <textarea ref="about" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="About" className="form-control float-label" id=""></textarea>
 
               </div>
               <div className="form-group">
-                <input type="text" ref="email" defaultValue={this.state.email} placeholder="Department Email ID" className="form-control float-label" id=""/>
+                <input type="text" ref="email" defaultValue={this.state.data&&this.state.data.email} placeholder="Department Email ID" className="form-control float-label" id=""/>
 
               </div>
             </div>
@@ -101,7 +110,7 @@ class MlEditDepartment extends React.Component{
           <div className="col-md-6">
             <div className="form_bg">
               <div className="form-group">
-                <input type="text" ref="displayName" defaultValue={this.state.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
+                <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
 
               </div>
               <div className="form-group">
@@ -113,7 +122,7 @@ class MlEditDepartment extends React.Component{
               <div className="form-group switch_wrap">
                 <label>Status</label><br/>
                 <label className="switch">
-                  <input type="checkbox" ref="status" id="status" defaultValue={this.state.status}/>
+                  <input type="checkbox" ref="status" id="status" checked={this.state.data&&this.state.data.isActive}/>
                   <div className="slider"></div>
                 </label>
               </div>
@@ -124,6 +133,7 @@ class MlEditDepartment extends React.Component{
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
         />
 
+      </div>)}
       </div>
     )
   }

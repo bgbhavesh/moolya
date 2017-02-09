@@ -19,3 +19,14 @@ MlResolver.MlMutationResolver['CreateSubDepartment'] = (obj, args, context, info
     }
   }
 }
+
+MlResolver.MlQueryResolver['FindSubDepartment'] = (obj, args, context, info) =>{
+  // TODO : Authorization
+
+  if (args._id) {
+    var id= args._id;
+    let response = MlSubDepartments.findOne({'_id':id});
+    return response;
+  }
+
+}

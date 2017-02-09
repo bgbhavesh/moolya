@@ -77,7 +77,7 @@ class MlEditDepartment extends React.Component{
         handler: null
       }
     ]
-
+    console.log(this.props.config)
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">

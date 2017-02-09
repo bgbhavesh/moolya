@@ -81,10 +81,10 @@ adminSection.route('/settings/addDepartment', {
     mount(AdminLayout,{adminContent:< MlAddDepartment/>})
   }
 });
-adminSection.route('/settings/editDepartment', {
+adminSection.route('/settings/editDepartment/:id', {
   name: 'settings_departments',
-  action(){
-    mount(AdminLayout,{adminContent:< MlEditDepartment/>})
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditDepartment config={params.id}/>})
   }
 });
 adminSection.route('/settings/subDepartmentsList', {

@@ -24,7 +24,15 @@ const mlDepartmentTableConfig=new MlViewer.View({
     {
       actionName: 'edit',
       showAction: true,
-      handler: null
+      handler:  (data)=>{
+        if(data&&data.id){
+          FlowRouter.go("/admin/settings/editDepartment/"+data.id)
+        }
+        else{
+          alert("Please select a department")
+        }
+        }
+
     },
     {
       showAction: true,

@@ -64,7 +64,7 @@ var clusterAdmin = MlRoles.findOne({roleName:"clusteradmin"})
 if(!clusterAdmin){
     let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
     let clusterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
-    let ccc = chapterModule1._id
+    // let ccc = chapterModule1._id
     let modules = [
                     {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, permissions:clusterPer},
                     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, permissions:permissions},

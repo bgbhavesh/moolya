@@ -2,7 +2,7 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 
-MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =>
+MlResolver.MlMutationResolver['CreateDepartment'] = (obj, args, context, info) =>
 {
     let isValidAuth = new MlAuthorization().validteAuthorization(context.userId, args.moduleName, args.actionName);
     if(!isValidAuth)

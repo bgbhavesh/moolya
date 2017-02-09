@@ -20,6 +20,17 @@ MlResolver.MlMutationResolver['CreateDepartment'] = (obj, args, context, info) =
        }
        }
 }
+MlResolver.MlMutationResolver['UpdateDepartment'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+  if (args._id) {
+    var id= args._id;
+    let updatedResponse= MlDepartments.update(id, {$set: args});
+    console.log(updatedResponse)
+    return updatedResponse
+  }
+
+}
 MlResolver.MlQueryResolver['FindDepartment'] = (obj, args, context, info) => {
   // TODO : Authorization
 

@@ -22,7 +22,7 @@ let CreateDepartment = `
     }
     
     type Mutation{
-        CreateDepartment(departmentName:String,displayName:String,departmentDesc:String,isActive:Boolean,isMoolya:Boolean,depatmentAvailable:[DepatmentAvailable]):String
+        CreateDepartment(_id:String,departmentName:String,displayName:String,departmentDesc:String,isActive:Boolean,isMoolya:Boolean,depatmentAvailable:[DepatmentAvailable]):String
     }
 `
 

@@ -5,7 +5,7 @@ export async function updateSubDepartmentActionHandler(SubDepartmentDetails) {
   let _id = SubDepartmentDetails.id;
   let subDepartmentName = SubDepartmentDetails.subDepartmentName;
   let displayName = SubDepartmentDetails.displayName;
-  let aboutSubDepartment = SubDepartmentDetails.about;
+  let aboutSubDepartment = SubDepartmentDetails.aboutSubDepartment;
   let email = SubDepartmentDetails.email;
   let selectCluster = SubDepartmentDetails.selectCluster;
   let isActive = SubDepartmentDetails.status;

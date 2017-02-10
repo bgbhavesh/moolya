@@ -53,6 +53,7 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
                      ...on SubDepartment{
                               subDepartmentName
                               displayName
+                              aboutSubDepartment
                               isActive
                               id:_id
                           }

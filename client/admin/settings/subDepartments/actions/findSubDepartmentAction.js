@@ -11,8 +11,8 @@ export async function findSubDepartmentActionHandler(SubDepartmentId) {
         id:_id
         subDepartmentName
         displayName
-        isActive
         aboutSubDepartment
+        isActive
       }
     }  
     `,

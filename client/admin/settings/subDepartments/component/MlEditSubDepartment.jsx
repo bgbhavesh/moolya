@@ -117,7 +117,7 @@ class MlEditSubDepartment extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <textarea ref="about" defaultValue={this.state.data&&this.state.data.aboutSubDepartment} placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea ref="aboutSubDepartment" defaultValue={this.state.data&&this.state.data.aboutSubDepartment} placeholder="About" className="form-control float-label" id=""></textarea>
 
                     </div>
                     <div className="form-group">

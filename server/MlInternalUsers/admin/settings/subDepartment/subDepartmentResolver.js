@@ -20,6 +20,17 @@ MlResolver.MlMutationResolver['CreateSubDepartment'] = (obj, args, context, info
   }
 }
 
+MlResolver.MlMutationResolver['UpdateSubDepartment'] = (obj, args, context, info) =>{
+  // TODO : Authorization
+
+  if (args._id) {
+    var id= args._id;
+    let resp = MlSubDepartments.update(id, {$set: args});
+    return resp;
+  }
+
+}
+
 MlResolver.MlQueryResolver['FindSubDepartment'] = (obj, args, context, info) =>{
   // TODO : Authorization
 

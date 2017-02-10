@@ -4,6 +4,8 @@ import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findSubDepartmentActionHandler} from '../actions/findSubDepartmentAction'
+import {updateSubDepartmentActionHandler} from '../actions/updateSubDepartmentAction'
+
 class MlEditSubDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -14,7 +16,7 @@ class MlEditSubDepartment extends React.Component{
     return this;
   }
   componentDidMount() {
-    if(this.state.status){
+    if(this.state.data.isAcive){
       $('#status').prop('checked', true);
     }
   }
@@ -45,7 +47,7 @@ class MlEditSubDepartment extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/cluster");
+    FlowRouter.go("/admin/settings/subDepartmentsList");
   };
 
   async  findSubDepartment() {
@@ -57,18 +59,27 @@ class MlEditSubDepartment extends React.Component{
 
   async  editSubDepartment() {
     let SubDepartmentDetails = {
+      id: this.refs.id.value,
       subDepartmentName: this.refs.subDepartmentName.value,
       displayName: this.refs.displayName.value,
-      about: this.refs.about.value,
+      aboutSubDepartment: this.refs.aboutSubDepartment.value,
       selectCluster: this.refs.selectCluster.value,
       email: this.refs.email.value,
       status: this.refs.status.checked
     }
     console.log(SubDepartmentDetails)
 
-    //const response = await createClusterActionHandler(clusterDetails)
-    return SubDepartmentDetails;
+    const response = await updateSubDepartmentActionHandler(SubDepartmentDetails)
+    return response;
 
+  }
+  onStatusChange(e){
+     const data=this.state.data;
+     if(e.currentTarget.checked){
+       this.setState({"data":{"isActive":true}});
+     }else{
+       this.setState({"data":{"isActive":false}});
+     }
   }
 
   render(){
@@ -100,6 +111,7 @@ class MlEditSubDepartment extends React.Component{
               <div className="col-md-6">
                 <div className="form_bg">
                   <form>
+                    <input type="text" ref="id" value={this.state.data.id} hidden="true"/>
                     <div className="form-group">
                       <input type="text" ref="subDepartmentName" defaultValue={this.state.data&&this.state.data.subDepartmentName} placeholder="Sub Department Name" className="form-control float-label" id=""/>
 
@@ -131,7 +143,7 @@ class MlEditSubDepartment extends React.Component{
                     <div className="form-group switch_wrap">
                       <label>Status</label><br/>
                       <label className="switch">
-                        <input type="checkbox" ref="status" id="status" checked={this.state.data&&this.state.data.isActive}/>
+                        <input type="checkbox" ref="status" id="status" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>

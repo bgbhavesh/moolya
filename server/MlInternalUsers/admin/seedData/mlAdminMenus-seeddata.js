@@ -156,18 +156,81 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/departmentsList",
             "name" : "Departments",
-            "uniqueId" : "settings_departments",
+            "uniqueId" : "settings_Departments",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addDepartment",
+                "name": "Add Departments",
+                "uniqueId": "settings_AddDepartment",
+                "subMenuMappingId":"settings_Departments",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/departmentsList",
+                "name": "List Department",
+                "uniqueId": "settings_DepartmentList",
+                "subMenuMappingId":"settings_Departments",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDepartment",
+                "name": "Edit Department",
+                "uniqueId": "settings_EditDepartment",
+                "subMenuMappingId":"settings_Departments",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
           },
           {
             "link" : "/admin/settings/subDepartmentsList",
             "name" : "Sub Departments",
-            "uniqueId" : "settings_subDepartments",
+            "uniqueId" : "settings_SubDepartments",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addSubDepartment",
+              "name": "Add Sub Departments",
+              "uniqueId": "settings_AddSubDepartments",
+              "subMenuMappingId":"settings_SubDepartments",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+              },
+              {
+                "link": "/admin/settings/subDepartmentsList",
+                "name": "List Sub Department",
+                "uniqueId": "settings_SubDepartmentList",
+                "subMenuMappingId":"settings_SubDepartments",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editSubDepartment",
+                "name": "Edit Sub Department",
+                "uniqueId": "settings_EditSubDepartments",
+                "subMenuMappingId":"settings_SubDepartments",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           },
           {
             "link" : "/admin/settings/permissionList",

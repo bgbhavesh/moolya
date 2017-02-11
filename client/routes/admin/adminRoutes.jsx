@@ -70,37 +70,37 @@ adminSection.route('/internalusers', {
 });
 
 adminSection.route('/settings/departmentsList', {
-  name: 'settings_departments',
+  name: 'settings_DepartmentList',
   action(){
     mount(AdminLayout,{adminContent:< MlDepartmentsList />})
   }
 });
 adminSection.route('/settings/addDepartment', {
-  name: 'settings_departments',
+  name: 'settings_AddDepartment',
   action(){
     mount(AdminLayout,{adminContent:< MlAddDepartment/>})
   }
 });
 adminSection.route('/settings/editDepartment/:id', {
-  name: 'settings_departments',
+  name: 'settings_EditDepartment',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditDepartment config={params.id}/>})
   }
 });
 adminSection.route('/settings/subDepartmentsList', {
-  name: 'settings_subDepartments',
+  name: 'settings_SubDepartmentList',
   action(){
     mount(AdminLayout,{adminContent:< MlSubDepartmentsList/>})
   }
 });
 adminSection.route('/settings/addSubDepartment', {
-  name: 'settings_subDepartments',
+  name: 'settings_AddSubDepartments',
   action(){
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
   }
 });
 adminSection.route('/settings/editSubDepartment/:id', {
-  name: 'settings_subDepartments',
+  name: 'settings_EditSubDepartments',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditSubDepartment config={params.id}/>})
   }

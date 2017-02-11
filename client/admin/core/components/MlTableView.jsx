@@ -35,7 +35,7 @@ export default class MlTableView extends Component {
     this.setState({
       sizePerPage: sizePerPage
     });
-    this.props.fetchMore();
+  //  this.props.fetchMore();
   }
 
   onSortChange(sortName,sortOrder){

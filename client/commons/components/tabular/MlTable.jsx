@@ -20,7 +20,7 @@ export default class MlTable extends React.Component {
                     selectRow:(this.props.selectRow?selectRow:{}) ,
                     data:this.props.data,
                     remote:true,
-                    search:false,multiColumnSearch:false,pagination:false,
+                    search:false,multiColumnSearch:false,pagination:this.props.pagination,
                     fetchInfo:{ dataTotalSize: this.props.totalDataSize }
                    };
    //Note: you can pass the functions for expandRow and expandComponent as properties.
@@ -38,7 +38,7 @@ export default class MlTable extends React.Component {
 
      config['options']={sizePerPage:this.props.sizePerPage,
       sizePerPageList: [5,10,20,50,100],
-      page: this.props.currentPage,
+      page: this.props.pageNumber,
       onPageChange: this.props.onPageChange,
       onSizePerPageList: this.props.onSizePerPageList,
       onSortChange:this.props.onSortChange,

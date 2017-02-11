@@ -31,7 +31,7 @@ type SearchResp {
   data:[SearchResult]
 }
 type Query {
-  SearchQuery(module: String!): SearchResp!
+  SearchQuery(module: String!,offset: Int,limit:Int): SearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);

@@ -2,24 +2,33 @@ import MlResolver from '../mlAdminResolverDef'
 
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
+  const findOptions = {
+              skip: args.offset
+  };
+
+  // `limit` may be `null`
+  if (args.limit > 0) {
+    findOptions.limit = args.limit;
+  }
+
   if(args.module=="cluster"){
-    data= MlClusters.find().fetch();
-    totalRecords=MlClusters.find().count();
+    data= MlClusters.find({},findOptions).fetch();
+    totalRecords=MlClusters.find({},findOptions).count();
   }
 
   if(args.module=="chapter"){
-    data= MlChapters.find().fetch();
-    totalRecords=MlChapters.find().count();
+    data= MlChapters.find({},findOptions).fetch();
+    totalRecords=MlChapters.find({},findOptions).count();
   }
 
   if(args.module=="department"){
-    data= MlDepartments.find().fetch();
-    totalRecords=MlDepartments.find().count();
+    data= MlDepartments.find({},findOptions).fetch();
+    totalRecords=MlDepartments.find({},findOptions).count();
   }
 
   if(args.module=="subDepartment"){
-    data= MlSubDepartments.find().fetch();
-    totalRecords=MlSubDepartments.find().count();
+    data= MlSubDepartments.find({},findOptions).fetch();
+    totalRecords=MlSubDepartments.find({},findOptions).count();
   }
 
   return {'totalRecords':totalRecords,'data':data};

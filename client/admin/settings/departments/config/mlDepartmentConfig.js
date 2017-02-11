@@ -9,7 +9,7 @@ const mlDepartmentTableConfig=new MlViewer.View({
   fields:["departmentName","displayName","isActive"],
   searchFields:["departmentName","displayName","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
@@ -47,9 +47,10 @@ const mlDepartmentTableConfig=new MlViewer.View({
       handler: (data)=>{console.log(data);}
     }
   ],
+  sizePerPage:5,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"department"){
+              query SearchQuery( $offset: Int, $limit: Int) {
+              data:SearchQuery(module:"department",offset: $offset, limit: $limit){
                     totalRecords
                     data{
                      ...on Department{

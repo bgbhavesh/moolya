@@ -4,7 +4,7 @@
 
 let modules = ["community", "chapter", "subchapter", "cluster", "department", "subdepartment", "roles", "users", "settings", "documents", "conversations"];
 
-Meteor.startup(function () {
+// Meteor.startup(function () {
     for(i = 0; i < modules.length; i++){
         let module = MlModules.findOne({name: modules[i]});
         if(!module){
@@ -12,4 +12,4 @@ Meteor.startup(function () {
           MlModules.insert(module);
         }
     }
-})
+// })

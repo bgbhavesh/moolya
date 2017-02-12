@@ -27,7 +27,7 @@ class MlAddSubDepartment extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/cluster");
+    FlowRouter.go("/admin/settings/subDepartmentsList");
   };
 
   async  createSubDepartment() {

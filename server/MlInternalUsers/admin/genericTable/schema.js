@@ -24,14 +24,14 @@ let moolya = `
 //MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],moolya]);
 
 let search = `
-union SearchResult = Cluster | Chapter | Department
+union SearchResult = Cluster | Chapter | Department | SubDepartment
 
 type SearchResp {
   totalRecords:Int,
   data:[SearchResult]
 }
 type Query {
-  SearchQuery(module: String!): SearchResp!
+  SearchQuery(module: String!,offset: Int,limit:Int): SearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);

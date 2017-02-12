@@ -2,7 +2,7 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
 let Menu = `
     type Menu{
-     image: String
+      image: String
       link: String
       name: String
       uniqueId:String
@@ -10,6 +10,8 @@ let Menu = `
       isMenu:Boolean
       subMenu:[Menu]
       dynamicLink:Boolean
+      subMenuMappingId:String
+      subMenusId:String
     }
     type MlMenu 
     {

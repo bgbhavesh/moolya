@@ -2,6 +2,15 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let SubDepartment = `        
     
+    type SubDepartment{
+      subDepartmentName :String
+      displayName :String
+      aboutSubDepartment: String
+      _id:String
+      isActive:Boolean
+      isMoolya : Boolean
+      countryFlag:String
+    }
     
     input SubDepatmentAvailable{
     cluster : String
@@ -13,7 +22,12 @@ let SubDepartment = `
     }
     
     type Mutation{
-        CreateSubDepartment(subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
+        CreateSubDepartment(_id:String,subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
+        
+        UpdateSubDepartment(_id:String,subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
+    }
+    type Query{
+      FindSubDepartment(_id: String):SubDepartment
     }
 `
 

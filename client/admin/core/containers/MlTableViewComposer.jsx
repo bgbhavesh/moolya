@@ -12,14 +12,19 @@ export default class  MlTableViewComposer extends Component {
     if(DataComposerType==='graphQl'){
       const Composer = graphql(config.graphQlQuery, {
         options: props => ({
+          variables: {
+             offset: 0,
+             limit: config.sizePerPage||5,
+          },
           forceFetch: true,
         }),
         props: ({data: {loading, data, fetchMore}}) => ({
           loading,
           data,
-          fetchMore: () => fetchMore({
+          fetchMore: (sizePerPage,pageNumber) => fetchMore({
             variables: {
-              offset: data,
+              offset:sizePerPage*(pageNumber-1)||0,
+              limit:sizePerPage||10,
             },
            updateQuery: (prev, {fetchMoreResult}) => {
               if (!fetchMoreResult.data) {

@@ -1,7 +1,7 @@
 /**
  * Created by venkatasrinag on 9/1/17.
  */
-import MoolyaloginContainer from '../container/loginContainer'
+import MoolyaloginContainer from '../containers/loginContainer'
 export let loginActionHandler = {
     onLoginFormSubmit(details,callback){
         let logincontainer=MoolyaloginContainer.loginContainer
@@ -14,5 +14,9 @@ export let loginActionHandler = {
                 FlowRouter.go("/admin/dashboard");
             }
         });
+    },
+    onLogout(callback){
+      let logoutcontainer=MoolyaloginContainer.loginContainer;
+      logoutcontainer.logout(callback);
     }
 }

@@ -1,19 +1,19 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-const mlDepartmentTableConfig=new MlViewer.View({
-  name:"departmentTable",
-  module:"department",//Module name for filter.
+const mlSubDepartmentTableConfig=new MlViewer.View({
+  name:"subDepartmentTable",
+  module:"subDepartment",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["departmentName","displayName","isActive"],
-  searchFields:["departmentName","displayName","isActive"],
+  fields:["subDepartmentName","displayName","isActive"],
+  searchFields:["subDepartmentName","displayName","isActive"],
   throttleRefresh:false,
-  pagination:true,//To display pagination
+  pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "departmentName", title: "Department Name",dataSort:true},
+    {dataField: "subDepartmentName", title: "Department Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
@@ -24,21 +24,19 @@ const mlDepartmentTableConfig=new MlViewer.View({
     {
       actionName: 'edit',
       showAction: true,
-      handler:  (data)=>{
-        if(data&&data.id){
-          FlowRouter.go("/admin/settings/editDepartment/"+data.id)
+      handler: (data)=>{
+        if(data && data.id){
+          FlowRouter.go("/admin/settings/editSubDepartment/"+data.id);
+        } else{
+          alert("Please select a Sub Department");
         }
-        else{
-          alert("Please select a department")
-        }
-        }
-
+      }
     },
     {
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addDepartment")
+        FlowRouter.go("/admin/settings/addSubDepartment")
       }
     },
     {
@@ -47,15 +45,15 @@ const mlDepartmentTableConfig=new MlViewer.View({
       handler: (data)=>{console.log(data);}
     }
   ],
-  sizePerPage:5,
   graphQlQuery:gql`
-              query SearchQuery( $offset: Int, $limit: Int) {
-              data:SearchQuery(module:"department",offset: $offset, limit: $limit){
+              query{
+              data:SearchQuery(module:"subDepartment"){
                     totalRecords
                     data{
-                     ...on Department{
-                              departmentName
+                     ...on SubDepartment{
+                              subDepartmentName
                               displayName
+                              aboutSubDepartment
                               isActive
                               id:_id
                           }
@@ -65,4 +63,4 @@ const mlDepartmentTableConfig=new MlViewer.View({
               `
 });
 
-export {mlDepartmentTableConfig};
+export {mlSubDepartmentTableConfig};

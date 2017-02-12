@@ -10,13 +10,31 @@ import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import MlDepartmentsList from "../../admin/settings/departments/component/MlDepartmentsList";
+import MlSubDepartmentsList from "../../admin/settings/subDepartments/component/MlSubDepartmentsList";
 import MlAddDepartment from '../../admin/settings/departments/component/MlAddDepartment'
 import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
-  prefix: "/admin"
+  prefix: "/admin",
+  name: 'admin',
+  triggersEnter: [function(context, redirect) {
+    console.log('running /adminPrefix trigger');
+    console.log(context);
+    if (!Meteor.userId()) {
+      FlowRouter.go('/login')
+    }
+  }]
+});
+
+adminSection.route('/', {
+  action: function() {
+    FlowRouter.go("/admin/dashboard");
+  },
+  triggersEnter: [function(context, redirect) {
+    console.log('running /admin trigger');
+  }]
 });
 adminSection.route('/dashboard', {
   name: 'dashboard',
@@ -69,39 +87,39 @@ adminSection.route('/internalusers', {
 });
 
 adminSection.route('/settings/departmentsList', {
-  name: 'settings_departments',
+  name: 'settings_DepartmentList',
   action(){
     mount(AdminLayout,{adminContent:< MlDepartmentsList />})
   }
 });
 adminSection.route('/settings/addDepartment', {
-  name: 'settings_departments',
+  name: 'settings_AddDepartment',
   action(){
     mount(AdminLayout,{adminContent:< MlAddDepartment/>})
   }
 });
-adminSection.route('/settings/editDepartment', {
-  name: 'settings_departments',
-  action(){
-    mount(AdminLayout,{adminContent:< MlEditDepartment/>})
+adminSection.route('/settings/editDepartment/:id', {
+  name: 'settings_EditDepartment',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditDepartment config={params.id}/>})
   }
 });
 adminSection.route('/settings/subDepartmentsList', {
-  name: 'settings_subDepartments',
+  name: 'settings_SubDepartmentList',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlSubDepartmentsList/>})
   }
 });
 adminSection.route('/settings/addSubDepartment', {
-  name: 'settings_subDepartments',
+  name: 'settings_AddSubDepartments',
   action(){
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
   }
 });
-adminSection.route('/settings/editSubDepartment', {
-  name: 'settings_subDepartments',
-  action(){
-    mount(AdminLayout,{adminContent:< MlEditSubDepartment/>})
+adminSection.route('/settings/editSubDepartment/:id', {
+  name: 'settings_EditSubDepartments',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditSubDepartment config={params.id}/>})
   }
 });
 adminSection.route('/settings/permissionList', {
@@ -153,11 +171,5 @@ adminSection.route('/settings/citiesList', {
   }
 });
 
-adminSection.route('/login', {
-  name: 'admin',
-    action(){
-        mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
-    }
-});
 
 

@@ -17,7 +17,24 @@ import MlAddSubDepartment from '../../admin/settings/subDepartments/component/Ml
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
-  prefix: "/admin"
+  prefix: "/admin",
+  name: 'admin',
+  triggersEnter: [function(context, redirect) {
+    console.log('running /adminPrefix trigger');
+    console.log(context);
+    if (!Meteor.userId()) {
+      FlowRouter.go('/login')
+    }
+  }]
+});
+
+adminSection.route('/', {
+  action: function() {
+    FlowRouter.go("/admin/dashboard");
+  },
+  triggersEnter: [function(context, redirect) {
+    console.log('running /admin trigger');
+  }]
 });
 adminSection.route('/dashboard', {
   name: 'dashboard',
@@ -154,11 +171,5 @@ adminSection.route('/settings/citiesList', {
   }
 });
 
-adminSection.route('/login', {
-  name: 'admin',
-    action(){
-        mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
-    }
-});
 
 

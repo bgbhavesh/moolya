@@ -14,7 +14,7 @@ export let loginContainer = {
          })
     },
 
-    logout(){
+    logout(callback){
         let originalLogout = Meteor.logout;
         Meteor.logout()
         {
@@ -22,7 +22,10 @@ export let loginContainer = {
             if (user && user.profile && user.profile.isMoolyaBackend === true) {
                 originalLogout.apply(Meteor, arguments);
             }
-            FlowRouter.go("/admin/login");
+
+            if(callback) {
+              callback();
+            }
         }
     }
 }

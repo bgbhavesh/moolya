@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlTabView from  './MlAdminTabView'
 import MlAdminSearch from  './MlAdminSearch'
-import MoolyaloginContainer from '../../../login/container/loginContainer'
+import {logout} from "../header/actions/logoutAction";
 export default class MlAdminHeader extends Component {
   constructor(props,context){
     super(props,context);
@@ -18,7 +18,7 @@ export default class MlAdminHeader extends Component {
     });
   }
   logoutUser(){
-   this.props.onlogout(true);
+        logout();
   }
 
   render(){

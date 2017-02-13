@@ -3,7 +3,7 @@
  */
 let actions = ["create", "read", "update", "delete"]
 
-Meteor.startup(function () {
+// Meteor.startup(function () {
   for(i = 0; i < actions.length; i++){
       let action = MlActions.findOne({name: actions[i]});
       if(!action){
@@ -12,4 +12,4 @@ Meteor.startup(function () {
           MlActions.insert(action);
       }
   }
-})
+// })

@@ -369,7 +369,7 @@
             }
             else if (this.component && this.hasInput) { // component: input + button
                 this._events = [
-                    // For components that are not readonly, allow keyboard nav
+                    // For component that are not readonly, allow keyboard nav
                     [this.inputField, events],
                     [this.component, {
                         click: $.proxy(this.show, this)
@@ -870,8 +870,8 @@
 				cls.push('disabled');
 			}
 			if (this.dateIsDisabled(date)){
-				cls.push('disabled', 'disabled-date');	
-			} 
+				cls.push('disabled', 'disabled-date');
+			}
 			if ($.inArray(date.getUTCDay(), this.o.daysOfWeekHighlighted) !== -1){
 				cls.push('highlighted');
 			}

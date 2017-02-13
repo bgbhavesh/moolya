@@ -30,6 +30,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlSubDepartments.find({},findOptions).fetch();
     totalRecords=MlSubDepartments.find({},findOptions).count();
   }
+  if(args.module=="permission"){
+    data= MlPermissions.find({},findOptions).fetch();
+    totalRecords=MlPermissions.find({},findOptions).count();
+  }
+
 
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -51,6 +56,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
 
     if (data.subDepartmentName) {
       return 'SubDepartment';
+    }
+    if (data.permissionName) {
+      return 'Permissions';
     }
 
     return null;

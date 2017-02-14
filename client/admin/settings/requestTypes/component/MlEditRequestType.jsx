@@ -3,25 +3,22 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findPermissionActionHandler} from '../actions/findPermissionAction'
-import {updatePermissionActionHandler} from '../actions/updatePermissionAction'
-class MlEditPermission extends React.Component{
+import {findRequestTypeActionHandler} from '../actions/findRequestTypeAction'
+import {updateRequestTypeActionHandler} from '../actions/updateRequestTypeAction'
+class MlEditRequestType extends React.Component{
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
     this.addEventHandler.bind(this);
-    this.editPermission.bind(this)
-    this.findPermission.bind(this);
+    this.updateRequestType.bind(this)
+    this.findRequestType.bind(this);
     return this;
   }
 
   componentWillMount() {
 
-    const resp=this.findPermission();
+    const resp=this.findRequestType();
     return resp;
-
-
-    //this.setState({departmentName:'manager',displayName:'Manager', about:'moolya manger ', selectCluster:'Select Cluster', email:'manger@moolya', status:true})
 
   }
   componentDidMount(){
@@ -31,7 +28,7 @@ class MlEditPermission extends React.Component{
   }
 
   async addEventHandler() {
-  //  const resp=await this.createDepartment();
+   // const resp=await this.findRequestType
   //  return resp;
   }
 
@@ -41,26 +38,23 @@ class MlEditPermission extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/settings/permissionList");
+    FlowRouter.go("/admin/settings/requestTypeList");
   };
-  async findPermission(){
-    let permissionId=this.props.config
-    console.log(permissionId)
-    const response = await findPermissionActionHandler(permissionId);
+  async findRequestType(){
+    let requestTypeId=this.props.config
+    //console.log(requestTypeId)
+    const response = await findRequestTypeActionHandler(requestTypeId);
     this.setState({loading:false,data:response});
-    //return response;
   }
-  async  editPermission() {
-    let PermissionDetails = {
+  async  updateRequestType() {
+    let RequestTypeDetails = {
       id: this.refs.id.value,
-      permissionName: this.refs.permissionName.value,
+      requestName: this.refs.requestName.value,
       displayName: this.refs.displayName.value,
-      permissionDesc: this.refs.permissionDesc.value,
+      requestDesc: this.refs.requestDesc.value,
       isActive: this.refs.isActive.checked
     }
-    console.log(PermissionDetails)
-
-    const response = await updatePermissionActionHandler(PermissionDetails)
+    const response = await updateRequestTypeActionHandler(RequestTypeDetails)
     return response;
 
   }
@@ -79,7 +73,7 @@ class MlEditPermission extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: async(event) => this.props.handler(this.editPermission.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.updateRequestType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -99,16 +93,16 @@ class MlEditPermission extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Edit Permission</h2>
+          <h2>Edit RequestType</h2>
           <div className="col-md-6">
             <div className="form_bg">
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  <input type="text" ref="permissionName" placeholder="Permission Name" defaultValue={this.state.data&&this.state.data.permissionName} className="form-control float-label" id=""/>
+                  <input type="text" ref="requestName" placeholder="Request Name" defaultValue={this.state.data&&this.state.data.requestName} className="form-control float-label" id=""/>
 
                 </div>
                 <div className="form-group">
-                  <textarea  ref="permissionDesc" placeholder="About" defaultValue={this.state.data&&this.state.data.permissionDesc}className="form-control float-label" id=""></textarea>
+                  <textarea  ref="requestDesc" placeholder="About" defaultValue={this.state.data&&this.state.data.requestDesc}className="form-control float-label" id=""></textarea>
 
                 </div>
             </div>
@@ -138,4 +132,4 @@ class MlEditPermission extends React.Component{
   }
 };
 
-export default MlEditPermission = formHandler()(MlEditPermission);
+export default MlEditRequestType = formHandler()(MlEditRequestType);

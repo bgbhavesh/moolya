@@ -14,9 +14,7 @@ const mlCountriesTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "country", title: "Name",dataSort:true},
-    {dataField: "url", title: "Flag",dataSort:true
-
-    },
+    {dataField: "url", title: "Flag",dataSort:true},
     {dataField: "isActive", title: "Available in System",dataSort:true},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
@@ -28,19 +26,19 @@ const mlCountriesTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editSubDepartment/"+data.id);
+          FlowRouter.go("/admin/settings/editCountry/"+data.id);
         } else{
-          alert("Please select a Sub Department");
+          alert("Please select a Country");
         }
       }
     },
-    {
-      showAction: true,
-      actionName: 'add',
-      handler: (data)=>{
-        FlowRouter.go("/admin/settings/addSubDepartment")
-      }
-    },
+    // {
+    //   showAction: true,
+    //   actionName: 'add',
+    //   handler: (data)=>{
+    //     FlowRouter.go("/admin/settings/addSubDepartment")
+    //   }
+    // },
     {
       showAction: true,
       actionName: 'logout',

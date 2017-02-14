@@ -162,4 +162,4 @@ class MlEditSubDepartment extends React.Component{
   }
 };
 
-export default MoolyaEditSubDepartment = formHandler()(MlEditSubDepartment);
+export default MlEditSubDepartment = formHandler()(MlEditSubDepartment);

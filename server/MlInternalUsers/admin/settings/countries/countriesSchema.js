@@ -2,7 +2,7 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let Countries = `   
    
-    type MlCountries 
+    type Countries 
     {  
      _id : String  
      country : String
@@ -11,9 +11,9 @@ let Countries = `
      isActive : Boolean
     }
     type Query {
-        FetchCountries(input: String): [MlCountries]
-        FetchCountry(countryCode: String): MlCountries
-        FetchCountriesSearch(searchQuery:String): [MlCountries]
+        FetchCountries(input: String): [Countries]
+        FetchCountry(countryCode: String): Countries
+        FetchCountriesSearch(searchQuery:String): [Countries]
     }
 `
 

@@ -16,9 +16,10 @@ import MlEditDepartment from '../../admin/settings/departments/component/MlEditD
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
 import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'
-import MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
-import MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
-import MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
+import  MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
+import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
+import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
 import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
 import MlEditRequestType from  '../../admin/settings/requestTypes/component/MlEditRequestType'
@@ -144,7 +145,7 @@ adminSection.route('/settings/addPermission', {
 adminSection.route('/settings/editPermission/:id', {
   name: 'settings_EditPermissions',
   action(params){
-    mount(AdminLayout,{adminContent:<MlEditRequestType config={params.id} />})
+    mount(AdminLayout,{adminContent:<MlEditPermission config={params.id} />})
   }
 });
 adminSection.route('/settings/rolesList', {
@@ -186,7 +187,7 @@ adminSection.route('/settings/filtersList', {
 adminSection.route('/settings/countriesList', {
   name: 'settings_countries',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlCountriesList/>})
   }
 });
 adminSection.route('/settings/statesList', {

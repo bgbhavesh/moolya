@@ -5,11 +5,14 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   const findOptions = {
               skip: args.offset
   };
-
   // `limit` may be `null`
   if (args.limit > 0) {
     findOptions.limit = args.limit;
   }
+
+  let moduleName=args.module;
+  let action="READ";
+  //Authorization layer
 
   if(args.module=="cluster"){
     data= MlClusters.find({},findOptions).fetch();

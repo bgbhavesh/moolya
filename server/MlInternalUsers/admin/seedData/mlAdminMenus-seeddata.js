@@ -308,7 +308,27 @@ if(Meteor.isServer){
             "uniqueId" : "settings_countries",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            subMenu:[{
+                "link": "/admin/settings/countriesList",
+                "name": "List Countries",
+                "uniqueId": "settings_CountriesList",
+                "subMenuMappingId":"settings_Countries",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editCountries",
+                "name": "Edit Countries",
+                "uniqueId": "settings_EditCountries",
+                "subMenuMappingId":"settings_Countries",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           },
           {
             "link" : "/admin/settings/statesList",

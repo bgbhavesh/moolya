@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import Select from 'react-select';
-import 'react-select/dist/react-select.css'
 import  $ from 'jquery'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
+/*import 'react-select/dist/react-select.css';*/
 import _ from 'lodash';
 export default class MoolyaSelect extends Component {
   constructor(props){
@@ -46,8 +46,14 @@ export default class MoolyaSelect extends Component {
      // this.setState({ selectedValue: refSelected });
     }
     else{
-      let selectValue=val.value
-      this.props.onSelect(selectValue,this.onChangeCallBackHandler);
+      if(val!= null){
+        let selectValue=val.value
+        this.props.onSelect(selectValue,this.onChangeCallBackHandler);
+      }
+      else{
+        this.props.onSelect('',this.onChangeCallBackHandler);
+      }
+
      // this.setState({ selectedValue: selectValue});
     }
 
@@ -105,7 +111,7 @@ export default class MoolyaSelect extends Component {
     return(
       <div>
         {executeQuery&&<QueryExecutor />}
-        {<Select multi={this.props.multiSelect} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
+        {<Select  multi={this.props.multiSelect} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
       </div>
     )
   }

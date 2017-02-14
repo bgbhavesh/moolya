@@ -18,6 +18,7 @@ import MlEditSubDepartment from '../../admin/settings/subDepartments/component/M
 import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'
 import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
 import  MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
+import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -186,5 +187,10 @@ adminSection.route('/settings/citiesList', {
   }
 });
 
-
+adminSection.route('/myprofile', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{adminContent:< MlMyProfile/>})
+  }
+});
 

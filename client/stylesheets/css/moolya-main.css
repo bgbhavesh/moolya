@@ -1,5 +1,6 @@
+/*
 @charset "utf-8";
-/* CSS Document */
+!* CSS Document *!
 @import url("assets/fonts/font_style.css");
 @font-face {
 	font-family: 'Conv_DINPro-Regular_13937';
@@ -9,7 +10,7 @@
 	font-style: normal;
 }
 
-/*header*/
+!*header*!
 .moolya-header{
 	background:#212020;
 	float:left;
@@ -72,7 +73,7 @@
 	margin-left: -6px;
 }
 /}
-/*breadcrumbs*/
+!*breadcrumbs*!
 .moolya-breadcrumbs-wrapp{
 	float: left;
 	position: absolute;
@@ -103,7 +104,7 @@
 	background:url(assets/images/list-active.png) no-repeat 2px 7px !important;
 }
 
-/*Success message*/
+!*Success message*!
 .moolya-success-msg-wrapp{
 	float: right;
 	padding: 10px 10px 0px;
@@ -157,9 +158,9 @@
 .moolya-msg-icon{
 	color: #53a1d2;
 }
-/*header end*/
+!*header end*!
 
-/*left pannel css*/
+!*left pannel css*!
 .moolya-left-nav{
 	float: left;
 	width: 5.80%;
@@ -167,7 +168,7 @@
 }
 
 .left-pannel a{ text-decoration: none;}
-/* Navigation*/
+!* Navigation*!
 .nav-pills.nav-wizard > li {
 	position: relative;
 	overflow: visible;
@@ -185,7 +186,7 @@
 }
 .nav-pills.nav-wizard > li a {
 	border-radius: 0;
-	/*background-color: #ce1937;*/
+	!*background-color: #ce1937;*!
 	color: #000;
 	text-align: center;
 	font-weight: 400
@@ -222,7 +223,7 @@
 	border-color: #ffc20e transparent #ffc20e;
 	z-index: 75
 }
-/*left nav active*/
+!*left nav active*!
 .nav-pills.nav-wizard > li.active .nav-arrow-inner {
 	position: absolute;
 	top: 7px;
@@ -255,9 +256,9 @@
 	border-color: #fff #fff transparent;
 	z-index: 75;
 }
-/*left nav active end*/
+!*left nav active end*!
 
-/*left nav hover*/
+!*left nav hover*!
 .nav-pills.nav-wizard > li:active .nav-arrow-inner {
 	position: absolute;
 	top: 7px;
@@ -294,9 +295,9 @@
 
 .wiz-inner{font-size: 12px;}
 .wiz-inner span:nth-child(2){float: left; width: 60px;}
-/* Navigation end*/
+!* Navigation end*!
 
-/*nav active */
+!*nav active *!
 .nav-pills.nav-wizard > li:active .nav-wedge {
 	border-color: #fff #fff transparent;
 }
@@ -320,10 +321,10 @@
 	background: #fff;
 	color: #000
 }
-/*nav active ends*/
+!*nav active ends*!
 
 
-/*top menu hexagan*/
+!*top menu hexagan*!
 .mly-top-nav ul {
 	list-style-type: none;
 	padding: 0px;
@@ -350,7 +351,7 @@
 .hexa:before, .hexa:after {
 	content:'';
 	position: absolute;
-	top:0px; /* magic number = border width */
+	top:0px; !* magic number = border width *!
 	width: 2.1em;
 	height: 2.1em;
 	background: inherit;
@@ -366,7 +367,7 @@
 	left:100%;
 	transform: translateX(-50%)rotate(45deg) scale(0.719);
 }
-/*hexgan menu active*/
+!*hexgan menu active*!
 .mooly-top-nav .active .hexa {
 	background: #fff;
 	color: #f00;
@@ -381,7 +382,7 @@
 	border-right: 20px solid #fff;
 	border:1px solid #f00;
 }
-/*top menu hexagan end*/
+!*top menu hexagan end*!
 
 .moolya-container{
 	width: 94.2%;
@@ -391,7 +392,7 @@
 	margin-top: 65px;
 }
 
-/*---custom scroll bar---*/
+!*---custom scroll bar---*!
 .mooly-style-3::-webkit-scrollbar-track {
 	-webkit-box-shadow: inset 0 0 6px rgba(245,249,25,0.1);
 	background-color: #cacac8;
@@ -404,10 +405,10 @@
 	background-color: #ffd65c;
 	border-radius:5px;
 }
-/*//scroll bar*/
+!*!/scroll bar*!
 
 
-/*footer css*/
+!*footer css*!
 .menuContentbg{
 	opacity: 0.6;
 	float: left;
@@ -427,7 +428,7 @@
 	z-index: 99;
 }
 .menuContent a.slider {
-	/*	background-color: #9c9898;*/
+	!*	background-color: #9c9898;*!
 	background-image: url(assets/images/bottom_top.png);
 	background-repeat: no-repeat;
 	border-bottom: none;
@@ -438,7 +439,7 @@
 	padding: 3px 25px;
 	width: 8px;
 	z-index: 2001;
-	/*	box-shadow: 3px -2px 3px #B8B8B8;*/
+	!*	box-shadow: 3px -2px 3px #B8B8B8;*!
 }
 .menuContent a.slider img {
 	padding-bottom: 3px;
@@ -452,7 +453,7 @@
 	margin: 10px;
 }
 #nav li a {
-	/*	border: 1px solid #ccc;*/
+	!*	border: 1px solid #ccc;*!
 	color: #858585;
 	display: block;
 	padding: 5px 10px;
@@ -482,7 +483,7 @@
 	vertical-align: middle;
 	width: 16px;
 }
-/* hexa gonal button shape */
+!* hexa gonal button shape *!
 #hex1 {
 	width: 40px;
 	height: 40px;
@@ -496,7 +497,7 @@
 }
 .hexagon-wrapper {
 	text-align: center;
-	/*	margin: 20px;*/
+	!*	margin: 20px;*!
 	position: relative;
 	display: inline-block;
 	cursor: pointer;
@@ -547,10 +548,10 @@
 	font-size: 12px;
 	color: #fff;
 }
-/*footer end*/
+!*footer end*!
 
 
-/*landing page box datacontainers*/
+!*landing page box datacontainers*!
 .m-box-wrapp{
 	background: #fff;
 	border: 1px solid #ddd;
@@ -637,7 +638,7 @@
 	height: 100%;
 	z-index: 9;
 }
-/*business data*/
+!*business data*!
 .m-bs-box-wrapp{
 	margin-top: 2px;
 	border-radius: 4px;
@@ -666,7 +667,7 @@
 	cursor: pointer;
 }
 
-/*grid random boxes*/
+!*grid random boxes*!
 .grid-item,
 .grid-sizer {
 	width: 25%;
@@ -690,7 +691,7 @@
 	text-align: center;
 }
 
-/*about start*/
+!*about start*!
 .offset-top{margin: 18px 0px 0px;}
 .offset-top3{margin-top: 3px;}
 .moolya-client li{float: left; list-style: none; }
@@ -706,9 +707,9 @@
 .moolya-app-abt-infrm{background: #fff; margin-top: -15px; padding-top: 10px; height: 355px; overflow-y: scroll}
 .about-logo img{ width: 180px;}
 
-/*about end*/
+!*about end*!
 
-/*search*/
+!*search*!
 .expSearchBox {
 	margin:0;
 	position: absolute;
@@ -731,7 +732,7 @@ input#field{
 	line-height:0px;
 	vertical-align:top;
 	padding:0px 15px;
-	-webkit-transition: width .5s; /* Safari */
+	-webkit-transition: width .5s; !* Safari *!
 	transition: width .5s;
 	position:relative;
 	z-index:2;
@@ -799,10 +800,10 @@ input#field:focus + .close span.back{
 	transform: rotate(-45deg);
 	opacity:1;
 }
-/*search end*/
+!*search end*!
 
 
-/*promoters-details*/
+!*promoters-details*!
 .m-promoter-flow .swiper-container {
 	width: 100%;
 	height: 300px;
@@ -812,7 +813,7 @@ input#field:focus + .close span.back{
 	text-align: center;
 	font-size: 18px;
 	background: #fff;
-	/* Center slide text vertically */
+	!* Center slide text vertically *!
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: -webkit-flex;
@@ -834,7 +835,7 @@ input#field:focus + .close span.back{
 .m-promoter-flow .swiper-slide:nth-child(3n) {
 	width: 10%;
 }
-/*????????????*/
+!*????????????*!
 
 .promoter-info {
 	height: 270px;
@@ -869,16 +870,16 @@ input#field:focus + .close span.back{
 }
 
 
-/*promoters page*/
+!*promoters page*!
 
 .m-card-swatch {
-	/*	width: 100%;*/
+	!*	width: 100%;*!
 	height: 250px;
 	margin: 0 auto;
 	margin-top: 6em;
 	float: none;
-	/*	border-bottom: 1px solid #ffc20e;*/
-	/*	display: flex;*/
+	!*	border-bottom: 1px solid #ffc20e;*!
+	!*	display: flex;*!
 }
 
 .m-card-anim {
@@ -912,11 +913,11 @@ input#field:focus + .close span.back{
 .bubble {
 	height: 230px;
 	width: 100%;
-	/*	margin: 2px;*/
-	/*	margin-top: 4em;*/
+	!*	margin: 2px;*!
+	!*	margin-top: 4em;*!
 	padding: 2px;
 	background: #FFFFFF;
-	/*	border: #ffc20e solid 1px;*/
+	!*	border: #ffc20e solid 1px;*!
 	display: none;
 	overflow-y: auto;
 }
@@ -942,7 +943,7 @@ input#field:focus + .close span.back{
 .content-image {
 	width: 25%;
 	height: 180px;
-	/*	border: 1px solid #ccc;*/
+	!*	border: 1px solid #ccc;*!
 	padding: 5px;
 	float: left;
 }
@@ -957,7 +958,7 @@ figcaption {
 }
 
 
-/*card animation*/
+!*card animation*!
 
 .sb-container {
 	position: relative;
@@ -971,7 +972,7 @@ figcaption {
 	border-radius: 50%;
 	width: 50px;
 	height: 50px;
-	/* padding: 15px; */
+	!* padding: 15px; *!
 	padding-left: 13px;
 }
 
@@ -1014,7 +1015,7 @@ label.card-number {
 	cursor: pointer;
 	padding: 10px;
 	font-size: 30px;
-	/*	background-image: url(../images/fabric.png);*/
+	!*	background-image: url(../images/fabric.png);*!
 	-webkit-transform-origin: 65% 90%;
 	-moz-transform-origin: 65% 90%;
 	-o-transform-origin: 65% 90%;
@@ -1070,7 +1071,7 @@ span.sb-icon:before {
 	width: 0.2em;
 	background: #ffc20e;
 }
-/*.promoters:after {
+!*.promoters:after {
 	content: '';
 	position: absolute;
 	border-style: solid;
@@ -1093,11 +1094,11 @@ span.sb-icon:before {
 	z-index: 1;
 	top: 10px;
 	left: 90%;
-}*/
-/*Promoters end*/
+}*!
+!*Promoters end*!
 
 
-/*moolya membership screen*/
+!*moolya membership screen*!
 .moolya-membership {
 	height: 580px;
 	overflow: hidden;
@@ -1188,9 +1189,9 @@ span.sb-icon:before {
 	background: #ffc20e;
 	color: #ffc20e;
 }
-/*membership end*/
+!*membership end*!
 
-/*Ideators*/
+!*Ideators*!
 .m-box-header{
 	background: #1b3b61;
 	height: 90px;
@@ -1246,7 +1247,7 @@ span.sb-icon:before {
 	padding: 5px 25px 0px 22px;
 	text-align: center;
 }
-/*Ideators end*/
+!*Ideators end*!
 
 .moolya-bg{background: #fff;}
 
@@ -1254,7 +1255,7 @@ span.sb-icon:before {
 
 
 
-/*Register form css start*/
+!*Register form css start*!
 .register_btn{background: #ce1936;color: #fff;position: absolute;top: 123px;height: 78px;width: 28px;right: 0px;cursor:pointer;z-index: 99;transition:.3s ease-in-out;}
 .register_btn:hover{width:33px;}
 .register_btn.btn_form_open{right: 352px;width: 28px !important;}
@@ -1267,9 +1268,9 @@ span.sb-icon:before {
 .form_nav li.active_nav{opacity: 1;}
 .show_p{background: url(assets/images/show.svg);width: 24px;height: 24px;position: absolute;right: 0px;bottom: 5px;cursor: pointer;}
 .hide_p{background: url(assets/images/hide.svg);width: 24px;height: 24px;position: absolute;right: 0px;bottom: 5px;cursor: pointer;}
-/*Register form css start*/
+!*Register form css start*!
 
-/*funders grid random boxes*/
+!*funders grid random boxes*!
 .m-fn-box-wrapp{
 	margin-top: 2px;
 	border-radius: 4px;
@@ -1320,7 +1321,7 @@ span.sb-icon:before {
 .funder-mask span{
 	background: #fbffff;
 	float: left;
-	/*width: 69%;*/
+	!*width: 69%;*!
 	border-radius: 35%;
 	margin: 49px 0px 0px 30px;
 	overflow: hidden;
@@ -1338,10 +1339,10 @@ span.sb-icon:before {
 	font-size: 17px !important;
 	padding: 10px 0px;
 }
-/*funders end*/
+!*funders end*!
 
 
-/*funders profile*/
+!*funders profile*!
 
 .moolya-swipe-box {
 	border: 1px solid #ddd;
@@ -1368,7 +1369,7 @@ span.sb-icon:before {
 	text-align: center;
 }
 .moolya-funder-detail-bg img {
-	/*width: 165px;*/
+	!*width: 165px;*!
 	width: 135px;
 	padding-top: 0px;
 }
@@ -1389,9 +1390,9 @@ span.sb-icon:before {
 	width: 35%;
 	margin-top: 28px;
 }
-/*funders profiles*/
+!*funders profiles*!
 
-/*hanging button*/
+!*hanging button*!
 .homepage-switch{
 	width: 80px;
 	height: 44px;
@@ -1411,26 +1412,26 @@ span.sb-icon:before {
 	top: 7px;
 	left: 43px;
 }
-/*.mapview{background: url(../images/list-view-active.png) no-repeat}
-.mainview{background: url(../images/map-view-active.png) no-repeat}*/
-/*hanging button end*/
+!*.mapview{background: url(../images/list-view-active.png) no-repeat}
+.mainview{background: url(../images/map-view-active.png) no-repeat}*!
+!*hanging button end*!
 
 
-/*News start here*/
+!*News start here*!
 .moolya-bg{background: #fff;}
 .moolya-news{padding-bottom: 25px; margin:5px;}
 .moolya-border{border:1px solid #ddd;}
 .moolya-news-txt{font-size: 18px; border-bottom: 1px solid #ddd; float: left; width: 100%; padding: 7px; margin-bottom: 5px;}
-/*News end here*/
+!*News end here*!
 
-/*funders areamof interest*/
+!*funders areamof interest*!
 .padding10{padding: 10px;}
 .moolya-area{height: 255px; overflow-y: scroll;}
-/*funders areamof interest*/
+!*funders areamof interest*!
 
 
 
-/*principal and teams main */
+!*principal and teams main *!
 .principals a{
 	text-decoration: none; color: #333;
 }
@@ -1478,9 +1479,9 @@ span.sb-icon:before {
 	padding: 15px;
 }
 .principal-teamleft{background: #fff; margin-top: 5px; padding-top: 10px;}
-/*principal and teams main */
+!*principal and teams main *!
 
-/*principals*/
+!*principals*!
 .m-principal {
 	width: 100%;
 	height: 450px;
@@ -1521,10 +1522,10 @@ span.sb-icon:before {
 .p-user-details h4 {
 	text-align: center;
 }
-/* principals end *****/
+!* principals end *****!
 
 
-/*teams page */
+!*teams page *!
 .teams-details {
 	display: inline-flex;
 	flex-direction: column;
@@ -1554,7 +1555,7 @@ span.sb-icon:before {
 	width: 70%;
 	padding-left: 5px;
 }
-/*teams page end*/
+!*teams page end*!
 
 .ideator-footer-swipe-bg{
 	background: url(assets/images/ideator-bg100x.png) no-repeat center;
@@ -1609,7 +1610,7 @@ span.sb-icon:before {
 	border-radius: 21%;
 }
 
-/*hanging button*/
+!*hanging button*!
 .homepage-switch{
 	width: 80px;
 	height: 44px;
@@ -1629,9 +1630,9 @@ span.sb-icon:before {
 	top: 7px;
 	left: 43px;
 }
-/*.mapview{background: url(../images/list-view-active.png) no-repeat}
-.mainview{background: url(../images/map-view-active.png) no-repeat}*/
-/*hanging button end*/
+!*.mapview{background: url(../images/list-view-active.png) no-repeat}
+.mainview{background: url(../images/map-view-active.png) no-repeat}*!
+!*hanging button end*!
 
 .moolya-app-principal{background: #fff; margin-top: -15px; padding-top: 10px; height: 440px; overflow-y: scroll; text-align: left;}
 
@@ -1651,7 +1652,7 @@ span.sb-icon:before {
 	margin-top: 28px;
 }
 
-/*responsive*/
+!*responsive*!
 @media screen and (max-width: 1024px) and (min-width: 768px) {
 	.moolya-container{
 		width: 92.5%;
@@ -1675,3 +1676,4 @@ span.sb-icon:before {
 	.funder-mask{left: 4%;}
 	.fun-center { left: 28%;}
 }
+*/

@@ -70,9 +70,14 @@ export default class MlAsignInternalUsers extends React.Component {
 
   render() {
    let that=this;
-    let queryOptions={options: { variables: { name:'mlAdminRole',searchQuery:null}}};
-    let query=gql`query RoleQuery($name: String!,$searchQuery:String) {data:FetchRoles(name: $name,searchQuery:$searchQuery){label:roleName,value:roleValue}}`;
-
+   // let queryOptions={options: { variables: { name:'mlAdminRole',searchQuery:null}}};
+   // let query=gql`query RoleQuery($name: String!,$searchQuery:String) {data:FetchRoles(name: $name,searchQuery:$searchQuery){label:roleName,value:roleValue}}`;
+    let queryOptions={options: { variables: {searchQuery:null}}};
+    let query=gql` query CountryQuery($searchQuery:String)
+{data:FetchCountries(input:$searchQuery)
+  {label:country,value:countryCode}
+}
+`;
     return (
 
     <div className="swiper-container blocks_in_form">

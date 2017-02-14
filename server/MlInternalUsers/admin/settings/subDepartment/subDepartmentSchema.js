@@ -23,7 +23,6 @@ let SubDepartment = `
     
     type Mutation{
         CreateSubDepartment(_id:String,subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
-        
         UpdateSubDepartment(_id:String,subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
     }
     type Query{

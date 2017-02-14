@@ -1,34 +1,44 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let CreateDepartment = `        
+let departmentSchema = `        
     
     type Department{
-      departmentName :String
-      displayName :String
-      departmentDesc: String
-      _id:String
-      isActive:Boolean
-      isMoolya : Boolean
-      countryFlag:String
+        _id:String
+        departmentName :String
+        displayName :String
+        departmentDesc: String        
+        isActive:Boolean
+        isMoolya : Boolean
+        countryFlag:String
     }
     
     input DepatmentAvailable{
-    cluster : String
-    chapter : String
-    subChapter : String
-    email : String
-    notify : Boolean
-    isActive : Boolean
+        cluster     : String
+        chapter     : String
+        subChapter  : String
+        email       : String
+        notify      : Boolean
+        isActive    : Boolean
+    }
+    
+    input departmentObject{
+          departmentName:String,
+          displayName:String,
+          departmentDesc:String,
+          isActive:Boolean,
+          isMoolya:Boolean,
+          depatmentAvailable:[DepatmentAvailable]
     }
     
     type Mutation{
-         CreateDepartment(_id:String,departmentName:String,displayName:String,departmentDesc:String,isActive:Boolean,isMoolya:Boolean,depatmentAvailable:[DepatmentAvailable]):String
-         UpdateDepartment(_id:String,departmentName:String,displayName:String,departmentDesc:String,isActive:Boolean,isMoolya:Boolean,depatmentAvailable:[DepatmentAvailable]):String
+         createDepartment(department: departmentObject):String
+         updateDepartment(departmentId:String, department: departmentObject):String
     }
     type Query{
-        FindDepartment(_id:String):Department
+        findDepartment(departmentId:String):String
+        findDepartments:String
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],CreateDepartment]);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
 console.log(MlSchemaDef);

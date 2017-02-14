@@ -17,8 +17,6 @@ export default class MlTableView extends Component {
   }
 
   componentWillUpdate(nextProps, nextState){
-    console.log(this.state);
-    console.log(nextState);
     if((this.state.sizePerPage!==nextState.sizePerPage)||(this.state.pageNumber!==nextState.pageNumber)){
       this.props.fetchMore(nextState.sizePerPage,nextState.pageNumber);
     }

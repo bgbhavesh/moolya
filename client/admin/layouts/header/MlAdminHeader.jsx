@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import MlTabView from  './MlAdminTabView'
 import MlAdminSearch from  './MlAdminSearch'
 import {logout} from "../header/actions/logoutAction";
+import VerticalBreadCrum from "../../../commons/components/breadcrum/VerticalBreadCrum";
 export default class MlAdminHeader extends Component {
   constructor(props,context){
     super(props,context);
@@ -45,6 +46,7 @@ export default class MlAdminHeader extends Component {
             </ol>
           </div>
         </div>
+        <VerticalBreadCrum />
         <div className="header_bottom">
           <MlTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>
         </div>

@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 const mlDepartmentTableConfig=new MlViewer.View({
   name:"departmentTable",
   module:"department",//Module name for filter.
+  action:"READ",
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["departmentName","displayName","isActive"],
@@ -65,4 +66,8 @@ const mlDepartmentTableConfig=new MlViewer.View({
               `
 });
 
-export {mlDepartmentTableConfig};
+const mlDepartmentModuleConfig={
+  moduleName:"department",
+  actions:{"READ":"read","ADD":"add","UPDATE":"update"}
+};
+export {mlDepartmentTableConfig,mlDepartmentModuleConfig};

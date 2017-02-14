@@ -19,6 +19,7 @@ import MlAddPermission from '../../admin/settings/permissions/component/MlAddPer
 import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
 import  MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
+import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
 import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
@@ -170,9 +171,15 @@ adminSection.route('/settings/filtersList', {
   }
 });
 adminSection.route('/settings/countriesList', {
-  name: 'settings_countries',
+  name: 'settings_CountriesList',
   action(){
     mount(AdminLayout,{adminContent:< MlCountriesList/>})
+  }
+});
+adminSection.route('/settings/editCountry/:id', {
+  name: 'settings_EditCountries',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditCountry config={params.id} />})
   }
 });
 adminSection.route('/settings/statesList', {

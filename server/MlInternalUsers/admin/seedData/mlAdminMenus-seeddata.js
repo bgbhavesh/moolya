@@ -305,7 +305,7 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/countriesList",
             "name" : "Countries",
-            "uniqueId" : "settings_countries",
+            "uniqueId" : "settings_Countries",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
@@ -320,7 +320,7 @@ if(Meteor.isServer){
                 "image": ""
               },
               {
-                "link": "/admin/settings/editCountries",
+                "link": "/admin/settings/editCountry",
                 "name": "Edit Countries",
                 "uniqueId": "settings_EditCountries",
                 "subMenuMappingId":"settings_Countries",

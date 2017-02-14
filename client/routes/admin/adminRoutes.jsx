@@ -20,6 +20,9 @@ import  MlPermissionList from '../../admin/settings/permissions/component/MlPerm
 import  MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
+import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
+import MlEditRequestType from  '../../admin/settings/requestTypes/component/MlEditRequestType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -157,10 +160,22 @@ adminSection.route('/settings/internalUsersList', {
     mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
   }
 });
-adminSection.route('/settings/requestTypesList', {
-  name: 'settings_requestTypes',
+adminSection.route('/settings/requestTypeList', {
+  name: 'settings_RequestTypeList',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlRequestTypeList/>})
+  }
+});
+adminSection.route('/settings/addRequestType', {
+  name: 'settings_AddRequestType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddRequestType />})
+  }
+});
+adminSection.route('/settings/editRequestType/:id', {
+  name: 'settings_EditRequestType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditPermission config={params.id} />})
   }
 });
 adminSection.route('/settings/filtersList', {

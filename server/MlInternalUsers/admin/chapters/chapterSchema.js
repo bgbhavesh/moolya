@@ -2,33 +2,48 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
 let chapterSchema = `
     type Chapter{
-        clusterId:String,
-        chapterName: String,
-        diplayName: String,
+        chapterId:String,
+        chapterName:String,
+        displayName:String,
         about:String,
-        link:String,
-        id:String,
-        state:String,
+        chapterImage:String,
+        stateName:String,
+        stateId:String,
+        cityId:String,
+        cityName:String,
+        latitude:String,
+        longitude:String,
         email:String,
-        isActive:Boolean,
-        showOnMap:Boolean
+        showOnMap:Boolean,
+        isActive:Boolean
+        
     }
     
     input chapterObject{
-        clusterId:String,
-        chapterName: String,
-        diplayName: String,
+        chapterId:String,
+        chapterName:String,
+        displayName:String,
         about:String,
-        link:String,
-        id:String,
-        state:String,
+        chapterImage:String,
+        stateName:String,
+        stateId:String,
+        cityId:String,
+        cityName:String,
+        latitude:String,
+        longitude:String,
         email:String,
         showOnMap:Boolean,
         isActive:Boolean
     }
     
+    type Query{ 
+        fetchChapter:String
+        fetchChapters:String
+    }
+    
      type Mutation {
         createChapter(chapter:chapterObject):String
+        updateChapeter(chapterId:String, chapter:chapterObject):String
      }
 `
 

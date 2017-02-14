@@ -1,5 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlClusterList from '../component/MlClusterList'
+import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
+
 import React from 'react';
 import gql from 'graphql-tag'
 const mlClusterDashboardListConfig=new MlViewer.View({
@@ -41,7 +43,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
   searchFields:["userName","mobileNumber","eMail","city","regType"],
   throttleRefresh:true,
   pagination:false,
-  viewComponent:'',
+  viewComponent:<MlMapViewContainer />,
   graphQlQuery:gql`
               query{
               data:SearchQuery(module:"cluster"){
@@ -52,10 +54,12 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
                               displayName
                               about
                               link
-                              id
+                              _id
                               email
                               showOnMap
                               countryFlag
+                              latitude
+                              longitude
                           }
                       }
               }

@@ -235,10 +235,40 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/permissionList",
             "name" : "Permission",
-            "uniqueId" : "settings_permission",
+            "uniqueId" : "settings_Permissions",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addPermission",
+              "name": "Add Permission",
+              "uniqueId": "settings_AddPermissions",
+              "subMenuMappingId":"settings_Permissions",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/permissionList",
+                "name": "List Permissions",
+                "uniqueId": "settings_PermissionList",
+                "subMenuMappingId":"settings_Permissions",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editPermission",
+                "name": "Edit Permission",
+                "uniqueId": "settings_EditPermissions",
+                "subMenuMappingId":"settings_Permissions",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           },
           {
             "link" : "/admin/settings/rolesList",

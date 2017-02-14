@@ -172,7 +172,7 @@ input:checked + .slider:before {-webkit-transform: translateX(34px);-ms-transfor
 
 .profile-img {margin-top: 0px;width: 24px;}
 .ml_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
-	.ml_profile:focus{outline: 0px;}	
+	.ml_profile:focus{outline: 0px;}
 .ml_profile.profile_open {background-color: #525252;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 4;}
 .ml_profile h1 {box-sizing: border-box;font-size: 100%;text-transform: uppercase;font-weight: normal;/*border: 1px dotted yellow;	padding: 25px 10px;*/position: fixed;top: 5px;right: 5px;margin: 0;border: 2px solid #ffc20e;border-radius: 50%;z-index: 50;cursor: pointer;background:url(/images/img.png) center -5px;width: 40px;height: 40px;}
 .ml_profile ol, .ml_profile li {margin: 0;padding: 0;list-style-type: none;}
@@ -223,7 +223,7 @@ table{background: #fff;}
 .fileUpload {
     position: relative;
     /*overflow: hidden;*/
-    
+
 }
 .fileUpload input.upload {position: absolute;top: 0;right: 0;margin: 0;padding: 0;font-size: 20px;cursor: pointer;opacity: 0;filter: alpha(opacity=0);}
 
@@ -232,7 +232,7 @@ table{background: #fff;}
 margin-left: 10px;height: 36px;line-height: 33px;float: left;text-align: center;}
 
 a.mlUpload_btn{width: auto;margin:0px 20px;float: none;display: inline-block;}
-a.mlUpload_btn:hover{text-decoration: none;color: #fff;} 
+a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
 .mlUpload_btn:before{position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
 .mlUpload_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .previewImg{width: 100px;height: 50px;border:1px solid #ddd;float: left;margin-left: 40px;margin-top: -13px;margin-bottom: 33px;}
@@ -451,7 +451,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 
 
 .pollSlider{
-    
+
 }
 #pollSlider-button{
     z-index: 999;

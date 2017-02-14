@@ -15,6 +15,10 @@ import MlAddDepartment from '../../admin/settings/departments/component/MlAddDep
 import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
+import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'
+import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
+import  MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
+import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -123,9 +127,21 @@ adminSection.route('/settings/editSubDepartment/:id', {
   }
 });
 adminSection.route('/settings/permissionList', {
-  name: 'settings_permission',
+  name: 'settings_PermissionList',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlPermissionList/>})
+  }
+});
+adminSection.route('/settings/addPermission', {
+  name: 'settings_AddPermissions',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddPermission />})
+  }
+});
+adminSection.route('/settings/editPermission/:id', {
+  name: 'settings_EditPermissions',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditPermission config={params.id} />})
   }
 });
 adminSection.route('/settings/rolesList', {
@@ -171,5 +187,10 @@ adminSection.route('/settings/citiesList', {
   }
 });
 
-
+adminSection.route('/myprofile', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{adminContent:< MlMyProfile/>})
+  }
+});
 

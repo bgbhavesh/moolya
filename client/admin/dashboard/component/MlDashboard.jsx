@@ -1,7 +1,8 @@
 import React from 'react';
 import MlInfinity from "./MlInfinity";
-import MlMapView from "../component/MlMapView";
 import MlListViewContainer from "../../core/containers/MlListViewContainer";
+import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
+
 export default class MlDashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +27,7 @@ export default class MlDashboard extends React.Component {
     return (
       <div>
         <div className="admin_main_wrap">
-          {viewMode ? <MlMapView {...config.mapConfig} /> : <div><MlListViewContainer {...listConfig}/></div> }
+          {viewMode ? <MlMapViewContainer {...config.mapConfig} /> : <div><MlListViewContainer {...listConfig}/></div> }
           {showInfinity && (<MlInfinity {...infinityViewProps} />)}
         </div>
       </div>

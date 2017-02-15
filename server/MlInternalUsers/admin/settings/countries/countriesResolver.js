@@ -1,7 +1,6 @@
 
 
 import MlResolver from '../../mlAdminResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
 
 
 MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{
@@ -31,6 +30,16 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
         }
         let resp = MlCountries.update({_id:args.countryId}, {$set:country}, {upsert:true})
         if(resp){
+            let cluster = {
+                countryId:country._id,
+                countryName : country.country,
+                displayName: country.displayName,
+                about:"",
+                email:"",
+                showOnMap:false,
+                isActive:false
+            }
+            createCluster(cluster);
             let code = 200;
             let result = {cluster: resp}
             let response = JSON.stringify(new MlRespPayload().successPayload(result, code));

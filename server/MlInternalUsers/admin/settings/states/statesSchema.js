@@ -1,7 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let States = `       
-    type MlStates 
+    type States 
     {     
         _id         : String
         name        : String
@@ -18,11 +18,11 @@ let States = `
     }
     
     type Query {
-        fetchStates(countryId: String!): [MlStates]      
+        fetchStates(countryId: String!): [States]      
     }
     
     type Mutation{
-        updateState(stateId: String!, state:stateObject!): String
+        updateState(stateId: String, state:stateObject): String
     }
 `
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],States]);

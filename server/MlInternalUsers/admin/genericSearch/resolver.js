@@ -49,7 +49,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlUserTypes.find({},findOptions).fetch();
     totalRecords=MlUserTypes.find({},findOptions).count();
   }
-
+  if(args.module=="roleType"){
+    data= MlRoleTypes.find({},findOptions).fetch();
+    totalRecords=MlRoleTypes.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -83,7 +86,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.userTypeName){
       return 'UserTypes'
     }
-
+    if(data.roleTypeName){
+      return 'RoleTypes'
+    }
     return null;
   }
 }

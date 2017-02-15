@@ -29,6 +29,9 @@ import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserT
 
 import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleType'
+import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
+import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
+import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -243,6 +246,24 @@ adminSection.route('/settings/editRoleType/:id', {
   name: 'settings_EditRoleType',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditRoleType  config={params.id}/>})
+  }
+});
+adminSection.route('/settings/transactionTypeList', {
+  name: 'settings_TransactionTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTransactionTypeList/>})
+  }
+});
+adminSection.route('/settings/addTransactionType', {
+  name: 'settings_AddTransactionType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTransaction />})
+  }
+});
+adminSection.route('/settings/editTransactionType/:id', {
+  name: 'settings_EditTransactionType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTransactionType config={params.id} />})
   }
 });
 

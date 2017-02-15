@@ -1,34 +1,44 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let SubDepartment = `        
-    
-    type SubDepartment{
-      subDepartmentName :String
-      displayName :String
-      aboutSubDepartment: String
-      _id:String
-      isActive:Boolean
-      isMoolya : Boolean
-      countryFlag:String
+let subDepartmentSchema = `
+        
+    input SubDepatmentAvailable
+    {
+        cluster     : String,
+        chapter     : String,
+        subChapter  : String,
+        email       : String,
+        notify      : Boolean,
+        isActive    : Boolean
     }
     
-    input SubDepatmentAvailable{
-    cluster : String
-    chapter : String
-    subChapter : String
-    email : String
-    notify : Boolean
-    isActive : Boolean
+    type SubDepartment{
+        _id:String,
+        subDepartmentName :String,
+        displayName :String,
+        aboutSubDepartment: String,
+        departmentId: String,
+        isActive:Boolean,
+        isMoolya : Boolean
+    }
+    
+    input subDepartmentObject{
+        subDepartmentName:String,
+        displayName:String,
+        aboutSubDepartment:String,
+        isActive:Boolean,
+        departmentId:String,
+        isMoolya:Boolean,
+        subDepatmentAvailable:[SubDepatmentAvailable]
     }
     
     type Mutation{
-        CreateSubDepartment(_id:String,subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
-        UpdateSubDepartment(_id:String,subDepartmentName:String,displayName:String,aboutSubDepartment:String,isActive:Boolean,departmentId:String,isMoolya:Boolean,subDepatmentAvailable:[SubDepatmentAvailable]):String
+        createSubDepartment(subDepartment:subDepartmentObject!):String
+        updateSubDepartment(subDepartmentId:String!, subDepartment:subDepartmentObject):String
     }
     type Query{
-      FindSubDepartment(_id: String):SubDepartment
+        findSubDepartment(_id: String): SubDepartment
+        findSubDepartments: [SubDepartment]
     }
 `
-
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],SubDepartment]);
-console.log(MlSchemaDef);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],subDepartmentSchema]);

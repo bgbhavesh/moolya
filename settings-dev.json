@@ -3,6 +3,7 @@
       "MONGO_URL":"mongodb://localhost:27017"
   },
   "private": {
+      "subChapterName":"Moolya",
       "HierarchyCount": 10,
       "emailConfig":{
         "username": "raksanconsulting",

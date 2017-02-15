@@ -24,7 +24,7 @@ let moolya = `
 //MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],moolya]);
 
 let search = `
-union SearchResult = Cluster | Chapter | Department | SubDepartment | Permissions | Requests | Countries | UserTypes | RoleTypes
+union SearchResult = Cluster | Chapter | Department | SubDepartment | Permissions | Requests | Countries | UserTypes | Transaction | RoleTypes
 
 type SearchResp {
   totalRecords:Int,

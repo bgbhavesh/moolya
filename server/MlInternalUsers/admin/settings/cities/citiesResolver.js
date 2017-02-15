@@ -30,6 +30,23 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
     }
     let resp = MlCities.update({_id:args.cityId}, {$set:city}, {upsert:true})
     if(resp){
+      let chapter = {
+          chapterId:"ML_"+city.stateId,
+          chapterName:city.name,
+          displayName:city.name,
+          about:"ssw",
+          chapterImage:"image",
+          stateName:"",
+          stateId:"",
+          cityId:args.cityId,
+          cityName:city.name,
+          latitude:"22.1",
+          longitude:"22.12",
+          email:"moolya@moolya.com",
+          showOnMap:false,
+          isActive:false
+      }
+      MlResolver.MlMutationResolver['createChapter'](obj, {chapter:chapter}, context, info)
       let code = 200;
       let result = {city: resp}
       let response = JSON.stringify(new MlRespPayload().successPayload(result, code));

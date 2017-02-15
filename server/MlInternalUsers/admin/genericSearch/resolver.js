@@ -49,6 +49,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlStates.find({},findOptions).fetch();
     totalRecords=MlStates.find({},findOptions).count();
   }
+  if(args.module=="cities"){
+    data= MlCities.find({},findOptions).fetch();
+    totalRecords=MlCities.find({},findOptions).count();
+  }
   if(args.module=="userType"){
     data= MlUserTypes.find({},findOptions).fetch();
     totalRecords=MlUserTypes.find({},findOptions).count();

@@ -12,7 +12,7 @@ const mlRoleTypeTableConfig=new MlViewer.View({
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    {dataField: "id",title:"Id",'isKey':true,isHidden:false},
+    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "roleTypeName", title: "RoleType Name",dataSort:true},
     {dataField: "roleTypeDisplayName", title: "Display Name",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true}

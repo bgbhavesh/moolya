@@ -13,6 +13,7 @@ let countriesSchema = `
     }
     
     input countryObject{
+        id:String
         country       : String
         countryCode   : String
         displayName   : String

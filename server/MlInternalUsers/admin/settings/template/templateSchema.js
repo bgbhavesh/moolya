@@ -1,7 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let Template = `        
-    
     type Template{
       templateName :String
       templateDisplayName :String
@@ -19,4 +18,3 @@ let Template = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Template]);
-console.log(MlSchemaDef);

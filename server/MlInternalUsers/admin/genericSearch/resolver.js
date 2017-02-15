@@ -57,7 +57,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTransactions.find({},findOptions).fetch();
     totalRecords=MlTransactions.find({},findOptions).count();
   }
-
+  if(args.module=="template"){
+    data= MlTemplates.find({},findOptions).fetch();
+    totalRecords=MlTemplates.find({},findOptions).count();
+  }
 
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -98,7 +101,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.transactionName){
       return 'Transaction'
     }
-
+    if(data.templateName){
+      return 'Template'
+    }
     return null;
   }
 }

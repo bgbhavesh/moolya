@@ -61,7 +61,7 @@ export default class MlActionComponent extends Component {
         }
         return (
           <div className={`${activeClass} `} key={option.actionName}  >
-            <div onClick={option.handler} key={option.actionName}   className={`${activesubclass} `}>
+            <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `}>
               <img src={action['imagefield']} />
             </div></div>
         )

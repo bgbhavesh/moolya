@@ -1,25 +1,24 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-import ActiveFormatter from '../actions/ActiveFormatter';
-import FlagFormatter from '../actions/FlagFormatter';
+import ActiveStateFormatter from "../actions/ActiveStateFormatter"
 
-const mlCountriesTableConfig=new MlViewer.View({
-  name:"CountriesTable",
-  module:"countries",//Module name for filter.
+const mlStatesTableConfig=new MlViewer.View({
+  name:"StatesTable",
+  module:"states",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["country","displayName","url","isActive"],
-  searchFields:["country","displayName","url","isActive"],
+  action:"READ",
+  fields:["name","countryCode","isActive"],
+  searchFields:["name","countryCode","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "country", title: "Name",dataSort:true},
-    {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "url", title: "Flag",dataSort:true,customComponent:FlagFormatter},
-    {dataField: "isActive", title: "Available in System",dataSort:true,customComponent:ActiveFormatter},
+    {dataField: "name", title: "Name",dataSort:true},
+    {dataField: "countryCode", title: "Country",dataSort:true},
+    {dataField: "isActive", title: "Available in System",dataSort:true, customComponent:ActiveStateFormatter},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
   tableHeaderClass:'react_table_head',
@@ -30,9 +29,9 @@ const mlCountriesTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editCountry/"+data.id);
+          FlowRouter.go("/admin/settings/editState/"+data.id);
         } else{
-          alert("Please select a Country");
+          alert("Please select a State");
         }
       }
     },
@@ -52,13 +51,11 @@ const mlCountriesTableConfig=new MlViewer.View({
   sizePerPage:5,
   graphQlQuery:gql`
               query{
-              data:SearchQuery(module:"countries"){
+              data:SearchQuery(module:"states"){
                     totalRecords
                     data{
-                     ...on Countries{
-                              country
-                              url
-                              displayName
+                     ...on States{
+                              name  
                               countryCode
                               isActive
                               id:_id
@@ -68,5 +65,8 @@ const mlCountriesTableConfig=new MlViewer.View({
               }
               `
 });
-
-export {mlCountriesTableConfig};
+const mlStateModuleConfig={
+  moduleName:"states",
+  actions:{"READ":"read","UPDATE":"update"}
+};
+export {mlStatesTableConfig,mlStateModuleConfig};

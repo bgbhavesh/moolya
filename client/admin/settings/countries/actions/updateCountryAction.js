@@ -24,6 +24,6 @@ export async function updateCountryActionHandler(CountryDetails) {
     }
   })
   console.log(result)
-  const id = result.data.UpdateCountry;
+  const id = result.data.updateCountry;
   return id
 }

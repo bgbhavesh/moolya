@@ -1,9 +1,8 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let countriesSchema = `
+let coutriesSchema = `
 
-    type Countries
-    {
+    type Countries{
         _id           : String
         country       : String
         countryCode   : String
@@ -13,7 +12,6 @@ let countriesSchema = `
     }
     
     input countryObject{
-        id:String
         country       : String
         countryCode   : String
         displayName   : String
@@ -32,4 +30,4 @@ let countriesSchema = `
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], countriesSchema]);
+MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], coutriesSchema]);

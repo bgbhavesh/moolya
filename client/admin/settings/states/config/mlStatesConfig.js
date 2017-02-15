@@ -50,13 +50,14 @@ const mlStatesTableConfig=new MlViewer.View({
   ],
   sizePerPage:5,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"states"){
+              query SearchQuery( $offset: Int, $limit: Int) {
+              data:SearchQuery(module:"states",offset: $offset, limit: $limit){
                     totalRecords
                     data{
-                     ...on States{
+                      ...on States{
                               name  
                               countryCode
+                              countryId
                               isActive
                               id:_id
                           }

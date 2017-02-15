@@ -7,7 +7,7 @@ export async function findCountryActionHandler(CountryId) {
   const result = await client.query({
     query: gql`
     query ($id: String){
-      FindCountry(_id: $id,) {
+      fetchCountry(_id: $id,) {
         id:_id
         country
         countryCode
@@ -20,6 +20,6 @@ export async function findCountryActionHandler(CountryId) {
     }
   })
   console.log(result)
-  const id = result.data.FindCountry;
+  const id = result.data.fetchCountry;
   return id
 }

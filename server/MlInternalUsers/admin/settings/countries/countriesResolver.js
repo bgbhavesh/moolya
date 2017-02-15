@@ -1,7 +1,6 @@
 
 
 import MlResolver from '../../mlAdminResolverDef'
-import {createCluster} from '../../clusters/clusterResolver'
 
 
 MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{

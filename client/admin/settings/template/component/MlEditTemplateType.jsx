@@ -1,0 +1,133 @@
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import formHandler from '../../../../commons/containers/MlFormHandler';
+import {findTemplateTypeActionHandler} from '../actions/findTemplateTypeAction'
+import {updateTemplateTypeActionHandler} from '../actions/updateTemplateTypeAction'
+class MlEditTransactionType extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {loading:true,data:{}};
+    this.addEventHandler.bind(this);
+    this.updateTemplateType.bind(this)
+    this.findTemplateType.bind(this);
+    return this;
+  }
+
+  componentWillMount() {
+
+    const resp=this.findTemplateType();
+    return resp;
+
+  }
+  componentDidMount(){
+    /*if(this.state.data.isActive){
+     $('#status').prop('checked', true);
+     }*/
+  }
+
+  async addEventHandler() {
+    // const resp=await this.findRequestType
+    //  return resp;
+  }
+
+  async handleError(response) {
+    alert(response)
+  };
+
+  async handleSuccess(response) {
+    FlowRouter.go("/admin/settings/templateTypeList");
+  };
+  async findTemplateType(){
+    let TemplateTypeId=this.props.config
+    const response = await findTemplateTypeActionHandler(TemplateTypeId);
+    this.setState({loading:false,data:response});
+  }
+  async  updateTemplateType() {
+    let TemplateType = {
+      id: this.refs.id.value,
+      templateName: this.refs.templateName.value,
+      templateDisplayName: this.refs.templateDisplayName.value,
+      templateDescription: this.refs.templateDescription.value,
+      isActive: this.refs.isActive.checked
+    }
+    const response = await updateTemplateTypeActionHandler(TemplateType)
+    return response;
+
+  }
+
+  onStatusChange(e){
+    const data=this.state.data;
+    if(e.currentTarget.checked){
+      this.setState({"data":{"isActive":true}});
+    }else{
+      this.setState({"data":{"isActive":false}});
+    }
+  }
+
+  render(){
+    let MlActionConfig = [
+      {
+        actionName: 'edit',
+        showAction: true,
+        handler: async(event) => this.props.handler(this.updateTemplateType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'add',
+        handler: null
+      },
+      {
+        showAction: true,
+        actionName: 'logout',
+        handler: null
+      }
+    ];
+
+    const showLoader=this.state.loading;
+    return (
+      <div>
+        {showLoader===true?( <div className="loader_wrap"></div>):(
+          <div className="admin_main_wrap">
+            <div className="admin_padding_wrap">
+              <h2>Edit TransactionType</h2>
+              <div className="col-md-6">
+                <div className="form_bg">
+                  <div className="form-group">
+                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
+                    <input type="text" ref="templateName" placeholder="Name" defaultValue={this.state.data&&this.state.data.templateName} className="form-control float-label" id=""/>
+
+                  </div>
+                  <div className="form-group">
+                    <textarea  ref="templateDescription" placeholder="About" defaultValue={this.state.data&&this.state.data.templateDescription}className="form-control float-label" id=""></textarea>
+
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="form_bg">
+                  <div className="form-group">
+                    <input type="text" ref="templateDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.templateDisplayName} className="form-control float-label" id=""/>
+                  </div>
+                  <div className="form-group switch_wrap">
+                    <label>Status</label><br/>
+                    <label className="switch">
+                      <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
+                      <div className="slider"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
+            />
+
+          </div>)}
+      </div>
+
+    )
+  }
+};
+
+export default MlEditTransactionType = formHandler()(MlEditTransactionType);

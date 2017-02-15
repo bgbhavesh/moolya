@@ -22,9 +22,9 @@ class MlEditTransactionType extends React.Component{
 
   }
   componentDidMount(){
-    if(this.state.data.isActive){
+    /*if(this.state.data.isActive){
       $('#status').prop('checked', true);
-    }
+    }*/
   }
 
   async addEventHandler() {
@@ -37,7 +37,6 @@ class MlEditTransactionType extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/transactionTypeList");
   };
   async findTransactionType(){

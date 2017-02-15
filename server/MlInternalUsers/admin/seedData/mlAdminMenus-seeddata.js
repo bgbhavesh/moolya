@@ -279,12 +279,42 @@ if(Meteor.isServer){
             "image" : ""
           },
           {
-            "link" : "/admin/settings/internalUsersList",
-            "name" : "Internal Users",
-            "uniqueId" : "settings_internalUsers",
+            "link" : "/admin/settings/backendUserList",
+            "name" : "Backend Users",
+            "uniqueId" : "settings_BackendUsers",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addBackendUser",
+              "name": "Add BackendUser",
+              "uniqueId": "settings_AddBackendUser",
+              "subMenuMappingId":"settings_BackendUsers",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/backendUserList",
+                "name": "List BackendUser",
+                "uniqueId": "settings_BackendUserList",
+                "subMenuMappingId":"settings_BackendUsers",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editBackendUser",
+                "name": "Edit BackendUser",
+                "uniqueId": "settings_EditBackendUser",
+                "subMenuMappingId":"settings_BackendUsers",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           },
           {
             "link" : "/admin/settings/requestTypeList",
@@ -447,6 +477,73 @@ if(Meteor.isServer){
               }]
 
           },
+          {
+            "link" : "/admin/settings/roleTypeList",
+            "name" : "Role Types",
+            "uniqueId" : "settings_roleTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link": "/admin/settings/roleTypeList",
+                "name": "List RoleType",
+                "uniqueId": "settings_RoleTypeList",
+                "subMenuMappingId":"settings_roleTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editRoleType",
+                "name": "Edit RoleType",
+                "uniqueId": "settings_EditRoleType",
+                "subMenuMappingId":"settings_roleTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/templateTypeList",
+            "name" : "Template Types",
+            "uniqueId" : "settings_templateTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addTemplateType",
+              "name": "Add TemplateType",
+              "uniqueId": "settings_AddTemplateType",
+              "subMenuMappingId":"settings_templateTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/templateTypeList",
+                "name": "List TemplateType",
+                "uniqueId": "settings_TemplateTypeList",
+                "subMenuMappingId":"settings_templateTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTemplateType",
+                "name": "Edit TemplateType",
+                "uniqueId": "settings_EditTemplateType",
+                "subMenuMappingId":"settings_templateTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          }
         ]
       }
     ]

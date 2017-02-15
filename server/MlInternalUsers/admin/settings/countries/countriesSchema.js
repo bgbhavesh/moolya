@@ -2,8 +2,7 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let coutriesSchema = `
 
-    type Countries
-    {
+    type Countries{
         _id           : String
         country       : String
         countryCode   : String
@@ -12,7 +11,7 @@ let coutriesSchema = `
         isActive      : Boolean
     }
     
-    input conutryObject{
+    input countryObject{
         country       : String
         countryCode   : String
         displayName   : String
@@ -27,7 +26,7 @@ let coutriesSchema = `
     }
     
     type Mutation{
-        updateCountry(countryId: String, country: conutryObject): String
+        updateCountry(countryId: String, country: countryObject): String
     }
 `
 

@@ -3,102 +3,81 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let BackEndUser = `  
-    
-    type department{
-    departmentId : String
-    subDepartmentId : String
+let BackEndUser = `
+
+     input assignedDepartment{
+        department: String,
+        subDepartment: String
     }
     
-    type contact{
-    contactType : String
-    contactNumberType : String
-    countryCode : String
-    number : String
-    isOTPValidated : Boolean
+    input contacts{
+        contactNumberType:String,
+        contactType: String,
+        countryCode:String,
+        number:String,
+        isOTPValidated:String
     }
     
-    type User 
-    {
-    firstName : String
-    middleName : String
-    lastName : String
-    userType : String
-    roleType : String
-    password : String    
-    departments : [department]
-    displayName : String
-    contacts : [contact]
-    email : String
-    globalAssignmentAvailability : String
-    isActive : String
+    input userroles{
+        roleId:String,
+        clusterId:String,
+        chapterId:String,
+        subChapterId:String,
+        communityId:String,
+        isActive:Boolean,
+        hierarchyLevel:String
     }
     
-    input assignedDepartment{
-    departmentId : String
-    subDepartmentId : String
+    input userprofiles{
+        isDefault: Boolean,
+        clusterId: String,
+        userRoles:[userroles]
+    }
+  
+    input moolyaProfile{
+        firstName: String,
+        middleName: String,
+        lastName: String,
+        userType: String,
+        roleType: String,
+        assignedDepartment:[assignedDepartment],
+        displayName: String,
+        email:String,
+        contact:[contacts],
+        globalAssignment:Boolean,
+        isActive:Boolean,
+        userProfiles:[userprofiles]
+        
+    }
+
+    input InternalUprofile{
+        moolyaProfile: moolyaProfile
+    }
+  
+    input profile{
+        isInternaluser: String,
+        isExternaluser: String,
+        email: String,
+        InternalUprofile: InternalUprofile
     }
     
-    input contactInput{
-    contactType : String
-    contactNumberType : String
-    countryCode : String
-    number : String
-    isOTPValidated : Boolean
+    input userObject{
+        username: String,
+        password: String,
+        profile:profile
     }
     
-    
-    input UserInput 
-    {
-    firstName : String
-    middleName : String
-    lastName : String
-    userType : String
-    roleType : String
-    password : String    
-    departments : [assignedDepartment]
-    displayName : String
-    contacts : [contactInput]
-    email : String
-    globalAssignmentAvailability : String
-    isActive : Boolean
-    }
-    
-    input UserUpdate 
-    {
-    id : String
-    firstName : String
-    middleName : String
-    lastName : String
-    userType : String
-    roleType : String
-    password : String    
-    departments : [assignedDepartment]
-    displayName : String
-    contacts : [contactInput]
-    email : String
-    globalAssignmentAvailability : String
-    isActive : Boolean
-    }
-    
-    input role{
-      roleId : String
-      chapterId : String
-      subchapterId : String
-      communityId : String
-    }
-    
-    input UserProfile{
-      id : String
-      isDefault : Boolean
-      clusterId : String
-      userRoles : [role]
-    }
     
     type Mutation{
-        createUser(user : UserInput):String
-        assignUser(user : UserProfile):String
+        createUser(user:userObject!):String
+        updateUser(userId:String!, user:userObject!): String
     }
+    
+    type Query{
+        fetchUsers: String
+        fetchUser(userId:String): String
+    }
+    
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);

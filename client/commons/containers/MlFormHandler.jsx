@@ -55,7 +55,7 @@ export default function formHandler() {
 
         return (
           <div>
-          {showLoader===true? (<div>Loading...</div>) :
+          {showLoader===true? (<div><div className="loader_wrap"></div><SourceComponent {...this.props} handler={this.handler.bind(this)}/></div>) :
             (<SourceComponent {...this.props} handler={this.handler.bind(this)}/>)
           }
         </div>

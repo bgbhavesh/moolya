@@ -408,6 +408,45 @@ if(Meteor.isServer){
               }]
 
           },
+          {
+            "link" : "/admin/settings/transactionTypeList",
+            "name" : "Transaction Types",
+            "uniqueId" : "settings_transactionTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addTransactionType",
+              "name": "Add TransactionType",
+              "uniqueId": "settings_AddTransactionType",
+              "subMenuMappingId":"settings_transactionTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/transactionTypeList",
+                "name": "List TransactionType",
+                "uniqueId": "settings_TransactionTypeList",
+                "subMenuMappingId":"settings_transactionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTransactionType",
+                "name": "Edit TransactionType",
+                "uniqueId": "settings_EditTransactionType",
+                "subMenuMappingId":"settings_transactionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+
+          },
         ]
       }
     ]

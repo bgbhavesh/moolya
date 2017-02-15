@@ -5,32 +5,74 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 
-MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
-        // TODO : Authorization
+// MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
+//         // TODO : Authorization
+//     var userDetails = {
+//         profile:{
+//           isInternaluser : "yes",
+//           isExternaluser : "no",
+//           email: args.user.email,
+//           InternalUprofile:{
+//             moolyaProfile: args.user
+//           }
+//         },
+//         username: args.user.email,
+//         password: args.user.password,
+//     };
+//      let userId = Accounts.createUser(userDetails);
+//      Accounts.setPassword(userId, adminPassword);
+//         if(userId){
+//             let code = 200;
+//             let result = {userId: userId}
+//             let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+//             return response
+//         }
+// }
+// MlResolver.MlMutationResolver['assignUser'] = (obj, args, context, info) => {
+//     // TODO : Authorization
+//     Meteor.users.update({_id:args.user.id}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":args.user}})
+//     response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+// }
 
-    var userDetails = {
-      profile:{
-        isInternaluser : "yes",
-        isExternaluser : "no",
-        email: args.user.email,
-        InternalUprofile:{
-          moolyaProfile: args.user
-        }
-      },
-      username: args.user.email,
-      password: args.user.password,
-    };
-     let userId = Accounts.createUser(userDetails);
-     Accounts.setPassword(userId, adminPassword);
-        if(userId){
-            let code = 200;
-            let result = {userId: userId}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-            return response
-        }
+MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
+    console.log(args)
+    if(Accounts.find({username:args.user.username}).count() > 0) {
+        let code = 409;
+        return new MlRespPayload().errorPayload("Already Exist", code);
+    }
+
+    let userId = Accounts.createUser(args.user);
+    if(userId){
+        let code = 200;
+        let result = {userId: userId}
+        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        return response
+    }
+
 }
-MlResolver.MlMutationResolver['assignUser'] = (obj, args, context, info) => {
-  // TODO : Authorization
-  Meteor.users.update({_id:args.user.id}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":args.user}})
-  response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+
+MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
+    console.log(args)
+    let user = Accounts.findOne({_id: args.userId});
+    if(user){
+        for(key in args.user){
+          user[key] = args.user[key]
+        }
+        let resp = Accounts.update({_id:args.userId}, {$set:user}, {upsert:true})
+        if(resp){
+          let code = 200;
+          let result = {user: resp}
+          let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+          return response
+        }
+    }
+}
+
+MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
+    let user = Accounts.findOne({_id: args.userId});
+    return user;
+}
+
+MlResolver.MlQueryResolver['fetchUsers'] = (obj, args, context, info) => {
+
 }

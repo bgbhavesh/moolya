@@ -325,6 +325,7 @@ if(Meteor.isServer){
               }]
 
           },
+
           {
             "link" : "/admin/settings/filtersList",
             "name" : "Filters",
@@ -376,7 +377,37 @@ if(Meteor.isServer){
             "isLink" : true,
             "isMenu" : true,
             "image" : ""
-          }
+          },
+          {
+            "link" : "/admin/settings/userTypeList",
+            "name" : "User Types",
+            "uniqueId" : "settings_userTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link": "/admin/settings/userTypeList",
+                "name": "List UserType",
+                "uniqueId": "settings_UserTypeList",
+                "subMenuMappingId":"settings_userTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editUserType",
+                "name": "Edit UserType",
+                "uniqueId": "settings_EditUserType",
+                "subMenuMappingId":"settings_userTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+
+          },
         ]
       }
     ]

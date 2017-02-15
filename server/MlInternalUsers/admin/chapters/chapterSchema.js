@@ -43,7 +43,7 @@ let chapterSchema = `
     
      type Mutation {
         createChapter(chapter:chapterObject):String
-        updateChapeter(chapterId:String, chapter:chapterObject):String
+        updateChapter(chapterId:String, chapter:chapterObject):String
      }
 `
 

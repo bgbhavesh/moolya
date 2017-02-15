@@ -26,19 +26,21 @@ import MlEditCountry from "../../admin/settings/countries/component/MlEditCountr
 import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
-
 import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleType'
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
+
+import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
+import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
+import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
   name: 'admin',
   triggersEnter: [function(context, redirect) {
     console.log('running /adminPrefix trigger');
-    console.log(context);
     if (!Meteor.userId()) {
       FlowRouter.go('/login')
     }
@@ -266,4 +268,21 @@ adminSection.route('/settings/editTransactionType/:id', {
     mount(AdminLayout,{adminContent:<MlEditTransactionType config={params.id} />})
   }
 });
-
+adminSection.route('/settings/templateTypeList', {
+  name: 'settings_TemplateTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTemplateTypeList/>})
+  }
+});
+adminSection.route('/settings/addTemplateType', {
+  name: 'settings_AddTemplateType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTemplate />})
+  }
+});
+adminSection.route('/settings/editTemplateType/:id', {
+  name: 'settings_EditTemplateType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTemplateType config={params.id} />})
+  }
+});

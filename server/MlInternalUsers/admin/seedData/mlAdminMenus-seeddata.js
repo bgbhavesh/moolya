@@ -279,12 +279,42 @@ if(Meteor.isServer){
             "image" : ""
           },
           {
-            "link" : "/admin/settings/internalUsersList",
-            "name" : "Internal Users",
-            "uniqueId" : "settings_internalUsers",
+            "link" : "/admin/settings/backendUserList",
+            "name" : "Backend Users",
+            "uniqueId" : "settings_BackendUsers",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addBackendUser",
+              "name": "Add BackendUser",
+              "uniqueId": "settings_AddBackendUser",
+              "subMenuMappingId":"settings_BackendUsers",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/backendUserList",
+                "name": "List BackendUser",
+                "uniqueId": "settings_BackendUserList",
+                "subMenuMappingId":"settings_BackendUsers",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editBackendUser",
+                "name": "Edit BackendUser",
+                "uniqueId": "settings_EditBackendUser",
+                "subMenuMappingId":"settings_BackendUsers",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           },
           {
             "link" : "/admin/settings/requestTypeList",
@@ -408,6 +438,75 @@ if(Meteor.isServer){
               }]
 
           },
+          {
+            "link" : "/admin/settings/transactionTypeList",
+            "name" : "Transaction Types",
+            "uniqueId" : "settings_transactionTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addTransactionType",
+              "name": "Add TransactionType",
+              "uniqueId": "settings_AddTransactionType",
+              "subMenuMappingId":"settings_transactionTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/transactionTypeList",
+                "name": "List TransactionType",
+                "uniqueId": "settings_TransactionTypeList",
+                "subMenuMappingId":"settings_transactionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTransactionType",
+                "name": "Edit TransactionType",
+                "uniqueId": "settings_EditTransactionType",
+                "subMenuMappingId":"settings_transactionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+
+          },
+          {
+            "link" : "/admin/settings/roleTypeList",
+            "name" : "Role Types",
+            "uniqueId" : "settings_roleTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link": "/admin/settings/roleTypeList",
+                "name": "List RoleType",
+                "uniqueId": "settings_RoleTypeList",
+                "subMenuMappingId":"settings_roleTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editRoleType",
+                "name": "Edit RoleType",
+                "uniqueId": "settings_EditRoleType",
+                "subMenuMappingId":"settings_roleTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+
+          }
         ]
       }
     ]

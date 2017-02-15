@@ -1,20 +1,34 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let coutriesSchema = `
+let countriesSchema = `
 
     type Countries
     {
-        _id         : String
-        code        : String
-        name        : String
-        url         : String
-        isActive    : Boolean
+        _id           : String
+        country       : String
+        countryCode   : String
+        displayName   : String
+        url           : String
+        isActive      : Boolean
     }
+    
+    input countryObject{
+        country       : String
+        countryCode   : String
+        displayName   : String
+        url           : String
+        isActive      : Boolean
+    }
+    
     type Query {
         fetchCountries: [Countries]
-        fetchCountry(countryCode: String): String
+        fetchCountry(countryId: String): String
         fetchCountriesSearch(searchQuery:String): String
+    }
+    
+    type Mutation{
+        updateCountry(countryId: String, country: countryObject): String
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], coutriesSchema]);
+MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], countriesSchema]);

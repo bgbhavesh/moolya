@@ -22,9 +22,9 @@ class MlEditTransactionType extends React.Component{
 
   }
   componentDidMount(){
-    if(this.state.data.isActive){
+    /*if(this.state.data.isActive){
       $('#status').prop('checked', true);
-    }
+    }*/
   }
 
   async addEventHandler() {

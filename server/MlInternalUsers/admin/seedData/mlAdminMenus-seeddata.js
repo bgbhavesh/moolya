@@ -447,6 +447,36 @@ if(Meteor.isServer){
               }]
 
           },
+          {
+            "link" : "/admin/settings/roleTypeList",
+            "name" : "Role Types",
+            "uniqueId" : "settings_roleTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link": "/admin/settings/roleTypeList",
+                "name": "List RoleType",
+                "uniqueId": "settings_RoleTypeList",
+                "subMenuMappingId":"settings_roleTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editRoleType",
+                "name": "Edit RoleType",
+                "uniqueId": "settings_EditRoleType",
+                "subMenuMappingId":"settings_roleTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+
+          }
         ]
       }
     ]

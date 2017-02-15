@@ -279,12 +279,42 @@ if(Meteor.isServer){
             "image" : ""
           },
           {
-            "link" : "/admin/settings/internalUsersList",
-            "name" : "Internal Users",
-            "uniqueId" : "settings_internalUsers",
+            "link" : "/admin/settings/backendUserList",
+            "name" : "Backend Users",
+            "uniqueId" : "settings_BackendUsers",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addBackendUser",
+              "name": "Add BackendUser",
+              "uniqueId": "settings_AddBackendUser",
+              "subMenuMappingId":"settings_BackendUsers",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/backendUserList",
+                "name": "List BackendUser",
+                "uniqueId": "settings_BackendUserList",
+                "subMenuMappingId":"settings_BackendUsers",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editBackendUser",
+                "name": "Edit BackendUser",
+                "uniqueId": "settings_EditBackendUser",
+                "subMenuMappingId":"settings_BackendUsers",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           },
           {
             "link" : "/admin/settings/requestTypeList",

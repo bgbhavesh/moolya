@@ -7,7 +7,7 @@ MlResolver.MlMutationResolver['CreateTransaction'] = (obj, args, context, info) 
   let id = MlTransactions.insert(args);
   if (id) {
     let code = 200;
-    let result = {permissionId: id}
+    let result = {transactionId: id}
     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return response
   }

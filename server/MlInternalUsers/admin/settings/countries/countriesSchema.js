@@ -4,11 +4,12 @@ let coutriesSchema = `
 
     type Countries
     {
-        _id         : String
-        code        : String
-        name        : String
-        url         : String
-        isActive    : Boolean
+        _id           : String
+        country       : String
+        countryCode   : String
+        displayName   : String
+        url           : String
+        isActive      : Boolean
     }
     type Query {
         fetchCountries: [Countries]

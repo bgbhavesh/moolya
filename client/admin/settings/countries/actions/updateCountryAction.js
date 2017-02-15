@@ -7,14 +7,11 @@ export async function updateCountryActionHandler(CountryDetails) {
   let countryCode = CountryDetails.countryCode;
   let url = CountryDetails.url;
   let isActive = CountryDetails.isActive;
-  // let isMoolya = false;
-  // let departmentId = "Moolya DPT ID";
-  // let subDepatmentAvailable = [];
 
   const result = await client.mutate({
     mutation: gql`
     mutation ($_id:String, $country: String, $countryCode: String, $url: String, $isActive: Boolean){
-      UpdateCountry(
+      updateCountry(
       _id:$_id,
       country: $country,
       countryCode: $countryCode,
@@ -32,6 +29,6 @@ export async function updateCountryActionHandler(CountryDetails) {
     }
   })
   console.log(result)
-  const id = result.data.CreateCountry;
+  const id = result.data.UpdateCountry;
   return id
 }

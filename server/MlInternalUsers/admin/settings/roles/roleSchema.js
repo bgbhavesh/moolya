@@ -30,10 +30,6 @@ let Role = `
         permissions:[permissions]
     }
     
-    type Query {
-        fetchRole(roleName: String, roleValue: String, name: String): String
-    }
-    
     input roleObject{
         roleName: String, 
         displayName:String, 
@@ -42,6 +38,10 @@ let Role = `
         modules:[modules], 
         about:String, 
         isActive:Boolean
+    }
+    
+    type Query {
+        fetchRole(roleName: String, roleValue: String, name: String): String
     }
     
     type Mutation {

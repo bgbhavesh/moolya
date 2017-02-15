@@ -17,7 +17,8 @@ export async function findTemplateTypeActionHandler(TemplateTypeId) {
     `,
     variables: {
       id:did
-    }
+    },
+    forceFetch:true
   })
   const id = result.data.FindTemplate;
   return id

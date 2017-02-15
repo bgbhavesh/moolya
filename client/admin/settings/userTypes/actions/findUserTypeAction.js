@@ -17,9 +17,9 @@ export async function findUserTypeActionHandler(userTypeId) {
     `,
     variables: {
       id:did
-    }
+    },
+    forceFetch:true
   })
-  console.log(result)
   const id = result.data.FindUserType;
   return id
 }

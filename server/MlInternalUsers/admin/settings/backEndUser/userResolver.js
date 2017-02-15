@@ -48,7 +48,6 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
         let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
         return response
     }
-
 }
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {

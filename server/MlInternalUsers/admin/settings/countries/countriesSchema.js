@@ -11,10 +11,23 @@ let coutriesSchema = `
         url           : String
         isActive      : Boolean
     }
+    
+    input conutryObject{
+        country       : String
+        countryCode   : String
+        displayName   : String
+        url           : String
+        isActive      : Boolean
+    }
+    
     type Query {
         fetchCountries: [Countries]
-        fetchCountry(countryCode: String): String
+        fetchCountry(countryId: String): String
         fetchCountriesSearch(searchQuery:String): String
+    }
+    
+    type Mutation{
+        updateCountry(countryId: String, country: conutryObject): String
     }
 `
 

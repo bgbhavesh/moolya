@@ -74,17 +74,16 @@ let chapterSchema = `
     }
     
     type Query{ 
-        fetchChapter(chapterId:String):String
+        fetchChapter:String
         fetchChapters:String
-        fetchSubChapter(subChapterId:String):String
+        fetchSubChapter:String
         fetchSubChapters:String
     }
     
      type Mutation {
-        createChapter(chapter:chapterObject!):String
-        updateChapter(chapterId:String!, chapter:chapterObject!):String
-        createSubChapter(subChapter:subChapterObject!):String
-        updateChapter(subChapterId:String!, subChapter:subChapterObject!):String
+        createChapter(chapter:chapterObject):String
+        updateChapter(chapterId:String, chapter:chapterObject):String
+        createSubChapter(subChapter:subChapterObject):String
      }
 `
 

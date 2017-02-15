@@ -20,7 +20,6 @@ export async function findRequestTypeActionHandler(requestTypeId) {
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.FindRequestType;
   return id
 }

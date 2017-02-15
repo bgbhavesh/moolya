@@ -4,22 +4,23 @@ import {client} from '../../../core/apolloConnection';
 export async function addDepartmentActionHandler(DepartmentDetails) {
   let departmentName = DepartmentDetails.departmentName;
   let displayName = DepartmentDetails.displayName;
-  let departmentDesc = DepartmentDetails.about;
-  let selectCluster = DepartmentDetails.selectCluster;
-  let email = DepartmentDetails.email;
-  let isActive = DepartmentDetails.status
-  let depatmentAvailable = []
-  let isMoolya = true
+  let departmentDesc = DepartmentDetails.aboutDepartment;
+  let isActive = DepartmentDetails.departmentStatus;
+  let isMoolya = DepartmentDetails.appType;
+  let departmentAvailable = DepartmentDetails.departmentAvailablity;
+
   const result = await client.mutate({
     mutation: gql`
     mutation  ($departmentName: String, $displayName: String, $departmentDesc: String, $isMoolya: Boolean, $depatmentAvailable: [DepatmentAvailable], $isActive: Boolean){
-        CreateDepartment(
+        createDepartment(
+          department :{
           departmentName: $departmentName,
           displayName: $displayName,
           departmentDesc: $departmentDesc,
           isMoolya :$isMoolya,
           depatmentAvailable: $depatmentAvailable,
           isActive :$isActive
+          }
         ) 
       }
     `,
@@ -27,9 +28,9 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
       departmentName,
       displayName,
       departmentDesc,
-      depatmentAvailable,
-      isActive,
-      isMoolya
+      isMoolya,
+      departmentAvailable,
+      isActive
     }
   })
   const id = result.data.CreateDepartment;

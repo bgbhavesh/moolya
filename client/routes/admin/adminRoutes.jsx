@@ -23,7 +23,8 @@ import MlEditRequestType from  '../../admin/settings/requestTypes/component/MlEd
 import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
-import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import MlStatesList from "../../admin/settings/states/component/MlStatesList";
+import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
 import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
@@ -208,9 +209,9 @@ adminSection.route('/settings/editCountry/:id', {
   }
 });
 adminSection.route('/settings/statesList', {
-  name: 'settings_states',
+  name: 'settings_StatesList',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlStatesList/>})
   }
 });
 adminSection.route('/settings/citiesList', {

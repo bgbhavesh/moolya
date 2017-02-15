@@ -45,6 +45,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlCountries.find({},findOptions).fetch();
     totalRecords=MlCountries.find({},findOptions).count();
   }
+  if(args.module=="states"){
+    data= MlStates.find({},findOptions).fetch();
+    totalRecords=MlStates.find({},findOptions).count();
+  }
   if(args.module=="userType"){
     data= MlUserTypes.find({},findOptions).fetch();
     totalRecords=MlUserTypes.find({},findOptions).count();
@@ -68,6 +72,17 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
 
+    if (data.countryCode && data.country) {
+      return 'Countries';
+    }
+    if(data.name && data.countryId&&!data.stateId){
+      return 'States';
+    }
+
+    if(data.name && data.stateId){
+      return 'Cities';
+    }
+
     if (data.countryId) {
       return 'Cluster';
     }
@@ -89,9 +104,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if (data.permissionName) {
       return 'Permissions';
     }
-    if (data.countryCode) {
-      return 'Countries';
-    }
+
     if(data.userTypeName){
       return 'UserTypes'
     }

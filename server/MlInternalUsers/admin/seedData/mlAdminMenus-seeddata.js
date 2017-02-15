@@ -395,10 +395,30 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/statesList",
             "name" : "States",
-            "uniqueId" : "settings_states",
+            "uniqueId" : "settings_States",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/statesList",
+              "name": "List States",
+              "uniqueId": "settings_StatesList",
+              "subMenuMappingId":"settings_States",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+            {
+              "link": "/admin/settings/editState",
+              "name": "Edit State",
+              "uniqueId": "settings_EditState",
+              "subMenuMappingId":"settings_States",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": true,
+              "image": ""
+            }]
           },
           {
             "link" : "/admin/settings/citiesList",

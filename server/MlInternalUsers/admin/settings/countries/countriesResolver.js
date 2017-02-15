@@ -4,7 +4,10 @@ import {createcluster} from '../../clusters/clusterResolver'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{
-    return MlCountries.find().fetch();
+    let result=MlCountries.find().fetch();
+    let code = 200;
+    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+    return response
 }
 MlResolver.MlQueryResolver['fetchCountry'] = (obj, args, context, info) =>{
     let country=null;
@@ -14,7 +17,7 @@ MlResolver.MlQueryResolver['fetchCountry'] = (obj, args, context, info) =>{
     return country?country:null;
 }
 MlResolver.MlQueryResolver['fetchCountriesSearch'] = (obj, args, context, info) =>{
-    return MlCountries.find({"country":{ $regex:"^"+args.searchQuery, $options: "si" }}).fetch();
+    return MlCountries.find({}).fetch();
 }
 
 

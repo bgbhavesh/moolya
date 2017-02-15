@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import MlTable from "../../../commons/components/tabular/MlTable";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+import _ from "underscore";
 export default class MlTableView extends Component {
   constructor(props) {
     super(props);
@@ -54,11 +55,11 @@ export default class MlTableView extends Component {
      }
   }
 
-  actionHandlerProxy(actionHandler){
+  actionHandlerProxy(actionConfig){
      const selectedRow=this.state.selectedRow;
-     if(actionHandler){
-        actionHandler(selectedRow);
-     }
+     const actions=this.props.actionConfiguration;
+     const action=_.find(actions,{"actionName":actionConfig.actionName});
+          action.handler(selectedRow);
   }
 
   render(){
@@ -69,16 +70,17 @@ export default class MlTableView extends Component {
     config["handleRowSelect"]=this.handleRowSelect.bind(this);
 
     let that=this;
-    let actionConfigration=config.actionConfiguration
-    actionConfigration.forEach(function (action) {
-
-      action.handler=that.actionHandlerProxy.bind(that,action.handler)
-    })
-    config["actionConfiguration"]=actionConfigration;
+    let actionsConf=_.clone(config.actionConfiguration);
+    let actionsProxyList=[];
+    actionsConf.forEach(function (action) {
+      let act={actionName:action.actionName,showAction:action.showAction};
+      act.handler=that.actionHandlerProxy.bind(that);
+      actionsProxyList.push(act);
+    });
     return(<div>{loading?(<div className="loader_wrap"></div>):(
       <div>
         <MlTable {...config } totalDataSize={totalDataSize} data={data} pageNumber={this.state.pageNumber} sizePerPage={this.state.sizePerPage} onPageChange={this.onPageChange.bind(this)} onSizePerPageList={this.onSizePerPageList.bind(this)} handleRowSelect={that.handleRowSelect.bind(this)}></MlTable>
-        {config.showActionComponent===true && <MlActionComponent ActionOptions={config.actionConfiguration} />}
+        {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
       </div>
     )}</div>)
   }

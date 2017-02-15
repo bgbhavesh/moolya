@@ -23,7 +23,7 @@ let coutriesSchema = `
     type Query {
         fetchCountries: [Countries]
         fetchCountry(countryId: String): String
-        fetchCountriesSearch(searchQuery:String): String
+        fetchCountriesSearch: [Countries]
     }
     
     type Mutation{

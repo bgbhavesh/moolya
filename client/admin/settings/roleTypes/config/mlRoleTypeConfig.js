@@ -33,11 +33,6 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     },
     {
       showAction: true,
-      actionName: 'add',
-      handler: null
-    },
-    {
-      showAction: true,
       actionName: 'logout',
       handler: (data)=>{console.log(data);}
     }

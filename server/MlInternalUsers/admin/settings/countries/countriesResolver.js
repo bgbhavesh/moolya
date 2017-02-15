@@ -1,6 +1,7 @@
 
 
 import MlResolver from '../../mlAdminResolverDef'
+import MlRespPayload from '../../../../commons/mlPayload'
 
 
 MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{

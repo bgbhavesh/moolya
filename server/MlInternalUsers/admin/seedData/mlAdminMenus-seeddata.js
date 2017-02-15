@@ -475,7 +475,44 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
-
+          },
+          {
+            "link" : "/admin/settings/templateTypeList",
+            "name" : "Template Types",
+            "uniqueId" : "settings_templateTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addTemplateType",
+              "name": "Add TemplateType",
+              "uniqueId": "settings_AddTemplateType",
+              "subMenuMappingId":"settings_templateTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/templateTypeList",
+                "name": "List TemplateType",
+                "uniqueId": "settings_TemplateTypeList",
+                "subMenuMappingId":"settings_templateTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTemplateType",
+                "name": "Edit TemplateType",
+                "uniqueId": "settings_EditTemplateType",
+                "subMenuMappingId":"settings_templateTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

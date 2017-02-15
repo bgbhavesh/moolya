@@ -45,7 +45,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlCountries.find({},findOptions).fetch();
     totalRecords=MlCountries.find({},findOptions).count();
   }
-
+  if(args.module=="userType"){
+    data= MlUserTypes.find({},findOptions).fetch();
+    totalRecords=MlUserTypes.find({},findOptions).count();
+  }
 
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -76,6 +79,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if (data.countryCode) {
       return 'Countries';
+    }
+    if(data.userTypeName){
+      return 'UserTypes'
     }
 
     return null;

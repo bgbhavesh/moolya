@@ -24,6 +24,8 @@ import  MlPermissionList from '../../admin/settings/permissions/component/MlPerm
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
 import  MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
+import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -216,4 +218,17 @@ adminSection.route('/myprofile', {
     mount(AdminLayout,{adminContent:< MlMyProfile/>})
   }
 });
+adminSection.route('/settings/userTypeList', {
+  name: 'settings_UserTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlUserTypeList/>})
+  }
+});
+adminSection.route('/settings/editUserType/:id', {
+  name: 'settings_EditUserType',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditUserType  config={params.id}/>})
+  }
+});
+
 

@@ -2,8 +2,6 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
 let chapterSchema = `
     type Chapter{
-        clusterId:String,
-        clusterName:String,
         chapterId:String,
         chapterName:String,
         displayName:String,

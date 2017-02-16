@@ -24,7 +24,9 @@ import  MlPermissionList from '../../admin/settings/permissions/component/MlPerm
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
 import MlStatesList from "../../admin/settings/states/component/MlStatesList";
+import MlEditState from "../../admin/settings/states/component/MlStateEdit";
 import MlCitiesList from "../../admin/settings/cities/component/MlCitiesList";
+import MlEditCity from "../../admin/settings/cities/component/MlEditCity";
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
@@ -206,7 +208,7 @@ adminSection.route('/settings/countriesList', {
   }
 });
 adminSection.route('/settings/editCountry/:id', {
-  name: 'settings_EditCountries',
+  name: 'settings_EditCountry',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditCountry config={params.id} />})
   }
@@ -217,10 +219,22 @@ adminSection.route('/settings/statesList', {
     mount(AdminLayout,{adminContent:< MlStatesList/>})
   }
 });
+adminSection.route('/settings/editState/:id', {
+  name: 'settings_EditState',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditState config={params.id} />})
+  }
+});
 adminSection.route('/settings/citiesList', {
   name: 'settings_CitiesList',
   action(){
     mount(AdminLayout,{adminContent:< MlCitiesList/>})
+  }
+});
+adminSection.route('/settings/editCity/:id', {
+  name: 'settings_EditCity',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditCity config={params.id} />})
   }
 });
 

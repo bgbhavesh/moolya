@@ -41,13 +41,12 @@
   overflow: hidden;
   position: relative;
   width: 100%;
-  z-index: 9999;
 }
 .Select-control:hover {
   /*box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);*/
 }
 .Select-control .Select-input:focus {
-
+  
 }
 .is-searchable.is-open > .Select-control {
   cursor: text;
@@ -81,8 +80,8 @@
   color: #aaa;
   left: 0;
   line-height: 34px;
-  padding-left: 10px;
-  padding-right: 10px;
+  font-size: 15px;
+  text-shadow: none;
   position: absolute;
   right: 0;
   top: 0;
@@ -93,8 +92,11 @@
 }
 .has-value.Select--single > .Select-control .Select-value .Select-value-label,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value .Select-value-label {
-  color: #333;
+  padding: 6px 0px;border: 0px; box-shadow: none;color: #273545;background-color: transparent;border-radius: 0px;font-size: 15px;
 }
+
+
+
 .has-value.Select--single > .Select-control .Select-value a.Select-value-label,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label {
   cursor: pointer;
@@ -104,12 +106,10 @@
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:hover,
 .has-value.Select--single > .Select-control .Select-value a.Select-value-label:focus,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:focus {
-
+  
 }
 .Select-input {
   height: 34px;
-  padding-left: 10px;
-  padding-right: 10px;
   vertical-align: middle;
 }
 .Select-input > input {

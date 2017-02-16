@@ -37,6 +37,7 @@ import MlEditTransactionType from '../../admin/settings/transactions/component/M
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
+import  MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -167,12 +168,13 @@ adminSection.route('/settings/rolesList', {
     mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
   }
 });
-adminSection.route('/settings/internalUsersList', {
-  name: 'settings_internalUsers',
+adminSection.route('/settings/addBackendUser', {
+  name: 'settings_BackendUserList',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlAddBackendUser/>})
   }
 });
+
 adminSection.route('/settings/requestTypeList', {
   name: 'settings_RequestTypeList',
   action(){

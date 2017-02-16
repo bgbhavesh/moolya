@@ -3,8 +3,20 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
-MlResolver.MlQueryResolver['fetchStates'] = (obj, args, context, info) =>{
-    return MlStates.find({"countryId":args.countryId}).fetch();
+let _ = require('lodash');
+MlResolver.MlQueryResolver['fetchStates'] = (obj, args, context, info) =>
+{
+    let allStates = [];
+    let countries = MlCountries.find({"$and":[{"countryId":args.countryId}, {"isActive": true}]}).fetch()
+    if(countries && countries.length > 0){
+        for(var i = 0; i < countries.length; i++){
+            let states = MlStates.find({"stateId":states[i]._id}).fetch();
+            if(MlStates && MlStates.length > 0){
+                _.merge(allStates, states)
+            }
+        }
+    }
+    return allStates;
 }
 
 MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {

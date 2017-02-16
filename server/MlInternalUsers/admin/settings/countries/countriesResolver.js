@@ -34,13 +34,10 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
                 countryId:args.countryId,
                 countryName : country.country,
                 displayName: country.displayName,
-                countryFlag:country.url,
-                about:"india",
+                about:"",
                 email:"",
                 showOnMap:false,
-                isActive:false,
-                latitude:country.lat,
-                longitude:country.lng
+                isActive:false
             }
             MlResolver.MlMutationResolver['createCluster'](obj, {cluster:cluster}, context, info)
             let code = 200;

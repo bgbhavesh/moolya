@@ -14,22 +14,20 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else{
-
-        let id = MlClusters.insert(cluster);
-        if(id){
-            let code = 200;
-            let result = {clusterid: id}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-            return response
-        }
-
-        // geocoder.geocode(cluster.displayName, Meteor.bindEnvironment(function ( err, data ) {
-        //     if(err){
-        //         return "Invalid Country Name";
-        //     }
-        //     cluster.latitude = data.results[0].geometry.location.lat;
-        //     cluster.longitude = data.results[0].geometry.location.lng;
-        // }));
+        geocoder.geocode(cluster.displayName, Meteor.bindEnvironment(function ( err, data ) {
+            if(err){
+                return "Invalid Country Name";
+            }
+            cluster.latitude = data.results[0].geometry.location.lat;
+            cluster.longitude = data.results[0].geometry.location.lng;
+            let id = MlClusters.insert(cluster);
+            if(id){
+                let code = 200;
+                let result = {clusterid: id}
+                let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+                return response
+            }
+        }));
     }
 }
 

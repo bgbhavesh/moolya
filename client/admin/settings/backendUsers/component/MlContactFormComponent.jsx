@@ -8,7 +8,7 @@ export default class MlContactFormComponent extends React.Component {
   constructor(props){
     super(props);
    this.state={
-      contactForm:[{numberType: null,countryCode:'',contactNumber:'',otpStatus:false}],
+      contactForm:[{contactNumberType: null,countryCode:'',number:'',isOTPValidated:false}],
      isWorkEnble:true,
      isOfficeEnable:false,
     }
@@ -16,7 +16,7 @@ export default class MlContactFormComponent extends React.Component {
   }
   AssignDepartment(idx){
     this.setState({
-      contactForm: this.state.contactForm.concat([{ numberType: null,countryCode:null,contactNumber:'',otpStatus:false}])
+      contactForm: this.state.contactForm.concat([{ contactNumberType: null,countryCode:'',number:'',isOTPValidated:false}])
     });
   }
   RemoveAssignContactForm(idx,event){
@@ -30,7 +30,7 @@ export default class MlContactFormComponent extends React.Component {
   }
   optionsBySelectNumberType(index, selectedValue){
     let assignContactDetails=this.state.contactForm
-    assignContactDetails[index]['numberType']=selectedValue
+    assignContactDetails[index]['contactNumberType']=selectedValue
     this.setState({contactForm:assignContactDetails})
     this.props.getAssignedContacts(this.state.contactForm);
   }
@@ -42,18 +42,18 @@ export default class MlContactFormComponent extends React.Component {
   }
   onChangeContactNumber(index,event){
     let assignContactDetails=this.state.contactForm
-      assignContactDetails[index]['contactNumber']=event.target.value
+      assignContactDetails[index]['number']=event.target.value
       this.setState({contactForm: assignContactDetails})
       this.props.getAssignedContacts(this.state.contactForm);
   }
   onStatusChange(index,event){
     let assignContactDetails=this.state.contactForm
     if(event.currentTarget.checked){
-      assignContactDetails[index]['otpStatus']=true
+      assignContactDetails[index]['isOTPValidated']=true
       this.setState({contactForm:assignContactDetails})
       this.props.getAssignedContacts(this.state.contactForm);
     }else {
-      assignContactDetails[index]['otpStatus'] = false
+      assignContactDetails[index]['isOTPValidated'] = false
       this.setState({contactForm: assignContactDetails})
       this.props.getAssignedContacts(this.state.contactForm);
     }
@@ -75,7 +75,7 @@ export default class MlContactFormComponent extends React.Component {
               </div>
               <div className="panel-body">
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.numberType} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectNumberType.bind(that,idx)} />
+                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.contactNumberType} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectNumberType.bind(that,idx)} />
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.countryCode} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectCountryCode.bind(that,idx)} />
@@ -86,7 +86,7 @@ export default class MlContactFormComponent extends React.Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>OTP Validation</label>
                   <label className="switch">
-                    <input type="checkbox" checked={contactForm.otpStatus} onChange={that.onStatusChange.bind(that,idx)}/>
+                    <input type="checkbox" checked={contactForm.isOTPValidated} onChange={that.onStatusChange.bind(that,idx)}/>
                     <div className="slider"></div>
                   </label>
                 </div>

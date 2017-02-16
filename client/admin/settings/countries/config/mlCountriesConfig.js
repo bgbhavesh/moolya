@@ -51,17 +51,19 @@ const mlCountriesTableConfig=new MlViewer.View({
   ],
   sizePerPage:5,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"countries"){
+              query SearchQuery( $offset: Int, $limit: Int) {
+              data:SearchQuery(module:"countries",offset: $offset, limit: $limit){
                     totalRecords
                     data{
-                     ...on Countries{
+                      ...on Countries{
                               country
                               url
                               displayName
                               countryCode
                               isActive
                               id:_id
+                              lat 
+                              lng
                           }
                       }
               }

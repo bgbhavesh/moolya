@@ -53,9 +53,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
                               countryId
                               displayName
                               about
-                              link
                               _id
-                              email
                               showOnMap
                               countryFlag
                               latitude

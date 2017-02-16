@@ -1,6 +1,9 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
+import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 
 import React from 'react';
+import gql from 'graphql-tag'
+
 const mlChapterDashboardListConfig=new MlViewer.View({
   name:"chapterDashBoardList",
   viewType:MlViewerTypes.LIST,
@@ -23,8 +26,31 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:false,
   sort:false,
-  viewComponent:'',
-  graphQlQuery:''
+  viewComponent:<MlMapViewContainer />,
+  graphQlQuery:gql`
+              query{
+              data:SearchQuery(module:"chapter"){
+                    totalRecords
+                    data{
+                     ...on Chapter{
+                              chapterId
+                              chapterName
+                              displayName
+                              about
+                              chapterImage
+                              stateName
+                              stateId
+                              cityId
+                              cityName
+                              latitude
+                              longitude
+                              showOnMap
+                              isActive
+                          }
+                      }
+              }
+              }
+              `
 });
 
 export {mlChapterDashboardListConfig,mlChapterDashboardMapConfig};

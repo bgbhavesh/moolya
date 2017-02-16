@@ -27,11 +27,20 @@ export default class MlAssignDepartments extends React.Component {
       }
     });
   }
-  optionsBySelect(index, selectedIndex){
+  optionsBySelectCluster(index, selectedIndex){
 
     let availabilityDetails=this.state.departmentAvailability
     console.log("Selected--"+availabilityDetails);
-    availabilityDetails[index]['country']=selectedIndex
+    availabilityDetails[index]['cluster']=selectedIndex
+    this.setState({departmentAvailability:availabilityDetails})
+    this.props.getDepartmentAvailability(this.state.departmentAvailability)
+  }
+
+  optionsBySelectChapter(index, selectedIndex){
+
+    let availabilityDetails=this.state.departmentAvailability
+    console.log("Selected--"+availabilityDetails);
+    availabilityDetails[index]['chapter']=selectedIndex
     this.setState({departmentAvailability:availabilityDetails})
     this.props.getDepartmentAvailability(this.state.departmentAvailability)
   }
@@ -84,13 +93,13 @@ export default class MlAssignDepartments extends React.Component {
               <div className="form_inner_block swiper-slide">
 
                 <div className="form-group">
-                  <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.country} queryType={"graphql"} query={query}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelect.bind(that,id)} />
+                  <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={query}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
                 </div>
 
                 <div className="form-group">
-                  <select placeholder="Select Cluster" ref="slectChapter" className="form-control float-label">
-                    <option>Select SubChapter</option>
-                  </select>
+                  <div className="form-group">
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.chapter} queryType={"graphql"} query={query}  isDynamic={true} id={'chapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />
+                  </div>
                 </div>
                 <div className="form-group">
                   <select placeholder="Select subChapter" ref="selectSubChapter" className="form-control float-label">
@@ -103,7 +112,7 @@ export default class MlAssignDepartments extends React.Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" name={'status'} value={options.status} onChange={that.onChange.bind(that,id)}/>
+                    <input type="checkbox" name={'isActive'} value={options.isActive} onChange={that.onChange.bind(that,id)} />
                     <div className="slider"></div>
                   </label>
                 </div>
@@ -116,9 +125,6 @@ export default class MlAssignDepartments extends React.Component {
       <br className="brclear"/>
       <div className="swiper-pagination"></div>
     </div>
-
-
-
 
     )
   }

@@ -8,7 +8,9 @@ let coutriesSchema = `
         countryCode   : String,
         displayName   : String,
         url           : String,
-        isActive      : Boolean
+        isActive      : Boolean,
+        lat           : String,
+        lng           : String
     }
     
     input countryObject{
@@ -18,6 +20,8 @@ let coutriesSchema = `
         displayName   : String,
         url           : String,
         isActive      : Boolean
+        lat           : String,
+        lng           : String
     }
     
     type Query {

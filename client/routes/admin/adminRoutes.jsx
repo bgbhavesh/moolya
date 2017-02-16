@@ -24,6 +24,7 @@ import  MlPermissionList from '../../admin/settings/permissions/component/MlPerm
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
 import MlStatesList from "../../admin/settings/states/component/MlStatesList";
+import MlCitiesList from "../../admin/settings/cities/component/MlCitiesList";
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
@@ -36,6 +37,7 @@ import MlEditTransactionType from '../../admin/settings/transactions/component/M
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
+import  MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -166,12 +168,13 @@ adminSection.route('/settings/rolesList', {
     mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
   }
 });
-adminSection.route('/settings/internalUsersList', {
-  name: 'settings_internalUsers',
+adminSection.route('/settings/addBackendUser', {
+  name: 'settings_BackendUserList',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlAddBackendUser/>})
   }
 });
+
 adminSection.route('/settings/requestTypeList', {
   name: 'settings_RequestTypeList',
   action(){
@@ -215,9 +218,9 @@ adminSection.route('/settings/statesList', {
   }
 });
 adminSection.route('/settings/citiesList', {
-  name: 'settings_cities',
+  name: 'settings_CitiesList',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    mount(AdminLayout,{adminContent:< MlCitiesList/>})
   }
 });
 

@@ -10,7 +10,7 @@ let clusterSchema = `
         link: String
         email:String
         showOnMap : Boolean
-        clusterFlag:String
+        countryFlag:String
         latitude:String 
         longitude:String
     }
@@ -20,7 +20,7 @@ let clusterSchema = `
         countryName: String
         displayName:String, 
         about:String, 
-        clusterFlag:String, 
+        countryFlag:String, 
         email:String, 
         showOnMap:Boolean, 
         isActive:Boolean, 

@@ -2,7 +2,7 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) => {
-    if(MlDepartments.find({name:args.department.name}).count() > 0){
+    if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }

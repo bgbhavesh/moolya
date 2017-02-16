@@ -9,7 +9,7 @@ import {updateSubDepartmentActionHandler} from '../actions/updateSubDepartmentAc
 class MlEditSubDepartment extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}};
+    this.state = {loading:true,data:{id:props.config}};
     this.addEventHandler.bind(this);
     this.editSubDepartment.bind(this);
     this.findSubDepartment.bind(this);
@@ -111,7 +111,7 @@ class MlEditSubDepartment extends React.Component{
               <div className="col-md-6">
                 <div className="form_bg">
                   <form>
-                    <input type="text" ref="id" value={this.state.data.id} hidden="true"/>
+                    <input type="text" ref="id" value={this.state.data._id} hidden="true"/>
                     <div className="form-group">
                       <input type="text" ref="subDepartmentName" defaultValue={this.state.data&&this.state.data.subDepartmentName} placeholder="Sub Department Name" className="form-control float-label" id=""/>
 

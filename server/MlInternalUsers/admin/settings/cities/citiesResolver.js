@@ -22,18 +22,18 @@ MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) =>
 
 
 MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
-  console.log(args)
-  let city = MlCities.findOne({_id: args.cityId});
-  if(city){
-    for(key in args.city){
-      city[key] = args.city[key]
+    console.log(args)
+    let city = MlCities.findOne({_id: args.cityId});
+    if(city){
+        for(key in args.city){
+            city[key] = args.city[key]
+        }
+        let resp = MlCities.update({_id:args.cityId}, {$set:city}, {upsert:true})
+        if(resp){
+            let code = 200;
+            let result = {city: resp}
+            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            return response
+        }
     }
-    let resp = MlCities.update({_id:args.cityId}, {$set:city}, {upsert:true})
-    if(resp){
-      let code = 200;
-      let result = {city: resp}
-      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-      return response
-    }
-  }
 }

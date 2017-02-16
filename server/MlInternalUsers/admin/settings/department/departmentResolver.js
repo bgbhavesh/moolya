@@ -17,13 +17,13 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
 
 MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) => {
     console.log(args)
-    let cluster = MlClusters.findOne({_id: args.clusterId});
-    if(cluster)
+    let department = MlDepartments.findOne({_id: args.departmentId});
+    if(department)
     {
-        for(key in args.cluster){
-            cluster[key] = args.cluster[key]
+        for(key in args.department){
+            cluster[key] = args.department[key]
         }
-        let resp = MlClusters.update({_id:args.clusterId}, {$set:cluster}, {upsert:true})
+        let resp = MlDepartments.update({_id:args.departmentId}, {$set:department}, {upsert:true})
         if(resp){
             let code = 200;
             let result = {cluster: resp}

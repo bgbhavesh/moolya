@@ -43,7 +43,17 @@ import MlRespPayload from '../../../../commons/mlPayload'
 // }
 
 MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info) =>{
-
+    if(MlSubDepartments.find({subDepartmentName:args.subDepartment.subDepartmentName}).count() > 0){
+        let code = 409;
+        return new MlRespPayload().errorPayload("Already Exist", code);
+    }
+    let id = MlSubDepartments.insert(args.subDepartment);
+    if(id){
+        let code = 200;
+        let result = {subDepartmentId: id}
+        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        return response
+    }
 }
 
 MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info) =>{
@@ -51,7 +61,7 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['findSubDepartment'] = (obj, args, context, info) =>{
-
+    return MlSubDepartments.findOne({"_id":args._id});
 }
 
 MlResolver.MlQueryResolver['findSubDepartments'] = (obj, args, context, info) =>{

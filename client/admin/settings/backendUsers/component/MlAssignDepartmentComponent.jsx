@@ -9,13 +9,13 @@ export default class MlAssignDepartmentComponent extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      assignDepartmentForm:[{department: null,subdepartment:null}]
+      assignDepartmentForm:[{department: null,subDepartment:null}]
     }
     return this;
   }
   AssignDepartment(idx){
     this.setState({
-      assignDepartmentForm: this.state.assignDepartmentForm.concat([{ department:null,subdepartment:null}])
+      assignDepartmentForm: this.state.assignDepartmentForm.concat([{ department:null,subDepartment:null}])
     });
   }
  RemoveAssignDepartmentForm(idx,event){
@@ -35,7 +35,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
   }
   optionsBySelectSubDepartment(index, selectedValue){
     let assignDepartmentDetails=this.state.assignDepartmentForm
-    assignDepartmentDetails[index]['subdepartment']=selectedValue
+    assignDepartmentDetails[index]['subDepartment']=selectedValue
     this.setState({assignDepartmentForm:assignDepartmentDetails})
     this.props.getAssignedDepartments(this.state.assignDepartmentForm);
   }
@@ -63,7 +63,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
              </div>
              <div className="form-group">
               {/* <Select name="form-field-name" value={assignDepartmentForm.subdepartment} options={options3} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
-               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignDepartmentForm.subdepartment} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
+               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
               </div>
            </div>
          </div>

@@ -4,7 +4,7 @@ import {mount} from 'react-mounter';
 import AdminLayout from '../../admin/layouts/AdminLayout'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer'
-import  MlAddClusterFormComponent from '../../admin/cluster/components/MoolyaAddClusterAction'
+import  MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapterFormComponent'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
@@ -74,7 +74,7 @@ adminSection.route('/dashboard', {
 adminSection.route('/cluster', {
   name: 'cluster',
   action(){
-    mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer/>})
+    mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer mapConfig={mlClusterDashboardMapConfig} />})
   }
 });
 adminSection.route('/cluster/clusters', {
@@ -83,10 +83,10 @@ adminSection.route('/cluster/clusters', {
     mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer />})
   }
 });
-adminSection.route('/cluster/addCluster', {
+adminSection.route('/cluster/clusterDetails/:clusterId', {
   name: 'cluster',
-  action(){
-    mount(AdminLayout,{adminContent:< MlAddClusterFormComponent/>})
+  action(params){
+    mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
   }
 });
 adminSection.route('/chapter', {

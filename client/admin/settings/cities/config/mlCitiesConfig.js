@@ -1,25 +1,25 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-import ActiveFormatter from '../actions/ActiveFormatter';
-import FlagFormatter from '../actions/FlagFormatter';
+import ActiveCityFormatter from "../actions/ActiveCityFormatter"
 
-const mlCountriesTableConfig=new MlViewer.View({
-  name:"CountriesTable",
-  module:"countries",//Module name for filter.
+const mlCitiesTableConfig=new MlViewer.View({
+  name:"CitiesTable",
+  module:"cities",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["country","displayName","url","isActive"],
-  searchFields:["country","displayName","url","isActive"],
+  action:"READ",
+  fields:["name","stateId","countryCode","isActive"],
+  searchFields:["name","stateId","countryCode","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "country", title: "Name",dataSort:true},
-    {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "url", title: "Flag",dataSort:true,customComponent:FlagFormatter},
-    {dataField: "isActive", title: "Available in System",dataSort:true,customComponent:ActiveFormatter},
+    {dataField: "name", title: "Name",dataSort:true},
+    {dataField: "countryCode", title: "Country",dataSort:true},
+    {dataField: "stateId", title: "State",dataSort:true},
+    {dataField: "isActive", title: "Available in System",dataSort:true, customComponent:ActiveCityFormatter},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
   tableHeaderClass:'react_table_head',
@@ -30,9 +30,9 @@ const mlCountriesTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editCountry/"+data.id);
+          FlowRouter.go("/admin/settings/editCity/"+data.id);
         } else{
-          alert("Please select a Country");
+          alert("Please select a City");
         }
       }
     },
@@ -52,14 +52,14 @@ const mlCountriesTableConfig=new MlViewer.View({
   sizePerPage:5,
   graphQlQuery:gql`
               query SearchQuery( $offset: Int, $limit: Int) {
-              data:SearchQuery(module:"countries",offset: $offset, limit: $limit){
+              data:SearchQuery(module:"cities",offset: $offset, limit: $limit){
                     totalRecords
                     data{
-                      ...on Countries{
-                              country
-                              url
-                              displayName
+                      ...on Cities{
+                              name  
                               countryCode
+                              countryId
+                              stateId
                               isActive
                               id:_id
                           }
@@ -68,5 +68,8 @@ const mlCountriesTableConfig=new MlViewer.View({
               }
               `
 });
-
-export {mlCountriesTableConfig};
+const mlStateModuleConfig={
+  moduleName:"cities",
+  actions:{"READ":"read","UPDATE":"update"}
+};
+export {mlCitiesTableConfig,mlStateModuleConfig};

@@ -16,7 +16,7 @@ export default class  MlTableViewComposer extends Component {
              offset: 0,
              limit: config.sizePerPage||5,
           },
-          forceFetch: true,
+          forceFetch: true
         }),
         props: ({data: {loading, data, fetchMore}}) => ({
           loading,

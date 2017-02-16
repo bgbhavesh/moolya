@@ -375,7 +375,7 @@ export default class MlMyProfile extends React.Component{
               </a>
             </div>
           </div>
-          <span className="actions_switch"></span>
+          <span></span>
           <div className="bottom_actions_block">
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>

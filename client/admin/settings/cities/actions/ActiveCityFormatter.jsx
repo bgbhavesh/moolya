@@ -1,6 +1,6 @@
 import React from 'react';
-import {updateStateActionHandler} from './updateStateAction'
-class ActiveStateFormatter extends React.Component {
+import {updateCityActionHandler} from './updateCityAction'
+class ActiveCityFormatter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
@@ -22,13 +22,14 @@ class ActiveStateFormatter extends React.Component {
 
     let StateDetails = {
       id: data.id,
-      state: data.name,
+      city: data.name,
       countryId: data.countryId,
+      stateId: data.stateId,
       countryCode: data.countryCode,
       isActive: this.refs.status.checked
     }
 
-    updateStateActionHandler(StateDetails);
+    updateCityActionHandler(StateDetails);
   }
 
   render() {
@@ -39,4 +40,4 @@ class ActiveStateFormatter extends React.Component {
   }
 };
 
-export default ActiveStateFormatter;
+export default ActiveCityFormatter;

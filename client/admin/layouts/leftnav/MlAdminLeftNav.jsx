@@ -17,9 +17,20 @@ export default class MlAdminLeftNav extends Component {
   }
 
   componentDidMount() {
-    let WinWidth = $(window).width();
-    let WinHeight = $(window).height();
-    $('.admin_menu, .admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    $('.admin_menu, .admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    /*$('.actions_switch').click(function(){
+      $('.bottom_actions_block').toggleClass('show_block');
+      $(this).toggleClass('show_act');
+    });*/
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    $(document).on('click', '.menu_in a', function(e){
+      //e.preventDefault();
+      $(this).parents('li').addClass('active_menu');
+      $('.admin_menu ul li').not($(this).parents('li')).removeClass('active_menu');
+      return false;
+    });
 
 
   }

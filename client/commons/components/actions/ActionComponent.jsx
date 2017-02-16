@@ -7,14 +7,23 @@ export default class MlActionComponent extends Component {
   constructor(props){
     super(props);
   return this;
+    this.onActionSwitch.bind(this);
   }
   componentDidMount()
   {
-    $('.actions_switch').click(function(){
+   /* $('.actions_switch').click(function(){
       $('.bottom_actions_block').toggleClass('show_block');
       $(this).toggleClass('show_act');
-    });
+    });*/
   }
+
+  onActionSwitch(e){
+
+      $('.bottom_actions_block').toggleClass('show_block');
+      $(e.currentTarget).toggleClass('show_act');
+
+  }
+
 
   render(){
     let config=[
@@ -69,7 +78,7 @@ export default class MlActionComponent extends Component {
     return(
 
       <div>
-        <span className="actions_switch" ></span>
+        <span className="actions_switch" onClick={this.onActionSwitch.bind(this)}></span>
         <div className="bottom_actions_block ">
           {actionView}
         </div>

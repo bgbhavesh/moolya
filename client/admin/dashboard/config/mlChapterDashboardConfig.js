@@ -44,7 +44,6 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
                               cityName
                               latitude
                               longitude
-                              
                               showOnMap
                               isActive
                           }

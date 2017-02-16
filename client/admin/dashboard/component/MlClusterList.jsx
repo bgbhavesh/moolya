@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
+import dashboardRoutes from '../actions/routesActionHandler';
 export default class MlClusterList extends Component {
 
   render(){
@@ -8,7 +9,7 @@ export default class MlClusterList extends Component {
       <div className="col-md-2" key={prop.displayName}>
         <div className="list_block">
           <div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>
-          <a href={prop.listRouterPath}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
+          <a href={dashboardRoutes.clusterDetailsRoute(prop.id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
           <h3>{prop.displayName}</h3>
         </div>
       </div>

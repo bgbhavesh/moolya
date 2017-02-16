@@ -62,6 +62,8 @@ const mlCountriesTableConfig=new MlViewer.View({
                               countryCode
                               isActive
                               id:_id
+                              lat 
+                              lng
                           }
                       }
               }

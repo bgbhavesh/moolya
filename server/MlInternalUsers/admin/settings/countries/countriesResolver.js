@@ -39,8 +39,8 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
                 email:"",
                 showOnMap:false,
                 isActive:false,
-                latitude:"20.5937",
-                longitude:"78.9629"
+                latitude:country.lat,
+                longitude:country.lng
             }
             MlResolver.MlMutationResolver['createCluster'](obj, {cluster:cluster}, context, info)
             let code = 200;

@@ -5,7 +5,7 @@ import AdminLayout from '../../admin/layouts/AdminLayout'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer'
 import  MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
-import MlAddChapterFormComponent from '../../admin/chapter/components/MlAddChapterFormComponent'
+import MlSubChapterDetails from '../../admin/chapter/components/MlSubChapterDetails'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
@@ -91,10 +91,10 @@ adminSection.route('/cluster/clusterDetails/:clusterId', {
     mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
   }
 });
-adminSection.route('/chapter', {
-  name: 'chapter',
+adminSection.route('/chapter/subChapterDetails', {
+  name: 'subChapterDetails',
   action(){
-    mount(AdminLayout,{adminContent:< MlAddChapterFormComponent/>})
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails/>})
   }
 });
 adminSection.route('/community', {

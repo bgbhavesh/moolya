@@ -7,20 +7,29 @@ export async function findDepartmentActionHandler(DepartmentId) {
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        FindDepartment(_id:$id) {
-        id:_id
-        departmentName
-        displayName
-        isActive
-        departmentDesc
-       
-        }
+         findDepartment(departmentId:$id)  {
+    departmentName
+    displayName
+    departmentDesc
+    isActive
+    isMoolya
+    depatmentAvailable{
+      cluster{
+        clusterId
       }
+      chapter
+      subChapter
+      email
+      isActive
+    }
+  }
+}
+
     `,
     variables: {
       id:did
     }
   })
-  const id = result.data.FindDepartment;
+  const id = result.data.findDepartment;
   return id
 }

@@ -2,22 +2,37 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let departmentSchema = `        
     
-    type Department{
-        _id:String
-        departmentName :String
-        displayName :String
-        departmentDesc: String        
-        isActive:Boolean
-        isMoolya : Boolean
-        countryFlag:String
+    type ClusterListSchema{
+        clusterId   : String
     }
     
-    input DepatmentAvailable{
-        cluster     : String
+    type DepatmentAvailableSchema{
+        cluster     : [ClusterListSchema]
         chapter     : String
         subChapter  : String
         email       : String
-        notify      : Boolean
+        isActive    : Boolean
+    }
+    
+    type Department{
+         _id            : String
+         departmentName : String
+         displayName    : String
+         departmentDesc : String
+         isActive       : Boolean
+         isMoolya       : Boolean
+         depatmentAvailable:[DepatmentAvailableSchema]
+    }
+    
+    input ClusterList{
+        clusterId     : String
+    }
+    
+    input DepatmentAvailable{
+        cluster     : [ClusterList]
+        chapter     : String
+        subChapter  : String
+        email       : String
         isActive    : Boolean
     }
     
@@ -35,7 +50,7 @@ let departmentSchema = `
          updateDepartment(departmentId:String, department: departmentObject):String
     }
     type Query{
-        findDepartment(departmentId:String):String
+        findDepartment(departmentId:String):Department
         findDepartments:String
     }
 `

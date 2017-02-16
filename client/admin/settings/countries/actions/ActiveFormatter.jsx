@@ -12,6 +12,7 @@ class ActiveFormatter extends React.Component {
     }
   }
   onChange(data) {
+
     if (this.refs.status.checked == true) {
       // $('#status').prop('checked', true);
       this.refs.status.checked = true;

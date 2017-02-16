@@ -9,16 +9,27 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
   let isMoolya = DepartmentDetails.appType;
   let departmentAvailable = DepartmentDetails.departmentAvailablity;
 
+  let clusters = departmentAvailable[0].cluster;
+  departmentAvailable[0].cluster=null;
+  let clustersList = [];
+  for(var i in clusters) {
+    var cluster = clusters[i];
+    clustersList.push({
+      "clusterId" : cluster
+    });
+  }
+  departmentAvailable[0].cluster=clustersList;
+
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($departmentName: String, $displayName: String, $departmentDesc: String, $isMoolya: Boolean, $depatmentAvailable: [DepatmentAvailable], $isActive: Boolean){
+    mutation  ($departmentName: String, $displayName: String, $departmentDesc: String, $isMoolya: Boolean, $departmentAvailable: [DepatmentAvailable], $isActive: Boolean){
         createDepartment(
           department :{
           departmentName: $departmentName,
           displayName: $displayName,
           departmentDesc: $departmentDesc,
           isMoolya :$isMoolya,
-          depatmentAvailable: $depatmentAvailable,
+          depatmentAvailable: $departmentAvailable,
           isActive :$isActive
           }
         ) 

@@ -74,7 +74,7 @@ adminSection.route('/dashboard', {
 adminSection.route('/cluster', {
   name: 'cluster',
   action(){
-    mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer/>})
+    mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer mapConfig={mlClusterDashboardMapConfig} />})
   }
 });
 adminSection.route('/cluster/clusters', {

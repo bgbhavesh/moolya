@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import {createClusterActionHandler} from '../actions/createCluster'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
-class MlAddClusterFormComponent extends React.Component {
+class MlClusterDetails extends React.Component {
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -39,16 +39,6 @@ class MlAddClusterFormComponent extends React.Component {
   };
 
   async  createCluster() {
-      // let clusterDetails = {
-      //   clusterName: this.refs.clusterName.value,
-      //   displayName: this.refs.displayName.value,
-      //   about: this.refs.about.value,
-      //   uploadImage: this.refs.uploadImage.value,
-      //   email: this.refs.email.value,
-      //   ismapShow: this.refs.ismapShow.checked,
-      //   status: this.refs.status.checked
-      // }
-
       let clusterDetails = {
           "countryId": "c101",
           "countryFlag": "https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png",
@@ -89,7 +79,7 @@ class MlAddClusterFormComponent extends React.Component {
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <form >
-            <h2>Add Cluster</h2>
+            <h2>Edit cluster details</h2>
             <div className="col-md-6">
               <div className="form_bg">
                 <div className="form-group">
@@ -155,4 +145,4 @@ class MlAddClusterFormComponent extends React.Component {
 }
 ;
 
-export default MoolyaAddCluster = formHandler()(MlAddClusterFormComponent);
+export default MoolyaAddCluster = formHandler()(MlClusterDetails);

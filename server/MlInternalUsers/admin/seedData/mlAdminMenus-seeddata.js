@@ -64,9 +64,9 @@ if(Meteor.isServer){
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/cluster/addCluster",
-            "name" : "Clusters",
-            "uniqueId" : "cluster_clusters",
+            "link" : "/admin/cluster/clusterDetails",
+            "name" : "clusterDetails",
+            "uniqueId" : "clusterDetails",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",

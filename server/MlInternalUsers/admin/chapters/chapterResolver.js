@@ -94,7 +94,7 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
     createSubChapter(args.subChapter)
 }
 
-MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
     console.log(args)
     let subChapter = MlSubChapters.findOne({_id: args.subChapterId});
     if(subChapter){

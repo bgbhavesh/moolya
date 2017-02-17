@@ -77,15 +77,25 @@ MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
-
+  if (args.id) {
+    var id= args.id;
+    let response= MlChapters.findOne({"clusterId":id})||[];
+    return [response];
+  }
 }
+
 MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) => {
   let result=MlChapters.find({isActive:true}).fetch()||[];
   return result;
 }
 
 MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
-
+  // TODO : Authorization
+  if (args._id) {
+    var id= args._id;
+    let response= MlSubChapters.findOne({"_id":id});
+    return response;
+  }
 }
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {

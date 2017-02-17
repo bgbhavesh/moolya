@@ -5,7 +5,7 @@ import AdminLayout from '../../admin/layouts/AdminLayout'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer'
 import  MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
-import MlSubChapterDetails from '../../admin/chapter/components/MlSubChapterDetails'
+import MlSubChapterDetails from '../../admin/subChapter/components/MlSubChapterDetails'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
@@ -109,12 +109,13 @@ adminSection.route('/chapter/:chapterId', {
     mount(AdminLayout,{adminContent:<MlSubChapterList params={params.chapterId} listConfig={mlChapterListConfig} />})
   }
 });
-adminSection.route('/chapter/subChapterDetails', {
+adminSection.route('/chapter/subChapterDetails/:subChapterId', {
   name: 'subChapterDetails',
-  action(){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails/>})
+  action(params){
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
+
 adminSection.route('/community', {
   name: 'community',
   action(){

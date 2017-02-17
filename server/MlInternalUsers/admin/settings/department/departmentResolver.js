@@ -34,6 +34,11 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
 
 }
 
+MlResolver.MlQueryResolver['fetchDepartments'] = (obj, args, context, info) => {
+  let result=MlDepartments.find({isActive:true}).fetch()||[];
+  return result;
+}
+
 MlResolver.MlQueryResolver['findDepartment'] = (obj, args, context, info) => {
   let resp = MlDepartments.findOne({_id: args.departmentId});
   return resp;

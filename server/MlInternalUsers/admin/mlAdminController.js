@@ -39,7 +39,7 @@ const expressServer = graphqlExpress((req) => {
 
 app.use('/graphql', bodyParser.json(), Meteor.bindEnvironment(expressServer));
 
-app.listen(8090);
+app.listen(Meteor.settings.public.graphqlPort);
 console.log('Running a GraphQL API server at localhost:8090/graphql');
 // This binds the specified paths to the Express server running Apollo + GraphiQL
 WebApp.connectHandlers.use(Meteor.bindEnvironment(app));

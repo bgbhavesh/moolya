@@ -4,7 +4,7 @@ import {ApolloClient,createNetworkInterface} from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
 
-const networkInterface = createNetworkInterface('http://localhost:8090/graphql');
+const networkInterface = createNetworkInterface(Meteor.settings.public.graphqlUrl);
 
 export const client = new ApolloClient({
   networkInterface,

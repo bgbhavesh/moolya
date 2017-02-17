@@ -10,7 +10,7 @@ MlResolver.MlQueryResolver['fetchStates'] = (obj, args, context, info) =>
     let countries = MlCountries.find({"isActive": true}).fetch()
     if(countries && countries.length > 0){
         for(var i = 0; i < countries.length; i++){
-            let states = MlStates.find({"countryCode":countries[i].countryCode}).fetch();
+            let states = MlStates.find({"countryId":countries[i]._id}).fetch();
             if(states && states.length > 0){
                 _.merge(allStates, states)
             }

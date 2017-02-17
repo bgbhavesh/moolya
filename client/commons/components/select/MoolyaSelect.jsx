@@ -22,9 +22,9 @@ export default class MoolyaSelect extends Component {
     return this;
   }
   componentWillUpdate(nextProps, nextState) {
-    // console.log(nextState.options);
-    // console.log(nextState.searchTerm)
-    console.log("componentWillUpdate:", nextState.searchTerm);
+    if((this.props.queryOptions!==nextProps.queryOptions)) {
+      this.setState({"executeQuery":true});
+    }
   }
 
 
@@ -66,6 +66,8 @@ export default class MoolyaSelect extends Component {
  // this.props.onSearch(value,this.onChangeCallBackHandler);
   // this.props.searchTerm(value)
   }
+
+
 
   executeQuery(){
    function QueryHandler({data}) {

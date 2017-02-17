@@ -67,3 +67,12 @@ MlResolver.MlQueryResolver['findSubDepartment'] = (obj, args, context, info) =>{
 MlResolver.MlQueryResolver['findSubDepartments'] = (obj, args, context, info) =>{
 
 }
+
+
+MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) => {
+  if (args.id) {
+    var id= args.id;
+    let response= MlSubDepartments.findOne({"departmentId":id})||[];
+    return [response];
+  }
+}

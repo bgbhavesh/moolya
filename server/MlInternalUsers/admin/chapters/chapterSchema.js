@@ -78,6 +78,7 @@ let chapterSchema = `
         fetchChapters:String
         fetchSubChapter:String
         fetchSubChapters:String
+        fetchChaptersForMap:[Chapter]
     }
     
      type Mutation {

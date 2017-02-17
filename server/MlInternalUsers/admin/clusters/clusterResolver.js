@@ -56,8 +56,9 @@ MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
   }
 }
 
-MlResolver.MlQueryResolver['fetchClusters'] = (obj, args, context, info) => {
-
+MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) => {
+      let result=MlClusters.find({isActive:true}).fetch()||[];
+      return result;
 }
 
 

@@ -33,7 +33,7 @@ let clusterSchema = `
     
     type Query{ 
         fetchCluster(_id: String):Cluster
-        fetchClusters:String
+        fetchClustersForMap:[Cluster]
     }
    
     

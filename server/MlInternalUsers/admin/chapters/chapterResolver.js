@@ -85,7 +85,12 @@ MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) =
 }
 
 MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
-
+  // TODO : Authorization
+  if (args._id) {
+    var id= args._id;
+    let response= MlSubChapters.findOne({"_id":id});
+    return response;
+  }
 }
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {

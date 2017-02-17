@@ -2,13 +2,16 @@ import React from 'react';
 import {render} from 'react-dom';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
+import formHandler from '../../../commons/containers/MlFormHandler';
+import _ from 'lodash';
 
-export default class MlSubChapterDetails extends React.Component {
+
+class MlSubChapterDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading: true, data: {}};
-    // this.onStatusChangeActive = this.onStatusChangeActive.bind(this);
-    // this.onStatusChangeMap = this.onStatusChangeMap.bind(this);
+    this.onStatusChangeActive = this.onStatusChangeActive.bind(this);
+    this.onStatusChangeMap = this.onStatusChangeMap.bind(this);
     this.findSubChapter.bind(this);
     this.updateSubChapter.bind(this)
     return this;
@@ -23,32 +26,61 @@ export default class MlSubChapterDetails extends React.Component {
     // FlowRouter.go("/admin/dashboard");
   };
 
-
-  componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
+  onStatusChangeActive(e) {
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["isActive"]);
+    if (e.currentTarget.checked) {
+      var z=_.extend(updatedData,{isActive:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{isActive:false});
+      this.setState({data:z,loading:false});
+    }
   }
 
-  async  updateSubChapter() {
-    console.log('edit clicked');
-    // let subChapterDetails = {
-    //   _id: this.refs.id.value,
-    //   countryName: this.refs.countryName.value,
-    //   displayName: this.refs.displayName.value,
-    //   about: this.refs.about.value,
-    //   email: this.refs.email.value,
-    //   showOnMap: this.refs.showOnMap.checked,
-    //   isActive: this.refs.isActive.checked
-    // }
+  onStatusChangeMap(e)
+  {
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["showOnMap"]);
+    if (e.currentTarget.checked) {
+      var z=_.extend(updatedData,{showOnMap:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{showOnMap:false});
+      this.setState({data:z,loading:false});
+    }
+  }
+
+
+  // componentDidMount() {
+  //   $(function () {
+  //     $('.float-label').jvFloat();
+  //   });
+  //
+  //   $('.switch input').change(function () {
+  //     if ($(this).is(':checked')) {
+  //       $(this).parent('.switch').addClass('on');
+  //     } else {
+  //       $(this).parent('.switch').removeClass('on');
+  //     }
+  //   });
+  // }
+
+  async updateSubChapter() {
+    let subChapterDetails = {
+      _id: this.refs.id.value,
+      clusterName: this.refs.clusterName.value,
+      chapterName: this.refs.chapterName.value,
+      subChapterName: this.refs.subChapterName.value,
+      subChapterDisplayName: this.refs.subChapterDisplayName.value,
+      aboutSubChapter: this.refs.aboutSubChapter.value,
+      subChapterImageLink: this.refs.subChapterImageLink.value,
+      subChapterEmail: this.refs.subChapterEmail.value,
+      isEmailNotified: this.refs.isEmailNotified.value,
+      showOnMap: this.refs.showOnMap.checked,
+      isActive: this.refs.isActive.checked
+    }
+    console.log(subChapterDetails);
     // const response = await updateSubChapterActionHandler(subChapterDetails)
     // return response;
   }
@@ -60,9 +92,8 @@ export default class MlSubChapterDetails extends React.Component {
 
   async findSubChapter() {
     let subChapterId = this.props.params;
-    findSubChapterActionHandler(subChapterId)
-    // const response = await findSubChapterActionHandler(subChapterId);
-    // this.setState({loading: false, data: response});
+    const response = await findSubChapterActionHandler(subChapterId);
+    this.setState({loading: false, data: response});
   }
 
   render() {
@@ -78,35 +109,38 @@ export default class MlSubChapterDetails extends React.Component {
         handler: null
       }
     ]
-
-    // const showLoader = this.state.loading;
+     let chapterData=this.state.data;
+    const showLoader = this.state.loading;
     return (
       <div>
-        {/*{showLoader === true ? ( <div className="loader_wrap"></div>) : (*/}
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_main_wrap">
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>
-            <div className="col-md-6 nopadding-left">
+          <form>
+            <div className="col-md-6">
               <div className="form_bg">
                   <div className="form-group ">
-                    <input type="text" ref="id" defaultValue="" hidden="true"/>
-                    <input type="text" placeholder="Cluster Name" ref="clusterName" className="form-control float-label"
-                           readOnly defaultValue=""/>
+                    <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
+                    <input type="text" placeholder="Cluster Name" ref="clusterName" readOnly
+                          defaultValue={this.state.data && this.state.data.clusterName}
+                          className="form-control float-label" />
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Chapter Name" ref="chapterName" className="form-control float-label"
-                           readOnly defaultValue=""/>
+                           readOnly defaultValue={this.state.data && this.state.data.chapterName}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Sub-Chapter Name" ref="subChapterName" readOnly
-                           className="form-control float-label" defaultValue=""/>
+                           className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterName}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
-                           className="form-control float-label"/>
+                           className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                   </div>
                   <div className="form-group">
-                  <textarea placeholder="About" ref="aboutSubChapter" className="form-control float-label">
+                  <textarea placeholder="About" ref="aboutSubChapter" defaultValue={this.state.data && this.state.data.aboutSubChapter}
+                    className="form-control float-label">
                   </textarea>
                   </div>
               </div>
@@ -125,14 +159,15 @@ export default class MlSubChapterDetails extends React.Component {
                   <br className="brclear"/>
                   <div className="form-group">
                     <input type="text" ref="state" placeholder="State" className="form-control float-label"
-                           defaultValue="Telangana"/>
+                        defaultValue="check hard coded state will be here"/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
+                           defaultValue={this.state.data && this.state.data.subChapterEmail}
                            className="form-control float-label"/>
                     <div className="email_notify">
                       <div className="input_types">
-                        <input ref="isEmailNotified" type="checkbox" name="checkbox" value="1"/>
+                        <input ref="isEmailNotified" type="checkbox" name="checkbox" defaultChecked="1"/>
                         <label htmlFor="checkbox1"><span> </span>Notify</label>
                       </div>
                     </div>
@@ -140,24 +175,30 @@ export default class MlSubChapterDetails extends React.Component {
                   <div className="form-group switch_wrap">
                     <label>Show on Map</label><br/>
                     <label className="switch">
-                      <input type="checkbox" ref="showOnMap"/>
+                      <input type="checkbox" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
+                      onChange={this.onStatusChangeMap.bind(this)} />
                       <div className="slider"></div>
                     </label>
                   </div>
                   <div className="form-group switch_wrap">
                     <label>Status</label><br/>
                     <label className="switch">
-                      <input type="checkbox" ref="isActive"/>
+                      <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
+                        onChange={this.onStatusChangeActive.bind(this)} />
                       <div className="slider"></div>
                     </label>
                   </div>
               </div>
             </div>
+          </form>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName" />
           </div>
+
         </div>
-          {/*)}*/}
+        )}
       </div>
     )
   }
 };
+
+export default MoolyaUpdateSubChapter = formHandler()(MlSubChapterDetails);

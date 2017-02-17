@@ -8,6 +8,8 @@ let citiesSchema = `
         stateId     : String,
         countryId   : String,
         countryCode : String,
+        displayName : String,
+        about       : String,
         isActive    : Boolean
     }
     
@@ -17,11 +19,13 @@ let citiesSchema = `
         stateId     : String,
         countryId   : String,
         countryCode : String,
+        displayName : String,
+        about       : String,
         isActive    : Boolean
     }
     
     type Query {
-        fetchCities: SearchResp      
+        fetchCities(countryId: String): [Cities]      
     }
     
     type Mutation {

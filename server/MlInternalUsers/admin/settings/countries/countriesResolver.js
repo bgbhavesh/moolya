@@ -11,7 +11,7 @@ MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{
 }
 MlResolver.MlQueryResolver['fetchCountry'] = (obj, args, context, info) =>{
     let country=null;
-    if(countryCode){
+    if(args.countryId){
         country =  MlCountries.findOne({"_id":args.countryId});
     }
     return country?country:null;
@@ -30,16 +30,23 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
         }
         let resp = MlCountries.update({_id:args.countryId}, {$set:country}, {upsert:true})
         if(resp){
-            let cluster = {
-                countryId:args.countryId,
-                countryName : country.country,
-                displayName: country.displayName,
-                about:"",
-                email:"",
-                showOnMap:false,
-                isActive:false
+          let cluster = MlClusters.findOne({"countryId":args.countryId});
+          if(cluster){
+            // let Args = {clusterId:cluster._id, cluster:{isActive:country.isActive}};
+            MlResolver.MlMutationResolver['updateCluster'] (obj, {clusterId:cluster._id, cluster:{isActive:country.isActive}}, context, info)
+          }
+          else {
+            cluster = {
+              countryId:args.countryId,
+              countryName : country.country,
+              displayName: country.displayName,
+              about:"",
+              email:"",
+              showOnMap:false,
+              isActive:false
             }
             MlResolver.MlMutationResolver['createCluster'](obj, {cluster:cluster}, context, info)
+          }
             let code = 200;
             let result = {cluster: resp}
             let response = JSON.stringify(new MlRespPayload().successPayload(result, code));

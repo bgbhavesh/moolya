@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
+import AlphaSearch from '../../../commons/components/alphaSearch/AlphaSearch';
 export default class MlListView extends Component {
   constructor(props) {
     super(props);
@@ -11,12 +12,17 @@ export default class MlListView extends Component {
     }
     this.onPageChange.bind(this);
     this.onSizePerPageList.bind(this);
+    this.onAlphaSearchChange.bind(this);
   }
 
   onPageChange(page,sizePerPage) {
     this.setState({
       pageNumber: page
     });
+  }
+
+  onAlphaSearchChange(alpha){
+    alert("selected alphabet is "+alpha);
   }
 
   onSizePerPageList(sizePerPage) {
@@ -44,7 +50,7 @@ export default class MlListView extends Component {
     return(<div>{loading?(<div className="loader_wrap"></div>):(
       <div className="admin_padding_wrap">
       <div className="list_view_block">
-      <div className="filter alfa_filter" onClick={this.onSizePerPageList.bind(this,2)}> a </div>
+        <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
       <div className="col-md-12">
         <div className="row">
           {ListComponent}

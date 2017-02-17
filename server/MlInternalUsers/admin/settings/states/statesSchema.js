@@ -7,6 +7,8 @@ let States = `
         name        : String
         countryId   : String
         countryCode : String
+        displayName : String
+        about       : String
         isActive    : Boolean
     }
     
@@ -14,11 +16,13 @@ let States = `
         name        : String
         countryId   : String
         countryCode : String
+        displayName : String
+        about       : String
         isActive    : Boolean
     }
     
     type Query {
-        fetchStates: SearchResp     
+        fetchStates(countryId: String): [States]      
     }
     
     type Mutation{

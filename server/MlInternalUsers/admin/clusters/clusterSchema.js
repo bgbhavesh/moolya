@@ -10,6 +10,7 @@ let clusterSchema = `
         link: String
         email:String
         showOnMap : Boolean
+        isActive: Boolean
         countryFlag:String
         latitude:String 
         longitude:String
@@ -31,8 +32,8 @@ let clusterSchema = `
     }
     
     type Query{ 
-        fetchCluster:String
-        fetchClusters:String
+        fetchCluster(_id: String):Cluster
+        fetchClustersForMap:[Cluster]
     }
    
     
@@ -44,3 +45,4 @@ let clusterSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],  clusterSchema]);
+// fetchCluster:String

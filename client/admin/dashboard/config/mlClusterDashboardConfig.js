@@ -46,21 +46,19 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
   viewComponent:<MlMapViewContainer />,
   graphQlQuery:gql`
               query{
-              data:SearchQuery(module:"cluster"){
-                    totalRecords
-                    data{
-                     ...on Cluster{
-                              countryId
-                              displayName
-                              about
-                              _id
-                              showOnMap
-                              countryFlag
-                              latitude
-                              longitude
-                          }
-                      }
-              }
+                  data:fetchClustersForMap{
+                     _id
+                     isActive
+                    countryName
+                    countryId
+                    displayName
+                    about
+                    showOnMap
+                    countryFlag
+                    latitude
+                    longitude
+                    
+                  }
               }
               `
 });

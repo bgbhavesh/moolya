@@ -22,41 +22,45 @@ MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) =>
 
 
 MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
-  console.log(args)
-  let city = MlCities.findOne({_id: args.cityId});
-  if(city){
-    for(key in args.city){
-      city[key] = args.city[key]
-    }
-    let resp = MlCities.update({_id:args.cityId}, {$set:city}, {upsert:true})
-    if(resp){
-      let chapter = MlChapters.findOne({"cityId":args.cityId});
-      if(chapter){
-        MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:chapter._id, chapter:{isActive:city.isActive}}, context, info)
-      } else {
-        chapter = {
-          chapterId:"ML_"+city.stateId,
-          chapterName:city.name,
-          displayName:city.name,
-          about:"ssw",
-          chapterImage:"image",
-          stateName:"",
-          stateId:"",
-          cityId:args.cityId,
-          cityName:city.name,
-          // latitude:"22.1",
-          // longitude:"22.12",
-          email:"moolya@moolya.com",
-          showOnMap:false,
-          isActive:city.isActive
+    console.log(args)
+    let city = MlCities.findOne({_id: args.cityId});
+    if(city){
+        let state = MlStates.findOne({_id:city.stateId})
+        for(key in args.city){
+            city[key] = args.city[key]
         }
-        MlResolver.MlMutationResolver['createChapter'](obj, {chapter:chapter}, context, info)
-      }
+        let resp = MlCities.update({_id:args.cityId}, {$set:city}, {upsert:true})
+        if(resp)
+        {
+            let chapter = MlChapters.findOne({"cityId":args.cityId});
+            if(chapter){
+                MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:chapter._id, chapter:{isActive:city.isActive}}, context, info)
+            }
+            else {
+                let cluster = MlClusters.findOne({"countryId":city.countryId});
+                chapter = {
+                    clusterId:cluster._id,
+                    clusterName:cluster.countryName,
+                    chapterId:"ML_"+city.name,
+                    chapterName:city.name,
+                    displayName:city.name,
+                    about:"ssw",
+                    chapterImage:"image",
+                    stateName:state.name,
+                    stateId:state._id,
+                    cityId:args.cityId,
+                    cityName:city.name,
+                    email:"moolya@moolya.com",
+                    showOnMap:false,
+                    isActive:city.isActive
+                }
+                MlResolver.MlMutationResolver['createChapter'](obj, {chapter:chapter}, context, info)
+            }
 
-      let code = 200;
-      let result = {city: resp}
-      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-      return response
+            let code = 200;
+            let result = {city: resp}
+            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            return response
+        }
     }
-  }
 }

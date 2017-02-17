@@ -10,6 +10,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {findBackendUserActionHandler} from '../actions/findBackendUserAction'
+import {updateBackendUserActionHandler} from '../actions/updateBackendUserAction'
 let Select = require('react-select');
 
 
@@ -25,21 +26,22 @@ class MlEditBackendUser extends React.Component{
       confirmPassword:'',
       selectedBackendUserType:'',
       selectedBackendUser:'',
-      selectedCluster:'',
+     /* selectedCluster:'',
       selectedChapter:'',
       selectedDepartment:'',
       selectedSubDepartment:'',
-      selectedRole:''
+      selectedRole:''*/
     }
     this.addEventHandler.bind(this);
-    this.createBackendUser.bind(this);
+    this.updateBackendUser.bind(this);
     this.onBackendUserTypeSelect.bind(this);
-    this.onBackendUserSelect.bind(this)
-    this.onClusterSelect.bind(this);
+    this.onBackendUserSelect.bind(this);
+    this.onStatusChanged.bind(this)
+    /*this.onClusterSelect.bind(this);
     this.onChapterSelect.bind(this);
     this.onDepartmentSelect.bind(this);
     this.onSubDepartmentSelect.bind(this);
-    this.onROleSelect.bind(this);
+    this.onROleSelect.bind(this);*/
     return this;
   }
   componentDidMount()
@@ -55,6 +57,7 @@ class MlEditBackendUser extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -67,7 +70,7 @@ class MlEditBackendUser extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/settings/addBackendUser");
+    FlowRouter.go("/admin/settings/backendUserList");
   };
   componentWillMount() {
 
@@ -83,13 +86,41 @@ class MlEditBackendUser extends React.Component{
    this.setState({loading:false,data:response});
     this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
     this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
+   /* this.setState({mlAssignDepartmentDetails:this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment})
+    this.setState({mlAssignContactDetails:this.state.data.profile.InternalUprofile.moolyaProfile.contact})*/
+
+  }
+  onStatusChanged(e){
+    const data=this.state.data;
+    if(e.currentTarget.checked){
+      this.setState({"data":{"profile":{"InternalUprofile":{"moolyaProfile":{"globalAssignment":true}}}}});
+    }else{
+      this.setState({"data":{"profile":{"InternalUprofile":{"moolyaProfile":{"globalAssignment":true}}}}});
+    }
   }
 
-  async  createBackendUser() {
-    let backendUserDetails = {
-      transactionName: this.refs.firstName.value,
-      transactionDisplayName: this.refs.middleName.value,
-      transactionDescription: this.refs.lastName.value,
+  async  updateBackendUser() {
+
+    let userroles=[{
+      roleId:this.refs.role.value,
+      clusterId:this.refs.cluster.value,
+      chapterId:this.refs.chapter.value,
+      subChapterId:'',
+      communityId:'',
+      isActive: this.refs.isActive.checked,
+      hierarchyLevel:''
+
+    }]
+    let userprofiles=[{
+      isDefault: this.refs.isDefault.checked,
+      clusterId: this.refs.cluster.value,
+      userRoles:userroles
+    }]
+
+    let moolyaProfile = {
+      firstName: this.refs.firstName.value,
+      middleName: this.refs.middleName.value,
+      lastName: this.refs.lastName.value,
       userType:this.state.selectedBackendUserType,
       roleType:this.state.selectedBackendUser,
       assignedDepartment:this.state.mlAssignDepartmentDetails,
@@ -97,17 +128,33 @@ class MlEditBackendUser extends React.Component{
       email:this.refs.email.value,
       contact:this.state.mlAssignContactDetails,
       globalAssignment:this.refs.globalAssignment.checked,
-      isActive: this.refs.isActive.checked,
-      clusterId:this.state.selectedCluster,
-      chapterId:this.state.selectedChapter,
-      departmentId:this.state.selectedDepartment,
-      subDepartmentId:this.state.selectedSubDepartment,
-      role:this.state.selectedRole,
-      isDefault:this.refs.isDefault.checked
+      isActive:this.refs.isActive.checked,
+      userProfiles:userprofiles
+    }
+    let InternalUprofile={
+      moolyaProfile: moolyaProfile
+    }
+    let profile={
+      isInternaluser: 'true',
+      isExternaluser: 'true',
+      email: this.refs.email.value,
+      InternalUprofile: InternalUprofile
+    }
+    let userObject={
+      username: moolyaProfile.firstName+moolyaProfile.lastName,
+      password: this.refs.password.value,
+      profile:profile
     }
 
-    console.log(backendUserDetails)
-    const response = await addBackendUserActionHandler(backendUserDetails)
+    console.log(userObject)
+
+    console.log(userObject)
+    let updateUserObject={
+      userId:this.refs.id.value,
+      userObject:userObject
+
+    }
+    const response = await updateBackendUserActionHandler(updateUserObject)
     return response;
 
   }
@@ -124,7 +171,7 @@ class MlEditBackendUser extends React.Component{
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val})
   }
-  onClusterSelect(val){
+  /*onClusterSelect(val){
     this.setState({selectedCluster:val})
   }
   onChapterSelect(val){
@@ -138,7 +185,7 @@ class MlEditBackendUser extends React.Component{
   }
   onROleSelect(val){
     this.setState({selectedRole:val})
-  }
+  }*/
 
   render(){
     let MlActionConfig = [
@@ -150,7 +197,7 @@ class MlEditBackendUser extends React.Component{
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.updateBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -182,6 +229,7 @@ class MlEditBackendUser extends React.Component{
               >
                 <div className="form_bg">
                   <div className="form-group">
+                    <input type="text" ref="id" value={this.state.data&&this.state.data._id} hidden="true"/>
                     <input type="text" ref="firstName" placeholder="First Name" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.firstName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
@@ -232,7 +280,7 @@ class MlEditBackendUser extends React.Component{
                   <div className="form-group switch_wrap inline_switch">
                     <label>Global Assignment Availability</label>
                     <label className="switch">
-                      <input type="checkbox" ref="globalAssignment"/>
+                      <input type="checkbox" checked={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment}  onchange={this.onStatusChanged.bind(this)} ref="globalAssignment"/>
                       <div className="slider"></div>
                     </label>
                   </div>

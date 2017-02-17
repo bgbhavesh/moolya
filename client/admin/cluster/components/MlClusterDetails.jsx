@@ -44,7 +44,7 @@ class MlClusterDetails extends React.Component {
 
   onStatusChangeActive(e) {
     let updatedData = this.state.data||{};
-    updatedData=_.omit(updatedData,["isActive"]);
+    updatedData=_.omit(updatedData,["showOnMap"]);
     if (e.currentTarget.checked) {
       var z=_.extend(updatedData,{isActive:true});
       this.setState({data:z,loading:false});
@@ -147,7 +147,7 @@ class MlClusterDetails extends React.Component {
                     <div className="form-group switch_wrap">
                       <label>Status</label><br/>
                       <label className="switch">
-                        <input type="checkbox" id="isActive" ref="isActive" checked={this.state.data && this.state.data.isActive}
+                        <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
                                onChange={this.onStatusChangeActive.bind(this)}/>
                         <div className="slider"></div>
                       </label>

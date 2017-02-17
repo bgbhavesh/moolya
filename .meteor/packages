@@ -30,8 +30,9 @@ force-ssl
 aldeed:simple-schema
 meteorhacks:npm
 chrismbeckett:toastr
-
+fortawesome:fontawesome
 
 
 
 npm-container
+

@@ -52,12 +52,12 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
     console.log(args)
-    let user = Accounts.findOne({_id: args.userId});
+    let user = Meteor.users.findOne({_id: args.userId});
     if(user){
         for(key in args.user){
           user[key] = args.user[key]
         }
-        let resp = Accounts.update({_id:args.userId}, {$set:user}, {upsert:true})
+        let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
         if(resp){
           let code = 200;
           let result = {user: resp}

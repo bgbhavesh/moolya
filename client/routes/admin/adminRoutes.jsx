@@ -36,7 +36,8 @@ import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleT
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
-import MlChapterMapView from '../../admin/chapter/components/MlChapterMapView'
+import MlChapterView from '../../admin/chapter/components/MlChapter'
+import MlSubChapterList from '../../admin/dashboard/component/MlSubChapterList'
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
@@ -44,7 +45,7 @@ import  MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAd
 import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
 import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBackendUserList'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
-import {mlChapterMapConfig} from '../../admin/chapter/config/mlChapterConfig'
+import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -99,7 +100,13 @@ adminSection.route('/cluster/clusterDetails/:clusterId', {
 adminSection.route('/chapter', {
   name: 'chapter',
   action(){
-    mount(AdminLayout,{adminContent:<MlChapterMapView mapConfig={mlChapterMapConfig} />})
+    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+  }
+});
+adminSection.route('/chapter/:chapterId', {
+  name: 'chapter',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlSubChapterList params={params.chapterId} listConfig={mlChapterListConfig} />})
   }
 });
 adminSection.route('/chapter/subChapterDetails', {

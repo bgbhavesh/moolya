@@ -111,20 +111,31 @@ export default class MlAssignClustersToRoles extends React.Component {
 
   render() {
     let that=this;
-    //let queryOptions={options: { variables: {searchQuery:null}}};
-    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
-    let chapterquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
-    let subChapterquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
-    let departmentquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
-    let subDepartmentquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
+    let queryOptions={options: { variables: {searchQuery:null}}};
+    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let chapterquery=gql`query($id:String){  
+  data:fetchChapters(id:$id) {
+    value:chapterId
+    label:chapterName
+  }  
+}`;
+    let subChapterquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}} `;
+    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
+    let subDepartmentquery=gql`query($id:String){  
+  data:fetchSubDepartments(id:$id) {
+    value:_id
+    label:subDepartmentName
+  }  
+}`;
 
     return (
 
       <div>
 
         <div className="form-group"> <a onClick={that.AssignassignRoleToClusters.bind(this)} className="mlUpload_btn">Add</a></div>
-        {that.state.assignRoleToClusters.map(function(options,id){
-
+        {that.state.assignRoleToClusters.map(function(assignCluster,id){
+          let chapterOption={options: { variables: {id:assignCluster.cluster}}};
+          let subDeparatmentOption={options: { variables: {id:assignCluster.department}}};
           return(
             <div className="panel panel-default" key={id}>
               <div className="panel panel-default">
@@ -132,33 +143,33 @@ export default class MlAssignClustersToRoles extends React.Component {
                 <div className="panel-body">
 
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
                   </div>
 
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'+id} reExecuteQuery={true} queryOptions={chapterOption} onSelect={that.optionsBySelectChapter.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subDepartment} queryType={"graphql"} query={subDepartmentquery}  isDynamic={true} id={'subDepartment'+id} onSelect={that.optionsBySelectSubDepartment.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subDepartment} queryType={"graphql"} query={subDepartmentquery}  isDynamic={true} id={'subDepartment'+id} reExecuteQuery={true} queryOptions={subDeparatmentOption}  onSelect={that.optionsBySelectSubDepartment.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" name={'isActive'} value={options.isActive} onChange={that.onChange.bind(that,id)} />
+                      <input type="checkbox" name={'isActive'} value={assignCluster.isActive} onChange={that.onChange.bind(that,id)} />
                       <div className="slider"></div>
                     </label>
                   </div>

@@ -173,8 +173,7 @@ class MlAddRole extends React.Component{
               </ScrollArea>
             </div>
           </div>
-          <div>
-
+          <div className="col-md-6 nopadding-right"  >
           <MlAssignModulesToRoles getassignModulesToRoles={this.getassignModulesToRoles.bind(this)}/>
           </div>
 

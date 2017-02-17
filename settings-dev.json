@@ -1,6 +1,8 @@
 {
   "public": {
-      "MONGO_URL":"mongodb://localhost:27017"
+      "MONGO_URL":"mongodb://localhost:27017",
+      "graphqlUrl": "",
+      "graphqlPort":8091
   },
   "private": {
       "subChapterName":"Moolya",

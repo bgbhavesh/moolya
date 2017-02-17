@@ -52,6 +52,7 @@ let departmentSchema = `
     type Query{
         findDepartment(departmentId:String):Department
         findDepartments:String
+        fetchDepartments:[Department]
     }
 `
 

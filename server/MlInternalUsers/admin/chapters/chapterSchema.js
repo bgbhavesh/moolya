@@ -77,7 +77,7 @@ let chapterSchema = `
     
     type Query{ 
         fetchChapter:String
-        fetchChapters:String
+        fetchChapters(id:String):[Chapter]
         fetchSubChapter:String
         fetchSubChapters:String
         fetchChaptersForMap:[Chapter]

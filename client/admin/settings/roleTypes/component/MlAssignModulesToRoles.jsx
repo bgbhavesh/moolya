@@ -105,8 +105,8 @@ export default class MlAssignModulesToRoles extends React.Component {
 
           return(
 
-              <div className="col-md-6 nopadding-right"  key={id}>
-                <div className="form_bg">
+
+                <div className="form_bg" key={id}>
                   <div className="left_wrap">
 
                     <ScrollArea
@@ -121,8 +121,10 @@ export default class MlAssignModulesToRoles extends React.Component {
                           <div className="panel-heading">Add Module<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/remove.png"/></div></div>
                           <div className="panel-body">
                             <div className="row">
-                              <div className="form-group">
-                                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.moduleId} queryType={"graphql"} query={getModulesquery}  isDynamic={true} id={'moduleId'+id} onSelect={that.optionsBySelectModule.bind(that,id)} />
+                              <div className="col-md-6">
+                                <div className="form-group">
+                                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.moduleId} queryType={"graphql"} query={getModulesquery}  isDynamic={true} id={'moduleId'+id} onSelect={that.optionsBySelectModule.bind(that,id)} />
+                                </div>
                               </div>
                               <div className="col-md-6">
                                 <div className="form-group">
@@ -178,7 +180,7 @@ export default class MlAssignModulesToRoles extends React.Component {
                     </ScrollArea>
                   </div>
                 </div>
-              </div>
+
 
           )})}
       </div>

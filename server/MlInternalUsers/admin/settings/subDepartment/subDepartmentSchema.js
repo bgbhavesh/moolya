@@ -49,6 +49,7 @@ let subDepartmentSchema = `
     type Query{
         findSubDepartment(_id: String): SubDepartment
         findSubDepartments: [SubDepartment]
+        fetchSubDepartments(id: String):[SubDepartment]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],subDepartmentSchema]);

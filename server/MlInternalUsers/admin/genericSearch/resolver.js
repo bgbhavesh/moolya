@@ -38,8 +38,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlRequestType.find({},findOptions).count();
   }
   if(args.module=="permission"){
-    data= MlPermissions.find({},findOptions).fetch();
-    totalRecords=MlPermissions.find({},findOptions).count();
+    // data= MlPermissions.find({},findOptions).fetch();
+    // totalRecords=MlPermissions.find({},findOptions).count();
   }
   if(args.module=="countries"){
     data= MlCountries.find({},findOptions).fetch();

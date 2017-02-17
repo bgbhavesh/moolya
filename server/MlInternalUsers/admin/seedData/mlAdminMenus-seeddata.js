@@ -384,7 +384,7 @@ if(Meteor.isServer){
               {
                 "link": "/admin/settings/editCountry",
                 "name": "Edit Countries",
-                "uniqueId": "settings_EditCountries",
+                "uniqueId": "settings_EditCountry",
                 "subMenuMappingId":"settings_Countries",
                 "subMenusId":"settings",
                 "isLink": true,
@@ -438,9 +438,9 @@ if(Meteor.isServer){
               "image": ""
             },
               {
-                "link": "/admin/settings/editState",
+                "link": "/admin/settings/editCity",
                 "name": "Edit City",
-                "uniqueId": "settings_CityState",
+                "uniqueId": "settings_EditCity",
                 "subMenuMappingId":"settings_Cities",
                 "subMenusId":"settings",
                 "isLink": true,

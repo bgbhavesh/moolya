@@ -1,6 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let coutriesSchema = `
+let countriesSchema = `
 
     type Countries{
         _id           : String,
@@ -8,6 +8,8 @@ let coutriesSchema = `
         countryCode   : String,
         displayName   : String,
         url           : String,
+        about         : String,
+        capital       : String,
         isActive      : Boolean,
         lat           : String,
         lng           : String
@@ -19,6 +21,8 @@ let coutriesSchema = `
         countryCode   : String,
         displayName   : String,
         url           : String,
+        about         : String,
+        capital       : String,
         isActive      : Boolean
         lat           : String,
         lng           : String
@@ -26,7 +30,7 @@ let coutriesSchema = `
     
     type Query {
         fetchCountries: [Countries]
-        fetchCountry(countryId: String): String
+        fetchCountry(countryId: String): Countries
         fetchCountriesSearch: [Countries]
     }
     
@@ -35,4 +39,4 @@ let coutriesSchema = `
     }
 `
 
-MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], coutriesSchema]);
+MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], countriesSchema]);

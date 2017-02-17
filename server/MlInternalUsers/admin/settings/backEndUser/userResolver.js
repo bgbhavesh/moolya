@@ -36,7 +36,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
     console.log(args)
-    if(Accounts.find({username:args.user.username}).count() > 0) {
+    if(Meteor.users.find({username:args.user.username}).count() > 0) {
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }

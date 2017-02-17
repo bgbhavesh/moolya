@@ -4,8 +4,15 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
 let modules = `
+    type Module{
+        _id:String
+         name:String,
+         displayName:String,
+         code:String,
+         isActive:Boolean
+    }
     type Query {
-        fetchModules: String
+        fetchModules: [Module]
     }    
 `
 

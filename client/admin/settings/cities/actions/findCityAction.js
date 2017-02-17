@@ -1,20 +1,19 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findCountryActionHandler(CountryId) {
+export async function findCityActionHandler(CountryId) {
   let did = CountryId;
 
   const result = await client.query({
     query: gql`
     query ($id: String){
-      fetchCountry(countryId:$id) {
+      fetchCities(countryId:$id) {
         _id
-        country
+        name
         countryCode
+        stateId
         displayName
         about
-        capital
-        url
         isActive
       }
     }  

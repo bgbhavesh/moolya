@@ -28,7 +28,8 @@ import MlCitiesList from "../../admin/settings/cities/component/MlCitiesList";
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
-import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
+/*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
+import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'
 import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleType'
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
@@ -165,7 +166,8 @@ adminSection.route('/settings/editPermission/:id', {
 adminSection.route('/settings/rolesList', {
   name: 'settings_roles',
   action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+    /*mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})*/
+    mount(AdminLayout,{adminContent:< MlAddRole/>})
   }
 });
 adminSection.route('/settings/addBackendUser', {
@@ -245,7 +247,8 @@ adminSection.route('/settings/editUserType/:id', {
 adminSection.route('/settings/roleTypeList', {
   name: 'settings_RoleTypeList',
   action(){
-    mount(AdminLayout,{adminContent:< MlRoleTypeList/>})
+   /* mount(AdminLayout,{adminContent:< MlRoleTypeList/>})*/
+    mount(AdminLayout,{adminContent:< MlAddRole/>})
   }
 });
 adminSection.route('/settings/editRoleType/:id', {

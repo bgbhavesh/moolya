@@ -7,16 +7,16 @@ let _ = require('lodash');
 MlResolver.MlQueryResolver['fetchStates'] = (obj, args, context, info) =>
 {
     let allStates = [];
-    let countries = MlCountries.find({"$and":[{"countryId":args.countryId}, {"isActive": true}]}).fetch()
+    let countries = MlCountries.find({"isActive": true}).fetch()
     if(countries && countries.length > 0){
         for(var i = 0; i < countries.length; i++){
-            let states = MlStates.find({"stateId":states[i]._id}).fetch();
-            if(MlStates && MlStates.length > 0){
+            let states = MlStates.find({"countryCode":countries[i].countryCode}).fetch();
+            if(states && states.length > 0){
                 _.merge(allStates, states)
             }
         }
     }
-    return allStates;
+    return {data:allStates,totalRecords:allStates&&allStates.length?allStates.length:0};
 }
 
 MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {

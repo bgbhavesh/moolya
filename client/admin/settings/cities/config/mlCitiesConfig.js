@@ -51,12 +51,12 @@ const mlCitiesTableConfig=new MlViewer.View({
   ],
   sizePerPage:5,
   graphQlQuery:gql`
-              query SearchQuery( $offset: Int, $limit: Int) {
-              data:SearchQuery(module:"cities",offset: $offset, limit: $limit){
+             query{
+  data:fetchCities{
                     totalRecords
                     data{
                       ...on Cities{
-                              name  
+                              name
                               countryCode
                               countryId
                               stateId

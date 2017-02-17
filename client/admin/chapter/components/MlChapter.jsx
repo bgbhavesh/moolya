@@ -3,7 +3,7 @@ import MlInfinity from "../../dashboard/component/MlInfinity";
 import MlListViewContainer from "../../core/containers/MlListViewContainer";
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 
-export default class MlChapterMapView extends React.Component {
+export default class MlChapterView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ export default class MlChapterMapView extends React.Component {
     let showInfinity=true;
     let infinityViewProps = {viewMode: this.state.viewMode, onViewModeChange:this.viewModeChange.bind(this)};
     let config=this.props;
-    // let listConfig=this.props.listConfig;
+    let listConfig=this.props.listConfig;
     // listConfig.data=[{displayName:"India"}];
     return (
       <div>

@@ -5,5 +5,6 @@ import MlResolver from '../mlAdminResolverDef'
 
 
 MlResolver.MlQueryResolver['fetchModules'] = (obj, args, context, info) =>{
-  // return MlRoles.findOne({name});
+    return MlModules.find().fetch();
+    // return MlRoles.findOne({name});
 }

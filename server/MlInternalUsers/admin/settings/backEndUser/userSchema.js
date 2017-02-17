@@ -5,6 +5,67 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let BackEndUser = `
 
+    type BackendUsers{
+        _id: String,
+        password: String,
+        username: String,
+        profile:userProfile
+    }
+    
+    type userProfile{
+        isInternaluser: String,
+        isExternaluser: String,
+        email: String,
+        InternalUprofile: internalUserprofile
+    }
+    
+     type internalUserprofile{
+        moolyaProfile: MoolyaProfile
+    }
+    
+    type AssignedDepartment{
+        department: String,
+        subDepartment: String
+    }
+    
+    type Contacts{
+        contactNumberType:String,
+        countryCode:String,
+        number:String,
+        isOTPValidated:String
+    }
+    
+    type UserProfiles{
+        isDefault: Boolean,
+        clusterId: String,
+        userRoles:[UserRoles]
+    }
+    
+    type UserRoles{
+        roleId:String,
+        clusterId:String,
+        chapterId:String,
+        subChapterId:String,
+        communityId:String,
+        isActive:Boolean,
+        hierarchyLevel:String
+    }
+    
+    type MoolyaProfile{
+        firstName: String,
+        middleName: String,
+        lastName: String,
+        userType: String,
+        roleType: String,
+        assignedDepartment:[AssignedDepartment],
+        displayName: String,
+        email:String,
+        contact:[Contacts],
+        globalAssignment:Boolean,
+        isActive:Boolean,
+        userProfiles:[UserProfiles]
+    }
+
      input assignedDepartment{
         department: String,
         subDepartment: String
@@ -12,7 +73,6 @@ let BackEndUser = `
     
     input contacts{
         contactNumberType:String,
-        contactType: String,
         countryCode:String,
         number:String,
         isOTPValidated:String
@@ -68,14 +128,14 @@ let BackEndUser = `
     }
     
     
+    
     type Mutation{
         createUser(user:userObject!):String
         updateUser(userId:String!, user:userObject!): String
     }
     
     type Query{
-        fetchUsers: String
-        fetchUser(userId:String): String
+        fetchUser(userId:String): BackendUsers
     }
     
 `

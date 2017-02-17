@@ -23,14 +23,24 @@ class MlAddDepartment extends React.Component{
     });
 
     $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
+      if($(this).parent().hasClass('nocolor-switch')){
+
+        if ($(this).is(':checked')) {
+          $('.state_label:nth-of-type(1)').removeClass('acLabel');
+          $('.state_label:nth-of-type(2)').addClass('acLabel');
+        }else{
+          $('.state_label:nth-of-type(2)').removeClass('acLabel');
+          $('.state_label:nth-of-type(1)').addClass('acLabel');
+        }
       }else{
-        $(this).parent('.switch').removeClass('on');
+        if ($(this).is(':checked')) {
+          $(this).parent('.switch').addClass('on');
+        }else{
+          $(this).parent('.switch').removeClass('on');
+        }
       }
     });
   }
-
   async addEventHandler() {
     const resp=await this.createDepartment();
     return resp;
@@ -92,7 +102,7 @@ class MlAddDepartment extends React.Component{
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Create Department</h2>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-left">
             <div className="form_bg">
                 <div className="form-group">
                   <input type="text" ref="departmentName" placeholder="Department Name" className="form-control float-label" id=""/>
@@ -105,8 +115,8 @@ class MlAddDepartment extends React.Component{
                   <textarea ref="aboutDepartment" placeholder="about Depatment" className="form-control float-label" id=""></textarea>
                 </div>
 
-                <div className="form-group switch_wrap">
-                  <label>Status</label><br/>
+                <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
                   <label className="switch">
                     <input type="checkbox" ref="departmentStatus" />
                     <div className="slider"></div>
@@ -120,11 +130,11 @@ class MlAddDepartment extends React.Component{
               <form>
                 <div className="form-group switch_wrap switch_names">
                   <label>Select Type</label><br/>
-                  <span className="state_label acLabel">moolya</span><label className="switch">
+                  <span className="state_label">moolya</span><label className="switch nocolor-switch">
                   <input type="checkbox" ref="appType" />
                   <div className="slider"></div>
                 </label>
-                  <span className="state_label">non-moolya</span>
+                  <span className="state_label acLabel">non-moolya</span>
                 </div><br className="brclear"/>
 
 
@@ -138,10 +148,6 @@ class MlAddDepartment extends React.Component{
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
 
       </div>
-
-
-
-
     )
   }
 };

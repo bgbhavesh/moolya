@@ -14,6 +14,23 @@ export default class MlAssignDepartments extends React.Component {
     this.addDepartmentComponent.bind(this);
     return this;
   }
+
+  AssignDepartmentAvailability(id){
+    this.setState({
+      departmentAvailability: this.state.departmentAvailability.concat([{cluster: '',chapter:'',subChapter:'',email:'',isActive:false }])
+    });
+  }
+
+  RemoveAssignDepartmentAvailability(id,event){
+    let departmentAvailability;
+    departmentAvailability= this.state.departmentAvailability.filter(function(object,index){
+      return id !== index;
+    });
+    this.setState({
+      departmentAvailability: departmentAvailability
+    })
+  }
+
   componentDidMount() {
     $(function () {
       $('.float-label').jvFloat();
@@ -83,14 +100,16 @@ export default class MlAssignDepartments extends React.Component {
 `;
     return (
 
-    <div className="swiper-container blocks_in_form">
-      <div className="swiper-wrapper">
+    <div>
 
+      <div className="form-group"> <a onClick={that.AssignDepartmentAvailability.bind(this)} className="mlUpload_btn">Add</a></div>
         {that.state.departmentAvailability.map(function(options,id){
-          return(
-            <div className="form_inner_block swiper-slide"  key={id}>
 
-              <div className="form_inner_block swiper-slide">
+          return(
+            <div className="panel panel-default" key={id}>
+            <div className="panel panel-default">
+              <div className="panel-heading">Assign Department<div className="pull-right block_action"><img src="/images/remove.png"/></div></div>
+              <div className="panel-body">
 
                 <div className="form-group">
                   <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={query}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
@@ -118,13 +137,15 @@ export default class MlAssignDepartments extends React.Component {
                 </div>
 
               </div>
-              <br className="brclear"/>
+
+
+            </div>
             </div>
           )})}
       </div>
-      <br className="brclear"/>
-      <div className="swiper-pagination"></div>
-    </div>
+
+
+
 
     )
   }

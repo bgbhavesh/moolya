@@ -3,10 +3,9 @@ import MlSchemaDef from '../../mlAdminSchemaDef'
 let Role = `
     scalar Date
     input assignroles{
-        clusterId:String,
-        chapterId:String,
-        subChapterId:String,
-        communityId:String,
+        cluster:String,
+        chapter:String,
+        subChapter:String,
         department:String, 
         subDepartment:String, 
         isActive:Boolean
@@ -24,8 +23,13 @@ let Role = `
         actionId:String
     }
     
+    input actions{
+        actionId : String
+    }
+    
     input modules{
         moduleId:String,
+        actions : [actions]
         fieldRestrictions: [fieldRestrictions],
         permissions:[permissions]
     }
@@ -34,9 +38,10 @@ let Role = `
         roleName: String, 
         displayName:String, 
         roleType:String,
+        userType:String,
+        about:String, 
         assignRoles:[assignroles],
         modules:[modules], 
-        about:String, 
         isActive:Boolean
     }
     

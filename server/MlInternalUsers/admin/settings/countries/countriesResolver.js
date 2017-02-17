@@ -40,6 +40,7 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
               countryId:args.countryId,
               countryName : country.country,
               displayName: country.displayName,
+              countryFlag: country.url,
               about:"",
               email:"",
               showOnMap:false,

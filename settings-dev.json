@@ -1,8 +1,8 @@
 {
   "public": {
       "MONGO_URL":"mongodb://localhost:27017",
-      "graphqlUrl": "",
-      "graphqlPort":8091
+      "graphqlUrl": "http://35.154.53.81:8090/graphql",
+      "graphqlPort":8090
   },
   "private": {
       "subChapterName":"Moolya",

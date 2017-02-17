@@ -69,6 +69,8 @@ let chapterSchema = `
         showOnMap:Boolean,
         isActive:Boolean,
         isBespokeRegistration:Boolean,
+        latitude:String,
+        longitude:String,
         isBespokeWorkFlow:Boolean,
         subChapterDataAcessMatrix:[subChapterDataAcessMatrix]
     }

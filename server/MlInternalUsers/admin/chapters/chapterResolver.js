@@ -39,6 +39,8 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             subChapterImageLink: "ssc",
             showOnMap: false,
             isActive: false,
+            latitude:chapter.latitude,
+            longitude:chapter.longitude,
             isBespokeRegistration: false,
             isBespokeWorkFlow: false,
             subChapterDataAcessMatrix: []

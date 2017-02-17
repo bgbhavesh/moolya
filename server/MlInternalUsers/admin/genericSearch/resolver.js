@@ -70,6 +70,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlTemplates.find({},findOptions).count();
   }
 
+  if(args.module == 'BackendUsers'){
+      data = Meteor.users.find().fetch();
+      totalRecords=Meteor.users.find({},findOptions).count();
+  }
+
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -121,6 +126,11 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.templateName){
       return 'Template'
     }
+
+    if(data.username){
+      return 'BackendUsers'
+    }
+
     return null;
   }
 }

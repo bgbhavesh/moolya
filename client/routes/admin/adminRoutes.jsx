@@ -40,6 +40,8 @@ import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplate
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
 import  MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
+import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
+import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBackendUserList'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -170,10 +172,22 @@ adminSection.route('/settings/rolesList', {
     mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
   }
 });
-adminSection.route('/settings/addBackendUser', {
+adminSection.route('/settings/backendUserList', {
   name: 'settings_BackendUserList',
   action(){
+    mount(AdminLayout,{adminContent:< MlBackendUserList/>})
+  }
+});
+adminSection.route('/settings/addBackendUser', {
+  name: 'settings_AddBackendUser',
+  action(){
     mount(AdminLayout,{adminContent:< MlAddBackendUser/>})
+  }
+});
+adminSection.route('/settings/editBackendUser/:id', {
+  name: 'settings_EditBackendUser',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.id}/>})
   }
 });
 

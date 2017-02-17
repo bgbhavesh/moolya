@@ -1,29 +1,20 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function addBackendUserActionHandler(backendUserDetails) {
-  /*let transactionName = TransactionDetails.transactionName;
-  let transactionDisplayName = TransactionDetails.transactionDisplayName;
-  let transactionDescription = TransactionDetails.transactionDescription;
-  let isActive = TransactionDetails.isActive;
+export async function addBackendUserActionHandler(userObjectDetails) {
+let user=userObjectDetails
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($transactionName: String, $transactionDisplayName: String, $transactionDescription: String,$isActive: Boolean){
-        CreateTransaction(
-          transactionName: $transactionName,
-          transactionDisplayName: $transactionDisplayName,
-         transactionDescription: $transactionDescription,
-          isActive :$isActive
+       mutation  ($user: userObject!){
+        createUser(          
+          user :$user         
         )
       }
     `,
     variables: {
-      transactionName,
-      transactionDisplayName,
-      transactionDescription,
-      isActive
+      user
     }
   })
-  const id = result.data.CreateTransaction;
-  return id*/
+  const id = result.data.createUser;
+  return id
 }

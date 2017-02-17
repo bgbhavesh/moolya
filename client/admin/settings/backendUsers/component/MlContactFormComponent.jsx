@@ -14,7 +14,13 @@ export default class MlContactFormComponent extends React.Component {
     }
     return this;
   }
-  AssignDepartment(idx){
+  componentDidMount() {
+    let assignContactForm = this.props.contacts
+    if (assignContactForm) {
+      this.setState({contactForm: assignContactForm});
+    }
+  }
+    AssignDepartment(idx){
     this.setState({
       contactForm: this.state.contactForm.concat([{ contactNumberType: null,countryCode:'',number:'',isOTPValidated:false}])
     });
@@ -81,12 +87,12 @@ export default class MlContactFormComponent extends React.Component {
                   <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.countryCode} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectCountryCode.bind(that,idx)} />
                 </div>
                 <div className="form-group">
-                  <input type="text" className="form-control float-label" placeholder="Enter Number" onBlur={that.onChangeContactNumber.bind(that,idx)} />
+                  <input type="text" className="form-control float-label" defaultValue={contactForm.number} placeholder="Enter Number" onBlur={that.onChangeContactNumber.bind(that,idx)} />
                 </div>
                 <div className="form-group switch_wrap inline_switch">
                   <label>OTP Validation</label>
                   <label className="switch">
-                    <input type="checkbox" checked={contactForm.isOTPValidated} onChange={that.onStatusChange.bind(that,idx)}/>
+                    <input type="checkbox"  checked={contactForm.isOTPValidated} onChange={that.onStatusChange.bind(that,idx)}/>
                     <div className="slider"></div>
                   </label>
                 </div>

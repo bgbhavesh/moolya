@@ -68,10 +68,12 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
-    let user = Accounts.findOne({_id: args.userId});
+    let user = Meteor.users.findOne({_id: args.userId});
     return user;
 }
 
+/*
 MlResolver.MlQueryResolver['fetchUsers'] = (obj, args, context, info) => {
 
 }
+*/

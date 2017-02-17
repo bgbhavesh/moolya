@@ -13,6 +13,13 @@ export default class MlAssignDepartmentComponent extends React.Component {
     }
     return this;
   }
+  componentDidMount() {
+    let assignDepartmentForm = this.props.departments
+    if(assignDepartmentForm){
+      this.setState({assignDepartmentForm: assignDepartmentForm});
+    }
+
+  }
   AssignDepartment(idx){
     this.setState({
       assignDepartmentForm: this.state.assignDepartmentForm.concat([{ department:null,subDepartment:null}])

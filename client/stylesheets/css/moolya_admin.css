@@ -158,7 +158,7 @@ span.actions_switch.show_act{bottom: 50px;}
 
 
 .panel-heading{font-weight: bold;}
-.panel-heading .block_action img{width: 25px; margin-top: -2px;} 
+.panel-heading .block_action img{width: 25px; margin-top: -2px;}
 .form-control{padding: 6px 0px;border: 0px; border-bottom: 2px solid #273545;box-shadow: none;color: #273545;background-color: transparent;border-radius: 0px;font-size: 15px;}
  .form-control:focus{box-shadow: none;}
  .admin_main_wrap textarea.form-control{height: 80px;}
@@ -195,7 +195,7 @@ input:checked + .slider:before {-webkit-transform: translateX(34px);-ms-transfor
 
 .profile-img {margin-top: 0px;width: 24px;}
 .ml_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
-	.ml_profile:focus{outline: 0px;}	
+	.ml_profile:focus{outline: 0px;}
 .ml_profile.profile_open {background-color: #525252;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 4;}
 .ml_profile h1 {box-sizing: border-box;font-size: 100%;text-transform: uppercase;font-weight: normal;/*border: 1px dotted yellow;	padding: 25px 10px;*/position: fixed;top: 5px;right: 5px;margin: 0;border: 2px solid #ffe144;border-radius: 50%;z-index: 50;cursor: pointer;background:url(/images/img.png) center -5px;width: 40px;height: 40px;}
 .ml_profile ol, .ml_profile li {margin: 0;padding: 0;list-style-type: none;}
@@ -228,14 +228,14 @@ table{background: #fff;}
 
 .vTimeline{border-left: 2px solid #67cbe5;position: absolute;top: 9px;left: 51px;}
 .vTimeline ul{margin: -7px 0px 0px -6px;}
-.vTimeline li{background: url(images/timeline_bg.png) left center no-repeat;padding-left: 15px; color: #fff;text-shadow: none; font-size: 12px; line-height: 20px;} 
+.vTimeline li{background: url(images/timeline_bg.png) left center no-repeat;padding-left: 15px; color: #fff;text-shadow: none; font-size: 12px; line-height: 20px;}
 .vTimeline li.current{background: url(images/timeline_ac.png) left center no-repeat;color: #ef4647;}
 .vTimeline li.timelineLast{background: #000;margin-top: -6px;}
 
 .loading{    position: absolute;    top: calc(50% - 30px);    left: calc(50% - 60px);}
 .loader_wrap{position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background-color: rgba(255,255,255,0.8);z-index: 9;background-image: url(/images/loading.gif);background-position: center center;background-repeat: no-repeat;}
 
-.fileUpload {position: relative; /*overflow: hidden;*/ } 
+.fileUpload {position: relative; /*overflow: hidden;*/ }
 .fileUpload input.upload {position: absolute;top: 0;right: 0;margin: 0;padding: 0;font-size: 20px;cursor: pointer;opacity: 0;filter: alpha(opacity=0);}
 
 
@@ -243,7 +243,7 @@ table{background: #fff;}
 margin-left: 15px;height: 36px;line-height: 33px;float: left;text-align: center;}
 
 a.mlUpload_btn{width: auto;margin:0px 20px;float: none;display: inline-block;}
-a.mlUpload_btn:hover{text-decoration: none;color: #fff;} 
+a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
 .mlUpload_btn:before{position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
 .mlUpload_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .previewImg{width: 100px;height: 50px;border:1px solid #ddd;float: left;margin-left: 40px;margin-top: -13px;margin-bottom: 33px;}
@@ -557,7 +557,7 @@ float: left;
 .pageMinPip {
     left: -10px;
 }
-.pagination {
+/*.pagination {
     width: 300px;
     text-align: center;
     background: #cacaca;
@@ -566,7 +566,7 @@ float: left;
     right: -260px;
     z-index: 9999;
     bottom: 0px;
-border-radius:0px; 
+border-radius:0px;
 transition: .5s linear;
 cursor: pointer;
 }
@@ -643,7 +643,7 @@ cursor: pointer;
 .ui-slider.long .ui-slider-handle::after {
     right: 12px;
     top: 30%;
-}
+}*/
 @media( max-width: 550px) {
     .pagination {
         width: auto;

@@ -8,6 +8,8 @@ let countriesSchema = `
         countryCode   : String,
         displayName   : String,
         url           : String,
+        about         : String,
+        capital       : String,
         isActive      : Boolean,
         lat           : String,
         lng           : String
@@ -19,6 +21,8 @@ let countriesSchema = `
         countryCode   : String,
         displayName   : String,
         url           : String,
+        about         : String,
+        capital       : String,
         isActive      : Boolean
         lat           : String,
         lng           : String

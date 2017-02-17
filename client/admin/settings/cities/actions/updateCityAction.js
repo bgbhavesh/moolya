@@ -6,7 +6,7 @@ export async function updateCityActionHandler(CityDetails) {
   let cityName = CityDetails.name;
   let countryCode = CityDetails.countryCode;
   let stateId = CityDetails.stateId;
-  // let displayName = CityDetails.displayName;
+  let displayName = CityDetails.displayName;
   let isActive = CityDetails.isActive;
 
   let cityDetails = {
@@ -14,6 +14,7 @@ export async function updateCityActionHandler(CityDetails) {
     name: CityDetails.name,
     countryId:CityDetails.countryId,
     countryCode:CityDetails.countryCode,
+    displayName : CityDetails.displayName,
     stateId : CityDetails.stateId,
     isActive:CityDetails.isActive
   }
@@ -28,7 +29,7 @@ export async function updateCityActionHandler(CityDetails) {
       }
     `,
     variables: {
-      cityId:cityId,
+      cityId:cityDetails._id,
       city:cityDetails
     }
   })

@@ -1,5 +1,6 @@
 import MlResolver from '../mlAdminResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
+import geocoder from 'geocoder'
 
 MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
     let chapter = args.chapter;
@@ -11,37 +12,44 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
     if(MlChapters.find({cityId:chapter.cityId}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
-    }else{
-        let id = MlChapters.insert(chapter);
-        if(id){
-            let subChapter = {
-                clusterId:chapter.clusterId,
-                clusterName:chapter.clusterName,
-                stateId:chapter.stateId,
-                chapterId:id,
-                chapterName:chapter.chapterName,
-                subChapterId:"ML_"+chapter+"_"+subChapterName,
-                subChapterName:subChapterName,
-                subChapterDisplayName:subChapterName,
-                associatedChapters:[],
-                subChapterUrl:"",
-                isUrlNotified:false,
-                subChapterEmail:"moolyahyd@moolya.com",
-                isEmailNotified:false,
-                aboutSubChapter:"ssss",
-                subChapterImageLink:"ssc",
-                showOnMap:false,
-                isActive:false,
-                isBespokeRegistration:false,
-                isBespokeWorkFlow:false,
-                subChapterDataAcessMatrix:[]
-            }
-            createSubChapter(subChapter);
-            let code = 200;
-            let result = {chapterId: id}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-            return response
+    }else {
+      geocoder.geocode(chapter.displayName, Meteor.bindEnvironment(function (err, data) {
+        if (err) {
+          return "Invalid Country Name";
         }
+        chapter.latitude = data.results[0].geometry.location.lat;
+        chapter.longitude = data.results[0].geometry.location.lng;
+        let id = MlChapters.insert(chapter);
+        if (id) {
+          let subChapter = {
+            clusterId: chapter.clusterId,
+            clusterName: chapter.clusterName,
+            stateId: chapter.stateId,
+            chapterId: id,
+            chapterName: chapter.chapterName,
+            subChapterId: "ML_" + chapter + "_" + subChapterName,
+            subChapterName: subChapterName,
+            subChapterDisplayName: subChapterName,
+            associatedChapters: [],
+            subChapterUrl: "",
+            isUrlNotified: false,
+            subChapterEmail: "moolyahyd@moolya.com",
+            isEmailNotified: false,
+            aboutSubChapter: "ssss",
+            subChapterImageLink: "ssc",
+            showOnMap: false,
+            isActive: false,
+            isBespokeRegistration: false,
+            isBespokeWorkFlow: false,
+            subChapterDataAcessMatrix: []
+          }
+          createSubChapter(subChapter);
+          let code = 200;
+          let result = {chapterId: id}
+          let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+          return response
+        }
+      }));
     }
 }
 
@@ -69,6 +77,10 @@ MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
 
 }
+MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) => {
+  let result=MlChapters.find({isActive:true}).fetch()||[];
+  return result;
+}
 
 MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
 
@@ -82,7 +94,7 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
     createSubChapter(args.subChapter)
 }
 
-MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
     console.log(args)
     let subChapter = MlSubChapters.findOne({_id: args.subChapterId});
     if(subChapter){

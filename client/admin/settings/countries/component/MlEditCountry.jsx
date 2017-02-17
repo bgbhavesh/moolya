@@ -48,11 +48,12 @@ class MlEditCountry extends React.Component{
 
   async  editCountry() {
     let CountryDetails = {
-      // id: this.refs.id.value,
+      id: this.refs.id.value,
       country: this.refs.country.value,
       displayName: this.refs.displayName.value,
-      // countryCode: this.refs.countryCode.value,
-      url: this.refs.url.value,
+      about: this.refs.about.value,
+      capital: this.refs.capital.value,
+      url: this.refs.url.src,
       status: this.refs.status.checked
     };
     console.log("CountryDetails "+CountryDetails);
@@ -75,12 +76,12 @@ class MlEditCountry extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
+        handler: async(event) => this.props.handler(this.editCountry.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.editCountry.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: null
       },
       {
         showAction: true,
@@ -96,7 +97,7 @@ class MlEditCountry extends React.Component{
             <div className="admin_padding_wrap">
               <h2>Edit Country</h2>
               <div className="col-md-6 nopadding-left">
-                <input type="text" ref="id" value={this.state.data.fetchCountry.id} hidden="true"/>
+                <input type="text" ref="id" value={this.state.data.fetchCountry._id} hidden="true"/>
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
@@ -104,11 +105,11 @@ class MlEditCountry extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <textarea placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea ref="about" defaultValue={this.state.data.fetchCountry && this.state.data.fetchCountry.about} placeholder="About" className="form-control float-label" id=""></textarea>
 
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Capital" className="form-control float-label" id=""/>
+                      <input type="text" ref="capital" defaultValue={this.state.data.fetchCountry && this.state.data.fetchCountry.capital} placeholder="Capital" className="form-control float-label" id=""/>
 
                     </div>
                   </form>

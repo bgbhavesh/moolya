@@ -35,12 +35,14 @@ import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleT
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
-
+import MlChapterMapView from '../../admin/chapter/components/MlChapterMapView'
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
 import  MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
+import {mlChapterMapConfig} from '../../admin/chapter/config/mlChapterConfig'
+
 adminSection = FlowRouter.group({
   prefix: "/admin",
   name: 'admin',
@@ -89,6 +91,12 @@ adminSection.route('/cluster/clusterDetails/:clusterId', {
   name: 'cluster',
   action(params){
     mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
+  }
+});
+adminSection.route('/chapter', {
+  name: 'chapter',
+  action(){
+    mount(AdminLayout,{adminContent:<MlChapterMapView mapConfig={mlChapterMapConfig} />})
   }
 });
 adminSection.route('/chapter/subChapterDetails', {

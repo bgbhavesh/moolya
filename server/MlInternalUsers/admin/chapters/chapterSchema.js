@@ -69,6 +69,8 @@ let chapterSchema = `
         showOnMap:Boolean,
         isActive:Boolean,
         isBespokeRegistration:Boolean,
+        latitude:String,
+        longitude:String,
         isBespokeWorkFlow:Boolean,
         subChapterDataAcessMatrix:[subChapterDataAcessMatrix]
     }
@@ -78,12 +80,14 @@ let chapterSchema = `
         fetchChapters:String
         fetchSubChapter:String
         fetchSubChapters:String
+        fetchChaptersForMap:[Chapter]
     }
     
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
         createSubChapter(subChapter:subChapterObject):String
+        updateSubChapter(subChapterId:String, subChapter:subChapterObject):String
      }
 `
 

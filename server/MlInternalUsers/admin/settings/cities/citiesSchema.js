@@ -25,7 +25,7 @@ let citiesSchema = `
     }
     
     type Query {
-        fetchCities(countryId: String): [Cities]      
+        fetchCities: SearchResp      
     }
     
     type Mutation {

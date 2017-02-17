@@ -59,6 +59,7 @@ const mlCitiesTableConfig=new MlViewer.View({
                               name
                               countryCode
                               countryId
+                              displayName
                               stateId
                               isActive
                               id:_id

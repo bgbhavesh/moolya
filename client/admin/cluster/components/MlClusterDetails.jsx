@@ -1,17 +1,19 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
-import {createClusterActionHandler} from '../actions/createCluster'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import {findClusterTypeActionHandler} from '../actions/findCluster'
+import {updateClusterActionHandler} from '../actions/updateCluster'
 import formHandler from '../../../commons/containers/MlFormHandler';
+import _ from 'lodash';
 class MlClusterDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading: true, data: {}};
-    this.addEventHandler.bind(this);
-    this.createCluster.bind(this)
+    this.onStatusChangeActive = this.onStatusChangeActive.bind(this);
+    this.onStatusChangeMap = this.onStatusChangeMap.bind(this);
     this.findCluster.bind(this);
+    this.updateCluster.bind(this)
     return this;
   }
 
@@ -26,31 +28,43 @@ class MlClusterDetails extends React.Component {
     this.setState({loading: false, data: response});
   }
 
+  async  updateCluster() {
+    let clusterDetails = {
+      _id: this.refs.id.value,
+      countryName: this.refs.countryName.value,
+      displayName: this.refs.displayName.value,
+      about: this.refs.about.value,
+      email: this.refs.email.value,
+      showOnMap: this.refs.showOnMap.checked,
+      isActive: this.refs.isActive.checked
+    }
+    const response = await updateClusterActionHandler(clusterDetails)
+    return response;
+  }
 
-  // componentDidMount() {
-  //   $('.switch input').change(function () {
-  //     if ($(this).is(':checked')) {
-  //       $(this).parent('.switch').addClass('on');
-  //       $(this).val(true)
-  //     } else {
-  //       $(this).parent('.switch').removeClass('on');
-  //       $(this).val(false)
-  //     }
-  //   });
-  // }
-
-  onStatusChange(e) {
-    const data = this.state.data;
+  onStatusChangeActive(e) {
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["showOnMap"]);
     if (e.currentTarget.checked) {
-      this.setState({"data": {"isActive": true}});
+      var z=_.extend(updatedData,{isActive:true});
+      this.setState({data:z,loading:false});
     } else {
-      this.setState({"data": {"isActive": false}});
+      var z=_.extend(updatedData,{isActive:false});
+      this.setState({data:z,loading:false});
     }
   }
 
-  async addEventHandler() {
-    const resp = await this.createCluster();
-    return resp;
+  onStatusChangeMap(e)
+  {
+      let updatedData = this.state.data||{};
+      updatedData=_.omit(updatedData,["showOnMap"]);
+      if (e.currentTarget.checked) {
+        var z=_.extend(updatedData,{showOnMap:true});
+        this.setState({data:z,loading:false});
+      } else {
+        var z=_.extend(updatedData,{showOnMap:false});
+        this.setState({data:z,loading:false});
+    }
   }
 
   async handleError(response) {
@@ -58,31 +72,15 @@ class MlClusterDetails extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/cluster");
+    FlowRouter.go("/admin/dashboard");
   };
-
-  async  createCluster() {
-    let clusterDetails = {
-      "countryId": "c101",
-      "countryFlag": "https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png",
-      "about": "India",
-      "displayName": "India",
-      "email": "moolya@moolya.in",
-      "showOnMap": false,
-      "isActive": false,
-      "moduleName": "CLUSTER",
-      "actionName": "CREATE"
-    }
-    const response = await createClusterActionHandler(clusterDetails)
-    return response;
-  }
 
   render() {
     let MlActionConfig = [
       {
         actionName: 'edit',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateTemplateType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.updateCluster.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -102,6 +100,7 @@ class MlClusterDetails extends React.Component {
                 <div className="col-md-6">
                   <div className="form_bg">
                     <div className="form-group">
+                      <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
                       <input type="text" ref="countryName" placeholder="Cluster Name"
                              defaultValue={this.state.data && this.state.data.countryName}
                              className="form-control float-label"/>
@@ -123,11 +122,11 @@ class MlClusterDetails extends React.Component {
                   <div className="form_bg">
                     <div className="form-group ">
                       <div className="fileUpload mlUpload_btn">
-                        <span>Upload Image</span>
-                        <input type="file" ref="uploadImage" className="upload"/>
+                        <span>Country Flag</span>
+                        {/*<input type="file" ref="uploadImage" className="upload"/>*/}
                       </div>
                       <div className="previewImg">
-                        <img src="/images/india.png"/>
+                          <img src={this.state.data && this.state.data.countryFlag}/>
                       </div>
 
                     </div>
@@ -140,16 +139,16 @@ class MlClusterDetails extends React.Component {
                     <div className="form-group switch_wrap">
                       <label>Show on map</label><br/>
                       <label className="switch">
-                        <input type="checkbox" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
-                               onChange={this.onStatusChange.bind(this)}/>
+                        <input type="checkbox" id="showOnMap" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
+                               onChange={this.onStatusChangeMap.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>
                     <div className="form-group switch_wrap">
                       <label>Status</label><br/>
                       <label className="switch">
-                        <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
-                               onChange={this.onStatusChange.bind(this)}/>
+                        <input type="checkbox" id="isActive" ref="isActive" checked={this.state.data && this.state.data.isActive}
+                               onChange={this.onStatusChangeActive.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>
@@ -168,3 +167,4 @@ class MlClusterDetails extends React.Component {
 ;
 
 export default MoolyaAddCluster = formHandler()(MlClusterDetails);
+

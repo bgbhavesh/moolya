@@ -16,6 +16,16 @@ let clusterSchema = `
         longitude:String
     }
     
+      input clusterUpdateObject{
+        _id:String,
+        countryName: String
+        displayName:String, 
+        about:String,  
+        email:String, 
+        showOnMap:Boolean, 
+        isActive:Boolean
+    }
+    
     input clusterObject{
         countryId:String, 
         countryName: String
@@ -40,9 +50,9 @@ let clusterSchema = `
     type Mutation 
     {
         createCluster(cluster:clusterObject):String
-        updateCluster(clusterId:String, cluster:clusterObject): String
+        upsertCluster(clusterId:String, cluster:clusterObject): String
+        updateCluster(clusterId:String, clusterDetails:clusterUpdateObject):String
     }    
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],  clusterSchema]);
-// fetchCluster:String
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], clusterSchema]);

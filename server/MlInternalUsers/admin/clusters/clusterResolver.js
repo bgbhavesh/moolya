@@ -31,7 +31,7 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
     }
 }
 
-MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
     let cluster = MlClusters.findOne({_id: args.clusterId});
     if(cluster){
         for(key in args.cluster){
@@ -55,6 +55,17 @@ MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
     return response;
   }
 }
+
+MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.clusterId) {
+    var id= args.clusterId;
+    let updatedResponse= MlClusters.update(id, {$set: args.clusterDetails});
+    return updatedResponse
+  }
+}
+
+
 
 MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) => {
       let result=MlClusters.find({isActive:true}).fetch()||[];

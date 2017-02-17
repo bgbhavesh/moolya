@@ -9,7 +9,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     super(props);
     this.state={
       selectedValue:null,
-      assignRoleToClusters:[{cluster: '',chapter:'',subChapter:'',department:'',suDepartment:'',isActive:false }]
+      assignRoleToClusters:[{cluster: '',chapter:'',subChapter:'',department:'',subDepartment:'',isActive:false }]
     }
     this.addDepartmentComponent.bind(this);
     return this;
@@ -17,7 +17,7 @@ export default class MlAssignClustersToRoles extends React.Component {
 
   AssignassignRoleToClusters(id){
     this.setState({
-      assignRoleToClusters: this.state.assignRoleToClusters.concat([{cluster: '',chapter:'',subChapter:'',department:'',suDepartment:'',isActive:false }])
+      assignRoleToClusters: this.state.assignRoleToClusters.concat([{cluster: '',chapter:'',subChapter:'',department:'',subDepartment:'',isActive:false }])
     });
   }
 
@@ -45,19 +45,37 @@ export default class MlAssignClustersToRoles extends React.Component {
     });
   }
   optionsBySelectCluster(index, selectedIndex){
-
     let availabilityDetails=this.state.assignRoleToClusters
-    console.log("Selected--"+availabilityDetails);
     availabilityDetails[index]['cluster']=selectedIndex
     this.setState({assignRoleToClusters:availabilityDetails})
     this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
   }
 
   optionsBySelectChapter(index, selectedIndex){
+    let availabilityDetails=this.state.assignRoleToClusters
+    availabilityDetails[index]['chapter']=selectedIndex
+    this.setState({assignRoleToClusters:availabilityDetails})
+    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+  }
 
+  optionsBySelectSubChapter(index, selectedIndex){
+    let availabilityDetails=this.state.assignRoleToClusters
+    availabilityDetails[index]['subChapter']=selectedIndex
+    this.setState({assignRoleToClusters:availabilityDetails})
+    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+  }
+
+  optionsBySelectDepartment(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     console.log("Selected--"+availabilityDetails);
-    availabilityDetails[index]['chapter']=selectedIndex
+    availabilityDetails[index]['department']=selectedIndex
+    this.setState({assignRoleToClusters:availabilityDetails})
+    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+  }
+
+  optionsBySelectSubDepartment(index, selectedIndex){
+    let availabilityDetails=this.state.assignRoleToClusters
+    availabilityDetails[index]['subDepartment']=selectedIndex
     this.setState({assignRoleToClusters:availabilityDetails})
     this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
   }
@@ -94,11 +112,11 @@ export default class MlAssignClustersToRoles extends React.Component {
   render() {
     let that=this;
     //let queryOptions={options: { variables: {searchQuery:null}}};
-    let clusterquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
-    let chapterquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
-    let subChapterquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
-    let departmentquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
-    let subDepartmentquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
+    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
+    let chapterquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
+    let subChapterquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
+    let departmentquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
+    let subDepartmentquery=gql` query{data:fetchClustersForMap{label:displayName,value:countryId}}`;
 
     return (
 
@@ -124,17 +142,17 @@ export default class MlAssignClustersToRoles extends React.Component {
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subDepartment} queryType={"graphql"} query={subDepartmentquery}  isDynamic={true} id={'subDepartment'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subDepartment} queryType={"graphql"} query={subDepartmentquery}  isDynamic={true} id={'subDepartment'+id} onSelect={that.optionsBySelectSubDepartment.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group switch_wrap inline_switch">

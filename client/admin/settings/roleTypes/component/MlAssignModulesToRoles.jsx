@@ -3,13 +3,14 @@ import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
+import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 export default class MlAssignModulesToRoles extends React.Component {
   constructor(props){
     super(props);
     this.state={
       selectedValue:null,
-      assignModulesToRoles:[{moduleName: '',diplayName:'',actions:[],fields:[],isActive:false }]
+      assignModulesToRoles:[{moduleId: '',actions:[]}]
     }
     this.addDepartmentComponent.bind(this);
     return this;
@@ -17,7 +18,7 @@ export default class MlAssignModulesToRoles extends React.Component {
 
   assignModuleToRoles(id){
     this.setState({
-      assignModulesToRoles: this.state.assignModulesToRoles.concat([{moduleName: '',diplayName:'',actions:[],fields:[],isActive:false }])
+      assignModulesToRoles: this.state.assignModulesToRoles.concat([{moduleId: '',actions:[]}])
     });
   }
 
@@ -44,25 +45,25 @@ export default class MlAssignModulesToRoles extends React.Component {
       }
     });
   }
-  optionsBySelectCluster(index, selectedIndex){
-
-    let availabilityDetails=this.state.assignModulesToRoles
-    console.log("Selected--"+availabilityDetails);
-    availabilityDetails[index]['cluster']=selectedIndex
-    this.setState({assignModulesToRoles:availabilityDetails})
+  optionsBySelectModule(index, selectedIndex){
+    let assignModulesToRoles=this.state.assignModulesToRoles
+    assignModulesToRoles[index]['moduleId']=selectedIndex
+    this.setState({assignModulesToRoles:assignModulesToRoles})
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
   }
 
-  optionsBySelectChapter(index, selectedIndex){
-
-    let availabilityDetails=this.state.assignModulesToRoles
-    console.log("Selected--"+availabilityDetails);
-    availabilityDetails[index]['chapter']=selectedIndex
-    this.setState({assignModulesToRoles:availabilityDetails})
+  optionsBySelectAction(index, event){
+    let assignModulesToRoles=this.state.assignModulesToRoles
+    let actions=this.state.assignModulesToRoles[index].actions
+    if(event.target.checked){
+      let value= event.target.name
+      actions.push({actionId:value})
+      assignModulesToRoles[index].actions=actions
+    }
+    this.setState({assignModulesToRoles:assignModulesToRoles})
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
   }
   addDepartmentComponent(event) {
-
     var mySwiper = new Swiper('.blocks_in_form', {
       // speed: 400,
       pagination: '.swiper-pagination',
@@ -73,7 +74,7 @@ export default class MlAssignModulesToRoles extends React.Component {
     });
     mySwiper.updateContainerSize()
     this.setState({
-      assignModulesToRoles: this.state.assignModulesToRoles.concat([{cluster: '',chapter:'',subChapter:'',email:'',isActive:false }])
+      assignModulesToRoles: this.state.assignModulesToRoles.concat([{moduleId: '',actions:[]}])
     });
 
   }
@@ -84,7 +85,6 @@ export default class MlAssignModulesToRoles extends React.Component {
       fieldValue=event.target.checked;
     }
     let departmentDetails=this.state.assignModulesToRoles
-
     departmentDetails[id][filedName]=fieldValue
     this.setState({assignModulesToRoles:departmentDetails})
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
@@ -93,7 +93,7 @@ export default class MlAssignModulesToRoles extends React.Component {
 
   render() {
     let that=this;
-    let getModulesquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
+    let getModulesquery=gql` query{data:fetchModules{label:name,value:_id}}`;
     let getfieldsquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
 
     return (
@@ -104,8 +104,8 @@ export default class MlAssignModulesToRoles extends React.Component {
         {that.state.assignModulesToRoles.map(function(options,id){
 
           return(
-            <div className="panel panel-default" key={id}>
-              <div className="col-md-6 nopadding-right">
+
+              <div className="col-md-6 nopadding-right"  key={id}>
                 <div className="form_bg">
                   <div className="left_wrap">
 
@@ -118,17 +118,15 @@ export default class MlAssignModulesToRoles extends React.Component {
                       <form style={{marginTop:'0px'}}>
 
                         <div className="panel panel-default">
-                          <div className="panel-heading">Add Module</div>
+                          <div className="panel-heading">Add Module<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/remove.png"/></div></div>
                           <div className="panel-body">
                             <div className="row">
-                              <div className="col-md-6">
-                                <div className="form-group">
-                                  <input type="text" placeholder="Module Name" className="form-control float-label" id="" />
-                                </div>
+                              <div className="form-group">
+                                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.moduleId} queryType={"graphql"} query={getModulesquery}  isDynamic={true} id={'moduleId'+id} onSelect={that.optionsBySelectModule.bind(that,id)} />
                               </div>
                               <div className="col-md-6">
                                 <div className="form-group">
-                                  <input type="text" placeholder="Display Name" className="form-control float-label" id="" />
+                                  <input type="text" placeholder="Display Name" ref="displayName" className="form-control float-label" id="" />
                                 </div>
                               </div>
                               <div className="col-md-12 role_dif">
@@ -136,10 +134,10 @@ export default class MlAssignModulesToRoles extends React.Component {
                                   Actions
                                 </div>
                                 <div className="form-group">
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Create</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Read</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Update</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Delete</label></div>
+                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="CREATE" onChange={that.optionsBySelectAction.bind(that, id)}  /><label htmlFor="chapter_admin_check"><span></span>Create</label></div>
+                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="READ" onChange={that.optionsBySelectAction.bind(that, id)} /><label htmlFor="chapter_admin_check"><span></span>Read</label></div>
+                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="UPDATE" onChange={that.optionsBySelectAction.bind(that, id)} /><label htmlFor="chapter_admin_check"><span></span>Update</label></div>
+                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="DELETE" onChange={that.optionsBySelectAction.bind(that, id)} /><label htmlFor="chapter_admin_check"><span></span>Delete</label></div>
                                 </div>
                               </div>
                               <div className="col-md-3">
@@ -173,17 +171,6 @@ export default class MlAssignModulesToRoles extends React.Component {
                                   <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Delete</label></div>
                                 </div>
                               </div>
-                              <div className="col-md-12 role_dif">
-                                <div className="form-group">
-                                  Field Name 2
-                                </div>
-                                <div className="form-group">
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Create</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Read</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Update</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Delete</label></div>
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -192,7 +179,7 @@ export default class MlAssignModulesToRoles extends React.Component {
                   </div>
                 </div>
               </div>
-            </div>
+
           )})}
       </div>
 

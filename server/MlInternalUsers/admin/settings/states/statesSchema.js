@@ -22,7 +22,7 @@ let States = `
     }
     
     type Query {
-        fetchStates(countryId: String): [States]      
+        fetchStates: SearchResp  
     }
     
     type Mutation{

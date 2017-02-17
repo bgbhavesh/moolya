@@ -6,6 +6,7 @@ export async function updateCountryActionHandler(CountryDetails) {
   let country = CountryDetails.country;
   let countryCode = CountryDetails.countryCode;
   let displayName = CountryDetails.displayName;
+  let about = CountryDetails.about;
   let url = CountryDetails.url;
   let isActive = CountryDetails.isActive;
   let lat = CountryDetails.lat;

@@ -33,13 +33,14 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
           let cluster = MlClusters.findOne({"countryId":args.countryId});
           if(cluster){
             // let Args = {clusterId:cluster._id, cluster:{isActive:country.isActive}};
-            MlResolver.MlMutationResolver['updateCluster'] (obj, {clusterId:cluster._id, cluster:{isActive:country.isActive}}, context, info)
+            MlResolver.MlMutationResolver['upsertCluster'] (obj, {clusterId:cluster._id, cluster:{isActive:country.isActive}}, context, info)
           }
           else {
             cluster = {
               countryId:args.countryId,
               countryName : country.country,
               displayName: country.displayName,
+              countryFlag: country.url,
               about:"",
               email:"",
               showOnMap:false,

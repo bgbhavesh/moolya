@@ -12,6 +12,8 @@ export async function findCountryActionHandler(CountryId) {
         country
         countryCode
         displayName
+        about
+        capital
         url
         isActive
       }

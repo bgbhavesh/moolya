@@ -9,16 +9,19 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
   let isMoolya = DepartmentDetails.appType;
   let departmentAvailable = DepartmentDetails.departmentAvailablity;
 
-  let clusters = departmentAvailable[0].cluster;
-  departmentAvailable[0].cluster=null;
-  let clustersList = [];
-  for(var i in clusters) {
-    var cluster = clusters[i];
-    clustersList.push({
-      "clusterId" : cluster
-    });
+  var arrayLength = departmentAvailable.length;
+  for (var j = 0; j < arrayLength; j++) {
+    let clusters = departmentAvailable[j].cluster;
+    departmentAvailable[j].cluster=null;
+    let clustersList = [];
+    for(var i in clusters) {
+      var cluster = clusters[i];
+      clustersList.push({
+        "clusterId" : cluster
+      });
+    }
+    departmentAvailable[j].cluster=clustersList;
   }
-  departmentAvailable[0].cluster=clustersList;
 
   const result = await client.mutate({
     mutation: gql`

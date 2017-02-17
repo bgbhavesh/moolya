@@ -22,7 +22,7 @@ export default class MoolyaMapView extends Component {
 
   render()
   {
-    const places = this.props.data?this.props.data.data.map(place => {
+    const places = this.props.data?this.props.data.map(place => {
       // const { ...data} = place;
       return (
         <MapMarkers key={place.countryId} lat={place.latitude} lng={place.longitude} text={place.displayName} hover={this.props.hoverKey === place._id} desc={place.about}/>

@@ -31,8 +31,7 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
     }
 }
 
-MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
-    console.log(args)
+MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
     let cluster = MlClusters.findOne({_id: args.clusterId});
     if(cluster){
         for(key in args.cluster){
@@ -49,11 +48,28 @@ MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
-
+  // TODO : Authorization
+  if (args._id) {
+    var id= args._id;
+    let response= MlClusters.findOne({"_id":id});
+    return response;
+  }
 }
 
-MlResolver.MlQueryResolver['fetchClusters'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.clusterId) {
+    var id= args.clusterId;
+    let updatedResponse= MlClusters.update(id, {$set: args.clusterDetails});
+    return updatedResponse
+  }
+}
 
+
+
+MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) => {
+      let result=MlClusters.find({isActive:true}).fetch()||[];
+      return result;
 }
 
 
@@ -62,7 +78,6 @@ MlResolver.MlQueryResolver['fetchClusters'] = (obj, args, context, info) => {
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else{
-
         let id = MlClusters.insert(cluster);
         if(id){
             let code = 200;

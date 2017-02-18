@@ -19,4 +19,3 @@ let modules = `
 //TODO: Update Role
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], modules]);
-console.log(MlSchemaDef);

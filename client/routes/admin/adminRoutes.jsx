@@ -37,7 +37,7 @@ import MlAddTransaction from '../../admin/settings/transactions/component/MlAddT
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
 import MlChapterView from '../../admin/chapter/components/MlChapter'
-import MlSubChapterList from '../../admin/dashboard/component/MlSubChapterList'
+import MlSubChapterView from '../../admin/dashboard/component/MlSubChapterList'
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
@@ -104,7 +104,7 @@ adminSection.route('/chapter', {
     mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
   }
 });
-adminSection.route('/chapter/:chapterId', {
+adminSection.route('/chapters/:chapterId', {
   name: 'chapter',
   action(params){
     mount(AdminLayout,{adminContent:<MlSubChapterView params={params.chapterId} listConfig={mlSubChapterListConfig} />})

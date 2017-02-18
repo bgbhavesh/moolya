@@ -93,7 +93,7 @@ let chapterSchema = `
         fetchChapter:String
         fetchChapters(id:String):[Chapter]
         fetchSubChapter(_id: String):SubChapter
-        fetchSubChapters:String
+        fetchSubChapters(id: String):[SubChapter]
         fetchChaptersForMap:[Chapter]
     }
     

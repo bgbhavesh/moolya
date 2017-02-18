@@ -73,6 +73,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlDocumentFormats.find({},findOptions).fetch();
     totalRecords=MlDocumentFormats.find({},findOptions).count();
   }
+  if(args.module=="kycCategory"){
+    data= MlDocumentCategories.find({},findOptions).fetch();
+    totalRecords=MlDocumentCategories.find({},findOptions).count();
+  }
   if(args.module=="transaction"){
     data= MlTransactions.find({},findOptions).fetch();
     totalRecords=MlTransactions.find({},findOptions).count();
@@ -141,6 +145,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.docFormatName){
       return 'DocumentFormats'
+    }
+    if(data.docCategoryName){
+      return 'KycCategories'
     }
     if(data.transactionName){
       return 'Transaction'

@@ -659,6 +659,44 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/kycCategoryList",
+            "name" : "KYC Category",
+            "uniqueId" : "settings_kycCategories",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addKycCategory",
+              "name": "Add KYC Category",
+              "uniqueId": "settings_AddKycCategory",
+              "subMenuMappingId":"settings_kycCategories",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/kycCategoryList",
+                "name": "List KYC Categories",
+                "uniqueId": "settings_KycCategoryList",
+                "subMenuMappingId":"settings_kycCategories",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editKycCategory",
+                "name": "Edit KYC Category",
+                "uniqueId": "settings_EditKycCategory",
+                "subMenuMappingId":"settings_kycCategories",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

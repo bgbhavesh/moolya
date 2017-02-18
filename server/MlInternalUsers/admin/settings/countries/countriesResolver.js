@@ -22,7 +22,6 @@ MlResolver.MlQueryResolver['fetchCountriesSearch'] = (obj, args, context, info) 
 
 
 MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
-    console.log(args)
     let country = MlCountries.findOne({_id: args.countryId});
     if(country){
         for( key in args.country){

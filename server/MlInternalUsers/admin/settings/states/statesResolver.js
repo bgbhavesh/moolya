@@ -20,7 +20,7 @@ MlResolver.MlQueryResolver['fetchStates'] = (obj, args, context, info) =>
 }
 
 MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {
-    console.log(args)
+
     let state = MlStates.findOne({_id: args.stateId});
     if(state){
         for(key in args.state){

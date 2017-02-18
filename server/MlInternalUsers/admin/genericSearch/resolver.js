@@ -73,6 +73,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlDocumentFormats.find({},findOptions).fetch();
     totalRecords=MlDocumentFormats.find({},findOptions).count();
   }
+  if(args.module=="kycCategory"){
+    data= MlDocumentCategories.find({},findOptions).fetch();
+    totalRecords=MlDocumentCategories.find({},findOptions).count();
+  }
   if(args.module=="transaction"){
     data= MlTransactions.find({},findOptions).fetch();
     totalRecords=MlTransactions.find({},findOptions).count();
@@ -86,7 +90,19 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data = Meteor.users.find().fetch();
       totalRecords=Meteor.users.find({},findOptions).count();
   }
+  if(args.module == 'roles'){
+    data= MlRoles.find({},findOptions).fetch();
+    totalRecords=MlRoles.find({},findOptions).count();
+  }
 
+  if(args.module=="industry"){
+    data= MlIndustries.find({},findOptions).fetch();
+    totalRecords=MlIndustries.find({},findOptions).count();
+  }
+  if(args.module=="specification"){
+    data= MlSpecifications.find({},findOptions).fetch();
+    totalRecords=MlSpecifications.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -142,6 +158,12 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.docFormatName){
       return 'DocumentFormats'
     }
+    if(data.docCategoryName){
+      return 'KycCategories'
+    }
+    if(data.docCategoryName){
+      return 'DocumentMapping'
+    }
     if(data.transactionName){
       return 'Transaction'
     }
@@ -152,7 +174,16 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.username){
       return 'BackendUsers'
     }
+    if(data.roleName){
+      return 'Roles'
+    }
 
+    if(data.industryName){
+      return 'Industry'
+    }
+    if(data.specificationName){
+      return 'Specification'
+    }
     return null;
   }
 }

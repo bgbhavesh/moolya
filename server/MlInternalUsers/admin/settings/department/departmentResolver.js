@@ -16,7 +16,6 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) => {
-    console.log(args)
     let department = MlDepartments.findOne({_id: args.departmentId});
     if(department)
     {

@@ -37,4 +37,3 @@ let Filters = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Filters]);
-console.log(MlSchemaDef);

@@ -18,7 +18,6 @@ MlResolver.MlMutationResolver['UpdatePermission'] = (obj, args, context, info) =
   if (args._id) {
     var id= args._id;
     let updatedResponse= MlPermissions.update(id, {$set: args});
-    console.log(updatedResponse)
     return updatedResponse
   }
 
@@ -29,7 +28,6 @@ MlResolver.MlQueryResolver['FindPermission'] = (obj, args, context, info) => {
   if (args._id) {
     var id= args._id;
     let response= MlPermissions.findOne({"_id":id});
-    console.log(response)
     return response;
   }
 

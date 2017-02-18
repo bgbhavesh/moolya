@@ -1,6 +1,16 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let Role = `
+
+   type Roles{
+        _id:String,
+        roleName: String, 
+        displayName:String, 
+        roleType:String,
+        userType:String,
+        about:String 
+    }
+    
     scalar Date
     input assignroles{
         cluster:String,
@@ -55,4 +65,4 @@ let Role = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Role]);
-console.log(MlSchemaDef);
+

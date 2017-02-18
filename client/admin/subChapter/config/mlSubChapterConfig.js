@@ -14,28 +14,23 @@ const mlSubChapterListConfig=new MlViewer.View({
   pagination:true,
   sort:true,
   viewComponent:<MlSubChapterList />,
-  // graphQlQuery:gql`
-  //              query{
-  //                 data:fetchSubChapters($id: String){
-  //                    totalRecords
-  //                       data{
-  //                        ...on SubChapter{
-  //                                 clusterName
-  //                                 chapterName
-  //                                 subChapterName
-  //                                 subChapterDisplayName
-  //                                 aboutSubChapter
-  //                                 subChapterImageLink
-  //                                 subChapterEmail
-  //                                 isEmailNotified
-  //                                 showOnMap
-  //                                 isActive
-  //                             }
-  //                        }
-  //
-  //                 }
-  //              }
-  //             `
+  graphQlQuery:gql` query fetchSubChapters( $id:String) {
+                    data:fetchSubChapters(id: $id){
+                       ...on SubChapter{
+                                   clusterName
+                                   chapterName
+                                   subChapterName
+                                  subChapterDisplayName
+                                   aboutSubChapter
+                                   subChapterImageLink
+                                   subChapterEmail
+                                   isEmailNotified
+                                   showOnMap
+                                   isActive
+                               }
+                    }
+                     }`
+
 });
 
 export { mlSubChapterListConfig};

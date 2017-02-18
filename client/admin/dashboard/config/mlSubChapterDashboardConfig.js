@@ -4,7 +4,7 @@ import MlSubChapterList from "../../dashboard/component/MlSubChapterList"
 import React from 'react';
 import gql from 'graphql-tag'
 
-const mlSubChapterListConfig=new MlViewer.View({
+const mlSubChapterDashboardListConfig=new MlViewer.View({
   name:"subChapterList",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
@@ -16,7 +16,10 @@ const mlSubChapterListConfig=new MlViewer.View({
   viewComponent:<MlSubChapterList />,
   graphQlQuery:gql` query fetchSubChapters( $id:String) {
                     data:fetchSubChapters(id: $id){
-                       ...on SubChapter{
+                       data{...on SubChapter{
+                                   _id
+                                   chapterId
+                                   clusterId
                                    clusterName
                                    chapterName
                                    subChapterName
@@ -27,10 +30,11 @@ const mlSubChapterListConfig=new MlViewer.View({
                                    isEmailNotified
                                    showOnMap
                                    isActive
+                                   subChapterDisplayName
                                }
                     }
+                    }
                      }`
-
 });
 
-export { mlSubChapterListConfig};
+export { mlSubChapterDashboardListConfig};

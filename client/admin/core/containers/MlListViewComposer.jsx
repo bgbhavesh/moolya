@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { graphql,compose } from 'react-apollo';
 import MlListView from "../components/MlListView"
-
+import _ from 'lodash';
 const DataComposerType='graphQl';
 export default class  MlListViewComposer extends Component {
   constructor(props) {
@@ -9,11 +9,22 @@ export default class  MlListViewComposer extends Component {
   }
   render () {
     let config=this.props;
+    let queryOptions={
+      forceFetch: true,
+      variables: {
+        offset: 0,
+        limit: config.sizePerPage||5,
+      }
+    };
     if(DataComposerType==='graphQl'){
+      let hasQueryOptions=config.queryOptions?true:false;
+      if(hasQueryOptions){
+        let extendedQueryVar=_.extend(queryOptions.variables,config.queryOptions);
+        queryOptions["variables"]=extendedQueryVar;
+      }
+
       const Composer = graphql(config.graphQlQuery, {
-        options: props => ({
-          forceFetch: true,
-        }),
+        options: props => (queryOptions),
         props: ({data: {loading, data, fetchMore}}) => ({
           loading,
           data,

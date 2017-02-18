@@ -99,8 +99,8 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({chapterId: args.chapterId}).fetch()||[];
-  return result;
+  let result=MlSubChapters.find({chapterId: args.id}).fetch()||[];
+  return {data:result};
 }
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {

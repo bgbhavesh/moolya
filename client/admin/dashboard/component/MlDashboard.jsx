@@ -23,7 +23,7 @@ export default class MlDashboard extends React.Component {
     let infinityViewProps = {viewMode: this.state.viewMode, onViewModeChange:this.viewModeChange.bind(this)};
     let config=this.props;
     let listConfig=this.props.listConfig;
-    listConfig.data=[{displayName:"India"}];
+    listConfig.queryOptions=this.props.queryOptions?this.props.queryOptions:null;
     return (
       <div>
         <div className="admin_main_wrap">

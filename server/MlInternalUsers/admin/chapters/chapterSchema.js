@@ -44,7 +44,10 @@ let chapterSchema = `
     
     type SubChapter{
         _id:String
+        clusterId:String
         clusterName: String
+        chapterId:String
+        subChapterImageLink:String
         chapterName :String
         subChapterName :String
         subChapterDisplayName: String
@@ -90,11 +93,15 @@ let chapterSchema = `
         subChapterDataAcessMatrix:[subChapterDataAcessMatrix]
     }
     
+     type SubChapterResponse{
+         data:[SubChapter]
+    }
+    
     type Query{ 
         fetchChapter:String
         fetchChapters(id:String):[Chapter]
         fetchSubChapter(_id: String):SubChapter
-        fetchSubChapters(id: String):[SubChapter]
+        fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
     }
     

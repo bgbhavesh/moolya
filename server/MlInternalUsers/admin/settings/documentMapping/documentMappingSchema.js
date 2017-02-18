@@ -1,8 +1,8 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
-let Role = `
+let DocumentMapping = `
 
-   type Roles{
+   type DocumentMapping{
         _id:String,
         roleName: String, 
         displayName:String, 
@@ -56,13 +56,13 @@ let Role = `
     }
     
     type Query {
-        fetchRole(roleName: String, roleValue: String, name: String): String
+        fetchDocumentMapping(roleName: String, roleValue: String, name: String): String
     }
     
     type Mutation {
-       createRole(role:roleObject): String
+       createDocumentMapping(role:roleObject): String
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Role]);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentMapping]);
 

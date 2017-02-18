@@ -583,6 +583,44 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/documentTypeList",
+            "name" : "Document Types",
+            "uniqueId" : "settings_documentTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addDocumentType",
+              "name": "Add Document Type",
+              "uniqueId": "settings_AddDocumentType",
+              "subMenuMappingId":"settings_documentTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/templateTypeList",
+                "name": "List Document Type",
+                "uniqueId": "settings_DocumentTypeList",
+                "subMenuMappingId":"settings_documentTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDocumentType",
+                "name": "Edit Document Type",
+                "uniqueId": "settings_EditDocumentType",
+                "subMenuMappingId":"settings_documentTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

@@ -29,7 +29,6 @@ MlResolver.MlQueryResolver['FindTransaction'] = (obj, args, context, info) => {
   if (args._id) {
     var id= args._id;
     let response= MlTransactions.findOne({"_id":id});
-    console.log(response)
     return response;
   }
 

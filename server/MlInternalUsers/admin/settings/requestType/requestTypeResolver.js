@@ -18,7 +18,6 @@ MlResolver.MlMutationResolver['UpdateRequestType'] = (obj, args, context, info) 
   if (args._id) {
     var id= args._id;
     let updatedResponse= MlRequestType.update(id, {$set: args});
-    console.log(updatedResponse)
     return updatedResponse
   }
 
@@ -29,7 +28,6 @@ MlResolver.MlQueryResolver['FindRequestType'] = (obj, args, context, info) => {
   if (args._id) {
     var id= args._id;
     let response= MlRequestType.findOne({"_id":id});
-    console.log(response)
     return response;
   }
 

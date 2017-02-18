@@ -57,4 +57,3 @@ let departmentSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
-console.log(MlSchemaDef);

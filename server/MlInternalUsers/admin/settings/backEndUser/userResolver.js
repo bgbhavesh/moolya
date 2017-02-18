@@ -35,7 +35,6 @@ import MlRespPayload from '../../../../commons/mlPayload'
 // }
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
-    console.log(args)
     if(Meteor.users.find({username:args.user.username}).count() > 0) {
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
@@ -51,7 +50,6 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
-    console.log(args)
     let user = Meteor.users.findOne({_id: args.userId});
     if(user){
         for(key in args.user){

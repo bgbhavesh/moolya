@@ -79,6 +79,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       totalRecords=Meteor.users.find({},findOptions).count();
   }
 
+  if(args.module=="industry"){
+    data= MlIndustries.find({},findOptions).fetch();
+    totalRecords=MlIndustries.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -134,11 +138,12 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.templateName){
       return 'Template'
     }
-
     if(data.username){
       return 'BackendUsers'
     }
-
+    if(data.industryName){
+      return 'Industry'
+    }
     return null;
   }
 }

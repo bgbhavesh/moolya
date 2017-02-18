@@ -3,19 +3,21 @@ import React from 'react';
 import gql from 'graphql-tag'
 const mlRoleTypeTableConfig=new MlViewer.View({
   name:"roleTypeTable",
-  module:"roleType",//Module name for filter.
+  module:"roles",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["roleTypeName","roleTypeDisplayName","isActive"],
+  fields:["roleName","displayName","roleType","userType","about"],
   searchFields:["roleTypeName","roleTypeDisplayName","isActive"],
   throttleRefresh:false,
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "roleTypeName", title: "RoleType Name",dataSort:true},
-    {dataField: "roleTypeDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "isActive", title: "Active",dataSort:true}
+    {dataField: "roleName", title: "Role Name",dataSort:true},
+    {dataField: "displayName", title: "Display Name",dataSort:true},
+    {dataField: "roleType", title: "Role Type",dataSort:true},
+    {dataField: "userType", title: "User Type",dataSort:true},
+    {dataField: "about", title: "Role Description",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -25,10 +27,17 @@ const mlRoleTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editRoleType/"+data.id);
+          FlowRouter.go("/admin/settings/editRole/"+data.id);
         } else{
           alert("Please select a Role Type");
         }
+      }
+    },
+    {
+      showAction: true,
+      actionName: 'add',
+      handler: (data)=>{
+        FlowRouter.go("/admin/settings/createRole")
       }
     },
     {
@@ -38,20 +47,21 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"roleType"){
-                    totalRecords
-                    data{
-                     ...on RoleTypes{
-                             roleTypeName
-                              roleTypeDisplayName
-                              roleTypeDescription
-                              isActive
-                              id:_id
-                          }
-                      }
-              }
-             }
+                query{
+                data:SearchQuery(module:"roles"){
+                      totalRecords
+                      data{
+                       ...on Roles{
+                              id:_id,
+                              roleName, 
+                              displayName, 
+                              roleType,
+                              userType,
+                              about 
+                            }
+                        }
+                }
+               }
               `
 });
 

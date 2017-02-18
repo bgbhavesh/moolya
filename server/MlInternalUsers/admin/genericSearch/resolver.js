@@ -74,6 +74,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data = Meteor.users.find().fetch();
       totalRecords=Meteor.users.find({},findOptions).count();
   }
+  if(args.module == 'roles'){
+    data= MlRoles.find({},findOptions).fetch();
+    totalRecords=MlRoles.find({},findOptions).count();
+  }
 
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -129,6 +133,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
 
     if(data.username){
       return 'BackendUsers'
+    }
+    if(data.roleName){
+      return 'Roles'
     }
 
     return null;

@@ -39,6 +39,7 @@ import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/
 import MlAddKycCategory from  '../../admin/settings/kycCategory/component/MlAddKycCategory'
 import MlKycCategoriesList from '../../admin/settings/kycCategory/component/MlKycCategoriesList'
 import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
+import MlAddDocumentMapping from '../../admin/settings/documentMapping/component/MlAddDocumentMapping'
 
 /*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
 import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'

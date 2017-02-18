@@ -699,6 +699,44 @@ if(Meteor.isServer){
               }]
           },
           {
+            "link" : "/admin/settings/documentMappingList",
+            "name" : "Document Mapping",
+            "uniqueId" : "settings_DocumentMapping",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addDocumentMapping",
+              "name": "Add Document Mapping",
+              "uniqueId": "settings_AddDocumentMapping",
+              "subMenuMappingId":"settings_DocumentMapping",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/documentMappingList",
+                "name": "List Document Mapping",
+                "uniqueId": "settings_DocumentMappingList",
+                "subMenuMappingId":"settings_DocumentMapping",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDocumentMapping",
+                "name": "Edit Document Mapping",
+                "uniqueId": "settings_EditDocumentMapping",
+                "subMenuMappingId":"settings_DocumentMapping",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
             "link" : "/admin/settings/industryList",
             "name" : "Industry Types",
             "uniqueId" : "settings_industryTypes",

@@ -46,6 +46,7 @@ import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEdi
 import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBackendUserList'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
+import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
 
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -106,7 +107,7 @@ adminSection.route('/chapter', {
 adminSection.route('/chapter/:chapterId', {
   name: 'chapter',
   action(params){
-    mount(AdminLayout,{adminContent:<MlSubChapterList params={params.chapterId} listConfig={mlChapterListConfig} />})
+    mount(AdminLayout,{adminContent:<MlSubChapterView params={params.chapterId} listConfig={mlSubChapterListConfig} />})
   }
 });
 adminSection.route('/chapter/subChapterDetails/:subChapterId', {

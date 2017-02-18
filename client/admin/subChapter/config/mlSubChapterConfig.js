@@ -16,20 +16,17 @@ const mlSubChapterListConfig=new MlViewer.View({
   viewComponent:<MlSubChapterList />,
   graphQlQuery:gql`
               query{
-              data:SearchQuery(module:"chapter"){
+              data:SearchQuery(module:"subChapter"){
                     totalRecords
                     data{
-                     ...on Chapter{
-                              chapterId
-                              chapterName
-                              displayName
-                              chapterImage
-                              stateName
-                              stateId
-                              cityId
-                              cityName
-                              latitude
-                              longitude
+                     ...on SubChapter{
+                              subChapterName
+                      				clusterName
+                              clusterName
+                              aboutSubChapter
+                              subChapterDisplayName
+                              subChapterImageLink
+                              subChapterEmail
                               showOnMap
                               isActive
                           }

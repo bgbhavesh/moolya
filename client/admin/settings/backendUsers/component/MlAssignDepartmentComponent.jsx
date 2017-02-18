@@ -54,13 +54,16 @@ export default class MlAssignDepartmentComponent extends React.Component {
     let that=this;
   //  let queryOptions={options: { variables: {searchQuery:null}}};
     let query=gql` query{
-  data:fetchCountriesSearch{label:country,value:countryCode}
+  data:fetchActiveDepartment{label:departmentName,value:_id}
 }
 `;
+    let subdepartmentquery=gql`query($id:String){data:fetchActiveSubDepartments(departmentId:$id){label:subDepartmentName, value:_id}}`
+
    return(
      <div>
    <div className="form-group"> <a onClick={that.AssignDepartment.bind(this)} className="mlUpload_btn">Assign  Department</a></div>
        {that.state.assignDepartmentForm.map(function(assignDepartmentForm, idx){
+         let subDepartmentOptions = {options: { variables: {id:assignDepartmentForm.department}}};
          return(
          <div className="panel panel-default" key={idx}>
            <div className="panel-heading"> Assign Departments
@@ -74,7 +77,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
              </div>
              <div className="form-group">
               {/* <Select name="form-field-name" value={assignDepartmentForm.subdepartment} options={options3} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
-               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subdepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
               </div>
            </div>
          </div>

@@ -95,7 +95,7 @@ export default class MlAssignDepartments extends React.Component {
    let that=this;
    //let queryOptions={options: { variables: {searchQuery:null}}};
     let query=gql` query{
-  data:fetchCountriesSearch{label:country,value:countryCode}
+  data:fetchActiveClusters{label:countryName,value:_id}
 }
 `;
     return (
@@ -111,19 +111,22 @@ export default class MlAssignDepartments extends React.Component {
               <div className="panel-heading">Assign Department<div className="pull-right block_action"><img src="/images/remove.png"/></div></div>
               <div className="panel-body">
 
-                <div className="form-group">
+                <div className="form-group" disabled="true">
                   <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={query}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
+
                 </div>
 
-                <div className="form-group">
+                <div className="form-group"  disabled="true">
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.chapter} queryType={"graphql"} query={query}  isDynamic={true} id={'chapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />
+                    {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.chapter} queryType={"graphql"} query={query}  isDynamic={true} id={'chapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />*/}
+                    <input type="text" id="" placeholder="Select Chapter" className="form-control float-label" disabled="true"/>
                   </div>
                 </div>
                 <div className="form-group">
-                  <select placeholder="Select subChapter" ref="selectSubChapter" className="form-control float-label">
-                    <option>Select SubChapter</option>
-                  </select>
+                  {/*<select placeholder="Select subChapter" ref="selectSubChapter" className="form-control float-label">*/}
+                    {/*<option>Select SubChapter</option>*/}
+                  {/*</select>*/}
+                  <input type="text" id="" placeholder="Select Sub Chapter" className="form-control float-label" disabled="true"/>
                 </div>
                 <div className="form-group">
                   <input placeholder="Department Email Id" className="form-control float-label"/>

@@ -72,6 +72,11 @@ MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) =
       return result;
 }
 
+MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) => {
+  let result=MlClusters.find({isActive:true}).fetch()||[];
+  return result;
+}
+
 
  let createcluster = (cluster) =>{
     if(MlClusters.find({countryId:cluster.countryId}).count() > 0){

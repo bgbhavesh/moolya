@@ -44,6 +44,7 @@ let clusterSchema = `
     type Query{ 
         fetchCluster(_id: String):Cluster
         fetchClustersForMap:[Cluster]
+        fetchActiveClusters:[Cluster]
     }
    
     

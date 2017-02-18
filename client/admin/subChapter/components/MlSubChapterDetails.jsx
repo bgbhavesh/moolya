@@ -2,6 +2,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
+import {updateSubChapterActionHandler} from '../actions/updateSubChapter'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import _ from 'lodash';
 
@@ -12,6 +13,7 @@ class MlSubChapterDetails extends React.Component {
     this.state = {loading: true, data: {}};
     this.onStatusChangeActive = this.onStatusChangeActive.bind(this);
     this.onStatusChangeMap = this.onStatusChangeMap.bind(this);
+    this.onStatusChangeNotify = this.onStatusChangeNotify.bind(this);
     this.findSubChapter.bind(this);
     this.updateSubChapter.bind(this)
     return this;
@@ -22,8 +24,7 @@ class MlSubChapterDetails extends React.Component {
   };
 
   async handleSuccess(response) {
-    console.log('final roleback');
-    // FlowRouter.go("/admin/dashboard");
+    FlowRouter.go("/admin/dashboard");
   };
 
   onStatusChangeActive(e) {
@@ -51,38 +52,34 @@ class MlSubChapterDetails extends React.Component {
     }
   }
 
-
-  // componentDidMount() {
-  //   $(function () {
-  //     $('.float-label').jvFloat();
-  //   });
-  //
-  //   $('.switch input').change(function () {
-  //     if ($(this).is(':checked')) {
-  //       $(this).parent('.switch').addClass('on');
-  //     } else {
-  //       $(this).parent('.switch').removeClass('on');
-  //     }
-  //   });
-  // }
+  onStatusChangeNotify(e)
+  {
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["isEmailNotified"]);
+    if (e.currentTarget.checked) {
+      var z=_.extend(updatedData,{isEmailNotified:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{isEmailNotified:false});
+      this.setState({data:z,loading:false});
+    }
+  }
 
   async updateSubChapter() {
     let subChapterDetails = {
       _id: this.refs.id.value,
-      clusterName: this.refs.clusterName.value,
-      chapterName: this.refs.chapterName.value,
-      subChapterName: this.refs.subChapterName.value,
       subChapterDisplayName: this.refs.subChapterDisplayName.value,
       aboutSubChapter: this.refs.aboutSubChapter.value,
-      subChapterImageLink: this.refs.subChapterImageLink.value,
+      // subChapterImageLink: this.refs.subChapterImageLink.value,
       subChapterEmail: this.refs.subChapterEmail.value,
-      isEmailNotified: this.refs.isEmailNotified.value,
+      // isEmailNotified: this.refs.isEmailNotified.value,
       showOnMap: this.refs.showOnMap.checked,
       isActive: this.refs.isActive.checked
     }
-    console.log(subChapterDetails);
-    // const response = await updateSubChapterActionHandler(subChapterDetails)
-    // return response;
+
+    // updateSubChapterActionHandler(subChapterDetails)
+    const response = await updateSubChapterActionHandler(subChapterDetails)
+    return response;
   }
 
   componentWillMount() {
@@ -109,7 +106,7 @@ class MlSubChapterDetails extends React.Component {
         handler: null
       }
     ]
-     let chapterData=this.state.data;
+     // let chapterData=this.state.data;
     const showLoader = this.state.loading;
     return (
       <div>
@@ -153,7 +150,8 @@ class MlSubChapterDetails extends React.Component {
                       <input type="file" className="upload" ref="subChapterImageLink"/>
                     </div>
                     <div className="previewImg ProfileImg">
-                      <img src="/images/ideator_01.png"/>
+                      <img src={this.state.data && this.state.data.subChapterImageLink}/>
+                      {/*<img src="/images/ideator_01.png"/>*/}
                     </div>
                   </div>
                   <br className="brclear"/>
@@ -167,7 +165,9 @@ class MlSubChapterDetails extends React.Component {
                            className="form-control float-label"/>
                     <div className="email_notify">
                       <div className="input_types">
-                        <input ref="isEmailNotified" type="checkbox" name="checkbox" defaultChecked="1"/>
+                        <input ref="isEmailNotified" type="checkbox" name="checkbox"
+                               defaultChecked="0"
+                               onChange={this.onStatusChangeNotify.bind(this)}/>
                         <label htmlFor="checkbox1"><span> </span>Notify</label>
                       </div>
                     </div>

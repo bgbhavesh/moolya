@@ -30,6 +30,10 @@ import MlEditCity from "../../admin/settings/cities/component/MlEditCity";
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
+import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
+import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAddDocumentType'
+import MlDocumentFormatsList from '../../admin/settings/documentFormats/component/MlDocumentFormatsList'
+import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/MlAddDocumentFormat'
 /*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
 import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'
 import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleType'
@@ -318,6 +322,30 @@ adminSection.route('/settings/editTransactionType/:id', {
   name: 'settings_EditTransactionType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditTransactionType config={params.id} />})
+  }
+});
+adminSection.route('/settings/documentTypeList', {
+  name: 'settings_DocumentTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDocumentTypesList/>})
+  }
+});
+adminSection.route('/settings/addDocumentType', {
+  name: 'settings_AddDocumentType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDocumentType/>})
+  }
+});
+adminSection.route('/settings/documentFormatList', {
+  name: 'settings_DocumentFormatList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDocumentFormatsList/>})
+  }
+});
+adminSection.route('/settings/addDocumentFormat', {
+  name: 'settings_AddDocumentFormat',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDocumentFormat/>})
   }
 });
 adminSection.route('/settings/templateTypeList', {

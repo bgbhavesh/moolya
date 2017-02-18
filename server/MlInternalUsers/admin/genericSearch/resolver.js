@@ -65,6 +65,14 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlRoleTypes.find({},findOptions).fetch();
     totalRecords=MlRoleTypes.find({},findOptions).count();
   }
+  if(args.module=="documentType"){
+    data= MlDocumentTypes.find({},findOptions).fetch();
+    totalRecords=MlDocumentTypes.find({},findOptions).count();
+  }
+  if(args.module=="documentFormat"){
+    data= MlDocumentFormats.find({},findOptions).fetch();
+    totalRecords=MlDocumentFormats.find({},findOptions).count();
+  }
   if(args.module=="transaction"){
     data= MlTransactions.find({},findOptions).fetch();
     totalRecords=MlTransactions.find({},findOptions).count();
@@ -127,6 +135,12 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.roleTypeName){
       return 'RoleTypes'
+    }
+    if(data.docTypeName){
+      return 'DocumentTypes'
+    }
+    if(data.docFormatName){
+      return 'DocumentFormats'
     }
     if(data.transactionName){
       return 'Transaction'

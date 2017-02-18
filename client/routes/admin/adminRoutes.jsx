@@ -49,9 +49,13 @@ import MlSubChapterView from '../../admin/dashboard/component/MlSubChapterList'
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
-import  MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
+import MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
 import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
 import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBackendUserList'
+import MlIndustryTypeList from '../../admin/settings/industry/component/MlIndustryTypeList'
+import MlAddIndustryType from '../../admin/settings/industry/component/MlAddIndustryType'
+// import MlEditIndustryType from '../../admin/settings/industry/component/MlEditIndustryType'
+
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -394,3 +398,22 @@ adminSection.route('/settings/editTemplateType/:id', {
     mount(AdminLayout,{adminContent:<MlEditTemplateType config={params.id} />})
   }
 });
+
+adminSection.route('/settings/industryList', {
+  name: 'settings_IndustryList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlIndustryTypeList/>})
+  }
+});
+adminSection.route('/settings/addIndustry', {
+  name: 'settings_AddIndustryType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddIndustryType />})
+  }
+});
+// adminSection.route('/settings/editIndustry/:id', {
+//   name: 'settings_EditIndustryType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditIndustryType config={params.id} />})
+//   }
+// });

@@ -697,6 +697,82 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/industryList",
+            "name" : "Industry Types",
+            "uniqueId" : "settings_industryTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addIndustry",
+              "name": "Add IndustryType",
+              "uniqueId": "settings_AddIndustryType",
+              "subMenuMappingId":"settings_industryTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/industryList",
+                "name": "List IndustryType",
+                "uniqueId": "settings_IndustryTypeList",
+                "subMenuMappingId":"settings_industryTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editIndustry",
+                "name": "Edit IndustryType",
+                "uniqueId": "settings_EditIndustryType",
+                "subMenuMappingId":"settings_industryTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/specificationList",
+            "name" : "Specification Types",
+            "uniqueId" : "settings_specificationTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addSpecification",
+              "name": "Add SpecificationType",
+              "uniqueId": "settings_AddSpecificationType",
+              "subMenuMappingId":"settings_specificationTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/specificationList",
+                "name": "List SpecificationType",
+                "uniqueId": "settings_SpecificationTypeList",
+                "subMenuMappingId":"settings_specificationTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editSpecification",
+                "name": "Edit SpecificationType",
+                "uniqueId": "settings_EditSpecificationType",
+                "subMenuMappingId":"settings_specificationTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

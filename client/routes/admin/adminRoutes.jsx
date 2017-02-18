@@ -15,7 +15,8 @@ import MlAddDepartment from '../../admin/settings/departments/component/MlAddDep
 import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
-import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'
+/*import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'*/
+import MlAddProcessMapping from '../../admin/settings/processMapping/component/MlAddProcessMapping'
 import MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
 import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
 import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
@@ -30,6 +31,7 @@ import MlEditCity from "../../admin/settings/cities/component/MlEditCity";
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
+import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
 import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAddDocumentType'
 import MlDocumentFormatsList from '../../admin/settings/documentFormats/component/MlDocumentFormatsList'
@@ -190,6 +192,12 @@ adminSection.route('/settings/addPermission', {
     mount(AdminLayout,{adminContent:<MlAddPermission />})
   }
 });
+adminSection.route('/settings/addProcess', {
+  name: 'settings_AddProcess',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddProcessMapping />})
+  }
+});
 adminSection.route('/settings/editPermission/:id', {
   name: 'settings_EditPermissions',
   action(params){
@@ -301,10 +309,16 @@ adminSection.route('/settings/editUserType/:id', {
     mount(AdminLayout,{adminContent:< MlEditUserType  config={params.id}/>})
   }
 });
-adminSection.route('/settings/roleTypeList', {
-  name: 'settings_RoleTypeList',
+adminSection.route('/settings/rolesList', {
+  name: 'settings_rolesList',
   action(){
-   /* mount(AdminLayout,{adminContent:< MlRoleTypeList/>})*/
+   mount(AdminLayout,{adminContent:< MlRoleTypeList/>})
+
+  }
+});
+adminSection.route('/settings/createRole', {
+  name: 'settings_createRole',
+  action(){
     mount(AdminLayout,{adminContent:< MlAddRole/>})
   }
 });

@@ -191,7 +191,7 @@ adminSection.route('/settings/addPermission', {
   action(){
     mount(AdminLayout,{adminContent:<MlAddPermission />})
   }
-});*/
+});
 adminSection.route('/settings/addProcess', {
   name: 'settings_AddProcess',
   action(){

@@ -42,7 +42,7 @@ let chapterSchema = `
         chapterId:String
     }
     
-    type subChapter{
+    type SubChapter{
         _id:String
         clusterName: String
         chapterName :String
@@ -92,7 +92,7 @@ let chapterSchema = `
     type Query{ 
         fetchChapter:String
         fetchChapters(id:String):[Chapter]
-        fetchSubChapter(_id: String):subChapter
+        fetchSubChapter(_id: String):SubChapter
         fetchSubChapters:String
         fetchChaptersForMap:[Chapter]
     }

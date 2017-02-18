@@ -54,7 +54,9 @@ import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBac
 import MlIndustryTypeList from '../../admin/settings/industry/component/MlIndustryTypeList'
 import MlAddIndustryType from '../../admin/settings/industry/component/MlAddIndustryType'
 // import MlEditIndustryType from '../../admin/settings/industry/component/MlEditIndustryType'
-
+import MlSpecificationTypeList from '../../admin/settings/specifications/component/MlSpecificationsTypeList'
+import MlAddSpecificationType from '../../admin/settings/specifications/component/MlAddSpecificationsType'
+// import MlEditSpecificationType from '../../admin/settings/specifications/component/MlEditSpecificationsType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -402,5 +404,23 @@ adminSection.route('/settings/addIndustry', {
 //   name: 'settings_EditIndustryType',
 //   action(params){
 //     mount(AdminLayout,{adminContent:<MlEditIndustryType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/specificationList', {
+  name: 'settings_SpecificationTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlSpecificationTypeList/>})
+  }
+});
+adminSection.route('/settings/addSpecification', {
+  name: 'settings_AddSpecificationType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddSpecificationType />})
+  }
+});
+// adminSection.route('/settings/editSpecification/:id', {
+//   name: 'settings_EditIndustryType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditSpecificationType config={params.id} />})
 //   }
 // });

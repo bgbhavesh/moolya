@@ -369,13 +369,13 @@ adminSection.route('/settings/addKycCategory', {
   }
 });
 adminSection.route('/settings/documentMappingList', {
-  name: 'settings_KycCategoryList',
+  name: 'settings_DocumentMappingList',
   action(){
     mount(AdminLayout,{adminContent:< MlDocumentMappingList/>})
   }
 });
 adminSection.route('/settings/addDocumentMapping', {
-  name: 'settings_AddKycCategory',
+  name: 'settings_AddDocumentMapping',
   action(){
     mount(AdminLayout,{adminContent:< MlAddDocumentMapping/>})
   }

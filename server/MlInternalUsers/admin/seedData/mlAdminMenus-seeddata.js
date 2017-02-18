@@ -583,6 +583,82 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/documentTypeList",
+            "name" : "Document Types",
+            "uniqueId" : "settings_documentTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addDocumentType",
+              "name": "Add Document Type",
+              "uniqueId": "settings_AddDocumentType",
+              "subMenuMappingId":"settings_documentTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/documentTypeList",
+                "name": "List Document Type",
+                "uniqueId": "settings_DocumentTypeList",
+                "subMenuMappingId":"settings_documentTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDocumentType",
+                "name": "Edit Document Type",
+                "uniqueId": "settings_EditDocumentType",
+                "subMenuMappingId":"settings_documentTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/documentFormatList",
+            "name" : "Document Format",
+            "uniqueId" : "settings_documentFormats",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addDocumentFormat",
+              "name": "Add Document Format",
+              "uniqueId": "settings_AddDocumentFormat",
+              "subMenuMappingId":"settings_documentFormats",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/documentFormatList",
+                "name": "List Document Format",
+                "uniqueId": "settings_DocumentFormatList",
+                "subMenuMappingId":"settings_documentFormats",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDocumentFormat",
+                "name": "Edit Document Format",
+                "uniqueId": "settings_EditDocumentFormat",
+                "subMenuMappingId":"settings_documentFormats",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

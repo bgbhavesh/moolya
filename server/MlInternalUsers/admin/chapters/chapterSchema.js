@@ -65,6 +65,7 @@ let chapterSchema = `
     }
     
     input subChapterObject{
+        _id:String,
         clusterId:String, 
         clusterName:String,
         stateId:String,
@@ -93,7 +94,7 @@ let chapterSchema = `
         fetchChapter:String
         fetchChapters(id:String):[Chapter]
         fetchSubChapter(_id: String):SubChapter
-        fetchSubChapters:String
+        fetchSubChapters(id: String):[SubChapter]
         fetchChaptersForMap:[Chapter]
     }
     
@@ -101,7 +102,7 @@ let chapterSchema = `
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
         createSubChapter(subChapter:subChapterObject):String
-        updateSubChapter(subChapterId:String, subChapter:subChapterObject):String
+        updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject):String
      }
 `
 

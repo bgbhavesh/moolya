@@ -14,29 +14,28 @@ const mlSubChapterListConfig=new MlViewer.View({
   pagination:true,
   sort:true,
   viewComponent:<MlSubChapterList />,
-  graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"chapter"){
-                    totalRecords
-                    data{
-                     ...on Chapter{
-                              chapterId
-                              chapterName
-                              displayName
-                              chapterImage
-                              stateName
-                              stateId
-                              cityId
-                              cityName
-                              latitude
-                              longitude
-                              showOnMap
-                              isActive
-                          }
-                      }
-              }
-              }
-              `
+  // graphQlQuery:gql`
+  //              query{
+  //                 data:fetchSubChapters($id: String){
+  //                    totalRecords
+  //                       data{
+  //                        ...on SubChapter{
+  //                                 clusterName
+  //                                 chapterName
+  //                                 subChapterName
+  //                                 subChapterDisplayName
+  //                                 aboutSubChapter
+  //                                 subChapterImageLink
+  //                                 subChapterEmail
+  //                                 isEmailNotified
+  //                                 showOnMap
+  //                                 isActive
+  //                             }
+  //                        }
+  //
+  //                 }
+  //              }
+  //             `
 });
 
 export { mlSubChapterListConfig};

@@ -69,6 +69,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlDocumentTypes.find({},findOptions).fetch();
     totalRecords=MlDocumentTypes.find({},findOptions).count();
   }
+  if(args.module=="documentFormat"){
+    data= MlDocumentFormats.find({},findOptions).fetch();
+    totalRecords=MlDocumentFormats.find({},findOptions).count();
+  }
   if(args.module=="transaction"){
     data= MlTransactions.find({},findOptions).fetch();
     totalRecords=MlTransactions.find({},findOptions).count();
@@ -134,6 +138,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.docTypeName){
       return 'DocumentTypes'
+    }
+    if(data.docFormatName){
+      return 'DocumentFormats'
     }
     if(data.transactionName){
       return 'Transaction'

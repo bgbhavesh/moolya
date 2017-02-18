@@ -149,6 +149,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.docCategoryName){
       return 'KycCategories'
     }
+    if(data.docCategoryName){
+      return 'DocumentMapping'
+    }
     if(data.transactionName){
       return 'Transaction'
     }

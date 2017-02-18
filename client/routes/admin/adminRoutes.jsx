@@ -36,6 +36,7 @@ import MlDocumentFormatsList from '../../admin/settings/documentFormats/componen
 import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/MlAddDocumentFormat'
 import MlAddKycCategory from  '../../admin/settings/kycCategory/component/MlAddKycCategory'
 import MlKycCategoriesList from '../../admin/settings/kycCategory/component/MlKycCategoriesList'
+import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
 
 /*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
 import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'
@@ -361,6 +362,18 @@ adminSection.route('/settings/addKycCategory', {
   name: 'settings_AddKycCategory',
   action(){
     mount(AdminLayout,{adminContent:< MlAddKycCategory/>})
+  }
+});
+adminSection.route('/settings/documentMappingList', {
+  name: 'settings_KycCategoryList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDocumentMappingList/>})
+  }
+});
+adminSection.route('/settings/addDocumentMapping', {
+  name: 'settings_AddKycCategory',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDocumentMapping/>})
   }
 });
 adminSection.route('/settings/templateTypeList', {

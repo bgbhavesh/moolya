@@ -15,24 +15,26 @@ const mlSubChapterListConfig=new MlViewer.View({
   sort:true,
   viewComponent:<MlSubChapterList />,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"subChapter"){
-                    totalRecords
-                    data{
-                     ...on SubChapter{
-                              subChapterName
-                      				clusterName
-                              clusterName
-                              aboutSubChapter
-                              subChapterDisplayName
-                              subChapterImageLink
-                              subChapterEmail
-                              showOnMap
-                              isActive
-                          }
-                      }
-              }
-              }
+               query{
+                  data:fetchSubChapters($id: String){
+                     totalRecords
+                        data{
+                         ...on SubChapter{
+                                  clusterName
+                                  chapterName
+                                  subChapterName
+                                  subChapterDisplayName
+                                  aboutSubChapter
+                                  subChapterImageLink
+                                  subChapterEmail
+                                  isEmailNotified 
+                                  showOnMap
+                                  isActive
+                              }
+                         }
+                      
+                  }
+               }
               `
 });
 

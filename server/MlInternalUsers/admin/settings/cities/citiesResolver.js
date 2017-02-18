@@ -22,7 +22,7 @@ MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) =>
 
 
 MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
-    console.log(args)
+
     let city = MlCities.findOne({_id: args.cityId});
     if(city){
         let state = MlStates.findOne({_id:city.stateId})

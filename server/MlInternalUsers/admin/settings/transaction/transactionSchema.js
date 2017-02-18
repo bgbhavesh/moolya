@@ -19,4 +19,4 @@ let Transaction = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Transaction]);
-console.log(MlSchemaDef);
+

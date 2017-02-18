@@ -90,11 +90,17 @@ MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) =
 }
 
 MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
-
+  // TODO : Authorization
+  if (args._id) {
+    var id= args._id;
+    let response= MlSubChapters.findOne({"_id":id});
+    return response;
+  }
 }
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
-
+  let result=MlSubChapters.find({chapterId: args.chapterId}).fetch()||[];
+  return result;
 }
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
@@ -102,13 +108,12 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
-    console.log(args)
     let subChapter = MlSubChapters.findOne({_id: args.subChapterId});
     if(subChapter){
-        for(key in args.subChapter){
-          subChapter[key] = args.subChapter[key]
+        for(key in args.subChapterDetails){
+          subChapter[key] = args.subChapterDetails[key]
         }
-        let resp = MlSubChapters.update({_id:args.subChapterId}, {$set:subChapter}, {upsert:true})
+        let resp = MlSubChapters.update({_id:args.subChapterId}, {$set:subChapter})
         if(resp){
             let code = 200;
             let result = {subChapter: resp}

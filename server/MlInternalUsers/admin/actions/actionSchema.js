@@ -12,4 +12,4 @@ let actions = `
 //TODO: Update Role
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], actions]);
-console.log(MlSchemaDef);
+

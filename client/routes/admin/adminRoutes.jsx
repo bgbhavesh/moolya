@@ -32,20 +32,35 @@ import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
 import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
+import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
+import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAddDocumentType'
+import MlDocumentFormatsList from '../../admin/settings/documentFormats/component/MlDocumentFormatsList'
+import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/MlAddDocumentFormat'
+import MlAddKycCategory from  '../../admin/settings/kycCategory/component/MlAddKycCategory'
+import MlKycCategoriesList from '../../admin/settings/kycCategory/component/MlKycCategoriesList'
+import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
+
+/*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
 import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'
 import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleType'
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
-import MlChapterMapView from '../../admin/chapter/components/MlChapterMapView'
+import MlChapterView from '../../admin/chapter/components/MlChapter'
+import MlSubChapterView from '../../admin/dashboard/component/MlSubChapterList'
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
 import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
 import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
-import  MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
+import MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
 import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
 import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBackendUserList'
+import MlIndustryTypeList from '../../admin/settings/industry/component/MlIndustryTypeList'
+import MlAddIndustryType from '../../admin/settings/industry/component/MlAddIndustryType'
+// import MlEditIndustryType from '../../admin/settings/industry/component/MlEditIndustryType'
+
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
-import {mlChapterMapConfig} from '../../admin/chapter/config/mlChapterConfig'
+import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
+import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
 
 adminSection = FlowRouter.group({
   prefix: "/admin",
@@ -100,7 +115,13 @@ adminSection.route('/cluster/clusterDetails/:clusterId', {
 adminSection.route('/chapter', {
   name: 'chapter',
   action(){
-    mount(AdminLayout,{adminContent:<MlChapterMapView mapConfig={mlChapterMapConfig} />})
+    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+  }
+});
+adminSection.route('/chapters/:chapterId', {
+  name: 'chapter',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlSubChapterView params={params.chapterId} listConfig={mlSubChapterListConfig} />})
   }
 });
 adminSection.route('/chapter/subChapterDetails/:subChapterId', {
@@ -165,7 +186,7 @@ adminSection.route('/settings/permissionList', {
     mount(AdminLayout,{adminContent:< MlPermissionList/>})
   }
 });
-/*adminSection.route('/settings/addPermission', {
+adminSection.route('/settings/addPermission', {
   name: 'settings_AddPermissions',
   action(){
     mount(AdminLayout,{adminContent:<MlAddPermission />})
@@ -183,7 +204,13 @@ adminSection.route('/settings/editPermission/:id', {
     mount(AdminLayout,{adminContent:<MlEditPermission config={params.id} />})
   }
 });
-
+adminSection.route('/settings/rolesList', {
+  name: 'settings_roles',
+  action(){
+    /*mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})*/
+    mount(AdminLayout,{adminContent:< MlAddRole/>})
+  }
+});
 adminSection.route('/settings/backendUserList', {
   name: 'settings_BackendUserList',
   action(){
@@ -319,6 +346,54 @@ adminSection.route('/settings/editTransactionType/:id', {
     mount(AdminLayout,{adminContent:<MlEditTransactionType config={params.id} />})
   }
 });
+adminSection.route('/settings/documentTypeList', {
+  name: 'settings_DocumentTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDocumentTypesList/>})
+  }
+});
+adminSection.route('/settings/addDocumentType', {
+  name: 'settings_AddDocumentType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDocumentType/>})
+  }
+});
+adminSection.route('/settings/documentFormatList', {
+  name: 'settings_DocumentFormatList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDocumentFormatsList/>})
+  }
+});
+adminSection.route('/settings/addDocumentFormat', {
+  name: 'settings_AddDocumentFormat',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDocumentFormat/>})
+  }
+});
+adminSection.route('/settings/kycCategoryList', {
+  name: 'settings_KycCategoryList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlKycCategoriesList/>})
+  }
+});
+adminSection.route('/settings/addKycCategory', {
+  name: 'settings_AddKycCategory',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddKycCategory/>})
+  }
+});
+adminSection.route('/settings/documentMappingList', {
+  name: 'settings_KycCategoryList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDocumentMappingList/>})
+  }
+});
+adminSection.route('/settings/addDocumentMapping', {
+  name: 'settings_AddKycCategory',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDocumentMapping/>})
+  }
+});
 adminSection.route('/settings/templateTypeList', {
   name: 'settings_TemplateTypeList',
   action(){
@@ -337,3 +412,22 @@ adminSection.route('/settings/editTemplateType/:id', {
     mount(AdminLayout,{adminContent:<MlEditTemplateType config={params.id} />})
   }
 });
+
+adminSection.route('/settings/industryList', {
+  name: 'settings_IndustryList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlIndustryTypeList/>})
+  }
+});
+adminSection.route('/settings/addIndustry', {
+  name: 'settings_AddIndustryType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddIndustryType />})
+  }
+});
+// adminSection.route('/settings/editIndustry/:id', {
+//   name: 'settings_EditIndustryType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditIndustryType config={params.id} />})
+//   }
+// });

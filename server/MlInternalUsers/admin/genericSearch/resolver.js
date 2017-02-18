@@ -23,6 +23,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlChapters.find({},findOptions).fetch();
     totalRecords=MlChapters.find({},findOptions).count();
   }
+  if(args.module=="subChapter"){
+    data= MlSubChapters.find({},findOptions).fetch();
+    totalRecords=MlSubChapters.find({},findOptions).count();
+  }
 
   if(args.module=="department"){
     data= MlDepartments.find({},findOptions).fetch();
@@ -61,6 +65,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlRoleTypes.find({},findOptions).fetch();
     totalRecords=MlRoleTypes.find({},findOptions).count();
   }
+  if(args.module=="documentType"){
+    data= MlDocumentTypes.find({},findOptions).fetch();
+    totalRecords=MlDocumentTypes.find({},findOptions).count();
+  }
+  if(args.module=="documentFormat"){
+    data= MlDocumentFormats.find({},findOptions).fetch();
+    totalRecords=MlDocumentFormats.find({},findOptions).count();
+  }
+  if(args.module=="kycCategory"){
+    data= MlDocumentCategories.find({},findOptions).fetch();
+    totalRecords=MlDocumentCategories.find({},findOptions).count();
+  }
   if(args.module=="transaction"){
     data= MlTransactions.find({},findOptions).fetch();
     totalRecords=MlTransactions.find({},findOptions).count();
@@ -79,6 +95,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlRoles.find({},findOptions).count();
   }
 
+  if(args.module=="industry"){
+    data= MlIndustries.find({},findOptions).fetch();
+    totalRecords=MlIndustries.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -104,6 +124,10 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'Chapter';
     }
 
+    if (data.subChapterName) {
+      return 'SubChapter';
+    }
+
     if (data.departmentName) {
       return 'Department';
     }
@@ -124,6 +148,18 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.roleTypeName){
       return 'RoleTypes'
     }
+    if(data.docTypeName){
+      return 'DocumentTypes'
+    }
+    if(data.docFormatName){
+      return 'DocumentFormats'
+    }
+    if(data.docCategoryName){
+      return 'KycCategories'
+    }
+    if(data.docCategoryName){
+      return 'DocumentMapping'
+    }
     if(data.transactionName){
       return 'Transaction'
     }
@@ -138,6 +174,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'Roles'
     }
 
+    if(data.industryName){
+      return 'Industry'
+    }
     return null;
   }
 }

@@ -583,6 +583,196 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/documentTypeList",
+            "name" : "Document Types",
+            "uniqueId" : "settings_documentTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addDocumentType",
+              "name": "Add Document Type",
+              "uniqueId": "settings_AddDocumentType",
+              "subMenuMappingId":"settings_documentTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/documentTypeList",
+                "name": "List Document Type",
+                "uniqueId": "settings_DocumentTypeList",
+                "subMenuMappingId":"settings_documentTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDocumentType",
+                "name": "Edit Document Type",
+                "uniqueId": "settings_EditDocumentType",
+                "subMenuMappingId":"settings_documentTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/documentFormatList",
+            "name" : "Document Format",
+            "uniqueId" : "settings_documentFormats",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addDocumentFormat",
+              "name": "Add Document Format",
+              "uniqueId": "settings_AddDocumentFormat",
+              "subMenuMappingId":"settings_documentFormats",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/documentFormatList",
+                "name": "List Document Format",
+                "uniqueId": "settings_DocumentFormatList",
+                "subMenuMappingId":"settings_documentFormats",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDocumentFormat",
+                "name": "Edit Document Format",
+                "uniqueId": "settings_EditDocumentFormat",
+                "subMenuMappingId":"settings_documentFormats",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/kycCategoryList",
+            "name" : "KYC Category",
+            "uniqueId" : "settings_kycCategories",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addKycCategory",
+              "name": "Add KYC Category",
+              "uniqueId": "settings_AddKycCategory",
+              "subMenuMappingId":"settings_kycCategories",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/kycCategoryList",
+                "name": "List KYC Categories",
+                "uniqueId": "settings_KycCategoryList",
+                "subMenuMappingId":"settings_kycCategories",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editKycCategory",
+                "name": "Edit KYC Category",
+                "uniqueId": "settings_EditKycCategory",
+                "subMenuMappingId":"settings_kycCategories",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/industryList",
+            "name" : "Industry Types",
+            "uniqueId" : "settings_industryTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addIndustry",
+              "name": "Add IndustryType",
+              "uniqueId": "settings_AddIndustryType",
+              "subMenuMappingId":"settings_industryTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/industryList",
+                "name": "List IndustryType",
+                "uniqueId": "settings_IndustryTypeList",
+                "subMenuMappingId":"settings_industryTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editIndustry",
+                "name": "Edit IndustryType",
+                "uniqueId": "settings_EditIndustryType",
+                "subMenuMappingId":"settings_industryTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/specificationList",
+            "name" : "Specification Types",
+            "uniqueId" : "settings_specificationTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addSpecification",
+              "name": "Add SpecificationType",
+              "uniqueId": "settings_AddSpecificationType",
+              "subMenuMappingId":"settings_specificationTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/specificationList",
+                "name": "List SpecificationType",
+                "uniqueId": "settings_SpecificationTypeList",
+                "subMenuMappingId":"settings_specificationTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editSpecification",
+                "name": "Edit SpecificationType",
+                "uniqueId": "settings_EditSpecificationType",
+                "subMenuMappingId":"settings_specificationTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

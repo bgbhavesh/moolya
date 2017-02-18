@@ -44,7 +44,7 @@ class MlClusterDetails extends React.Component {
 
   onStatusChangeActive(e) {
     let updatedData = this.state.data||{};
-    updatedData=_.omit(updatedData,["showOnMap"]);
+    updatedData=_.omit(updatedData,["isActive"]);
     if (e.currentTarget.checked) {
       var z=_.extend(updatedData,{isActive:true});
       this.setState({data:z,loading:false});

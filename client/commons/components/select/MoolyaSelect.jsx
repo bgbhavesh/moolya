@@ -59,10 +59,8 @@ export default class MoolyaSelect extends Component {
 
   }
   onInputSearch(value){
-    console.log(value);
   this.setState({"searchTerm": value,executeQuery:true});
 
-  console.log(this.props.query)
  // this.props.onSearch(value,this.onChangeCallBackHandler);
   // this.props.searchTerm(value)
   }
@@ -71,9 +69,6 @@ export default class MoolyaSelect extends Component {
 
   executeQuery(){
    function QueryHandler({data}) {
-      console.log(this);
-      console.log(data);
-      console.log(options);
       let callbackHandler=data.variables&&data.variables.callBackHandler?data.variables.callBackHandler:null;
       if(data.loading===false&&callbackHandler){
         callbackHandler(data.data);
@@ -102,9 +97,7 @@ export default class MoolyaSelect extends Component {
    const labelKey=this.props.labelKey||'label';
    const valueKey=this.props.valueKey||'value';
    let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{}}};
-    console.log(queryOptions)
     queryOptions.options.variables.searchQuery=this.state.searchTerm;
-    console.log(queryOptions)
    let QueryExecutor=null;
    if(isDynamic&&query&&executeQuery){
      queryOptions['options']['variables']['callBackHandler']=this.onChangeCallBackHandler;

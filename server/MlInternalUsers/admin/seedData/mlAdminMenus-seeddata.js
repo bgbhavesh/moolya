@@ -811,6 +811,44 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/professionList",
+            "name" : "Profession Types",
+            "uniqueId" : "settings_professionTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addProfession",
+              "name": "Add ProfessionType",
+              "uniqueId": "settings_AddProfessionType",
+              "subMenuMappingId":"settings_professionTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/professionList",
+                "name": "List ProfessionType",
+                "uniqueId": "settings_ProfessionTypeList",
+                "subMenuMappingId":"settings_professionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editProfession",
+                "name": "Edit ProfessionType",
+                "uniqueId": "settings_EditProfessionType",
+                "subMenuMappingId":"settings_professionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

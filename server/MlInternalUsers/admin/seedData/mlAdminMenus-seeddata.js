@@ -811,6 +811,120 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/professionList",
+            "name" : "Profession Types",
+            "uniqueId" : "settings_professionTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addProfession",
+              "name": "Add ProfessionType",
+              "uniqueId": "settings_AddProfessionType",
+              "subMenuMappingId":"settings_professionTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/professionList",
+                "name": "List ProfessionType",
+                "uniqueId": "settings_ProfessionTypeList",
+                "subMenuMappingId":"settings_professionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editProfession",
+                "name": "Edit ProfessionType",
+                "uniqueId": "settings_EditProfessionType",
+                "subMenuMappingId":"settings_professionTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/entityList",
+            "name" : "Entity Types",
+            "uniqueId" : "settings_entityTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addEntity",
+              "name": "Add EntityType",
+              "uniqueId": "settings_AddEntityType",
+              "subMenuMappingId":"settings_entityTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/entityList",
+                "name": "List EntityType",
+                "uniqueId": "settings_EntityTypeList",
+                "subMenuMappingId":"settings_entityTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editEntity",
+                "name": "Edit EntityType",
+                "uniqueId": "settings_EditEntityType",
+                "subMenuMappingId":"settings_entityTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/stageOfCompanyList",
+            "name" : "StageOfCompany Types",
+            "uniqueId" : "settings_stageOfCompanyTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addStageOfCompany",
+              "name": "Add StageOfCompanyType",
+              "uniqueId": "settings_AddStageOfCompanyType",
+              "subMenuMappingId":"settings_stageOfCompanyTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/stageOfCompanyList",
+                "name": "List StageOfCompanyType",
+                "uniqueId": "settings_StageOfCompanyTypeList",
+                "subMenuMappingId":"settings_stageOfCompanyTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editStageOfCompany",
+                "name": "Edit StageOfCompanyType",
+                "uniqueId": "settings_EditStageOfCompanyType",
+                "subMenuMappingId":"settings_stageOfCompanyTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

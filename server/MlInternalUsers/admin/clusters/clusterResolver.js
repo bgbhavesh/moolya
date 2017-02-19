@@ -14,7 +14,7 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else{
-        geocoder.geocode(cluster.displayName, Meteor.bindEnvironment(function ( err, data ) {
+        geocoder.geocode(cluster.clusterName, Meteor.bindEnvironment(function ( err, data ) {
             if(err){
                 return "Invalid Country Name";
             }

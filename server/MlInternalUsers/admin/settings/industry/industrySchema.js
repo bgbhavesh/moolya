@@ -10,10 +10,11 @@ let Industry = `
     }
     type Mutation{
         CreateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean):String
-        UpdateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean):String
+        UpdateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean):String        
     }
     type Query{
       FindIndustry(_id: String):Industry
+      fetchIndustrySearch: [Industry]
       fetchIndustries:[Industry]
     }
 `

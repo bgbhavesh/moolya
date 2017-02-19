@@ -62,6 +62,15 @@ import MlAddIndustryType from '../../admin/settings/industry/component/MlAddIndu
 import MlSpecificationTypeList from '../../admin/settings/specifications/component/MlSpecificationsTypeList'
 import MlAddSpecificationType from '../../admin/settings/specifications/component/MlAddSpecificationsType'
 // import MlEditSpecificationType from '../../admin/settings/specifications/component/MlEditSpecificationsType'
+import MlProfessionTypeList from '../../admin/settings/profession/component/MlProfessionTypeList'
+import MlAddProfessionType from '../../admin/settings/profession/component/MlAddProfessionType'
+// import MlEditProfessionType from '../../admin/settings/profession/component/MlEditProfessionType'
+import MlEntityTypeList from '../../admin/settings/entity/component/MlEntityTypeList'
+import MlAddEntityType from '../../admin/settings/entity/component/MlAddEntityType'
+// import MlEditEntityType from '../../admin/settings/entity/component/MlEditEntityType'
+import MlStageOfCompanyTypeList from '../../admin/settings/stageOfCompany/component/MlStageOfCompanyTypeList'
+import MlAddStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlAddStageOfCompanyType'
+// import MlEditStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlEditStageOfCompanyType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -470,5 +479,59 @@ adminSection.route('/settings/addSpecification', {
 //   name: 'settings_EditIndustryType',
 //   action(params){
 //     mount(AdminLayout,{adminContent:<MlEditSpecificationType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/professionList', {
+  name: 'settings_ProfessionTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlProfessionTypeList/>})
+  }
+});
+adminSection.route('/settings/addProfession', {
+  name: 'settings_AddProfessionType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddProfessionType />})
+  }
+});
+// adminSection.route('/settings/editProfession/:id', {
+//   name: 'settings_EditProfessionType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditProfessionType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/entityList', {
+  name: 'settings_EntityTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEntityTypeList/>})
+  }
+});
+adminSection.route('/settings/addEntity', {
+  name: 'settings_AddEntityType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEntityType />})
+  }
+});
+// adminSection.route('/settings/editEntity/:id', {
+//   name: 'settings_EditEntityType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditEntityType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/stageOfCompanyList', {
+  name: 'settings_StageOfCompanyTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlStageOfCompanyTypeList/>})
+  }
+});
+adminSection.route('/settings/addStageOfCompany', {
+  name: 'settings_AddStageOfCompanyType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddStageOfCompanyType />})
+  }
+});
+// adminSection.route('/settings/editStageOfCompany/:id', {
+//   name: 'settings_EditStageOfCompanyType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditStageOfCompanyType config={params.id} />})
 //   }
 // });

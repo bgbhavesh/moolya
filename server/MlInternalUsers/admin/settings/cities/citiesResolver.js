@@ -40,7 +40,7 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
                 let cluster = MlClusters.findOne({"countryId":city.countryId});
                 chapter = {
                     clusterId:cluster._id,
-                    clusterName:cluster.countryName,
+                    clusterName:cluster.clusterName,
                     chapterId:"ML_"+city.name,
                     chapterName:city.name,
                     displayName:city.name,

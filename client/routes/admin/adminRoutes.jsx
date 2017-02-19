@@ -68,6 +68,9 @@ import MlAddProfessionType from '../../admin/settings/profession/component/MlAdd
 import MlEntityTypeList from '../../admin/settings/entity/component/MlEntityTypeList'
 import MlAddEntityType from '../../admin/settings/entity/component/MlAddEntityType'
 // import MlEditEntityType from '../../admin/settings/entity/component/MlEditEntityType'
+import MlStageOfCompanyTypeList from '../../admin/settings/stageOfCompany/component/MlStageOfCompanyTypeList'
+import MlAddStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlAddStageOfCompanyType'
+// import MlEditStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlEditStageOfCompanyType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -512,5 +515,23 @@ adminSection.route('/settings/addEntity', {
 //   name: 'settings_EditEntityType',
 //   action(params){
 //     mount(AdminLayout,{adminContent:<MlEditEntityType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/stageOfCompanyList', {
+  name: 'settings_StageOfCompanyTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlStageOfCompanyTypeList/>})
+  }
+});
+adminSection.route('/settings/addStageOfCompany', {
+  name: 'settings_AddStageOfCompanyType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddStageOfCompanyType />})
+  }
+});
+// adminSection.route('/settings/editStageOfCompany/:id', {
+//   name: 'settings_EditStageOfCompanyType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditStageOfCompanyType config={params.id} />})
 //   }
 // });

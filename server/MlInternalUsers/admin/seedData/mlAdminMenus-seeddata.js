@@ -887,6 +887,44 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/stageOfCompanyList",
+            "name" : "StageOfCompany Types",
+            "uniqueId" : "settings_stageOfCompanyTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addStageOfCompany",
+              "name": "Add StageOfCompanyType",
+              "uniqueId": "settings_AddStageOfCompanyType",
+              "subMenuMappingId":"settings_stageOfCompanyTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/stageOfCompanyList",
+                "name": "List StageOfCompanyType",
+                "uniqueId": "settings_StageOfCompanyTypeList",
+                "subMenuMappingId":"settings_stageOfCompanyTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editStageOfCompany",
+                "name": "Edit StageOfCompanyType",
+                "uniqueId": "settings_EditStageOfCompanyType",
+                "subMenuMappingId":"settings_stageOfCompanyTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

@@ -103,6 +103,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlSpecifications.find({},findOptions).fetch();
     totalRecords=MlSpecifications.find({},findOptions).count();
   }
+  if(args.module=="profession"){
+    data= MlProfessions.find({},findOptions).fetch();
+    totalRecords=MlProfessions.find({},findOptions).count();
+  }
+  if(args.module=="entity"){
+    data= MlEntity.find({},findOptions).fetch();
+    totalRecords=MlEntity.find({},findOptions).count();
+  }
+  if(args.module=="stageOfCompany"){
+    data= MlStageOfCompany.find({},findOptions).fetch();
+    totalRecords=MlStageOfCompany.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -178,11 +190,21 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'Roles'
     }
 
+    if(data.professionName){
+      return 'Profession'
+    }
+
     if(data.industryName){
       return 'Industry'
     }
     if(data.specificationName){
       return 'Specification'
+    }
+    if(data.entityName){
+      return 'Entity'
+    }
+    if(data.stageOfCompanyName){
+      return 'StageOfCompany'
     }
     return null;
   }

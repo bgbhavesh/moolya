@@ -4,7 +4,8 @@ import {mount} from 'react-mounter';
 import AdminLayout from '../../admin/layouts/AdminLayout'
 import loginActions,{loginActionHandler} from '../../login/actions/loginActions'
 import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminViewContainer'
-import  MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
+import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
+import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import MlSubChapterDetails from '../../admin/subChapter/components/MlSubChapterDetails'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
@@ -126,6 +127,14 @@ adminSection.route('/cluster/clusterDetails/:clusterId', {
     mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
   }
 });
+
+adminSection.route('/cluster/internal_users', {
+  name: 'cluster',
+  action(params){
+      mount(AdminLayout,{adminContent:< MlAssignBackendUsers />})
+  }
+});
+
 adminSection.route('/chapter', {
   name: 'chapter',
   action(){

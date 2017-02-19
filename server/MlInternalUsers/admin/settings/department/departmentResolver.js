@@ -49,6 +49,17 @@ MlResolver.MlQueryResolver['findDepartment'] = (obj, args, context, info) => {
   // }
 }
 
+MlResolver.MlQueryResolver['fetchActiveDepartment'] = (obj, args, context, info) => {
+  let resp = MlDepartments.find({"isActive":true}).fetch();
+  return resp;
+  // if(resp){
+  //     let code = 200;
+  //     let result = {department: resp}
+  //     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  //     return response
+  // }
+}
+
 MlResolver.MlQueryResolver['findDepartments'] = (obj, args, context, info) => {
 
 }

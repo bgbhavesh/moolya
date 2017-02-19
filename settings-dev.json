@@ -1,6 +1,6 @@
 {
   "public": {
-      "graphqlUrl": "dev.moolya.in:8090/graphql",
+      "graphqlUrl": "http://dev.moolya.in:8090/graphql",
       "graphqlPort":8090
   },
   "private": {

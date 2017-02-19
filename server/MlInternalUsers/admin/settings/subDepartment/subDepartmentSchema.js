@@ -50,6 +50,7 @@ let subDepartmentSchema = `
         findSubDepartment(_id: String): SubDepartment
         findSubDepartments: [SubDepartment]
         fetchSubDepartments(id: String):[SubDepartment]
+        fetchActiveSubDepartments(departmentId: String):[SubDepartment]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],subDepartmentSchema]);

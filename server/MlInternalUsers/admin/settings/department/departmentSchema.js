@@ -53,7 +53,9 @@ let departmentSchema = `
         findDepartment(departmentId:String):Department
         findDepartments:String
         fetchDepartments:[Department]
+        fetchActiveDepartment:[Department]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
+

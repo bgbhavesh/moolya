@@ -69,7 +69,7 @@ export default class MlAssignSubDepartments extends React.Component {
    let that=this;
    //let queryOptions={options: { variables: {searchQuery:null}}};
     let query=gql` query{
-  data:fetchCountriesSearch{label:country,value:countryCode}
+  data:fetchActiveClusters{label:countryName,value:_id}
 }
 `;
     return (
@@ -81,14 +81,16 @@ export default class MlAssignSubDepartments extends React.Component {
                     <Moolyaselect  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={query}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelect.bind(that,id)} />
                 </div>
                 <div className="form-group">
-                    <select placeholder="Select Chapter" ref="selectChapter" className="form-control float-label" disabled= {true}>
-                        <option>Select Chapter</option>
-                    </select>
+                    {/*<select placeholder="Select Chapter" ref="selectChapter" className="form-control float-label" disabled= {true}>*/}
+                        {/*<option>Select Chapter</option>*/}
+                    {/*</select>*/}
+                    <input type="text" id="" placeholder="Select Chapter" className="form-control float-label" disabled="true"/>
                 </div>
                 <div className="form-group">
-                    <select placeholder="Select Cluster" ref="slectSubChapter" className="form-control float-label" disabled= {true}>
-                        <option>Select SubChapter</option>
-                    </select>
+                    {/*<select placeholder="Select Cluster" ref="slectSubChapter" className="form-control float-label" disabled= {true}>*/}
+                        {/*<option>Select SubChapter</option>*/}
+                    {/*</select>*/}
+                    <input type="text" id="" placeholder="Select Sub Chapter" className="form-control float-label" disabled="true"/>
                 </div>
 
                 <div className="form-group">

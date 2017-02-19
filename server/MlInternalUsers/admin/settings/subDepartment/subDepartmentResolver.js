@@ -68,6 +68,15 @@ MlResolver.MlQueryResolver['findSubDepartments'] = (obj, args, context, info) =>
 
 }
 
+MlResolver.MlQueryResolver['fetchActiveSubDepartments'] = (obj, args, context, info) =>{
+    let department = MlDepartments.findOne({"_id":args.departmentId})
+    if(department && department.departmentName) {
+      let response = MlSubDepartments.find({"$and": [{"departmentId": department.departmentName}, {"isActive": true}]}).fetch()
+      return response;
+    }
+
+}
+
 
 MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) => {
   if (args.id) {

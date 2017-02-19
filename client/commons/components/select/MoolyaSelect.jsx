@@ -96,6 +96,7 @@ export default class MoolyaSelect extends Component {
 
 // You can also use `graphql` for GraphQL mutations
    const options=this.state.options?this.state.options:[];
+    const placeholder=this.props.placeholder||"Select...";
    const executeQuery=this.state.executeQuery;
    const isDynamic=this.props.isDynamic;
    const query=this.props.query;
@@ -113,7 +114,7 @@ export default class MoolyaSelect extends Component {
     return(
       <div>
         {executeQuery&&<QueryExecutor />}
-        {<Select  multi={this.props.multiSelect} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
+        {<Select  multi={this.props.multiSelect} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
       </div>
     )
   }

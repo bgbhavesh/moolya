@@ -14,6 +14,7 @@ let Industry = `
     }
     type Query{
       FindIndustry(_id: String):Industry
+      fetchIndustries:[Industry]
     }
 `
 

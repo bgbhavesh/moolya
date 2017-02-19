@@ -33,4 +33,9 @@ MlResolver.MlQueryResolver['FindIndustry'] = (obj, args, context, info) => {
 
 }
 
+MlResolver.MlQueryResolver['fetchIndustries'] = (obj, args, context, info) => {
+  let result=MlIndustries.find({isActive:true}).fetch()||[];
+  return result;
+}
+
 

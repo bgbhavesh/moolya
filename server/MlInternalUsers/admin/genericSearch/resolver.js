@@ -107,6 +107,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlProfessions.find({},findOptions).fetch();
     totalRecords=MlProfessions.find({},findOptions).count();
   }
+  if(args.module=="entity"){
+    data= MlEntity.find({},findOptions).fetch();
+    totalRecords=MlEntity.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -191,6 +195,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.specificationName){
       return 'Specification'
+    }
+    if(data.entityName){
+      return 'Entity'
     }
     return null;
   }

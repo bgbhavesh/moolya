@@ -65,6 +65,9 @@ import MlAddSpecificationType from '../../admin/settings/specifications/componen
 import MlProfessionTypeList from '../../admin/settings/profession/component/MlProfessionTypeList'
 import MlAddProfessionType from '../../admin/settings/profession/component/MlAddProfessionType'
 // import MlEditProfessionType from '../../admin/settings/profession/component/MlEditProfessionType'
+import MlEntityTypeList from '../../admin/settings/entity/component/MlEntityTypeList'
+import MlAddEntityType from '../../admin/settings/entity/component/MlAddEntityType'
+// import MlEditEntityType from '../../admin/settings/entity/component/MlEditEntityType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -491,5 +494,23 @@ adminSection.route('/settings/addProfession', {
 //   name: 'settings_EditProfessionType',
 //   action(params){
 //     mount(AdminLayout,{adminContent:<MlEditProfessionType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/entityList', {
+  name: 'settings_EntityTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEntityTypeList/>})
+  }
+});
+adminSection.route('/settings/addEntity', {
+  name: 'settings_AddEntityType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEntityType />})
+  }
+});
+// adminSection.route('/settings/editEntity/:id', {
+//   name: 'settings_EditEntityType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditEntityType config={params.id} />})
 //   }
 // });

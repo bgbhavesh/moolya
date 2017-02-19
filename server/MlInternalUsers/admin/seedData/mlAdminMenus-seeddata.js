@@ -849,6 +849,44 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/entityList",
+            "name" : "Entity Types",
+            "uniqueId" : "settings_entityTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addEntity",
+              "name": "Add EntityType",
+              "uniqueId": "settings_AddEntityType",
+              "subMenuMappingId":"settings_entityTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/entityList",
+                "name": "List EntityType",
+                "uniqueId": "settings_EntityTypeList",
+                "subMenuMappingId":"settings_entityTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editEntity",
+                "name": "Edit EntityType",
+                "uniqueId": "settings_EditEntityType",
+                "subMenuMappingId":"settings_entityTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

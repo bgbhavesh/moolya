@@ -57,7 +57,6 @@ class MlEditBackendUser extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
-
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -83,11 +82,16 @@ class MlEditBackendUser extends React.Component{
     //console.log(userTypeId)
     const response = await findBackendUserActionHandler(userTypeId);
     console.log(response)
-   this.setState({loading:false,data:response});
-    this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
-    this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
-   /* this.setState({mlAssignDepartmentDetails:this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment})
-    this.setState({mlAssignContactDetails:this.state.data.profile.InternalUprofile.moolyaProfile.contact})*/
+
+   if(response){
+     this.setState({loading:false,data:response});
+      this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
+      this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
+     /* this.setState({mlAssignDepartmentDetails:this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment})
+      this.setState({mlAssignContactDetails:this.state.data.profile.InternalUprofile.moolyaProfile.contact})*/
+
+    }
+
 
   }
   onStatusChanged(e){
@@ -216,7 +220,7 @@ class MlEditBackendUser extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <div className="loader_container"><div className="loader_wrap"></div></div>):(
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Edit Backend User</h2>

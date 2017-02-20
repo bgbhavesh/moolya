@@ -37,3 +37,9 @@ MlResolver.MlMutationResolver['createKycCategory'] = (obj, args, context, info) 
 }
 
 
+MlResolver.MlQueryResolver['fetchKYCCategories'] = (obj, args, context, info) => {
+  let result=MlDocumentCategories.find({isActive:true}).fetch()||[];
+  return result;
+}
+
+

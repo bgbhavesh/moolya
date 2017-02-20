@@ -115,6 +115,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlStageOfCompany.find({},findOptions).fetch();
     totalRecords=MlStageOfCompany.find({},findOptions).count();
   }
+  if(args.module=="process"){
+    data= MlProcessMapping.find({},findOptions).fetch();
+    totalRecords=MlProcessMapping.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -205,6 +209,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.stageOfCompanyName){
       return 'StageOfCompany'
+    }
+    if(data.processId){
+      return 'ProcessType'
     }
     return null;
   }

@@ -36,4 +36,8 @@ MlResolver.MlQueryResolver['FindProfession'] = (obj, args, context, info) => {
 
 }
 
+MlResolver.MlQueryResolver['fetchProfessions'] = (obj, args, context, info) => {
+  let result=MlProfessions.find({isActive:true}).fetch()||[];
+  return result;
+}
 

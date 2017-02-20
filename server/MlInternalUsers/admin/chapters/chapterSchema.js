@@ -2,6 +2,7 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../mlAdminSchemaDef'
 let chapterSchema = `
     type Chapter{
+        _id:String,
         chapterId:String,
         chapterName:String,
         displayName:String,
@@ -103,6 +104,7 @@ let chapterSchema = `
         fetchSubChapter(_id: String):SubChapter
         fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
+        fetchSubChaptersSelect(id: String):[SubChapter]
     }
     
      type Mutation {

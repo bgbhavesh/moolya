@@ -13,7 +13,7 @@ let BusinessType = `
         UpdateBusinessType(_id:String,businessTypeName:String,businessTypeDisplayName:String,about:String,isActive:Boolean):String
     }
     type Query{
-      FindBusinessType(_id: String):Entity
+      FindBusinessType(_id: String):BusinessType
     }
 `
 

@@ -162,17 +162,7 @@ export default class MlAssignModulesToRoles extends React.Component {
                                 </div>
                               </div>
                               <hr/>
-                              <div className="col-md-12 role_dif">
-                                <div className="form-group">
-                                  Field Name 1
-                                </div>
-                                <div className="form-group">
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Create</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Read</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Update</label></div>
-                                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Delete</label></div>
-                                </div>
-                              </div>
+
                             </div>
                           </div>
                         </div>

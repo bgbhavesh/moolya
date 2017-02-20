@@ -11,6 +11,33 @@ let Role = `
         about:String 
     }
     
+     
+     type RoleOutput{
+        roleName: String, 
+        displayName:String, 
+        roleType:String,
+        userType:String,
+        about:String, 
+        assignRoles:[assignrolesOutput],
+        modules:[modulesOutput], 
+        isActive:Boolean
+    }
+    type modulesOutput{
+        moduleId:String,
+        actions : [actionsOutput]
+    }
+     type actionsOutput{
+        actionId : String
+    }
+    type assignrolesOutput{
+        cluster:String,
+        chapter:String,
+        subChapter:String,
+        department:String, 
+        subDepartment:String, 
+        isActive:Boolean
+    }
+    
     scalar Date
     input assignroles{
         cluster:String,
@@ -57,10 +84,12 @@ let Role = `
     
     type Query {
         fetchRole(roleName: String, roleValue: String, name: String): String
+        findRole(id:String):RoleOutput
     }
     
     type Mutation {
        createRole(role:roleObject): String
+       updateRole(id:String,role:roleObject):String
     }
 `
 

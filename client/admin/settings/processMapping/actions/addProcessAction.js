@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function addProcessActionHandler(ProcessInput) {
-  let communityList = ProcessInput.communities;
+  /*let communityList = ProcessInput.communities;
   let communities = [];
   for(var i in communityList) {
     var community = communityList[i];
@@ -30,7 +30,7 @@ export async function addProcessActionHandler(ProcessInput) {
       "id" : community
     });
   }
-  ProcessInput.industries=industries;
+  ProcessInput.industries=industries;*/
 
   //let process = {ProcessInput:processDetails};
   const result = await client.mutate({

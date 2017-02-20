@@ -7,14 +7,14 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import {addProcessActionHandler} from '../actions/addProcessAction'
-import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
+import {findProcessActionHandler} from '../actions/findProcessAction'
 import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 
 let Select = require('react-select');
 
-class MlAddProcessMapping extends React.Component{
+class MlEditProcessMapping extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -67,7 +67,7 @@ class MlAddProcessMapping extends React.Component{
     this.setState({'assignDocuments':details})
   }
 
-  async findDepartment(){
+  async findProcess(){
     let processId=this.props.config
     const response = await findProcessActionHandler(processId);
     this.setState({loading:false,data:response});
@@ -281,5 +281,5 @@ class MlAddProcessMapping extends React.Component{
     )
   }
 };
-export default MlAddProcessMapping = formHandler()(MlAddProcessMapping);
+export default MlEditProcessMapping = formHandler()(MlEditProcessMapping);
 

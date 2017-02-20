@@ -22,16 +22,6 @@ class MlEditSubDepartment extends React.Component{
   }
 
   componentWillMount() {
-    // let subDeptId = this.props.config;
-    //
-    // this.setState ({
-    //   subDepartmentName: 'kjahsdjha',
-    //   displayName: 'jkahskjdhkjh khkh kh',
-    //   about: 'lkjhaslkjl asj lkljlk a',
-    //   selectCluster: 'select cluster',
-    //   email: 'hakjs dkjhsah@hsadkha sjkahs k',
-    //   status: true
-    // })
     const resp=this.findSubDepartment();
       return resp;
   }
@@ -50,27 +40,28 @@ class MlEditSubDepartment extends React.Component{
     FlowRouter.go("/admin/settings/subDepartmentsList");
   };
 
-  async  findSubDepartment() {
-    let id = this.props.config
-    const response = await findSubDepartmentActionHandler(id);
-    this.setState({loading:false,data:response});
-
-  }
 
   async  editSubDepartment() {
     let SubDepartmentDetails = {
-      id: this.refs.id.value,
+      _id: this.refs.id.value,
       subDepartmentName: this.refs.subDepartmentName.value,
       displayName: this.refs.displayName.value,
       aboutSubDepartment: this.refs.aboutSubDepartment.value,
       selectCluster: this.refs.selectCluster.value,
       email: this.refs.email.value,
-      status: this.refs.status.checked
+      isActive: this.refs.status.checked
     }
     console.log(SubDepartmentDetails)
 
     const response = await updateSubDepartmentActionHandler(SubDepartmentDetails)
     return response;
+
+  }
+
+  async  findSubDepartment() {
+    let id = this.props.config
+    const response = await findSubDepartmentActionHandler(id);
+    this.setState({loading:false,data:response});
 
   }
   onStatusChange(e){
@@ -111,7 +102,7 @@ class MlEditSubDepartment extends React.Component{
               <div className="col-md-6">
                 <div className="form_bg">
                   <form>
-                    <input type="text" ref="id" value={this.state.data._id} hidden="true"/>
+                    <input type="text" ref="id" value={this.state.data.id} hidden="true"/>
                     <div className="form-group">
                       <input type="text" ref="subDepartmentName" defaultValue={this.state.data&&this.state.data.subDepartmentName} placeholder="Sub Department Name" className="form-control float-label" id=""/>
 

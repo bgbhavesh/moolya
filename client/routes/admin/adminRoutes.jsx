@@ -36,6 +36,7 @@ import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserT
 import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
 import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAddDocumentType'
+import MlEditDocumentType from '../../admin/settings/documentTypes/component/MlEditDocumentType'
 import MlDocumentFormatsList from '../../admin/settings/documentFormats/component/MlDocumentFormatsList'
 import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/MlAddDocumentFormat'
 import MlAddKycCategory from  '../../admin/settings/kycCategory/component/MlAddKycCategory'

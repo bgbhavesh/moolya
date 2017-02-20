@@ -37,7 +37,7 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
           else {
             cluster = {
               countryId:args.countryId,
-              clusterCode:arg.countryCode,
+              clusterCode:args.countryCode,
               countryName : country.country,
               clusterName:country.country,
               displayName: country.displayName,

@@ -57,15 +57,25 @@ export default class MapMarkers extends Component {
   render() {
     const style = this.props.hover ? mapMarkerStyleHover : mapMarkerStyle;
     return (
-      <div className="hint hint--html hint--info hint--top" style={style} onClick={this.info} onMouseEnter={this.onMouseEnterContent}
-           onMouseLeave={this.onMouseLeaveContent}>
-        <div>{this.props.text}</div>
-        <div style={{width: 80}} className="hoverContent hint__content">{this.props.text}</div>
 
-        <div className="isDisplay hint__content">
-          {this.props.desc}
-        </div>
+    <div className="cluster_map inactive" style={{'top': '30%', 'left': '35%'}}>
+      <div className="hex_btn hex_btn_in">
+        <span><img src="/images/hover_image.png" /><b>123</b></span>
+        <span><img src="/images/hover_image.png" /><b>123</b></span>
+        <div className="indec"></div>
       </div>
+      <div>{this.props.text}</div>
+    </div>
+
+      // <div className="hint hint--html hint--info hint--top" style={style} onClick={this.info} onMouseEnter={this.onMouseEnterContent}
+      //      onMouseLeave={this.onMouseLeaveContent}>
+      //   <div>{this.props.text}</div>
+      //   <div style={{width: 80}} className="hoverContent hint__content">{this.props.text}</div>
+      //
+      //   <div className="isDisplay hint__content">
+      //     {this.props.desc}
+      //   </div>
+      // </div>
     );
   }
 }

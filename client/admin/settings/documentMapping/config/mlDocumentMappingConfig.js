@@ -13,9 +13,11 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "roleTypeName", title: "RoleType Name",dataSort:true},
-    {dataField: "roleTypeDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "isActive", title: "Active",dataSort:true}
+    {dataField: "documentName", title: "Name",dataSort:true},
+    {dataField: "kycCategory", title: "Category",dataSort:true},
+    {dataField: "allowableFormat", title: "Allowable Format",dataSort:true},
+    {dataField: "allowableMaxSize", title: "Allowable Size",dataSort:true},
+    {dataField: "clusters", title: "Jurisdiction",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -25,10 +27,17 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          // FlowRouter.go("/admin/settings/editRoleType/"+data.id);
+          // FlowRouter.go("/admin/settings/editSubDepartment/"+data.id);
         } else{
-          alert("Please select a Role Type");
+          alert("Please select a Document");
         }
+      }
+    },
+    {
+      showAction: true,
+      actionName: 'add',
+      handler: (data)=>{
+        FlowRouter.go("/admin/settings/addDocumentMapping")
       }
     },
     {
@@ -39,14 +48,17 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
   ],
   graphQlQuery:gql`
               query{
-              data:SearchQuery(module:"roleType"){
+              data:SearchQuery(module:"documentMapping"){
                     totalRecords
                     data{
-                     ...on RoleTypes{
-                             roleTypeName
-                              roleTypeDisplayName
-                              roleTypeDescription
-                              isActive
+                     ...on DocumentMapping{
+                              documentId
+                              documentDisplayName
+                              documentName
+                              kycCategory
+                              allowableFormat
+                              allowableMaxSize
+                              clusters
                               id:_id
                           }
                       }

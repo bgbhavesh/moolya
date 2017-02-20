@@ -5,12 +5,15 @@ import {addDepartmentActionHandler} from '../actions/addDepartmentAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import MlAssignDepartments from './MlAssignDepartments'
+import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
+/*var FloatingLabel = require('react-floating-label');*/
 class MlAddDepartment extends React.Component{
 
   constructor(props) {
     super(props);
     this.state={
-      departmentAvailability:[]
+      departmentAvailability:[],
+      ismoolya:false
     }
     this.addEventHandler.bind(this);
     this.createDepartment.bind(this)
@@ -56,6 +59,8 @@ class MlAddDepartment extends React.Component{
   };
 
   async  createDepartment() {
+
+
     let DepartmentDetails = {
       departmentName: this.refs.departmentName.value,
       displayName: this.refs.displayName.value,
@@ -70,13 +75,22 @@ class MlAddDepartment extends React.Component{
    return response;
 
   }
-
+  getMoolyaDepartmentAvailability(details){
+    this.setState({'departmentAvailability':details})
+  }
   getDepartmentAvailability(details){
-    console.log("details->"+details);
+    console.log(details);
     this.setState({'departmentAvailability':details})
   }
   onSubmit(){
     console.log(this.state.departmentAvailability)
+  }
+  onStatusChange(e){
+    if(e.currentTarget.checked){
+      this.setState({"ismoolya":true});
+    }else{
+      this.setState({"ismoolya":false});
+    }
   }
 
   render(){
@@ -131,14 +145,14 @@ class MlAddDepartment extends React.Component{
                 <div className="form-group switch_wrap switch_names">
                   <label>Select Type</label><br/>
                   <span className="state_label">moolya</span><label className="switch nocolor-switch">
-                  <input type="checkbox" ref="appType" />
+                  <input type="checkbox" ref="appType" onChange={this.onStatusChange.bind(this)} />
                   <div className="slider"></div>
                 </label>
                   <span className="state_label acLabel">non-moolya</span>
                 </div><br className="brclear"/>
 
+                {this.state.ismoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)}/>:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)}/>}
 
-                <MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)}/>
 
               </form>
             </div>

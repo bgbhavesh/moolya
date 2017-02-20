@@ -18,6 +18,7 @@ import MlAddSubDepartment from '../../admin/settings/subDepartments/component/Ml
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
 /*import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'*/
 import MlAddProcessMapping from '../../admin/settings/processMapping/component/MlAddProcessMapping'
+import MlProcessMappingList from '../../admin/settings/processMapping/component/MlProcessMappingList'
 import MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
 import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
 import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
@@ -224,13 +225,14 @@ adminSection.route('/settings/editSubDepartment/:id', {
 adminSection.route('/settings/permissionList', {
   name: 'settings_PermissionList',
   action(){
-    mount(AdminLayout,{adminContent:< MlPermissionList/>})
+    mount(AdminLayout,{adminContent:< MlProcessMappingList/>})
   }
 });
-adminSection.route('/settings/addPermission', {
-  name: 'settings_AddPermissions',
+
+adminSection.route('/settings/processList', {
+  name: 'settings_AddProcess',
   action(){
-    mount(AdminLayout,{adminContent:<MlAddPermission />})
+    mount(AdminLayout,{adminContent:<MlProcessMappingList />})
   }
 });
 adminSection.route('/settings/addProcess', {
@@ -239,19 +241,19 @@ adminSection.route('/settings/addProcess', {
     mount(AdminLayout,{adminContent:<MlAddProcessMapping />})
   }
 });
+adminSection.route('/settings/processList', {
+  name: 'settings_AddProcess',
+  action(){
+    mount(AdminLayout,{adminContent:<MlProcessMappingList />})
+  }
+});
 adminSection.route('/settings/editPermission/:id', {
   name: 'settings_EditPermissions',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditPermission config={params.id} />})
   }
 });
-adminSection.route('/settings/rolesList', {
-  name: 'settings_roles',
-  action(){
-    /*mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})*/
-    mount(AdminLayout,{adminContent:< MlAddRole/>})
-  }
-});
+
 adminSection.route('/settings/backendUserList', {
   name: 'settings_BackendUserList',
   action(){

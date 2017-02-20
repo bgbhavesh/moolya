@@ -115,11 +115,16 @@ export default class MlAssignClustersToRoles extends React.Component {
     let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterquery=gql`query($id:String){  
   data:fetchChapters(id:$id) {
-    value:chapterId
+    value:_id
     label:chapterName
   }  
 }`;
-    let subChapterquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}} `;
+    let subChapterquery=gql`query($id:String){  
+  data:fetchSubChaptersSelect(id:$id) {
+    value:_id
+    label:subChapterName
+  }  
+}`;
     let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
     let subDepartmentquery=gql`query($id:String){  
   data:fetchSubDepartments(id:$id) {
@@ -135,6 +140,7 @@ export default class MlAssignClustersToRoles extends React.Component {
         <div className="form-group"> <a onClick={that.AssignassignRoleToClusters.bind(this)} className="mlUpload_btn">Add</a></div>
         {that.state.assignRoleToClusters.map(function(assignCluster,id){
           let chapterOption={options: { variables: {id:assignCluster.cluster}}};
+          let subChapterOption={options: { variables: {id:assignCluster.chapter}}};
           let subDeparatmentOption={options: { variables: {id:assignCluster.department}}};
           return(
             <div className="panel panel-default" key={id}>
@@ -153,7 +159,7 @@ export default class MlAssignClustersToRoles extends React.Component {
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} queryOptions={subChapterOption} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">

@@ -24,6 +24,7 @@ let KycCategoriesSchema = `
     }
     type Query{
         findKycCategory(_id:String): KycCategories
+        fetchKYCCategories:[KycCategories]
     }
 `
 

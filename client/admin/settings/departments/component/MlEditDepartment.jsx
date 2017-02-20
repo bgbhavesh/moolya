@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
 import  {updateDepartmentActionHandler} from '../actions/updateDepartmentAction'
 import MlAssignDepartments from './MlAssignDepartments'
+import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 class MlEditDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -67,6 +68,10 @@ class MlEditDepartment extends React.Component{
     console.log("details->"+details);
     this.setState({'departmentAvailability':details})
   }
+  getMoolyaDepartmentAvailability(details){
+    this.setState({'departmentAvailability':details})
+  }
+
   onSubmit(){
     console.log(this.state.departmentAvailability)
   }
@@ -144,10 +149,7 @@ class MlEditDepartment extends React.Component{
                   </label>
                     <span className="state_label">non-moolya</span>
                   </div><br className="brclear"/>
-
-
-                  <MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)}/>
-
+                  {this.state.data&&this.state.data.isMoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
                 </form>
               </div>
             </div>

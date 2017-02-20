@@ -6,6 +6,7 @@ let clusterSchema = `
         countryName: String
         countryId :String
         displayName :String
+        clusterCode:String
         about: String
         link: String
         email:String
@@ -20,6 +21,7 @@ let clusterSchema = `
         _id:String,
         countryName: String
         displayName:String, 
+        clusterCode:String,
         about:String,  
         email:String, 
         showOnMap:Boolean, 
@@ -29,7 +31,8 @@ let clusterSchema = `
     input clusterObject{
         countryId:String, 
         countryName: String
-        displayName:String, 
+        displayName:String,
+        clusterCode:String,
         about:String, 
         countryFlag:String, 
         email:String, 

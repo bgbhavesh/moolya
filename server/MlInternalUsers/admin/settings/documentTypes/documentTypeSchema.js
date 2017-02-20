@@ -24,6 +24,7 @@ let DocumentTypesSchema = `
     }
     type Query{
         findDocumentType(_id:String): DocumentTypes
+        fetchDocuments:[DocumentTypes]
     }
 `
 

@@ -18,6 +18,7 @@ let ProfessionSchema = `
     }
     type Query{
         FindProfession(_id:String): Profession
+        fetchProfessions:[Profession]
     }
 `
 

@@ -15,6 +15,23 @@ export default class MlListView extends Component {
     this.onAlphaSearchChange.bind(this);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
+
+      let hasQueryOptions = this.props.queryOptions ? true : false;
+      const variables={
+                          offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
+                          limit: nextState.sizePerPage || 20
+                      }
+      if (hasQueryOptions) {
+        let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
+        let extendedVariables = _.extend(dynamicQueryOptions);
+        this.props.fetchMore(extendedVariables);
+      }
+      this.props.fetchMore(variables);
+    }
+  }
+
   onPageChange(page,sizePerPage) {
     this.setState({
       pageNumber: page

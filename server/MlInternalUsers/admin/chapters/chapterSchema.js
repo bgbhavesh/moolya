@@ -54,6 +54,7 @@ let chapterSchema = `
         chapterName :String
         subChapterName :String
         subChapterDisplayName: String
+        subChapterCode:String,
         aboutSubChapter: String
         subChapterImageLink: String
         subChapterEmail: String

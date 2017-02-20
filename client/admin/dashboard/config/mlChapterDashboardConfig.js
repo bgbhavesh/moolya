@@ -28,8 +28,8 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
   sort:false,
   viewComponent:<MlMapViewContainer />,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"chapter"){
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
+              data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
                     totalRecords
                     data{
                      ...on Chapter{

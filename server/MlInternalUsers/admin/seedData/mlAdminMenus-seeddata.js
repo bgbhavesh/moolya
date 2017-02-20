@@ -962,6 +962,82 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/citizenshipList",
+            "name" : "Citizenship Types",
+            "uniqueId" : "settings_citizenshipTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addCitizenship",
+              "name": "Add CitizenshipType",
+              "uniqueId": "settings_AddCitizenshipType",
+              "subMenuMappingId":"settings_citizenshipTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/citizenshipList",
+                "name": "List CitizenshipType",
+                "uniqueId": "settings_CitizenshipTypeList",
+                "subMenuMappingId":"settings_citizenshipTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editCitizenship",
+                "name": "Edit CitizenshipType",
+                "uniqueId": "settings_EditCitizenshipType",
+                "subMenuMappingId":"settings_citizenshipTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/lookingForList",
+            "name" : "LookingFor Types",
+            "uniqueId" : "settings_lookingForTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addLookingFor",
+              "name": "Add LookingForType",
+              "uniqueId": "settings_AddLookingForType",
+              "subMenuMappingId":"settings_lookingForTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/lookingForList",
+                "name": "List LookingForType",
+                "uniqueId": "settings_LookingForTypeList",
+                "subMenuMappingId":"settings_lookingForTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editLookingFor",
+                "name": "Edit LookingForType",
+                "uniqueId": "settings_EditLookingForType",
+                "subMenuMappingId":"settings_lookingForTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
           }
         ]
       }

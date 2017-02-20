@@ -19,7 +19,9 @@ export default class  MlListViewComposer extends Component {
     if(DataComposerType==='graphQl'){
       let hasQueryOptions=config.queryOptions?true:false;
       if(hasQueryOptions){
-        let extendedQueryVar=_.extend(queryOptions.variables,config.queryOptions);
+        let dynamicQueryOptions=config.buildQueryOptions?config.buildQueryOptions(config):{};
+
+        let extendedQueryVar=_.extend(queryOptions.variables,dynamicQueryOptions);
         queryOptions["variables"]=extendedQueryVar;
       }
 

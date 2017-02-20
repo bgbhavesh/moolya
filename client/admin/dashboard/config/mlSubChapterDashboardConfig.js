@@ -14,9 +14,13 @@ const mlSubChapterDashboardListConfig=new MlViewer.View({
   pagination:true,
   sort:true,
   viewComponent:<MlSubChapterList />,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {id:config.params&&config.params.chapterId?config.params.chapterId:null}
+  },
   graphQlQuery:gql` query fetchSubChapters( $id:String) {
                     data:fetchSubChapters(id: $id){
-                       data{...on SubChapter{
+                       data{
                                    _id
                                    chapterId
                                    clusterId
@@ -31,7 +35,7 @@ const mlSubChapterDashboardListConfig=new MlViewer.View({
                                    showOnMap
                                    isActive
                                    subChapterDisplayName
-                               }
+                            
                     }
                     }
                      }`

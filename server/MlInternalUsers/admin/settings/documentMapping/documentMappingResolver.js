@@ -2,9 +2,9 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 
-MlResolver.MlMutationResolver['createDocumentMapping'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlRequestType.insert(args);
+  let id = MlDocumentMapping.insert(args);
   if (id) {
     let code = 200;
     let result = {permissionId: id}

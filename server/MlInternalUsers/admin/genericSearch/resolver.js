@@ -119,6 +119,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlProcessMapping.find({},findOptions).fetch();
     totalRecords=MlProcessMapping.find({},findOptions).count();
   }
+  if(args.module=="businessType"){
+    data= MlBusinessType.find({},findOptions).fetch();
+    totalRecords=MlBusinessType.find({},findOptions).count();
+  }
+  if(args.module=="citizenship"){
+    data= MlCitizenship.find({},findOptions).fetch();
+    totalRecords=MlCitizenship.find({},findOptions).count();
+  }
+  if(args.module=="lookingFor"){
+    data= MlLookingFor.find({},findOptions).fetch();
+    totalRecords=MlLookingFor.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -209,6 +221,15 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.stageOfCompanyName){
       return 'StageOfCompany'
+    }
+    if(data.businessTypeName){
+      return 'BusinessType'
+    }
+    if(data.citizenshipTypeName){
+      return 'Citizenship'
+    }
+    if(data.lookingForName){
+      return 'LookingFor'
     }
     if(data.processId){
       return 'ProcessType'

@@ -9,14 +9,15 @@ export default class MlClusterListView extends Component {
     const data = this.props.data || [];
     const list = data.map(function (prop) {
       let status = prop.profile.InternalUprofile.moolyaProfile.isActive;
-      let StatusActive = '';
+      let StatusActive = '',fontName='';
       if (status == true) {
         StatusActive = 'active'
+        fontName='check'
       }
       return (
         <div className="col-md-2" key={prop._id}>
           <div className="list_block provider_block">
-            <div className={`cluster_status ${StatusActive}_cl`}><FontAwesome name='check'/></div>
+            <div className={`cluster_status ${StatusActive}_cl`}><FontAwesome name={fontName}/></div>
             <a href={backendUserRoute.backendUserDetailRoute(prop._id)}>
               <div className="provider_mask">
                 <img src="/images/funder_bg.png"/>

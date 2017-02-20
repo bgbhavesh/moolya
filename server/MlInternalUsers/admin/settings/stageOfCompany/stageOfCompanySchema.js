@@ -13,7 +13,7 @@ let StageOfCompany = `
         UpdateStageOfCompany(_id:String,stageOfCompanyName:String,stageOfCompanyDisplayName:String,about:String,isActive:Boolean):String
     }
     type Query{
-      FindStageOfCompany(_id: String):Entity
+      FindStageOfCompany(_id: String):StageOfCompany
     }
 `
 

@@ -72,6 +72,15 @@ import MlAddEntityType from '../../admin/settings/entity/component/MlAddEntityTy
 import MlStageOfCompanyTypeList from '../../admin/settings/stageOfCompany/component/MlStageOfCompanyTypeList'
 import MlAddStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlAddStageOfCompanyType'
 // import MlEditStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlEditStageOfCompanyType'
+import MlBusinessTypeList from '../../admin/settings/businessType/component/MlBusinessTypeList'
+import MlAddBusinessType from '../../admin/settings/businessType/component/MlAddBusinessType'
+// import MlEditBusinessType from '../../admin/settings/businessType/component/MlEditBusinessType'
+import MlCitizenshipTypeList from '../../admin/settings/citizenship/component/MlCitizenshipTypeList'
+import MlAddCitizenshipType from '../../admin/settings/citizenship/component/MlAddCitizenshipType'
+// import MlEditCitizenshipType from '../../admin/settings/citizenship/component/MlEditCitizenshipType'
+import MlLookingForTypeList from '../../admin/settings/lookingFor/component/MlLookingForTypeList'
+import MlAddLookingForType from '../../admin/settings/lookingFor/component/MlAddLookingForType'
+// import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEditLookingForType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -535,5 +544,59 @@ adminSection.route('/settings/addStageOfCompany', {
 //   name: 'settings_EditStageOfCompanyType',
 //   action(params){
 //     mount(AdminLayout,{adminContent:<MlEditStageOfCompanyType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/businessList', {
+  name: 'settings_BusinessTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlBusinessTypeList/>})
+  }
+});
+adminSection.route('/settings/addBusiness', {
+  name: 'settings_AddBusinessType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddBusinessType />})
+  }
+});
+// adminSection.route('/settings/editBusiness/:id', {
+//   name: 'settings_EditBusinessType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditBusinessType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/citizenshipList', {
+  name: 'settings_CitizenshipTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlCitizenshipTypeList/>})
+  }
+});
+adminSection.route('/settings/addCitizenship', {
+  name: 'settings_AddCitizenshipType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddCitizenshipType />})
+  }
+});
+// adminSection.route('/settings/editCitizenship/:id', {
+//   name: 'settings_EditCitizenshipType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditCitizenshipType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/lookingForList', {
+  name: 'settings_LookingForTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlLookingForTypeList/>})
+  }
+});
+adminSection.route('/settings/addLookingFor', {
+  name: 'settings_AddLookingForType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddLookingForType />})
+  }
+});
+// adminSection.route('/settings/editLookingFor/:id', {
+//   name: 'settings_EditLookingForType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
 //   }
 // });

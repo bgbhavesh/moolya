@@ -165,7 +165,26 @@ class MlAddProcessMapping extends React.Component{
     data:fetchIndustries{label:industryName,value:_id}
     }
 `;
+    let professionquery=gql` query{
+    data:fetchProfessions{label:professionName,value:_id}
+    }
+`;
+    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let chapterquery=gql`query($id:String){  
+  data:fetchChapters(id:$id) {
+    value:_id
+    label:chapterName
+  }  
+}`;
+    let subChapterquery=gql`query($id:String){  
+  data:fetchSubChaptersSelect(id:$id) {
+    value:_id
+    label:subChapterName
+  }  
+}`;
 
+    let chapterOption={options: { variables: {id:this.state.clusters}}};
+    let subChapterOption={options: { variables: {id:this.state.chapters}}};
    return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -178,8 +197,10 @@ class MlAddProcessMapping extends React.Component{
                 smoothScrolling={true}
                 default={true}
               >
+
                 <div className="form_bg">
                   <form>
+
                     <div className="form-group">
                       <input type="text"  ref="processId" placeholder="process Id" className="form-control float-label" id=""/>
                     </div>
@@ -206,11 +227,11 @@ class MlAddProcessMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={professionquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectClusters.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
                     </div>
 
                     <div className="form-group">
@@ -218,11 +239,11 @@ class MlAddProcessMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
                     </div>
 
                     <div className="form-group switch_wrap inline_switch">

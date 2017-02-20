@@ -3,8 +3,10 @@ import MlSchemaDef from '../../mlAdminSchemaDef'
 let Process = `
 
     type ProcessType{
+        _id         : String
         processId   : String
-        process     : String       
+        process     : String  
+        isActive    : Boolean
     }
     
     input community{

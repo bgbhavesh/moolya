@@ -35,5 +35,9 @@ MlResolver.MlMutationResolver['createDocumentType'] = (obj, args, context, info)
     return response
   }
 }
+MlResolver.MlQueryResolver['fetchDocuments'] = (obj, args, context, info) => {
+  let result=MlDocumentTypes.find({isActive:true}).fetch()||[];
+  return result;
+}
 
 

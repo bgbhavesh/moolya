@@ -402,7 +402,7 @@ adminSection.route('/settings/addDocumentType', {
 adminSection.route('/settings/editDocumentType/:id', {
   name: 'settings_EditDocumentType',
   action(params){
-    mount(AdminLayout,{adminContent:<MlEditTransactionType config={params.id} />})
+    mount(AdminLayout,{adminContent:<MlEditDocumentType config={params.id} />})
   }
 });
 adminSection.route('/settings/documentFormatList', {

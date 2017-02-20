@@ -23,7 +23,6 @@ import MlEditPermission from '../../admin/settings/permissions/component/MlEditP
 import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
 import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
 import MlEditRequestType from  '../../admin/settings/requestTypes/component/MlEditRequestType'
-import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
 import MlStatesList from "../../admin/settings/states/component/MlStatesList";
@@ -222,15 +221,9 @@ adminSection.route('/settings/editSubDepartment/:id', {
     mount(AdminLayout,{adminContent:< MlEditSubDepartment config={params.id}/>})
   }
 });
-adminSection.route('/settings/permissionList', {
-  name: 'settings_PermissionList',
-  action(){
-    mount(AdminLayout,{adminContent:< MlProcessMappingList/>})
-  }
-});
 
-adminSection.route('/settings/processList', {
-  name: 'settings_AddProcess',
+adminSection.route('/settings/permissionList', {
+  name: 'settings_processList',
   action(){
     mount(AdminLayout,{adminContent:<MlProcessMappingList />})
   }
@@ -239,12 +232,6 @@ adminSection.route('/settings/addProcess', {
   name: 'settings_AddProcess',
   action(){
     mount(AdminLayout,{adminContent:<MlAddProcessMapping />})
-  }
-});
-adminSection.route('/settings/processList', {
-  name: 'settings_AddProcess',
-  action(){
-    mount(AdminLayout,{adminContent:<MlProcessMappingList />})
   }
 });
 adminSection.route('/settings/editPermission/:id', {

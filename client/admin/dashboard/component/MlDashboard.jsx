@@ -23,11 +23,11 @@ export default class MlDashboard extends React.Component {
     let infinityViewProps = {viewMode: this.state.viewMode, onViewModeChange:this.viewModeChange.bind(this)};
     let config=this.props;
     let listConfig=this.props.listConfig;
-    listConfig.queryOptions=this.props.queryOptions?this.props.queryOptions:null;
+     let params=this.props.params?this.props.params:null;
     return (
       <div>
         <div className="admin_main_wrap">
-          {viewMode ? <MlMapViewContainer {...config.mapConfig} /> : <div><MlListViewContainer {...listConfig}/></div> }
+          {viewMode ? <MlMapViewContainer params={params} {...config.mapConfig} /> : <div><MlListViewContainer params={params} {...listConfig}/></div> }
           {showInfinity && (<MlInfinity {...infinityViewProps} />)}
         </div>
       </div>

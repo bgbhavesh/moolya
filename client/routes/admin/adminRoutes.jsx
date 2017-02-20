@@ -163,10 +163,10 @@ adminSection.route('/chapter', {
 adminSection.route('/chapters/:chapterId', {
   name: 'chapter',
   action(params){
-    mount(AdminLayout,{adminContent:<MlSubChapterView params={params.chapterId} listConfig={mlSubChapterListConfig} />})
+    mount(AdminLayout,{adminContent:<MlDashboard params={params} mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} /> })
   }
 });
-adminSection.route('/chapter/subChapterDetails/:subChapterId', {
+  adminSection.route('/chapter/subChapterDetails/:subChapterId', {
   name: 'subChapterDetails',
   action(params){
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})

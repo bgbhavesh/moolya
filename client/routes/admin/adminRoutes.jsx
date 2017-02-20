@@ -39,8 +39,10 @@ import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAd
 import MlEditDocumentType from '../../admin/settings/documentTypes/component/MlEditDocumentType'
 import MlDocumentFormatsList from '../../admin/settings/documentFormats/component/MlDocumentFormatsList'
 import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/MlAddDocumentFormat'
+import MlEditDocumentFormat from '../../admin/settings/documentFormats/component/MlEditDocumentFormat'
 import MlAddKycCategory from  '../../admin/settings/kycCategory/component/MlAddKycCategory'
 import MlKycCategoriesList from '../../admin/settings/kycCategory/component/MlKycCategoriesList'
+import MlEditKycCategory from '../../admin/settings/kycCategory/component/MlEditKycCategory'
 import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
 import MlAddDocumentMapping from '../../admin/settings/documentMapping/component/MlAddDocumentMapping'
 
@@ -420,6 +422,12 @@ adminSection.route('/settings/addDocumentFormat', {
     mount(AdminLayout,{adminContent:< MlAddDocumentFormat/>})
   }
 });
+adminSection.route('/settings/editDocumentFormat/:id', {
+  name: 'settings_EditDocumentFormat',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDocumentFormat config={params.id} />})
+  }
+});
 adminSection.route('/settings/kycCategoryList', {
   name: 'settings_KycCategoryList',
   action(){
@@ -430,6 +438,12 @@ adminSection.route('/settings/addKycCategory', {
   name: 'settings_AddKycCategory',
   action(){
     mount(AdminLayout,{adminContent:< MlAddKycCategory/>})
+  }
+});
+adminSection.route('/settings/editKycCategory/:id', {
+  name: 'settings_EditKycCategory',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditKycCategory config={params.id} />})
   }
 });
 adminSection.route('/settings/documentMappingList', {

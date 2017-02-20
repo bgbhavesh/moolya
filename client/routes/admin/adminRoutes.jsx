@@ -71,6 +71,10 @@ import MlAddEntityType from '../../admin/settings/entity/component/MlAddEntityTy
 import MlStageOfCompanyTypeList from '../../admin/settings/stageOfCompany/component/MlStageOfCompanyTypeList'
 import MlAddStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlAddStageOfCompanyType'
 // import MlEditStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlEditStageOfCompanyType'
+import MlBusinessTypeList from '../../admin/settings/businessType/component/MlBusinessTypeList'
+import MlAddBusinessType from '../../admin/settings/businessType/component/MlAddBusinessType'
+// import MlEditBusinessType from '../../admin/settings/businessType/component/MlEditBusinessType'
+
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -533,5 +537,23 @@ adminSection.route('/settings/addStageOfCompany', {
 //   name: 'settings_EditStageOfCompanyType',
 //   action(params){
 //     mount(AdminLayout,{adminContent:<MlEditStageOfCompanyType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/businessList', {
+  name: 'settings_BusinessTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlBusinessTypeList/>})
+  }
+});
+adminSection.route('/settings/addBusiness', {
+  name: 'settings_AddBusinessType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddBusinessType />})
+  }
+});
+// adminSection.route('/settings/editBusiness/:id', {
+//   name: 'settings_EditBusinessType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditBusinessType config={params.id} />})
 //   }
 // });

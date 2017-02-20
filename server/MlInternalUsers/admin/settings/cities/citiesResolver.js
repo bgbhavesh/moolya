@@ -41,7 +41,7 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
                 chapter = {
                     clusterId:cluster._id,
                     clusterName:cluster.clusterName,
-                    chapterCode:"ML_"+city.name,
+                    chapterCode:"ML_"+(cluster.clusterCode?cluster.clusterCode+"_":"")+city.name.replace(/ +/g,"").trim(),
                     chapterName:city.name,
                     displayName:city.name,
                     about:"ssw",

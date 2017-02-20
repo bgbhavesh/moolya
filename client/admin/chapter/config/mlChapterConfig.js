@@ -17,7 +17,8 @@ const mlChapterMapConfig=new MlViewer.View({
   graphQlQuery:gql`
               query{
                   data:fetchChaptersForMap{
-                    chapterId
+                     _id
+                    chapterCode
                     chapterName
                     displayName
                     chapterImage
@@ -51,7 +52,8 @@ const mlChapterListConfig=new MlViewer.View({
                     totalRecords
                     data{
                      ...on Chapter{
-                              chapterId
+                              _id
+                              chapterCode
                               chapterName
                               displayName
                               chapterImage

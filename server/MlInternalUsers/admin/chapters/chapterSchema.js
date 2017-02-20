@@ -22,7 +22,8 @@ let chapterSchema = `
     }
     
     input chapterObject{
-        clusterId:String,
+        _id:String,
+        chapterCode:String,
         clusterName:String,
         chapterCode:String,
         chapterName:String,

@@ -6,6 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
+import {findRoleActionHandler} from '../actions/findRoleTypeAction'
 import {addRoleActionHandler} from '../actions/addRoleAction'
 import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'
@@ -66,7 +67,13 @@ class MlAddRole extends React.Component{
     console.log(this.state.assignRoleToClusters)
   }
 
-  async  createRole() {
+  async findRole(){
+    let roleId=this.props.config
+    const response = await findRoleActionHandler(roleId);
+    this.setState({loading:false,data:response});
+  }
+
+  async  editRole() {
     let roleDetails = {
       roleName: this.refs.roleName.value,
       displayName:this.refs.diplayName.value,
@@ -104,7 +111,7 @@ class MlAddRole extends React.Component{
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.editRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,

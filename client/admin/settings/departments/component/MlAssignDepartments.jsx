@@ -97,11 +97,16 @@ export default class MlAssignDepartments extends React.Component {
 `;
     let chapterQuery=gql`query($id:String){  
   data:fetchChapters(id:$id) {
-    value:chapterId
+    value:_id
     label:chapterName
   }  
 }`;
-    let subChapterQuery=gql`query{ data:fetchSubChapter{value:_id,label:displayName}} `;
+    let subChapterquery=gql`query($id:String){  
+  data:fetchSubChaptersSelect(id:$id) {
+    value:_id
+    label:subChapterName
+  }  
+}`;
     return (
 
     <div>
@@ -131,7 +136,7 @@ export default class MlAssignDepartments extends React.Component {
                   {/*<select placeholder="Select subChapter" ref="selectSubChapter" className="form-control float-label">*/}
                     {/*<option>Select SubChapter</option>*/}
                   {/*</select>*/}
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
+                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subChapter} queryType={"graphql"} query={subChapterquery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
                  {/* <input type="text" id="" placeholder="Select Sub Chapter" className="form-control float-label" disabled="true"/>*/}
                 </div>
                 <div className="form-group">
@@ -151,9 +156,6 @@ export default class MlAssignDepartments extends React.Component {
             </div>
           )})}
       </div>
-
-
-
 
     )
   }

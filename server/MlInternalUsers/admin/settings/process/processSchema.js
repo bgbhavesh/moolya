@@ -9,6 +9,52 @@ let Process = `
         isActive    : Boolean
     }
     
+    type communityOutput{
+        id   :  String
+    }    
+    type userTypeOutput{
+        id   :  String
+    }    
+    type industryOutput{
+        id   :  String
+    }    
+    type professionOutput{
+        id   :  String
+    }    
+    type clusterOutput{
+        id   :  String
+    }    
+    type stateOutput{
+        id   :  String
+    }    
+    type chapterOutput{
+        id   :  String
+    }
+    type subChapterOutput{
+        id   :  String
+    }
+    type documentOutput{
+        type      :  String
+        category  :  String
+        isActive  :  Boolean
+        
+    }
+    type processOutput{
+        processId   : String,
+        process     : String,
+        communities : [communityOutput],
+        userTypes   : [userTypeOutput],
+        identity    : String,
+        industries  : [industryOutput],
+        professions : [professionOutput],
+        clusters    : [clusterOutput],
+        states      : [stateOutput],
+        chapters    : [chapterOutput],
+        subChapters : [subChapterOutput],
+        isActive    : Boolean,
+        documents   : [documentOutput]  
+    }
+    
     input community{
         id   :  String
     }    
@@ -58,7 +104,13 @@ let Process = `
     
     type Mutation {
        createProcess(process:processInput): String
+       updateProcess(id:String,process:processInput):String
     }
+    
+    type Query{
+      findProcess(id:String):processOutput
+    }
+    
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Process]);

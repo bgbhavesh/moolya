@@ -22,3 +22,22 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
     }
     return "true";
 }
+MlResolver.MlQueryResolver['findProcess'] = (obj, args, context, info) => {  // TODO : Authorization
+
+  if (args.id) {
+    var id= args.id;
+    let response= MlProcessMapping.findOne({"_id":id});
+    return response;
+  }
+
+}
+
+MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.id) {
+    var id= args.id;
+    let updatedResponse= MlProcessMapping.update(id, {$set: args.process});
+    return updatedResponses
+  }
+
+}

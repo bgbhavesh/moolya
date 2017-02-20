@@ -28,6 +28,8 @@ let subDepartmentSchema = `
         aboutSubDepartment: String,
         departmentId: String,
         isActive:Boolean,
+        selectCluster:String,
+        email:String,
         isMoolya : Boolean,
         SubDepatmentAvailable: [subDepatmentAvailable]
     }
@@ -36,15 +38,17 @@ let subDepartmentSchema = `
         subDepartmentName:String,
         displayName:String,
         aboutSubDepartment:String,
+        selectCluster:String,
         isActive:Boolean,
         departmentId:String,
+        email:String,
         isMoolya:Boolean,
         subDepatmentAvailable:[SubDepatmentAvailable]
     }
     
     type Mutation{
         createSubDepartment(subDepartment:subDepartmentObject):String
-        updateSubDepartment(subDepartmentId:String!, subDepartment:subDepartmentObject):String
+        updateSubDepartment(subDepartmentId:String, subDepartment:subDepartmentObject):String
     }
     type Query{
         findSubDepartment(_id: String): SubDepartment

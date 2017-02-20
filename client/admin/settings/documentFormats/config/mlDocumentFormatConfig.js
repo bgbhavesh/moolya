@@ -26,7 +26,7 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          // FlowRouter.go("/admin/settings/editSubDepartment/"+data.id);
+          FlowRouter.go("/admin/settings/editDocumentFormat/"+data.id);
         } else{
           alert("Please select a Document Format");
         }

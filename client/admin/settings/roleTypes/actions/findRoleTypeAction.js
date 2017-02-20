@@ -1,17 +1,32 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findRoleTypeActionHandler(roleTypeId) {
-  let did=roleTypeId
+export async function findRoleActionHandler(roleId) {
+  let did=roleId
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        FindRoleType(_id:$id){
-         id:_id
-        roleTypeName
-        roleTypeDisplayName
-        isActive
-        roleTypeDescription
+        findRole(id:$id){
+          roleName
+          displayName
+          roleType
+          userType
+          about
+          assignRoles{
+            cluster
+            chapter
+            subChapter
+            department
+            subDepartment
+            isActive
+          }
+          modules{
+            moduleId
+            actions{
+              actionId
+            }
+          }
+          isActive
       }
       }
     `,
@@ -20,6 +35,6 @@ export async function findRoleTypeActionHandler(roleTypeId) {
     },
     forceFetch:true
   })
-  const id = result.data.FindRoleType;
+  const id = result.data.findRole;
   return id
 }

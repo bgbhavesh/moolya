@@ -2,45 +2,32 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function updateSubDepartmentActionHandler(SubDepartmentDetails) {
-  let _id = SubDepartmentDetails.id;
-  let subDepartmentName = SubDepartmentDetails.subDepartmentName;
-  let displayName = SubDepartmentDetails.displayName;
-  let aboutSubDepartment = SubDepartmentDetails.aboutSubDepartment;
-  let email = SubDepartmentDetails.email;
-  let selectCluster = SubDepartmentDetails.selectCluster;
-  let isActive = SubDepartmentDetails.status;
-  let isMoolya = false;
-  let departmentId = "Moolya DPT ID";
-  let subDepatmentAvailable = [];
+
+  let _id = SubDepartmentDetails._id;
+  let details = {
+    subDepartmentName: SubDepartmentDetails.subDepartmentName,
+    displayName: SubDepartmentDetails.displayName,
+    aboutSubDepartment: SubDepartmentDetails.aboutSubDepartment,
+    selectCluster: SubDepartmentDetails.selectCluster,
+    email: SubDepartmentDetails.email,
+    isActive:SubDepartmentDetails.isActive
+  }
 
   const result = await client.mutate({
     mutation: gql`
-    mutation ($_id:String, $subDepartmentName: String, $displayName: String, $aboutSubDepartment: String, $isMoolya: Boolean,$departmentId:String, $subDepatmentAvailable: [SubDepatmentAvailable], $isActive: Boolean){
-      UpdateSubDepartment(
-      _id:$_id,
-      subDepartmentName: $subDepartmentName,
-      displayName: $displayName,
-      aboutSubDepartment: $aboutSubDepartment,
-      isMoolya :$isMoolya,
-      departmentId: $departmentId,
-      subDepatmentAvailable: $subDepatmentAvailable,
-      isActive :$isActive
-      ) 
+    mutation ($subDepartmentId:String,$subDepartment:subDepartmentObject){
+        updateSubDepartment(
+          subDepartmentId:$subDepartmentId,
+          subDepartment:$subDepartment
+        )
       }
     `,
     variables: {
-      _id,
-      subDepartmentName,
-      displayName,
-      aboutSubDepartment,
-      email,
-      isActive,
-      isMoolya,
-      departmentId,
-      subDepatmentAvailable
+      subDepartmentId:_id,
+      subDepartment:details
     }
   })
   console.log(result)
-  const id = result.data.CreateSubDepartment;
+  const id = result;
   return id
 }

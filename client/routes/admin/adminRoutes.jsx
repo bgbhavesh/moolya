@@ -399,6 +399,12 @@ adminSection.route('/settings/addDocumentType', {
     mount(AdminLayout,{adminContent:< MlAddDocumentType/>})
   }
 });
+adminSection.route('/settings/editDocumentType/:id', {
+  name: 'settings_EditDocumentType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTransactionType config={params.id} />})
+  }
+});
 adminSection.route('/settings/documentFormatList', {
   name: 'settings_DocumentFormatList',
   action(){

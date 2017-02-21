@@ -75,6 +75,11 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
     return Meteor.users.find().fetch();
 }
 
+MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>{
+  console.log(args);
+  return Meteor.users.findOne({"_id":args.userId})
+}
+
 /*
 MlResolver.MlQueryResolver['fetchUsers'] = (obj, args, context, info) => {
 

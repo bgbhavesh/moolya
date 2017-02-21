@@ -20,16 +20,16 @@ import MlRespPayload from '../../../../commons/mlPayload'
 //   }
 // }
 //
-// MlResolver.MlMutationResolver['UpdateSubDepartment'] = (obj, args, context, info) =>{
-//   // TODO : Authorization
-//
-//   if (args._id) {
-//     var id= args._id;
-//     let resp = MlSubDepartments.update(id, {$set: args});
-//     return resp;
-//   }
-//
-// }
+MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info) =>{
+  // TODO : Authorization
+
+  if (args._id) {
+    var id= args._id;
+    let resp = MlSubDepartments.update(id, {$set: args});
+    return resp;
+  }
+
+}
 //
 // MlResolver.MlQueryResolver['FindSubDepartment'] = (obj, args, context, info) =>{
 //   // TODO : Authorization
@@ -82,6 +82,6 @@ MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) =
   if (args.id) {
     var id= args.id;
     let response= MlSubDepartments.findOne({"departmentId":id})||[];
-    return [response];
+    return response;
   }
 }

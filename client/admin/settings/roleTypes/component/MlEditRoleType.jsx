@@ -1,31 +1,47 @@
+
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
+import ScrollArea from 'react-scrollbar';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag'
+import formHandler from '../../../../commons/containers/MlFormHandler'
+import {addRoleActionHandler} from '../actions/addRoleAction'
+import MlAssignClustersToRoles from './MlAssignClustersToRoles'
+import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findRoleTypeActionHandler} from '../actions/findRoleTypeAction'
-import {updateRoleTypeActionHandler} from '../actions/updateRoleTypeAction'
-class MlEditRoleType extends React.Component{
-  constructor(props) {
+
+let Select = require('react-select');
+
+class MlEditRole extends React.Component{
+  constructor(props){
     super(props);
-    this.state = {loading:true,data:{}};
+    this.state={
+      assignRoleToClusters:[],
+      assignModulesToRoles:[],
+      selectedUserType:'',
+      selectedroleType:'',
+    }
     this.addEventHandler.bind(this);
-    this.updateRoleType.bind(this)
-    this.findRoleType.bind(this);
     return this;
   }
+  componentDidMount()
+  {
+    $(function() {
+      $('.float-label').jvFloat();
+    });
 
-  componentWillMount() {
-
+    $('.switch input').change(function() {
+      if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
+      }else{
+        $(this).parent('.switch').removeClass('on');
+      }
+    });
   }
-  componentDidMount(){
-    const resp=this.findRoleType();
-    if(this.state.data.isActive){
-      $('#status').prop('checked', true);
-    }
-  }
-
   async addEventHandler() {
+    const resp=await this.createBackendUser();
+    return resp;
   }
 
   async handleError(response) {
@@ -33,34 +49,49 @@ class MlEditRoleType extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/roleTypeList");
+
+    FlowRouter.go("/admin/settings/rolesList");
   };
 
-  async findRoleType(){
-    let roleTypeId=this.props.config;
-    const response = await findRoleTypeActionHandler(roleTypeId);
-    this.setState({loading:false,data:response});
+  getassignRoleToClusters(details){
+    console.log("details->"+details);
+    this.setState({'assignRoleToClusters':details})
   }
-  async updateRoleType() {
-    let RoleTypeDetails = {
-      id: this.refs.id.value,
-      roleTypeName: this.refs.roleTypeName.value,
-      roleTypeDisplayName: this.refs.roleTypeDisplayName.value,
-      roleTypeDescription: this.refs.roleTypeDescription.value,
-      isActive: this.refs.isActive.checked
+
+  getassignModulesToRoles(details){
+    console.log("details->"+details);
+    this.setState({'assignModulesToRoles':details})
+  }
+  onSubmit(){
+    console.log(this.state.assignRoleToClusters)
+  }
+
+  async  createRole() {
+    let roleDetails = {
+      roleName: this.refs.roleName.value,
+      displayName:this.refs.diplayName.value,
+      roleType:this.state.selectedUserType,
+      userType:this.state.selectedroleType,
+      about:this.refs.about.value,
+      assignRoles:this.state.assignRoleToClusters,
+      modules:this.state.assignModulesToRoles,
+      isActive:this.refs.status.checked
     }
-    const response = await updateRoleTypeActionHandler(RoleTypeDetails)
+    console.log(roleDetails)
+    const response = await addRoleActionHandler(roleDetails)
     return response;
 
   }
+  getAssignedDepartments(departments){
+    this.setState({'mlAssignDepartmentDetails':departments})
+  }
 
-  onStatusChange(e){
-    const data=this.state.data;
-    if(e.currentTarget.checked){
-      this.setState({"data":{"isActive":true}});
-    }else{
-      this.setState({"data":{"isActive":false}});
-    }
+
+  onUserTypeSelect(val){
+    this.setState({selectedUserType:val.value})
+  }
+  onRoleTypeSelect(val){
+    this.setState({selectedroleType:val.value})
   }
 
   render(){
@@ -68,63 +99,92 @@ class MlEditRoleType extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateRoleType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: null
       },
       {
         showAction: true,
         actionName: 'add',
-        handler: null
+        handler: async(event) => this.props.handler(this.createRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
         actionName: 'logout',
         handler: null
       }
+    ]
+    let UserTypeOptions = [
+      {value: 'moolya', label: 'moolya'},
+      {value: 'non-moolya', label: 'non-moolya'}
     ];
+    let query=gql` query{
+  data:fetchCountriesSearch{label:country,value:countryCode}
+}
+`;
 
-    const showLoader=this.state.loading;
     return (
-      <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_main_wrap">
-            <div className="admin_padding_wrap">
-              <h2>Edit Role Type</h2>
-              <div className="col-md-6">
+      <div className="admin_main_wrap">
+        <div className="admin_padding_wrap">
+          <h2>Create Role</h2>
+          <div className="col-md-6 nopadding-left">
+            <div className="left_wrap">
+              <ScrollArea
+                speed={0.8}
+                className="left_wrap"
+                smoothScrolling={true}
+                default={true}
+              >
                 <div className="form_bg">
-                  <div className="form-group">
-                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="roleTypeName" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label" id=""/>
+                  <form>
+                    <div className="form-group">
+                      <input type="text"  ref="roleName" placeholder="Role Name" className="form-control float-label" id=""/>
 
-                  </div>
-                  <div className="form-group">
-                    <textarea  ref="roleTypeDescription" placeholder="About" defaultValue={this.state.data&&this.state.data.roleTypeDescription}className="form-control float-label" id=""></textarea>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="diplayName" placeholder="Display Name" className="form-control float-label" id=""/>
 
-                  </div>
+                    </div>
+                    <div className="form-group">
+                      <Select name="form-field-name" ref="userType" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
+
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        name="form-field-name" ref="roleType" options={UserTypeOptions} value={this.state.selectedroleType}  onChange={this.onRoleTypeSelect.bind(this)} className="float-label"/>
+
+                    </div>
+                    <div className="form-group">
+                      <textarea placeholder="About" ref="about" className="form-control float-label"></textarea>
+                    </div>
+
+                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)}/>
+
+                    <div className="form-group switch_wrap inline_switch">
+                      <label className="">Overall Role Status</label>
+                      <label className="switch">
+                        <input type="checkbox" ref="status"/>
+                        <div className="slider"></div>
+                      </label>
+                    </div>
+                    <br className="brclear"/>
+
+
+                  </form>
                 </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form_bg">
-                  <div className="form-group">
-                    <input type="text" ref="roleTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.roleTypeDisplayName} className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group switch_wrap">
-                    <label>Status</label><br/>
-                    <label className="switch">
-                      <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                </div>
-              </div>
+              </ScrollArea>
             </div>
-            <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-            />
+          </div>
+          <div className="col-md-6 nopadding-right"  >
+            <MlAssignModulesToRoles getassignModulesToRoles={this.getassignModulesToRoles.bind(this)}/>
+          </div>
 
-          </div>)}
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+
+        </div>
+
+
       </div>
-
     )
   }
 };
+export default MlEditRole = formHandler()(MlEditRole);
 
-export default MlEditRoleType = formHandler()(MlEditRoleType);

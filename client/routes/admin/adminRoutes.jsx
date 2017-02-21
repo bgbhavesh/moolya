@@ -23,7 +23,6 @@ import MlEditPermission from '../../admin/settings/permissions/component/MlEditP
 import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
 import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
 import MlEditRequestType from  '../../admin/settings/requestTypes/component/MlEditRequestType'
-import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
 import MlStatesList from "../../admin/settings/states/component/MlStatesList";
@@ -36,10 +35,13 @@ import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserT
 import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
 import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAddDocumentType'
+import MlEditDocumentType from '../../admin/settings/documentTypes/component/MlEditDocumentType'
 import MlDocumentFormatsList from '../../admin/settings/documentFormats/component/MlDocumentFormatsList'
 import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/MlAddDocumentFormat'
+import MlEditDocumentFormat from '../../admin/settings/documentFormats/component/MlEditDocumentFormat'
 import MlAddKycCategory from  '../../admin/settings/kycCategory/component/MlAddKycCategory'
 import MlKycCategoriesList from '../../admin/settings/kycCategory/component/MlKycCategoriesList'
+import MlEditKycCategory from '../../admin/settings/kycCategory/component/MlEditKycCategory'
 import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
 import MlAddDocumentMapping from '../../admin/settings/documentMapping/component/MlAddDocumentMapping'
 
@@ -86,7 +88,9 @@ import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/confi
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 
-adminSection = FlowRouter.group({
+
+
+export const adminSection = FlowRouter.group({
   prefix: "/admin",
   name: 'admin',
   triggersEnter: [function(context, redirect) {
@@ -96,6 +100,8 @@ adminSection = FlowRouter.group({
     }
   }]
 });
+
+
 
 adminSection.route('/', {
   action: function() {
@@ -222,15 +228,9 @@ adminSection.route('/settings/editSubDepartment/:id', {
     mount(AdminLayout,{adminContent:< MlEditSubDepartment config={params.id}/>})
   }
 });
-adminSection.route('/settings/permissionList', {
-  name: 'settings_PermissionList',
-  action(){
-    mount(AdminLayout,{adminContent:< MlProcessMappingList/>})
-  }
-});
 
-adminSection.route('/settings/processList', {
-  name: 'settings_AddProcess',
+adminSection.route('/settings/permissionList', {
+  name: 'settings_processList',
   action(){
     mount(AdminLayout,{adminContent:<MlProcessMappingList />})
   }
@@ -239,12 +239,6 @@ adminSection.route('/settings/addProcess', {
   name: 'settings_AddProcess',
   action(){
     mount(AdminLayout,{adminContent:<MlAddProcessMapping />})
-  }
-});
-adminSection.route('/settings/processList', {
-  name: 'settings_AddProcess',
-  action(){
-    mount(AdminLayout,{adminContent:<MlProcessMappingList />})
   }
 });
 adminSection.route('/settings/editPermission/:id', {
@@ -401,6 +395,12 @@ adminSection.route('/settings/addDocumentType', {
     mount(AdminLayout,{adminContent:< MlAddDocumentType/>})
   }
 });
+adminSection.route('/settings/editDocumentType/:id', {
+  name: 'settings_EditDocumentType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDocumentType config={params.id} />})
+  }
+});
 adminSection.route('/settings/documentFormatList', {
   name: 'settings_DocumentFormatList',
   action(){
@@ -413,6 +413,12 @@ adminSection.route('/settings/addDocumentFormat', {
     mount(AdminLayout,{adminContent:< MlAddDocumentFormat/>})
   }
 });
+adminSection.route('/settings/editDocumentFormat/:id', {
+  name: 'settings_EditDocumentFormat',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDocumentFormat config={params.id} />})
+  }
+});
 adminSection.route('/settings/kycCategoryList', {
   name: 'settings_KycCategoryList',
   action(){
@@ -423,6 +429,12 @@ adminSection.route('/settings/addKycCategory', {
   name: 'settings_AddKycCategory',
   action(){
     mount(AdminLayout,{adminContent:< MlAddKycCategory/>})
+  }
+});
+adminSection.route('/settings/editKycCategory/:id', {
+  name: 'settings_EditKycCategory',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditKycCategory config={params.id} />})
   }
 });
 adminSection.route('/settings/documentMappingList', {

@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-export default class MlAsignInternalUsers extends React.Component {
+export default class MlRoleAssignComponent extends React.Component {
   constructor(props){
     super(props);
     this.state={
@@ -80,7 +80,7 @@ export default class MlAsignInternalUsers extends React.Component {
 `;
     return (
 
-    <div className="swiper-container blocks_in_form">
+      <div className="swiper-container blocks_in_form">
       <div className="swiper-wrapper">
 
         {that.state.roleForm.map(function(options,id){

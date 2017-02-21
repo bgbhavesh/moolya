@@ -7,28 +7,14 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
+import MlAssignBackendUserList from './MlAssignBackendUserList'
+import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
+import {mlClusterConfig } from '../config/mlClusterConfig'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
-let options = [
-    { value: 'role', label: 'Role' },
-    { value: 'role', label: 'Role' }
-];
 
-function logChange(val) {
-    console.log("Selected: " + val);
-}
-
-let initSwiper = () => {
-    new Swiper('.blocks_in_form', {
-        speed: 400,
-        spaceBetween: 25,
-        slidesPerView:2,
-        pagination: '.swiper-pagination',
-        paginationClickable: true
-    });
-}
 
 export default class MlAssignBackendUsers extends React.Component{
     constructor(props){
@@ -36,30 +22,49 @@ export default class MlAssignBackendUsers extends React.Component{
         this.state={
             selectedBackendUser:'',
             users:[{username: '', _id:''}]
+
         }
-        this.optionsBySelectUser.bind(this)
         // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
 
     componentDidMount(){
-      initSwiper();
     }
 
     enableAssignUser(){
-
     }
 
     optionsBySelectUser(index, selectedIndex){
+        this.setState({selectedBackendUser:index})
     }
 
-    getBackendUsers(users){
-        console.log(users)
+    getAssignedRoles(roles){
+        console.log(roles)
+        this.setState({'mlroleDetails':roles})
+        console.log(this.state.mlroleDetails)
     }
 
     render(){
-        let that = this;
-        let query=gql`query{data:fetchUsersByClusterDepSubDep{label:username,value:_id}}`;
+        let MlActionConfig = [
+          {
+            actionName: 'edit',
+            showAction: true,
+            handler: null
+          },
+          {
+            showAction: true,
+            actionName: 'add',
+            handler: async(event) => this.props.handler(this.createBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+          },
+          {
+            showAction: true,
+            actionName: 'logout',
+            handler: null
+          }
+        ]
+        let that    = this;
+        let query   = gql`query{data:fetchUsersByClusterDepSubDep{label:username,value:_id}}`;
+        let userid  = this.state.selectedBackendUser||"";
         return(
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
@@ -75,14 +80,7 @@ export default class MlAssignBackendUsers extends React.Component{
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
-
-                                      <div className="col-md-4 col-sm-4">
-                                        <div className="list_block provider_block">
-                                            <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
-                                            <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/ideator_01.png" /> </div>
-                                            <h3>User Name1<br />USA</h3>
-                                        </div>
-                                      </div>
+                                      <MlAssignBackendUserList/>
                                   </ScrollArea>
                               </div>
                           </div>
@@ -102,7 +100,7 @@ export default class MlAssignBackendUsers extends React.Component{
                                       </div>
                                       <br className="brclear"/>
                                       <div className="form-group">
-                                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} selectedValue={this.state.selectedBackendUser}/>
+                                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>
                                       </div>
                                       <div>
                                           <div className="form-group">
@@ -111,86 +109,11 @@ export default class MlAssignBackendUsers extends React.Component{
                                           <div className="form-group">
                                               <input type="text" placeholder="Display Name" className="form-control float-label" id="dName" />
                                           </div>
-                                          {/*<div className="form-group">*/}
-                                              {/*<input type="text" placeholder="User Name" className="form-control float-label" id="uName" />*/}
-                                          {/*</div>*/}
-                                          {/*<div className="form-group">*/}
-                                              {/*<input type="text" placeholder="Department" className="form-control float-label" id="Dept" />*/}
-                                          {/*</div>*/}
-                                          {/*<div className="form-group">*/}
-                                              {/*<input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept" />*/}
-                                          {/*</div>*/}
-                                          {/*<div className="form-group">*/}
-                                              {/*<div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Is a Chapter admin</label></div>*/}
-                                          {/*</div>*/}
                                           <br className="brclear"/>
                                       </div>
-                                      <div className="swiper-container blocks_in_form">
-                                          <div className="swiper-wrapper">
-                                              <div className="form_inner_block swiper-slide">
-                                                  <div className="add_form_block"><img src="/images/add.png"/></div>
-                                                  <div className="form-group">
-                                                      <Select name="form-field-name" options={options} value='role' onChange={logChange}/>
-                                                  </div>
-                                                  <div className="form-group left_al">
-                                                      <input type="text" placeholder="Valid from" className="form-control float-label" id="" />
-                                                  </div>
-                                                  <div className="form-group left_al">
-                                                      <input type="text" placeholder="Valid to" className="form-control float-label" id="" />
-                                                  </div>
-                                                  <div className="form-group switch_wrap">
-                                                      <label>Status</label>
-                                                      <label className="switch">
-                                                          <input type="checkbox" />
-                                                          <div className="slider"></div>
-                                                      </label>
-                                                  </div>
-                                                  <br className="brclear"/>
-                                              </div>
-                                              <div className="form_inner_block swiper-slide">
-                                                  <div className="add_form_block"><img src="/images/add.png"/></div>
-                                                  <div className="form-group">
-                                                      <select className="form-control float-label" placeholder="Role"><option>Select User Role</option><option>test</option></select>
-                                                  </div>
-                                                  <div className="form-group left_al">
-                                                      <input type="text" placeholder="Valid from" className="form-control float-label" id="" />
-                                                  </div>
-                                                  <div className="form-group left_al">
-                                                      <input type="text" placeholder="Valid to" className="form-control float-label" id="" />
-                                                  </div>
-                                                  <div className="form-group switch_wrap">
-                                                      <label>Status</label>
-                                                      <label className="switch">
-                                                          <input type="checkbox" />
-                                                          <div className="slider"></div>
-                                                      </label>
-                                                  </div>
-                                                  <br className="brclear"/>
-                                              </div>
-                                              <div className="form_inner_block swiper-slide">
-                                                  <div className="add_form_block"><img src="/images/add.png"/></div>
-                                                  <div className="form-group">
-                                                      <select className="form-control float-label" placeholder="Role"><option>Select User Role</option><option>test</option></select>
-                                                  </div>
-                                                  <div className="form-group left_al">
-                                                      <input type="text" placeholder="Valid from" className="form-control float-label" id="" />
-                                                  </div>
-                                                  <div className="form-group left_al">
-                                                      <input type="text" placeholder="Valid to" className="form-control float-label" id="" />
-                                                  </div>
-                                                  <div className="form-group switch_wrap">
-                                                      <label>Status</label>
-                                                      <label className="switch">
-                                                          <input type="checkbox" />
-                                                          <div className="slider"></div>
-                                                      </label>
-                                                  </div>
-                                                  <br className="brclear"/>
-                                              </div>
-                                          </div>
-                                          <br className="brclear"/>
-                                          <div className="swiper-pagination"></div>
-                                      </div>
+
+                                      {userid?(<MlAssignBackednUserRoles userId={userid} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
+
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
@@ -204,6 +127,7 @@ export default class MlAssignBackendUsers extends React.Component{
                         </div>
                     </div>
                 </div>
+              <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </div>
         )
     }

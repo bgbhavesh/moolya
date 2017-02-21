@@ -23,3 +23,8 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) =>{
     }
     return "true";
 }
+
+MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) => {
+    let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
+    return roles;
+}

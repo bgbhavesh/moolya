@@ -99,7 +99,7 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({chapterId: args.id}).fetch()||[];
+  let result =  MlSubChapters.find({chapterId: args.id}).fetch()||[];
   return {data:result};
 }
 
@@ -120,6 +120,12 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
             let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
             return response
         }
+    }
+}
+
+MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
+    if(args.chapterId) {
+        return MlSubChapters.find({"chapterId":args.chapterId}).fetch();
     }
 }
 

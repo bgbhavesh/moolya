@@ -28,9 +28,11 @@ export default class MoolyaSelect extends Component {
   }
 
 
-  onChangeCallBackHandler(items){
-    if(items&&_.isArray(items)){
-    this.setState({options:items,executeQuery:false});
+  onChangeCallBackHandler(items)
+  {
+    if(items&&_.isArray(items))
+    {
+        this.setState({options:items,executeQuery:false});
     }else{
       this.setState({options:[],executeQuery:false});
     }

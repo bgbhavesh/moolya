@@ -1,6 +1,6 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
-
+import MlChapterList from "../../dashboard/component/MlChapterList"
 import React from 'react';
 import gql from 'graphql-tag'
 
@@ -8,13 +8,39 @@ const mlChapterDashboardListConfig=new MlViewer.View({
   name:"chapterDashBoardList",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
-  fields:{"userName":1,"mobileNumber":1,"eMail":1,"city":1,"regType":1},
-  searchFields:["userName","mobileNumber","eMail","city","regType"],
   throttleRefresh:true,
   pagination:true,
   sort:true,
-  viewComponent:'',
-  graphQlQuery:''
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+  },
+  viewComponent:<MlChapterList />,
+  graphQlQuery:gql`
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
+              data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+                    totalRecords
+                    data{
+                     ...on Chapter{
+                              _id
+                              clusterId
+                              chapterCode
+                              chapterName
+                              displayName
+                              chapterImage
+                              stateName
+                              stateId
+                              cityId
+                              cityName
+                              latitude
+                              longitude
+                              showOnMap
+                              isActive
+                          }
+                      }
+              }
+              }
+              `
 });
 
 const mlChapterDashboardMapConfig=new MlViewer.View({
@@ -28,27 +54,23 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
   sort:false,
   viewComponent:<MlMapViewContainer />,
   graphQlQuery:gql`
-              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-              data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
-                    totalRecords
-                    data{
-                     ...on Chapter{
-                              chapterId
-                              chapterName
-                              displayName
-                              about
-                              chapterImage
-                              stateName
-                              stateId
-                              cityId
-                              cityName
-                              latitude
-                              longitude
-                              showOnMap
-                              isActive
-                          }
-                      }
-              }
+              query{
+                  data:fetchChaptersForMap{
+                     _id
+                    chapterCode
+                    chapterName
+                    displayName
+                    chapterImage
+                    stateName
+                    stateId
+                    cityId
+                    cityName
+                    latitude
+                    longitude
+                    showOnMap
+                    isActive
+                    
+                  }
               }
               `
 });

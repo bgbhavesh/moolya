@@ -73,4 +73,8 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 
   }
 
+MlResolver.MlQueryResolver['fetchActiveRoles'] = (obj, args, context, info) =>{
+  return MlRoles.find({isActive:true}).fetch();
+}
+
 

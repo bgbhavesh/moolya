@@ -72,12 +72,12 @@ export default class MlAssignDepartmentComponent extends React.Component {
            <div className="panel-body">
              <div className="form-group">
               {/* <Select name="form-field-name" value={assignDepartmentForm.department} options={options2} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
-               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />
+               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />
 
              </div>
              <div className="form-group">
               {/* <Select name="form-field-name" value={assignDepartmentForm.subdepartment} options={options3} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
-                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subdepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Sub-Department" selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subdepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
               </div>
            </div>
          </div>

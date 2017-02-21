@@ -3,7 +3,7 @@ import MlSchemaDef from '../mlAdminSchemaDef'
 let chapterSchema = `
     type Chapter{
         _id:String,
-        chapterId:String,
+        clusterId:String,
         chapterCode:String,
         chapterName:String,
         displayName:String,
@@ -23,6 +23,7 @@ let chapterSchema = `
     
     input chapterObject{
         _id:String,
+        clusterId:String,
         chapterCode:String,
         clusterName:String,
         chapterCode:String,

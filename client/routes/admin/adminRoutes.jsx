@@ -62,13 +62,13 @@ import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEdi
 import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBackendUserList'
 import MlIndustryTypeList from '../../admin/settings/industry/component/MlIndustryTypeList'
 import MlAddIndustryType from '../../admin/settings/industry/component/MlAddIndustryType'
-// import MlEditIndustryType from '../../admin/settings/industry/component/MlEditIndustryType'
+import MlEditIndustryType from '../../admin/settings/industry/component/MlEditIndustryType'
 import MlSpecificationTypeList from '../../admin/settings/specifications/component/MlSpecificationsTypeList'
 import MlAddSpecificationType from '../../admin/settings/specifications/component/MlAddSpecificationsType'
-// import MlEditSpecificationType from '../../admin/settings/specifications/component/MlEditSpecificationsType'
+import MlEditSpecificationType from '../../admin/settings/specifications/component/MlEditSpecificationsType'
 import MlProfessionTypeList from '../../admin/settings/profession/component/MlProfessionTypeList'
 import MlAddProfessionType from '../../admin/settings/profession/component/MlAddProfessionType'
-// import MlEditProfessionType from '../../admin/settings/profession/component/MlEditProfessionType'
+import MlEditProfessionType from '../../admin/settings/profession/component/MlEditProfessionType'
 import MlEntityTypeList from '../../admin/settings/entity/component/MlEntityTypeList'
 import MlAddEntityType from '../../admin/settings/entity/component/MlAddEntityType'
 import MlEditEntityType from '../../admin/settings/entity/component/MlEditEntityType'
@@ -80,16 +80,18 @@ import MlAddBusinessType from '../../admin/settings/businessType/component/MlAdd
 import MlEditBusinessType from '../../admin/settings/businessType/component/MlEditBusinessType'
 import MlCitizenshipTypeList from '../../admin/settings/citizenship/component/MlCitizenshipTypeList'
 import MlAddCitizenshipType from '../../admin/settings/citizenship/component/MlAddCitizenshipType'
-// import MlEditCitizenshipType from '../../admin/settings/citizenship/component/MlEditCitizenshipType'
+import MlEditCitizenshipType from '../../admin/settings/citizenship/component/MlEditCitizenshipType'
 import MlLookingForTypeList from '../../admin/settings/lookingFor/component/MlLookingForTypeList'
 import MlAddLookingForType from '../../admin/settings/lookingFor/component/MlAddLookingForType'
-// import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEditLookingForType'
+import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEditLookingForType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 
-adminSection = FlowRouter.group({
+
+
+export const adminSection = FlowRouter.group({
   prefix: "/admin",
   name: 'admin',
   triggersEnter: [function(context, redirect) {
@@ -100,6 +102,8 @@ adminSection = FlowRouter.group({
   }]
 });
 
+
+
 adminSection.route('/', {
   action: function() {
     FlowRouter.go("/admin/dashboard");
@@ -108,13 +112,13 @@ adminSection.route('/', {
     console.log('running /admin trigger');
   }]
 });
-adminSection.route('/dashboard', {
+/*adminSection.route('/dashboard', {
   name: 'dashboard',
   action(){
-   /* mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<LeftNavConnection navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})*/
+   /!* mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<LeftNavConnection navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})*!/
   mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlClusterDashboardMapConfig} listConfig={mlClusterDashboardListConfig} />})
   }
-});
+});*/
 
 adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',
@@ -125,12 +129,12 @@ adminSection.route('/dashboard/subChapters/:chapterId', {
 });
 
 
-  adminSection.route('/dashboard/clusters', {
+ /* adminSection.route('/dashboard/clusters', {
   name: 'dashboard_clusters',
   action(){
     mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer/>})
   }
-});
+});*/
 adminSection.route('/cluster', {
   name: 'cluster',
   action(){
@@ -474,7 +478,7 @@ adminSection.route('/settings/editTemplateType/:id', {
 });
 
 adminSection.route('/settings/industryList', {
-  name: 'settings_IndustryList',
+  name: 'settings_IndustryTypeList',
   action(){
     mount(AdminLayout,{adminContent:< MlIndustryTypeList/>})
   }
@@ -485,12 +489,12 @@ adminSection.route('/settings/addIndustry', {
     mount(AdminLayout,{adminContent:<MlAddIndustryType />})
   }
 });
-// adminSection.route('/settings/editIndustry/:id', {
-//   name: 'settings_EditIndustryType',
-//   action(params){
-//     mount(AdminLayout,{adminContent:<MlEditIndustryType config={params.id} />})
-//   }
-// });
+adminSection.route('/settings/editIndustry/:id', {
+  name: 'settings_EditIndustryType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditIndustryType config={params.id} />})
+  }
+});
 adminSection.route('/settings/specificationList', {
   name: 'settings_SpecificationTypeList',
   action(){
@@ -503,12 +507,12 @@ adminSection.route('/settings/addSpecification', {
     mount(AdminLayout,{adminContent:< MlAddSpecificationType />})
   }
 });
-// adminSection.route('/settings/editSpecification/:id', {
-//   name: 'settings_EditIndustryType',
-//   action(params){
-//     mount(AdminLayout,{adminContent:<MlEditSpecificationType config={params.id} />})
-//   }
-// });
+adminSection.route('/settings/editSpecification/:id', {
+  name: 'settings_EditIndustryType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditSpecificationType config={params.id} />})
+  }
+});
 adminSection.route('/settings/professionList', {
   name: 'settings_ProfessionTypeList',
   action(){
@@ -521,12 +525,12 @@ adminSection.route('/settings/addProfession', {
     mount(AdminLayout,{adminContent:< MlAddProfessionType />})
   }
 });
-// adminSection.route('/settings/editProfession/:id', {
-//   name: 'settings_EditProfessionType',
-//   action(params){
-//     mount(AdminLayout,{adminContent:<MlEditProfessionType config={params.id} />})
-//   }
-// });
+adminSection.route('/settings/editProfession/:id', {
+  name: 'settings_EditProfessionType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditProfessionType config={params.id} />})
+  }
+});
 adminSection.route('/settings/entityList', {
   name: 'settings_EntityTypeList',
   action(){
@@ -593,12 +597,12 @@ adminSection.route('/settings/addCitizenship', {
     mount(AdminLayout,{adminContent:< MlAddCitizenshipType />})
   }
 });
-// adminSection.route('/settings/editCitizenship/:id', {
-//   name: 'settings_EditCitizenshipType',
-//   action(params){
-//     mount(AdminLayout,{adminContent:<MlEditCitizenshipType config={params.id} />})
-//   }
-// });
+adminSection.route('/settings/editCitizenship/:id', {
+  name: 'settings_EditCitizenshipType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditCitizenshipType config={params.id} />})
+  }
+});
 adminSection.route('/settings/lookingForList', {
   name: 'settings_LookingForTypeList',
   action(){
@@ -611,9 +615,9 @@ adminSection.route('/settings/addLookingFor', {
     mount(AdminLayout,{adminContent:< MlAddLookingForType />})
   }
 });
-// adminSection.route('/settings/editLookingFor/:id', {
-//   name: 'settings_EditLookingForType',
-//   action(params){
-//     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
-//   }
-// });
+adminSection.route('/settings/editLookingFor/:id', {
+  name: 'settings_EditLookingForType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
+  }
+});

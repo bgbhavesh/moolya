@@ -54,10 +54,19 @@ WebApp.rawConnectHandlers.use(proxyMiddleware(`http://localhost:8090/graphql`));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
-
-app.post('/multipartFormData', multipartMiddleware, function (req, res) {
+1
+app.post('/assignusers', multipartMiddleware, function (req, res) {
     var context = {};
     context = getContext({req});
     context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    // mlS3Client.uploadFile()
+    if(req && req.body && req.body.hierarchyLevel == "CLUSTER"){
+    }
+    else if(req && req.body && req.body.hierarchyLevel == "CHAPTER"){
+    }
+    else if(req && req.body && req.body.hierarchyLevel == "SUBCHAPTER"){
+    }
+    else if(req && req.body && req.body.hierarchyLevel == "COMMUNITY"){
+    }
+
+    res.send(true)
 })

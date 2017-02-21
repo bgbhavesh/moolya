@@ -41,11 +41,26 @@ export default class MlAssignDepartments extends React.Component {
        $(this).parent('.switch').removeClass('on');
       }
     });
+    this.props.getDepartmentAvailability(this.state.departmentAvailability)
+
+  }
+  componentWillMount() {
     let availabilityDetails=this.props.nonMoolya
     if(availabilityDetails){
-      this.setState({departmentAvailability:availabilityDetails})
-    }
+      let availabilityDetailsForm=[]
+      for(let i=0;i<availabilityDetails.length;i++){
+        let json={
+          cluster:[{clusterId: availabilityDetails[i].cluster[0].clusterId}],
+          chapter:availabilityDetails[i].chapter,
+          subChapter:availabilityDetails[i].subChapter,
+          email:availabilityDetails[i].email,
+          isActive:availabilityDetails[i].isActive
 
+        }
+        availabilityDetailsForm.push(json)
+      }
+      this.setState({departmentAvailability:availabilityDetailsForm})
+    }
   }
   optionsBySelectCluster(index, selectedIndex){
 
@@ -140,7 +155,7 @@ export default class MlAssignDepartments extends React.Component {
                  {/* <input type="text" id="" placeholder="Select Sub Chapter" className="form-control float-label" disabled="true"/>*/}
                 </div>
                 <div className="form-group">
-                  <input placeholder="Department Email Id" className="form-control float-label" onBlur={that.onEmailChange.bind(that,id)}/>
+                  <input placeholder="Department Email Id" className="form-control float-label" defaultValue={options.email} onBlur={that.onEmailChange.bind(that,id)}/>
                 </div>
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>

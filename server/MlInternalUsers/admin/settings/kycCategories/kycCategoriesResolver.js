@@ -7,7 +7,7 @@ MlResolver.MlMutationResolver['updateKycCategory'] = (obj, args, context, info) 
 
   if (args._id) {
     var id= args._id;
-    let updatedResponse= MlDocumentFormats.update(id, {$set: args});
+    let updatedResponse= MlDocumentCategories.update(id, {$set: args});
     return updatedResponse
   }
 
@@ -17,7 +17,7 @@ MlResolver.MlQueryResolver['findKycCategory'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlDocumentFormats.findOne({"_id":id});
+    let response= MlDocumentCategories.findOne({"_id":id});
     return response;
   }
 

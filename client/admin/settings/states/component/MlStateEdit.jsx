@@ -48,15 +48,16 @@ class MlEditState extends React.Component{
 
   async  editState() {
     let StateDetails = {
-      // id: this.refs.id.value,
-      name: this.refs.country.value,
-      // countryCode: this.refs.countryCode.value,
-      // url: this.refs.url.value,
-      status: this.refs.status.checked
+      id: this.refs.id.value,
+      name: this.refs.stateName.value,
+      countryCode: this.refs.countryName.value,
+      displayName: this.refs.displayName.value,
+      about: this.refs.about.value,
+      isActive: this.refs.status.checked
     }
     console.log(StateDetails)
 
-    const response = await updateStateActionHandler(CountryDetails)
+    const response = await updateStateActionHandler(StateDetails)
     return response;
 
   }
@@ -95,14 +96,15 @@ class MlEditState extends React.Component{
           <div className="admin_padding_wrap">
             <h2>Edit State</h2>
             <div className="col-md-6 nopadding-left">
+              <input type="text" ref="id" defaultValue={this.state.data._id} hidden="true"/>
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="Country Name" className="form-control float-label" id=""/>
+                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" id=""/>
 
                   </div>
                   <div className="form-group">
-                    <textarea placeholder="About" className="form-control float-label" id=""></textarea>
+                    <textarea placeholder="About" ref="about" defaultValue={this.state.data && this.state.data.about} className="form-control float-label" id=""></textarea>
 
                   </div>
 
@@ -113,19 +115,19 @@ class MlEditState extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="State Name" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="State Name" ref="stateName" defaultValue={this.state.data && this.state.data.name} className="form-control float-label" id=""/>
 
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Display Name" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="Display Name" ref="displayName" defaultValue={this.state.data && this.state.data.displayName} className="form-control float-label" id=""/>
 
                   </div>
 
                   <div className="form-group switch_wrap inline_switch">
                     <label>Available on System</label>
                     <label className="switch">
-                      <input type="checkbox" />
+                      <input type="checkbox" ref="status" checked={this.state.data && this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
                   </div>

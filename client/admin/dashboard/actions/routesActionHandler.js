@@ -4,10 +4,10 @@ const dashboardRoutes={
     return `/admin/cluster/clusterDetails/${clusterId}`;
   },
   chapterListRoute:(clusterId)=>{
-    return `/admin/chapters/${clusterId}`;
+    return `/admin/dashboard/${clusterId}/chapters`;
   },
   subChapterListRoute:(clusterId,chapterId,router) =>{
-  return `/admin/chapters/${clusterId}/${chapterId}`;
+    return `/admin/dashboard/${clusterId}/${chapterId}/subChapters`;
   },
   communityListRoute:(clusterId,chapterId,subChapterId,router)=>{
     return `/admin/subChapters/${clusterId}/${chapterId}/${subChapterId}`;

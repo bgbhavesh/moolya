@@ -41,9 +41,12 @@ module.exports = class s3Client{
     }
 
     getS3SignedUrl(fileKey, s3Bucket){
+        let params = {Key:fileKey, Bucket:s3Bucket, Expires:Meteor.settings.private.aws.urlExpirationTime}
+        return this.client.s3.getSignedUrl('getObject', params);
     }
 
     getS3PublicUrl(fileKey, s3Bucket){
+        return s3.getPublicUrlHttp(s3Bucket, fileKey);
     }
 
 }

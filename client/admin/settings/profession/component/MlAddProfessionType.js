@@ -52,7 +52,7 @@ class MlAddProfession extends React.Component {
 
   render() {
     let query = gql` query{
-  data:fetchIndustrySearch{label:industryName,value:_id}
+  data:fetchIndustries{label:industryName,value:_id}
 }
 `;
 
@@ -99,7 +99,7 @@ class MlAddProfession extends React.Component {
                        className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                <Moolyaselect multiSelect={false} placeholder="Select Industry" className="form-control float-label" valueKey={'value'}
                               labelKey={'label'} queryType={"graphql"}
                               selectedValue={this.state.selectedIndustry}
                               query={query} isDynamic={true} onSelect={this.onIndustrySelect.bind(this)}/>

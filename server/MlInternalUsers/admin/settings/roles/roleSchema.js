@@ -13,7 +13,7 @@ let Role = `
   
   type Modules{
       moduleId:String,
-      actions : [actions]
+      actions : [Actions]
   }
   
   type Actions{

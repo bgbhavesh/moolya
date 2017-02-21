@@ -128,12 +128,6 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
     }
 }
 
-MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
-    if(args.chapterId) {
-        return MlSubChapters.find({"chapterId":args.chapterId}).fetch();
-    }
-}
-
 createSubChapter = (subChapter) =>{
     if(MlSubChapters.find({$and:[{chapterId:subChapter.chapterId}, {subChapterName:subChapter.subChapterName}]}).count() > 0){
         let code = 409;

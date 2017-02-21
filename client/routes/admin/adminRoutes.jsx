@@ -111,13 +111,13 @@ adminSection.route('/', {
     console.log('running /admin trigger');
   }]
 });
-adminSection.route('/dashboard', {
+/*adminSection.route('/dashboard', {
   name: 'dashboard',
   action(){
-   /* mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<LeftNavConnection navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})*/
+   /!* mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<LeftNavConnection navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})*!/
   mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlClusterDashboardMapConfig} listConfig={mlClusterDashboardListConfig} />})
   }
-});
+});*/
 
 adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',
@@ -128,12 +128,12 @@ adminSection.route('/dashboard/subChapters/:chapterId', {
 });
 
 
-  adminSection.route('/dashboard/clusters', {
+ /* adminSection.route('/dashboard/clusters', {
   name: 'dashboard_clusters',
   action(){
     mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer/>})
   }
-});
+});*/
 adminSection.route('/cluster', {
   name: 'cluster',
   action(){

@@ -6,24 +6,28 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
+import formHandler from '../../../commons/containers/MlFormHandler'
 import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
 import MlAssignBackendUserList from './MlAssignBackendUserList'
 import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
 import {mlClusterConfig } from '../config/mlClusterConfig'
+import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
 
 
-export default class MlAssignBackendUsers extends React.Component{
+class MlAssignBackendUsers extends React.Component{
     constructor(props){
         super(props)
         this.state={
             selectedBackendUser:'',
             users:[{username: '', _id:''}]
-
         }
+
+        this.addEventHandler.bind(this);
+        this.assignBackendUsers.bind(this)
         // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
@@ -44,6 +48,28 @@ export default class MlAssignBackendUsers extends React.Component{
         console.log(this.state.mlroleDetails)
     }
 
+    async addEventHandler() {
+      const resp = await this.assignBackendUsers();
+      return resp;
+    }
+
+    async assignBackendUsers(){
+        let userProfile = {};
+        userProfile['clusterId'] = "";
+        userProfile['userRoles'] = this.state.mlroleDetails;
+        userProfile['displayName'] = this.refs.displayName.value;
+        let response = await multipartFormHandler(userProfile, "http://localhost:3000/assignusers", this.refs.profilePic.files[0]);
+        return response;
+    }
+
+    handleScuccess(){
+
+    }
+
+    handleError(){
+
+    }
+
     render(){
         let MlActionConfig = [
           {
@@ -54,7 +80,7 @@ export default class MlAssignBackendUsers extends React.Component{
           {
             showAction: true,
             actionName: 'add',
-            handler: async(event) => this.props.handler(this.createBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this))
           },
           {
             showAction: true,
@@ -92,7 +118,7 @@ export default class MlAssignBackendUsers extends React.Component{
                                       <div className="form-group">
                                           <div className="fileUpload mlUpload_btn">
                                               <span>Profile Pic</span>
-                                              <input type="file" className="upload" />
+                                              <input type="file" className="upload" ref="profilePic"/>
                                           </div>
                                           <div className="previewImg ProfileImg">
                                               <img src="/images/ideator_01.png"/>
@@ -107,7 +133,7 @@ export default class MlAssignBackendUsers extends React.Component{
                                               <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"/>
                                           </div>
                                           <div className="form-group">
-                                              <input type="text" placeholder="Display Name" className="form-control float-label" id="dName" />
+                                              <input type="text" placeholder="Display Name" className="form-control float-label" id="dName"  ref="displayName"/>
                                           </div>
                                           <br className="brclear"/>
                                       </div>
@@ -132,3 +158,5 @@ export default class MlAssignBackendUsers extends React.Component{
         )
     }
 }
+
+export default MlAssignBackendUsers = formHandler()(MlAssignBackendUsers);

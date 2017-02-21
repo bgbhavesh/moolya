@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
-import {addProcessActionHandler} from '../actions/addProcessAction'
+import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {findProcessActionHandler} from '../actions/findProcessAction'
 import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
@@ -18,17 +18,19 @@ class MlEditProcessMapping extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      id          : '',
+      processId   : '',
       assignDocument:[],
       process     : '',
-      communities : [],
-      userTypes   : [],
+      communities : [{id:''}],
+      userTypes   : [{id:''}],
       identity    : '',
-      industries  : [],
-      professions : [],
-      clusters    : [],
-      states      : [],
-      chapters    : [],
-      subChapters : [],
+      industries  : [{id:''}],
+      professions : [{id:''}],
+      clusters    : [{id:''}],
+      states      : [{id:''}],
+      chapters    : [{id:''}],
+      subChapters : [{id:''}],
       isActive    : ''
     }
     this.addEventHandler.bind(this);
@@ -68,9 +70,51 @@ class MlEditProcessMapping extends React.Component{
   }
 
   async findProcess(){
-    let processId=this.props.config
-    const response = await findProcessActionHandler(processId);
+    let pid=this.props.config
+    const response = await findProcessActionHandler(pid);
+
+    if(response) {
+      this.setState({loading: false, data: response});
+      this.setState({processId: this.state.data.processId});
+      this.setState({id: this.state.data._id});
+      if (this.state.data.process) {
+        this.setState({process: this.state.data.process});
+      }
+      if (this.state.data.communities) {
+        let communityId = this.state.data.communities[0].id;
+        this.setState({communities: [{id: communityId}]});
+      }
+      if (this.state.data.userTypes) {
+        let userTypesId = this.state.data.userTypes[0].id;
+        this.setState({userTypes: [{id: userTypesId}]});
+      }
+      if (this.state.data.industries) {
+        let industriesId = this.state.data.industries[0].id;
+        this.setState({industries: [{id: industriesId}]});
+      }
+      if (this.state.data.professions) {
+        let professionsId = this.state.data.professions[0].id;
+        this.setState({professions: [{id: professionsId}]});
+      }
+      if (this.state.data.clusters) {
+        let clustersId = this.state.data.clusters[0].id;
+        this.setState({clusters: [{id: clustersId}]});
+      }
+      if (this.state.data.states) {
+        let statesId = this.state.data.states[0].id;
+        this.setState({states: [{id: statesId}]});
+      }
+      if (this.state.data.chapters) {
+        let chaptersId = this.state.data.chapters[0].id;
+        this.setState({chapters: [{id: chaptersId}]});
+      }
+      if (this.state.data.subChapters) {
+        let subChaptersId = this.state.data.subChapters[0].id;
+        this.setState({subChapters: [{id: subChaptersId}]});
+      }
+    }
     this.setState({loading:false,data:response});
+
   }
 
 
@@ -78,9 +122,14 @@ class MlEditProcessMapping extends React.Component{
     console.log(this.state.assignDocuments)
   }
 
-  async  createProcess() {
+  componentWillMount() {
+    const resp=this.findProcess();
+    return resp;
+
+  }
+  async  updateProcess() {
     let processDetails = {
-      processId   : this.refs.processId.value,
+      processId   : this.state.processId,
       process     : this.state.process,
       communities : this.state.communities,
       userTypes   : this.state.userTypes,
@@ -94,8 +143,10 @@ class MlEditProcessMapping extends React.Component{
       isActive    : this.refs.status.checked,
       documents   : this.state.assignDocument
     }
+     let id       = this.state.id;
+     let process  = processDetails;
     console.log(processDetails)
-    const response = await addProcessActionHandler(processDetails)
+    const response = await updateProcessActionHandler(id,process)
     return response;
   }
   getAssignedDocuments(departments){
@@ -107,39 +158,55 @@ class MlEditProcessMapping extends React.Component{
   }
 
   optionsBySelectCommunities(val){
-    this.setState({communities:val})
+    let community=this.state.communities
+    community[0]['id']=val;
+    this.setState({communities:community})
   }
 
   optionsBySelectUserType(val){
-    this.setState({userTypes:val})
+    let userTypes=this.state.userTypes
+    userTypes[0]['id']=val;
+    this.setState({userTypes:userTypes})
   }
 
   optionsBySelectIdentity(val){
-    this.setState({identity:val.value})
+    this.setState({identity:val})
   }
 
   optionsBySelectIndustries(val){
-    this.setState({industries:val})
+    let industries=this.state.industries
+    industries[0]['id']=val;
+    this.setState({industries:industries})
   }
 
-    optionsBySelectProfessions(val){
-    this.setState({professions:val})
+  optionsBySelectProfessions(val){
+    let professions=this.state.professions
+    professions[0]['id']=val;
+    this.setState({professions:professions})
   }
 
   optionsBySelectClusters(val){
-    this.setState({clusters:val})
+    let clusters=this.state.clusters
+    clusters[0]['id']=val;
+    this.setState({clusters:clusters})
   }
 
   optionsBySelectStates(val){
-    this.setState({states:val})
+    let states=this.state.states
+    states[0]['id']=val;
+    this.setState({states:states})
   }
 
   optionsBySelectChapters(val){
-    this.setState({chapters:val})
+    let chapters=this.state.chapters
+    chapters[0]['id']=val;
+    this.setState({chapters:chapters})
   }
 
   optionsBySelectSubChapters(val){
-    this.setState({subChapters:val})
+    let subChapters=this.state.subChapters
+    subChapters[0]['id']=val;
+    this.setState({subChapters:subChapters})
   }
 
   render(){
@@ -152,7 +219,7 @@ class MlEditProcessMapping extends React.Component{
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createProcess.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.updateProcess.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -209,7 +276,7 @@ class MlEditProcessMapping extends React.Component{
                   <form>
 
                     <div className="form-group">
-                      <input type="text"  ref="processId" placeholder="process Id" className="form-control float-label" id=""/>
+                      <input type="text"   readOnly="true" defaultValue={this.state.processId} placeholder="process Id" className="form-control float-label" id=""/>
                     </div>
 
 
@@ -218,11 +285,11 @@ class MlEditProcessMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Community"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectCommunities.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Community"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities[0].id} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectCommunities.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"UserType"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectUserType.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"UserType"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes[0].id} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectUserType.bind(this)} />
                     </div>
 
                     <div className="form-group">
@@ -230,27 +297,27 @@ class MlEditProcessMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Industries"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.industries} queryType={"graphql"} query={industriesquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectIndustries.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Industries"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.industries[0].id} queryType={"graphql"} query={industriesquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectIndustries.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={professionquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions[0].id} queryType={"graphql"} query={professionquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states[0].id} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters[0].id} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
                     </div>
 
                     <div className="form-group switch_wrap inline_switch">

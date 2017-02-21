@@ -26,9 +26,21 @@ export default class MlMoolyaAssignDepartment extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
+    this.props.getMoolyaDepartmentAvailability(this.state.departmentAvailability)
+  }
+  componentWillMount(){
     let availabilityDetails=this.props.moolya
+
     if(availabilityDetails){
-      this.setState({departmentAvailability:availabilityDetails})
+      let  availabilityDetailsForm=[{
+        cluster:[{clusterId: availabilityDetails[0].cluster[0].clusterId}],
+        chapter:'All',
+        subChapter:'All',
+        email:availabilityDetails[0].email,
+        isActive:availabilityDetails[0].isActive
+
+      }]
+      this.setState({departmentAvailability:availabilityDetailsForm})
     }
   }
   optionsBySelectCluster(index, selectedIndex){
@@ -92,7 +104,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
                     <input type="text" id="" placeholder="Select Sub Chapter" className="form-control float-label"  value="All" disabled="true"/>
                   </div>
                   <div className="form-group">
-                    <input placeholder="Department Email Id" className="form-control float-label" onBlur={that.onEmailChange.bind(that,id)}/>
+                    <input placeholder="Department Email Id" className="form-control float-label" defaultValue={options.email} onBlur={that.onEmailChange.bind(that,id)}/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

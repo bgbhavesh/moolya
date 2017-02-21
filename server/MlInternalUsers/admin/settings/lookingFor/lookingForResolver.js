@@ -17,7 +17,9 @@ MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) =
 }
 MlResolver.MlMutationResolver['UpdateLookingFor'] = (obj, args, context, info) => {
   // TODO : Authorization
-
+  if (MlCommunityDefinition.findOne({code:args.communityCode})){
+    args.communityName=MlCommunityDefinition.findOne({code:args.communityCode}).name;
+  }
   if (args._id) {
     var id= args._id;
     let updatedResponse = MlLookingFor.update(id, {$set: args});

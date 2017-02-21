@@ -61,7 +61,11 @@ let Role = `
       moduleId:String,
       actions : [actions]
       fieldRestrictions: [fieldRestrictions],
-      permissions:[permissions]
+      permissions:[permissions],
+      moduleName:String,
+      validFrom:String,
+      validTo:String,
+      isActive:Boolean
   }
   
   input roleObject{

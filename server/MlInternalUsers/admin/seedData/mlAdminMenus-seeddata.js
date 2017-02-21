@@ -233,50 +233,42 @@ if(Meteor.isServer){
               }]
           },
           {
-            "link" : "/admin/settings/permissionList",
-            "name" : "Permission",
-            "uniqueId" : "settings_Permissions",
+            "link" : "/admin/settings/rolesList",
+            "name" : "Roles",
+            "uniqueId" : "settings_roles",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
             subMenu:[{
-              "link": "/admin/settings/addPermission",
-              "name": "Add Permission",
-              "uniqueId": "settings_AddPermissions",
-              "subMenuMappingId":"settings_Permissions",
+              "link": "/admin/settings/createRole",
+              "name": "Add Roles",
+              "uniqueId": "settings_createRole",
+              "subMenuMappingId":"settings_roles",
               "subMenusId":"settings",
               "isLink": true,
               "isMenu": false,
               "image": ""
             },
               {
-                "link": "/admin/settings/permissionList",
-                "name": "List Permissions",
-                "uniqueId": "settings_PermissionList",
-                "subMenuMappingId":"settings_Permissions",
+                "link": "/admin/settings/rolesList",
+                "name": "List Roles",
+                "uniqueId": "settings_rolesList",
+                "subMenuMappingId":"settings_roles",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": false,
                 "image": ""
               },
               {
-                "link": "/admin/settings/editPermission",
-                "name": "Edit Permission",
-                "uniqueId": "settings_EditPermissions",
-                "subMenuMappingId":"settings_Permissions",
+                "link": "/admin/settings/editRoleType",
+                "name": "Edit Roles",
+                "uniqueId": "settings_EditRoleType",
+                "subMenuMappingId":"settings_roles",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": true,
                 "image": ""
               }]
-          },
-          {
-            "link" : "/admin/settings/rolesList",
-            "name" : "Roles",
-            "uniqueId" : "settings_roles",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : ""
           },
           {
             "link" : "/admin/settings/backendUserList",
@@ -1033,6 +1025,44 @@ if(Meteor.isServer){
                 "name": "Edit LookingForType",
                 "uniqueId": "settings_EditLookingForType",
                 "subMenuMappingId":"settings_lookingForTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/processList",
+            "name" : "Process Types",
+            "uniqueId" : "settings_Process",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addProcess",
+              "name": "Add Process",
+              "uniqueId": "settings_addProcess",
+              "subMenuMappingId":"settings_Process",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/processList",
+                "name": "List Process",
+                "uniqueId": "settings_processList",
+                "subMenuMappingId":"settings_Process",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editProcess",
+                "name": "Edit Process",
+                "uniqueId": "settings_editProcess",
+                "subMenuMappingId":"settings_Process",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": true,

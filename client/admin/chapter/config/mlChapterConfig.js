@@ -53,6 +53,7 @@ const mlChapterListConfig=new MlViewer.View({
                     data{
                      ...on Chapter{
                               _id
+                              clusterId
                               chapterCode
                               chapterName
                               displayName

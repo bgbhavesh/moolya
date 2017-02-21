@@ -88,7 +88,9 @@ import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/confi
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 
-adminSection = FlowRouter.group({
+
+
+export const adminSection = FlowRouter.group({
   prefix: "/admin",
   name: 'admin',
   triggersEnter: [function(context, redirect) {
@@ -98,6 +100,8 @@ adminSection = FlowRouter.group({
     }
   }]
 });
+
+
 
 adminSection.route('/', {
   action: function() {

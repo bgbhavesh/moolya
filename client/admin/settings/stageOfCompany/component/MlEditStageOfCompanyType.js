@@ -100,7 +100,7 @@ class MlEditStageOfCompanyType extends React.Component{
 
                   </div>
                   <div className="form-group">
-                    <textarea  ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about}className="form-control float-label" id=""></textarea>
+                    <textarea  ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>
 
                   </div>
                 </div>

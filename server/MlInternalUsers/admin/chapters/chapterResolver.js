@@ -27,7 +27,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             stateId: chapter.stateId,
             chapterId: id,
             chapterName: chapter.chapterName,
-            subChapterId: "ML_" + chapter.chapterName + "_" + subChapterName,
+            subChapterCode: "ML_" + chapter.chapterName + "_" + subChapterName,
             subChapterName: subChapterName,
             subChapterDisplayName: subChapterName,
             associatedChapters: [],
@@ -79,8 +79,8 @@ MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
-    let response= MlChapters.findOne({"clusterId":id})||[];
-    return [response];
+    let response= MlChapters.find({"clusterId":id}).fetch()||[];
+    return response;
   }
 }
 
@@ -101,6 +101,11 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
   let result =  MlSubChapters.find({chapterId: args.id}).fetch()||[];
   return {data:result};
+}
+
+MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info) => {
+  let result=MlSubChapters.find({chapterId: args.id}).fetch()||[];
+  return result
 }
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {

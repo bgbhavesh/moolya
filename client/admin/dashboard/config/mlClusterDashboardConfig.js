@@ -15,8 +15,8 @@ const mlClusterDashboardListConfig=new MlViewer.View({
   sort:true,
   viewComponent:<MlClusterList />,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"cluster"){
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
+                    data:ContextSpecSearch(module:"cluster",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
                     totalRecords
                     data{
                      ...on Cluster{

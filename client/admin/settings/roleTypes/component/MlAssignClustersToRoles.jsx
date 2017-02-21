@@ -119,10 +119,15 @@ export default class MlAssignClustersToRoles extends React.Component {
     label:chapterName
   }  
 }`;
-    let subChapterquery=gql`query($id:String){ data:fetchActiveSubChapters(chapterId:$id){value:_id,label:subChapterName}}`;
+    let subChapterquery=gql`query($id:String){  
+  data:fetchSubChaptersSelect(id:$id) {
+    value:_id
+    label:subChapterName
+  }  
+}`;
     let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
     let subDepartmentquery=gql`query($id:String){  
-  data:fetchActiveSubDepartments(departmentId:$id) {
+  data:fetchSubDepartments(id:$id) {
     value:_id
     label:subDepartmentName
   }  

@@ -4,6 +4,7 @@ let chapterSchema = `
     type Chapter{
         _id:String,
         chapterId:String,
+        chapterCode:String,
         chapterName:String,
         displayName:String,
         about:String,
@@ -21,9 +22,10 @@ let chapterSchema = `
     }
     
     input chapterObject{
-        clusterId:String,
+        _id:String,
+        chapterCode:String,
         clusterName:String,
-        chapterId:String,
+        chapterCode:String,
         chapterName:String,
         displayName:String,
         about:String,
@@ -52,6 +54,7 @@ let chapterSchema = `
         chapterName :String
         subChapterName :String
         subChapterDisplayName: String
+        subChapterCode:String,
         aboutSubChapter: String
         subChapterImageLink: String
         subChapterEmail: String
@@ -75,7 +78,7 @@ let chapterSchema = `
         stateId:String,
         chapterId:String,
         chapterName:String,
-        subChapterId:String,
+        subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
         associatedChapters:[associatedChapters],
@@ -104,6 +107,7 @@ let chapterSchema = `
         fetchSubChapter(_id: String):SubChapter
         fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
+        fetchSubChaptersSelect(id: String):[SubChapter]
         fetchActiveSubChapters(chapterId:String):[SubChapter]
     }
     

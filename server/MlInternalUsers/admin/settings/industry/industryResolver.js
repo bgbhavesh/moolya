@@ -30,7 +30,15 @@ MlResolver.MlQueryResolver['FindIndustry'] = (obj, args, context, info) => {
     let response= MlIndustries.findOne({"_id":id});
     return response;
   }
+}
 
+MlResolver.MlQueryResolver['fetchIndustrySearch'] = (obj, args, context, info) =>{
+  return MlIndustries.find({}).fetch();
+}
+
+MlResolver.MlQueryResolver['fetchIndustries'] = (obj, args, context, info) => {
+  let result=MlIndustries.find({isActive:true}).fetch()||[];
+  return result;
 }
 
 

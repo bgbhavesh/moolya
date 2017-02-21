@@ -9,17 +9,22 @@ export default class  MlListViewComposer extends Component {
   }
   render () {
     let config=this.props;
+    //note: params are mandatory,if not data will not be fetched
     let queryOptions={
       forceFetch: true,
       variables: {
         offset: 0,
         limit: config.sizePerPage||5,
+        context:null,
+        searchSpec:null
       }
     };
     if(DataComposerType==='graphQl'){
       let hasQueryOptions=config.queryOptions?true:false;
       if(hasQueryOptions){
-        let extendedQueryVar=_.extend(queryOptions.variables,config.queryOptions);
+        let dynamicQueryOptions=config.buildQueryOptions?config.buildQueryOptions(config):{};
+
+        let extendedQueryVar=_.extend(queryOptions.variables,dynamicQueryOptions);
         queryOptions["variables"]=extendedQueryVar;
       }
 
@@ -28,9 +33,9 @@ export default class  MlListViewComposer extends Component {
         props: ({data: {loading, data, fetchMore}}) => ({
           loading,
           data,
-          fetchMore: () => fetchMore({
-            variables: {
-              offset: data,
+          fetchMore: (variables) => fetchMore({
+            variables: variables?variables:{
+              offset: data
             },
            updateQuery: (prev, {fetchMoreResult}) => {
               if (!fetchMoreResult.data) {

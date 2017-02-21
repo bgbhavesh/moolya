@@ -103,6 +103,34 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlSpecifications.find({},findOptions).fetch();
     totalRecords=MlSpecifications.find({},findOptions).count();
   }
+  if(args.module=="profession"){
+    data= MlProfessions.find({},findOptions).fetch();
+    totalRecords=MlProfessions.find({},findOptions).count();
+  }
+  if(args.module=="entity"){
+    data= MlEntity.find({},findOptions).fetch();
+    totalRecords=MlEntity.find({},findOptions).count();
+  }
+  if(args.module=="stageOfCompany"){
+    data= MlStageOfCompany.find({},findOptions).fetch();
+    totalRecords=MlStageOfCompany.find({},findOptions).count();
+  }
+  if(args.module=="process"){
+    data= MlProcessMapping.find({},findOptions).fetch();
+    totalRecords=MlProcessMapping.find({},findOptions).count();
+  }
+  if(args.module=="businessType"){
+    data= MlBusinessType.find({},findOptions).fetch();
+    totalRecords=MlBusinessType.find({},findOptions).count();
+  }
+  if(args.module=="citizenship"){
+    data= MlCitizenship.find({},findOptions).fetch();
+    totalRecords=MlCitizenship.find({},findOptions).count();
+  }
+  if(args.module=="lookingFor"){
+    data= MlLookingFor.find({},findOptions).fetch();
+    totalRecords=MlLookingFor.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -178,11 +206,33 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'Roles'
     }
 
+    if(data.professionName){
+      return 'Profession'
+    }
+
     if(data.industryName){
       return 'Industry'
     }
     if(data.specificationName){
       return 'Specification'
+    }
+    if(data.entityName){
+      return 'Entity'
+    }
+    if(data.stageOfCompanyName){
+      return 'StageOfCompany'
+    }
+    if(data.businessTypeName){
+      return 'BusinessType'
+    }
+    if(data.citizenshipTypeName){
+      return 'Citizenship'
+    }
+    if(data.lookingForName){
+      return 'LookingFor'
+    }
+    if(data.processId){
+      return 'ProcessType'
     }
     return null;
   }

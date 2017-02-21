@@ -24,7 +24,8 @@ let moolya = `
 //MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],moolya]);
 
 let search = `
-union SearchResult = Cluster | Chapter | SubChapter | Department | SubDepartment | Permissions | Requests | Countries | States | Cities | UserTypes | Transaction | RoleTypes | DocumentTypes | DocumentFormats | KycCategories | DocumentMapping | Template | BackendUsers | Industry | Specification
+union SearchResult = Cluster | Chapter | SubChapter | Department | SubDepartment | Permissions | Requests | Countries | States | Cities | UserTypes | Transaction | RoleTypes | DocumentTypes | DocumentFormats | KycCategories | DocumentMapping | Template | BackendUsers | Industry | Specification | Profession | Entity | StageOfCompany | BusinessType | Citizenship | LookingFor | Roles | ProcessType
+
 
 type SearchResp {
   totalRecords:Int,

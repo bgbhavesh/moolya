@@ -18,11 +18,11 @@ import MlAddSubDepartment from '../../admin/settings/subDepartments/component/Ml
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
 /*import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'*/
 import MlAddProcessMapping from '../../admin/settings/processMapping/component/MlAddProcessMapping'
+import MlProcessMappingList from '../../admin/settings/processMapping/component/MlProcessMappingList'
 import MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
 import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
 import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
 import MlEditRequestType from  '../../admin/settings/requestTypes/component/MlEditRequestType'
-import  MlPermissionList from '../../admin/settings/permissions/component/MlPermissionsList'
 import MlCountriesList from "../../admin/settings/countries/component/MlCountriesList";
 import MlEditCountry from "../../admin/settings/countries/component/MlEditCountry";
 import MlStatesList from "../../admin/settings/states/component/MlStatesList";
@@ -35,10 +35,13 @@ import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserT
 import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
 import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAddDocumentType'
+import MlEditDocumentType from '../../admin/settings/documentTypes/component/MlEditDocumentType'
 import MlDocumentFormatsList from '../../admin/settings/documentFormats/component/MlDocumentFormatsList'
 import MlAddDocumentFormat from '../../admin/settings/documentFormats/component/MlAddDocumentFormat'
+import MlEditDocumentFormat from '../../admin/settings/documentFormats/component/MlEditDocumentFormat'
 import MlAddKycCategory from  '../../admin/settings/kycCategory/component/MlAddKycCategory'
 import MlKycCategoriesList from '../../admin/settings/kycCategory/component/MlKycCategoriesList'
+import MlEditKycCategory from '../../admin/settings/kycCategory/component/MlEditKycCategory'
 import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
 import MlAddDocumentMapping from '../../admin/settings/documentMapping/component/MlAddDocumentMapping'
 
@@ -62,6 +65,24 @@ import MlAddIndustryType from '../../admin/settings/industry/component/MlAddIndu
 import MlSpecificationTypeList from '../../admin/settings/specifications/component/MlSpecificationsTypeList'
 import MlAddSpecificationType from '../../admin/settings/specifications/component/MlAddSpecificationsType'
 // import MlEditSpecificationType from '../../admin/settings/specifications/component/MlEditSpecificationsType'
+import MlProfessionTypeList from '../../admin/settings/profession/component/MlProfessionTypeList'
+import MlAddProfessionType from '../../admin/settings/profession/component/MlAddProfessionType'
+// import MlEditProfessionType from '../../admin/settings/profession/component/MlEditProfessionType'
+import MlEntityTypeList from '../../admin/settings/entity/component/MlEntityTypeList'
+import MlAddEntityType from '../../admin/settings/entity/component/MlAddEntityType'
+import MlEditEntityType from '../../admin/settings/entity/component/MlEditEntityType'
+import MlStageOfCompanyTypeList from '../../admin/settings/stageOfCompany/component/MlStageOfCompanyTypeList'
+import MlAddStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlAddStageOfCompanyType'
+import MlEditStageOfCompanyType from '../../admin/settings/stageOfCompany/component/MlEditStageOfCompanyType'
+import MlBusinessTypeList from '../../admin/settings/businessType/component/MlBusinessTypeList'
+import MlAddBusinessType from '../../admin/settings/businessType/component/MlAddBusinessType'
+import MlEditBusinessType from '../../admin/settings/businessType/component/MlEditBusinessType'
+import MlCitizenshipTypeList from '../../admin/settings/citizenship/component/MlCitizenshipTypeList'
+import MlAddCitizenshipType from '../../admin/settings/citizenship/component/MlAddCitizenshipType'
+// import MlEditCitizenshipType from '../../admin/settings/citizenship/component/MlEditCitizenshipType'
+import MlLookingForTypeList from '../../admin/settings/lookingFor/component/MlLookingForTypeList'
+import MlAddLookingForType from '../../admin/settings/lookingFor/component/MlAddLookingForType'
+// import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEditLookingForType'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
@@ -144,10 +165,10 @@ adminSection.route('/chapter', {
 adminSection.route('/chapters/:chapterId', {
   name: 'chapter',
   action(params){
-    mount(AdminLayout,{adminContent:<MlSubChapterView params={params.chapterId} listConfig={mlSubChapterListConfig} />})
+    mount(AdminLayout,{adminContent:<MlDashboard params={params} mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} /> })
   }
 });
-adminSection.route('/chapter/subChapterDetails/:subChapterId', {
+  adminSection.route('/chapter/subChapterDetails/:subChapterId', {
   name: 'subChapterDetails',
   action(params){
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
@@ -203,16 +224,11 @@ adminSection.route('/settings/editSubDepartment/:id', {
     mount(AdminLayout,{adminContent:< MlEditSubDepartment config={params.id}/>})
   }
 });
+
 adminSection.route('/settings/permissionList', {
-  name: 'settings_PermissionList',
+  name: 'settings_processList',
   action(){
-    mount(AdminLayout,{adminContent:< MlPermissionList/>})
-  }
-});
-adminSection.route('/settings/addPermission', {
-  name: 'settings_AddPermissions',
-  action(){
-    mount(AdminLayout,{adminContent:<MlAddPermission />})
+    mount(AdminLayout,{adminContent:<MlProcessMappingList />})
   }
 });
 adminSection.route('/settings/addProcess', {
@@ -227,13 +243,7 @@ adminSection.route('/settings/editPermission/:id', {
     mount(AdminLayout,{adminContent:<MlEditPermission config={params.id} />})
   }
 });
-adminSection.route('/settings/rolesList', {
-  name: 'settings_roles',
-  action(){
-    /*mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})*/
-    mount(AdminLayout,{adminContent:< MlAddRole/>})
-  }
-});
+
 adminSection.route('/settings/backendUserList', {
   name: 'settings_BackendUserList',
   action(){
@@ -381,6 +391,12 @@ adminSection.route('/settings/addDocumentType', {
     mount(AdminLayout,{adminContent:< MlAddDocumentType/>})
   }
 });
+adminSection.route('/settings/editDocumentType/:id', {
+  name: 'settings_EditDocumentType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDocumentType config={params.id} />})
+  }
+});
 adminSection.route('/settings/documentFormatList', {
   name: 'settings_DocumentFormatList',
   action(){
@@ -393,6 +409,12 @@ adminSection.route('/settings/addDocumentFormat', {
     mount(AdminLayout,{adminContent:< MlAddDocumentFormat/>})
   }
 });
+adminSection.route('/settings/editDocumentFormat/:id', {
+  name: 'settings_EditDocumentFormat',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDocumentFormat config={params.id} />})
+  }
+});
 adminSection.route('/settings/kycCategoryList', {
   name: 'settings_KycCategoryList',
   action(){
@@ -403,6 +425,12 @@ adminSection.route('/settings/addKycCategory', {
   name: 'settings_AddKycCategory',
   action(){
     mount(AdminLayout,{adminContent:< MlAddKycCategory/>})
+  }
+});
+adminSection.route('/settings/editKycCategory/:id', {
+  name: 'settings_EditKycCategory',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditKycCategory config={params.id} />})
   }
 });
 adminSection.route('/settings/documentMappingList', {
@@ -470,5 +498,113 @@ adminSection.route('/settings/addSpecification', {
 //   name: 'settings_EditIndustryType',
 //   action(params){
 //     mount(AdminLayout,{adminContent:<MlEditSpecificationType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/professionList', {
+  name: 'settings_ProfessionTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlProfessionTypeList/>})
+  }
+});
+adminSection.route('/settings/addProfession', {
+  name: 'settings_AddProfessionType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddProfessionType />})
+  }
+});
+// adminSection.route('/settings/editProfession/:id', {
+//   name: 'settings_EditProfessionType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditProfessionType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/entityList', {
+  name: 'settings_EntityTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEntityTypeList/>})
+  }
+});
+adminSection.route('/settings/addEntity', {
+  name: 'settings_AddEntityType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEntityType />})
+  }
+});
+adminSection.route('/settings/editEntity/:id', {
+  name: 'settings_EditEntityType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditEntityType config={params.id} />})
+  }
+});
+adminSection.route('/settings/stageOfCompanyList', {
+  name: 'settings_StageOfCompanyTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlStageOfCompanyTypeList/>})
+  }
+});
+adminSection.route('/settings/addStageOfCompany', {
+  name: 'settings_AddStageOfCompanyType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddStageOfCompanyType />})
+  }
+});
+adminSection.route('/settings/editStageOfCompany/:id', {
+  name: 'settings_EditStageOfCompanyType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditStageOfCompanyType config={params.id} />})
+  }
+});
+adminSection.route('/settings/businessList', {
+  name: 'settings_BusinessTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlBusinessTypeList/>})
+  }
+});
+adminSection.route('/settings/addBusiness', {
+  name: 'settings_AddBusinessType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddBusinessType />})
+  }
+});
+adminSection.route('/settings/editBusiness/:id', {
+  name: 'settings_EditBusinessType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditBusinessType config={params.id} />})
+  }
+});
+adminSection.route('/settings/citizenshipList', {
+  name: 'settings_CitizenshipTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlCitizenshipTypeList/>})
+  }
+});
+adminSection.route('/settings/addCitizenship', {
+  name: 'settings_AddCitizenshipType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddCitizenshipType />})
+  }
+});
+// adminSection.route('/settings/editCitizenship/:id', {
+//   name: 'settings_EditCitizenshipType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditCitizenshipType config={params.id} />})
+//   }
+// });
+adminSection.route('/settings/lookingForList', {
+  name: 'settings_LookingForTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlLookingForTypeList/>})
+  }
+});
+adminSection.route('/settings/addLookingFor', {
+  name: 'settings_AddLookingForType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddLookingForType />})
+  }
+});
+// adminSection.route('/settings/editLookingFor/:id', {
+//   name: 'settings_EditLookingForType',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
 //   }
 // });

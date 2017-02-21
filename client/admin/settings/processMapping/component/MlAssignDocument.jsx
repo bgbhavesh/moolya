@@ -10,7 +10,7 @@ export default class MlAssignDocument extends React.Component {
     super(props);
     this.state={
       selectedValue:null,
-      assignDocuments:[{document: '',kyc:'',isActive:false}]
+      assignDocuments:[{type: '',category:'',isActive:false}]
     }
     this.addDepartmentComponent.bind(this);
     return this;
@@ -18,7 +18,7 @@ export default class MlAssignDocument extends React.Component {
 
   assignDocumentsState(id){
     this.setState({
-      assignDocuments: this.state.assignDocuments.concat([{document: '',kyc:'',isActive:false}])
+      assignDocuments: this.state.assignDocuments.concat([{type: '',category:'',isActive:false}])
     });
   }
 
@@ -47,13 +47,13 @@ export default class MlAssignDocument extends React.Component {
   }
   optionsBySelectDocument(index, selectedIndex){
     let assignDocuments=this.state.assignDocuments
-    assignDocuments[index]['document']=selectedIndex
+    assignDocuments[index]['type']=selectedIndex
     this.setState({assignDocuments:assignDocuments})
     this.props.getAssignedDocuments(this.state.assignDocuments)
   }
   optionsBySelectKyc(index, selectedIndex){
     let assignDocuments=this.state.assignDocuments
-    assignDocuments[index]['kyc']=selectedIndex
+    assignDocuments[index]['category']=selectedIndex
     this.setState({assignDocuments:assignDocuments})
     this.props.getAssignedDocuments(this.state.assignDocuments)
   }
@@ -69,7 +69,7 @@ export default class MlAssignDocument extends React.Component {
     });
     mySwiper.updateContainerSize()
     this.setState({
-      assignDocuments: this.state.assignDocuments.concat([{document: '',kyc:'',isActive:false}])
+      assignDocuments: this.state.assignDocuments.concat([{type: '',category:'',isActive:false}])
     });
 
   }
@@ -88,9 +88,15 @@ export default class MlAssignDocument extends React.Component {
 
   render() {
     let that=this;
-    let getModulesquery=gql` query{data:fetchModules{label:name,value:_id}}`;
-    let getfieldsquery=gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
 
+    let docTypequery=gql` query{
+    data:fetchDocuments{label:docTypeName,value:_id}
+    }
+`;
+    let docKycquery=gql` query{
+    data:fetchKYCCategories{label:docCategoryName,value:_id}
+    }
+`;
     return (
 
       <div>
@@ -113,14 +119,14 @@ export default class MlAssignDocument extends React.Component {
                   <form style={{marginTop:'0px'}}>
 
                     <div className="panel panel-default">
-                      <div className="panel-heading">Type of Document<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/add.png"/></div></div>
+                      <div className="panel-heading">Type of Document<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/remove.png"/></div></div>
                       <div className="panel-body">
 
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.document} queryType={"graphql"} query={getModulesquery}  isDynamic={true} id={'document'+id} onSelect={that.optionsBySelectDocument.bind(that,id)} />
+                          <Moolyaselect multiSelect={false} placeholder={"Document Type"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.type} queryType={"graphql"} query={docTypequery}  isDynamic={true} id={'document'+id} onSelect={that.optionsBySelectDocument.bind(that,id)} />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.kyc} queryType={"graphql"} query={getModulesquery}  isDynamic={true} id={'kyc'+id} onSelect={that.optionsBySelectKyc.bind(that,id)} />
+                          <Moolyaselect multiSelect={false} placeholder={"KYC Category"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.category} queryType={"graphql"} query={docKycquery}  isDynamic={true} id={'kyc'+id} onSelect={that.optionsBySelectKyc.bind(that,id)} />
                         </div>
                         <div className="form-group switch_wrap inline_switch" style={{marginTop:'7px'}}>
                           <label className="">Status</label>

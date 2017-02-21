@@ -68,10 +68,12 @@ let Role = `
   type Query {
       fetchRole(roleName: String, roleValue: String, name: String): String
       fetchRolesByDepSubDep(departmentId:String, subDepartmentId:String): [Roles]
+      findRole(id:String):Roles
   }
   
   type Mutation {
      createRole(role:roleObject): String
+     updateRole(id:String,role:roleObject):String
   }
 `
 

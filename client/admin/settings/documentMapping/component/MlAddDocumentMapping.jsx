@@ -17,9 +17,10 @@ class MlAddDocumentMapping extends React.Component{
     super(props);
     this.state={
       selectedValue:null,
-      clusters: [],
-      chapters:[],
-      subChapters:[],
+      clusters: [{id:''}],
+      chapters:[{id:''}],
+      subChapters:[{id:''}],
+      allowableFormat:[{id:''}],
       isActive:false,
       documentId   : '',
       displayName  : '',
@@ -27,10 +28,10 @@ class MlAddDocumentMapping extends React.Component{
       length      : '',
       remark      : '',
       documentName   : '',
-      kycCategories  : [],
-      documentType   : [],
-      allowableSize  : [],
-      issuingAuthority   : [],
+      kycCategory  : [{id:''}],
+      documentType   : [{id:''}],
+      allowableSize  : '',
+      issuingAuthority   : '',
     }
     this.addEventHandler.bind(this);
     return this;
@@ -75,9 +76,9 @@ class MlAddDocumentMapping extends React.Component{
 
   async  createDocument() {
     let documentDetails = {
-
+      documentId : this.refs.documentId.value,
       documentDisplayName  : this.refs.displayName.value,
-      allowableFormat : this.state.allowableFormats,
+      allowableFormat : this.state.allowableFormat,
       clusters    : this.state.clusters,
       chapters    : this.state.chapters,
       subChapters : this.state.subChapters,
@@ -85,7 +86,7 @@ class MlAddDocumentMapping extends React.Component{
       inputLength      : this.refs.length.value,
       remarks      : this.refs.remark.value,
       documentName   : this.refs.documentName.value,
-      kycCategory  : this.state.kycCategories,
+      kycCategory  : this.state.kycCategory,
       documentType   : this.state.documentType,
       allowableMaxSize  : this.refs.allowableSize.value,
       issuingAuthority   : this.refs.issuingAuthority.value,
@@ -95,69 +96,41 @@ class MlAddDocumentMapping extends React.Component{
     const response = await addDocumentMappingActionHandler(documentDetails)
     return response;
   }
-  // getassignDocumentToClusters(details){
-  //   console.log("details->"+details);
-  //   this.setState({'assignDocumentToClusters':details})
-  // }
-  // AssignassignDocumentToClusters(id){
-  //   this.setState({
-  //     assignDocumentToClusters: this.state.assignDocumentToClusters.concat([{cluster: '',chapter:'',subChapter:'',isActive:false }])
-  //   });
-  // }
-  //
-  // RemoveAssignassignDocumentToClusters(id,event){
-  //   let assignRoleToClusters;
-  //   assignDocumentToClusters= this.state.assignDocumentToClusters.filter(function(object,index){
-  //     return id !== index;
-  //   });
-  //   this.setState({
-  //     assignDocumentToClusters: assignDocumentToClusters
-  //   })
-  // }
-  // optionsBySelectCluster(index, selectedIndex){
-  //   let availabilityDetails=this.state.assignDocumentToClusters
-  //   availabilityDetails[index]['cluster']=selectedIndex
-  //   this.setState({assignDocumentToClusters:availabilityDetails})
-  //   this.props.getassignDocumentToClusters(this.state.assignDocumentToClusters)
-  // }
-  //
-  // optionsBySelectChapter(index, selectedIndex){
-  //   let availabilityDetails=this.state.assignDocumentToClusters
-  //   availabilityDetails[index]['chapter']=selectedIndex
-  //   this.setState({assignDocumentToClusters:availabilityDetails})
-  //   this.props.getassignDocumentToClusters(this.state.assignDocumentToClusters)
-  // }
-  //
-  // optionsBySelectSubChapter(index, selectedIndex){
-  //   let availabilityDetails=this.state.assignDocumentToClusters
-  //   availabilityDetails[index]['subChapter']=selectedIndex
-  //   this.setState({assignDocumentToClusters:availabilityDetails})
-  //   this.props.getassignDocumentToClusters(this.state.assignDocumentToClusters)
-  // }
-
 
   optionsBySelectAllowableFormats(val){
-    this.setState({allowableFormats:val})
+    let allowableFormat=this.state.allowableFormat
+    allowableFormat[0]['id']=val;
+    this.setState({allowableFormat:allowableFormat})
   }
 
   optionsBySelectDocumentType(val){
-    this.setState({documentType:val})
+    let documentType=this.state.documentType
+    documentType[0]['id']=val;
+    this.setState({documentType:documentType})
   }
 
   optionsByKycCategories(val){
-    this.setState({kycCategories:val})
+    let kycCategory=this.state.kycCategory
+    kycCategory[0]['id']=val;
+    this.setState({kycCategory:kycCategory})
   }
 
   optionsBySelectClusters(val){
-    this.setState({clusters:val})
+    let clusters=this.state.clusters
+    clusters[0]['id']=val;
+    this.setState({clusters:clusters})
   }
 
   optionsBySelectChapters(val){
-    this.setState({chapters:val})
+    let chapters=this.state.chapters
+    chapters[0]['id']=val;
+    this.setState({chapters:chapters})
   }
 
   optionsBySelectSubChapters(val){
-    this.setState({subChapters:val})
+    let subChapters=this.state.subChapters
+    subChapters[0]['id']=val;
+    this.setState({subChapters:subChapters})
   }
   render(){
     let MlActionConfig = [
@@ -202,20 +175,20 @@ class MlAddDocumentMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormats} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
                     </div>
                     <div className="panel panel-default">
                           <div className="panel-heading">Jurisdiction</div>
                           <div className="panel-body">
 
                             <div className="form-group">
-                              <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={cluster} isDynamic={true} id={'query'} onSelect={this.optionsBySelectClusters.bind(this)} />
+                              <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={cluster} isDynamic={true} id={'query'} onSelect={this.optionsBySelectClusters.bind(this)} />
                             </div>
                             <div className="form-group">
-                              <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={cluster} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+                              <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={cluster} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
                             </div>
                             <div className="form-group">
-                              <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+                              <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
                             </div>
                             <div className="form-group">
                               <input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>
@@ -248,10 +221,10 @@ class MlAddDocumentMapping extends React.Component{
               <input type="text"  ref="documentName" placeholder="Name" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategories} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />
+              <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
+              <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
             </div>
             <div className="form-group">
               <input type="text"  ref="allowableSize" placeholder="Allowable Size" className="form-control float-label" id=""/>

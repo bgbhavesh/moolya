@@ -36,6 +36,7 @@ export default class MapMarkers extends Component {
   constructor(props){
     super(props);
     console.log(this.props);
+    this.markerClickHandler.bind(this);
   }
 
   info(){
@@ -54,18 +55,66 @@ export default class MapMarkers extends Component {
     $(".isDisplay").hide();
   }
 
+  markerClickHandler(data){
+    alert(data.text);
+    //this.actionHandler(data);
+    //Action Handler Gives the data.
+    //Use session to show and hide the Tab
+  }
+
   render() {
     const style = this.props.hover ? mapMarkerStyleHover : mapMarkerStyle;
     return (
+      <div className="map_view_block" id={this.props.markerId} onClick={this.markerClickHandler.bind(this,this.props)}>
+        <div className="cluster_map inactive" style={{'top': '30%', 'left': '35%'}}>
+          <div className="hex_btn hex_btn_in">
+            <span><img src="/images/hover_image.png" /><b>{this.props.text}</b></span>
+            <div className="indec"></div>
+          </div>
+        </div>
 
-    <div className="cluster_map inactive" style={{'top': '30%', 'left': '35%'}}>
-      <div className="hex_btn hex_btn_in">
-        <span><img src="/images/hover_image.png" /><b>123</b></span>
-        <span><img src="/images/hover_image.png" /><b>123</b></span>
-        <div className="indec"></div>
+        <div className="chapter_map_hover" style={{'top': '40%', 'left': '30%','display':'none'}}>
+          <div className="chapter_map_hover_content">
+            <h2>USA</h2>
+            <ul>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+              <li>
+                <img src="/images/hover_image.png" />
+                <div className="hex_btn2 hex_btn_in2">123</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
       </div>
-      <div>{this.props.text}</div>
-    </div>
 
       // <div className="hint hint--html hint--info hint--top" style={style} onClick={this.info} onMouseEnter={this.onMouseEnterContent}
       //      onMouseLeave={this.onMouseLeaveContent}>

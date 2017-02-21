@@ -7,7 +7,7 @@ import {mlChapterDashboardMapConfig, mlChapterDashboardListConfig} from '../../a
 import MlChapterView from '../../admin/chapter/components/MlChapter'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
-import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
+import {mlSubChapterDashboardMapConfig,mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 
 
 adminSection.route('/dashboard', {
@@ -48,6 +48,6 @@ adminSection.route('/dashboard/:clusterId/chapters', {
 adminSection.route('/dashboard/:clusterId/:chapterId/subChapters', {
   name: 'dashboard_specSubChapters',
   action(params){
-    mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} params={params}/>})
+    mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlSubChapterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} params={params}/>})
   }
 });

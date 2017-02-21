@@ -3,11 +3,15 @@ import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
 
 MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   let totalRecords=0;
-  const findOptions = {
-    skip: args.offset
+  let findOptions = {};
+
+  // `offset` may be `null`
+  if(args.offset && args.offset >0){
+    findOptions.skip=args.offset;
   };
+
   // `limit` may be `null`
-  if (args.limit > 0) {
+  if (args.limit&&args.limit > 0) {
     findOptions.limit = args.limit;
   }
 
@@ -20,17 +24,17 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   let result=null;
   switch(moduleName){
     case "cluster":
-             result=CoreModulesRepo.MlClusterRepo(args.context,contextQuery,findOptions);
-             break;
+      result=CoreModulesRepo.MlClusterRepo(args.context,contextQuery,findOptions);
+      break;
     case "chapter":
-             result=CoreModulesRepo.MlChapterRepo(args.context,contextQuery,findOptions);
-             break;
+      result=CoreModulesRepo.MlChapterRepo(args.context,contextQuery,findOptions);
+      break;
     case "subChapter":
-             result=CoreModulesRepo.MlSubChapterRepo(args.context,contextQuery,findOptions);
-             break;
+      result=CoreModulesRepo.MlSubChapterRepo(args.context,contextQuery,findOptions);
+      break;
     case "community":
-             result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions);
-             break;
+      result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions);
+      break;
 
   }
 

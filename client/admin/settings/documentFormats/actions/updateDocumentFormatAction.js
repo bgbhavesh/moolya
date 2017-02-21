@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function updateDocumentFormatActionHandler(Details) {
-  let _id=Details.id;
+  let _id=Details._id;
   let docFormatName = Details.docFormatName;
   let docFormatDisplayName = Details.docFormatDisplayName;
   let about = Details.about;

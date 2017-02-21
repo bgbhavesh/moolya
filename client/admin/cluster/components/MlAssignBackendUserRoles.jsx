@@ -23,16 +23,15 @@ let initSwiper = () => {
 
 export default class MlAssignBackednUserRoles extends React.Component{
   constructor(props){
-    super(props)
-    this.state={
-      roleForm:[],
-      roleDetails:[{ userRole: null,validFrom:'',validTo:'',status:false, department:"", subDepartment:"" }],
-      selectedRole:""
-    }
-    this.findUserDepartments.bind(this);
-    return this;
-
-    this.getUserDepSubDep = this.getUserDepSubDep.bind(this);
+      super(props)
+      this.state={
+          roleForm:[],
+          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:"", chapterId:"", subChapterId:"", hierarchyLevel:""}],
+          selectedRole:""
+      }
+      this.findUserDepartments.bind(this);
+      return this;
+      this.getUserDepSubDep = this.getUserDepSubDep.bind(this);
   }
 
   componentDidMount() {
@@ -57,7 +56,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
   optionsBySelectRole(index, selectedValue){
       console.log(index)
       let roleDetails = this.state.roleDetails
-      roleDetails[index]['userRole']=selectedValue
+      roleDetails[index]['roleId']=selectedValue
       this.setState({roleDetails:roleDetails})
       this.props.getAssignedRoles(this.state.roleDetails)
   }
@@ -73,22 +72,21 @@ export default class MlAssignBackednUserRoles extends React.Component{
       });
       mySwiper.updateContainerSize()
       this.setState({
-        roleDetails: this.state.roleDetails.concat([{ userRole: null,validFrom:'',validTo:'',status:false, department:"", subDepartment:"" }])
+          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:"", chapterId:"", subChapterId:""}])
       });
   }
 
   onChange(id,event, department){
+      let roleDetails=this.state.roleDetails
       let filedName=event.target.name
       let fieldValue=event.target.value;
       if(filedName=='status'){
         fieldValue=event.target.checked;
+        roleDetails[index]['isActive']=selectedValue
       }
-      let roleDetails=this.state.roleDetails
-      // if(department){
-      //   roleDetails[id]['department'] = department.department;
-      //   roleDetails[id]['subDepartment'] = department.subDepartment
-      // }
-
+      else {
+          roleDetails[index][[filedName]]=selectedValue
+      }
       this.setState({roleDetails:roleDetails})
       this.props.getAssignedRoles(this.state.roleDetails)
   }
@@ -109,7 +107,6 @@ export default class MlAssignBackednUserRoles extends React.Component{
   async findUserDepartments(){
      let userId = this.props.userId;
       const response = await findUserDepartmentypeActionHandler(userId);
-      // let data = {response:response && response.profile && response.profile && response.profile:||""}
       let data = response ? response && response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile && response.profile.InternalUprofile.moolyaProfile.assignedDepartment : []
       this.setState({loading:false,roleForm:data});
   }
@@ -141,7 +138,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
                         <div className="form_inner_block swiper-slide">
                           <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, department)}/></div>
                           <div className="form-group">
-                            <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.userRole}/>
+                            <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>
                           </div>
                           <div className="form-group left_al">
                             <input type="text" placeholder="Valid from" id={'validFrom'+idx} onClick={that.onClickDate.bind(that,idx)} className="form-control float-label" name={'validFrom'} onBlur={that.onChange.bind(that,idx, event)} value={details.validFrom} />
@@ -152,8 +149,8 @@ export default class MlAssignBackednUserRoles extends React.Component{
                           <div className="form-group switch_wrap">
                             <label>Status</label>
                             <label className="switch">
-                              <input type="checkbox" name={'status'} value={details.status} onChange={that.onChange.bind(that,idx)}/>
-                              <div className="slider"></div>
+                                <input type="checkbox" name={'status'} value={details.isActive} onChange={that.onChange.bind(that,idx)}/>
+                                <div className="slider"></div>
                             </label>
                           </div>
                           <br className="brclear"/>

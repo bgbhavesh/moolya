@@ -47,6 +47,7 @@ class MlEditDocumentType extends React.Component{
 
   async  updateDocumentType() {
     let DocTypeDetails = {
+      id: this.refs.id.value,
       docTypeName: this.refs.docTypeName.value,
       docTypeDisplayName: this.refs.displayName.value,
       about: this.refs.about.value,
@@ -59,14 +60,14 @@ class MlEditDocumentType extends React.Component{
 
   }
 
-  // onStatusChange(e){
-  //   const data=this.state.data;
-  //   if(e.currentTarget.checked){
-  //     this.setState({"data":{"isActive":true}});
-  //   }else{
-  //     this.setState({"data":{"isActive":false}});
-  //   }
-  // }
+  onStatusChange(e){
+    const data=this.state.data;
+    if(e.currentTarget.checked){
+      this.setState({"data":{"isActive":true}});
+    }else{
+      this.setState({"data":{"isActive":false}});
+    }
+  }
 
 
   render(){
@@ -87,8 +88,10 @@ class MlEditDocumentType extends React.Component{
         handler: null
       }
     ]
-
+    const showLoader=this.state.loading;
     return (
+      <div>
+        {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Edit Document Type</h2>
@@ -120,7 +123,7 @@ class MlEditDocumentType extends React.Component{
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" ref="documentTypeStatus" checked={this.state.data&&this.state.data.isActive} />
+                      <input type="checkbox" ref="documentTypeStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
                   </div>
@@ -131,6 +134,7 @@ class MlEditDocumentType extends React.Component{
           </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
         </div>
+      </div>)}
       </div>
     )
   }

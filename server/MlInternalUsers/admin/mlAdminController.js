@@ -54,8 +54,9 @@ WebApp.rawConnectHandlers.use(proxyMiddleware(`http://localhost:8090/graphql`));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
-1
-app.post('/assignusers', multipartMiddleware, function (req, res) {
+
+app.post('/assignusers', multipartMiddleware, function (req, res)
+{
     var context = {};
     context = getContext({req});
     context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;

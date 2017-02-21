@@ -1,9 +1,12 @@
+/**
+ * Created by venkatasrinag on 21/2/17.
+ */
 import React from 'react';
 import MlInfinity from "../../dashboard/component/MlInfinity";
 import MlListViewContainer from "../../core/containers/MlListViewContainer";
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 
-export default class MlChapterView extends React.Component {
+export default class MlClusterView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

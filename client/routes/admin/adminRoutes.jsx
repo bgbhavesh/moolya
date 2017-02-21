@@ -52,6 +52,8 @@ import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleT
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
+
+import MlClusterView from '../../admin/cluster/components/MlClusterView'
 import MlChapterView from '../../admin/chapter/components/MlChapter'
 import MlSubChapterView from '../../admin/dashboard/component/MlSubChapterList'
 import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
@@ -89,14 +91,17 @@ import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/confi
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 
+import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 
+
+let userId = Meteor.userId();
 
 export const adminSection = FlowRouter.group({
   prefix: "/admin",
   name: 'admin',
   triggersEnter: [function(context, redirect) {
     console.log('running /adminPrefix trigger');
-    if (!Meteor.userId()) {
+    if (!userId) {
       FlowRouter.go('/login')
     }
   }]
@@ -135,18 +140,31 @@ adminSection.route('/dashboard/subChapters/:chapterId', {
     mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer/>})
   }
 });*/
-adminSection.route('/cluster', {
+adminSection.route('/clusters', {
   name: 'cluster',
   action(){
-    mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer mapConfig={mlClusterDashboardMapConfig} />})
+    // mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer mapConfig={mlClusterDashboardMapConfig} />})
+      mount(AdminLayout,{adminContent:<MlClusterView mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
   }
 });
+
+adminSection.route('/clusters/:clusterId', {
+    name: 'cluster',
+    action(params){
+      mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
+    }
+});
+
+
+
+
 adminSection.route('/cluster/clusters', {
   name: 'cluster',
   action(){
-    mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer />})
+    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
   }
 });
+
 adminSection.route('/cluster/clusterDetails/:clusterId', {
   name: 'cluster',
   action(params){

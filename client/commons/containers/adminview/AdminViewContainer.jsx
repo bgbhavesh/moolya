@@ -12,18 +12,18 @@ constructor(props) {
     statusField:props.statusField,
     imageLink:props.imageLink,
     clusterListOptions:[
-      {
-        imageLink: '/images/afghanistan.png',
-        nameField: 'Afghanistan',
-        statusField: 'active',
-        listRouterPath:'/admin/dashboard'
-      },
-      {
-        imageLink: '/images/australia.png',
-        nameField: 'Australia',
-        statusField: 'inactive',
-        listRouterPath:'/admin/dashboard'
-      }
+      // {
+      //   imageLink: '/images/afghanistan.png',
+      //   nameField: 'Afghanistan',
+      //   statusField: 'active',
+      //   listRouterPath:'/admin/dashboard'
+      // },
+      // {
+      //   imageLink: '/images/australia.png',
+      //   nameField: 'Australia',
+      //   statusField: 'inactive',
+      //   listRouterPath:'/admin/dashboard'
+      // }
     ],
     footerOptions:props.footerOptions,
     routerPath:props.routerPath,

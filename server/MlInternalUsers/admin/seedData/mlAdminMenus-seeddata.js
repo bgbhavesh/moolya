@@ -57,43 +57,12 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/cluster_icon.png",
-        "link" : "/admin/cluster",
+        "link" : "/admin/clusters",
         "name" : "cluster",
         "uniqueId"   :"cluster",
         "isLink" : true,
         "isMenu" : true,
-        "subMenu" : [
-          {
-            "link" : "/admin/cluster/clusterDetails",
-            "name" : "clusterDetails",
-            "uniqueId" : "clusterDetails",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-          },
-          {
-            "link" : "/admin/cluster/chapter",
-            "name" : "Chapters",
-            "uniqueId" : "cluster_chapters",
-            "isLink" : true,
-            "image" : ""
-          },
-          {
-            "link" : "/admin/cluster/communities",
-            "name" : "Communities",
-            "uniqueId" : "cluster_communities",
-            "isLink" : true,
-            "image" : ""
-          },
-          {
-            "link" : "/admin/cluster/internal_users",
-            "name" : "Internal Users",
-            "uniqueId" : "cluster_Internal_Users",
-            "isLink" : true,
-            "image" : ""
-          },
 
-        ]
       },
       {
         "image" : "/images/chapter_icon.png",

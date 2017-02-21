@@ -5,6 +5,7 @@ import {mount} from 'react-mounter';
 
 import loginActions,{loginActionHandler} from '../login/actions/loginActions';
 
+let userId = Meteor.userId();
 
 FlowRouter.route('/', {
   action: function() {
@@ -13,7 +14,7 @@ FlowRouter.route('/', {
   },
   triggersEnter: [function(context, redirect) {
     console.log('running / trigger');
-    if (!Meteor.userId()) {
+    if (!userId) {
       FlowRouter.go('/login');
     }
   }]

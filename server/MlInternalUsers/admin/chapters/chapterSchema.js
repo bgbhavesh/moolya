@@ -108,7 +108,6 @@ let chapterSchema = `
         fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String):[SubChapter]
-        fetchActiveSubChapters(chapterId:String):[SubChapter]
     }
     
      type Mutation {

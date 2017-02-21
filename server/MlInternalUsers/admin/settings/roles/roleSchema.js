@@ -10,6 +10,15 @@ let Role = `
       subDepartment:String, 
       isActive:Boolean
   }
+  
+  type Modules{
+      moduleId:String,
+      actions : [actions]
+  }
+  
+  type Actions{
+      actionId : String
+  }
 
   type Roles{
         _id:String,
@@ -19,6 +28,7 @@ let Role = `
         userType:String,
         about:String,
         assignRoles:[AssignRoles],
+        modules: [Modules]
   }
   
   scalar Date

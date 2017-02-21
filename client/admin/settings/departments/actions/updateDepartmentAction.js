@@ -2,37 +2,28 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function updateDepartmentActionHandler(DepartmentDetails) {
-  let _id=DepartmentDetails.id;
-  let departmentName = DepartmentDetails.departmentName;
+  let departmentId=DepartmentDetails.departmentId;
+  let department=DepartmentDetails.department;
+/*  let departmentName = DepartmentDetails.departmentName;
   let displayName = DepartmentDetails.displayName;
   let departmentDesc = DepartmentDetails.about;
-  let selectCluster = DepartmentDetails.selectCluster;
-  let email = DepartmentDetails.email;
-  let isActive = DepartmentDetails.status
-  let depatmentAvailable = []
-  let isMoolya = true
+  /!*let selectCluster = DepartmentDetails.selectCluster;
+  let email = DepartmentDetails.email;*!/
+  let isActive = DepartmentDetails.departmentStatus
+  let depatmentAvailable =DepartmentDetails.departmentAvailablity
+  let isMoolya = DepartmentDetails.appType*/
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$departmentName: String, $displayName: String, $departmentDesc: String, $isMoolya: Boolean, $depatmentAvailable: [DepatmentAvailable], $isActive: Boolean){
-        UpdateDepartment(
-          _id:$_id,
-          departmentName: $departmentName,
-          displayName: $displayName,
-          departmentDesc: $departmentDesc,
-          isMoolya :$isMoolya,
-          depatmentAvailable: $depatmentAvailable,
-          isActive :$isActive
-        ) 
+    mutation  ($departmentId: String, $department: departmentObject){
+        updateDepartment(
+          departmentId:$departmentId,
+          department: $department
+          ) 
       }
     `,
     variables: {
-      _id,
-      departmentName,
-      displayName,
-      departmentDesc,
-      depatmentAvailable,
-      isActive,
-      isMoolya
+      departmentId,
+      department
     }
   })
   console.log(result)

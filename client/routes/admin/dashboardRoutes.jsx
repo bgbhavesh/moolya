@@ -9,10 +9,39 @@ import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 
+
+adminSection.route('/dashboard', {
+  name: 'dashboard',
+  action(){
+    FlowRouter.go("/admin/dashboard/clusters");
+  }
+});
+
+adminSection.route('/dashboard/clusters', {
+  name: 'dashboard_Clusters',
+  action(){
+    mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlClusterDashboardMapConfig} listConfig={mlClusterDashboardListConfig} />})
+  }
+});
+
+adminSection.route('/dashboard/chapters', {
+  name: 'dashboard_Chapters',
+  action(){
+    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+  }
+});
+
+adminSection.route('/dashboard/communities', {
+  name: 'dashboard_Communities',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+  }
+});
+
 adminSection.route('/dashboard/:clusterId/chapters', {
   name: 'dashboard_specChapters',
   action(params){
-    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} params={params}/>})
   }
 });
 

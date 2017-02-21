@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import {mount} from 'react-mounter';
 import AdminLayout from '../../admin/layouts/AdminLayout'
-import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
+import {mlChapterDashboardMapConfig, mlChapterDashboardListConfig} from '../../admin/dashboard/config/mlChapterDashboardConfig'
 import MlChapterView from '../../admin/chapter/components/MlChapter'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
@@ -27,21 +27,21 @@ adminSection.route('/dashboard/clusters', {
 adminSection.route('/dashboard/chapters', {
   name: 'dashboard_Chapters',
   action(){
-    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+    mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlChapterDashboardMapConfig} listConfig={mlChapterDashboardListConfig} />})
   }
 });
 
 adminSection.route('/dashboard/communities', {
   name: 'dashboard_Communities',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+  action(){
+    mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlChapterDashboardMapConfig} listConfig={mlChapterDashboardListConfig} />})
   }
 });
 
 adminSection.route('/dashboard/:clusterId/chapters', {
   name: 'dashboard_specChapters',
   action(params){
-    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} params={params}/>})
+    mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlChapterDashboardMapConfig} listConfig={mlChapterDashboardListConfig} params={params}/>})
   }
 });
 

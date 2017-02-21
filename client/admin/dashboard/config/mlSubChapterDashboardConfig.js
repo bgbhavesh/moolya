@@ -48,7 +48,7 @@ const mlSubChapterDashboardListConfig=new MlViewer.View({
   viewComponent:<MlSubChapterList />,
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
+    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
   },
   graphQlQuery:gql`query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
               data:ContextSpecSearch(module:"subChapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){

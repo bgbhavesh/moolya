@@ -13,6 +13,7 @@ let States = `
     }
     
     input stateObject{
+        id          : String
         name        : String
         countryId   : String
         countryCode : String
@@ -23,6 +24,7 @@ let States = `
     
     type Query {
         fetchStates: SearchResp  
+        fetchState(stateId: String): States
     }
     
     type Mutation{

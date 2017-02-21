@@ -18,6 +18,13 @@ MlResolver.MlQueryResolver['fetchStates'] = (obj, args, context, info) =>
     }
     return {data:allStates,totalRecords:allStates&&allStates.length?allStates.length:0};
 }
+MlResolver.MlQueryResolver['fetchState'] = (obj, args, context, info) =>{
+  let state=null;
+  if(args.stateId){
+    state =  MlStates.findOne({"_id":args.stateId});
+  }
+  return state?state:null;
+}
 
 MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {
 

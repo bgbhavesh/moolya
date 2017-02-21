@@ -3,7 +3,8 @@ import {client} from '../../../core/apolloConnection';
 
 export async function addSubDepartmentActionHandler(SubDepartmentDetails)
 {
-    let subDepartmentName = SubDepartmentDetails.subDepartmentName;
+  let subDepartment=SubDepartmentDetails
+  /*  let subDepartmentName = SubDepartmentDetails.subDepartmentName;
     let displayName = SubDepartmentDetails.displayName;
     let aboutSubDepartment = SubDepartmentDetails.about;
     let selectCluster = SubDepartmentDetails.selectCluster;
@@ -11,7 +12,7 @@ export async function addSubDepartmentActionHandler(SubDepartmentDetails)
     let isMoolya = false;
     let departmentId = "Moolya DPT ID";
     let subDepatmentAvailable = [];
-
+*/
     const result = await client.mutate({
         mutation: gql`
         mutation ($subDepartment:subDepartmentObject){
@@ -21,7 +22,7 @@ export async function addSubDepartmentActionHandler(SubDepartmentDetails)
          }
         `,
         variables: {
-            subDepartment: SubDepartmentDetails
+            subDepartment
         }
     })
     console.log(result)

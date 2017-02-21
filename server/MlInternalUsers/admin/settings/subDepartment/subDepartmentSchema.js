@@ -1,26 +1,8 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let subDepartmentSchema = `
-        
-    input SubDepatmentAvailable
-    {
-        cluster     : String,
-        chapter     : String,
-        subChapter  : String,
-        email       : String,
-        notify      : Boolean,
-        isActive    : Boolean
-    }
-    
-    type subDepatmentAvailable{ 
-        cluster     : String,
-        chapter     : String,
-        subChapter  : String,
-        email       : String,
-        notify      : Boolean,
-        isActive    : Boolean
-    }
-    
+  
+   
     type SubDepartment{
         _id:String,
         subDepartmentName :String,
@@ -28,20 +10,40 @@ let subDepartmentSchema = `
         aboutSubDepartment: String,
         departmentId: String,
         isActive:Boolean,
-        selectCluster:String,
         email:String,
         isMoolya : Boolean,
-        SubDepatmentAvailable: [subDepatmentAvailable]
+        subDepatmentAvailable: [subDepatmentAvailable]
+    }
+    
+    type subDepatmentAvailable{ 
+        cluster     : [clusterListSchema],
+        chapter     : String,
+        subChapter  : String,
+        email       : String,
+        isActive    : Boolean
+    }
+     type clusterListSchema{
+        clusterId     : String
+    }
+     input ClusterList{
+     
+        clusterId     : String
+    }
+    input SubDepatmentAvailable
+    {
+        cluster     : [ClusterList],
+        chapter     : String,
+        subChapter  : String,
+        email       : String,
+        isActive    : Boolean
     }
     
     input subDepartmentObject{
         subDepartmentName:String,
         displayName:String,
         aboutSubDepartment:String,
-        selectCluster:String,
         isActive:Boolean,
         departmentId:String,
-        email:String,
         isMoolya:Boolean,
         subDepatmentAvailable:[SubDepatmentAvailable]
     }

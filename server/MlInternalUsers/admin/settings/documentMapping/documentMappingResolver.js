@@ -4,10 +4,10 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlDocumentMapping.insert(args);
+  let id = MlDocumentMapping.insert(args.document);
   if (id) {
     let code = 200;
-    let result = {permissionId: id}
+    let result = {documentId: id}
     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return response
   }

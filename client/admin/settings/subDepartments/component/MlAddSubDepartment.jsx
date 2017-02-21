@@ -1,15 +1,26 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag'
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addSubDepartmentActionHandler} from '../actions/addSubDepartmentAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import MlAssignSubDepartments from './MlAssignSubDepartments'
+import MlAssignDepartments from './MlAssignDepartments'
+import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
+import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import ScrollArea from 'react-scrollbar';
 
 class MlAddSubDepartment extends React.Component{
   constructor(props) {
     super(props);
+    this.state={
+      department:'',
+      loading:true,
+      data:{},
+      subdepartmentAvailability:[],
+    }
     this.addEventHandler.bind(this);
     this.createSubDepartment.bind(this)
     return this;
@@ -35,13 +46,13 @@ class MlAddSubDepartment extends React.Component{
 
   async  createSubDepartment() {
     let SubDepartmentDetails = {
-        subDepartmentName: this.refs.subDepartmentName.value,
-        displayName: this.refs.displayName.value,
-        aboutSubDepartment: this.refs.about.value,
-        isActive: this.refs.subDepartmentStatus.checked,
-        departmentId: this.refs.departmentName.value,
-        isMoolya: this.refs.subDeptype.value,
-        subDepatmentAvailable:this.state.subdepartmentAvailability
+      subDepartmentName: this.refs.subDepartmentName.value,
+      displayName: this.refs.displayName.value,
+      aboutSubDepartment: this.refs.about.value,
+      isActive: this.refs.subDepartmentStatus.checked,
+      departmentId: this.state.department,
+      isMoolya: this.refs.appType.checked,
+      subDepatmentAvailable:this.state.subdepartmentAvailability
     }
     console.log(SubDepartmentDetails)
 
@@ -50,8 +61,22 @@ class MlAddSubDepartment extends React.Component{
 
   }
 
-  getSubDepartmentAvailability(details){
+  optionsBySelectDepartment(val){
+    this.setState({department:val})
+    this.findDepartment(val);
+  }
+  async findDepartment(val){
+    let departmentId=val
+    console.log(departmentId)
+    const response = await findDepartmentActionHandler(departmentId);
+    console.log(response)
+   this.setState({data:response});
+  }
+  getDepartmentAvailability(details){
     console.log("details->"+details);
+    this.setState({'subdepartmentAvailability':details})
+  }
+  getMoolyaDepartmentAvailability(details){
     this.setState({'subdepartmentAvailability':details})
   }
 
@@ -73,6 +98,8 @@ class MlAddSubDepartment extends React.Component{
           handler: null
         }
       ]
+    const showLoader=this.state.loading;
+    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
 
       return (
           <div className="admin_main_wrap">
@@ -114,22 +141,19 @@ class MlAddSubDepartment extends React.Component{
                           >
                               <form>
                                   <div className="form-group">
-                                      <input type="text" ref="departmentName" placeholder="Department Name" className="form-control float-label" id=""/>
-                                  </div>
-                                  <div className="form-group switch_wrap switch_names">
-                                      <span className="state_label acLabel">moolya</span>
-                                      <label className="switch">
-                                          <input type="checkbox" ref="subDeptype"/>
-                                          <div className="slider"></div>
-                                      </label>
-                                      <span className="state_label">non-moolya</span>
-                                  </div>
-                                  <br className="brclear"/>
-                                  <div className="panel panel-default">
-                                      <div className="panel-body">
-                                          <MlAssignSubDepartments getSubDepartmentAvailability={this.getSubDepartmentAvailability.bind(this)}/>
-                                      </div>
-                                  </div>
+                                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'} onSelect={this.optionsBySelectDepartment.bind(this)} />
+                                     </div>
+                                {this.state.data!=''&&(<div>
+                                <div className="form-group switch_wrap switch_names" disabled="true">
+                                  <label>Select Type</label><br/>
+                                  <span className="state_label acLabel">moolya</span><label className="switch">
+                                  <input type="checkbox" ref="appType" checked={this.state.data&&this.state.data.isMoolya} disabled="true"/>
+                                  <div className="slider"></div>
+                                </label>
+                                  <span className="state_label">non-moolya</span>
+                                </div><br className="brclear"/>
+                                {this.state.data&&this.state.data.isMoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
+                                  </div> )}
                               </form>
                           </ScrollArea>
                       </div>

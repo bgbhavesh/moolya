@@ -1,15 +1,21 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findSubDepartmentActionHandler} from '../actions/findSubDepartmentAction'
 import {updateSubDepartmentActionHandler} from '../actions/updateSubDepartmentAction'
-
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import MlAssignDepartments from './MlAssignDepartments'
+import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
+import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
+import ScrollArea from 'react-scrollbar';
 class MlEditSubDepartment extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{id:props.config}};
+    this.state = {loading:true,data:{id:props.config},departmentdata:{},department:'',subDepatmentAvailable:[]};
     this.addEventHandler.bind(this);
     this.editSubDepartment.bind(this);
     this.findSubDepartment.bind(this);
@@ -42,18 +48,25 @@ class MlEditSubDepartment extends React.Component{
 
 
   async  editSubDepartment() {
-    let SubDepartmentDetails = {
-      _id: this.refs.id.value,
+    let subDepartment= {
       subDepartmentName: this.refs.subDepartmentName.value,
       displayName: this.refs.displayName.value,
       aboutSubDepartment: this.refs.aboutSubDepartment.value,
-      selectCluster: this.refs.selectCluster.value,
-      email: this.refs.email.value,
-      isActive: this.refs.status.checked
+      isActive: this.refs.subDepartmentStatus.checked,
+      departmentId:this.state.department,
+      isMoolya:this.refs.appType.checked,
+    subDepatmentAvailable:this.state.subdepartmentAvailability
+    }
+    let SubDepartmentDetails={
+      subDepartmentId:this.props.config,
+      subDepartment:subDepartment
     }
     console.log(SubDepartmentDetails)
 
     const response = await updateSubDepartmentActionHandler(SubDepartmentDetails)
+    if(response){
+
+    }
     return response;
 
   }
@@ -61,8 +74,31 @@ class MlEditSubDepartment extends React.Component{
   async  findSubDepartment() {
     let id = this.props.config
     const response = await findSubDepartmentActionHandler(id);
-    this.setState({loading:false,data:response});
+    if(response){
+      this.setState({"department":response.departmentId})
+      this.setState({loading:false,data:response});
+    }
 
+
+  }
+  optionsBySelectDepartment(val){
+    this.setState({department:val})
+    this.findDepartment(val);
+
+  }
+  async findDepartment(val){
+    let departmentId=val
+    console.log(departmentId)
+    const response = await findDepartmentActionHandler(departmentId);
+    console.log(response)
+    this.setState({departmentdata:response});
+  }
+  getDepartmentAvailability(details){
+    console.log("details->"+details);
+    this.setState({'subDepatmentAvailable':details})
+  }
+  getMoolyaDepartmentAvailability(details){
+    this.setState({'subDepatmentAvailable':details})
   }
   onStatusChange(e){
      const data=this.state.data;
@@ -92,60 +128,64 @@ class MlEditSubDepartment extends React.Component{
       }
     ]
     const showLoader=this.state.loading;
-
+    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
     return (
       <div>
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Edit Sub Department</h2>
-              <div className="col-md-6">
+              <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                    <input type="text" ref="id" value={this.state.data.id} hidden="true"/>
                     <div className="form-group">
                       <input type="text" ref="subDepartmentName" defaultValue={this.state.data&&this.state.data.subDepartmentName} placeholder="Sub Department Name" className="form-control float-label" id=""/>
-
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Displayname" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
                       <textarea ref="aboutSubDepartment" defaultValue={this.state.data&&this.state.data.aboutSubDepartment} placeholder="About" className="form-control float-label" id=""></textarea>
-
                     </div>
-                    <div className="form-group">
-                      <input type="text" ref="email" defaultValue={this.state.data&&this.state.data.email} placeholder="Sub Department Email ID" className="form-control float-label" id=""/>
-
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form_bg">
-                  <form>
-                    <div className="form-group">
-                      <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
-
-                    </div>
-                    <div className="form-group">
-                      <select placeholder="Select Cluster" ref="selectCluster" defaultValue={this.state.data&&this.state.data.selectCluster} className="form-control float-label">
-                        <option>Select Cluster</option>
-                      </select>
-                    </div>
-
-                    <div className="form-group switch_wrap">
-                      <label>Status</label><br/>
+                    <div className="form-group switch_wrap inline_switch">
+                      <label>Status</label>
                       <label className="switch">
-                        <input type="checkbox" ref="status" id="status" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
+                        <input type="checkbox" ref="subDepartmentStatus" checked={this.state.data&&this.state.data.isActive}/>
                         <div className="slider"></div>
                       </label>
                     </div>
                   </form>
                 </div>
               </div>
-              <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-              />
+              <div className="col-md-6 nopadding-right">
+                <div className="form_bg left_wrap">
+                  <ScrollArea
+                    speed={0.8}
+                    className="left_wrap"
+                    smoothScrolling={true}
+                    default={true}
+                  >
+                    <form>
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'} onSelect={this.optionsBySelectDepartment.bind(this)} />
+                      </div>
+                      {this.state.data!=''&&(<div>
+                        <div className="form-group switch_wrap switch_names" disabled="true">
+                          <label>Select Type</label><br/>
+                          <span className="state_label acLabel">moolya</span><label className="switch">
+                          <input type="checkbox" ref="appType" checked={this.state.data&&this.state.data.isMoolya} disabled="true"/>
+                          <div className="slider"></div>
+                        </label>
+                          <span className="state_label">non-moolya</span>
+                        </div><br className="brclear"/>
+                        {this.state.data&&this.state.data.isMoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.subDepatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.subDepatmentAvailable}/>}
+                      </div> )}
+                    </form>
+                  </ScrollArea>
+                </div>
+              </div>
+              <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </div>
-
-
           </div>
         )}
       </div>

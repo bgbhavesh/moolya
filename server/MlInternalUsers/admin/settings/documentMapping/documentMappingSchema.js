@@ -5,6 +5,12 @@ let DocumentMapping = `
    type DocumentMapping{
         documentId   : String
         document : String
+        documentDisplayName : String
+        validity    : String
+        inputLength : String
+        remarks     : String
+        allowableMaxSize  : String
+        issuingAuthority  : String
       }
       input allowableFormat{
           id   :  String
@@ -25,7 +31,8 @@ let DocumentMapping = `
           id   :  String
       }
       input documentObject{
-         displayName  : String,
+        documentId : String,
+        documentDisplayName  : String,
         allowableFormat : [allowableFormat],
         clusters    : [clusters],
         chapters    : [chapters],

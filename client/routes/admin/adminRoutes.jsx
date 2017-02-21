@@ -248,14 +248,14 @@ adminSection.route('/settings/editSubDepartment/:id', {
   }
 });
 
-adminSection.route('/settings/permissionList', {
+adminSection.route('/settings/processList', {
   name: 'settings_processList',
   action(){
     mount(AdminLayout,{adminContent:<MlProcessMappingList />})
   }
 });
 adminSection.route('/settings/addProcess', {
-  name: 'settings_AddProcess',
+  name: 'settings_addProcess',
   action(){
     mount(AdminLayout,{adminContent:<MlAddProcessMapping />})
   }

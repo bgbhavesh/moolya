@@ -13,7 +13,12 @@ import _ from 'lodash';
 
 var express = require('express');
 var {apolloExpress, graphiqlExpress} = require('apollo-server')
-var bodyParser = require('body-parser')
+var bodyParser  = require('body-parser')
+var multipart 	= require('connect-multiparty');
+var fs 			    = require('fs');
+
+var multipartMiddleware = multipart();
+
 const { makeExecutableSchema } = require('graphql-tools');
 
 var app = express().use('*',cors());
@@ -49,3 +54,10 @@ WebApp.rawConnectHandlers.use(proxyMiddleware(`http://localhost:8090/graphql`));
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
+
+app.post('/multipartFormData', multipartMiddleware, function (req, res) {
+    var context = {};
+    context = getContext({req});
+    context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    // mlS3Client.uploadFile()
+})

@@ -6,13 +6,13 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 export default class MlAssignClustersToRoles extends React.Component {
   constructor(props){
-    super(props);
-    this.state={
-      selectedValue:null,
-      assignRoleToClusters:[{cluster: '',chapter:'',subChapter:'',department:'',subDepartment:'',isActive:false }]
-    }
-    this.addDepartmentComponent.bind(this);
-    return this;
+      super(props);
+      this.state={
+         selectedValue:null,
+         assignRoleToClusters:[{cluster: '',chapter:'',subChapter:'',department:'',subDepartment:'',isActive:false }]
+      }
+      this.addDepartmentComponent.bind(this);
+      return this;
   }
 
   AssignassignRoleToClusters(id){
@@ -115,7 +115,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterquery=gql`query($id:String){  
   data:fetchChapters(id:$id) {
-    value:_id
+    value:_id,
     label:chapterName
   }  
 }`;
@@ -140,11 +140,11 @@ export default class MlAssignClustersToRoles extends React.Component {
         <div className="form-group"> <a onClick={that.AssignassignRoleToClusters.bind(this)} className="mlUpload_btn">Add</a></div>
         {that.state.assignRoleToClusters.map(function(assignCluster,id){
           let chapterOption={options: { variables: {id:assignCluster.cluster}}};
-          let subChapterOption={options: { variables: {id:assignCluster.chapter}}};
+          let subchapterOption={options: { variables: {id:assignCluster.chapter}}};
           let subDeparatmentOption={options: { variables: {id:assignCluster.department}}};
           return(
-
-              <div className="panel panel-default" key={id}>
+            <div className="panel panel-default" key={id}>
+              <div className="panel panel-default">
                 <div className="panel-heading">Assign Department<div className="pull-right block_action" onClick={that.RemoveAssignassignRoleToClusters.bind(that,id)}><img src="/images/remove.png"/></div></div>
                 <div className="panel-body">
 
@@ -159,7 +159,7 @@ export default class MlAssignClustersToRoles extends React.Component {
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} queryOptions={subChapterOption} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
@@ -182,6 +182,8 @@ export default class MlAssignClustersToRoles extends React.Component {
 
                 </div>
 
+
+              </div>
             </div>
           )})}
       </div>

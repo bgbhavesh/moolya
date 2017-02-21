@@ -137,8 +137,10 @@ let BackEndUser = `
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
+        fetchUserDepSubDep(userId:String):BackendUsers
     }
     
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
+

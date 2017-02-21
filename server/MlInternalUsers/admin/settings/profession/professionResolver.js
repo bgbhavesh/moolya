@@ -17,7 +17,9 @@ MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) =
 }
 MlResolver.MlMutationResolver['UpdateProfession'] = (obj, args, context, info) => {
   // TODO : Authorization
-
+  if (MlIndustries.findOne({_id:args.industryId})){
+    args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
+  }
   if (args._id) {
     var id= args._id;
     let updatedResponse= MlProfessions.update(id, {$set: args});

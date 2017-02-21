@@ -28,6 +28,16 @@ module.exports = class s3Client{
         check(fileKey, String);
         check(fileContentType, String);
         check(s3Bucket, String);
+        var params = {
+            Body: fileData,
+            Bucket:s3Bucket,
+            Key: bucketFolder+fileKey,
+            ContentType:fileContentType
+        }
+        this.client.s3.putObject(params, Meteor.bindEnvironment(function(err, response) {
+            console.log(response)
+            callback(err, response);
+        })) ;
     }
 
     getS3SignedUrl(fileKey, s3Bucket){

@@ -47,12 +47,13 @@ const mlChapterListConfig=new MlViewer.View({
   sort:true,
   viewComponent:<MlChapterList />,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"chapter"){
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
+              data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
                     totalRecords
                     data{
                      ...on Chapter{
                               _id
+                              clusterId
                               chapterCode
                               chapterName
                               displayName

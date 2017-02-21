@@ -99,7 +99,7 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({chapterId: args.id}).fetch()||[];
+  let result =  MlSubChapters.find({chapterId: args.id}).fetch()||[];
   return {data:result};
 }
 

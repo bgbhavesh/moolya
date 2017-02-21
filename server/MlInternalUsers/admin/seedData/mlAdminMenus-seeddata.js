@@ -61,9 +61,28 @@ if(Meteor.isServer){
         "name" : "cluster",
         "uniqueId"   :"cluster",
         "isLink" : true,
-        "isMenu" : true,
-
+        "isMenu" : true
       },
+
+      {
+        "link" : "/admin/clusters/clusterview/",
+        "name" : "cluster",
+        "uniqueId"   :"cluster",
+        "isLink" : true,
+        "isMenu" : true,
+        "isdynamic":true,
+        "subMenu":[
+          {
+            "link" : "/admin/cluster/clusterDetails",
+            "name" : "clusterDetails",
+            "uniqueId" : "cluster",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+          }
+        ]
+      },
+
       {
         "image" : "/images/chapter_icon.png",
         "link" : "/admin/chapter",

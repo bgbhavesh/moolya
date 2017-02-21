@@ -58,8 +58,6 @@ class MlAddRole extends React.Component{
   }
 
   getassignModulesToRoles(details){
-    console.log('....................');
-    console.log(details);
     this.setState({'assignModulesToRoles':details})
   }
   onSubmit(){

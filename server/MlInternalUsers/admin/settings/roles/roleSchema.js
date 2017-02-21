@@ -83,6 +83,7 @@ let Role = `
       fetchRole(roleName: String, roleValue: String, name: String): String
       fetchRolesByDepSubDep(departmentId:String, subDepartmentId:String): [Roles]
       findRole(id:String):Roles
+      fetchActiveRoles: [Roles]
   }
   
   type Mutation {

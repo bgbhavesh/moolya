@@ -27,7 +27,7 @@ class MlEditKycCategory extends React.Component{
   }
 
   async addEventHandler() {
-    const resp=await this.updateDocumentType();
+    const resp=await this.updateDocument();
     return resp;
   }
 
@@ -37,7 +37,7 @@ class MlEditKycCategory extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/settings/kycCastegoryList");
+    FlowRouter.go("/admin/settings/kycCategoryList");
   };
   async findDocument(){
     let documentTypeId=this.props.config
@@ -47,6 +47,7 @@ class MlEditKycCategory extends React.Component{
 
   async  updateDocument() {
     let Details = {
+      _id: this.refs.id.value,
       docCategoryName: this.refs.name.value,
       docCategoryDisplayName: this.refs.displayName.value,
       about: this.refs.about.value,
@@ -59,14 +60,14 @@ class MlEditKycCategory extends React.Component{
 
   }
 
-  // onStatusChange(e){
-  //   const data=this.state.data;
-  //   if(e.currentTarget.checked){
-  //     this.setState({"data":{"isActive":true}});
-  //   }else{
-  //     this.setState({"data":{"isActive":false}});
-  //   }
-  // }
+  onStatusChange(e){
+    const data=this.state.data;
+    if(e.currentTarget.checked){
+      this.setState({"data":{"isActive":true}});
+    }else{
+      this.setState({"data":{"isActive":false}});
+    }
+  }
 
 
   render(){
@@ -87,8 +88,10 @@ class MlEditKycCategory extends React.Component{
         handler: null
       }
     ]
-
+    const showLoader=this.state.loading;
     return (
+      <div>
+        {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Edit KYC Category</h2>
@@ -97,7 +100,7 @@ class MlEditKycCategory extends React.Component{
               <form>
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data._id} hidden="true"/>
-                  <input type="text" ref="name" placeholder="Name" defaultValue={this.state.data&&this.state.data.docTypeName} className="form-control float-label" id=""/>
+                  <input type="text" ref="name" placeholder="Name" defaultValue={this.state.data&&this.state.data.docCategoryName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <textarea ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label" id=""></textarea>
@@ -115,12 +118,12 @@ class MlEditKycCategory extends React.Component{
               >
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docTypeDisplayName} className="form-control float-label" id=""/>
+                    <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docCategoryDisplayName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" ref="status" checked={this.state.data&&this.state.data.isActive} />
+                      <input type="checkbox" ref="status" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
                   </div>
@@ -131,7 +134,8 @@ class MlEditKycCategory extends React.Component{
           </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
         </div>
-      </div>
+      </div>)}
+    </div>
     )
   }
 };

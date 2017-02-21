@@ -3,7 +3,7 @@ import {client} from '../../../core/apolloConnection';
 
 export async function findKycCategoryActionHandler(Id)
 {
-  let did=Ids
+  let did=Id
   const result = await client.query({
     query: gql`
     query  ($id: String){

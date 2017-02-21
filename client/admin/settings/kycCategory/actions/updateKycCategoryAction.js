@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function updateKycCategoryActionHandler(Details) {
-  let _id=Details.id;
+  let _id=Details._id;
   let docCategoryName = Details.docCategoryName;
   let docCategoryDisplayName = Details.docCategoryDisplayName;
   let about = Details.about;

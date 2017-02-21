@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findCityActionHandler(CountryId) {
-  let did = CountryId;
+export async function findCityActionHandler(Id) {
+  let did = Id;
 
   const result = await client.query({
     query: gql`
     query ($id: String){
-      fetchCities(countryId:$id) {
+      fetchCity(cityId:$id) {
         _id
         name
         countryCode
@@ -23,6 +23,6 @@ export async function findCityActionHandler(CountryId) {
     }
   })
   console.log(result)
-  const id = result.data;
+  const id = result.data.fetchCity;
   return id
 }

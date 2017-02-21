@@ -50,17 +50,14 @@ class MlAddRole extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/rolesList");
   };
 
   getassignRoleToClusters(details){
-    console.log("details->"+details);
     this.setState({'assignRoleToClusters':details})
   }
 
   getassignModulesToRoles(details){
-    console.log("details->"+details);
     this.setState({'assignModulesToRoles':details})
   }
   onSubmit(){

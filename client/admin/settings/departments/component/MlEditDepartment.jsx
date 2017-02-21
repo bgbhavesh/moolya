@@ -44,18 +44,21 @@ class MlEditDepartment extends React.Component{
       let departmentId=this.props.config
       console.log(departmentId)
       const response = await findDepartmentActionHandler(departmentId);
-    this.setState({loading:false,data:response,departmentAvailability:response.depatmentAvailable});
+    this.setState({loading:false,data:response});
       //return response;
     }
   async  editDepartment() {
-    let DepartmentDetails = {
-      id: this.refs.id.value,
+    let departmentObject = {
       departmentName: this.refs.departmentName.value,
       displayName: this.refs.displayName.value,
-      aboutDepartment: this.refs.aboutDepartment.value,
-      departmentStatus: this.refs.departmentStatus.checked,
-      appType:this.refs.appType.checked,
-      departmentAvailablity:this.state.departmentAvailability
+      departmentDesc: this.refs.aboutDepartment.value,
+      isActive: this.refs.departmentStatus.checked,
+      isMoolya:this.refs.appType.checked,
+      depatmentAvailable:this.state.departmentAvailability
+    }
+    let DepartmentDetails={
+         departmentId:  this.props.config     ,
+         department: departmentObject
     }
     console.log(DepartmentDetails)
 

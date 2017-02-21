@@ -3,7 +3,7 @@ import {client} from '../../../core/apolloConnection';
 
 export async function findDocumentFormatActionHandler(Id)
 {
-  let did=Ids
+  let did=Id
   const result = await client.query({
     query: gql`
     query  ($id: String){

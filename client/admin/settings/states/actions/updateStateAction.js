@@ -3,17 +3,6 @@ import {client} from '../../../core/apolloConnection';
 
 export async function updateStateActionHandler(StateDetails) {
   let stateId = StateDetails.id;
-  let stateName = StateDetails.name;
-  let countryCode = StateDetails.countryCode;
-  // let displayName = StateDetails.displayName;
-  let isActive = StateDetails.isActive;
-
-  let stateDetails = {
-      name: StateDetails.name,
-      countryId:StateDetails.countryId,
-      countryCode:StateDetails.countryCode,
-      isActive:StateDetails.isActive
-  }
 
   const result = await client.mutate({
     mutation: gql`
@@ -26,7 +15,7 @@ export async function updateStateActionHandler(StateDetails) {
     `,
     variables: {
       stateId:stateId,
-      state:stateDetails
+      state:StateDetails
     }
   })
   console.log(result)

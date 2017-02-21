@@ -39,5 +39,5 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
     let updatedResponse= MlProcessMapping.update(id, {$set: args.process});
     return updatedResponses
   }
-
+o
 }

@@ -61,7 +61,11 @@ let Role = `
       moduleId:String,
       actions : [actions]
       fieldRestrictions: [fieldRestrictions],
-      permissions:[permissions]
+      permissions:[permissions],
+      moduleName:String,
+      validFrom:String,
+      validTo:String,
+      isActive:Boolean
   }
   
   input roleObject{
@@ -79,6 +83,7 @@ let Role = `
       fetchRole(roleName: String, roleValue: String, name: String): String
       fetchRolesByDepSubDep(departmentId:String, subDepartmentId:String): [Roles]
       findRole(id:String):Roles
+      fetchActiveRoles: [Roles]
   }
   
   type Mutation {

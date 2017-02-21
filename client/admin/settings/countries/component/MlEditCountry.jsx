@@ -9,7 +9,7 @@ import {updateCountryActionHandler} from '../actions/updateCountryAction'
 class MlEditCountry extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}};
+    this.state = {loading:true,data:{},url: ''};
     this.editCountry.bind(this);
     this.findCountry.bind(this);
     return this;
@@ -43,6 +43,7 @@ class MlEditCountry extends React.Component{
     let id = this.props.config
     const response = await findCountryActionHandler(id);
     this.setState({loading:false,data:response});
+    this.setState({url:this.state.data.url})
 
   }
 
@@ -54,10 +55,8 @@ class MlEditCountry extends React.Component{
       about: this.refs.about.value,
       capital: this.refs.capital.value,
       url: this.refs.url.src,
-      status: this.refs.status.checked
+      isActive: this.refs.status.checked
     };
-    console.log("CountryDetails "+CountryDetails);
-
     const response = await updateCountryActionHandler(CountryDetails);
     return response;
 
@@ -90,26 +89,25 @@ class MlEditCountry extends React.Component{
       }
     ]
     const showLoader=this.state.loading;
-
     return (
       <div>
         {showLoader===true?( <div className="loader_wrap"></div>):( <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Edit Country</h2>
               <div className="col-md-6 nopadding-left">
-                <input type="text" ref="id" value={this.state.data.fetchCountry._id} hidden="true"/>
+                <input type="text" ref="id" defaultValue={this.state.data._id} hidden="true"/>
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="country" defaultValue={this.state.data.fetchCountry && this.state.data.fetchCountry.country} placeholder="Country Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="country" defaultValue={this.state.data && this.state.data.country} placeholder="Country Name" className="form-control float-label" id=""/>
 
                     </div>
                     <div className="form-group">
-                      <textarea ref="about" defaultValue={this.state.data.fetchCountry && this.state.data.fetchCountry.about} placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea ref="about" defaultValue={this.state.data && this.state.data.about} placeholder="About" className="form-control float-label" id=""></textarea>
 
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="capital" defaultValue={this.state.data.fetchCountry && this.state.data.fetchCountry.capital} placeholder="Capital" className="form-control float-label" id=""/>
+                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capital} placeholder="Capital" className="form-control float-label" id=""/>
 
                     </div>
                   </form>
@@ -124,20 +122,20 @@ class MlEditCountry extends React.Component{
                         <input type="file" className="upload" />
                       </div>
                       <div className="previewImg">
-                        <img ref="url" src={this.state.data.fetchCountry && this.state.data.fetchCountry.url}/>
+                        <img ref="url" src={this.state.url}/>
                       </div>
 
                     </div>
                     <br className="brclear"/>
                     <div className="form-group">
-                      <input type="text" ref="displayName" defaultValue={this.state.data.fetchCountry && this.state.data.fetchCountry.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="displayName" defaultValue={this.state.data && this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
 
                     </div>
 
                     <div className="form-group switch_wrap inline_switch">
                       <label>Available on System</label>
                       <label className="switch">
-                        <input type="checkbox" ref="status" id="status" checked={this.state.data.fetchCountry && this.state.data.fetchCountry.isActive} onChange={this.onStatusChange.bind(this)}/>
+                        <input type="checkbox" ref="status" id="status" checked={this.state.data && this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>

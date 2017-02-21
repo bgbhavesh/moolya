@@ -1,4 +1,5 @@
 import MlResolver from '../mlAdminResolverDef'
+import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
 
 MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   let totalRecords=0;
@@ -16,28 +17,24 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
 
   //Context Specific Search layer
   const contextQuery={};
+  let result=null;
+  switch(moduleName){
+    case "cluster":
+             result=CoreModulesRepo.MlClusterRepo(args.context,contextQuery,findOptions);
+             break;
+    case "chapter":
+             result=CoreModulesRepo.MlChapterRepo(args.context,contextQuery,findOptions);
+             break;
+    case "subChapter":
+             result=CoreModulesRepo.MlSubChapterRepo(args.context,contextQuery,findOptions);
+             break;
+    case "community":
+             result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions);
+             break;
 
-
-  if(args.module=="cluster"){
-    data= MlClusters.find({},findOptions).fetch();
-    totalRecords=MlClusters.find({},findOptions).count();
   }
 
-  if(args.module=="chapter"){
-    data= MlChapters.find({},findOptions).fetch();
-    totalRecords=MlChapters.find({},findOptions).count();
-  }
-  if(args.module=="subChapter"){
-    data= MlSubChapters.find({},findOptions).fetch();
-    totalRecords=MlSubChapters.find({},findOptions).count();
-  }
-
-  if(args.module=="community"){
-    data= MlDepartments.find({},findOptions).fetch();
-    totalRecords=MlDepartments.find({},findOptions).count();
-  }
-
-  return {'totalRecords':totalRecords,'data':data};
+  return {totalRecords:result.totalRecords||0,data:result.data||[]};
 }
 
 MlResolver.MlUnionResolver['ContextSpecSearchResult']= {

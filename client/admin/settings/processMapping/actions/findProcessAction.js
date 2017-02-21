@@ -7,6 +7,7 @@ export async function findProcessActionHandler(processId) {
     query: gql`
     query  ($id: String){
          findProcess(id:$id)  {
+         _id
          processId
         process
         communities{

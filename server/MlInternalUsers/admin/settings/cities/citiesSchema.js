@@ -14,7 +14,7 @@ let citiesSchema = `
     }
     
     input cityObject{
-        _id         : String,
+        id         : String,
         name        : String,
         stateId     : String,
         countryId   : String,
@@ -25,7 +25,8 @@ let citiesSchema = `
     }
     
     type Query {
-        fetchCities: SearchResp      
+        fetchCities: SearchResp
+        fetchCity(cityId: String): Cities
     }
     
     type Mutation {

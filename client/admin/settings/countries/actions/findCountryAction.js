@@ -24,6 +24,6 @@ export async function findCountryActionHandler(CountryId) {
     }
   })
   console.log(result)
-  const id = result.data;
+  const id = result.data.fetchCountry;
   return id
 }

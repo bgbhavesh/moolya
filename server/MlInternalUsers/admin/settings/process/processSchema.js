@@ -40,6 +40,7 @@ let Process = `
         
     }
     type processOutput{
+        _id         : String,
         processId   : String,
         process     : String,
         communities : [communityOutput],

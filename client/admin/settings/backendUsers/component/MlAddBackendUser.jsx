@@ -174,7 +174,10 @@ class MlAddBackendUser extends React.Component{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
 `;
-
+    let rolequery=gql` query{
+    data:fetchActiveRoles{label:roleName,value:_id}
+    }
+`;
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -197,18 +200,18 @@ class MlAddBackendUser extends React.Component{
                       <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)}
+                      <Select name="form-field-name" placeholder="User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)}
                       />
                     </div>
                     <div className="form-group">
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} placeholder="Select Role" queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />
                     </div>
                     <div className="form-group">
-                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id=""/>
+                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label"/>
                     </div>
                     <div className="form-group">
-                      <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" id=""/>
+                      <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label"/>
                     </div>
                     <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 

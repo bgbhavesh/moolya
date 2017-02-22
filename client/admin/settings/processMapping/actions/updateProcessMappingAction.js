@@ -2,12 +2,12 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function updateProcessActionHandler(pid,process) {
-
+   pid = pid;
    const result = await client.mutate({
    mutation: gql`
-   mutation  ($id:String, $process: processInput){
+   mutation  ($pid:String, $process: processInput){
        updateProcess(
-       id: $id,
+       id: $pid,
        process: $process,
        )
    }

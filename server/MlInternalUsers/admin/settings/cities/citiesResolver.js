@@ -13,7 +13,7 @@ MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) =>
         for(var i = 0; i < states.length; i++){
             let cities = MlCities.find({"stateId":states[i]._id}).fetch();
             if(cities && cities.length > 0){
-                _.merge(allCities, cities)
+                allCities = allCities.concat(cities)
             }
         }
     }

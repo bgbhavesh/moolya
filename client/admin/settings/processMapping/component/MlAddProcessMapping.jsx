@@ -59,7 +59,7 @@ class MlAddProcessMapping extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/settings/permissionList");
+    FlowRouter.go("/admin/settings/processList");
   };
 
   getassignDocuments(details){

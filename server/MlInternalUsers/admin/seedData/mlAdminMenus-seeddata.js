@@ -4,7 +4,7 @@ if(Meteor.isServer){
     "menu" : [
       {
         "image" : "/images/db_icon.png",
-        "link" : "/admin/dashboard",
+        "link" : "/admin/dashboard/clusters",
         "name" : "dashboard",
         "uniqueId" : "dashboard",
         "isLink" : true,
@@ -14,41 +14,52 @@ if(Meteor.isServer){
             "link" : "/admin/dashboard/clusters",
             "name" : "Clusters",
             "uniqueId" : "dashboard_clusters",
+            "subMenuMappingId":"dashboard_clusters",
+            "subMenusId":"dashboard",
             "isLink" : true,
             "isMenu" : true,
-            "image" : "",
-            "subMenu" : [
-              {
-                "dynamicLink" : true,
-                "dynamicLinkHandler" : "",
-                "name" : "cluster_Details",
-                "link":"",
-                "uniqueId" : "dashboard_clusterDetails",
-                "isMenu" : true,
-                "image" : ""
-              },
-              {
-                "dynamicLink" : true,
-                "dynamicLinkHandler" : "",
-                "name" : "chapter Details",
-                "link":"",
-                "uniqueId" : "dashboard_chapterDetails",
-                "isMenu" : true,
-                "image" : ""
-              }
-            ]
+            "image" : ""
           },
           {
-            "link" : "/admin/dashboard/chapter",
+            "link" : "/admin/dashboard/chapters",
             "name" : "Chapters",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
             "uniqueId" : "dashboard_chapters",
+            "subMenuMappingId":"dashboard_chapters",
+            "subMenusId":"dashboard",
             "isLink" : true,
-            "image" : ""
+            "image" : "",
+            "subMenu":[
+              {
+                "link" : "/admin/dashboard/clusters",
+                "name" : "SpecChapters",
+                "uniqueId" : "dashboard_specChapters",
+                "subMenuMappingId":"dashboard_chapters",
+                "subMenusId":"dashboard",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : ""
+
+              },
+              {
+                "link" : "/admin/dashboard/clusters",
+                "name" : "SpecSubChapters",
+                "uniqueId" : "dashboard_specSubChapters",
+                "subMenuMappingId":"dashboard_chapters",
+                "subMenusId":"dashboard",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : ""
+
+              }]
           },
           {
             "link" : "/admin/dashboard/communities",
             "name" : "Communities",
             "uniqueId" : "dashboard_communities",
+            "subMenuMappingId":"dashboard_communities",
+            "subMenusId":"dashboard",
             "isLink" : true,
             "image" : ""
           },

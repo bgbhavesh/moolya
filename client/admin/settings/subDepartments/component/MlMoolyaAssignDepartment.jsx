@@ -11,6 +11,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
       selectedValue:null,
       departmentAvailability:[{cluster: [{clusterId:''}],chapter:'All',subChapter:'All',email:'',isActive:false }]
     }
+    this.onStatusChange=this.onStatusChange.bind(this)
     return this;
   }
 
@@ -53,7 +54,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
   }
 
 
-  onChange(id,event){
+  onStatusChange(id,event){
     let filedName=event.target.name
     let fieldValue=event.target.value;
     if(filedName=='isActive'){
@@ -109,7 +110,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" name={'isActive'} value={options.isActive} onChange={that.onChange.bind(that,id)} />
+                      <input type="checkbox" name={'isActive'} checked={options.isActive} onChange={that.onStatusChange.bind(that,id)} />
                       <div className="slider"></div>
                     </label>
                   </div>

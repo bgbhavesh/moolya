@@ -285,7 +285,23 @@ class MlAddProcessMapping extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right"  >
-        <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)}/>
+            <div className="form_bg" >
+              <div className="left_wrap">
+
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <form style={{marginTop:'0px'}}>
+                      <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)}/>
+                  </form>
+                </ScrollArea>
+              </div>
+            </div>
+
+
           </div>
 
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

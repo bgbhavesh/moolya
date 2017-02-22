@@ -4,7 +4,7 @@
 
 const clusterRoutes={
   clusterDetailsRoute:(clusterId, route)=> {
-    return `/admin/clusters/${clusterId}`;
+    return `/admin/clusters/clusterview/${clusterId}/`;
   }
   // chapterListRoute:(clusterId)=>{
   //   return `/admin/dashboard/${clusterId}/chapters`;

@@ -55,7 +55,7 @@ class MlEditSubDepartment extends React.Component{
       isActive: this.refs.subDepartmentStatus.checked,
       departmentId:this.state.department,
       isMoolya:this.refs.appType.checked,
-    subDepatmentAvailable:this.state.subdepartmentAvailability
+    subDepatmentAvailable:this.state.subDepatmentAvailable
     }
     let SubDepartmentDetails={
       subDepartmentId:this.props.config,

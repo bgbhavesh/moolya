@@ -8,21 +8,35 @@ export default class MlContactFormComponent extends React.Component {
   constructor(props){
     super(props);
    this.state={
-      contactForm:[{contactNumberType: null,countryCode:'',number:'',isOTPValidated:false}],
+      contactForm:[{contactNumberType: null,countryCode:'',number:'',isOTPValidated:''}],
      isWorkEnble:true,
      isOfficeEnable:false,
     }
+    this.onStatusChange = this.onStatusChange.bind(this);
     return this;
   }
   componentDidMount() {
+    this.props.getAssignedContacts(this.state.contactForm);
+  }
+  componentWillMount(){
     let assignContactForm = this.props.contacts
     if (assignContactForm) {
-      this.setState({contactForm: assignContactForm});
+      let assignContactFormDetails=[]
+      for(let i=0;i<assignContactForm.length;i++){
+        let json={
+          contactNumberType:assignContactForm[i].contactNumberType,
+          countryCode:assignContactForm[i].countryCode,
+          number:assignContactForm[i].number,
+          isOTPValidated:assignContactForm[i].isOTPValidated
+        }
+        assignContactFormDetails.push(json)
+      }
+      this.setState({contactForm: assignContactFormDetails});
     }
   }
     AssignDepartment(idx){
     this.setState({
-      contactForm: this.state.contactForm.concat([{ contactNumberType: null,countryCode:'',number:'',isOTPValidated:false}])
+      contactForm: this.state.contactForm.concat([{ contactNumberType: null,countryCode:'',number:'',isOTPValidated:''}])
     });
   }
   RemoveAssignContactForm(idx,event){
@@ -59,7 +73,7 @@ export default class MlContactFormComponent extends React.Component {
       this.setState({contactForm:assignContactDetails})
       this.props.getAssignedContacts(this.state.contactForm);
     }else {
-      assignContactDetails[index]['isOTPValidated'] = false
+      assignContactDetails[index]['isOTPValidated'] =false
       this.setState({contactForm: assignContactDetails})
       this.props.getAssignedContacts(this.state.contactForm);
     }

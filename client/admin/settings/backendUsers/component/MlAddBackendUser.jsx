@@ -257,23 +257,23 @@ class MlAddBackendUser extends React.Component{
                       <div className="panel-body">
 
                         <div className="form-group">
-                          <input type="text" ref="cluster" placeholder="Cluster" className="form-control float-label" id=""/>
+                          <input type="text" ref="cluster" placeholder="Cluster" className="form-control float-label" id="" disabled="true"/>
                           {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedCluster} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onClusterSelect.bind(this)} />*/}
                          </div>
                         <div className="form-group">
-                          <input type="text" ref="chapter" placeholder="Chapter" className="form-control float-label" id=""/>
+                          <input type="text" ref="chapter" placeholder="Chapter" className="form-control float-label" id="" disabled="true"/>
                           {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedChapter} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onChapterSelect.bind(this)} />*/}
                         </div>
                         <div className="form-group">
-                          <input type="text" ref="department" placeholder="Department" className="form-control float-label" id=""/>
+                          <input type="text" ref="department" placeholder="Department" className="form-control float-label" id="" disabled="true"/>
                          {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedDepartment} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onDepartmentSelect.bind(this)} />*/}
                          </div>
                         <div className="form-group">
-                          <input type="text" ref="subDepartment" placeholder="Sub Department" className="form-control float-label" id=""/>
+                          <input type="text" ref="subDepartment" placeholder="Sub Department" className="form-control float-label" id="" disabled="true"/>
                           {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubDepartment} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onSubDepartmentSelect.bind(this)} />*/}
                          </div>
                         <div className="form-group">
-                         <input type="text" ref="role" placeholder="Role" className="form-control float-label" id=""/>
+                         <input type="text" ref="role" placeholder="Role" className="form-control float-label" id="" disabled="true"/>
                           {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedRole} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onROleSelect.bind(this)} />*/}
                         </div>
                         <div className="form-group">

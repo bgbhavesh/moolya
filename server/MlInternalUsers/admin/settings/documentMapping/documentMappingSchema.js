@@ -1,16 +1,46 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let DocumentMapping = `
-
-   type DocumentMapping{
+     type DocumentMapping{
         documentId   : String
-        document : String
+        documentName : String
+        isActive : Boolean
+     }
+     
+     type allowableFormatOutput{
+          id   :  String
+      }    
+      type clustersOutput{
+          id   :  String
+      } 
+       type chaptersOutput{
+          id   :  String
+      }    
+      type subChaptersOutput{
+          id   :  String
+      } 
+      type kycCategoryOutput{
+          id   :  String
+      }    
+      type documentTypeOutput{
+          id   :  String
+      } 
+   type DocumentOutput{
+        documentId   : String
+        documentName : String
         documentDisplayName : String
         validity    : String
         inputLength : String
         remarks     : String
         allowableMaxSize  : String
         issuingAuthority  : String
+        allowableFormat : [allowableFormatOutput]
+        clusters :[clustersOutput]
+        chapters    : [chaptersOutput]
+        subChapters : [subChaptersOutput]
+        kycCategory  : [kycCategoryOutput]
+        documentType   : [documentTypeOutput]
+        isActive : Boolean
       }
       input allowableFormat{
           id   :  String
@@ -30,7 +60,7 @@ let DocumentMapping = `
       input documentType{
           id   :  String
       }
-      input documentObject{
+      input documentInput{
         documentId : String,
         documentDisplayName  : String,
         allowableFormat : [allowableFormat],
@@ -38,19 +68,24 @@ let DocumentMapping = `
         chapters    : [chapters],
         subChapters : [subChapters],
         validity    : String,
-        inputLength      : String,
-        remarks      : String,
-        documentName   : String,
+        inputLength : String,
+        remarks     : String,
+        documentName : String,
         kycCategory  : [kycCategory],
-        documentType   : [documentType],
+        documentType : [documentType],
         allowableMaxSize  : String,
-        issuingAuthority   : String,
+        issuingAuthority  : String,
         isActive    : Boolean
       }
       
      
       type Mutation {
-         createDocument(document:documentObject): String
+         createDocument(document:documentInput): String
+         updateDocument(documentId:String,document:documentInput):String
+      }
+      type Query{
+        findDocument(documentId:String): DocumentOutput
+        findDocuments: [DocumentOutput]
       }
      
 `

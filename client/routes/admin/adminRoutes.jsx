@@ -45,6 +45,7 @@ import MlKycCategoriesList from '../../admin/settings/kycCategory/component/MlKy
 import MlEditKycCategory from '../../admin/settings/kycCategory/component/MlEditKycCategory'
 import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
 import MlAddDocumentMapping from '../../admin/settings/documentMapping/component/MlAddDocumentMapping'
+import MlEditDocumentMapping from '../../admin/settings/documentMapping/component/MlEditDocumentMapping'
 
 /*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
 import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'
@@ -474,6 +475,12 @@ adminSection.route('/settings/addDocumentMapping', {
   name: 'settings_AddDocumentMapping',
   action(){
     mount(AdminLayout,{adminContent:< MlAddDocumentMapping/>})
+  }
+});
+adminSection.route('/settings/editDocumentMapping/:id', {
+  name: 'settings_EditDocumentMapping',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDocumentMapping config={params.id} />})
   }
 });
 adminSection.route('/settings/templateTypeList', {

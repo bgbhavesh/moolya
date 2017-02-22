@@ -24,6 +24,7 @@ let DocumentFormatsSchema = `
     }
     type Query{
         findDocumentFormat(_id:String): DocumentFormats
+        fetchDocumentsFormat:[DocumentFormats]
     }
 `
 

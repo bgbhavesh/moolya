@@ -6,13 +6,13 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
   module:"documentMapping",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["roleTypeName","roleTypeDisplayName","isActive"],
-  searchFields:["roleTypeName","roleTypeDisplayName","isActive"],
+  fields:["documentName","roleTypeDisplayName","isActive"],
+  searchFields:["documentName","roleTypeDisplayName","isActive"],
   throttleRefresh:false,
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "documentId",title:"Id",'isKey':true,isHidden:true},
     {dataField: "documentName", title: "Name",dataSort:true},
     {dataField: "kycCategory", title: "Category",dataSort:true},
     {dataField: "allowableFormat", title: "Allowable Format",dataSort:true},
@@ -26,8 +26,8 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: (data)=>{
-        if(data && data.id){
-          // FlowRouter.go("/admin/settings/editSubDepartment/"+data.id);
+        if(data && data.documentId){
+          FlowRouter.go("/admin/settings/editDocumentMapping/"+data.documentId);
         } else{
           alert("Please select a Document");
         }
@@ -46,20 +46,42 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       handler: (data)=>{console.log(data);}
     }
   ],
+  // graphQlQuery:gql`
+  //            query {
+  //                data: findDocuments{
+  //                   documentId
+  //                   documentName
+  //                 allowableFormat{
+  //                   id
+  //                 }
+  //                 clusters{
+  //                   id
+  //                 }
+  //                 chapters{
+  //                   id
+  //                 }
+  //                 subChapters{
+  //                   id
+  //                 }
+  //                 kycCategory{
+  //                   id
+  //                 }
+  //                 documentType{
+  //                   id
+  //                 }
+  //                 isActive
+  //               }
+  //         }
+  //             `
   graphQlQuery:gql`
               query{
               data:SearchQuery(module:"documentMapping"){
                     totalRecords
                     data{
                      ...on DocumentMapping{
-                              documentId
-                              documentDisplayName
+                               documentId
                               documentName
-                              kycCategory
-                              allowableFormat
-                              allowableMaxSize
-                              clusters
-                              id:_id
+                      				isActive
                           }
                       }
               }

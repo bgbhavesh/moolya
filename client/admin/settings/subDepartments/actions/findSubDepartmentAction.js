@@ -30,7 +30,8 @@ export async function findSubDepartmentActionHandler(SubDepartmentId) {
     `,
     variables: {
       _id:did
-    }
+    },
+    forceFetch:true
   })
   console.log(result)
   const id = result.data.findSubDepartment;

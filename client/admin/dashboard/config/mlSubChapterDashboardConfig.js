@@ -4,7 +4,7 @@ import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 import React from 'react';
 import gql from 'graphql-tag'
 
-const mlsubChapterDashboardMapConfig=new MlViewer.View({
+const mlSubChapterDashboardMapConfig=new MlViewer.View({
   name:"subChapterDashBoardMap",
   viewType:MlViewerTypes.MAP,
   extraFields:[],
@@ -12,25 +12,21 @@ const mlsubChapterDashboardMapConfig=new MlViewer.View({
   pagination:false,
   sort:false,
   viewComponent:<MlMapViewContainer />,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
+  },
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"subChapter"){
+              query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
+              data:ContextSpecSearch(module:"subChapter",context:$context,searchSpec:$searchSpec){
                     totalRecords
                     data{
-                     ...on Chapter{
-                              chapterId
-                              chapterName
-                              displayName
-                              about
-                              chapterImage
-                              stateName
-                              stateId
-                              cityId
-                              cityName
-                              latitude
-                              longitude
-                              showOnMap
-                              isActive
+                     ...on SubChapter{
+                                   _id
+                                   desc:aboutSubChapter
+                                   text:subChapterName
+                                   lat:latitude
+                                   lng:longitude
                           }
                       }
               }
@@ -77,4 +73,4 @@ const mlSubChapterDashboardListConfig=new MlViewer.View({
    `
 });
 
-export { mlSubChapterDashboardListConfig};
+export { mlSubChapterDashboardListConfig,mlSubChapterDashboardMapConfig};

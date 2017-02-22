@@ -10,10 +10,41 @@ export default class MlAssignDocument extends React.Component {
     super(props);
     this.state={
       selectedValue:null,
-      assignDocuments:[{type: '',category:'',isActive:false}]
+      assignDocuments:[{type: '',category:'',isActive:''}]
     }
-    this.addDepartmentComponent.bind(this);
+    this.onStatusChange = this.onStatusChange.bind(this);
     return this;
+  }
+
+  componentDidMount() {
+    /* $(function () {
+     $('.float-label').jvFloat();
+     });
+
+     $('.switch input').change(function () {
+     if ($(this).is(':checked')) {
+     $(this).parent('.switch').addClass('on');
+     } else {
+     $(this).parent('.switch').removeClass('on');
+     }
+     });*/
+    this.props.getAssignedDocuments(this.state.assignDocuments)
+  }
+
+  componentWillMount(){
+    let assignDocument=this.props.documents
+    if(assignDocument){
+      let assignDocumentDetails=[]
+      for(let i=0;i<assignDocument.length;i++){
+        let json={
+          type:assignDocument[i].type,
+          category:assignDocument[i].category,
+          isActive:assignDocument[i].isActive
+        }
+        assignDocumentDetails.push(json)
+      }
+      this.setState({"assignDocuments":assignDocumentDetails})
+    }
   }
 
   assignDocumentsState(id){
@@ -32,19 +63,7 @@ export default class MlAssignDocument extends React.Component {
     })
   }
 
-  componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
 
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-  }
   optionsBySelectDocument(index, selectedIndex){
     let assignDocuments=this.state.assignDocuments
     assignDocuments[index]['type']=selectedIndex
@@ -57,32 +76,17 @@ export default class MlAssignDocument extends React.Component {
     this.setState({assignDocuments:assignDocuments})
     this.props.getAssignedDocuments(this.state.assignDocuments)
   }
-
-  addDepartmentComponent(event) {
-    var mySwiper = new Swiper('.blocks_in_form', {
-      // speed: 400,
-      pagination: '.swiper-pagination',
-      spaceBetween: 0,
-      slidesPerView:'auto',
-      freeMode:true,
-      paginationClickable: false
-    });
-    mySwiper.updateContainerSize()
-    this.setState({
-      assignDocuments: this.state.assignDocuments.concat([{type: '',category:'',isActive:false}])
-    });
-
-  }
-  onChange(id,event){
-    let filedName=event.target.name
-    let fieldValue=event.target.value;
-    if(filedName=='isActive'){
-      fieldValue=event.target.checked;
+  onStatusChange(index,event){
+    let assignDocumentsDetails=this.state.assignDocuments
+    if(event.currentTarget.checked){
+      assignDocumentsDetails[index]['isActive']=true
+      this.setState({assignDocuments:assignDocumentsDetails})
+      this.props.getAssignedContacts(this.state.assignDocuments);
+    }else {
+      assignDocumentsDetails[index]['isActive'] =false
+      this.setState({assignDocuments: assignDocumentsDetails})
+      this.props.getAssignedContacts(this.state.assignDocuments);
     }
-    let departmentDetails=this.state.assignDocuments
-    departmentDetails[id][filedName]=fieldValue
-    this.setState({assignDocuments:departmentDetails})
-    this.props.getAssignedDocuments(this.state.assignDocuments)
   }
 
 
@@ -106,19 +110,7 @@ export default class MlAssignDocument extends React.Component {
 
           return(
 
-
-            <div className="form_bg" key={id}>
-              <div className="left_wrap">
-
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                  default={true}
-                >
-                  <form style={{marginTop:'0px'}}>
-
-                    <div className="panel panel-default">
+                    <div className="panel panel-default" key={id}>
                       <div className="panel-heading">Type of Document<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/remove.png"/></div></div>
                       <div className="panel-body">
 
@@ -131,7 +123,7 @@ export default class MlAssignDocument extends React.Component {
                         <div className="form-group switch_wrap inline_switch" style={{marginTop:'7px'}}>
                           <label className="">Status</label>
                           <label className="switch">
-                            <input type="checkbox" />
+                            <input type="checkbox" checked={options.isActive} onChange={that.onStatusChange.bind(that,id)} />
                             <div className="slider"></div>
                           </label>
                         </div>
@@ -139,10 +131,7 @@ export default class MlAssignDocument extends React.Component {
                       </div>
                     </div>
 
-                  </form>
-                </ScrollArea>
-              </div>
-            </div>
+
 
 
           )})}

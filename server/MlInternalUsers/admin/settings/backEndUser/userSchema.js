@@ -32,7 +32,7 @@ let BackEndUser = `
         contactNumberType:String,
         countryCode:String,
         number:String,
-        isOTPValidated:String
+        isOTPValidated:Boolean
     }
     
     type UserProfiles{
@@ -75,7 +75,7 @@ let BackEndUser = `
         contactNumberType:String,
         countryCode:String,
         number:String,
-        isOTPValidated:String
+        isOTPValidated:Boolean
     }
     
     input userroles{

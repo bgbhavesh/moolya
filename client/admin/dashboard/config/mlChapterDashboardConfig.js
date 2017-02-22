@@ -52,25 +52,25 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:false,
   sort:false,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+  },
   viewComponent:<MlMapViewContainer />,
   graphQlQuery:gql`
-              query{
-                  data:fetchChaptersForMap{
-                     _id
-                    chapterCode
-                    chapterName
-                    displayName
-                    chapterImage
-                    stateName
-                    stateId
-                    cityId
-                    cityName
-                    latitude
-                    longitude
-                    showOnMap
-                    isActive
-                    
-                  }
+               query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
+                    data:ContextSpecSearch(module:"chapter",context:$context,searchSpec:$searchSpec){
+                    totalRecords
+                    data{
+                     ...on Chapter{
+                             _id
+                             desc:displayName
+                             text:chapterName
+                             lat:latitude
+                             lng:longitude
+                          }
+                      }
+              }
               }
               `
 });

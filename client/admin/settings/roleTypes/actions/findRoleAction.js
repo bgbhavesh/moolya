@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function findRoleActionHandler(roleId) {
-  let did=roleId
+  let id=roleId
   const result = await client.query({
     query: gql`
     query  ($id: String){
@@ -22,6 +22,10 @@ export async function findRoleActionHandler(roleId) {
           }
           modules{
             moduleId
+            moduleName
+            validFrom
+            validTo
+            isActive          
             actions{
               actionId
             }
@@ -31,10 +35,10 @@ export async function findRoleActionHandler(roleId) {
       }
     `,
     variables: {
-      id:did
+      id
     },
     forceFetch:true
   })
-  const id = result.data.findRole;
-  return id
+  const did = result.data.findRole;
+  return did
 }

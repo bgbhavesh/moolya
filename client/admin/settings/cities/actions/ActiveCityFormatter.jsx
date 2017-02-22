@@ -22,7 +22,7 @@ class ActiveCityFormatter extends React.Component {
 
     let StateDetails = {
       id: data.id,
-      city: data.name,
+      name: data.name,
       countryId: data.countryId,
       stateId: data.stateId,
       countryCode: data.countryCode,

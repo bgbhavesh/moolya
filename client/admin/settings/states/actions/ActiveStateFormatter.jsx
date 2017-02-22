@@ -22,7 +22,7 @@ class ActiveStateFormatter extends React.Component {
 
     let StateDetails = {
       id: data.id,
-      state: data.name,
+      name: data.name,
       countryId: data.countryId,
       countryCode: data.countryCode,
       isActive: this.refs.status.checked

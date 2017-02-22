@@ -13,6 +13,10 @@ let Role = `
   
   type Modules{
       moduleId:String,
+      moduleName:String,
+      validFrom:String,
+      validTo:String,
+      isActive:Boolean,
       actions : [Actions]
   }
   
@@ -28,7 +32,8 @@ let Role = `
         userType:String,
         about:String,
         assignRoles:[AssignRoles],
-        modules: [Modules]
+        modules: [Modules],
+        isActive:Boolean
   }
   
   scalar Date
@@ -59,9 +64,7 @@ let Role = `
   
   input modules{
       moduleId:String,
-      actions : [actions]
-      fieldRestrictions: [fieldRestrictions],
-      permissions:[permissions],
+      actions : [actions],
       moduleName:String,
       validFrom:String,
       validTo:String,

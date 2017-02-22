@@ -57,6 +57,20 @@ MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info
 }
 
 MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info) =>{
+  let subDepartment = MlSubDepartments.findOne({_id: args.subDepartmentId});
+  if(subDepartment)
+  {
+    /* for(key in args.department){
+     cluster[key] = args.department[key]
+     }*/
+    let resp = MlSubDepartments.update({_id:args.subDepartmentId}, {$set:args.subDepartment}, {upsert:true})
+    if(resp){
+      let code = 200;
+      let result = {cluster: resp}
+      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+      return response
+    }
+  }
 
 }
 
@@ -81,7 +95,7 @@ MlResolver.MlQueryResolver['fetchActiveSubDepartments'] = (obj, args, context, i
 MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
-    let response= MlSubDepartments.findOne({"departmentId":id})||[];
+    let response= MlSubDepartments.find({"departmentId":id}).fetch()||[];
     return response;
   }
 }

@@ -6,7 +6,8 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
-import {addRoleActionHandler} from '../actions/addRoleAction'
+import {updateRoleActionHandler} from '../actions/updateRoleAction'
+import {findRoleActionHandler} from '../actions/findRoleAction'
 import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
@@ -17,6 +18,8 @@ class MlEditRole extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      loading:true,
+      data:{},
       assignRoleToClusters:[],
       assignModulesToRoles:[],
       selectedUserType:'',
@@ -66,7 +69,7 @@ class MlEditRole extends React.Component{
     console.log(this.state.assignRoleToClusters)
   }
 
-  async  createRole() {
+  async  updateRole() {
     let roleDetails = {
       roleName: this.refs.roleName.value,
       displayName:this.refs.diplayName.value,
@@ -78,7 +81,7 @@ class MlEditRole extends React.Component{
       isActive:this.refs.status.checked
     }
     console.log(roleDetails)
-    const response = await addRoleActionHandler(roleDetails)
+    const response = await updateRoleActionHandler(roleDetails)
     return response;
 
   }
@@ -94,6 +97,21 @@ class MlEditRole extends React.Component{
     this.setState({selectedroleType:val.value})
   }
 
+  async findRole(){
+    let roleid=this.props.config
+    const response = await findRoleActionHandler(roleid);
+    if(response) {
+      this.setState({loading:false,data:response});
+      this.setState({selectedUserType:this.state.data.userType})
+      this.setState({selectedroleType:this.state.data.roleType})
+    }
+  }
+
+  componentWillMount() {
+    const resp=this.findRole();
+    return resp;
+  }
+
   render(){
     let MlActionConfig = [
       {
@@ -104,7 +122,7 @@ class MlEditRole extends React.Component{
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.updateRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -136,11 +154,11 @@ class MlEditRole extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text"  ref="roleName" placeholder="Role Name" className="form-control float-label" id=""/>
+                      <input type="text"  ref="roleName" defaultValue={this.state.data&&this.state.data.roleName} placeholder="Role Name" className="form-control float-label" id=""/>
 
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="diplayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="diplayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
 
                     </div>
                     <div className="form-group">
@@ -153,10 +171,10 @@ class MlEditRole extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <textarea placeholder="About" ref="about" className="form-control float-label"></textarea>
+                      <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>
                     </div>
 
-                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)}/>
+                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} assignedClusterDetails={this.state.data&&this.state.data.assignRoles}/>
 
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>
@@ -174,7 +192,7 @@ class MlEditRole extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right"  >
-            <MlAssignModulesToRoles getassignModulesToRoles={this.getassignModulesToRoles.bind(this)}/>
+            <MlAssignModulesToRoles getassignModulesToRoles={this.getassignModulesToRoles.bind(this)} assignModulesToRolesData={this.state.data&&this.state.data.modules}/>
           </div>
 
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

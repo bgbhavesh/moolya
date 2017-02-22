@@ -54,6 +54,7 @@ import MlAddTransaction from '../../admin/settings/transactions/component/MlAddT
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
 
+import MlClusterListView from '../../admin/cluster/components/MlClusterListView'
 import MlClusterView from '../../admin/cluster/components/MlClusterView'
 import MlChapterView from '../../admin/chapter/components/MlChapter'
 import MlSubChapterView from '../../admin/dashboard/component/MlSubChapterList'
@@ -145,14 +146,14 @@ adminSection.route('/clusters', {
   name: 'cluster',
   action(){
     // mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer mapConfig={mlClusterDashboardMapConfig} />})
-      mount(AdminLayout,{adminContent:<MlClusterView mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
+      mount(AdminLayout,{adminContent:<MlClusterListView mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
   }
 });
 
-adminSection.route('/clusters/:clusterId', {
+adminSection.route('/clusters/clusterview/:clusterId', {
     name: 'cluster',
     action(params){
-      mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
+      mount(AdminLayout,{adminContent:< MlClusterView params={params.clusterId}/>})
     }
 });
 
@@ -166,7 +167,7 @@ adminSection.route('/cluster/clusters', {
   }
 });
 
-adminSection.route('/cluster/clusterDetails/:clusterId', {
+adminSection.route('/cluster/clusterDetails/:clusterId/', {
   name: 'cluster',
   action(params){
     mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
@@ -387,7 +388,7 @@ adminSection.route('/settings/createRole', {
     mount(AdminLayout,{adminContent:< MlAddRole/>})
   }
 });
-adminSection.route('/settings/editRoleType/:id', {
+adminSection.route('/settings/editRole/:id', {
   name: 'settings_EditRoleType',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditRoleType  config={params.id}/>})

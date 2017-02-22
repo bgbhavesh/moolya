@@ -81,13 +81,26 @@ class MlEditDepartment extends React.Component{
 
 
   onStatusChange(e){
-         const data=this.state.data;
-         if(e.currentTarget.checked){
-           this.setState({"data":{"isActive":true}});
-         }else{
-           this.setState({"data":{"isActive":false}});
-         }
-         }
+          let updatedData = this.state.data||{};
+          updatedData=_.omit(updatedData,["isActive"]);
+          if (e.currentTarget.checked) {
+            var z=_.extend(updatedData,{isActive:true});
+            this.setState({data:z,loading:false});
+          } else {
+            var z=_.extend(updatedData,{isActive:false});
+            this.setState({data:z,loading:false});
+          }
+  }
+
+  onMoolyaChange(e){
+    const data=this.state.data;
+    if(e.currentTarget.checked){
+      this.setState({"data":{"isMoolya":true}});
+    }else{
+      this.setState({"data":{"isMoolya":false}});
+    }
+  }
+
 
   render(){
     let MlActionConfig = [
@@ -134,7 +147,7 @@ class MlEditDepartment extends React.Component{
                 <div className="form-group switch_wrap">
                   <label>Status</label><br/>
                   <label className="switch">
-                    <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive}/>
+                    <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                     <div className="slider"></div>
                   </label>
                 </div>
@@ -147,7 +160,7 @@ class MlEditDepartment extends React.Component{
                   <div className="form-group switch_wrap switch_names">
                     <label>Select Type</label><br/>
                     <span className="state_label acLabel">moolya</span><label className="switch">
-                    <input type="checkbox" ref="appType" checked={this.state.data&&this.state.data.isMoolya}/>
+                    <input type="checkbox" ref="appType" checked={this.state.data&&this.state.data.isMoolya} onChange={this.onMoolyaChange.bind(this)}/>
                     <div className="slider"></div>
                   </label>
                     <span className="state_label">non-moolya</span>

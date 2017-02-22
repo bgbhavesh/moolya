@@ -62,6 +62,8 @@ let chapterSchema = `
         isEmailNotified: String 
         showOnMap : Boolean
         isActive: Boolean
+        latitude:String
+        longitude:String
     }
     
     input subChapterDataAcessMatrix{

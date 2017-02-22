@@ -5,13 +5,12 @@ let subDepartmentSchema = `
    
     type SubDepartment{
         _id:String,
-        subDepartmentName :String,
-        displayName :String,
-        aboutSubDepartment: String,
-        departmentId: String,
+         subDepartmentName:String,
+        displayName:String,
+        aboutSubDepartment:String,
         isActive:Boolean,
-        email:String,
-        isMoolya : Boolean,
+        departmentId:String,
+        isMoolya:Boolean,
         subDepatmentAvailable: [subDepatmentAvailable]
     }
     

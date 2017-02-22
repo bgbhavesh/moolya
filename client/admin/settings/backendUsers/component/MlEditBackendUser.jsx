@@ -36,7 +36,9 @@ class MlEditBackendUser extends React.Component{
     this.updateBackendUser.bind(this);
     this.onBackendUserTypeSelect.bind(this);
     this.onBackendUserSelect.bind(this);
-    this.onStatusChanged.bind(this)
+    this.onGlobalStatusChanged = this.onGlobalStatusChanged.bind(this);
+    this.onisActiveChanged= this.onisActiveChanged.bind(this);
+    // this.onisDefultChanged=this.onisDefultChanged.bind(this);
     /*this.onClusterSelect.bind(this);
     this.onChapterSelect.bind(this);
     this.onDepartmentSelect.bind(this);
@@ -87,19 +89,29 @@ class MlEditBackendUser extends React.Component{
      this.setState({loading:false,data:response});
       this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
       this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
-     /* this.setState({mlAssignDepartmentDetails:this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment})
-      this.setState({mlAssignContactDetails:this.state.data.profile.InternalUprofile.moolyaProfile.contact})*/
-
     }
-
-
   }
-  onStatusChanged(e){
+
+
+
+  onGlobalStatusChanged(e){
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["profile.InternalUprofile.moolyaProfile.globalAssignment"]);
+    if (e.currentTarget.checked) {
+      var z=_.extend(updatedData,{globalAssignment:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{globalAssignment:false});
+      this.setState({data:z,loading:false});
+    }
+  }
+
+  onisActiveChanged(event){
     const data=this.state.data;
-    if(e.currentTarget.checked){
-      this.setState({"data":{"profile":{"InternalUprofile":{"moolyaProfile":{"globalAssignment":true}}}}});
+    if(event.currentTarget.checked){
+      this.setState({"data":{"profile":{"InternalUprofile":{"moolyaProfile":{"isActive":true}}}}});
     }else{
-      this.setState({"data":{"profile":{"InternalUprofile":{"moolyaProfile":{"globalAssignment":true}}}}});
+      this.setState({"data":{"profile":{"InternalUprofile":{"moolyaProfile":{"isActive":false}}}}});
     }
   }
 
@@ -217,6 +229,10 @@ class MlEditBackendUser extends React.Component{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
 `;
+    let rolequery=gql` query{
+    data:fetchActiveRoles{label:roleName,value:_id}
+    }
+`;
     const showLoader=this.state.loading;
     return (
       <div>
@@ -248,7 +264,7 @@ class MlEditBackendUser extends React.Component{
                   </div>
                   <div className="form-group">
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />
                   </div>
                   <div className="form-group">
                     <input type="Password" ref="password" placeholder="Create Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
@@ -279,12 +295,12 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="email" placeholder="Email id" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.email} className="form-control float-label" id=""/>
                   </div>
 
-                  <MlContactFormComponent getAssignedContacts={this.getAssignedContacts.bind(this)} contacts={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.contact}/>
+                  <MlContactFormComponent getAssignedContacts={this.getAssignedContacts.bind(this)} contacts={this.state.data && this.state.data.profile.InternalUprofile.moolyaProfile.contact}/>
 
                   <div className="form-group switch_wrap inline_switch">
                     <label>Global Assignment Availability</label>
                     <label className="switch">
-                      <input type="checkbox" checked={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment}  onchange={this.onStatusChanged.bind(this)} ref="globalAssignment"/>
+                      <input type="checkbox" ref="globalAssignment" checked={this.state.data && this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment}  onChange={this.onGlobalStatusChanged.bind(this)} />
                       <div className="slider"></div>
                     </label>
                   </div>
@@ -292,7 +308,7 @@ class MlEditBackendUser extends React.Component{
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" ref="isActive"/>
+                      <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.profile.InternalUprofile.moolyaProfile.isActive}  onChange={this.onisActiveChanged.bind(this)} />
                       <div className="slider"></div>
                     </label>
                   </div>

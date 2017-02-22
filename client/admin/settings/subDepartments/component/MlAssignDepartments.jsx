@@ -11,6 +11,7 @@ export default class MlAssignDepartments extends React.Component {
       selectedValue:null,
       departmentAvailability:[{cluster: [{clusterId:''}],chapter:'',subChapter:'',email:'',isActive:false }]
     }
+    this.onStatusChange=this.onStatusChange.bind(this);
     return this;
   }
   AssignDepartmentAvailability(id){
@@ -90,7 +91,7 @@ export default class MlAssignDepartments extends React.Component {
     this.setState({departmentAvailability:availabilityDetails})
     this.props.getDepartmentAvailability(this.state.departmentAvailability)
   }
-  onChange(id,event){
+  onStatusChange(id,event){
     let filedName=event.target.name
     let fieldValue=event.target.value;
       if(filedName=='isActive'){
@@ -126,13 +127,13 @@ export default class MlAssignDepartments extends React.Component {
 
     <div>
 
-      <div className="form-group"> <a onClick={that.AssignDepartmentAvailability.bind(this)} className="mlUpload_btn">Add</a></div>
+      <div className="form-group"> {/*<a onClick={that.AssignDepartmentAvailability.bind(this)} className="mlUpload_btn">Add</a>*/}</div>
         {that.state.departmentAvailability.map(function(options,id){
           let chapterOption={options: { variables: {id:options.cluster[0].clusterId}}};
           let subChapterOption={options: { variables: {id:options.chapter}}}
           return(
             <div className="panel panel-default" key={id}>
-              <div className="panel-heading">Assign Department<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentAvailability.bind(that,id)}><img src="/images/remove.png"/></div></div>
+              <div className="panel-heading">Assign Department{/*<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentAvailability.bind(that,id)}><img src="/images/remove.png"/></div>*/}</div>
               <div className="panel-body">
 
                 <div className="form-group" >
@@ -157,7 +158,7 @@ export default class MlAssignDepartments extends React.Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" name={'isActive'} value={options.isActive} onChange={that.onChange.bind(that,id)} />
+                    <input type="checkbox" name={'isActive'} checked={options.isActive} onChange={that.onStatusChange.bind(that,id)} />
                     <div className="slider"></div>
                   </label>
                 </div>

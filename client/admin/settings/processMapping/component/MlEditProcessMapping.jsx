@@ -6,9 +6,10 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
+import MlAssignDocument from './MlAssignDocument'
 import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {findProcessActionHandler} from '../actions/findProcessAction'
-import MlAssignDocument from './MlAssignDocument'
+
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 
@@ -35,6 +36,7 @@ class MlEditProcessMapping extends React.Component{
       isActive    : ''
     }
     this.addEventHandler.bind(this);
+    this.getAssignedDocuments.bind(this)
     return this;
   }
   componentDidMount()
@@ -51,6 +53,11 @@ class MlEditProcessMapping extends React.Component{
       }
     });
   }
+  componentWillMount() {
+    const resp=this.findProcess();
+    return resp;
+
+  }
   async addEventHandler() {
     const resp=await this.createBackendUser();
     return resp;
@@ -65,17 +72,14 @@ class MlEditProcessMapping extends React.Component{
     FlowRouter.go("/admin/settings/processList");
   };
 
-  getassignDocuments(details){
-    console.log("details->"+details);
-    this.setState({'assignDocuments':details})
-  }
 
   async findProcess(){
     let pid=this.props.config
     const response = await findProcessActionHandler(pid);
-
+    this.setState({loading: false, data: response});
     if(response) {
-      this.setState({loading: false, data: response});
+
+      console.log(this.state.data.documents)
       this.setState({processId: this.state.data.processId});
       this.setState({id: this.state.data._id});
       if (this.state.data.process) {
@@ -114,17 +118,6 @@ class MlEditProcessMapping extends React.Component{
         this.setState({subChapters: [{id: subChaptersId}]});
       }
     }
-
-  }
-
-
-  onSubmit(){
-    console.log(this.state.assignDocuments)
-  }
-
-  componentWillMount() {
-    const resp=this.findProcess();
-    return resp;
 
   }
   async  updateProcess() {
@@ -336,7 +329,21 @@ class MlEditProcessMapping extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right"  >
-        <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)}/>
+            <div className="form_bg" >
+              <div className="left_wrap">
+
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <form style={{marginTop:'0px'}}>
+                    {this.state.data?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents}/>):""}
+                  </form>
+                </ScrollArea>
+              </div>
+            </div>
           </div>
 
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

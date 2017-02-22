@@ -100,13 +100,16 @@ class MlEditSubDepartment extends React.Component{
   getMoolyaDepartmentAvailability(details){
     this.setState({'subDepatmentAvailable':details})
   }
-  onStatusChange(e){
-     const data=this.state.data;
-     if(e.currentTarget.checked){
-       this.setState({"data":{"isActive":true}});
-     }else{
-       this.setState({"data":{"isActive":false}});
-     }
+  onSubDepartmentStatusChange(e){
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["isActive"]);
+    if (e.currentTarget.checked) {
+      var z=_.extend(updatedData,{isActive:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{isActive:false});
+      this.setState({data:z,loading:false});
+    }
   }
 
   render(){
@@ -150,7 +153,7 @@ class MlEditSubDepartment extends React.Component{
                     <div className="form-group switch_wrap inline_switch">
                       <label>Status</label>
                       <label className="switch">
-                        <input type="checkbox" ref="subDepartmentStatus" checked={this.state.data&&this.state.data.isActive}/>
+                        <input type="checkbox" ref="subDepartmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onSubDepartmentStatusChange.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>
@@ -167,7 +170,7 @@ class MlEditSubDepartment extends React.Component{
                   >
                     <form>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'} onSelect={this.optionsBySelectDepartment.bind(this)} />
+                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} disabled={true} selectedValue={this.state.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'} onSelect={this.optionsBySelectDepartment.bind(this)} />
                       </div>
                       {this.state.data!=''&&(<div>
                         <div className="form-group switch_wrap switch_names" disabled="true">

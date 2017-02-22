@@ -14,10 +14,20 @@ export default class MlAssignDepartmentComponent extends React.Component {
     return this;
   }
   componentDidMount() {
+    this.props.getAssignedDepartments(this.state.assignDepartmentForm);
+  }
+  componentWillMount(){
     let assignDepartmentForm = this.props.departments
     if(assignDepartmentForm){
-      this.setState({assignDepartmentForm: assignDepartmentForm});
-      //this.props.getAssignedDepartments(this.state.assignDepartmentForm);
+      let assgnDepartmentDetails=[]
+      for(let i=0;i<assignDepartmentForm.length;i++){
+        let json={
+          department:assignDepartmentForm[i].department,
+          subDepartment:assignDepartmentForm[i].subDepartment
+        }
+        assgnDepartmentDetails.push(json)
+      }
+      this.setState({assignDepartmentForm: assgnDepartmentDetails})
     }
 
   }
@@ -57,7 +67,12 @@ export default class MlAssignDepartmentComponent extends React.Component {
   data:fetchActiveDepartment{label:departmentName,value:_id}
 }
 `;
-    let subdepartmentquery=gql`query($id:String){data:fetchActiveSubDepartments(departmentId:$id){label:subDepartmentName, value:_id}}`
+   let subDepartmentquery=gql`query($id:String){
+      data:fetchSubDepartments(id:$id) {
+        value:_id
+        label:subDepartmentName
+      }
+    }`
 
    return(
      <div>
@@ -77,7 +92,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
              </div>
              <div className="form-group">
               {/* <Select name="form-field-name" value={assignDepartmentForm.subdepartment} options={options3} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
-                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Sub-Department" selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subdepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Sub-Department" selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subDepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
               </div>
            </div>
          </div>

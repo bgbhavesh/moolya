@@ -19,18 +19,14 @@ export const mlBackendUserListConfig=new MlViewer.View({
     {
       actionName: 'edit',
       showAction: true,
-      handler: (data)=>{
-        if(data && data.id){
-          FlowRouter.go("/admin/settings/editUserType/"+data.id);
-        } else{
-          alert("Please select a User Type");
-        }
-      }
+      handler: null
     },
     {
       showAction: true,
       actionName: 'add',
-      handler: null
+      handler: (data)=>{
+        FlowRouter.go("/admin/settings/addBackendUser")
+      }
     },
     {
       showAction: true,

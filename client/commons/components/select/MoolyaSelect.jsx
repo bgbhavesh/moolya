@@ -109,7 +109,7 @@ export default class MoolyaSelect extends Component {
     return(
       <div>
         {executeQuery&&<QueryExecutor />}
-        {<Select  multi={this.props.multiSelect} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
+        {<Select  multi={this.props.multiSelect} disabled={this.props.disabled} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch.bind(this)} onChange={this.onchangeOption.bind(this)}/>}
       </div>
     )
   }

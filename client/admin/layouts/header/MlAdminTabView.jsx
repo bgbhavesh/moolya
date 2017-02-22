@@ -49,6 +49,17 @@ export default class MlTabView extends Component {
       const menuLinkHandlerConfig={
         "editCluster":function(params,queryParams){
               return '/admin/cluster/'+params.cluserId;
+        },
+        "dashboard_chapters":function(params,queryParams){
+             let dynamicParams=params||{};
+              if(_.has(dynamicParams,"clusterId")&&_.has(dynamicParams,"chapterId")){
+                return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters`;
+              }else if(_.has(dynamicParams,"clusterId")){
+                return `/admin/dashboard/${dynamicParams.clusterId}/chapters`;
+              }else{
+                return '/admin/dashboard/chapters';
+              }
+          return '';
         }
       }
       let menuLinkHandler=menuLinkHandlerConfig[path];

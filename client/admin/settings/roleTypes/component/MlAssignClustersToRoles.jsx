@@ -43,6 +43,25 @@ export default class MlAssignClustersToRoles extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
+    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+  }
+  componentWillMount() {
+    let assignedClusterDetails=this.props.assignedClusterDetails
+    if(assignedClusterDetails){
+      let assignedClusterDetailsForm=[]
+      for(let i=0;i<availabilityDetails.length;i++){
+        let json={
+          cluster:assignedClusterDetails[i].cluster,
+          chapter:assignedClusterDetails[i].chapter,
+          subChapter:assignedClusterDetails[i].subChapter,
+          department:assignedClusterDetails[i].department,
+          subDepartment:assignedClusterDetails[i].subDepartment,
+          isActive:assignedClusterDetails[i].isActive
+        }
+        assignedClusterDetailsForm.push(json)
+      }
+      this.setState({assignRoleToClusters:assignedClusterDetailsForm})
+    }
   }
   optionsBySelectCluster(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters

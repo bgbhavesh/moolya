@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
-import {findRoleActionHandler} from '../actions/findRoleTypeAction'
+import {findRoleActionHandler} from '../actions/findRoleAction'
 import {addRoleActionHandler} from '../actions/addRoleAction'
 import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'

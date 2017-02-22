@@ -387,7 +387,7 @@ adminSection.route('/settings/createRole', {
     mount(AdminLayout,{adminContent:< MlAddRole/>})
   }
 });
-adminSection.route('/settings/editRoleType/:id', {
+adminSection.route('/settings/editRole/:id', {
   name: 'settings_EditRoleType',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditRoleType  config={params.id}/>})

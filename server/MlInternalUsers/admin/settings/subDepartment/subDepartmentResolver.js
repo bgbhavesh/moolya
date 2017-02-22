@@ -95,7 +95,7 @@ MlResolver.MlQueryResolver['fetchActiveSubDepartments'] = (obj, args, context, i
 MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
-    let response= MlSubDepartments.findOne({"departmentId":id})||[];
+    let response= MlSubDepartments.find({"departmentId":id}).fetch()||[];
     return response;
   }
 }

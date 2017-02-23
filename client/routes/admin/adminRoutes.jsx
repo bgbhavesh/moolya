@@ -67,44 +67,31 @@ adminSection.route('/dashboard/subChapters/:chapterId', {
     mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer/>})
   }
 });*/
-adminSection.route('/clusters', {
-  name: 'cluster',
-  action(){
-    // mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer mapConfig={mlClusterDashboardMapConfig} />})
-      mount(AdminLayout,{adminContent:<MlClusterListView mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
-  }
-});
-
-adminSection.route('/clusters/clusterview/:clusterId', {
-    name: 'cluster',
-    action(params){
-      mount(AdminLayout,{adminContent:< MlClusterView params={params.clusterId}/>})
-    }
-});
 
 
 
 
-adminSection.route('/cluster/clusters', {
-  name: 'cluster',
-  action(){
-    mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
-  }
-});
 
-adminSection.route('/cluster/clusterDetails/:clusterId/', {
-  name: 'cluster',
-  action(params){
-    mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
-  }
-});
-
-adminSection.route('/cluster/internal_users', {
-  name: 'cluster',
-  action(params){
-      mount(AdminLayout,{adminContent:< MlAssignBackendUsers />})
-  }
-});
+// adminSection.route('/cluster/clusters', {
+//   name: 'cluster',
+//   action(){
+//     mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
+//   }
+// });
+//
+// adminSection.route('/cluster/clusterDetails/:clusterId/', {
+//   name: 'cluster',
+//   action(params){
+//     mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
+//   }
+// });
+//
+// adminSection.route('/cluster/internal_users', {
+//   name: 'cluster',
+//   action(params){
+//       mount(AdminLayout,{adminContent:< MlAssignBackendUsers />})
+//   }
+// });
 
 adminSection.route('/chapter', {
   name: 'chapter',

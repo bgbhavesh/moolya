@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateCitizenship'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlCitizenship.insert(args);
+  let id = MlCitizenship.insert({...args});
   if (id) {
     let code = 200;
     let result = {citizenshipId: id}

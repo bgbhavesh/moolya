@@ -41,6 +41,8 @@ export default class MlAdminLeftNav extends Component {
 
   render() {
     let path = FlowRouter.current().route.name;
+    if(path == 'clusterview')
+      path = 'cluster'
 
     //let data = this.props.data && this.props.data.data ? this.props.data.data : {};
     let data = this.context.menu||{};
@@ -71,7 +73,7 @@ export default class MlAdminLeftNav extends Component {
         activeClass = 'active_menu'
       }
       return (
-        <li className={`menu_item ${activeClass} `} key={dataItem.name}>
+        <li className={`menu_item ${activeClass} `} key={dataItem.uniqueId}>
           <a href={dataItem.link} id={dataItem.uniqueId}>
             <div className={"menu_in"}>
               <img src={dataItem.image}/>

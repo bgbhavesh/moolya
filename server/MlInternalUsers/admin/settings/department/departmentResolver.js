@@ -6,7 +6,7 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
-    let id = MlDepartments.insert(args.department);
+    let id = MlDepartments.insert({...args.department});
     if(id){
         let code = 200;
         let result = {clusterid: id}

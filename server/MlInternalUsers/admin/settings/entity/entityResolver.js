@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateEntity'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlEntity.insert(args);
+  let id = MlEntity.insert({...args});
   if (id) {
     let code = 200;
     let result = {entityId: id}

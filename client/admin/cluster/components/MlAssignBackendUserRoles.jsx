@@ -26,7 +26,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
       super(props)
       this.state={
           roleForm:[],
-          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:"", chapterId:"", subChapterId:"", hierarchyLevel:""}],
+          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"", hierarchyLevel:""}],
           selectedRole:""
       }
       this.findUserDepartments.bind(this);
@@ -72,20 +72,20 @@ export default class MlAssignBackednUserRoles extends React.Component{
       });
       mySwiper.updateContainerSize()
       this.setState({
-          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:"", chapterId:"", subChapterId:""}])
+          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:""}])
       });
   }
 
-  onChange(id,event, department){
+  onChange(id,event){
       let roleDetails=this.state.roleDetails
       let filedName=event.target.name
       let fieldValue=event.target.value;
       if(filedName=='status'){
         fieldValue=event.target.checked;
-        roleDetails[index]['isActive']=selectedValue
+        roleDetails[id]['isActive']=fieldValue
       }
       else {
-          roleDetails[index][[filedName]]=selectedValue
+          roleDetails[id][[filedName]]=fieldValue
       }
       this.setState({roleDetails:roleDetails})
       this.props.getAssignedRoles(this.state.roleDetails)
@@ -105,10 +105,11 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   async findUserDepartments(){
-     let userId = this.props.userId;
-      const response = await findUserDepartmentypeActionHandler(userId);
-      let data = response ? response && response.profile && response.profile.InternalUprofile && response.profile.InternalUprofile.moolyaProfile && response.profile.InternalUprofile.moolyaProfile.assignedDepartment : []
-      this.setState({loading:false,roleForm:data});
+    let userId = this.props.userId;
+    let clusterId = this.props.clusterId;
+    const response = await findUserDepartmentypeActionHandler(userId, clusterId);
+    let data = response ? response : []
+    this.setState({loading:false,roleForm:data});
   }
 
   render(){
@@ -118,8 +119,8 @@ export default class MlAssignBackednUserRoles extends React.Component{
     return(
       <div>
         {userDepartments.map(function (department) {
-          let queryOptions = {options: { variables: {departmentId:department.department, subdepartmentId:department.subDepartment}}};
-          let query = gql`query($departmentId:String, $subdepartmentId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, subDepartmentId: $subdepartmentId) {value:_id, label:roleName}}`;
+          let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId}}};
+          let query = gql`query($departmentId:String, $clusterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId) {value:_id, label:roleName}}`;
           return(
             <div className="panel panel-default">
               <div className="panel-heading">Assign Role</div>

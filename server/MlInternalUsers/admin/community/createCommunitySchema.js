@@ -13,6 +13,10 @@ let CommunitySchema = `
       isActive : Boolean
     }
    
+   type MapData {
+   key:String,
+   count:Int
+   }
     
     type Mutation 
     {
@@ -26,7 +30,10 @@ let CommunitySchema = `
           about:String,
           isActive:Boolean):String
     }
-    
+     type Query{
+        FetchMapData(moduleName:String,id:String):[MapData]
+    }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],CommunitySchema]);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], CommunitySchema]);
+

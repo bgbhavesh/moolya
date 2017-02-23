@@ -37,6 +37,7 @@ const mlClusterDashboardListConfig=new MlViewer.View({
 
 const mlClusterDashboardMapConfig=new MlViewer.View({
   name:"clusterDashBoardMap",
+  module:"cluster",
   viewType:MlViewerTypes.MAP,
   extraFields:[],
   fields:["userName","mobileNumber","eMail","city","regType"],

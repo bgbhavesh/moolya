@@ -90,16 +90,28 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
 
 MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>{
   console.log(args);
-  if(args && args.userId && args.clusterId){
-      let clusterDep = MlDepartments.find({"depatmentAvailable.cluster.clusterId":args.clusterId}).fetch();
-      let user = Meteor.users.findOne({"_id":args.userId});
-      if(user && clusterDep && clusterDep.length > 0){
-          let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
-          let dep = _.intersectionWith(clusterDep, userDep, _.isEqual);
-          console.log(dep)
+  let dep = []
+  let user = Meteor.users.findOne({"_id":args.userId})
+  let clusterDep = MlDepartments.find({"depatmentAvailable.cluster.clusterId":args.clusterId}).fetch();
+  if(user && clusterDep && clusterDep.length > 0){
+    let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
+    // let dep = _.intersectionWith(clusterDep, userDep, _.isEqual);
+    // let dep = _.intersectionBy(clusterDep, userDep, 'myName');
+    // let dep = clusterDep.filter(function (e) {
+    //   return userDep.indexOf(e) > -1;
+    // });
+
+    for(var i = 0; i < clusterDep.length; i++){
+      for(var j = 0; j<userDep.length; j++){
+        if(userDep[j].department == clusterDep[i]._id){
+          dep.push(userDep[j]);
+        }
       }
+    }
+
+    console.log(dep)
   }
-  return Meteor.users.findOne({"_id":args.userId})
+  return dep
 }
 
 /*

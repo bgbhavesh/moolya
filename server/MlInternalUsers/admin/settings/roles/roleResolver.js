@@ -2,6 +2,8 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
+var _ = require('lodash');
+
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) =>{
   return MlRoles.findOne({name});
 }
@@ -47,10 +49,21 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 
 
 
-MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) =>
+{
+  let roles = [];
 
-    let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
-    return roles;
+  if(args.departmentId && args.clusterId){
+      roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
+  }
+
+  _.remove(roles, function (role) {
+      return role.roleName == 'platformadmin'
+  })
+
+  return roles;
+    // let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
+
 }
 
 MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {

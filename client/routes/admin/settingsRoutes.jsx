@@ -81,6 +81,9 @@ import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEd
 import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
 import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
 import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'
+import MlAddLanguage from '../../admin/settings/language/component/MlAddLanguage'
+import MlLanguagesList from '../../admin/settings/language/component/MlLanguagesList'
+import MlEditLanguage from '../../admin/settings/language/component/MlEditLanguage'
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -532,5 +535,23 @@ adminSection.route('/settings/editRegional/:id', {
   name: 'settings_EditRegional',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditRegional config={params.id} />})
+  }
+});
+adminSection.route('/settings/languagesList', {
+  name: 'settings_LanguagesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlLanguagesList/>})
+  }
+});
+adminSection.route('/settings/addLanguage', {
+  name: 'settings_AddLanguage',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddLanguage />})
+  }
+});
+adminSection.route('/settings/editLanguage/:id', {
+  name: 'settings_EditLanguage',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditLanguage config={params.id} />})
   }
 });

@@ -246,10 +246,61 @@ if(Meteor.isServer){
               }
             ]
           },
-
-
         ]
-      }
+      },
+      {
+        "image" : "/images/settings_icon.png",
+        "link" : "/admin/settings/languagesList",
+        "name" : "settings",
+        "uniqueId" : "settings",
+        "isLink" : true,
+        "isMenu" : true,
+        "subMenu" : [
+          {
+            "link" : "/admin/settings/languagesList",
+            "name" : "Regional",
+            "uniqueId" : "settings_Language",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addLanguage",
+                "name": "Add Language",
+                "uniqueId": "settings_AddLanguage",
+                "subMenuMappingId":"settings_Language",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/languagesList",
+                "name": "List Language",
+                "uniqueId": "settings_LanguagesList",
+                "subMenuMappingId":"settings_Language",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editLanguage",
+                "name": "Edit Language",
+                "uniqueId": "settings_EditLanguage",
+                "subMenuMappingId":"settings_Language",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+        ]
+      },
+
+
     ]
   }});
 }

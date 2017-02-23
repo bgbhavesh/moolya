@@ -140,6 +140,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
+  if(args.module=="language"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -246,6 +250,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
 
     if(data.regionalCurrencyName){
       return 'Regional'
+    }
+    if(data.languageName){
+      return 'Language'
     }
     return null;
   }

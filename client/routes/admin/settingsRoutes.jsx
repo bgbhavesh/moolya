@@ -77,6 +77,9 @@ import MlEditCitizenshipType from '../../admin/settings/citizenship/component/Ml
 import MlLookingForTypeList from '../../admin/settings/lookingFor/component/MlLookingForTypeList'
 import MlAddLookingForType from '../../admin/settings/lookingFor/component/MlAddLookingForType'
 import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEditLookingForType'
+import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
+import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
+import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
 
 import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
 import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
@@ -553,5 +556,24 @@ adminSection.route('/settings/editLanguage/:id', {
   name: 'settings_EditLanguage',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditLanguage config={params.id} />})
+  }
+});
+
+adminSection.route('/settings/taxTypeList', {
+  name: 'settings_TaxTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTaxTypeList/>})
+  }
+});
+adminSection.route('/settings/addTaxType', {
+  name: 'settings_AddTaxType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTaxType />})
+  }
+});
+adminSection.route('/settings/editTaxType/:id', {
+  name: 'settings_EditTaxType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTaxType config={params.id} />})
   }
 });

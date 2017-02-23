@@ -26,7 +26,6 @@ aldeed:collection2
 kadira:flow-router
 wylio:mandrill
 
-force-ssl
 aldeed:simple-schema
 meteorhacks:npm
 chrismbeckett:toastr

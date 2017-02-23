@@ -80,6 +80,11 @@ import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEd
 import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
 import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
 import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
+
+import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
+import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
+import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'
+
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
   action(){
@@ -512,6 +517,24 @@ adminSection.route('/settings/editLookingFor/:id', {
   name: 'settings_EditLookingForType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
+  }
+});
+adminSection.route('/settings/regionalsList', {
+  name: 'settings_RegionalsList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlRegionalsList/>})
+  }
+});
+adminSection.route('/settings/addregional', {
+  name: 'settings_AddRegional',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddRegional />})
+  }
+});
+adminSection.route('/settings/editRegional/:id', {
+  name: 'settings_EditRegional',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditRegional config={params.id} />})
   }
 });
 

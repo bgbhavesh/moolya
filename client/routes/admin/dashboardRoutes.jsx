@@ -10,10 +10,9 @@ import {mlSubChapterDashboardMapConfig,mlSubChapterDashboardListConfig} from '..
 import MlCommunityList from "../../admin/dashboard/component/MlCommunityList";
 
 adminSection.route('/dashboard', {
-  name: 'dashboard',
-    action(){
-      mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlClusterDashboardMapConfig} listConfig={mlClusterDashboardListConfig} />})
-    }
+  triggersEnter: [function(context, redirect) {
+    redirect('/admin/dashboard/clusters');
+  }]
 
 });
 

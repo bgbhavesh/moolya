@@ -28,6 +28,7 @@ export const adminSection = FlowRouter.group({
   name: 'admin',
   triggersEnter: [function(context, redirect) {
     console.log('running /adminPrefix trigger');
+     userId = Meteor.userId();
     if (!userId) {
       FlowRouter.go('/login')
     }
@@ -37,11 +38,10 @@ export const adminSection = FlowRouter.group({
 
 
 adminSection.route('/', {
-  action: function() {
-    FlowRouter.go("/admin/dashboard");
-  },
   triggersEnter: [function(context, redirect) {
     console.log('running /admin trigger');
+    //todo: route based on context-Internal User or External User
+    redirect("/admin/dashboard");
   }]
 });
 /*adminSection.route('/dashboard', {

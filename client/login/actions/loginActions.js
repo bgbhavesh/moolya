@@ -11,7 +11,7 @@ export let loginActionHandler = {
                 callback(result.reason)
             }
             else if(result && result.profile && result.profile.isInternaluser == "yes"){
-                FlowRouter.go("/admin/dashboard/clusters");
+                FlowRouter.redirect("/admin");
             }
         });
     },

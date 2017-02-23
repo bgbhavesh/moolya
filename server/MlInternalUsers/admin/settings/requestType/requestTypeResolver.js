@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateRequestType'] = (obj, args, context, info) => {
   // TODO : Authorization
-    let id = MlRequestType.insert(args);
+    let id = MlRequestType.insert({...args});
     if (id) {
       let code = 200;
       let result = {permissionId: id}

@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateTransaction'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlTransactions.insert(args);
+  let id = MlTransactions.insert({...args});
   if (id) {
     let code = 200;
     let result = {transactionId: id}

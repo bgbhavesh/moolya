@@ -27,7 +27,7 @@ MlResolver.MlMutationResolver['createKycCategory'] = (obj, args, context, info) 
     let code = 409;
     return new MlRespPayload().errorPayload("Already Exist", code);
   }
-  let id = MlDocumentCategories.insert(args.kycCategory);
+  let id = MlDocumentCategories.insert({...args.kycCategory});
   if(id){
     let code = 200;
     let result = {kycCategoryId: id}

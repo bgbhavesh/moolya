@@ -14,7 +14,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) =>{
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
-    let id = MlRoles.insert(args.role);
+    let id = MlRoles.insert({...args.role});
     if(id){
         let code = 200;
         let result = {roleId: id}

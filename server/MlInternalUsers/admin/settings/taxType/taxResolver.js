@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateTax'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlGlobalSettings.insert(args);
+  let id = MlGlobalSettings.insert({...args});
   if (id) {
     let code = 200;
     let result = {taxId: id}

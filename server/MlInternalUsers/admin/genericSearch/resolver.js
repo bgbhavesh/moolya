@@ -148,6 +148,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
+  if(args.module=="dateAndTime"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -260,6 +264,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.languageName){
       return 'Language'
+    }
+    if(data.timeFormat){
+      return 'DateAndTime'
     }
     return null;
   }

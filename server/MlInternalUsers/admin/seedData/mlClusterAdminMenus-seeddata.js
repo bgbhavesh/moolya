@@ -275,6 +275,47 @@ if(Meteor.isServer){
               }
             ]
           },
+          {
+            "link" : "/admin/settings/dateAndTimeList",
+            "name" : "Date And Time",
+            "uniqueId" : "settings_DateAndTime",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addDateAndTime",
+                "name": "Add Date And Time",
+                "uniqueId": "settings_AddDateAndTime",
+                "subMenuMappingId":"settings_DateAndTime",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/dateAndTimeList",
+                "name": "List Date And Time",
+                "uniqueId": "settings_DateAndTimeList",
+                "subMenuMappingId":"settings_DateAndTime",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDateAndTime",
+                "name": "Edit Date And Time",
+                "uniqueId": "settings_EditDateAndTime",
+                "subMenuMappingId":"settings_DateAndTime",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
     ]

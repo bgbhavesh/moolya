@@ -87,6 +87,9 @@ import MlEditRegional from '../../admin/settings/regional/component/MlEditRegion
 import MlAddLanguage from '../../admin/settings/language/component/MlAddLanguage'
 import MlLanguagesList from '../../admin/settings/language/component/MlLanguagesList'
 import MlEditLanguage from '../../admin/settings/language/component/MlEditLanguage'
+import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlAddDateAndTime'
+import MlDateAndTimeList from '../../admin/settings/dateAndTime/component/MlDateAndTimeList'
+import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEditDateAndTime'
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -556,6 +559,24 @@ adminSection.route('/settings/editLanguage/:id', {
   name: 'settings_EditLanguage',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditLanguage config={params.id} />})
+  }
+});
+adminSection.route('/settings/dateAndTimeList', {
+  name: 'settings_DateAndTimeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDateAndTimeList/>})
+  }
+});
+adminSection.route('/settings/addDateAndTime', {
+  name: 'settings_AddDateAndTime',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDateAndTime />})
+  }
+});
+adminSection.route('/settings/editDateAndTime/:id', {
+  name: 'settings_EditDateAndTime',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDateAndTime config={params.id} />})
   }
 });
 

@@ -234,16 +234,6 @@ if(Meteor.isServer){
               }
             ]
           },
-        ]
-      },
-      {
-        "image" : "/images/settings_icon.png",
-        "link" : "/admin/settings/languagesList",
-        "name" : "settings",
-        "uniqueId" : "settings",
-        "isLink" : true,
-        "isMenu" : true,
-        "subMenu" : [
           {
             "link" : "/admin/settings/languagesList",
             "name" : "Regional",
@@ -287,8 +277,6 @@ if(Meteor.isServer){
           },
         ]
       },
-
-
     ]
   }});
 }

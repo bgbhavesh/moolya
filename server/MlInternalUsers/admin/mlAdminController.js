@@ -49,7 +49,7 @@ console.log('Running a GraphQL API server at localhost:8090/graphql');
 // This binds the specified paths to the Express server running Apollo + GraphiQL
 WebApp.connectHandlers.use(Meteor.bindEnvironment(app));
 
-WebApp.rawConnectHandlers.use(proxyMiddleware(`http://localhost:8090/graphql`));
+WebApp.rawConnectHandlers.use(proxyMiddleware(Meteor.settings.private.graphql_proxy_url));
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'

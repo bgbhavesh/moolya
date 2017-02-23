@@ -47,7 +47,7 @@ MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
-    let id = MlSubDepartments.insert(args.subDepartment);
+    let id = MlSubDepartments.insert({...args.subDepartment});
     if(id){
         let code = 200;
         let result = {subDepartmentId: id}

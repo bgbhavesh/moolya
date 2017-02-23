@@ -6,7 +6,7 @@ MlResolver.MlMutationResolver['createRegional'] = (obj, args, context, info) => 
     let code = 409;
     return new MlRespPayload().errorPayload("Already Exist", code);
   }
-  let id = MlGlobalSettings.insert(args.regional);
+  let id = MlGlobalSettings.insert({...args.regional});
   if(id){
     let code = 200;
     let result = {regionalId: id}

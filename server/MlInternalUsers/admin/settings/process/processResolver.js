@@ -13,7 +13,7 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
-    let id = MlProcessMapping.insert(args.process);
+    let id = MlProcessMapping.insert({...args.process});
     if(id){
         let code = 200;
         let result = {roleId: id}

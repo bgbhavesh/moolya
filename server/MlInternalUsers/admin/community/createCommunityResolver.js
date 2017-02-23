@@ -14,7 +14,7 @@ MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) =>
     check(args.isActive, Boolean)
         //TODO : Duplicate Community Identification
         // TODO : Authorization
-        let id = MlCommunity.insert(args);
+        let id = MlCommunity.insert({...args});
         if(id){
             let code = 200;
             let result = {communityId: id}

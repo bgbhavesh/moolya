@@ -9,7 +9,7 @@ export default class MlClusterView extends React.Component {
 
     render(){
         return(
-          <div>srinag</div>
+          <div></div>
         )
     }
 

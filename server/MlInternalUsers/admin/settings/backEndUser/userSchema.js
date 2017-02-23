@@ -137,7 +137,7 @@ let BackEndUser = `
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
-        fetchUserDepSubDep(userId:String):BackendUsers
+        fetchUserDepSubDep(userId:String, clusterId:String):BackendUsers
     }
     
 `

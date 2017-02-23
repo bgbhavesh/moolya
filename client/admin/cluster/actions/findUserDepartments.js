@@ -5,12 +5,13 @@ import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
 
-export async function findUserDepartmentypeActionHandler(userId) {
-  let did=userId
+export async function findUserDepartmentypeActionHandler(userId, clusterId) {
+  let did=userId;
+  let clusterid = clusterId;
   const result = await client.query({
     query: gql`
-      query ($id: String) {
-        data: fetchUserDepSubDep(userId: $id) {
+      query ($id: String, $clusterId:String) {
+        data: fetchUserDepSubDep(userId: $id, clusterId:$clusterId) {
           profile {
             InternalUprofile {
               moolyaProfile {
@@ -25,7 +26,8 @@ export async function findUserDepartmentypeActionHandler(userId) {
       }
     `,
     variables: {
-      id:did
+      id:did,
+      clusterId:clusterid
     },
     forceFetch:true
   })

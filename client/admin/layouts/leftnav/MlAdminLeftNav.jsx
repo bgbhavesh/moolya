@@ -41,6 +41,8 @@ export default class MlAdminLeftNav extends Component {
 
   render() {
     let path = FlowRouter.current().route.name;
+    if(path == 'clusterview')
+      path = 'cluster'
 
     //let data = this.props.data && this.props.data.data ? this.props.data.data : {};
     let data = this.context.menu||{};

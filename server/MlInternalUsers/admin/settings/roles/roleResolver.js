@@ -48,6 +48,7 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 
 
 MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) => {
+
     let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
     return roles;
 }

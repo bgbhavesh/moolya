@@ -55,9 +55,10 @@ class MlAssignBackendUsers extends React.Component{
 
     async assignBackendUsers(){
         let userProfile = {};
-        userProfile['clusterId'] = "";
+        userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
+        alert(JSON.stringify(userProfile))
         let response = await multipartFormHandler(userProfile, "http://localhost:3000/assignusers", this.refs.profilePic.files[0]);
         return response;
     }
@@ -89,7 +90,8 @@ class MlAssignBackendUsers extends React.Component{
           }
         ]
         let that    = this;
-        let query   = gql`query{data:fetchUsersByClusterDepSubDep{label:username,value:_id}}`;
+        let queryOptions = {options: { variables: {clusterId:that.props.params}}};
+        let query   = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
         return(
             <div className="admin_main_wrap">
@@ -126,7 +128,7 @@ class MlAssignBackendUsers extends React.Component{
                                       </div>
                                       <br className="brclear"/>
                                       <div className="form-group">
-                                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>
+                                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query}  queryOptions={queryOptions}  isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>
                                       </div>
                                       <div>
                                           <div className="form-group">
@@ -138,7 +140,7 @@ class MlAssignBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignBackednUserRoles userId={userid} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
+                                      {userid?(<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

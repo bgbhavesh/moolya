@@ -19,6 +19,7 @@ class MlEditProcessMapping extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      data:{},
       id          : '',
       processId   : '',
       assignDocument:[],
@@ -117,7 +118,6 @@ class MlEditProcessMapping extends React.Component{
         this.setState({subChapters: [{id: subChaptersId}]});
       }
     }
-    this.setState({loading:false,data:response});
 
   }
   async  updateProcess() {
@@ -269,7 +269,7 @@ class MlEditProcessMapping extends React.Component{
                   <form>
 
                     <div className="form-group">
-                      <input type="text"   readOnly="true" defaultValue={this.state.processId} placeholder="process Id" className="form-control float-label" id=""/>
+                      <input type="text"   readOnly="true" defaultValue={this.state.data&&this.state.data.processId} placeholder="process Id" className="form-control float-label" id=""/>
                     </div>
 
 

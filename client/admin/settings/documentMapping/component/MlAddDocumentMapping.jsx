@@ -16,7 +16,6 @@ class MlAddDocumentMapping extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      selectedValue:null,
       clusters: [{id:''}],
       chapters:[{id:''}],
       subChapters:[{id:''}],
@@ -150,7 +149,42 @@ class MlAddDocumentMapping extends React.Component{
         handler: null
       }
     ]
-    let cluster=gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    // let cluster=gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+
+    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let chapterquery=gql`query($id:String){  
+    data:fetchChapters(id:$id) {
+      value:_id
+      label:chapterName
+    }  
+  }`;
+    let subChapterquery=gql`query($id:String){  
+    data:fetchSubChaptersSelect(id:$id) {
+      value:_id
+      label:subChapterName
+    }  
+  }`;
+    let kycCategoryquery=gql`query{  
+  data:fetchKYCCategories{
+    value:_id
+    label:docCategoryName
+  }  
+}`;
+    let documentTypequery=gql`query{  
+  data:fetchDocumentsType{
+    value:_id
+    label:docTypeName
+  }  
+}`;
+    let documentFormatquery=gql`query{  
+  data:fetchDocumentsFormat{
+    value:_id
+    label:docFormatName
+  }  
+}`;
+
+    let chapterOption={options: { variables: {id:this.state.clusters[0].id}}};
+    let subChapterOption={options: { variables: {id:this.state.chapters[0].id}}};
 
     return (
       <div className="admin_main_wrap">
@@ -175,38 +209,38 @@ class MlAddDocumentMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat[0].id} queryType={"graphql"} query={documentFormatquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
                     </div>
                     <div className="panel panel-default">
-                          <div className="panel-heading">Jurisdiction</div>
-                          <div className="panel-body">
+                      <div className="panel-heading">Jurisdiction</div>
+                      <div className="panel-body">
 
-                            <div className="form-group">
-                              <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={cluster} isDynamic={true} id={'query'} onSelect={this.optionsBySelectClusters.bind(this)} />
-                            </div>
-                            <div className="form-group">
-                              <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={cluster} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
-                            </div>
-                            <div className="form-group">
-                              <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
-                            </div>
-                            <div className="form-group">
-                              <input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>
-                            </div>
-                            <div className="form-group">
-                              <input type="text"  ref="length" placeholder="Length" className="form-control float-label" id=""/>
-                            </div>
-                            <div className="form-group">
-                              <input type="text"  ref="remark" placeholder="Remark" className="form-control float-label" id=""/>
-                            </div>
-                            <div className="form-group switch_wrap inline_switch">
-                              <label className="">Status</label>
-                              <label className="switch">
-                                <input type="checkbox" ref="status"/>
-                                <div className="slider"></div>
-                              </label>
-                            </div>
-                          </div>
+                        <div className="form-group">
+                          <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectClusters.bind(this)} />
+                        </div>
+                        <div className="form-group">
+                          <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+                        </div>
+                        <div className="form-group">
+                          <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters[0].id} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+                        </div>
+                        <div className="form-group">
+                          <input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>
+                        </div>
+                        <div className="form-group">
+                          <input type="text"  ref="length" placeholder="Length" className="form-control float-label" id=""/>
+                        </div>
+                        <div className="form-group">
+                          <input type="text"  ref="remark" placeholder="Remark" className="form-control float-label" id=""/>
+                        </div>
+                        <div className="form-group switch_wrap inline_switch">
+                          <label className="">Status</label>
+                          <label className="switch">
+                            <input type="checkbox" ref="status"/>
+                            <div className="slider"></div>
+                          </label>
+                        </div>
+                      </div>
                     </div>
                     <br className="brclear"/>
 
@@ -221,10 +255,10 @@ class MlAddDocumentMapping extends React.Component{
               <input type="text"  ref="documentName" placeholder="Name" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />
+              <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory[0].id} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType[0].id} queryType={"graphql"} query={cluster}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
+              <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType[0].id} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
             </div>
             <div className="form-group">
               <input type="text"  ref="allowableSize" placeholder="Allowable Size" className="form-control float-label" id=""/>

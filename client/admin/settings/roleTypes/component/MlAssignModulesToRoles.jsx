@@ -10,22 +10,17 @@ export default class MlAssignModulesToRoles extends React.Component {
     super(props);
     this.state = {
       selectedValue: null,
-      assignModulesToRoles: [{moduleId: '', moduleName: '', validFrom: '', validTo: '', isActive: '', actions: []}]
+      assignModulesToRoles: [{moduleId: '',moduleName: '',validFrom: '',validTo: '',isActive: '', actions: []}]
     }
     this.addDepartmentComponent.bind(this);
+    this.optionsBySelectAction=this.optionsBySelectAction.bind(this);
+    //this.onStatusChange=this.onStatusChange.bind(this)
     return this;
   }
 
   assignModuleToRoles(id) {
     this.setState({
-      assignModulesToRoles: this.state.assignModulesToRoles.concat([{
-        moduleId: '',
-        moduleName: '',
-        validFrom: '',
-        validTo: '',
-        isActive: '',
-        actions: []
-      }])
+      assignModulesToRoles: this.state.assignModulesToRoles.concat([{moduleId: '',moduleName: '',validFrom: '',validTo: '',isActive: '', actions: []}])
     });
   }
 
@@ -40,7 +35,7 @@ export default class MlAssignModulesToRoles extends React.Component {
   }
 
   componentDidMount() {
-    $(function () {
+  /*  $(function () {
       $('.float-label').jvFloat();
     });
 
@@ -50,7 +45,35 @@ export default class MlAssignModulesToRoles extends React.Component {
       } else {
         $(this).parent('.switch').removeClass('on');
       }
-    });
+    });*/
+    this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
+  }
+
+
+  componentWillMount() {
+    let assignModulesToRolesDetails=this.props.assignModulesToRolesData
+    if(assignModulesToRolesDetails){
+      let assignModulesToRolesForm=[]
+      for(let i=0;i<assignModulesToRolesDetails.length;i++){
+        let actions=assignModulesToRolesDetails[i].actions
+        let actionVal=[{actionId:''}]
+        if(actions){
+          actionVal.push({"actionId":actions[0].actionId})
+        }
+        let json={
+          moduleId:assignModulesToRolesDetails[i].moduleId,
+          moduleName:assignModulesToRolesDetails[i].moduleName,
+          validFrom:assignModulesToRolesDetails[i].validFrom,
+          validTo:assignModulesToRolesDetails[i].validTo,
+          isActive:assignModulesToRolesDetails[i].isActive,
+          actions:actionVal
+        }
+
+
+        assignModulesToRolesForm.push(json)
+      }
+      this.setState({assignModulesToRoles:assignModulesToRolesForm})
+    }
   }
 
   optionsBySelectModule(index, selectedIndex) {
@@ -92,35 +115,54 @@ export default class MlAssignModulesToRoles extends React.Component {
     });
     mySwiper.updateContainerSize()
     this.setState({
-      assignModulesToRoles: this.state.assignModulesToRoles.concat([{
-        moduleId: '',
-        moduleName: '',
-        validFrom: '',
-        validTo: '',
-        isActive: '',
-        actions: []
-      }])
+      assignModulesToRoles: this.state.assignModulesToRoles.concat([{moduleId: '',moduleName: '',validFrom: '',validTo: '',isActive: '', actions: []}])
     });
 
   }
 
-  onChange(id, event) {
-    let filedName = event.target.name
-    let fieldValue = event.target.value;
-    if (filedName == 'isActive') {
-      fieldValue = event.target.checked;
-    }
-    let departmentDetails = this.state.assignModulesToRoles
-    departmentDetails[id][filedName] = fieldValue
-    this.setState({assignModulesToRoles: departmentDetails})
+  onStatusChange(id, event) {
+
+   if(event.target.checked){
+     let departmentDetails = this.state.assignModulesToRoles
+     departmentDetails[id]['isActive'] = true
+     this.setState({assignModulesToRoles: departmentDetails})
+     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
+   }else{
+     let departmentDetails = this.state.assignModulesToRoles
+     departmentDetails[id]['isActive'] = false
+     this.setState({assignModulesToRoles: departmentDetails})
+     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
+   }
+
+
+  }
+
+  onmoduleNameChange(index, event) {
+    let assignModulesToRoles = this.state.assignModulesToRoles
+    assignModulesToRoles[index]['moduleName'] = event.target.value
+    this.setState({assignModulesToRoles: assignModulesToRoles})
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
   }
+  onvalidFromChange(index, event) {
+    let assignModulesToRoles = this.state.assignModulesToRoles
+    assignModulesToRoles[index]['validFrom'] = event.target.value
+    this.setState({assignModulesToRoles: assignModulesToRoles})
+    this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
+  }
+  onvalidToChange(index, event) {
+    let assignModulesToRoles = this.state.assignModulesToRoles
+    assignModulesToRoles[index]['validTo'] = event.target.value
+    this.setState({assignModulesToRoles: assignModulesToRoles})
+    this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
+  }
+
+
+
 
 
   render() {
     let that = this;
     let getModulesquery = gql` query{data:fetchModules{label:name,value:_id}}`;
-    let getfieldsquery = gql` query{data:fetchCountriesSearch{label:country,value:countryCode}}`;
 
     return (
       <div>
@@ -129,17 +171,8 @@ export default class MlAssignModulesToRoles extends React.Component {
         {that.state.assignModulesToRoles.map(function (options, id) {
 
           return (
-            <div className="form_bg" key={id}>
-              <div className="left_wrap">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                  default={true}
-                >
-                  <form style={{marginTop: '0px'}}>
 
-                    <div className="panel panel-default">
+                    <div className="panel panel-default"  key={id}>
                       <div className="panel-heading">Add Module
                         <div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that, id)}><img
                           src="/images/remove.png"/></div>
@@ -156,8 +189,8 @@ export default class MlAssignModulesToRoles extends React.Component {
                           </div>
                           <div className="col-md-6">
                             <div className="form-group">
-                              <input type="text" placeholder="Display Name" ref="displayName"
-                                     className="form-control float-label"/>
+                              <input type="text" placeholder="Display Name"
+                                     className="form-control float-label" defaultValue={options.moduleName} onBlur={that.onmoduleNameChange.bind(that,id)}/>
                             </div>
                           </div>
                           <div className="col-md-12 role_dif">
@@ -165,7 +198,7 @@ export default class MlAssignModulesToRoles extends React.Component {
                               Actions
                             </div>
                             <div className="form-group">
-                              <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="CREATE"
+                              <div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
                                                                   onChange={that.optionsBySelectAction.bind(that, id)}/><label
                                 htmlFor="chapter_admin_check"><span></span>Create</label></div>
                               <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="READ"
@@ -181,19 +214,19 @@ export default class MlAssignModulesToRoles extends React.Component {
                           </div>
                           <div className="col-md-3">
                             <div className="form-group">
-                              <input type="text" placeholder="Active From" className="form-control float-label" ref="validFrom"/>
+                              <input type="text" placeholder="Active From" className="form-control float-label" defaultValue={options.validFrom} onBlur={that.onvalidFromChange.bind(that,id)}/>
                             </div>
                           </div>
                           <div className="col-md-3">
                             <div className="form-group">
-                              <input type="text" placeholder="Active till" className="form-control float-label" ref="validTo"/>
+                              <input type="text" placeholder="Active till" className="form-control float-label" ref="validTo" defaultValue={options.validTo} onBlur={that.onvalidToChange.bind(that,id)}/>
                             </div>
                           </div>
                           <div className="col-md-6">
                             <div className="form-group switch_wrap inline_switch" style={{marginTop: '7px'}}>
                               <label className="">Overall Status</label>
                               <label className="switch">
-                                <input type="checkbox" ref="isActive"/>
+                                <input type="checkbox" checked={options.isActive} onChange={that.onStatusChange.bind(that,id)}/>
                                 <div className="slider"></div>
                               </label>
                             </div>
@@ -203,10 +236,7 @@ export default class MlAssignModulesToRoles extends React.Component {
                         </div>
                       </div>
                     </div>
-                  </form>
-                </ScrollArea>
-              </div>
-            </div>
+
           )
         })}
       </div>

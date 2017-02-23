@@ -2,8 +2,9 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function updateRoleActionHandler(role) {
-  let rid=role.id;
+export async function updateRoleActionHandler(roleDetails) {
+  let id=roleDetails.id;
+  let role=roleDetails.roleObject
   const result = await client.mutate({
     mutation: gql`
    mutation  ($id:String!, $role: roleObject!){
@@ -14,12 +15,12 @@ export async function updateRoleActionHandler(role) {
    }
    `,
     variables: {
-      rid,
+      id,
       role
     }
   })
   console.log(result)
-  const id = result;
-  return id
+  const res = result;
+  return res
 }
 

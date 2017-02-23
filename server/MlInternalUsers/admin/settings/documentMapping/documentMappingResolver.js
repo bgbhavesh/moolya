@@ -12,25 +12,30 @@ MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => 
     return response
   }
 }
-// MlResolver.MlMutationResolver['UpdateRequestType'] = (obj, args, context, info) => {
-//   // TODO : Authorization
-//
-//   if (args._id) {
-//     var id= args._id;
-//     let updatedResponse= MlRequestType.update(id, {$set: args});
-//     return updatedResponse
-//   }
-//
-// }
-// MlResolver.MlQueryResolver['FindRequestType'] = (obj, args, context, info) => {
-//   // TODO : Authorization
-//
-//   if (args._id) {
-//     var id= args._id;
-//     let response= MlRequestType.findOne({"_id":id});
-//     return response;
-//   }
-//
-// }
+MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+  if (args.documentId) {
+    let updatedResponse= MlDocumentMapping.update({documentId:args.documentId}, {$set: args.document});
+    return updatedResponse
+  }
+
+}
+MlResolver.MlQueryResolver['findDocument'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+  if (args.documentId) {
+    var id= args.documentId;
+    let response= MlDocumentMapping.findOne({"documentId":id});
+    return response;
+  }
+
+}
+MlResolver.MlQueryResolver['findDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  let response=  MlDocumentMapping.find({}).fetch();
+  return response;
+
+}
 
 

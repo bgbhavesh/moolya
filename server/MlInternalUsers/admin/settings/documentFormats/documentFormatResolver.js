@@ -35,5 +35,9 @@ MlResolver.MlMutationResolver['createDocumentFormat'] = (obj, args, context, inf
     return response
   }
 }
+MlResolver.MlQueryResolver['fetchDocumentsFormat'] = (obj, args, context, info) => {
+  let result=MlDocumentFormats.find({isActive:true}).fetch()||[];
+  return result;
+}
 
 

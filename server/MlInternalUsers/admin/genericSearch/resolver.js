@@ -77,6 +77,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlDocumentCategories.find({},findOptions).fetch();
     totalRecords=MlDocumentCategories.find({},findOptions).count();
   }
+  if(args.module=="documentMapping"){
+    data= MlDocumentMapping.find({},findOptions).fetch();
+    totalRecords=MlDocumentMapping.find({},findOptions).count();
+  }
   if(args.module=="transaction"){
     data= MlTransactions.find({},findOptions).fetch();
     totalRecords=MlTransactions.find({},findOptions).count();
@@ -130,6 +134,19 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if(args.module=="lookingFor"){
     data= MlLookingFor.find({},findOptions).fetch();
     totalRecords=MlLookingFor.find({},findOptions).count();
+  }
+  if(args.module=="tax"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+
+  if(args.module=="regional"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="language"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -189,8 +206,8 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.docCategoryName){
       return 'KycCategories'
     }
-    if(data.docCategoryName){
-      return 'DocumentMapping'
+    if(data.documentDisplayName){
+      return 'DocumentOutput'
     }
     if(data.transactionName){
       return 'Transaction'
@@ -233,6 +250,16 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.processId){
       return 'ProcessType'
+    }
+    if(data.taxName){
+      return 'Tax'
+    }
+
+    if(data.regionalCurrencyName){
+      return 'Regional'
+    }
+    if(data.languageName){
+      return 'Language'
     }
     return null;
   }

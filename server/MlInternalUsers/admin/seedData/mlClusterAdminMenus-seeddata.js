@@ -146,56 +146,57 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/settings_icon.png",
-        "link" : "/admin/settings/departmentsList",
+        "link" : "/admin/settings/taxTypeList",
         "name" : "settings",
         "uniqueId" : "settings",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/settings/departmentsList",
-            "name" : "Departments",
-            "uniqueId" : "settings_Departments",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "subMenu": [
+                "link" : "/admin/settings/taxTypeList",
+                "name" : "Tax Types",
+                "uniqueId" : "settings_TaxTypes",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenu": [
 
-              {
-                "link": "/admin/settings/addDepartment",
-                "name": "Add Departments",
-                "uniqueId": "settings_AddDepartment",
-                "subMenuMappingId":"settings_Departments",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/departmentsList",
-                "name": "List Department",
-                "uniqueId": "settings_DepartmentList",
-                "subMenuMappingId":"settings_Departments",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editDepartment",
-                "name": "Edit Department",
-                "uniqueId": "settings_EditDepartment",
-                "subMenuMappingId":"settings_Departments",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }
-            ]
-          },
+                {
+                  "link": "/admin/settings/addTaxType",
+                  "name": "Add TaxTypes",
+                  "uniqueId": "settings_AddTaxType",
+                  "subMenuMappingId":"settings_TaxTypes",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/taxTypeList",
+                  "name": "List TaxType",
+                  "uniqueId": "settings_TaxTypeList",
+                  "subMenuMappingId":"settings_TaxTypes",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/editTaxType",
+                  "name": "Edit TaxType",
+                  "uniqueId": "settings_EditTaxType",
+                  "subMenuMappingId":"settings_TaxTypes",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }
+              ]
+            },
 
 
-        ]
+
+]
       }
     ]
   }});

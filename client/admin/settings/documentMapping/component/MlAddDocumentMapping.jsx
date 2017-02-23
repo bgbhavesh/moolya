@@ -183,8 +183,8 @@ class MlAddDocumentMapping extends React.Component{
   }  
 }`;
 
-    let chapterOption={options: { variables: {id:this.state.clusters}}};
-    let subChapterOption={options: { variables: {id:this.state.chapters}}};
+    let chapterOption={options: { variables: {id:this.state.clusters[0].id}}};
+    let subChapterOption={options: { variables: {id:this.state.chapters[0].id}}};
 
     return (
       <div className="admin_main_wrap">

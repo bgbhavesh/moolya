@@ -243,8 +243,8 @@ class MlEditDocumentMapping extends React.Component{
   }  
 }`;
 
-    let chapterOption={options: { variables: {id:this.state.clusters}}};
-    let subChapterOption={options: { variables: {id:this.state.chapters}}};
+    let chapterOption={options: { variables: {id:this.state.clusters[0].id}}};
+    let subChapterOption={options: { variables: {id:this.state.chapters[0].id}}};
     const showLoader=this.state.loading;
     return (
       <div>

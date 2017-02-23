@@ -146,59 +146,6 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/settings_icon.png",
-        "link" : "/admin/settings/taxTypeList",
-        "name" : "settings",
-        "uniqueId" : "settings",
-        "isLink" : true,
-        "isMenu" : true,
-        "subMenu" : [
-          {
-                "link" : "/admin/settings/taxTypeList",
-                "name" : "Tax Types",
-                "uniqueId" : "settings_TaxTypes",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenu": [
-
-                {
-                  "link": "/admin/settings/addTaxType",
-                  "name": "Add TaxTypes",
-                  "uniqueId": "settings_AddTaxType",
-                  "subMenuMappingId":"settings_TaxTypes",
-                  "subMenusId":"settings",
-                  "isLink": true,
-                  "isMenu": false,
-                  "image": ""
-                },
-                {
-                  "link": "/admin/settings/taxTypeList",
-                  "name": "List TaxType",
-                  "uniqueId": "settings_TaxTypeList",
-                  "subMenuMappingId":"settings_TaxTypes",
-                  "subMenusId":"settings",
-                  "isLink": true,
-                  "isMenu": false,
-                  "image": ""
-                },
-                {
-                  "link": "/admin/settings/editTaxType",
-                  "name": "Edit TaxType",
-                  "uniqueId": "settings_EditTaxType",
-                  "subMenuMappingId":"settings_TaxTypes",
-                  "subMenusId":"settings",
-                  "isLink": true,
-                  "isMenu": true,
-                  "image": ""
-                }
-              ]
-            },
-
-
-        ]
-      },
-      {
-        "image" : "/images/settings_icon.png",
         "link" : "/admin/settings/regionalsList",
         "name" : "settings",
         "uniqueId" : "settings",
@@ -239,6 +186,47 @@ if(Meteor.isServer){
                 "name": "Edit Regional",
                 "uniqueId": "settings_EditRegional",
                 "subMenuMappingId":"settings_Regional",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/taxTypeList",
+            "name" : "Tax Types",
+            "uniqueId" : "settings_TaxTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addTaxType",
+                "name": "Add TaxTypes",
+                "uniqueId": "settings_AddTaxType",
+                "subMenuMappingId":"settings_TaxTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/taxTypeList",
+                "name": "List TaxType",
+                "uniqueId": "settings_TaxTypeList",
+                "subMenuMappingId":"settings_TaxTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTaxType",
+                "name": "Edit TaxType",
+                "uniqueId": "settings_EditTaxType",
+                "subMenuMappingId":"settings_TaxTypes",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": true,

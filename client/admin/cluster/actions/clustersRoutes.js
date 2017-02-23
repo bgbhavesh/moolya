@@ -4,14 +4,15 @@
 
 const clusterRoutes={
   clusterDetailsRoute:(clusterId, route)=> {
-    return `/admin/clusters/clusterview/${clusterId}/`;
-  }
+    return `/admin/clusters/${clusterId}/clusterDetails`;
+  },
+
   // chapterListRoute:(clusterId)=>{
   //   return `/admin/dashboard/${clusterId}/chapters`;
   // },
-  // subChapterListRoute:(clusterId,chapterId,router) =>{
-  //   return `/admin/dashboard/${clusterId}/${chapterId}/subChapters`;
-  // },
+  subChapterListRoute:(clusterId,chapterId,router) =>{
+    return `/admin/dashboard/${clusterId}/${chapterId}/subChapters`;
+  },
   // communityListRoute:(clusterId,chapterId,subChapterId,router)=>{
   //   return `/admin/subChapters/${clusterId}/${chapterId}/${subChapterId}`;
   // }

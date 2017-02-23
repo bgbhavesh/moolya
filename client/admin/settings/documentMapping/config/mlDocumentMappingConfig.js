@@ -1,6 +1,34 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+function categoriesformatter (data){
+    let categories=data&&data.data&&data.data.kycCategory?data.data.kycCategory:[];
+    let ids =[];
+  categories.map(function (doc) {
+      ids.push(doc.id)
+    })
+    return <div>{ids}</div>;
+}
+function allowableFormatformatter (data){
+
+  let allowableFormat=data&&data.data&&data.data.allowableFormat?data.data.allowableFormat:[];
+  let ids =[];
+  allowableFormat.map(function (doc) {
+    ids.push(doc.id)
+  })
+  return <div>{ids}</div>;
+
+}
+function clustersformatter (data){
+
+  let clusters=data&&data.data&&data.data.clusters?data.data.clusters:[];
+  let ids =[];
+  clusters.map(function (doc) {
+    ids.push(doc.id)
+  })
+  return <div>{ids}</div>;
+
+}
 const mlDocumentMappingTableConfig=new MlViewer.View({
   name:"documentMappingTable",
   module:"documentMapping",//Module name for filter.
@@ -14,10 +42,10 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
   columns:[
     {dataField: "documentId",title:"Id",'isKey':true,isHidden:true},
     {dataField: "documentName", title: "Name",dataSort:true},
-    {dataField: "kycCategory", title: "Category",dataSort:true},
-    {dataField: "allowableFormat", title: "Allowable Format",dataSort:true},
+    {dataField: "kycCategory", title: "Category",dataSort:true, customComponent:categoriesformatter},
+    {dataField: "allowableFormat", title: "Allowable Format",dataSort:true, customComponent:allowableFormatformatter},
     {dataField: "allowableMaxSize", title: "Allowable Size",dataSort:true},
-    {dataField: "clusters", title: "Jurisdiction",dataSort:true}
+    {dataField: "clusters", title: "Jurisdiction",dataSort:true, customComponent:clustersformatter}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -74,14 +102,23 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
   //         }
   //             `
   graphQlQuery:gql`
-              query{
+             query{
               data:SearchQuery(module:"documentMapping"){
                     totalRecords
                     data{
-                     ...on DocumentMapping{
-                               documentId
+                     ...on DocumentOutput{
+                              documentId
                               documentName
-                      				isActive
+                      				kycCategory {
+                      				  id
+                      				}
+                              allowableFormat{
+                                id
+                              }
+                              allowableMaxSize
+                              clusters{
+                                id
+                              }
                           }
                       }
               }

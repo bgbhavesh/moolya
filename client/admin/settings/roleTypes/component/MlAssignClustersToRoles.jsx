@@ -12,6 +12,7 @@ export default class MlAssignClustersToRoles extends React.Component {
          assignRoleToClusters:[{cluster: '',chapter:'',subChapter:'',department:'',subDepartment:'',isActive:false }]
       }
       this.addDepartmentComponent.bind(this);
+      this.onStatusChange=this.onStatusChange.bind(this)
       return this;
   }
 
@@ -49,7 +50,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     let assignedClusterDetails=this.props.assignedClusterDetails
     if(assignedClusterDetails){
       let assignedClusterDetailsForm=[]
-      for(let i=0;i<availabilityDetails.length;i++){
+      for(let i=0;i<assignedClusterDetails.length;i++){
         let json={
           cluster:assignedClusterDetails[i].cluster,
           chapter:assignedClusterDetails[i].chapter,
@@ -114,7 +115,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     });
 
   }
-  onChange(id,event){
+  onStatusChange(id,event){
     let filedName=event.target.name
     let fieldValue=event.target.value;
     if(filedName=='isActive'){
@@ -163,7 +164,6 @@ export default class MlAssignClustersToRoles extends React.Component {
           let subDeparatmentOption={options: { variables: {id:assignCluster.department}}};
           return(
             <div className="panel panel-default" key={id}>
-              <div className="panel panel-default">
                 <div className="panel-heading">Assign Department<div className="pull-right block_action" onClick={that.RemoveAssignassignRoleToClusters.bind(that,id)}><img src="/images/remove.png"/></div></div>
                 <div className="panel-body">
 
@@ -194,7 +194,7 @@ export default class MlAssignClustersToRoles extends React.Component {
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" name={'isActive'} value={assignCluster.isActive} onChange={that.onChange.bind(that,id)} />
+                      <input type="checkbox" name={'isActive'} checked={assignCluster.isActive} onChange={that.onStatusChange.bind(that,id)} />
                       <div className="slider"></div>
                     </label>
                   </div>
@@ -203,7 +203,6 @@ export default class MlAssignClustersToRoles extends React.Component {
 
 
               </div>
-            </div>
           )})}
       </div>
 

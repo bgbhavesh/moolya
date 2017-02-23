@@ -70,7 +70,7 @@ class MlEditRole extends React.Component{
   }
 
   async  updateRole() {
-    let roleDetails = {
+    let roleObject = {
       roleName: this.refs.roleName.value,
       displayName:this.refs.diplayName.value,
       roleType:this.state.selectedUserType,
@@ -81,6 +81,10 @@ class MlEditRole extends React.Component{
       isActive:this.refs.status.checked
     }
     console.log(roleDetails)
+    let roleDetails={
+      id:this.props.config,
+      roleObject:roleObject
+    }
     const response = await updateRoleActionHandler(roleDetails)
     return response;
 
@@ -100,8 +104,8 @@ class MlEditRole extends React.Component{
   async findRole(){
     let roleid=this.props.config
     const response = await findRoleActionHandler(roleid);
+    this.setState({loading:false,data:response});
     if(response) {
-      this.setState({loading:false,data:response});
       this.setState({selectedUserType:this.state.data.userType})
       this.setState({selectedroleType:this.state.data.roleType})
     }
@@ -154,11 +158,11 @@ class MlEditRole extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text"  ref="roleName" defaultValue={this.state.data&&this.state.data.roleName} placeholder="Role Name" className="form-control float-label" id=""/>
+                      <input type="text"  ref="roleName"  placeholder="Role Name"  defaultValue={this.state.data&&this.state.data.roleName} className="form-control float-label" />
 
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="diplayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="diplayName"  placeholder="Display Name"  defaultValue={this.state.data&&this.state.data.displayName} className="form-control float-label"/>
 
                     </div>
                     <div className="form-group">
@@ -174,7 +178,7 @@ class MlEditRole extends React.Component{
                       <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>
                     </div>
 
-                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} assignedClusterDetails={this.state.data&&this.state.data.assignRoles}/>
+                    {this.state.data&&this.state.data.assignRoles?(<MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} assignedClusterDetails={this.state.data&&this.state.data.assignRoles}/>):""}
 
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>
@@ -192,7 +196,21 @@ class MlEditRole extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right"  >
-            <MlAssignModulesToRoles getassignModulesToRoles={this.getassignModulesToRoles.bind(this)} assignModulesToRolesData={this.state.data&&this.state.data.modules}/>
+            <div className="form_bg">
+              <div className="left_wrap">
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <form style={{marginTop: '0px'}}>
+
+                  {this.state.data&&this.state.data.modules?(<MlAssignModulesToRoles getassignModulesToRoles={this.getassignModulesToRoles.bind(this)} assignModulesToRolesData={this.state.data&&this.state.data.modules}/>):""}
+                  </form>
+                </ScrollArea>
+              </div>
+            </div>
           </div>
 
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

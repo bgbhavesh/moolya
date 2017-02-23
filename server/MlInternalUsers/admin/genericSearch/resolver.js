@@ -135,6 +135,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlLookingFor.find({},findOptions).fetch();
     totalRecords=MlLookingFor.find({},findOptions).count();
   }
+
+  if(args.module=="regional"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -237,6 +242,10 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.processId){
       return 'ProcessType'
+    }
+
+    if(data.regionalCurrencyName){
+      return 'Regional'
     }
     return null;
   }

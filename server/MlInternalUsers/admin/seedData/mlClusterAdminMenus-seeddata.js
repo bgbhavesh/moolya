@@ -196,6 +196,59 @@ if(Meteor.isServer){
 
 
         ]
+      },
+      {
+        "image" : "/images/settings_icon.png",
+        "link" : "/admin/settings/regionalsList",
+        "name" : "settings",
+        "uniqueId" : "settings",
+        "isLink" : true,
+        "isMenu" : true,
+        "subMenu" : [
+          {
+            "link" : "/admin/settings/regionalsList",
+            "name" : "Regional",
+            "uniqueId" : "settings_Regional",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addregional",
+                "name": "Add Regional",
+                "uniqueId": "settings_AddRegional",
+                "subMenuMappingId":"settings_Regional",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/regionalsList",
+                "name": "List Regional",
+                "uniqueId": "settings_RegionalsList",
+                "subMenuMappingId":"settings_Regional",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editRegional",
+                "name": "Edit Regional",
+                "uniqueId": "settings_EditRegional",
+                "subMenuMappingId":"settings_Regional",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+
+
+        ]
       }
     ]
   }});

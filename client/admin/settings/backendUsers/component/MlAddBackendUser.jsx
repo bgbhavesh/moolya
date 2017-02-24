@@ -97,7 +97,7 @@ class MlAddBackendUser extends React.Component{
       contact:this.state.mlAssignContactDetails,
       globalAssignment:this.refs.globalAssignment.checked,
       isActive:this.refs.isActive.checked,
-      userProfiles:userprofiles
+      userProfiles:[]
     }
     let InternalUprofile={
       moolyaProfile: moolyaProfile

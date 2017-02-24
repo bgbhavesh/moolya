@@ -92,6 +92,9 @@ import MlEditLanguage from '../../admin/settings/language/component/MlEditLangua
 import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlAddDateAndTime'
 import MlDateAndTimeList from '../../admin/settings/dateAndTime/component/MlDateAndTimeList'
 import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEditDateAndTime'
+import MlAddAddressType from '../../admin/settings/addressType/component/MlAddAddressType'
+import MlAddressTypeList from '../../admin/settings/addressType/component/MlAddressTypeList'
+import MlEditAddressType from '../../admin/settings/addressType/component/MlEditAddressType'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -670,6 +673,24 @@ adminSection.route('/settings/employeeTypesList', {
 });
 
 //  @End
+adminSection.route('/settings/addressTypeList', {
+  name: 'settings_AddressTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddressTypeList/>})
+  }
+});
+adminSection.route('/settings/addAddressType', {
+  name: 'settings_AddAddressType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddAddressType />})
+  }
+});
+adminSection.route('/settings/editAddressType/:id', {
+  name: 'settings_EditAddressType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAddressType config={params.id} />})
+  }
+});
 
 // @Created By Sireesha on 24-02-2017
 // @For Cluster Admin Settings Company Type

@@ -80,13 +80,44 @@ import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEd
 import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
 import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
 import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
-
+import MlAddTaxation from '../../admin/settings/taxation/component/MlAddTaxation'
+import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
+import MlTitleList from '../../admin/settings/title/component/MlTitleList'
+import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
 import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
 import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
 import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'
 import MlAddLanguage from '../../admin/settings/language/component/MlAddLanguage'
 import MlLanguagesList from '../../admin/settings/language/component/MlLanguagesList'
 import MlEditLanguage from '../../admin/settings/language/component/MlEditLanguage'
+import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlAddDateAndTime'
+import MlDateAndTimeList from '../../admin/settings/dateAndTime/component/MlDateAndTimeList'
+import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEditDateAndTime'
+import MlAddAddressType from '../../admin/settings/addressType/component/MlAddAddressType'
+import MlAddressTypeList from '../../admin/settings/addressType/component/MlAddressTypeList'
+import MlEditAddressType from '../../admin/settings/addressType/component/MlEditAddressType'
+import MlNumericalFormatList from '../../admin/settings/numericalFormats/component/MlNumericalFormatList'
+import MlAddNumericalFormat from '../../admin/settings/numericalFormats/component/MlAddNumericalFormat'
+import MlEditNumericalFormat from '../../admin/settings/numericalFormats/component/MlEditNumericalFormat'
+import MlAddSocialLinkType from '../../admin/settings/socialLinks/component/MlAddSocialLinkType'
+import MlSocialLinksTypeList from '../../admin/settings/socialLinks/component/MlSocialLinksTypeList'
+import MlEditSocialLinkType from  '../../admin/settings/socialLinks/component/MlEditSocialLinksType'
+import MlAddGender from '../../admin/settings/gender/component/MlAddGender'
+import MlGenderList from '../../admin/settings/gender/component/MlGenderList'
+import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
+
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+// @Importing Cluster Admin Setting Employee Type Components from parent directory
+
+
+import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
+import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'
+import MlEditEmployeeType from '../../admin/settings/employeeTypes/components/MlEditEmployeeType'
+
+// @End
+
+
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -558,6 +589,24 @@ adminSection.route('/settings/editLanguage/:id', {
     mount(AdminLayout,{adminContent:<MlEditLanguage config={params.id} />})
   }
 });
+adminSection.route('/settings/dateAndTimeList', {
+  name: 'settings_DateAndTimeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDateAndTimeList/>})
+  }
+});
+adminSection.route('/settings/addDateAndTime', {
+  name: 'settings_AddDateAndTime',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDateAndTime />})
+  }
+});
+adminSection.route('/settings/editDateAndTime/:id', {
+  name: 'settings_EditDateAndTime',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDateAndTime config={params.id} />})
+  }
+});
 
 adminSection.route('/settings/taxTypeList', {
   name: 'settings_TaxTypeList',
@@ -575,5 +624,130 @@ adminSection.route('/settings/editTaxType/:id', {
   name: 'settings_EditTaxType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditTaxType config={params.id} />})
+  }
+});
+adminSection.route('/settings/addTaxation', {
+  name: 'settings_AddTaxType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTaxation />})
+  }
+});
+adminSection.route('/settings/titleList', {
+  name: 'settings_TitleList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTitleList/>})
+  }
+});
+adminSection.route('/settings/addTitle', {
+  name: 'settings_AddTitle',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTitle />})
+  }
+});
+adminSection.route('/settings/editTitle/:id', {
+  name: 'settings_EditTitle',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTitle config={params.id} />})
+  }
+});
+
+
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+
+
+/////////// for employee type create module
+adminSection.route('/settings/addEmployeeType', {
+  name: 'settings_AddEmployeeType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEmployeeType />})
+  }
+});
+/////////// for employee type edit module
+adminSection.route('/settings/editEmployeeType/:id', {
+  name: 'settings_EditEmployeeType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditEmployeeType config={params.id} />})
+  }
+});
+/////////// for list of employee types
+adminSection.route('/settings/employeeTypesList', {
+  name: 'settings_employeeTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEmployeeTypesList/>})
+  }
+});
+
+//  @End
+adminSection.route('/settings/addressTypeList', {
+  name: 'settings_AddressTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddressTypeList/>})
+  }
+});
+adminSection.route('/settings/addAddressType', {
+  name: 'settings_AddAddressType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddAddressType />})
+  }
+});
+adminSection.route('/settings/editAddressType/:id', {
+  name: 'settings_EditAddressType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAddressType config={params.id} />})
+  }
+});
+adminSection.route('/settings/numericalFormatList', {
+  name: 'settings_NumericalFormatList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlNumericalFormatList/>})
+  }
+});
+adminSection.route('/settings/addNumericalFormat', {
+  name: 'settings_AddNumericalFormat',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddNumericalFormat />})
+  }
+});
+adminSection.route('/settings/editNumericalFormat/:id', {
+  name: 'settings_EditNumericalFormat',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditNumericalFormat config={params.id} />})
+  }
+});
+adminSection.route('/settings/socialLinkTypeList', {
+  name: 'settings_SocialLinkTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlSocialLinksTypeList/>})
+  }
+});
+adminSection.route('/settings/addSocialLinkType', {
+  name: 'settings_AddSocialLinkType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddSocialLinkType />})
+  }
+});
+adminSection.route('/settings/editSocialLinkType/:id', {
+  name: 'settings_EditSocialLinkType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditSocialLinkType config={params.id} />})
+  }
+});
+adminSection.route('/settings/gendersList', {
+  name: 'settings_GenderList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlGenderList/>})
+  }
+});
+adminSection.route('/settings/addGender', {
+  name: 'settings_AddSocialLinkType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddGender />})
+  }
+});
+adminSection.route('/settings/editGender/:id', {
+  name: 'settings_EditGender',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditGender config={params.id} />})
   }
 });

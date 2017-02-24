@@ -1,0 +1,148 @@
+
+[class^="ml-"], [class*=" ml-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'moolya' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ml-Cross:before {
+  content: "\e901";
+}
+.ml-Down-Arrow:before {
+  content: "\e902";
+}
+.ml-Filter:before {
+  content: "\e903";
+}
+.ml-Left-Arrow:before {
+  content: "\e904";
+}
+.ml-Minus:before {
+  content: "\e905";
+}
+.ml-Right-Arrow:before {
+  content: "\e906";
+}
+.ml-Startup:before {
+  content: "\e908";
+}
+.ml-Up-Arrow:before {
+  content: "\e909";
+}
+.ml-Video:before {
+  content: "\e90a";
+}
+.ml-About:before {
+  content: "\e90b";
+}
+.ml-Account:before {
+  content: "\e90c";
+}
+.ml-Additional-Information:before {
+  content: "\e90d";
+}
+.ml-Address-Book:before {
+  content: "\e90e";
+}
+.ml-Address:before {
+  content: "\e90f";
+}
+.ml-address-1:before {
+  content: "\e910";
+}
+.ml-addressbook-2:before {
+  content: "\e911";
+}
+.ml-Assign:before {
+  content: "\e912";
+}
+.ml-Awards:before {
+  content: "\e913";
+}
+.ml-Basic-Information:before {
+  content: "\e914";
+}
+.ml-Chapter:before {
+  content: "\e915";
+}
+.ml-chat:before {
+  content: "\e916";
+}
+.ml-Cluster:before {
+  content: "\e917";
+}
+.ml-Community:before {
+  content: "\e918";
+}
+.ml-Correct2:before {
+  content: "\e919";
+}
+.ml-Dashboard:before {
+  content: "\e91a";
+}
+.ml-Dashboard-1:before {
+  content: "\e91b";
+}
+.ml-Documents:before {
+  content: "\e91c";
+}
+.ml-download:before {
+  content: "\e91d";
+}
+.ml-Edit:before {
+  content: "\e91e";
+}
+.ml-edit-1:before {
+  content: "\e91f";
+}
+.ml-KYC-Document:before {
+  content: "\e920";
+}
+.ml-LogOut:before {
+  content: "\e921";
+}
+.ml-Plus:before {
+  content: "\e922";
+}
+.ml-Save2:before {
+  content: "\e923";
+}
+.ml-Services:before {
+  content: "\e924";
+}
+.ml-Settings:before {
+  content: "\e925";
+}
+.ml-Settings-1:before {
+  content: "\e926";
+}
+.ml-Settings-2:before {
+  content: "\e927";
+}
+.ml-Social-Links:before {
+  content: "\e928";
+}
+.ml-Social-Links-1:before {
+  content: "\e929";
+}
+.ml-Template:before {
+  content: "\e92a";
+}
+.ml-Template-1:before {
+  content: "\e92b";
+}
+.ml-Transaction:before {
+  content: "\e92c";
+}
+.ml-upload:before {
+  content: "\e92d";
+}
+

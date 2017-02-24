@@ -165,6 +165,7 @@ if(Meteor.isServer){
       {
         "image" : "/images/documents_icon.png",
         "link" : "/admin/documents",
+        "uniqueId" : "documents",
         "name" : "documents",
         "isLink" : true,
         "isMenu" : true
@@ -174,7 +175,8 @@ if(Meteor.isServer){
         "link" : "/admin/services",
         "name" : "services",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "uniqueId" : "services"
       },
       {
         "image" : "/images/settings_icon.png",

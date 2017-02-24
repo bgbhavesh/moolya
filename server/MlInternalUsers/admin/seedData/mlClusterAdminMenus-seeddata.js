@@ -441,6 +441,47 @@ if(Meteor.isServer){
               }
             ]
           },
+          {
+            "link" : "/admin/settings/numericalFormatList",
+            "name" : "Numerical Format",
+            "uniqueId" : "settings_NumericalFormat",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addNumericalFormat",
+                "name": "Add Numerical Format",
+                "uniqueId": "settings_AddNumericalFormat",
+                "subMenuMappingId":"settings_NumericalFormat",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/numericalFormatList",
+                "name": "List Numerical Format",
+                "uniqueId": "settings_NumericalFormatList",
+                "subMenuMappingId":"settings_NumericalFormat",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editNumericalFormat",
+                "name": "Edit Numerical Format",
+                "uniqueId": "settings_EditNumericalFormat",
+                "subMenuMappingId":"settings_NumericalFormat",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
     ]

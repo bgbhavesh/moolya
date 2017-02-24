@@ -159,6 +159,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
+  if(args.module=="numericalFormat"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   if(args.module=="addressType"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
@@ -281,6 +285,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.languageName){
       return 'Language'
+    }
+    if(data.measurementSystem){
+      return 'NumericalFormat'
     }
     if(data.addressName){
       return 'AddressType'

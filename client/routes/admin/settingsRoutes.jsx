@@ -96,6 +96,9 @@ import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEdit
 import MlAddAddressType from '../../admin/settings/addressType/component/MlAddAddressType'
 import MlAddressTypeList from '../../admin/settings/addressType/component/MlAddressTypeList'
 import MlEditAddressType from '../../admin/settings/addressType/component/MlEditAddressType'
+import MlNumericalFormatList from '../../admin/settings/numericalFormats/component/MlNumericalFormatList'
+import MlAddNumericalFormat from '../../admin/settings/numericalFormats/component/MlAddNumericalFormat'
+import MlEditNumericalFormat from '../../admin/settings/numericalFormats/component/MlEditNumericalFormat'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -686,5 +689,23 @@ adminSection.route('/settings/editAddressType/:id', {
   name: 'settings_EditAddressType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditAddressType config={params.id} />})
+  }
+});
+adminSection.route('/settings/numericalFormatList', {
+  name: 'settings_NumericalFormatList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlNumericalFormatList/>})
+  }
+});
+adminSection.route('/settings/addNumericalFormat', {
+  name: 'settings_AddNumericalFormat',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddNumericalFormat />})
+  }
+});
+adminSection.route('/settings/editNumericalFormat/:id', {
+  name: 'settings_EditNumericalFormat',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditNumericalFormat config={params.id} />})
   }
 });

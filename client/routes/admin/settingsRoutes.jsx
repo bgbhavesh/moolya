@@ -80,6 +80,7 @@ import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEd
 import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
 import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
 import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
+import MlAddTaxation from '../../admin/settings/taxation/component/MlAddTaxation'
 import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
 import MlTitleList from '../../admin/settings/title/component/MlTitleList'
 import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
@@ -620,6 +621,12 @@ adminSection.route('/settings/editTaxType/:id', {
   name: 'settings_EditTaxType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditTaxType config={params.id} />})
+  }
+});
+adminSection.route('/settings/addTaxation', {
+  name: 'settings_AddTaxType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTaxation />})
   }
 });
 adminSection.route('/settings/titleList', {

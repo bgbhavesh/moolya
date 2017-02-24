@@ -159,6 +159,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
+  if(args.module=="CompanyType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -280,6 +284,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.timeFormat){
       return 'DateAndTime'
+    }
+    if(data.companyName){
+      return 'CompanyType'
     }
     return null;
   }

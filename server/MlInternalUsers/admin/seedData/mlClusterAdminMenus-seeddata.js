@@ -398,6 +398,48 @@ if(Meteor.isServer){
               },
 
             ]
+          },  // @End
+          {                                  // @Created By Sireesha on 24-02-2017 for Cluster Admin Settings Company Type
+            "link" : "/admin/settings/companyTypesList",
+            "name" : "CompanyTypes",
+            "uniqueId" : "settings_CompanyTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addCompanyType",
+                "name": "Add Company Type",
+                "uniqueId": "settings_AddCompanyType",
+                "subMenuMappingId":"settings_CompanyTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/companyTypesList",
+                "name": "List CompanyTypes",
+                "uniqueId": "settings_CompanyTypesList",
+                "subMenuMappingId":"settings_CompanyTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editCompanyType",
+                "name": "Edit Company Type",
+                "uniqueId": "settings_EditCompanyType",
+                "subMenuMappingId":"settings_CompanyTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+
+            ]
           }  // @End
 
         ]

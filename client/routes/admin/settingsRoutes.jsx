@@ -97,12 +97,22 @@ import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEdit
 // @For Cluster Admin Settings Employee Type
 // @Importing Cluster Admin Setting Employee Type Components from parent directory
 
-
 import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
 import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'
 import MlEditEmployeeType from '../../admin/settings/employeeTypes/components/MlEditEmployeeType'
 
 // @End
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Company Type
+// @Importing Cluster Admin Setting Company Type Components from parent directory
+
+import MlCompanyTypesList from '../../admin/settings/companyTypes/components/MlCompanyTypesList'
+import MlAddCompanyType from '../../admin/settings/companyTypes/components/MlAddCompanyType'
+import MlEditCompanyType from '../../admin/settings/companyTypes/components/MlEditCompanyType'
+
+// @End
+
 
 
 
@@ -656,6 +666,34 @@ adminSection.route('/settings/employeeTypesList', {
   name: 'settings_employeeTypesList',
   action(){
     mount(AdminLayout,{adminContent:< MlEmployeeTypesList/>})
+  }
+});
+
+//  @End
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Company Type
+
+
+/////////// for company type create module
+adminSection.route('/settings/addCompanyType', {
+  name: 'settings_AddCompanyType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddCompanyType />})
+  }
+});
+/////////// for employee type edit module
+adminSection.route('/settings/editCompanyType/:id', {
+  name: 'settings_EditCompanyType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditCompanyType config={params.id} />})
+  }
+});
+/////////// for list of employee types
+adminSection.route('/settings/companyTypesList', {
+  name: 'settings_CompanyTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlCompanyTypesList/>})
   }
 });
 

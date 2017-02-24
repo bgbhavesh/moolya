@@ -80,7 +80,9 @@ import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEd
 import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
 import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
 import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
-
+import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
+import MlTitleList from '../../admin/settings/title/component/MlTitleList'
+import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
 import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
 import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
 import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'
@@ -598,3 +600,22 @@ adminSection.route('/settings/editTaxType/:id', {
     mount(AdminLayout,{adminContent:<MlEditTaxType config={params.id} />})
   }
 });
+adminSection.route('/settings/titleList', {
+  name: 'settings_TitleList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTitleList/>})
+  }
+});
+adminSection.route('/settings/addTitle', {
+  name: 'settings_AddTitle',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTitle />})
+  }
+});
+adminSection.route('/settings/editTitle/:id', {
+  name: 'settings_EditTitle',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTitle config={params.id} />})
+  }
+});
+

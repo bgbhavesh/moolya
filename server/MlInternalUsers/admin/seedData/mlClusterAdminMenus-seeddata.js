@@ -235,6 +235,47 @@ if(Meteor.isServer){
             ]
           },
           {
+            "link" : "/admin/settings/titleList",
+            "name" : "Title",
+            "uniqueId" : "settings_Titles",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addTitle",
+                "name": "Add Title",
+                "uniqueId": "settings_AddTitle",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/titleList",
+                "name": "List Title",
+                "uniqueId": "settings_TitleList",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTitle",
+                "name": "Edit Title",
+                "uniqueId": "settings_EditTitle",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
             "link" : "/admin/settings/languagesList",
             "name" : "Regional",
             "uniqueId" : "settings_Language",

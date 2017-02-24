@@ -80,7 +80,9 @@ import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEd
 import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
 import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
 import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
-
+import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
+import MlTitleList from '../../admin/settings/title/component/MlTitleList'
+import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
 import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
 import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
 import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'
@@ -93,6 +95,19 @@ import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEdit
 import MlAddAddressType from '../../admin/settings/addressType/component/MlAddAddressType'
 import MlAddressTypeList from '../../admin/settings/addressType/component/MlAddressTypeList'
 import MlEditAddressType from '../../admin/settings/addressType/component/MlEditAddressType'
+
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+// @Importing Cluster Admin Setting Employee Type Components from parent directory
+
+
+import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
+import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'
+import MlEditEmployeeType from '../../admin/settings/employeeTypes/components/MlEditEmployeeType'
+
+// @End
+
+
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -601,6 +616,53 @@ adminSection.route('/settings/editTaxType/:id', {
     mount(AdminLayout,{adminContent:<MlEditTaxType config={params.id} />})
   }
 });
+adminSection.route('/settings/titleList', {
+  name: 'settings_TitleList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTitleList/>})
+  }
+});
+adminSection.route('/settings/addTitle', {
+  name: 'settings_AddTitle',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTitle />})
+  }
+});
+adminSection.route('/settings/editTitle/:id', {
+  name: 'settings_EditTitle',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTitle config={params.id} />})
+  }
+});
+
+
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+
+
+/////////// for employee type create module
+adminSection.route('/settings/addEmployeeType', {
+  name: 'settings_AddEmployeeType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEmployeeType />})
+  }
+});
+/////////// for employee type edit module
+adminSection.route('/settings/editEmployeeType/:id', {
+  name: 'settings_EditEmployeeType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditEmployeeType config={params.id} />})
+  }
+});
+/////////// for list of employee types
+adminSection.route('/settings/employeeTypesList', {
+  name: 'settings_employeeTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEmployeeTypesList/>})
+  }
+});
+
+//  @End
 adminSection.route('/settings/addressTypeList', {
   name: 'settings_AddressTypeList',
   action(){

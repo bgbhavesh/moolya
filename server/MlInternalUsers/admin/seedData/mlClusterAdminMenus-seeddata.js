@@ -235,6 +235,47 @@ if(Meteor.isServer){
             ]
           },
           {
+            "link" : "/admin/settings/titleList",
+            "name" : "Title",
+            "uniqueId" : "settings_Titles",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addTitle",
+                "name": "Add Title",
+                "uniqueId": "settings_AddTitle",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/titleList",
+                "name": "List Title",
+                "uniqueId": "settings_TitleList",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTitle",
+                "name": "Edit Title",
+                "uniqueId": "settings_EditTitle",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
             "link" : "/admin/settings/languagesList",
             "name" : "Regional",
             "uniqueId" : "settings_Language",
@@ -316,6 +357,49 @@ if(Meteor.isServer){
               }
             ]
           },
+          {                                  // @Created By Sireesha on 23-02-2017 for Cluster Admin Settings Employee Type
+            "link" : "/admin/settings/employeeTypesList",
+            "name" : "EmployeeTypes",
+            "uniqueId" : "settings_EmployeeTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addEmployeeType",
+                "name": "Add EmployeeType",
+                "uniqueId": "settings_AddEmployeeType",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/employeeTypesList",
+                "name": "List EmployeeTypes",
+                "uniqueId": "settings_employeeTypesList",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editEmployeeType",
+                "name": "Edit EmployeeType",
+                "uniqueId": "settings_EditEmployeeType",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+
+            ]
+          }  // @End
+
           {
             "link" : "/admin/settings/addressTypeList",
             "name" : "Address Type",

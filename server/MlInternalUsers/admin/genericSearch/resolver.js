@@ -135,11 +135,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlLookingFor.find({},findOptions).fetch();
     totalRecords=MlLookingFor.find({},findOptions).count();
   }
+  if(args.module=="EmployeeType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   if(args.module=="tax"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
-
+  if(args.module=="title"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   if(args.module=="regional"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
@@ -259,8 +266,14 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.processId){
       return 'ProcessType'
     }
+    if(data.employmentName){
+      return 'EmployeeType'
+    }
     if(data.taxName){
       return 'Tax'
+    }
+    if(data.titleName){
+      return 'Title'
     }
 
     if(data.regionalCurrencyName){

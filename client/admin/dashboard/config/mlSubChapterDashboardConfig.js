@@ -1,6 +1,8 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlSubChapterList from "../../dashboard/component/MlSubChapterList"
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
+import MapDetails from "../../../../client/commons/components/map/mapDetails"
+import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
 import React from 'react';
 import gql from 'graphql-tag'
 
@@ -17,6 +19,32 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
   buildQueryOptions:(config)=>{
     return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
   },
+  actionConfiguration:[
+    {
+      actionName: 'onMouseEnter',
+      hoverComponent: <MapDetails />,
+      handler:  function (reqParams,mapHoverHandlerCallback) {
+        let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams.markerId};
+        const mapDataPromise =  maphandler.findMapDetailsTypeActionHandler(mapDetailsQuery);
+        mapDataPromise.then(data =>{
+          //console.log(data);
+          if(mapHoverHandlerCallback){
+            mapHoverHandlerCallback(data);
+          };
+        });
+        return null;
+      }
+    },
+    {
+      actionName: 'onMouseLeave',
+      // hoverComponent:<MapDetails />,
+      handler:  (data)=>{
+        if(data&&data.id){
+          console.log('on leave called')
+        }
+      }
+    }
+  ],
   graphQlQuery:gql`
               query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
               data:ContextSpecSearch(module:"subChapter",context:$context,searchSpec:$searchSpec){

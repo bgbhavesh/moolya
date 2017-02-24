@@ -102,6 +102,9 @@ import MlEditNumericalFormat from '../../admin/settings/numericalFormats/compone
 import MlAddSocialLinkType from '../../admin/settings/socialLinks/component/MlAddSocialLinkType'
 import MlSocialLinksTypeList from '../../admin/settings/socialLinks/component/MlSocialLinksTypeList'
 import MlEditSocialLinkType from  '../../admin/settings/socialLinks/component/MlEditSocialLinksType'
+import MlAddGender from '../../admin/settings/gender/component/MlAddGender'
+import MlGenderList from '../../admin/settings/gender/component/MlGenderList'
+import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -728,5 +731,23 @@ adminSection.route('/settings/editSocialLinkType/:id', {
   name: 'settings_EditSocialLinkType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditSocialLinkType config={params.id} />})
+  }
+});
+adminSection.route('/settings/gendersList', {
+  name: 'settings_GenderList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlGenderList/>})
+  }
+});
+adminSection.route('/settings/addGender', {
+  name: 'settings_AddSocialLinkType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddGender />})
+  }
+});
+adminSection.route('/settings/editGender/:id', {
+  name: 'settings_EditGender',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditGender config={params.id} />})
   }
 });

@@ -11,17 +11,10 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
   const result = await client.query({
     query: gql`
       query ($id: String, $clusterId:String) {
-        data: fetchUserDepSubDep(userId: $id, clusterId:$clusterId) {
-          profile {
-            InternalUprofile {
-              moolyaProfile {
-                assignedDepartment {
-                  department
-                  subDepartment
-                }
-              }
-            }
-          }
+        data: fetchUserDepSubDep(userId: $id, clusterId:$clusterId) 
+        {
+            department
+            subDepartment
         }
       }
     `,

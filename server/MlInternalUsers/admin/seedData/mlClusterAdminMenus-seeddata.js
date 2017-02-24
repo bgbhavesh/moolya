@@ -190,10 +190,51 @@ if(Meteor.isServer){
                 "isLink": true,
                 "isMenu": true,
                 "image": ""
-              }
+              },
             ]
           },
+          {                                  // @Created By Sireesha on 23-02-2017 for Cluster Admin Settings Employee Type
+            "link" : "/admin/settings/employeeTypesList",
+            "name" : "EmployeeTypes",
+            "uniqueId" : "settings_EmployeeTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
 
+              {
+                "link": "/admin/settings/addEmployeeType",
+                "name": "Add EmployeeType",
+                "uniqueId": "settings_AddEmployeeType",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/employeeTypesList",
+                "name": "List EmployeeTypes",
+                "uniqueId": "settings_employeeTypesList",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editEmployeeType",
+                "name": "Edit EmployeeType",
+                "uniqueId": "settings_EditEmployeeType",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+
+            ]
+          }  // @End
 
         ]
       }

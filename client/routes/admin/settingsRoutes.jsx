@@ -78,6 +78,19 @@ import MlLookingForTypeList from '../../admin/settings/lookingFor/component/MlLo
 import MlAddLookingForType from '../../admin/settings/lookingFor/component/MlAddLookingForType'
 import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEditLookingForType'
 
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+// @Importing Cluster Admin Setting Employee Type Components from parent directory
+
+
+import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
+import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'
+import MlEditEmployeeType from '../../admin/settings/employeeTypes/components/MlEditEmployeeType'
+
+// @End
+
+
+
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
   action(){
@@ -512,3 +525,31 @@ adminSection.route('/settings/editLookingFor/:id', {
     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
   }
 });
+
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+
+
+/////////// for employee type create module
+adminSection.route('/settings/addEmployeeType', {
+  name: 'settings_AddEmployeeType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEmployeeType />})
+  }
+});
+/////////// for employee type edit module
+adminSection.route('/settings/editEmployeeType/:id', {
+  name: 'settings_EditEmployeeType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditEmployeeType config={params.id} />})
+  }
+});
+/////////// for list of employee types
+adminSection.route('/settings/employeeTypesList', {
+  name: 'settings_employeeTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEmployeeTypesList/>})
+  }
+});
+
+//  @End

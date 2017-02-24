@@ -398,7 +398,7 @@ if(Meteor.isServer){
               },
 
             ]
-          }  // @End
+          },  // @End
 
           {
             "link" : "/admin/settings/addressTypeList",

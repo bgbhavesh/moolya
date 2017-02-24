@@ -92,6 +92,22 @@ import MlEditLanguage from '../../admin/settings/language/component/MlEditLangua
 import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlAddDateAndTime'
 import MlDateAndTimeList from '../../admin/settings/dateAndTime/component/MlDateAndTimeList'
 import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEditDateAndTime'
+import MlAddAddressType from '../../admin/settings/addressType/component/MlAddAddressType'
+import MlAddressTypeList from '../../admin/settings/addressType/component/MlAddressTypeList'
+import MlEditAddressType from '../../admin/settings/addressType/component/MlEditAddressType'
+
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+// @Importing Cluster Admin Setting Employee Type Components from parent directory
+
+
+import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
+import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'
+import MlEditEmployeeType from '../../admin/settings/employeeTypes/components/MlEditEmployeeType'
+
+// @End
+
+
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -619,3 +635,49 @@ adminSection.route('/settings/editTitle/:id', {
   }
 });
 
+
+// @Created By Sireesha on 23-02-2017
+// @For Cluster Admin Settings Employee Type
+
+
+/////////// for employee type create module
+adminSection.route('/settings/addEmployeeType', {
+  name: 'settings_AddEmployeeType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEmployeeType />})
+  }
+});
+/////////// for employee type edit module
+adminSection.route('/settings/editEmployeeType/:id', {
+  name: 'settings_EditEmployeeType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditEmployeeType config={params.id} />})
+  }
+});
+/////////// for list of employee types
+adminSection.route('/settings/employeeTypesList', {
+  name: 'settings_employeeTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEmployeeTypesList/>})
+  }
+});
+
+//  @End
+adminSection.route('/settings/addressTypeList', {
+  name: 'settings_AddressTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddressTypeList/>})
+  }
+});
+adminSection.route('/settings/addAddressType', {
+  name: 'settings_AddAddressType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddAddressType />})
+  }
+});
+adminSection.route('/settings/editAddressType/:id', {
+  name: 'settings_EditAddressType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAddressType config={params.id} />})
+  }
+});

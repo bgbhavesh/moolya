@@ -135,6 +135,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlLookingFor.find({},findOptions).fetch();
     totalRecords=MlLookingFor.find({},findOptions).count();
   }
+  if(args.module=="EmployeeType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   if(args.module=="tax"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
@@ -152,6 +156,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
   if(args.module=="dateAndTime"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="addressType"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
@@ -258,6 +266,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.processId){
       return 'ProcessType'
     }
+    if(data.employmentName){
+      return 'EmployeeType'
+    }
     if(data.taxName){
       return 'Tax'
     }
@@ -270,6 +281,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.languageName){
       return 'Language'
+    }
+    if(data.addressName){
+      return 'AddressType'
     }
     if(data.timeFormat){
       return 'DateAndTime'

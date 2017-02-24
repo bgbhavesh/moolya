@@ -16,7 +16,7 @@ let EmployeeType = `
         UpdateEmployeeType(_id:String,employmentName:String,employmentDisplayName:String,aboutEmployment:String,isActive:Boolean):String
     }
     type Query{
-      FindEmployeeType(_id: String):EmployeeType
+      FindEmployeeType(_id:String):EmployeeType
     }
 `
 

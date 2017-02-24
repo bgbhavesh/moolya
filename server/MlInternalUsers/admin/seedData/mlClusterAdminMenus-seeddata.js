@@ -316,6 +316,47 @@ if(Meteor.isServer){
               }
             ]
           },
+          {
+            "link" : "/admin/settings/addressTypeList",
+            "name" : "Address Type",
+            "uniqueId" : "settings_AddressType",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addAddressType",
+                "name": "Add Address Type",
+                "uniqueId": "settings_AddAddressType",
+                "subMenuMappingId":"settings_AddressType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/addressTypeList",
+                "name": "List Address Type",
+                "uniqueId": "settings_AddressTypeList",
+                "subMenuMappingId":"settings_AddressType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editAddressType",
+                "name": "Edit Address Type",
+                "uniqueId": "settings_EditAddressType",
+                "subMenuMappingId":"settings_AddressType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
     ]

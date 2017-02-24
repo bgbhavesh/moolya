@@ -98,6 +98,9 @@ import MlEditAddressType from '../../admin/settings/addressType/component/MlEdit
 import MlNumericalFormatList from '../../admin/settings/numericalFormats/component/MlNumericalFormatList'
 import MlAddNumericalFormat from '../../admin/settings/numericalFormats/component/MlAddNumericalFormat'
 import MlEditNumericalFormat from '../../admin/settings/numericalFormats/component/MlEditNumericalFormat'
+import MlAddSocialLinkType from '../../admin/settings/socialLinks/component/MlAddSocialLinkType'
+import MlSocialLinksTypeList from '../../admin/settings/socialLinks/component/MlSocialLinksTypeList'
+import MlEditSocialLinkType from  '../../admin/settings/socialLinks/component/MlEditSocialLinksType'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -700,5 +703,23 @@ adminSection.route('/settings/editNumericalFormat/:id', {
   name: 'settings_EditNumericalFormat',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditNumericalFormat config={params.id} />})
+  }
+});
+adminSection.route('/settings/socialLinkTypeList', {
+  name: 'settings_SocialLinkTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlSocialLinksTypeList/>})
+  }
+});
+adminSection.route('/settings/addSocialLinkType', {
+  name: 'settings_AddSocialLinkType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddSocialLinkType />})
+  }
+});
+adminSection.route('/settings/editSocialLinkType/:id', {
+  name: 'settings_EditSocialLinkType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditSocialLinkType config={params.id} />})
   }
 });

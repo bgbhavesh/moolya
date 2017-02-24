@@ -482,6 +482,47 @@ if(Meteor.isServer){
               }
             ]
           },
+          {
+            "link" : "/admin/settings/socialLinkTypeList",
+            "name" : "Social Link Type",
+            "uniqueId" : "settings_SocialLinkType",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addSocialLinkType",
+                "name": "Add Social Link Type",
+                "uniqueId": "settings_AddSocialLinkType",
+                "subMenuMappingId":"settings_SocialLinkType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/socialLinkTypeList",
+                "name": "List Social Link Type",
+                "uniqueId": "settings_SocialLinkTypeList",
+                "subMenuMappingId":"settings_SocialLinkType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editSocialLinkType",
+                "name": "Edit Social Link Type",
+                "uniqueId": "settings_EditSocialLinkType",
+                "subMenuMappingId":"settings_SocialLinkType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
     ]

@@ -139,6 +139,26 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
+  if(args.module=="tax"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="title"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="regional"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="language"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="dateAndTime"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -244,6 +264,22 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.employmentName){
       return 'EmployeeType'
+    }
+    if(data.taxName){
+      return 'Tax'
+    }
+    if(data.titleName){
+      return 'Title'
+    }
+
+    if(data.regionalCurrencyName){
+      return 'Regional'
+    }
+    if(data.languageName){
+      return 'Language'
+    }
+    if(data.timeFormat){
+      return 'DateAndTime'
     }
     return null;
   }

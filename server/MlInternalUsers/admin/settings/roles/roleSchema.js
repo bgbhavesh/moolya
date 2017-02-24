@@ -84,7 +84,7 @@ let Role = `
   
   type Query {
       fetchRole(roleName: String, roleValue: String, name: String): String
-      fetchRolesByDepSubDep(departmentId:String, subDepartmentId:String): [Roles]
+      fetchRolesByDepSubDep(departmentId:String, clusterId:String): [Roles]
       findRole(id:String):Roles
       fetchActiveRoles: [Roles]
   }

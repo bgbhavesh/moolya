@@ -72,28 +72,60 @@ if(Meteor.isServer){
         "name" : "cluster",
         "uniqueId"   :"cluster",
         "isLink" : true,
-        "isMenu" : true
-      },
-
-      {
-        "link" : "/admin/clusters/clusterview/",
-        "name" : "cluster",
-        "uniqueId"   :"cluster",
-        "isLink" : true,
         "isMenu" : true,
-        "isdynamic":true,
+        "hideSubMenu":true,
         "subMenu":[
           {
-            "link" : "/admin/cluster/clusterDetails",
+            "link" : "/admin/clusters/clusterDetails",
             "name" : "clusterDetails",
-            "uniqueId" : "cluster",
+            "uniqueId" : "cluster_clusterDetails",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"cluster",
+            "subMenuMappingId":"cluster_clusterDetails"
+          },
+          {
+            "link" : "/admin/clusters/chapters",
+            "name" : "chapters",
+            "uniqueId" : "cluster_chapters",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"cluster",
+            "subMenuMappingId":"cluster_chapters"
+          },
+          {
+            "link" : "/admin/clusters/communities",
+            "name" : "Communities",
+            "uniqueId" : "cluster_communities",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"cluster",
+            "subMenuMappingId":"cluster_communities"
+          },
+          {
+            "link" : "/admin/clusters/assignusers",
+            "name" : "Backend Users",
+            "uniqueId" : "cluster_assignusers",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"cluster",
+            "subMenuMappingId":"cluster_assignusers"
           }
         ]
-      },
 
+      },
       {
         "image" : "/images/chapter_icon.png",
         "link" : "/admin/chapter",
@@ -133,6 +165,7 @@ if(Meteor.isServer){
       {
         "image" : "/images/documents_icon.png",
         "link" : "/admin/documents",
+        "uniqueId" : "documents",
         "name" : "documents",
         "isLink" : true,
         "isMenu" : true
@@ -142,7 +175,8 @@ if(Meteor.isServer){
         "link" : "/admin/services",
         "name" : "services",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "uniqueId" : "services"
       },
       {
         "image" : "/images/settings_icon.png",

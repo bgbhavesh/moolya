@@ -77,6 +77,21 @@ import MlEditCitizenshipType from '../../admin/settings/citizenship/component/Ml
 import MlLookingForTypeList from '../../admin/settings/lookingFor/component/MlLookingForTypeList'
 import MlAddLookingForType from '../../admin/settings/lookingFor/component/MlAddLookingForType'
 import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEditLookingForType'
+import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
+import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
+import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
+import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
+import MlTitleList from '../../admin/settings/title/component/MlTitleList'
+import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
+import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
+import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
+import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'
+import MlAddLanguage from '../../admin/settings/language/component/MlAddLanguage'
+import MlLanguagesList from '../../admin/settings/language/component/MlLanguagesList'
+import MlEditLanguage from '../../admin/settings/language/component/MlEditLanguage'
+import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlAddDateAndTime'
+import MlDateAndTimeList from '../../admin/settings/dateAndTime/component/MlDateAndTimeList'
+import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEditDateAndTime'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -525,6 +540,98 @@ adminSection.route('/settings/editLookingFor/:id', {
     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
   }
 });
+adminSection.route('/settings/regionalsList', {
+  name: 'settings_RegionalsList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlRegionalsList/>})
+  }
+});
+adminSection.route('/settings/addregional', {
+  name: 'settings_AddRegional',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddRegional />})
+  }
+});
+adminSection.route('/settings/editRegional/:id', {
+  name: 'settings_EditRegional',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditRegional config={params.id} />})
+  }
+});
+adminSection.route('/settings/languagesList', {
+  name: 'settings_LanguagesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlLanguagesList/>})
+  }
+});
+adminSection.route('/settings/addLanguage', {
+  name: 'settings_AddLanguage',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddLanguage />})
+  }
+});
+adminSection.route('/settings/editLanguage/:id', {
+  name: 'settings_EditLanguage',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditLanguage config={params.id} />})
+  }
+});
+adminSection.route('/settings/dateAndTimeList', {
+  name: 'settings_DateAndTimeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlDateAndTimeList/>})
+  }
+});
+adminSection.route('/settings/addDateAndTime', {
+  name: 'settings_AddDateAndTime',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddDateAndTime />})
+  }
+});
+adminSection.route('/settings/editDateAndTime/:id', {
+  name: 'settings_EditDateAndTime',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditDateAndTime config={params.id} />})
+  }
+});
+
+adminSection.route('/settings/taxTypeList', {
+  name: 'settings_TaxTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTaxTypeList/>})
+  }
+});
+adminSection.route('/settings/addTaxType', {
+  name: 'settings_AddTaxType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTaxType />})
+  }
+});
+adminSection.route('/settings/editTaxType/:id', {
+  name: 'settings_EditTaxType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTaxType config={params.id} />})
+  }
+});
+adminSection.route('/settings/titleList', {
+  name: 'settings_TitleList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTitleList/>})
+  }
+});
+adminSection.route('/settings/addTitle', {
+  name: 'settings_AddTitle',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTitle />})
+  }
+});
+adminSection.route('/settings/editTitle/:id', {
+  name: 'settings_EditTitle',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTitle config={params.id} />})
+  }
+});
+
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type

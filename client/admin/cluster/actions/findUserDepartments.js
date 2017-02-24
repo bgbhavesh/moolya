@@ -5,27 +5,22 @@ import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
 
-export async function findUserDepartmentypeActionHandler(userId) {
-  let did=userId
+export async function findUserDepartmentypeActionHandler(userId, clusterId) {
+  let did=userId;
+  let clusterid = clusterId;
   const result = await client.query({
     query: gql`
-      query ($id: String) {
-        data: fetchUserDepSubDep(userId: $id) {
-          profile {
-            InternalUprofile {
-              moolyaProfile {
-                assignedDepartment {
-                  department
-                  subDepartment
-                }
-              }
-            }
-          }
+      query ($id: String, $clusterId:String) {
+        data: fetchUserDepSubDep(userId: $id, clusterId:$clusterId) 
+        {
+            department
+            subDepartment
         }
       }
     `,
     variables: {
-      id:did
+      id:did,
+      clusterId:clusterid
     },
     forceFetch:true
   })

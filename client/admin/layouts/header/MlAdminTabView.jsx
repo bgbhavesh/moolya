@@ -60,6 +60,26 @@ export default class MlTabView extends Component {
                 return '/admin/dashboard/chapters';
               }
           return '';
+        },
+
+        "cluster_clusterDetails":function (params,queryParams) {
+            let dynamicParams=params||{};
+            if(_.has(dynamicParams,"clusterId")){
+                return `/admin/clusters/${dynamicParams.clusterId}/clusterDetails`;
+            }
+        },
+        "cluster_chapters":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"clusterId")){
+            return `/admin/clusters/${dynamicParams.clusterId}/chapters`;
+          }
+        },
+
+        "cluster_assignusers":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"clusterId")){
+            return `/admin/clusters/${dynamicParams.clusterId}/assignusers`;
+          }
         }
       }
       let menuLinkHandler=menuLinkHandlerConfig[path];
@@ -71,7 +91,7 @@ export default class MlTabView extends Component {
     }
 
     if (menu != undefined) {
-
+      let subMenuHide=menu.hideSubMenu;
       console.log(menu.subMenu)
       //if subMenu has subMenusId then we need to fetch the subMenus for that mapping Id
       const subMenusId=menu.subMenusId;
@@ -80,7 +100,11 @@ export default class MlTabView extends Component {
         menu = find(menu.subMenusId, menuConfig);
       }
 
-      let tabMenu = menu.subMenu||[];
+      let tabMenu = [];
+      if(!subMenuHide){
+        tabMenu= menu.subMenu;
+      }
+
 
       tabOptions = tabMenu.map(function (option,index) {
         let activeClass="";

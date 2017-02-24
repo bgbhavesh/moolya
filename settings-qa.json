@@ -21,6 +21,7 @@
         "multipartUploadSize": 15728640,
         "urlExpirationTime":4000
       }
-    }
+    },
+    "graphql_proxy_url":"http://localhost:8090/graphql"
   }
 }

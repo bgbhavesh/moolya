@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlIndustries.insert(args);
+  let id = MlIndustries.insert({...args});
   if (id) {
     let code = 200;
     let result = {industryId: id}

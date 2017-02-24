@@ -127,7 +127,10 @@ let BackEndUser = `
         profile:profile
     }
     
-    
+    type dep{
+      department:String,
+       subDepartment:String
+    }
     
     type Mutation{
         createUser(user:userObject!):String
@@ -137,7 +140,7 @@ let BackEndUser = `
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
-        fetchUserDepSubDep(userId:String):BackendUsers
+        fetchUserDepSubDep(userId:String, clusterId:String):[dep]
     }
     
 `

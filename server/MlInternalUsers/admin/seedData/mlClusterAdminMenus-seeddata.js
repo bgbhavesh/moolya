@@ -146,51 +146,215 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/settings_icon.png",
-        "link" : "/admin/settings/departmentsList",
+        "link" : "/admin/settings/regionalsList",
         "name" : "settings",
         "uniqueId" : "settings",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/settings/departmentsList",
-            "name" : "Departments",
-            "uniqueId" : "settings_Departments",
+            "link" : "/admin/settings/regionalsList",
+            "name" : "Regional",
+            "uniqueId" : "settings_Regional",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
             "subMenu": [
 
               {
-                "link": "/admin/settings/addDepartment",
-                "name": "Add Departments",
-                "uniqueId": "settings_AddDepartment",
-                "subMenuMappingId":"settings_Departments",
+                "link": "/admin/settings/addregional",
+                "name": "Add Regional",
+                "uniqueId": "settings_AddRegional",
+                "subMenuMappingId":"settings_Regional",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": false,
                 "image": ""
               },
               {
-                "link": "/admin/settings/departmentsList",
-                "name": "List Department",
-                "uniqueId": "settings_DepartmentList",
-                "subMenuMappingId":"settings_Departments",
+                "link": "/admin/settings/regionalsList",
+                "name": "List Regional",
+                "uniqueId": "settings_RegionalsList",
+                "subMenuMappingId":"settings_Regional",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": false,
                 "image": ""
               },
               {
-                "link": "/admin/settings/editDepartment",
-                "name": "Edit Department",
-                "uniqueId": "settings_EditDepartment",
-                "subMenuMappingId":"settings_Departments",
+                "link": "/admin/settings/editRegional",
+                "name": "Edit Regional",
+                "uniqueId": "settings_EditRegional",
+                "subMenuMappingId":"settings_Regional",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": true,
                 "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/taxTypeList",
+            "name" : "Tax Types",
+            "uniqueId" : "settings_TaxTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addTaxType",
+                "name": "Add TaxTypes",
+                "uniqueId": "settings_AddTaxType",
+                "subMenuMappingId":"settings_TaxTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
               },
+              {
+                "link": "/admin/settings/taxTypeList",
+                "name": "List TaxType",
+                "uniqueId": "settings_TaxTypeList",
+                "subMenuMappingId":"settings_TaxTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTaxType",
+                "name": "Edit TaxType",
+                "uniqueId": "settings_EditTaxType",
+                "subMenuMappingId":"settings_TaxTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/titleList",
+            "name" : "Title",
+            "uniqueId" : "settings_Titles",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addTitle",
+                "name": "Add Title",
+                "uniqueId": "settings_AddTitle",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/titleList",
+                "name": "List Title",
+                "uniqueId": "settings_TitleList",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTitle",
+                "name": "Edit Title",
+                "uniqueId": "settings_EditTitle",
+                "subMenuMappingId":"settings_Titles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/languagesList",
+            "name" : "Regional",
+            "uniqueId" : "settings_Language",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addLanguage",
+                "name": "Add Language",
+                "uniqueId": "settings_AddLanguage",
+                "subMenuMappingId":"settings_Language",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/languagesList",
+                "name": "List Language",
+                "uniqueId": "settings_LanguagesList",
+                "subMenuMappingId":"settings_Language",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editLanguage",
+                "name": "Edit Language",
+                "uniqueId": "settings_EditLanguage",
+                "subMenuMappingId":"settings_Language",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/dateAndTimeList",
+            "name" : "Date And Time",
+            "uniqueId" : "settings_DateAndTime",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addDateAndTime",
+                "name": "Add Date And Time",
+                "uniqueId": "settings_AddDateAndTime",
+                "subMenuMappingId":"settings_DateAndTime",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/dateAndTimeList",
+                "name": "List Date And Time",
+                "uniqueId": "settings_DateAndTimeList",
+                "subMenuMappingId":"settings_DateAndTime",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editDateAndTime",
+                "name": "Edit Date And Time",
+                "uniqueId": "settings_EditDateAndTime",
+                "subMenuMappingId":"settings_DateAndTime",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
             ]
           },
           {                                  // @Created By Sireesha on 23-02-2017 for Cluster Admin Settings Employee Type
@@ -237,7 +401,7 @@ if(Meteor.isServer){
           }  // @End
 
         ]
-      }
+      },
     ]
   }});
 }

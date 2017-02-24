@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateSpecification'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlSpecifications.insert(args);
+  let id = MlSpecifications.insert({...args});
   if (id) {
     let code = 200;
     let result = {specificationId: id}

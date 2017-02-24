@@ -4,7 +4,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateTemplate'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let id = MlTemplates.insert(args);
+  let id = MlTemplates.insert({...args});
   if (id) {
     let code = 200;
     let result = {templateId: id}

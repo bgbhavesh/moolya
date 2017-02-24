@@ -12,6 +12,7 @@ let Menu = `
       dynamicLink:Boolean
       subMenuMappingId:String
       subMenusId:String
+      hideSubMenu:Boolean
     }
     type MlMenu 
     {

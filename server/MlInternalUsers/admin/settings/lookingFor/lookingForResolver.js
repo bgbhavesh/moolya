@@ -7,7 +7,7 @@ MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) =
   if (MlCommunityDefinition.findOne({code:args.communityCode})){
     args.communityName=MlCommunityDefinition.findOne({code:args.communityCode}).name;
   }
-  let id = MlLookingFor.insert(args);
+  let id = MlLookingFor.insert({...args});
   if (id) {
     let code = 200;
     let result = {lookingForId: id}

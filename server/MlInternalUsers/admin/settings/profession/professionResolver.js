@@ -7,7 +7,7 @@ MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) =
   if (MlIndustries.findOne({_id:args.industryId})){
     args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
   }
-  let id = MlProfessions.insert(args);
+  let id = MlProfessions.insert({...args});
   if (id) {
     let code = 200;
     let result = {professionId: id}

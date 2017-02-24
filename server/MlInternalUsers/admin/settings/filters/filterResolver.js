@@ -7,7 +7,7 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['CreateFilter'] = (obj, args, context, info) => {
         // TODO : Authorization
-        let id = MlFilters.insert(args.filterObject);
+        let id = MlFilters.insert({...args.filterObject});
         if(id){
             let code = 200;
             let result = {roleId: id}

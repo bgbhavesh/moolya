@@ -4,7 +4,7 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
-
+var _ = require('lodash');
 // MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
 //         // TODO : Authorization
 //     var userDetails = {
@@ -72,12 +72,46 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context, info) =>{
     console.log(args);
-    return Meteor.users.find().fetch();
+    let users = [];
+    if(args.clusterId){
+        let departments = MlDepartments.find({"depatmentAvailable.cluster.clusterId":args.clusterId}).fetch();
+        if(departments && departments.length > 0){
+            for(var i = 0; i < departments.length; i++){
+                let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
+                if(depusers && depusers.length > 0){
+                    users = users.concat(depusers)
+                }
+            }
+        }
+
+    }
+    return users;
 }
 
 MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>{
   console.log(args);
-  return Meteor.users.findOne({"_id":args.userId})
+  let dep = []
+  let user = Meteor.users.findOne({"_id":args.userId})
+  let clusterDep = MlDepartments.find({"depatmentAvailable.cluster.clusterId":args.clusterId}).fetch();
+  if(user && clusterDep && clusterDep.length > 0){
+    let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
+    // let dep = _.intersectionWith(clusterDep, userDep, _.isEqual);
+    // let dep = _.intersectionBy(clusterDep, userDep, 'myName');
+    // let dep = clusterDep.filter(function (e) {
+    //   return userDep.indexOf(e) > -1;
+    // });
+
+    for(var i = 0; i < clusterDep.length; i++){
+      for(var j = 0; j<userDep.length; j++){
+        if(userDep[j].department == clusterDep[i]._id){
+          dep.push(userDep[j]);
+        }
+      }
+    }
+
+    console.log(dep)
+  }
+  return dep
 }
 
 /*

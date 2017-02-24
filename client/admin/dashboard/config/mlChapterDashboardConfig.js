@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 
 const mlChapterDashboardListConfig=new MlViewer.View({
   name:"chapterDashBoardList",
+  module:"chapter",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
   throttleRefresh:true,
@@ -47,6 +48,7 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
   name:"chapterDashBoardMap",
   viewType:MlViewerTypes.MAP,
   extraFields:[],
+  module:"chapter",
   fields:{"userName":1,"mobileNumber":1,"eMail":1,"city":1,"regType":1},
   searchFields:["userName","mobileNumber","eMail","city","regType"],
   throttleRefresh:true,

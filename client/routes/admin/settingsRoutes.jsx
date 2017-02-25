@@ -80,6 +80,7 @@ import MlEditLookingForType from '../../admin/settings/lookingFor/component/MlEd
 import MlAddTaxType from '../../admin/settings/taxTypes/component/MlAddTaxType'
 import MlTaxTypeList from '../../admin/settings/taxTypes/component/MlTaxTypeList'
 import MlEditTaxType from '../../admin/settings/taxTypes/component/MlEditTaxType'
+import MlAddTaxation from '../../admin/settings/taxation/component/MlAddTaxation'
 import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
 import MlTitleList from '../../admin/settings/title/component/MlTitleList'
 import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
@@ -98,6 +99,12 @@ import MlEditAddressType from '../../admin/settings/addressType/component/MlEdit
 import MlNumericalFormatList from '../../admin/settings/numericalFormats/component/MlNumericalFormatList'
 import MlAddNumericalFormat from '../../admin/settings/numericalFormats/component/MlAddNumericalFormat'
 import MlEditNumericalFormat from '../../admin/settings/numericalFormats/component/MlEditNumericalFormat'
+import MlAddSocialLinkType from '../../admin/settings/socialLinks/component/MlAddSocialLinkType'
+import MlSocialLinksTypeList from '../../admin/settings/socialLinks/component/MlSocialLinksTypeList'
+import MlEditSocialLinkType from  '../../admin/settings/socialLinks/component/MlEditSocialLinksType'
+import MlAddGender from '../../admin/settings/gender/component/MlAddGender'
+import MlGenderList from '../../admin/settings/gender/component/MlGenderList'
+import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -652,6 +659,12 @@ adminSection.route('/settings/editTaxType/:id', {
     mount(AdminLayout,{adminContent:<MlEditTaxType config={params.id} />})
   }
 });
+adminSection.route('/settings/addTaxation', {
+  name: 'settings_AddTaxType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddTaxation />})
+  }
+});
 adminSection.route('/settings/titleList', {
   name: 'settings_TitleList',
   action(){
@@ -733,6 +746,42 @@ adminSection.route('/settings/editNumericalFormat/:id', {
   name: 'settings_EditNumericalFormat',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditNumericalFormat config={params.id} />})
+  }
+});
+adminSection.route('/settings/socialLinkTypeList', {
+  name: 'settings_SocialLinkTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlSocialLinksTypeList/>})
+  }
+});
+adminSection.route('/settings/addSocialLinkType', {
+  name: 'settings_AddSocialLinkType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddSocialLinkType />})
+  }
+});
+adminSection.route('/settings/editSocialLinkType/:id', {
+  name: 'settings_EditSocialLinkType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditSocialLinkType config={params.id} />})
+  }
+});
+adminSection.route('/settings/gendersList', {
+  name: 'settings_GenderList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlGenderList/>})
+  }
+});
+adminSection.route('/settings/addGender', {
+  name: 'settings_AddSocialLinkType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddGender />})
+  }
+});
+adminSection.route('/settings/editGender/:id', {
+  name: 'settings_EditGender',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditGender config={params.id} />})
   }
 });
 

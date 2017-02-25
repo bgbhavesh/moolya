@@ -80,6 +80,41 @@ export default class MlTabView extends Component {
           if(_.has(dynamicParams,"clusterId")){
             return `/admin/clusters/${dynamicParams.clusterId}/assignusers`;
           }
+        },
+
+       /* "chapter_chapters":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"chapterId")){
+            return `/admin/chapters/${dynamicParams.clusterId}/chapterList`;
+          }
+        },
+
+        "chapter_subChapters":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"chapterId")){
+            return `/admin/chapters/${dynamicParams.clusterId}/subChapters`;
+          }
+        },*/
+
+        "chapter_subChapterDetails":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"chapterId")){
+            return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.subChapterId}/subChapterDetails`;
+          }
+        },
+
+        "chapter_communities":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"chapterId")){
+            return `/admin/chapters/${dynamicParams.clusterId}/subChapters/${dynamicParams.subChapterId}/communities`;
+          }
+        },
+
+        "chapter_assignusers":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"chapterId")){
+            return `/admin/chapters/${dynamicParams.clusterId}/subChapters/${dynamicParams.subChapterId}/assignusers`;
+          }
         }
       }
       let menuLinkHandler=menuLinkHandlerConfig[path];

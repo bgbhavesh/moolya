@@ -1,6 +1,6 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
-import MlChapterList from "../../dashboard/component/MlChapterList"
+import MlChapterList from "../../chapter/components/MlChapterList"
 
 import React from 'react';
 import gql from 'graphql-tag'

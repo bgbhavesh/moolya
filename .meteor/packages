@@ -22,11 +22,10 @@ check@1.2.4
 audit-argument-checks@1.0.7
 
 fourseven:scss
-aldeed:collection2-core
+aldeed:collection2-core@2.0.0
 kadira:flow-router
 wylio:mandrill
 
-aldeed:simple-schema
 meteorhacks:npm
 chrismbeckett:toastr
 fortawesome:fontawesome

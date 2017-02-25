@@ -17,6 +17,7 @@ MlResolver.MlMutationResolver['UpdateTax'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
+    args=_.omit(args,'_id');
     let updatedResponse= MlGlobalSettings.update(id, {$set: args});
     return updatedResponse
   }

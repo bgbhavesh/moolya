@@ -26,12 +26,12 @@ export default class MlAssignBackednUserRoles extends React.Component{
       super(props)
       this.state={
           roleForm:[],
-          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"", hierarchyLevel:""}],
+          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"",  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
           selectedRole:""
       }
       this.findUserDepartments.bind(this);
       return this;
-      this.getUserDepSubDep = this.getUserDepSubDep.bind(this);
+      // this.getUserDepSubDep = this.getUserDepSubDep.bind(this);
   }
 
   componentDidMount() {
@@ -72,7 +72,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
       });
       mySwiper.updateContainerSize()
       this.setState({
-          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:""}])
+          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"", communityId:"", hierarchyLevel:"", hierarchyCode:""}])
       });
   }
 

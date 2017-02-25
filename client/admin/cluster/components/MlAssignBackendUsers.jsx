@@ -55,11 +55,12 @@ class MlAssignBackendUsers extends React.Component{
 
     async assignBackendUsers(){
         let userProfile = {};
+        userProfile['userId']   = this.state.selectedBackendUser
         userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        alert(JSON.stringify(userProfile))
-        let response = await multipartFormHandler(userProfile, "http://localhost:3000/assignusers", this.refs.profilePic.files[0]);
+        // alert(JSON.stringify(userProfile))
+        let response = await multipartFormHandler(userProfile, Meteor.settings.public.assignUserMultiPartUrl, this.refs.profilePic.files[0]);
         return response;
     }
 
@@ -108,7 +109,7 @@ class MlAssignBackendUsers extends React.Component{
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
-                                      <MlAssignBackendUserList/>
+                                      <MlAssignBackendUserList clusterId={that.props.params}/>
                                   </ScrollArea>
                               </div>
                           </div>

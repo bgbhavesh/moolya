@@ -48,7 +48,8 @@ let BackEndUser = `
         subChapterId:String,
         communityId:String,
         isActive:Boolean,
-        hierarchyLevel:String
+        hierarchyLevel:String,
+        hierarchyCode:String
     }
     
     type MoolyaProfile{
@@ -135,12 +136,14 @@ let BackEndUser = `
     type Mutation{
         createUser(user:userObject!):String
         updateUser(userId:String!, user:userObject!): String
+        addUserProfile(userId:String, user:userObject): String
     }
     
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
+        fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): [BackendUsers]
     }
     
 `

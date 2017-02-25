@@ -135,6 +135,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlLookingFor.find({},findOptions).fetch();
     totalRecords=MlLookingFor.find({},findOptions).count();
   }
+  if(args.module=="EmployeeType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   if(args.module=="tax"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
@@ -152,6 +156,34 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
   if(args.module=="dateAndTime"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="numericalFormat"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="addressType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="CompanyType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="emailType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="contactType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="socialLinks"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="gender"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
@@ -258,6 +290,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.processId){
       return 'ProcessType'
     }
+    if(data.employmentName){
+      return 'EmployeeType'
+    }
     if(data.taxName){
       return 'Tax'
     }
@@ -271,8 +306,29 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.languageName){
       return 'Language'
     }
+    if(data.measurementSystem){
+      return 'NumericalFormat'
+    }
+    if(data.addressName){
+      return 'AddressType'
+    }
+    if(data.socialName){
+      return 'SocialLinks'
+    }
+    if(data.genderName){
+      return 'Gender'
+    }
     if(data.timeFormat){
       return 'DateAndTime'
+    }
+    if(data.companyName){
+      return 'CompanyType'
+    }
+    if(data.emailName){
+      return 'EmailType'
+    }
+    if(data.contactName){
+      return 'ContactType'
     }
     return null;
   }

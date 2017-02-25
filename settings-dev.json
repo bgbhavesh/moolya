@@ -1,7 +1,8 @@
 {
   "public": {
       "graphqlUrl": "http://localhost:8090/graphql",
-      "graphqlPort":8090
+      "graphqlPort":8090,
+      "assignUserMultiPartUrl":"http://localhost:3000/assignusers"
   },
   "private": {
       "subChapterName":"Moolya",

@@ -49,6 +49,47 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
     }
 }
 
+MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => {
+  let user = Meteor.users.findOne({_id: args.userId});
+  if(user)
+  {
+
+    let profile = args.userProfile;
+    let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+
+    if(userProfiles && userProfiles.length > 0){
+        let index = _.findIndex(userProfiles, {clusterId:profile.clusterId})
+        if(index >= 0)
+        {
+            // userProfiles[index].userroles.push(profile.userroles)
+            let roles     = profile.userroles;
+            let userRoles = userProfiles[index].userroles;
+            // _.merge(userRoles, roles)
+            roles.map(function (role) {
+                  let action =_.find(userRoles, {"roleId": role.roleId, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId});
+                  if(!action){
+                      userRoles.push(role)
+                  }
+
+            })
+            userProfiles[index].userroles = userRoles;
+        }else{
+            userProfiles.push(profile);
+        }
+    }else{
+        userProfiles.push(profile);
+    }
+    user.profile.InternalUprofile.moolyaProfile.userProfiles = userProfiles;
+    let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
+    if(resp){
+      let code = 200;
+      let result = {user: resp}
+      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+      return response
+    }
+  }
+}
+
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
     let user = Meteor.users.findOne({_id: args.userId});
     if(user){
@@ -68,6 +109,26 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     let user = Meteor.users.findOne({_id: args.userId});
     return user;
+}
+
+MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) => {
+
+  let query = ""
+  let users = [];
+
+  if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.communityId != ""){
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.subChapterId":args.subChapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.communityId":args.communityId}]}).fetch();
+  }
+  else if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != ""){
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.subChapterId":args.subChapterId}]}).fetch();
+  }
+  else if(args.clusterId != "" && args.chapterId != ""){
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}]}).fetch();
+  }
+  else if(args.clusterId != "" ){
+      users = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}).fetch();
+  }
+  return users;
 }
 
 MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context, info) =>{
@@ -113,9 +174,3 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
   }
   return dep
 }
-
-/*
-MlResolver.MlQueryResolver['fetchUsers'] = (obj, args, context, info) => {
-
-}
-*/

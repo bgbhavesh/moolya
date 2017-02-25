@@ -74,7 +74,7 @@ import MlChapters from '../../admin/chapter/components/MlChapters'
 import {mlChapterMapConfig,mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterMapConfig,mlSubChapterListConfig} from '../../admin/chapter/config/mlSubChapterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
-import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
+import MlAssignBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
 
 adminSection.route('/chapters/', {
   name: 'chapter_chapters',

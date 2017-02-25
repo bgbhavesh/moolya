@@ -135,8 +135,8 @@ if(Meteor.isServer){
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/chapters/subChapters/subChapterDetails",
-            "name" : "subChapterDetails",
+            "link" : "/admin/chapters/subChapterDetails",
+            "name" : "SubChapterDetails",
             "uniqueId" : "chapter_subChapterDetails",
             "isLink" : true,
             "isMenu" : true,
@@ -159,7 +159,7 @@ if(Meteor.isServer){
             "subMenuMappingId":"chapter_communities"
           },
           {
-            "link" : "/admin/chapters/subChapters/assignusers",
+            "link" : "/admin/chapters/assignusers",
             "name" : "Backend Users",
             "uniqueId" : "chapter_assignusers",
             "isLink" : true,

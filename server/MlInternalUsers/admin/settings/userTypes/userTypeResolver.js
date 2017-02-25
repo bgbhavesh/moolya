@@ -7,7 +7,7 @@ MlResolver.MlMutationResolver['UpdateUserType'] = (obj, args, context, info) => 
 
   if (args._id) {
     var id= args._id;
-    args=_.omit(args,'_id');
+     args=_.omit(args,'_id');
     let updatedResponse= MlUserTypes.update(id, {$set: args});
     return updatedResponse
   }

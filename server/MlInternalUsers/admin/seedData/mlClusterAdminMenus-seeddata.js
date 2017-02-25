@@ -524,6 +524,90 @@ if(Meteor.isServer){
               }
             ]
           },
+          {                                  // @Created By Sireesha on 24-02-2017 for Cluster Admin Settings Email Type
+            "link" : "/admin/settings/emailTypesList",
+            "name" : "EmailTypes",
+            "uniqueId" : "settings_EmailTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addCompanyType",
+                "name": "Add EmailType",
+                "uniqueId": "settings_AddEmailType",
+                "subMenuMappingId":"settings_EmailTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/emailTypesList",
+                "name": "List EmailTypes",
+                "uniqueId": "settings_EmailTypesList",
+                "subMenuMappingId":"settings_EmailTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editEmailType",
+                "name": "Edit EmailType",
+                "uniqueId": "settings_EditEmailType",
+                "subMenuMappingId":"settings_EmailTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+
+            ]
+          },  // @End
+          {                                  // @Created By Sireesha on 24-02-2017 for Cluster Admin Settings Contact Type
+            "link" : "/admin/settings/contactTypesList",
+            "name" : "ContactTypes",
+            "uniqueId" : "settings_ContactTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addContactType",
+                "name": "Add ContactType",
+                "uniqueId": "settings_AddContactType",
+                "subMenuMappingId":"settings_ContactTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/contactTypesList",
+                "name": "List ContactTypes",
+                "uniqueId": "settings_ContactTypesList",
+                "subMenuMappingId":"settings_ContactTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editContactType",
+                "name": "Edit EmailType",
+                "uniqueId": "settings_EditContactType",
+                "subMenuMappingId":"settings_ContactTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+
+            ]
+          },  // @End
         ]
       },
     ]

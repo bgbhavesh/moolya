@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlCompanyTypeTableConfig} from "../config/mlCompanyTypeConfig";
-export default class MlCompanyTypesList extends Component {
+import {mlContactTypeTableConfig} from "../config/mlContactTypeConfig";
+export default class MlContactTypesList extends Component {
 
   componentDidMount() {
   }
@@ -11,9 +11,9 @@ export default class MlCompanyTypesList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Company Types</h2>
+          <h2>Contact Types</h2>
 
-          <MlTableViewContainer {...mlCompanyTypeTableConfig}/>
+          <MlTableViewContainer {...mlContactTypeTableConfig}/>
 
         </div>
 

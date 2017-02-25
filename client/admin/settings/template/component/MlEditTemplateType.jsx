@@ -91,7 +91,7 @@ class MlEditTransactionType extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Edit TransactionType</h2>
+              <h2>Edit Template Type</h2>
               <div className="col-md-6">
                 <div className="form_bg">
                   <div className="form-group">

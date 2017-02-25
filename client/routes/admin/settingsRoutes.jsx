@@ -110,12 +110,45 @@ import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
 // @For Cluster Admin Settings Employee Type
 // @Importing Cluster Admin Setting Employee Type Components from parent directory
 
-
 import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
 import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'
 import MlEditEmployeeType from '../../admin/settings/employeeTypes/components/MlEditEmployeeType'
 
 // @End
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Company Type
+// @Importing Cluster Admin Setting Company Type Components from parent directory
+
+import MlCompanyTypesList from '../../admin/settings/companyTypes/components/MlCompanyTypesList'
+import MlAddCompanyType from '../../admin/settings/companyTypes/components/MlAddCompanyType'
+import MlEditCompanyType from '../../admin/settings/companyTypes/components/MlEditCompanyType'
+
+// @End
+
+
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Company Type
+// @Importing Cluster Admin Setting Email Type Components from parent directory
+
+import MlEmailTypesList from '../../admin/settings/emailType/components/MlEmailTypeList'
+import MlAddEmailType from '../../admin/settings/emailType/components/MlAddEmailType'
+import MlEditEmailType from '../../admin/settings/emailType/components/MlEditEmailType'
+
+// @End
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Company Type
+// @Importing Cluster Admin Setting Contact Type Components from parent directory
+
+import MlContactTypesList from '../../admin/settings/contactType/components/MlContactTypeList'
+import MlAddContactType from '../../admin/settings/contactType/components/MlAddContactType'
+import MlEditContactType from '../../admin/settings/contactType/components/MlEditContactType'
+
+// @End
+
+
 
 
 
@@ -751,3 +784,87 @@ adminSection.route('/settings/editGender/:id', {
     mount(AdminLayout,{adminContent:<MlEditGender config={params.id} />})
   }
 });
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Company Type
+
+
+/////////// for company type create module
+adminSection.route('/settings/addCompanyType', {
+  name: 'settings_AddCompanyType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddCompanyType />})
+  }
+});
+/////////// for employee type edit module
+adminSection.route('/settings/editCompanyType/:id', {
+  name: 'settings_EditCompanyType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditCompanyType config={params.id} />})
+  }
+});
+/////////// for list of employee types
+adminSection.route('/settings/companyTypesList', {
+  name: 'settings_CompanyTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlCompanyTypesList/>})
+  }
+});
+
+//  @End
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Email Type
+
+
+/////////// for company type create module
+adminSection.route('/settings/addEmailType', {
+  name: 'settings_AddEmailType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddEmailType />})
+  }
+});
+/////////// for employee type edit module
+adminSection.route('/settings/editEmailType/:id', {
+  name: 'settings_EditEmailType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditEmailType config={params.id} />})
+  }
+});
+/////////// for list of employee types
+adminSection.route('/settings/emailTypesList', {
+  name: 'settings_EmailTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlEmailTypesList/>})
+  }
+});
+
+//  @End
+
+// @Created By Sireesha on 24-02-2017
+// @For Cluster Admin Settings Email Type
+
+
+/////////// for contact type create module
+adminSection.route('/settings/addContactType', {
+  name: 'settings_AddContactType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddContactType />})
+  }
+});
+/////////// for contact type edit module
+adminSection.route('/settings/editContactType/:id', {
+  name: 'settings_EditContactType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditContactType config={params.id} />})
+  }
+});
+/////////// for list of contact types
+adminSection.route('/settings/contactTypesList', {
+  name: 'settings_ContactTypesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlContactTypesList/>})
+  }
+});
+
+//  @End

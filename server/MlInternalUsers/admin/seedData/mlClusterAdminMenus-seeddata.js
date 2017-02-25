@@ -357,6 +357,213 @@ if(Meteor.isServer){
               }
             ]
           },
+          {                                  // @Created By Sireesha on 23-02-2017 for Cluster Admin Settings Employee Type
+            "link" : "/admin/settings/employeeTypesList",
+            "name" : "EmployeeTypes",
+            "uniqueId" : "settings_EmployeeTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addEmployeeType",
+                "name": "Add EmployeeType",
+                "uniqueId": "settings_AddEmployeeType",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/employeeTypesList",
+                "name": "List EmployeeTypes",
+                "uniqueId": "settings_employeeTypesList",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editEmployeeType",
+                "name": "Edit EmployeeType",
+                "uniqueId": "settings_EditEmployeeType",
+                "subMenuMappingId":"settings_EmployeeTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+
+            ]
+          },  // @End
+
+          {
+            "link" : "/admin/settings/addressTypeList",
+            "name" : "Address Type",
+            "uniqueId" : "settings_AddressType",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addAddressType",
+                "name": "Add Address Type",
+                "uniqueId": "settings_AddAddressType",
+                "subMenuMappingId":"settings_AddressType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/addressTypeList",
+                "name": "List Address Type",
+                "uniqueId": "settings_AddressTypeList",
+                "subMenuMappingId":"settings_AddressType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editAddressType",
+                "name": "Edit Address Type",
+                "uniqueId": "settings_EditAddressType",
+                "subMenuMappingId":"settings_AddressType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/numericalFormatList",
+            "name" : "Numerical Format",
+            "uniqueId" : "settings_NumericalFormat",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addNumericalFormat",
+                "name": "Add Numerical Format",
+                "uniqueId": "settings_AddNumericalFormat",
+                "subMenuMappingId":"settings_NumericalFormat",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/numericalFormatList",
+                "name": "List Numerical Format",
+                "uniqueId": "settings_NumericalFormatList",
+                "subMenuMappingId":"settings_NumericalFormat",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editNumericalFormat",
+                "name": "Edit Numerical Format",
+                "uniqueId": "settings_EditNumericalFormat",
+                "subMenuMappingId":"settings_NumericalFormat",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/socialLinkTypeList",
+            "name" : "Social Link Type",
+            "uniqueId" : "settings_SocialLinkType",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addSocialLinkType",
+                "name": "Add Social Link Type",
+                "uniqueId": "settings_AddSocialLinkType",
+                "subMenuMappingId":"settings_SocialLinkType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/socialLinkTypeList",
+                "name": "List Social Link Type",
+                "uniqueId": "settings_SocialLinkTypeList",
+                "subMenuMappingId":"settings_SocialLinkType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editSocialLinkType",
+                "name": "Edit Social Link Type",
+                "uniqueId": "settings_EditSocialLinkType",
+                "subMenuMappingId":"settings_SocialLinkType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/settings/gendersList",
+            "name" : "Gender",
+            "uniqueId" : "settings_Gender",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addGender",
+                "name": "Add Gender",
+                "uniqueId": "settings_AddGender",
+                "subMenuMappingId":"settings_Gender",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/gendersList",
+                "name": "List Gender",
+                "uniqueId": "settings_GenderList",
+                "subMenuMappingId":"settings_Gender",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editGender",
+                "name": "Edit Gender",
+                "uniqueId": "settings_EditGender",
+                "subMenuMappingId":"settings_Gender",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
     ]

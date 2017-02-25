@@ -35,9 +35,9 @@ MlResolver.MlMutationResolver['createDateAndTime'] = (obj, args, context, info) 
     return response
   }
 }
-MlResolver.MlQueryResolver['fetchDocumentsType'] = (obj, args, context, info) => {
-  let result=MlDocumentTypes.find({isActive:true}).fetch()||[];
-  return result;
-}
+// MlResolver.MlQueryResolver['fetchDocumentsType'] = (obj, args, context, info) => {
+//   let result=MlDocumentTypes.find({isActive:true}).fetch()||[];
+//   return result;
+// }
 
 

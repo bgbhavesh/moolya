@@ -1,7 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
+import _ from 'lodash';
+import {findMapDetailsTypeActionHandler} from './findMapDetailsTypeAction'
+
 import MapDetails from './mapDetails'
+
 import {render} from 'react-dom';
 
 const K_SIZE = 80;
@@ -36,49 +40,62 @@ const mapMarkerStyleHover = {
 export default class MapMarkers extends Component {
   constructor(props) {
     super(props);
-    this.state = {data: {}, isClick: false};
+    this.state = {loading: true, data: {}, isHover: false};
     this.markerClickHandler.bind(this);
+    this.onMouseEnterHandlerCallback.bind(this);
   }
 
-  info() {
-    $(".isDisplay").show();
-    $(".hoverContent").hide();
-  }
+  onMouseEnterHandlerCallback(data){
+   this.setState({loading: false, data: data});
+  };
 
-  onMouseEnterContent() {
+  onMouseEnterContent(customHoverHandler) {
     this.setState({isHover: true});
-    // if(!$(".isDisplay").is(':visible')){
-    //   $(".hoverContent").show();
-    // }
+    let resp=[];
+    if(customHoverHandler){
+      customHoverHandler(this.props,this.onMouseEnterHandlerCallback.bind(this));
+    }
+      return resp;
   }
 
   onMouseLeaveContent() {
     this.setState({isHover: false});
-    // $(".isDisplay").hide();
   }
 
   markerClickHandler(data) {
-    alert(data.text);
-    console.log(data);
-    // this.setState({isHover: true});
-    //this.actionHandler(data);
-    //Action Handler Gives the data.
-    //Use session to show and hide the Tab
+    //alert(data.text);
   }
+
+  /*async findModuleDetails() {
+    let json = {
+      moduleName: this.props.module,
+      id: this.props.markerId
+    }
+    const response = await findMapDetailsTypeActionHandler(json);
+    this.setState({loading: false, data: response});
+    return response;
+  }*/
 
   render() {
     const style = this.props.hover ? mapMarkerStyleHover : mapMarkerStyle;
+
+    let actionConfig = this.props.actionConfiguration|| [];
+    let hoverInConfig = _.find(actionConfig, {actionName: 'onMouseEnter'});
+    let hoverActionHandler=hoverInConfig&&hoverInConfig.handler?hoverInConfig.handler:null;
+    let hoverComp = hoverInConfig&&hoverInConfig.hoverComponent?hoverInConfig.hoverComponent:"";
+    let data = this.state.data && this.state.data ? this.state.data : [];
+    let HoverComponent = React.cloneElement(hoverComp, {data: data});
     return (
 
       <div style={{'width': '200px'}} className="cluster_map inactive" id={this.props.markerId}
-           onMouseEnter={this.onMouseEnterContent.bind(this)} onMouseLeave={this.onMouseLeaveContent.bind(this)}
+           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
            onClick={this.markerClickHandler.bind(this, this.props)}>
         <div className="hex_btn hex_btn_in">
           <span><img src="/images/hover_image.png"/><b>{this.props.text}</b></span>
           <div className="indec"></div>
         </div>
-        {this.state.isHover ? (<div><MapDetails allData={this.props}/></div>) : ""}
-
+        {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
+        {this.state.isHover ? (<div>{HoverComponent}</div>) : ""}
       </div>
     );
   }

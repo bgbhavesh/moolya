@@ -2,12 +2,13 @@
  * Created by venkatasrinag on 21/2/17.
  */
 export async function multipartFormHandler(data, url, file) {
-    if(!file)
-        return  false;
+    // if(!file)
+    //     return  false;
 
     let formdata = new FormData();
     formdata.append('data', JSON.stringify(data));
-    formdata.append('file', file);
+    if(file)
+        formdata.append('file', file);
 
     const result = await new Promise(function (resolve, reject) {
         // Make ajax call

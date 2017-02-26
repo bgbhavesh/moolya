@@ -128,20 +128,48 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/chapter_icon.png",
-        "link" : "/admin/chapter",
+        "link" : "/admin/chapters",
         "uniqueId" : "chapter",
         "name" : "chapter",
         "isLink" : "true",
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/chapter/chapters",
-            "name" : "Chapters",
-            "uniqueId" : "chapter_chapters",
+            "link" : "/admin/chapters/subChapters/subChapterDetails",
+            "name" : "subChapterDetails",
+            "uniqueId" : "chapter_subChapterDetails",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"chapter",
+            "subMenuMappingId":"chapter_subChapterDetails"
           },
+          {
+            "link" : "/admin/chapters/subChapters/communities",
+            "name" : "Communities",
+            "uniqueId" : "chapter_communities",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"chapter",
+            "subMenuMappingId":"chapter_communities"
+          },
+          {
+            "link" : "/admin/chapters/subChapters/assignusers",
+            "name" : "Backend Users",
+            "uniqueId" : "chapter_assignusers",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"chapter",
+            "subMenuMappingId":"chapter_assignusers"
+          }
         ]
       },
       {

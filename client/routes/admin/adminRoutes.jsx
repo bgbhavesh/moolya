@@ -8,7 +8,7 @@ import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import MlSubChapterDetails from '../../admin/subChapter/components/MlSubChapterDetails'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
-import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
+import MlEditCommunityFormComponent from '../../admin/community/components/MlEditCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import MlClusterListView from '../../admin/cluster/components/MlClusterListView'
 import MlClusterView from '../../admin/cluster/components/MlClusterView'
@@ -20,6 +20,8 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 
+import  MlCommunityView from '../../admin/community/components/MlCommunity'
+import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
 
@@ -111,11 +113,23 @@ adminSection.route('/chapters/:chapterId', {
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
-
+//
+// adminSection.route('/community', {
+//   name: 'community',
+//   action(){
+//     mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
+//   }
+// });
 adminSection.route('/community', {
   name: 'community',
   action(){
-    mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
+    mount(AdminLayout,{adminContent:< MlCommunityView listConfig={mlCommunityListConfig}/>})
+  }
+});
+adminSection.route('/community/:communityId', {
+  name: 'community',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditCommunityFormComponent params={params.communityId}/>})
   }
 });
 adminSection.route('/internalusers', {

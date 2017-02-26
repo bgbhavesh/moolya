@@ -1,6 +1,6 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-
+import _ from 'lodash';
 
 // MlResolver.MlMutationResolver['CreateSubDepartment'] = (obj, args, context, info) =>{
 //         // TODO : Authorization
@@ -63,6 +63,7 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
     /* for(key in args.department){
      cluster[key] = args.department[key]
      }*/
+
     let resp = MlSubDepartments.update({_id:args.subDepartmentId}, {$set:args.subDepartment}, {upsert:true})
     if(resp){
       let code = 200;

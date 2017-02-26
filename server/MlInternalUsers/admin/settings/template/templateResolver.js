@@ -1,6 +1,6 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-
+import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateTemplate'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -14,10 +14,10 @@ MlResolver.MlMutationResolver['CreateTemplate'] = (obj, args, context, info) => 
 }
 MlResolver.MlMutationResolver['UpdateTemplate'] = (obj, args, context, info) => {
   // TODO : Authorization
-
   if (args._id) {
     var id= args._id;
-    let updatedResponse= MlTemplates.update(id, {$set: args});
+    args=_.omit(args,'_id');
+    let updatedResponse= MlTemplates.update({_id:id}, {$set: args});
     return updatedResponse
   }
 

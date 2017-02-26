@@ -3,6 +3,7 @@
  */
 import moolyaEmail from './commons/mlEmail'
 import s3Client from './commons/mlS3'
+import validteAuthorization from './mlAuthorization/mlAuthorization'
 
 Meteor.startup(function ()
 {
@@ -19,6 +20,7 @@ Meteor.startup(function ()
     // }
     mlEmail = new moolyaEmail();
     mlS3Client = new s3Client();
+    mlAuthorization = new validteAuthorization();
 })
 
 //Copied from SSL package..

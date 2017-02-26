@@ -37,5 +37,9 @@ MlResolver.MlQueryResolver['FetchTax'] = (obj, args, context, info) => {
   let result=MlGlobalSettings.find({isActive:true}).fetch()||[];
   return result;
 }
+MlResolver.MlQueryResolver['FetchActiveTax'] = (obj, args, context, info) => {
+  let resp = MlGlobalSettings.find({"isActive":true}).fetch();
+  return resp;
+}
 
 

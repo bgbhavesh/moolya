@@ -42,3 +42,11 @@ MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {
         }
     }
 }
+MlResolver.MlQueryResolver['FetchActiveStates'] = (obj, args, context, info) => {
+  if(args.countryId){
+    let resp = MlStates.find({"countryId":args.countryId}).fetch()
+    return resp;
+  }
+
+}
+

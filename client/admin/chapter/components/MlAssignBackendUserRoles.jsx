@@ -21,7 +21,7 @@ let initSwiper = () => {
 }
 
 
-export default class MlAssignBackednUserRoles extends React.Component{
+export default class MlAssignChapterBackendUserRoles extends React.Component{
   constructor(props){
       super(props)
       this.state={

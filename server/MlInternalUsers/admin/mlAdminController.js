@@ -35,6 +35,12 @@ const expressServer = graphqlExpress((req) => {
   var context = {};
   context = getContext({req});
   context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+  // let ret = mlAuthorization.validteAuthorization(context.userId, req.body)
+  // if(ret == false){
+  //   return{success:false}
+  // }
+
   return {
     schema: executableSchema,
     graphiql: true,
@@ -98,7 +104,7 @@ app.post('/assignusers', multipartMiddleware, Meteor.bindEnvironment(function (r
             userroles:  roles,
             isDefault: false
         }
-        let response = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)
+        let response = MlResolver.MlMutationResolver['a '](null, {userId:userId, userProfile:userProfile}, context, null)
         res.send(true)
     }
     // res.send(response)

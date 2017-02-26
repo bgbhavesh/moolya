@@ -6,9 +6,9 @@ import geocoder from 'geocoder'
 
 MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
     let cluster = args.cluster;
-    // let isValidAuth = new MlAuthorization().validteAuthorization(context.userId, args.moduleName, args.actionName);
-    // if(!isValidAuth)
-    //     return "Not Authorized"
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.cluster);
+    if(!isValidAuth)
+        return "Not Authorized"
 
     if(MlClusters.find({countryId:cluster.countryId}).count() > 0){
         let code = 409;

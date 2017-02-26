@@ -22,6 +22,11 @@ MlResolver.MlQueryResolver['fetchCountriesSearch'] = (obj, args, context, info) 
 
 
 MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
+    let cluster = args.cluster;
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if(!isValidAuth)
+      return "Not Authorized"
+
     let country = MlCountries.findOne({_id: args.countryId});
     if(country){
         for( key in args.country){
@@ -47,7 +52,7 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
               showOnMap:false,
               isActive:false
             }
-            MlResolver.MlMutationResolver['createCluster'](obj, {cluster:cluster}, context, info)
+            MlResolver.MlMutationResolver['createCluster'](obj, {cluster:cluster, moduleName:"CLUSTER", actionName:"CREATE"}, context, info)
           }
             let code = 200;
             let result = {country: resp}

@@ -9,7 +9,7 @@ import {fetchAssignUsersActionHandler} from '../actions/fetchAssignUsers'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
-export default class MlAssignBackendUserList extends React.Component{
+export default class MlAssignChapterBackendUserList extends React.Component{
     constructor(props){
         super(props)
         this.state={

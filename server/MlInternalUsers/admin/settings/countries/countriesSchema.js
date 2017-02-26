@@ -35,7 +35,7 @@ let countriesSchema = `
     }
     
     type Mutation{
-        updateCountry(countryId: String, country: countryObject): String
+        updateCountry(countryId: String, country: countryObject, moduleName:String, actionName:String): String
     }
 `
 

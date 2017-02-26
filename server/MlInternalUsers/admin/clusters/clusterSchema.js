@@ -53,7 +53,7 @@ let clusterSchema = `
     
     type Mutation 
     {
-        createCluster(cluster:clusterObject):String
+        createCluster(cluster:clusterObject, moduleNam:String, actionName:String):String
         upsertCluster(clusterId:String, cluster:clusterObject): String
         updateCluster(clusterId:String, clusterDetails:clusterUpdateObject):String
     }    

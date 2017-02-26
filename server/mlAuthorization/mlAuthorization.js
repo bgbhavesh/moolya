@@ -15,7 +15,11 @@ class MlAuthorization
         check(userId, String)
         check(moduleName, String)
         check(actionName, String)
-        check(resource, Object)
+        check(req, Object)
+
+        let ret = false;
+
+        let self = this
 
 
         let action = MlActions.findOne({code:actionName})
@@ -33,8 +37,10 @@ class MlAuthorization
         {
             let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
             let user_roles;
+
+            // Selecting Default Profile
             for(var i = 0; i < user_profiles.length; i++){
-                if(user_profiles[i].clusterId == "*" || user_profiles.clusterId == req.clusterId){
+                if(user_profiles[i].isDefault == true){
                     user_roles = user_profiles[i].userRoles
                     break;
                 }
@@ -42,48 +48,57 @@ class MlAuthorization
 
             if(user_roles && user_roles.length > 0)
             {
-                // if(req.chapterId != "" && req.subChapterId != "" && req.communityId != ""){
-                // }
-                // if(req.chapterId != "" && req.subChapterId != ""){
-                // }
-                // if(req.chapterId != ""){
-                // }
+                let role;
+                if(moduleName == "COMMUNITY" && req.chapterId != "" && req.subChapterId != "" && req.communityId != ""){
+                    let userRole = _.find(user_roles, {chapterId:req.chapterId || "all", subChapterId:req.subChapterId || "all", communityId:req.communityId || "all"})
+                    return validateRole(userRole.roleId, module, action)
+                }
 
-                user_roles.map(function (userrole) {
-                    let role = MlRoles.findOne({_id:userrole.roleId})
-                    if(role){
-                        role.modules.map(function (module) {
-                            if(module.moduleId == "*" || role.module[j].moduleId == module._id){
-                                let actions = role.module.actions;
-                                actions.map(function (action) {
-                                    if(action.actionId == "*" || action.actionId == action._id){
-                                        return true
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-                // for(var i = 0; i < user_roles.length; i++){
-                //     let role = MlRoles.findOne({_id:user_roles[i].roleId})
-                //     if(role){
-                //           for(var j = 0; j < role.modules.length; j++){
-                //               if(role.modules[j].moduleId == "*" || role.module[j].moduleId == module._id){
-                //                   let permissions = role.modules[j].actions;
-                //                   for(var k = 0; k < permissions.length; k++){
-                //                       if(permissions[k].actionId == "*" || permissions[k].actionId == action._id){
-                //                           return true;
-                //                       }
-                //                   }
-                //               }
-                //           }
-                //     }
-                // }
+                else if(moduleName == "SUBCHAPTER" && req.chapterId != "" && req.subChapterId != ""){
+                    let userRole = _.find(user_roles, {chapterId:req.chapterId || "all", subChapterId:req.subChapterId || "all"})
+                    return validateRole(userRole.roleId, module, action)
+                }
+
+                else if(moduleName == "CHAPTER" && req.chapterId != ""){
+                    let userRole = _.find(user_roles, {chapterId:req.chapterId || "all"})
+                    return validateRole(userRole.roleId, module, action)
+                }
+
+                else {
+                    user_roles.map(function (userRole) {
+                        ret = self.validateRole(userRole.roleId, module, action)
+                        if(ret)
+                            return;
+                    })
+                }
             }
         }
 
-        return false;
+        return ret;
     }
+
+    validateRole(roleId, module, action){
+        let ret = false;
+        let role = MlRoles.findOne({_id:roleId})
+        if(role)
+        {
+          role.modules.map(function (module) {
+            if(module.moduleId == "all" || module.moduleId == module._id){
+              let actions = module.actions;
+              actions.map(function (action) {
+                if(action.actionId == "all" || action.actionId == action._id){
+                  ret = true;
+                  return;
+                }
+              })
+            }
+          })
+        }
+
+        return ret;
+    }
+
+
 }
 
 

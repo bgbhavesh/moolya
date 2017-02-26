@@ -134,7 +134,7 @@ let BackEndUser = `
     }
     
     type Mutation{
-        createUser(user:userObject!):String
+        createUser(user:userObject!, moduleName:String, actionName:String):String
         updateUser(userId:String!, user:userObject!): String
         addUserProfile(userId:String, user:userObject): String
     }

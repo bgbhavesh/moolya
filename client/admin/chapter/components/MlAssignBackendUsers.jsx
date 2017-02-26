@@ -8,8 +8,8 @@ import gql from 'graphql-tag'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler'
 import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
-import MlAssignBackendUserList from './MlAssignBackendUserList'
-import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
+import MlAssignChapterBackendUserList from './MlAssignBackendUserList'
+import MlAssignChapterBackendUserRoles from './MlAssignBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 
 let FontAwesome = require('react-fontawesome');
@@ -17,7 +17,7 @@ let Select = require('react-select');
 
 
 
-class MlAssignBackendUsers extends React.Component{
+class MlAssignChapterBackendUsers extends React.Component{
     constructor(props){
         super(props)
         this.state={
@@ -108,7 +108,7 @@ class MlAssignBackendUsers extends React.Component{
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
-                                      <MlAssignBackendUserList clusterId={that.props.params}/>
+                                      <MlAssignChapterBackendUserList clusterId={that.props.params}/>
                                   </ScrollArea>
                               </div>
                           </div>
@@ -143,7 +143,7 @@ class MlAssignBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
+                                      {userid?(<MlAssignChapterBackendUserRoles userId={userid} clusterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">
@@ -164,4 +164,4 @@ class MlAssignBackendUsers extends React.Component{
     }
 }
 
-export default MlAssignBackendUsers = formHandler()(MlAssignBackendUsers);
+export default MlAssignChapterBackendUsers = formHandler()(MlAssignChapterBackendUsers);

@@ -33,7 +33,7 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($departmentName: String, $displayName: String, $departmentDesc: String, $isMoolya: Boolean, $departmentAvailable: [DepatmentAvailable], $isActive: Boolean){
+    mutation  ($departmentName: String, $displayName: String, $departmentDesc: String, $isMoolya: Boolean, $departmentAvailable: [DepatmentAvailable], $isActive: Boolean, $moduleName:String!, $actionName:String!){
         createDepartment(
           department :{
           departmentName: $departmentName,
@@ -42,7 +42,9 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
           isMoolya :$isMoolya,
           depatmentAvailable: $departmentAvailable,
           isActive :$isActive
-          }
+          },
+          moduleName:$moduleName,
+          actionName:$actionName
         ) 
       }
     `,
@@ -52,7 +54,9 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
       departmentDesc,
       isMoolya,
       departmentAvailable,
-      isActive
+      isActive,
+      moduleName:"DEPARTMENT",
+      actionName:"CREATE"
     }
   })
   const id = result.data.CreateDepartment;

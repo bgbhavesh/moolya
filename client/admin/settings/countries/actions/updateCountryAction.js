@@ -6,16 +6,20 @@ export async function updateCountryActionHandler(CountryDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation updateCountry($countryId:String, $country: countryObject){
+    mutation updateCountry($countryId:String, $country: countryObject, $moduleName:String, $actionName:String){
       updateCountry(
         countryId:$countryId,
-        country: $country
+        country: $country,
+        moduleName:$moduleName,
+        actionName:$actionName
       ) 
       }
     `,
     variables: {
       countryId:countryId,
-      country:CountryDetails
+      country:CountryDetails,
+      moduleName:"COUNTRIES",
+      actionName:"UPDATE"
     }
   })
   console.log(result)

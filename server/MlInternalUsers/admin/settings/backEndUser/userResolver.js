@@ -35,6 +35,10 @@ var _ = require('lodash');
 // }
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
+    let cluster = args.cluster;
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.cluster);
+    if(!isValidAuth)
+      return "Not Authorized"
     if(Meteor.users.find({username:args.user.username}).count() > 0) {
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);

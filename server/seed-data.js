@@ -8,7 +8,7 @@ var adminPassword = "Admin@123";
 var platformAdminId;
 let mlModules = MlModules.find().fetch();
 let actions = MlActions.find().fetch();
-let permissions = [{actionId:"*", isActive:true}]
+let permissions = [{actionId:"all", isActive:true}]
 
 
 
@@ -41,7 +41,7 @@ if(!userObj){
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(!role){
       let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
-    let modules = [{moduleId:"*", permissions:permissions}]
+    let modules = [{moduleId:"all", actions:permissions}]
     role = {
         roleName:"platformadmin",
         displayName:"Platform Admin",
@@ -50,10 +50,11 @@ if(!role){
         isActive:true
     }
     var roleId = MlRoles.insert(role);
-    var userRoles = [{roleId:roleId, chapterId:"*", subchapterId:"*", communityId:"*", hiearchy:10}]
+    var userRoles = [{roleId:roleId, chapterId:"all", subchapterId:"all", communityId:"all", hierarchyLevel:"4", hierarchyCode:"PLATFORM"}]
     var userProfiles = [{
-        clusterId:"*",
+        clusterId:"all",
         userRoles:userRoles,
+        isDefault:true
     }]
     Meteor.users.update({_id:platformAdminId}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":userProfiles}})
 }
@@ -67,10 +68,10 @@ if(!clusterAdmin){
     let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
     let clusterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
     let modules = [
-                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, permissions:clusterPer},
-                    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, permissions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, permissions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, permissions:permissions}
+                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:clusterPer},
+                    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
                   ]
     let role = {
       roleName:"clusteradmin",
@@ -87,8 +88,8 @@ if(!chapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, permissions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, permissions:permissions}
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"chapteradmin",
@@ -106,8 +107,8 @@ if(!subchapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, permissions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, permissions:permissions}
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"subchapteradmin",
@@ -124,7 +125,7 @@ if(!chapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
   let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, permissions:permissions}
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"communityadmin",

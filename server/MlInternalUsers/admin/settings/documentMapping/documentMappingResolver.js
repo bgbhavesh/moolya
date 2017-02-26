@@ -1,6 +1,6 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-
+import _ from 'lodash';
 
 MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -16,6 +16,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
   // TODO : Authorization
 
   if (args.documentId) {
+    args=_.omit(args,'_id');
     let updatedResponse= MlDocumentMapping.update({documentId:args.documentId}, {$set: args.document});
     return updatedResponse
   }

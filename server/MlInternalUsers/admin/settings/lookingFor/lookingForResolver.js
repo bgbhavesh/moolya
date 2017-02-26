@@ -1,6 +1,6 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-
+import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -22,6 +22,7 @@ MlResolver.MlMutationResolver['UpdateLookingFor'] = (obj, args, context, info) =
   }
   if (args._id) {
     var id= args._id;
+    args=_.omit(args,'_id');
     let updatedResponse = MlLookingFor.update(id, {$set: args});
     return updatedResponse
   }

@@ -1,12 +1,13 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-
+import _ from 'lodash'
 
 MlResolver.MlMutationResolver['updateDocumentType'] = (obj, args, context, info) => {
   // TODO : Authorization
 
   if (args._id) {
     var id= args._id;
+    args=_.omit(args,'_id');
     let updatedResponse= MlDocumentTypes.update(id, {$set: args});
     return updatedResponse
   }

@@ -1,6 +1,6 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-
+import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateEntity'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -17,6 +17,7 @@ MlResolver.MlMutationResolver['UpdateEntity'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
+    args=_.omit(args,'_id');
     let updatedResponse= MlEntity.update(id, {$set: args});
     return updatedResponse
   }

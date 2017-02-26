@@ -1,17 +1,8 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import MlTaxTable from './MlTaxTable'
-
-var options = [
-  { value: 'one', label: 'One' },
-  { value: 'two', label: 'Two' }
-];
-function logChange(val) {
-  console.log("Selected: " + val);
-}
 
 export default class MlAddTaxation extends React.Component{
   render(){

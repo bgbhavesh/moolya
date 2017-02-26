@@ -1,4 +1,5 @@
 import MlResolver from '../mlAdminResolverDef'
+import queryFunction from "../genericSearch/queryConstructor";
 
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
@@ -8,6 +9,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   // `limit` may be `null`
   if (args.limit > 0) {
     findOptions.limit = args.limit;
+  }
+
+  let query={};
+  if (args.fieldsData){
+    query = queryFunction(args);
   }
 
   let moduleName=args.module;
@@ -100,8 +106,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module=="industry"){
-    data= MlIndustries.find({},findOptions).fetch();
-    totalRecords=MlIndustries.find({},findOptions).count();
+    data= MlIndustries.find(query,findOptions).fetch();
+    totalRecords=MlIndustries.find(query,findOptions).count();
   }
   if(args.module=="specification"){
     data= MlSpecifications.find({},findOptions).fetch();

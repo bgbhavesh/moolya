@@ -15,16 +15,18 @@ export default class  MlTableViewComposer extends Component {
           variables: {
              offset: 0,
              limit: config.sizePerPage||5,
+              fieldsData:config.fieldsData||null
           },
           forceFetch: true
         }),
         props: ({data: {loading, data, fetchMore}}) => ({
           loading,
           data,
-          fetchMore: (sizePerPage,pageNumber) => fetchMore({
+          fetchMore: (sizePerPage,pageNumber,searchFilter) => fetchMore({
             variables: {
               offset:sizePerPage*(pageNumber-1)||0,
               limit:sizePerPage||10,
+              fieldsData:searchFilter||null
             },
            updateQuery: (prev, {fetchMoreResult}) => {
               if (!fetchMoreResult.data) {

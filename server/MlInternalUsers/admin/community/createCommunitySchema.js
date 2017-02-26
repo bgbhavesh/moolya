@@ -48,6 +48,9 @@ let CommunitySchema = `
   input communityInput{
       communityName :String,
       communityDisplayName :String,
+      communityDefId:String,
+      communityDefCode:String,
+      communityDefName:String,
       clusters: [clusters],
       chapters: [chapters],
       link : String,

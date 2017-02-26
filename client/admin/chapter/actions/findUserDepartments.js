@@ -1,17 +1,15 @@
-/**
- * Created by venkatasrinag on 20/2/17.
- */
+
 import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
 
-export async function findUserDepartmentypeActionHandler(userId, clusterId) {
+export async function findUserDepartmentypeActionHandler(userId, subChapterId) {
   let did=userId;
-  let clusterid = clusterId;
+  let scid = subChapterId;
   const result = await client.query({
     query: gql`
-      query ($id: String, $clusterId:String) {
-        data: fetchUserDepSubDep(userId: $id, clusterId:$clusterId) 
+      query ($id: String, $subChapterId:String) {
+        data: fetchsubChapterUserDepSubDep(userId: $id, subChapterId:$subChapterId) 
         {
             department
             subDepartment
@@ -20,7 +18,7 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
     `,
     variables: {
       id:did,
-      clusterId:clusterid
+      subChapterId:scid
     },
     forceFetch:true
   })

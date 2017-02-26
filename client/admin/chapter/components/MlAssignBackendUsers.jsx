@@ -55,7 +55,7 @@ class MlAssignBackendUsers extends React.Component{
     async assignBackendUsers(){
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
-        userProfile['clusterId'] = this.props.params;
+        userProfile['subChapterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         // alert(JSON.stringify(userProfile))
@@ -90,8 +90,8 @@ class MlAssignBackendUsers extends React.Component{
           }
         ]
         let that    = this;
-        let queryOptions = {options: { variables: {clusterId:that.props.params}}};
-        let query   = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
+        let queryOptions = {options: { variables: {subChapterId:that.props.params}}};
+        let query   = gql`query($subChapterId:String){data:fetchUsersBysubChapterDepSubDep(subChapterId: $subChapterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
         return(
             <div className="admin_main_wrap">
@@ -136,6 +136,9 @@ class MlAssignBackendUsers extends React.Component{
                                           </div>
                                           <div className="form-group">
                                               <input type="text" placeholder="Display Name" className="form-control float-label" id="dName"  ref="displayName"/>
+                                          </div>
+                                          <div className="form-group">
+                                            <input type="text" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName"/>
                                           </div>
                                           <br className="brclear"/>
                                       </div>

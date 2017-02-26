@@ -48,7 +48,7 @@ const mlCommunityListConfig=new MlViewer.View({
   viewComponent:<MlCommunityList />,
   graphQlQuery:gql`
               query {
-                  data:fetchCommunityDef {
+                  data:fetchCommunityDefs {
                        data{
                             _id
                             isActive

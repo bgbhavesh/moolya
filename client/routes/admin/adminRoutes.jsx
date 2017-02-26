@@ -8,7 +8,7 @@ import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import MlSubChapterDetails from '../../admin/subChapter/components/MlSubChapterDetails'
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
-import MlAddCommunityFormComponent from '../../admin/community/components/MlAddCommunityFormComponent'
+import MlEditCommunityFormComponent from '../../admin/community/components/MlEditCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
 import MlClusterListView from '../../admin/cluster/components/MlClusterListView'
 import MlClusterView from '../../admin/cluster/components/MlClusterView'
@@ -129,7 +129,7 @@ adminSection.route('/community', {
 adminSection.route('/community/:communityId', {
   name: 'community',
   action(params){
-    mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent params={params.communityId}/>})
+    mount(AdminLayout,{adminContent:< MlEditCommunityFormComponent params={params.communityId}/>})
   }
 });
 adminSection.route('/internalusers', {

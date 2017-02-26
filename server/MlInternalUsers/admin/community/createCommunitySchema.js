@@ -12,8 +12,6 @@ let CommunitySchema = `
     type Community{
       communityName :String,
       communityDisplayName :String,
-      clusters: [clustersOutput],
-      chapters: [chaptersOutput],
       link : String,
       id:String,      
       showOnMap : Boolean,
@@ -26,6 +24,8 @@ let CommunitySchema = `
       communityImageLink: String
       code: String
       aboutCommunity : String
+      clusters: [clustersOutput]
+      chapters: [chaptersOutput]
       _id:String      
       showOnMap : Boolean
       isActive : Boolean
@@ -51,21 +51,30 @@ let CommunitySchema = `
       communityDefId:String,
       communityDefCode:String,
       communityDefName:String,
-      clusters: [clusters],
-      chapters: [chapters],
-      link : String,
-      id:String,      
+      link : String,    
       showOnMap : Boolean,
       communityDescription : String,
       isActive : Boolean,
   }
+  input communityDefInput{
+      name :String,
+      displayName :String,
+      communityImageLink: String,
+      code: String,
+      aboutCommunity : String,
+      clusters: [clusters],
+      chapters: [chapters],
+      showOnMap : Boolean,
+      isActive : Boolean,
+    }
     
     type Mutation {
-         createCommunity(community:communityInput): String
+         updateCommunityDef(_id:String, communityDef:communityDefInput): String
     }
      type Query{
         FetchMapData(moduleName:String,id:String):[MapData]
-        fetchCommunityDef: CommunityDefOutput
+        fetchCommunityDef(_id:String): CommunityDef
+        fetchCommunityDefs: CommunityDefOutput
     }
 `
 

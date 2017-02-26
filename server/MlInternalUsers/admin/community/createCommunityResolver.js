@@ -3,18 +3,10 @@ import MlRespPayload from '../../../commons/mlPayload'
 
 
 MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) =>{
-    check(args, Object)
-    check(args.name, String)
-    check(args.displayName, String)
-    check(args.cluster, String)
-    check(args.chapter, String)
-    check(args.link, String)
-    check(args.showOnMap, Boolean)
-    check(args.about, String)
-    check(args.isActive, Boolean)
+    check(args.community, Object)
         //TODO : Duplicate Community Identification
         // TODO : Authorization
-        let id = MlCommunity.insert({...args});
+        let id = MlCommunity.insert({...args.community});
         if(id){
             let code = 200;
             let result = {communityId: id}
@@ -53,4 +45,10 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     })
   });
     return response;
+}
+MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+  let communityData=MlCommunityDefinition.find({isActive:true}).fetch();
+  return {data:communityData};
 }

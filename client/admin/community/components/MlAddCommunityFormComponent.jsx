@@ -4,9 +4,16 @@ import {render} from 'react-dom';
 import {createCommunityActionHandler} from '../actions/createCommunityFormAction'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
+import gql from 'graphql-tag'
+import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+
 class MlAddCommunityFormComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.state={
+      clusters: [{id:''}],
+      chapters:[{id:''}],
+    }
     this.addEventHandler.bind(this);
     this.createCluster.bind(this)
     return this;
@@ -35,16 +42,28 @@ class MlAddCommunityFormComponent extends React.Component {
   async  createCluster() {
     let communityDetails = {
       communityName: this.refs.communityName.value,
-      displayName: this.refs.displayName.value,
-      selectCluster: this.refs.selectCluster.value,
-      selectChapter: this.refs.selectChapter.value,
-      about: this.refs.about.value,
-      ismapShow: this.refs.showOnMap.checked,
-      status: this.refs.status.checked
+      communityDisplayName: this.refs.displayName.value,
+      clusters    : this.state.clusters,
+      chapters    : this.state.chapters,
+      communityDescription: this.refs.about.value,
+      communityDefId: this.props.params, // Community Def Id from router
+      showOnMap: this.refs.showOnMap.checked,
+      isActive: this.refs.status.checked
     }
 
     console.log(communityDetails)
     const response = await createCommunityActionHandler(communityDetails)
+  }
+  optionsBySelectClusters(val){
+    let clusters=this.state.clusters
+    clusters[0]['id']=val;
+    this.setState({clusters:clusters})
+  }
+
+  optionsBySelectChapters(val){
+    let chapters=this.state.chapters
+    chapters[0]['id']=val;
+    this.setState({chapters:chapters})
   }
 
   render() {
@@ -66,6 +85,15 @@ class MlAddCommunityFormComponent extends React.Component {
       }
     ]
 
+    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let chapterquery=gql`query($id:String){  
+        data:fetchChapters(id:$id) {
+          value:_id
+          label:chapterName
+        }  
+      }`;
+    let chapterOption={options: { variables: {id:this.state.clusters[0].id}}};
+
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -84,18 +112,10 @@ class MlAddCommunityFormComponent extends React.Component {
 
                 </div>
                 <div className="form-group">
-                  <select className="form-control float-label" ref="selectCluster" placeholder="Select Cluster">
-                    <option>Select Cluster</option>
-                    <option>India</option>
-                  </select>
-
+                  <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectClusters.bind(this)} />
                 </div>
                 <div className="form-group">
-                  <select className="form-control float-label" ref="selectChapter" placeholder="Select Chapter">
-                    <option>Select Chapter</option>
-                    <option>Hyderabad</option>
-                  </select>
-
+                  <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
                 </div>
 
               </form>
@@ -103,16 +123,24 @@ class MlAddCommunityFormComponent extends React.Component {
           </div>
           <div className="col-md-6">
             <div className="form_bg">
-              <div className="form-group">
-                <textarea placeholder="About" ref="about" className="form-control float-label" id="cl_about"></textarea>
-
+              <div className="form-group ">
+                <div className="fileUpload mlUpload_btn">
+                  <span>Upload Icon</span>
+                  <input type="file" className="upload" ref="upload"/>
+                </div>
               </div>
+              <br className="brclear"/>
+              <br className="brclear"/>
               <div className="form-group switch_wrap">
                 <label>Show on map</label><br/>
                 <label className="switch">
                   <input type="checkbox" ref="showOnMap"/>
                   <div className="slider"></div>
                 </label>
+              </div>
+              <br className="brclear"/>
+              <div className="form-group">
+                <textarea placeholder="About" ref="about" className="form-control float-label" id="cl_about"></textarea>
               </div>
               <div className="form-group switch_wrap">
                 <label>Status</label><br/>

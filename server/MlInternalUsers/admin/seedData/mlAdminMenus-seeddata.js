@@ -153,9 +153,9 @@ if(Meteor.isServer){
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admichapters/comminty/communities",
-            "name" : "communities",
-            "uniqueId" : "community_communities",
+            "link" : "/admin/community",
+            "name" : "Community Details",
+            "uniqueId" : "community_Community_Details",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",

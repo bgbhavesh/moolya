@@ -20,6 +20,8 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 
+import  MlCommunityView from '../../admin/community/components/MlCommunity'
+import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
 
@@ -111,11 +113,23 @@ adminSection.route('/chapters/:chapterId', {
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
-
+//
+// adminSection.route('/community', {
+//   name: 'community',
+//   action(){
+//     mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
+//   }
+// });
 adminSection.route('/community', {
   name: 'community',
   action(){
-    mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
+    mount(AdminLayout,{adminContent:< MlCommunityView listConfig={mlCommunityListConfig}/>})
+  }
+});
+adminSection.route('/community/:communityId', {
+  name: 'community',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent params={params.communityId}/>})
   }
 });
 adminSection.route('/internalusers', {

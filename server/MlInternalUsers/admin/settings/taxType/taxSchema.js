@@ -15,6 +15,7 @@ let Tax = `
     type Query{
       FindTax(_id: String):Tax
       FetchTax:[Tax]
+      FetchActiveTax:[Tax]
     }
 `
 

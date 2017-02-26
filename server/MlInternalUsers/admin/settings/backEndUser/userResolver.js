@@ -144,7 +144,6 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                 }
             }
         }
-
     }
     return users;
 }
@@ -171,6 +170,71 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
     }
 
     console.log(dep)
+  }
+  return dep
+}
+
+MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, context, info) =>{
+  console.log(args);
+  let users = [];
+  if(args.subChapterId){
+    let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
+    if(subChapter.subChapterName=='Moolya'){
+      let departments = MlDepartments.find({"depatmentAvailable.cluster.clusterId":subChapter.clusterId}).fetch();
+      if(departments && departments.length > 0){
+        for(var i = 0; i < departments.length; i++){
+          let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id},{"profile.InternalUprofile.moolyaProfile.globalAssignment":true}).fetch();
+          if(depusers && depusers.length > 0){
+            users = users.concat(depusers)
+          }
+        }
+      }
+    }else{
+      let departments = MlDepartments.find({"depatmentAvailable.cluster.subChapterId":subChapter._id}).fetch();
+      if(departments && departments.length > 0){
+        for(var i = 0; i < departments.length; i++){
+          let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
+          if(depusers && depusers.length > 0){
+            users = users.concat(depusers)
+          }
+        }
+      }
+    }
+  }
+  return users;
+}
+MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context, info) =>{
+  console.log(args);
+  let dep = []
+  let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
+
+  if(subChapter.subChapterName=='Moolya'){
+  let user = Meteor.users.findOne({"_id":args.userId})
+  let clusterDep = MlDepartments.find({"depatmentAvailable.cluster.clusterId":subChapter.clusterId}).fetch();
+  if(user && clusterDep && clusterDep.length > 0) {
+    let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
+
+    for (var i = 0; i < clusterDep.length; i++) {
+      for (var j = 0; j < userDep.length; j++) {
+        if (userDep[j].department == clusterDep[i]._id) {
+          dep.push(userDep[j]);
+        }
+      }
+    }
+  }
+  }else{
+    let user = Meteor.users.findOne({"_id":args.userId})
+    let clusterDep = MlDepartments.find({"depatmentAvailable.cluster.clusterId":subChapter.subChapterId}).fetch();
+    if(user && clusterDep && clusterDep.length > 0) {
+      let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
+      for (var i = 0; i < clusterDep.length; i++) {
+        for (var j = 0; j < userDep.length; j++) {
+          if (userDep[j].department == clusterDep[i]._id) {
+            dep.push(userDep[j]);
+          }
+        }
+      }
+    }
   }
   return dep
 }

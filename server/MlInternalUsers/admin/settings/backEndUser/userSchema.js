@@ -144,6 +144,8 @@ let BackEndUser = `
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String): [BackendUsers]
+        fetchUsersBysubChapterDepSubDep(subChapterId:String): [BackendUsers]
+        fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
     }
     
 `

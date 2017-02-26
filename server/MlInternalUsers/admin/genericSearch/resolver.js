@@ -173,6 +173,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
+  if(args.module=="CompanyType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="emailType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
+  if(args.module=="contactType"){
+    data= MlGlobalSettings.find({},findOptions).fetch();
+    totalRecords=MlGlobalSettings.find({},findOptions).count();
+  }
   if(args.module=="socialLinks"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
@@ -314,6 +326,15 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.timeFormat){
       return 'DateAndTime'
+    }
+    if(data.companyName){
+      return 'CompanyType'
+    }
+    if(data.emailName){
+      return 'EmailType'
+    }
+    if(data.contactName){
+      return 'ContactType'
     }
     return null;
   }

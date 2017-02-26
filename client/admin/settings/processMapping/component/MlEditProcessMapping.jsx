@@ -255,7 +255,7 @@ class MlEditProcessMapping extends React.Component{
    return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Create Process</h2>
+          <h2>Edit Process</h2>
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea

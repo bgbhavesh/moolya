@@ -17,6 +17,7 @@ MlResolver.MlMutationResolver['UpdateTax'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
+    args=_.omit(args,'_id');
     let updatedResponse= MlGlobalSettings.update(id, {$set: args});
     return updatedResponse
   }
@@ -35,6 +36,10 @@ MlResolver.MlQueryResolver['FindTax'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['FetchTax'] = (obj, args, context, info) => {
   let result=MlGlobalSettings.find({isActive:true}).fetch()||[];
   return result;
+}
+MlResolver.MlQueryResolver['FetchActiveTax'] = (obj, args, context, info) => {
+  let resp = MlGlobalSettings.find({"isActive":true}).fetch();
+  return resp;
 }
 
 

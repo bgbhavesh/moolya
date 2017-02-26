@@ -1,6 +1,7 @@
 
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
+import _ from 'lodash';
 /*
 MlResolver.MlQueryResolver['fetchProcess'] = (obj, args, context, info) =>{
   return MlProcessMapping.findOne({name});
@@ -36,6 +37,7 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.id) {
     var id= args.id;
+    args=_.omit(args,'_id');
     let updatedResponse= MlProcessMapping.update(id, {$set: args.process});
     return updatedResponse
   }

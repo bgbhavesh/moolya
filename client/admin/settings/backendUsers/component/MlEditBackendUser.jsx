@@ -185,7 +185,7 @@ class MlEditBackendUser extends React.Component{
     this.setState({selectedBackendUserType:val.value})
   }
   onBackendUserSelect(val){
-    this.setState({selectedBackendUser:val})
+    this.setState({selectedBackendUser:val.value})
   }
   /*onClusterSelect(val){
     this.setState({selectedCluster:val})
@@ -225,6 +225,11 @@ class MlEditBackendUser extends React.Component{
       {value: 'moolya', label: 'moolya'},
       {value: 'non-moolya', label: 'non-moolya'}
     ];
+    let BackendUserOptions=[
+      {value: 'Internal User', label: 'Internal User'},
+      {value: 'External User', label: 'External User'}
+    ]
+
     let query=gql` query{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
@@ -264,7 +269,9 @@ class MlEditBackendUser extends React.Component{
                   </div>
                   <div className="form-group">
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />
+                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)}
+                    />
+                   {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
                   </div>
                   <div className="form-group">
                     <input type="Password" ref="password" placeholder="Create Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>

@@ -2,9 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
 import _ from 'lodash';
-import {findMapDetailsTypeActionHandler} from './findMapDetailsTypeAction'
-
-import MapDetails from './mapDetails'
 
 import {render} from 'react-dom';
 

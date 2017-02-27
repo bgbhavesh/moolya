@@ -14,8 +14,8 @@ let permissions = [{actionId:"all", isActive:true}]
 
 var options = {
     profile:{
-        isInternaluser : "yes",
-        isExternaluser : "no",
+        isInternaluser : true,
+        isExternaluser : false,
         email: 'platformadmin@moolya.com',
         InternalUprofile:{
             moolyaProfile:{
@@ -53,7 +53,7 @@ if(!role){
     var userRoles = [{roleId:roleId, chapterId:"all", subchapterId:"all", communityId:"all", hierarchyLevel:"4", hierarchyCode:"PLATFORM"}]
     var userProfiles = [{
         clusterId:"all",
-        userRoles:userRoles,
+        userroles:userRoles,
         isDefault:true
     }]
     Meteor.users.update({_id:platformAdminId}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":userProfiles}})

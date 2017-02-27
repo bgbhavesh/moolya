@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import AlphaSearch from '../../../commons/components/alphaSearch/AlphaSearch';
+import MlActionComponent from '../../../commons/components/actions/ActionComponent'
+import _ from 'lodash';
 export default class MlListView extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +15,7 @@ export default class MlListView extends Component {
     this.onPageChange.bind(this);
     this.onSizePerPageList.bind(this);
     this.onAlphaSearchChange.bind(this);
+    this.actionHandlerProxy=this.actionHandlerProxy.bind(this);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -58,12 +61,25 @@ export default class MlListView extends Component {
     }
     this.setState({sort: sortObj});
   };
-
+  actionHandlerProxy(actionConfig){
+   // const selectedRow=this.state.selectedRow;
+    const actions=this.props.actionConfiguration;
+    const action=_.find(actions,{"actionName":actionConfig.actionName});
+    action.handler();
+  }
   render(){
     let data=this.props.data&&this.props.data.data?this.props.data.data:[];
     let ListComponent =React.cloneElement(this.props.viewComponent,{data:data});
     let loading=this.props.loading;
-
+    let config=this.props;
+    let actionsConf=_.clone(config.actionConfiguration);
+    let actionsProxyList=[];
+    let that = this;
+    actionsConf.forEach(function (action) {
+      let act={actionName:action.actionName,showAction:action.showAction};
+        act.handler=that.actionHandlerProxy
+      actionsProxyList.push(act);
+    });
     return(<div>{loading?(<div className="loader_wrap"></div>):(
       <div className="admin_padding_wrap">
       <div className="list_view_block">
@@ -74,6 +90,7 @@ export default class MlListView extends Component {
         </div>
       </div>
         </div>
+     {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
     </div>)}</div>)
   }
 

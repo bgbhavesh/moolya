@@ -65,9 +65,9 @@ class MlAssignChapterBackendUsers extends React.Component{
     async assignBackendUsers(){
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
-        userProfile['subChapterId'] = this.props.params;
-        userProfile['chapterId'] = this.state.data.chapterId;
         userProfile['clusterId'] = this.state.data.clusterId;
+    /*    userProfile['chapterId'] = this.state.data.chapterId;
+        userProfile['clusterId'] = this.state.data.clusterId;*/
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         // alert(JSON.stringify(userProfile))
@@ -105,6 +105,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         let queryOptions = {options: { variables: {subChapterId:that.props.params}}};
         let query   = gql`query($subChapterId:String){data:fetchUsersBysubChapterDepSubDep(subChapterId: $subChapterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
+        let clusterId = this.state.data&&this.state.data.clusterId||"";
+        let chapterId = this.state.data&&this.state.data.chapterId||"";
         return(
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
@@ -155,7 +157,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignChapterBackendUserRoles userId={userid} clusterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
+                                      {userid?(<MlAssignChapterBackendUserRoles userId={userid} clusterId={clusterId} chapterId={chapterId} subChapterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

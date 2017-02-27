@@ -26,7 +26,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       super(props)
       this.state={
           roleForm:[],
-          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"",  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
+          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:this.props.chapterId, subChapterId:this.props.subChapterId,  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
           selectedRole:""
       }
       this.findUserDepartments.bind(this);
@@ -106,8 +106,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
 
   async findUserDepartments(){
     let userId = this.props.userId;
-    let clusterId = this.props.clusterId;
-    const response = await findUserDepartmentypeActionHandler(userId, clusterId);
+    let subChapterId = this.props.subChapterId;
+    const response = await findUserDepartmentypeActionHandler(userId, subChapterId);
     let data = response ? response : []
     this.setState({loading:false,roleForm:data});
   }

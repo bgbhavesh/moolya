@@ -94,7 +94,7 @@ app.post('/assignusers', multipartMiddleware, Meteor.bindEnvironment(function (r
                     role.communityId = "all"
                 }
 
-                hierarchy = MlHierarchy.findOne({code:levelCode})
+                  hierarchy = MlHierarchy.findOne({code:levelCode})
                 role.hierarchyLevel = hierarchy.level;
                 role.hierarchyCode  = hierarchy.code;
             })
@@ -104,7 +104,7 @@ app.post('/assignusers', multipartMiddleware, Meteor.bindEnvironment(function (r
             userroles:  roles,
             isDefault: false
         }
-        let response = MlResolver.MlMutationResolver['a '](null, {userId:userId, userProfile:userProfile}, context, null)
+        let response = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)
         res.send(true)
     }
     // res.send(response)

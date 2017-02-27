@@ -3,7 +3,7 @@ import MlInfinity from "../../dashboard/component/MlInfinity";
 import MlListViewContainer from "../../core/containers/MlListViewContainer";
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 
-export default class MlChapters extends React.Component {
+export default class MlChaptersView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

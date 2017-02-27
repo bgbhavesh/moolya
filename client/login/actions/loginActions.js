@@ -10,7 +10,7 @@ export let loginActionHandler = {
                 console.log(result.reason)
                 callback(result.reason)
             }
-            else if(result && result.profile && result.profile.isInternaluser == "yes"){
+            else if(result && result.profile && result.profile.isInternaluser == true){
                 FlowRouter.redirect("/admin");
             }
         });

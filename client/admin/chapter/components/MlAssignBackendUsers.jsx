@@ -11,6 +11,7 @@ import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
 import MlAssignChapterBackendUserList from './MlAssignBackendUserList'
 import MlAssignChapterBackendUserRoles from './MlAssignBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
+import {findSubChapterActionHandler} from '../actions/findSubChapter'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -23,15 +24,24 @@ class MlAssignChapterBackendUsers extends React.Component{
         this.state={
             selectedBackendUser:'',
             users:[{username: '', _id:''}]
+
         }
 
         this.addEventHandler.bind(this);
-        this.assignBackendUsers.bind(this)
+        this.assignBackendUsers.bind(this);
+        this.findSubChapter.bind(this);
         // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
 
-    componentDidMount(){
+    componentDidMount() {
+      const resp=this.findSubChapter();
+    }
+
+    async findSubChapter() {
+      let subChapterId = this.props.params;
+      const response = await findSubChapterActionHandler(subChapterId);
+      this.setState({loading: false, data: response});
     }
 
     enableAssignUser(){
@@ -56,6 +66,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
         userProfile['subChapterId'] = this.props.params;
+        userProfile['chapterId'] = this.state.data.chapterId;
+        userProfile['clusterId'] = this.state.data.clusterId;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         // alert(JSON.stringify(userProfile))

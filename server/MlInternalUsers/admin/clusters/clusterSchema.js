@@ -45,7 +45,7 @@ let clusterSchema = `
     }
     
     type Query{ 
-        fetchCluster(_id: String):Cluster
+        fetchCluster(_id: String, moduleName:String!, actionName:String!):Cluster
         fetchClustersForMap:[Cluster]
         fetchActiveClusters:[Cluster]
     }

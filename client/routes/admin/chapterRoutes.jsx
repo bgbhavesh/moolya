@@ -31,6 +31,13 @@ adminSection.route('/chapters/:subChapterId/subChapterDetails', {
   }
 });
 
+adminSection.route('/chapters/:subChapterId/communities', {
+  name: 'chapter_communities',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+  }
+});
+
 adminSection.route('/chapters/:subChapterId/assignusers', {
   name: 'chapter_assignusers',
   action(params){

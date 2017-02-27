@@ -43,8 +43,6 @@ export default class MlTableView extends Component {
 
   onSearchChange(search) {
     this.setState({searchValue:search});
-      // let searchCriteria=this.constructSearchCriteria(search);
-     //this.props.fetchMore(this.state.sizePerPage, 1,searchCriteria);
   }
 
   onPageChange(page, sizePerPage) {

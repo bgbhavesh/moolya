@@ -53,7 +53,7 @@ if(!role){
     var userRoles = [{roleId:roleId, chapterId:"all", subchapterId:"all", communityId:"all", hierarchyLevel:"4", hierarchyCode:"PLATFORM"}]
     var userProfiles = [{
         clusterId:"all",
-        userroles:userroles,
+        userroles:userRoles,
         isDefault:true
     }]
     Meteor.users.update({_id:platformAdminId}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":userProfiles}})

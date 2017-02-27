@@ -74,15 +74,14 @@ export default class MlListView extends Component {
     let config=this.props;
     let actionsProxyList=[];
     if(config.actionConfiguration){
-      let actionsConf=_.clone(config.actionConfiguration);
-      let that = this;
-      actionsConf.forEach(function (action) {
-        let act={actionName:action.actionName,showAction:action.showAction};
+    let actionsConf=_.clone(config.actionConfiguration);
+    let that = this;
+    actionsConf.forEach(function (action) {
+      let act={actionName:action.actionName,showAction:action.showAction};
         act.handler=that.actionHandlerProxy
-        actionsProxyList.push(act);
-      });
+      actionsProxyList.push(act);
+    });
     }
-
     return(<div>{loading?(<div className="loader_wrap"></div>):(
       <div className="admin_padding_wrap">
       <div className="list_view_block">

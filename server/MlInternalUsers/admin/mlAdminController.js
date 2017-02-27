@@ -94,7 +94,7 @@ app.post('/assignusers', multipartMiddleware, Meteor.bindEnvironment(function (r
                     role.communityId = "all"
                 }
 
-                hierarchy = MlHierarchy.findOne({code:levelCode})
+                  hierarchy = MlHierarchy.findOne({code:levelCode})
                 role.hierarchyLevel = hierarchy.level;
                 role.hierarchyCode  = hierarchy.code;
             })

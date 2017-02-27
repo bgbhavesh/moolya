@@ -6,7 +6,7 @@ import MlTaxTable from './MlTaxTable'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addTaxationActionHandler} from '../actions/addTaxationAction'
-class MlAddTaxation extends React.Component{
+class MlEditTaxation extends React.Component{
   constructor(props) {
     super(props);
     this.state={
@@ -47,7 +47,7 @@ class MlAddTaxation extends React.Component{
     return response;
   }
   onClickDate(event){
-   let filedName=event.target.name
+    let filedName=event.target.name
     let fieldId=filedName+id
     $("#"+fieldId).datepicker({ format: this.state.dateformate });
     $("#"+fieldId).focus();
@@ -94,7 +94,7 @@ class MlAddTaxation extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                 {/* <input type="text" ref="taxationValidityFrom" placeholder="Valid from" className="form-control float-label" id="cluster_name"/>*/}
+                  {/* <input type="text" ref="taxationValidityFrom" placeholder="Valid from" className="form-control float-label" id="cluster_name"/>*/}
                   <input type="text" placeholder="Valid from" ref="taxationValidityFrom" onClick={this.onClickDate.bind(this)} className="form-control float-label" name={'validFrom'}   id="#validFrom"/>
                   <FontAwesome name='calendar' className="password_icon" />
                 </div>
@@ -140,7 +140,7 @@ class MlAddTaxation extends React.Component{
           </div>
 
 
-         < MlTaxTable getTaxTableDetails={this.getTaxTableDetails.bind(this)}/>
+          < MlTaxTable getTaxTableDetails={this.getTaxTableDetails.bind(this)}/>
         </div>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
         />
@@ -151,4 +151,4 @@ class MlAddTaxation extends React.Component{
     )
   }
 };
-export default MlAddTaxation = formHandler()(MlAddTaxation);
+export default MlEditTaxation = formHandler()(MlEditTaxation);

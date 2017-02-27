@@ -235,6 +235,47 @@ if(Meteor.isServer){
             ]
           },
           {
+            "link" : "/admin/settings/taxationList",
+            "name" : "Taxation",
+            "uniqueId" : "settings_Taxations",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addTaxation",
+                "name": "Add Taxation",
+                "uniqueId": "settings_AddTaxation",
+                "subMenuMappingId":"settings_Taxations",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/taxationList",
+                "name": "List Taxation",
+                "uniqueId": "settings_TaxationList",
+                "subMenuMappingId":"settings_Taxations",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editTaxation",
+                "name": "Edit Taxation",
+                "uniqueId": "settings_EditTaxation",
+                "subMenuMappingId":"settings_Taxations",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
             "link" : "/admin/settings/titleList",
             "name" : "Title",
             "uniqueId" : "settings_Titles",

@@ -2,19 +2,8 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let Taxation = `
-
-    type statesInfo{
-        stateName             : String
-        taxPercentage         : String
-    }
-  
-    type taxInformation{
-        taxName               : String
-        taxpercentage         : String
-        applicableStates      : [statesInfo]
-    }
-    
     type taxation{
+        _id                   : String                  
         taxationName          : String
         taxationValidityFrom  : String
         taxationValidityTo    : String
@@ -22,16 +11,35 @@ let Taxation = `
         isActive              : Boolean
         taxInformation        : [taxInformation]
     }
-
+    
+    type taxInformation{
+       taxId                 : String
+        taxName               : String
+        taxPercentage         : String
+        applicableStates      : String
+        aboutTax              : String
+        statesInfo            : [statesInfo]
+    }
+    type statesInfo{
+        stateName             : String
+        taxPercentage         : String
+        isChecked             : Boolean
+        taxId                 : String
+    }
     input statesInfoInput{
         stateName             : String
         taxPercentage         : String
+        isChecked             : Boolean
+        taxId                 : String
     }
   
     input taxInformationInput{
+        taxId                 : String
         taxName               : String
-        taxpercentage         : String
-        applicableStates      : [statesInfoInput]
+        taxPercentage         : String
+        applicableStates      : String
+        aboutTax              : String
+        statesInfo            : [statesInfoInput]
     }
     
     input taxationInput{

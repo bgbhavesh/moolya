@@ -3,13 +3,12 @@ import { render } from 'react-dom';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import {findClusterBasedStatesDeatilsActionHandler} from '../actions/MlFindClusterBasedStates'
+import {findClusterBasedStatesDeatilsActionHandler} from '../actions/findClusterBasedStatesAction'
 export default class MlAssignTaxInformation extends Component {
   constructor(props){
     super(props);
     this.state={
-      taxName:'',
-      states:[{name:'',_id:'',isActive:null,taxPercentage:''}]
+      states:[{stateName:'',isChecked:null,taxPercentage:'',taxId:''}]
     }
     return this;
   }
@@ -20,7 +19,7 @@ export default class MlAssignTaxInformation extends Component {
   }
   componentWillMount(){
     let selectaxName=this.props.id
-    this.setState({taxName:selectaxName})
+    this.setState({taxId:selectaxName})
   }
   async findClusterBasedStates() {
     let stateDetails = await findClusterBasedStatesDeatilsActionHandler();
@@ -28,27 +27,27 @@ export default class MlAssignTaxInformation extends Component {
     let stateInfo = []
     for (let i = 0; i < stateDetails.length; i++) {
       let json = {
-        name: stateDetails[i].name,
-        isActive:null,
-        _id:stateDetails[i]._id,
-        taxPercentage:''
+        stateName: stateDetails[i].name,
+        isChecked:null,
+        taxPercentage:'',
+        taxId:this.props.id
       }
       stateInfo.push(json)
     }
     this.setState({'states':stateInfo})
   }
   onSelectTaxType(value){
-    this.setState({taxName:value})
+    this.setState({taxId:value})
   }
   onSelectState(id,event){
    if(event.currentTarget.checked){
      let  stateDetails=this.state.states
-     stateDetails[id]['isActive']=true;
-     this.setState({'states':stateDetails})
+     stateDetails[id]['isChecked']=true;
+     this.setState({taxName:selectaxName})
      this.props.onGetTaxDetails(this.state.states)
    }else{
      let  stateDetails=this.state.states
-     stateDetails[id]['isActive']=false;
+     stateDetails[id]['isChecked']=false;
      this.setState({'states':stateDetails})
      this.props.onGetTaxDetails(this.state.states)
    }
@@ -84,7 +83,7 @@ export default class MlAssignTaxInformation extends Component {
 
                 <tr>
                   <td><br /><br />
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.taxName} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.taxId} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>
                   </td>
                   <td><textarea placeholder="About" className="form-control float-label" id="cl_about" defaultValue={that.props.about}>
 
@@ -99,10 +98,10 @@ export default class MlAssignTaxInformation extends Component {
             <div role="tabpanel" className="tab-pane" id={`profile${this.props.id}`}>
               <ul>
               {that.state.states.map(function (options,id) {
-               return( <li key={options._id}>
+               return( <li key={options.stateName}>
                    <div className="form-group">
-                     <div className="input_types"><input type="checkbox" checked={options.isActive} onChange={that.onSelectState.bind(that,id)}  />
-                       <label htmlFor="checkbox1"><span></span>{options.name}</label></div>
+                     <div className="input_types"><input type="checkbox" checked={options.isChecked} onChange={that.onSelectState.bind(that,id)}  />
+                       <label htmlFor="checkbox1"><span></span>{options.stateName}</label></div>
                      <input type="text" placeholder="%" defaultValue={options.taxPercentage} onBlur={that.ontaxPercentage.bind(that,id)} className="form-control float-label" id="cluster_name"/>
                    </div>
                  </li>
@@ -111,63 +110,6 @@ export default class MlAssignTaxInformation extends Component {
 
               }
               </ul>
-            {/* <table className="table table-striped">
-                <thead>
-                <tr>
-
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>All Status</label></div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>Andhra Pradesh</label></div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>Telangana</label></div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>Goa</label></div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>All Status</label></div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>Andhra Pradesh</label></div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>Telangana</label></div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1"/><label
-                        htmlFor="checkbox1"><span></span>Goa</label></div>
-                    </div>
-                  </td>
-                </tr>
-
-                </thead>
-
-              </table>*/}
             </div>
           </div>
 

@@ -149,6 +149,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
   }
+  if(args.module=="taxation"){
+    data= MlTaxation.find({},findOptions).fetch();
+    totalRecords=MlTaxation.find({},findOptions).count();
+  }
   if(args.module=="title"){
     data= MlGlobalSettings.find({},findOptions).fetch();
     totalRecords=MlGlobalSettings.find({},findOptions).count();
@@ -301,6 +305,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.taxName){
       return 'Tax'
+    }
+    if(data.taxationName){
+      return 'taxation'
     }
     if(data.titleName){
       return 'Title'

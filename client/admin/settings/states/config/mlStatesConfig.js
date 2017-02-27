@@ -49,39 +49,39 @@ const mlStatesTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
+//   graphQlQuery:gql`
+//       query{
+//   data:fetchStates{
+//      totalRecords
+//                     data{
+//                      ...on States{
+//                              name
+//                             countryId
+//                            countryCode
+//                              isActive
+//                               id:_id
+//                           }
+//                       }
+//
+//   }
+// }
+//   `
   graphQlQuery:gql`
-      query{
-  data:fetchStates{
-     totalRecords
+              query SearchQuery( $offset: Int, $limit: Int) {
+              data:SearchQuery(module:"states",offset: $offset, limit: $limit){
+                    totalRecords
                     data{
-                     ...on States{
-                             name
-                            countryId
-                           countryCode
-                             isActive
+                      ...on States{
+                              name
+                              countryCode
+                              countryId
+                              isActive
                               id:_id
                           }
                       }
-    
-  }
-}
-  `
-  // graphQlQuery:gql`
-  //             query SearchQuery( $offset: Int, $limit: Int) {
-  //             data:SearchQuery(module:"states",offset: $offset, limit: $limit){
-  //                   totalRecords
-  //                   data{
-  //                     ...on States{
-  //                             name
-  //                             countryCode
-  //                             countryId
-  //                             isActive
-  //                             id:_id
-  //                         }
-  //                     }
-  //             }
-  //             }
-  //             `
+              }
+              }
+             `
 });
 const mlStateModuleConfig={
   moduleName:"states",

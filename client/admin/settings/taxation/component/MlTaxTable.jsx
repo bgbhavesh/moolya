@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import  MlAssignTaxInformation from './MlAssignTaxInformation'
-import {findTaxTypeDetailsActionHandler} from '../actions/MlFindTaxTypeDetails'
+import {findTaxTypeDetailsActionHandler} from '../actions/findTaxTypeDetailsAction'
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 export default class MlTaxTable extends Component {
   constructor(props){
     super(props);
     this.state={
-      taxTypeInfo:[{taxName:'',percentage:'',states:'',id:'',about:''}]
+      taxTypeInfo:[{taxId:'',taxName:'',taxPercentage:'',applicableStates:'',statesInfo:[],aboutTax:''}]
     }
     this.onGetTaxDetails=this.onGetTaxDetails.bind(this)
     return this;
@@ -18,16 +18,34 @@ export default class MlTaxTable extends Component {
   }
   onGetTaxDetails(taxDetails){
     console.log(taxDetails)
+   // console.log(taxName)
     let states=[];
+    let percentages=[];
     for(let i=0;i<taxDetails.length;i++){
-      if(taxDetails[i].isActive){
-        states.push(taxDetails[i].name)
+      if(taxDetails[i].isChecked){
+        states.push(taxDetails[i].stateName)
+        percentages.push(taxDetails[i].taxPercentage)
       }
 
     }
+    Array.prototype.max = function() {
+      return Math.max.apply(null, this);
+    };
+
+    Array.prototype.min = function() {
+      return Math.min.apply(null, this);
+    };
+
     let taxTypeInfoDetails=this.state.taxTypeInfo
-    taxTypeInfoDetails[0].states=states
+    for(let i=0;i<taxTypeInfoDetails.length;i++){
+     if (taxTypeInfoDetails[i].taxId==taxDetails[0].taxId){
+       taxTypeInfoDetails[i].statesInfo=taxDetails;
+       taxTypeInfoDetails[i].applicableStates=states
+       taxTypeInfoDetails[i].taxPercentage=percentages.min()+"-"+percentages.max()+"%"
+      }
+    }
     this.setState({taxTypeInfo:taxTypeInfoDetails})
+    this.props.getTaxTableDetails(this.state.taxTypeInfo)
   }
   async findTaxTypDetails() {
         let taxDetails = await findTaxTypeDetailsActionHandler();
@@ -35,10 +53,11 @@ export default class MlTaxTable extends Component {
         for (let i = 0; i < taxDetails.length; i++) {
           let json = {
             taxName: taxDetails[i].taxName,
-            percentage: '',
-            states: '',
-            id:taxDetails[i]._id,
-            about:taxDetails[i].aboutTax
+            taxPercentage: '',
+            applicableStates: '',
+            taxId:taxDetails[i]._id,
+            aboutTax:taxDetails[i].aboutTax,
+            statesInfo:[]
           }
           taxInfo.push(json)
         }
@@ -46,14 +65,14 @@ export default class MlTaxTable extends Component {
   }
 
   isExpandableRow(row) {
-    if (row.id!=undefined) return true;
+    if (row.taxId!=undefined) return true;
     else return false;
   }
 
 
   expandComponent(row) {
     return (
-     <MlAssignTaxInformation id={ row.id }  onGetTaxDetails={this.onGetTaxDetails} about={row.about}/>
+     <MlAssignTaxInformation id={ row.taxId }  onGetTaxDetails={this.onGetTaxDetails} about={row.aboutTax}/>
     );
   }
   render() {
@@ -73,10 +92,10 @@ export default class MlTaxTable extends Component {
                        expandComponent={ this.expandComponent.bind(this) }
                        selectRow={ selectRow }
       >
-        <TableHeaderColumn dataField="id" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>
+        <TableHeaderColumn dataField="taxId" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>
         <TableHeaderColumn dataField="taxName">Tax Name</TableHeaderColumn>
-        <TableHeaderColumn dataField="percentage">Percentage</TableHeaderColumn>
-        <TableHeaderColumn dataField="states">Applicable States</TableHeaderColumn>
+        <TableHeaderColumn dataField="taxPercentage">Percentage</TableHeaderColumn>
+        <TableHeaderColumn dataField="applicableStates">Applicable States</TableHeaderColumn>
       </BootstrapTable>
 
     )

@@ -98,21 +98,21 @@ export default class MlTabView extends Component {
 
         "chapter_subChapterDetails":function (params,queryParams) {
           let dynamicParams=params||{};
-          if(_.has(dynamicParams,"chapterId")){
-            return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.subChapterId}/subChapterDetails`;
+          if(_.has(dynamicParams,"subChapterId")){
+            return `/admin/chapters/${dynamicParams.subChapterId}/subChapterDetails`;
           }
         },
 
         "chapter_communities":function (params,queryParams) {
           let dynamicParams=params||{};
-          if(_.has(dynamicParams,"chapterId")){
-            return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.subChapterId}/communities`;
+          if(_.has(dynamicParams,"subChapterId")){
+            return `/admin/chapters/${dynamicParams.subChapterId}/communities`;
           }
         },
 
         "chapter_assignusers":function (params,queryParams) {
           let dynamicParams=params||{};
-          if(_.has(dynamicParams,"chapterId")){
+          if(_.has(dynamicParams,"subChapterId")){
             return `/admin/chapters/${dynamicParams.subChapterId}/assignusers`;
           }
         }

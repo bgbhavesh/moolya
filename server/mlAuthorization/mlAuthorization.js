@@ -33,7 +33,7 @@ class MlAuthorization
         }
 
         var user = Meteor.users.findOne({_id:userId});
-        if(user && user.profile && user.profile.isInternaluser == "yes")
+        if(user && user.profile && user.profile.isInternaluser == true)
         {
             let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
             let user_roles;
@@ -41,7 +41,7 @@ class MlAuthorization
             // Selecting Default Profile
             for(var i = 0; i < user_profiles.length; i++){
                 if(user_profiles[i].isDefault == true){
-                    user_roles = user_profiles[i].userRoles
+                    user_roles = user_profiles[i].userroles
                     break;
                 }
             }

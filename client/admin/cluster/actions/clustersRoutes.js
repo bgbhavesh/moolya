@@ -7,9 +7,9 @@ const clusterRoutes={
     return `/admin/clusters/${clusterId}/clusterDetails`;
   },
 
-  // chapterListRoute:(clusterId)=>{
-  //   return `/admin/dashboard/${clusterId}/chapters`;
-  // },
+  chapterListRoute:(clusterId)=>{
+    return `/admin/clusters/${clusterId}/chapters`;
+  },
   subChapterListRoute:(clusterId,chapterId,router) =>{
     return `/admin/dashboard/${clusterId}/${chapterId}/subChapters`;
   },

@@ -7,17 +7,17 @@ let _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) =>
 {
-    let allCities = [];
-    let states = MlStates.find({"isActive": true}).fetch()
-    if(states && states.length > 0){
-        for(var i = 0; i < states.length; i++){
-            let cities = MlCities.find({"stateId":states[i]._id}).fetch();
-            if(cities && cities.length > 0){
-                allCities = allCities.concat(cities)
-            }
-        }
-    }
-    return {data:allCities,totalRecords:allCities&&allCities.length?allCities.length:0};
+    // let allCities = [];
+    // let states = MlStates.find({"isActive": true}).fetch()
+    // if(states && states.length > 0){
+    //     for(var i = 0; i < states.length; i++){
+    //         let cities = MlCities.find({"stateId":states[i]._id}).fetch();
+    //         if(cities && cities.length > 0){
+    //             allCities = allCities.concat(cities)
+    //         }
+    //     }
+    // }
+    // return {data:allCities,totalRecords:allCities&&allCities.length?allCities.length:0};
 }
 MlResolver.MlQueryResolver['fetchCity'] = (obj, args, context, info) =>{
   let city=null;

@@ -51,23 +51,41 @@ const mlCitiesTableConfig=new MlViewer.View({
   ],
   sizePerPage:5,
   graphQlQuery:gql`
-             query{
-  data:fetchCities{
+              query SearchQuery( $offset: Int, $limit: Int) {
+              data:SearchQuery(module:"cities",offset: $offset, limit: $limit){
                     totalRecords
                     data{
                       ...on Cities{
-                              name
-                              countryCode
-                              countryId
-                              displayName
-                              stateId
-                              isActive
-                              id:_id
+                               name
+                               countryCode
+                               countryId
+                               displayName
+                               stateId
+                               isActive
+                               id:_id
                           }
                       }
               }
               }
-              `
+             `
+  // graphQlQuery:gql`
+  //            query{
+  // data:fetchCities{
+  //                   totalRecords
+  //                   data{
+  //                     ...on Cities{
+  //                             name
+  //                             countryCode
+  //                             countryId
+  //                             displayName
+  //                             stateId
+  //                             isActive
+  //                             id:_id
+  //                         }
+  //                     }
+  //             }
+  //             }
+  //             `
 });
 const mlStateModuleConfig={
   moduleName:"cities",

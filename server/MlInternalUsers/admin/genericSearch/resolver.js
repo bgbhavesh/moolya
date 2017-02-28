@@ -1,5 +1,5 @@
 import MlResolver from '../mlAdminResolverDef'
-import queryFunction from "../genericSearch/queryConstructor";
+import getQuery from "../genericSearch/queryConstructor";
 
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
@@ -13,10 +13,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   let query={};
   if (args.fieldsData){
-    query = queryFunction(args);
+    query = getQuery.searchFunction(args);
+  }
+  if(args.sortData){
+    let sortObj = getQuery.sortFunction(args);
+    findOptions.sort=sortObj||{};
   }
 
-  let moduleName=args.module;
   let action="READ";
   //Authorization layer
 
@@ -111,7 +114,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   if(args.module=="industry"){
     data= MlIndustries.find(query,findOptions).fetch();
-    totalRecords=MlIndustries.find(query,findOptions).count();
+    totalRecords=MlIndustries.find(query, findOptions).count();
   }
   if(args.module=="specification"){
     data= MlSpecifications.find({},findOptions).fetch();

@@ -46,8 +46,8 @@ const mlDocumentTypesTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"documentType"){
+              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
+              data:SearchQuery(module:"documentType",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on DocumentTypes{

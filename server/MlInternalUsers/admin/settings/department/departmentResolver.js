@@ -2,9 +2,9 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) => {
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+   /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
     if(!isValidAuth)
-      return "Not Authorized"
+      return "Not Authorized"*/
 
     if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
         let code = 409;

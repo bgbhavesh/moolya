@@ -122,7 +122,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
-                                      <MlAssignChapterBackendUserList clusterId={that.props.params}/>
+                                      <MlAssignChapterBackendUserList clusterId={clusterId} chapterId={chapterId} subChapterId={that.props.params}/>
                                   </ScrollArea>
                               </div>
                           </div>

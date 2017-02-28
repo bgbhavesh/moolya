@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 25/2/17.
  */
 import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import {client} from '../admin/core/apolloConnection';
 
 export async function fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId) {
   let clusterid = clusterId,

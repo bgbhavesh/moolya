@@ -45,8 +45,8 @@ const mlProcessTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-                query{
-                data:SearchQuery(module:"process"){
+                query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                data:SearchQuery(module:"process", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                       totalRecords
                       data{
                        ...on ProcessType{

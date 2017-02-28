@@ -44,8 +44,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"userType"){
+              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
+              data:SearchQuery(module:"userType", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on UserTypes{

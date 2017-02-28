@@ -11,6 +11,7 @@ import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
 import MlAssignChapterBackendUserList from './MlAssignBackendUserList'
 import MlAssignChapterBackendUserRoles from './MlAssignBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
+import {findSubChapterActionHandler} from '../actions/findSubChapter'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -23,15 +24,24 @@ class MlAssignChapterBackendUsers extends React.Component{
         this.state={
             selectedBackendUser:'',
             users:[{username: '', _id:''}]
+
         }
 
         this.addEventHandler.bind(this);
-        this.assignBackendUsers.bind(this)
+        this.assignBackendUsers.bind(this);
+        this.findSubChapter.bind(this);
         // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
 
-    componentDidMount(){
+    componentDidMount() {
+      const resp=this.findSubChapter();
+    }
+
+    async findSubChapter() {
+      let subChapterId = this.props.params;
+      const response = await findSubChapterActionHandler(subChapterId);
+      this.setState({loading: false, data: response});
     }
 
     enableAssignUser(){
@@ -55,7 +65,9 @@ class MlAssignChapterBackendUsers extends React.Component{
     async assignBackendUsers(){
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
-        userProfile['subChapterId'] = this.props.params;
+        userProfile['clusterId'] = this.state.data.clusterId;
+    /*    userProfile['chapterId'] = this.state.data.chapterId;
+        userProfile['clusterId'] = this.state.data.clusterId;*/
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         // alert(JSON.stringify(userProfile))
@@ -93,6 +105,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         let queryOptions = {options: { variables: {subChapterId:that.props.params}}};
         let query   = gql`query($subChapterId:String){data:fetchUsersBysubChapterDepSubDep(subChapterId: $subChapterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
+        let clusterId = this.state.data&&this.state.data.clusterId||"";
+        let chapterId = this.state.data&&this.state.data.chapterId||"";
         return(
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
@@ -108,7 +122,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
-                                      <MlAssignChapterBackendUserList clusterId={that.props.params}/>
+                                      <MlAssignChapterBackendUserList clusterId={clusterId} chapterId={chapterId} subChapterId={that.props.params}/>
                                   </ScrollArea>
                               </div>
                           </div>
@@ -143,7 +157,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignChapterBackendUserRoles userId={userid} clusterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
+                                      {userid?(<MlAssignChapterBackendUserRoles userId={userid} clusterId={clusterId} chapterId={chapterId} subChapterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

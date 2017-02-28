@@ -45,7 +45,7 @@ let clusterSchema = `
     }
     
     type Query{ 
-        fetchCluster(_id: String):Cluster
+        fetchCluster(_id: String, moduleName:String!, actionName:String!):Cluster
         fetchClustersForMap:[Cluster]
         fetchActiveClusters:[Cluster]
     }
@@ -54,8 +54,8 @@ let clusterSchema = `
     type Mutation 
     {
         createCluster(cluster:clusterObject, moduleNam:String, actionName:String):String
-        upsertCluster(clusterId:String, cluster:clusterObject): String
-        updateCluster(clusterId:String, clusterDetails:clusterUpdateObject):String
+        upsertCluster(clusterId:String, cluster:clusterObject, moduleName:String!, actionName:String!): String
+        updateCluster(clusterId:String, clusterDetails:clusterUpdateObject, moduleName:String!, actionName:String!):String
     }    
 `
 

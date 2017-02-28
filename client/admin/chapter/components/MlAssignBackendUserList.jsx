@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import {fetchAssignUsersActionHandler} from '../actions/fetchAssignUsers'
+import {fetchAssignUsersActionHandler} from '../../../commons/fetchAssignUsers'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');

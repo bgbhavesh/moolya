@@ -187,13 +187,13 @@ class MlEditBackendUser extends React.Component{
       moolyaProfile: moolyaProfile
     }
     let profile={
-      isInternaluser: 'true',
-      isExternaluser: 'true',
+      isInternaluser: true,
+      isExternaluser: false,
       email: this.refs.email.value,
       InternalUprofile: InternalUprofile
     }
     let userObject={
-      username: moolyaProfile.firstName+moolyaProfile.lastName,
+      username: moolyaProfile.email,
       password: this.refs.password.value,
       profile:profile
     }

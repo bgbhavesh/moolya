@@ -14,8 +14,8 @@ let permissions = [{actionId:"all", isActive:true}]
 
 var options = {
     profile:{
-        isInternaluser : "yes",
-        isExternaluser : "no",
+        isInternaluser : true,
+        isExternaluser : false,
         email: 'platformadmin@moolya.com',
         InternalUprofile:{
             moolyaProfile:{

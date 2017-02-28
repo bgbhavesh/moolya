@@ -5,8 +5,8 @@ export async function findClusterTypeActionHandler(clusterId) {
   let did = clusterId
   const result = await client.query({
     query: gql`
-    query  ($id: String){
-        fetchCluster(_id:$id){
+    query  ($id: String, $moduleName:String!, $actionName:String!){
+        fetchCluster(_id:$id, moduleName:$moduleName, actionName:$actionName){
         id:_id
         countryName
         about
@@ -19,7 +19,9 @@ export async function findClusterTypeActionHandler(clusterId) {
       }
     `,
     variables: {
-      id: did
+      id: did,
+      moduleName:"CLUSTER",
+      actionName:"READ"
     },
     forceFetch: true
   })

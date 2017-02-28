@@ -48,8 +48,8 @@ const mlCompanyTypeTableConfig=new MlViewer.View({
   ],
   sizePerPage:5,
   graphQlQuery:gql`
-                query SearchQuery( $offset: Int, $limit: Int) {
-              data:SearchQuery(module:"CompanyType",offset: $offset, limit: $limit){
+                query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+              data:SearchQuery(module:"CompanyType",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on CompanyType{

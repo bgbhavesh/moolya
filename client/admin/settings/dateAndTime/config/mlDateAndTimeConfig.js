@@ -48,8 +48,8 @@ const mlDateAndTimeTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"dateAndTime"){
+              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
+              data:SearchQuery(module:"dateAndTime", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on DateAndTime{

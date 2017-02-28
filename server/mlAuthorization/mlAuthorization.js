@@ -41,7 +41,7 @@ class MlAuthorization
             // Selecting Default Profile
             for(var i = 0; i < user_profiles.length; i++){
                 if(user_profiles[i].isDefault == true){
-                    user_roles = user_profiles[i].userroles
+                    user_roles = user_profiles[i].userRoles
                     break;
                 }
             }

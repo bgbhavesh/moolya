@@ -7,7 +7,7 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={};
+    let query={isActive:true};
     const data= MlClusters.find(query,fieldsProj).fetch();
     const totalRecords=MlClusters.find(query,fieldsProj).count();
 
@@ -18,11 +18,11 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
    // let contextQuery=contextQuery||{};
-    let query={};
+    let query={isActive:true};
     //User selection filter.
     let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(clusterId){
-        query={"clusterId":clusterId};
+        query={"clusterId":clusterId,isActive:true};
     }
 
     const data= MlChapters.find(query,fieldsProj).fetch();
@@ -34,11 +34,11 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={};
+    let query={isActive:true};
     //User selection filter.
     let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
     if(chapterId){
-      query={"chapterId":chapterId};
+      query={"chapterId":chapterId,isActive:true};
     }
 
     const data= MlSubChapters.find(query,fieldsProj).fetch();
@@ -51,11 +51,11 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={};
+    let query={isActive:true};
     //User selection filter.
     let subChapterId=requestParams&&requestParams.subChapterId?requestParams.subChapterId:null;
     if(subChapterId){
-      query={"subChapterId":subChapterId};
+      query={"subChapterId":subChapterId,isActive:true};
     }
 
     const data= MlCommunity.find(query,fieldsProj).fetch();

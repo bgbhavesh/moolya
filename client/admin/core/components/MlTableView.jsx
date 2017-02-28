@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import MlTable from "../../../commons/components/tabular/MlTable";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
-// import {findSearchDetailsTypeActionHandler} from "../../core/actions/getSearchDetailsTypeAction";
 import _ from "underscore";
 export default class MlTableView extends Component {
   constructor(props) {
@@ -18,15 +17,19 @@ export default class MlTableView extends Component {
     this.onPageChange.bind(this);
     this.onSizePerPageList.bind(this);
     this.constructSearchCriteria.bind(this);
+    this.onSortChange.bind(this);
   }
 
   componentWillUpdate(nextProps, nextState) {
     if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
       let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
-      this.props.fetchMore(nextState.sizePerPage, nextState.pageNumber,searchCriteria);
+      this.props.fetchMore(nextState.sizePerPage, nextState.pageNumber,searchCriteria,nextState.sort);
     }else if(this.state.searchValue!==nextState.searchValue){
        let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
-       this.props.fetchMore(this.state.sizePerPage,1,searchCriteria);
+       this.props.fetchMore(this.state.sizePerPage,1,searchCriteria,nextState.sort);
+    }else if(this.state.sort!==nextState.sort){
+      let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
+      this.props.fetchMore(this.state.sizePerPage,1,searchCriteria,nextState.sort);
     }
   }
 
@@ -62,9 +65,9 @@ export default class MlTableView extends Component {
   onSortChange(sortName, sortOrder) {
     let sortObj = [];
     if (sortOrder === "asc") {
-      sortObj.push(sortName, "asc");
+      sortObj.push({fieldName : sortName, sort : "asc"});
     } else {
-      sortObj.push(sortName, "desc");
+      sortObj.push({fieldName : sortName, sort : "desc"});
     }
     this.setState({sort: sortObj});
   };
@@ -104,7 +107,7 @@ export default class MlTableView extends Component {
         <MlTable {...config } totalDataSize={totalDataSize} data={data} pageNumber={this.state.pageNumber}
                  sizePerPage={this.state.sizePerPage} onPageChange={this.onPageChange.bind(this)}
                  onSizePerPageList={this.onSizePerPageList.bind(this)} onSearchChange={this.onSearchChange.bind(this)}
-                 handleRowSelect={that.handleRowSelect.bind(this)}></MlTable>
+                 handleRowSelect={that.handleRowSelect.bind(this)} onSortChange={this.onSortChange.bind(this)}></MlTable>
         {config.showActionComponent === true && <MlActionComponent ActionOptions={actionsProxyList}/>}
       </div>
     )}</div>)

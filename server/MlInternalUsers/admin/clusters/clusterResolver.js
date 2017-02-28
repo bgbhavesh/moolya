@@ -33,6 +33,9 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
     let cluster = MlClusters.findOne({_id: args.clusterId});
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, {clusterId:cluster._id});
+    if(!isValidAuth)
+      return "Not Authorized"
     if(cluster){
         for(key in args.cluster){
             cluster[key] = args.cluster[key]
@@ -49,6 +52,9 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
   // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, {clusterId:args._id});
+  if(!isValidAuth)
+    return "Not Authorized"
   if (args._id) {
     var id= args._id;
     let response= MlClusters.findOne({"_id":id});
@@ -59,8 +65,8 @@ MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.clusterId) {
-    var id= args.clusterId;
-    let updatedResponse= MlClusters.update(id, {$set: args.clusterDetails});
+    var id = args.clusterId;
+    let updatedResponse= MlClusters.update({_id:id}, {$set: args.clusterDetails});
     return updatedResponse
   }
 }

@@ -13,8 +13,8 @@ let BackEndUser = `
     }
     
     type userProfile{
-        isInternaluser: String,
-        isExternaluser: String,
+        isInternaluser: Boolean,
+        isExternaluser: Boolean,
         email: String,
         InternalUprofile: internalUserprofile
     }
@@ -116,8 +116,8 @@ let BackEndUser = `
     }
   
     input profile{
-        isInternaluser: String,
-        isExternaluser: String,
+        isInternaluser: Boolean,
+        isExternaluser: Boolean,
         email: String,
         InternalUprofile: InternalUprofile
     }

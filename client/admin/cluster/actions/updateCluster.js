@@ -1,20 +1,33 @@
 import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
-export async function updateClusterActionHandler(clusterDetails) {
+export async function updateClusterActionHandler(clusterDetails)
+{
   let clusterId = clusterDetails._id;
+  let cluster = {
+    countryName:clusterDetails.countryName,
+    displayName: clusterDetails.displayName,
+    about: clusterDetails.about,
+    email: clusterDetails.email,
+    showOnMap: clusterDetails.showOnMap,
+    isActive: clusterDetails.isActive
+  }
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($clusterId:String,$clusterDetails:clusterUpdateObject){
-        updateCluster(
+    mutation  ($clusterId:String,$clusterDetails:clusterObject, $moduleName:String!, $actionName:String!){
+        upsertCluster(
           clusterId:$clusterId,
-          clusterDetails:$clusterDetails
+          cluster:$clusterDetails,
+          moduleName:$moduleName,
+          actionName:$actionName
         )
       }
     `,
     variables: {
       clusterId:clusterId,
-      clusterDetails:clusterDetails
+      clusterDetails:cluster,
+      moduleName:"CLUSTER",
+      actionName:"UPDATE"
     }
   })
   const id = result;

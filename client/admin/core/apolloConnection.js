@@ -1,15 +1,67 @@
 import React, { Component } from 'react'
+import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
 
-import {ApolloClient,createNetworkInterface} from 'apollo-client';
+import {ApolloClient,createNetworkInterface, createBatchingNetworkInterface} from 'apollo-client';
 import { ApolloProvider } from 'react-apollo';
 
+const defaultNetworkInterfaceConfig = {
+    uri: Meteor.absoluteUrl('graphql'),
+    opts: {},
+    useMeteorAccounts: true,
+    batchingInterface: false
+};
 
-const networkInterface = createNetworkInterface(Meteor.settings.public.graphqlUrl);
+const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
+  const config = {
+    ...defaultNetworkInterfaceConfig,
+    ...customNetworkInterfaceConfig,
+  };
+  const useBatchingInterface = config.batchingInterface && typeof config.batchInterval === 'number';
+  const interfaceToUse = useBatchingInterface ? createBatchingNetworkInterface : createNetworkInterface;
+  const interfaceArgument = {
+    uri: config.uri,
+    opts: config.opts,
+  }
+  const networkInterface = interfaceToUse(interfaceArgument);
+  if (config.useMeteorAccounts) {
+    const { loginToken } = config;
 
-export const client = new ApolloClient({
-  networkInterface,
-  dataIdFromObject: r => r.id,
-});
+    if (Meteor.isClient && loginToken) {
+      console.error('[Meteor Apollo Integration] The current user is not handled with your GraphQL requests: you are trying to pass a login token to an Apollo Client instance defined client-side. This is only allowed during server-side rendering, please check your implementation.');
+    } else {
+      networkInterface.use([{
+        applyMiddleware(request, next) {
+          const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
+          const currentUserToken = localStorageLoginToken || loginToken;
+          if (!currentUserToken) {
+            next();
+          }
+          if (!request.options.headers) {
+            request.options.headers = new Headers();
+          }
+          request.options.headers['meteor-login-token'] = currentUserToken;
+          next();
+        }
+      }]);
+    }
+  }
+  return networkInterface;
+};
+
+const defaultClientConfig =
+{
+    networkInterface: createMeteorNetworkInterface(),
+    //ssrMode: Meteor.isServer,
+    dataIdFromObject: r =>r.id
+};
+
+export const client = new ApolloClient({defaultClientConfig});
+
+
+/*
+const networkInterace=createNetworkInterface(Meteor.settings.public.graphUrl);
+export const client = new ApolloClient({networkInterace,dataIdFromObject:r=>r.id});
 
     networkInterface.use([{
       applyMiddleware(req, next) {
@@ -24,7 +76,7 @@ export const client = new ApolloClient({
       }
     }]);
 
-    /*     networkInterface.useAfter([{
+        networkInterface.useAfter([{
      applyAfterware({ response }, next) {
 
      setTimeout(function () {

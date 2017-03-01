@@ -15,7 +15,8 @@ import MlViews from '../../admin/core/components/MlViews';
 adminSection.route('/clusters', {
   name: 'cluster',
   action(){
-    mount(AdminLayout,{adminContent:<MlViews showInfinity={true} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
+    // To Show map, make showInfinity={true} and remove 'viewMode' parameter from the line.
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
   }
 });
 

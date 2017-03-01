@@ -13,7 +13,7 @@ const mlClusterSubChaptersListConfig=new MlViewer.View({
   sort:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null, chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
   },
   viewComponent:<MlClusterSubChaptersList />,
   graphQlQuery:gql`

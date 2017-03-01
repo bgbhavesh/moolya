@@ -10,8 +10,6 @@ import MlSubChapterDetails from '../../admin/subChapter/components/MlSubChapterD
 import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlEditCommunityFormComponent from '../../admin/community/components/MlEditCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
-import MlClusterListView from '../../admin/cluster/components/MlClusterListView'
-import MlClusterView from '../../admin/cluster/components/MlClusterView'
 import MlChapterView from '../../admin/chapter/components/MlChapter'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'

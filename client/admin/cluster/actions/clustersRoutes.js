@@ -11,11 +11,11 @@ const clusterRoutes={
     return `/admin/clusters/${clusterId}/chapters`;
   },
   subChapterListRoute:(clusterId,chapterId,router) =>{
-    return `/admin/dashboard/${clusterId}/${chapterId}/subChapters`;
+    return `/admin/clusters/${clusterId}/${chapterId}/subChapters`;
   },
-  // communityListRoute:(clusterId,chapterId,subChapterId,router)=>{
-  //   return `/admin/subChapters/${clusterId}/${chapterId}/${subChapterId}`;
-  // }
+  communityListRoute:(clusterId,chapterId,subChapterId,router)=>{
+    return `/admin/clusters/${clusterId}/${chapterId}/${subChapterId}/communities`;
+  }
 }
 
 export default clusterRoutes;

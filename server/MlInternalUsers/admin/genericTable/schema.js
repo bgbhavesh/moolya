@@ -36,12 +36,16 @@ input GenericFilter {
    value: String
 }
 
+input SortFilter {
+  fieldName : String,
+  sort : String
+}
 type SearchResp {
   totalRecords:Int,
   data:[SearchResult]
 }
 type Query {
-  SearchQuery(module: String!,offset: Int,limit:Int,fieldsData:[GenericFilter]): SearchResp!
+  SearchQuery(module: String!,offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);
@@ -50,3 +54,5 @@ MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);
 // valueType: String || Boolean || Date,
 // operator: String!,
 // valueType: String
+
+// SearchQuery(module: String!,offset: Int,limit:Int,fieldsData:[GenericFilter]): SearchResp!

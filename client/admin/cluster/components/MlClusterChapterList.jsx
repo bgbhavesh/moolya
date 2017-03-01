@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import clusterRoutes from '../actions/clustersRoutes';
-import {findChaptersTypeHandler} from '../actions/findChaptersTypeHandler'
 export default class MlClusterChapterList extends Component
 {
   constructor(props){

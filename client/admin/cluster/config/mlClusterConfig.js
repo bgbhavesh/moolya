@@ -15,23 +15,25 @@ const mlClusterListConfig=new MlViewer.View({
   sort:true,
   viewComponent:<MlClustersList />,
   graphQlQuery:gql`
-              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-                    data:ContextSpecSearch(module:"cluster",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
-                    totalRecords
-                    data{
-                     ...on Cluster{
-                              countryId
-                              displayName
-                              about
-                              link
-                              id:_id
-                              email
-                              showOnMap
-                              countryFlag
-                          }
+                  query{
+                      data: fetchAllClusters {
+                        data {
+                          id:_id
+                          countryName
+                          countryId
+                          displayName
+                          clusterCode
+                          about
+                          link
+                          email
+                          showOnMap
+                          isActive
+                          countryFlag
+                          latitude
+                          longitude
+                        }
                       }
-              }
-              }
+                    }
               `
 });
 

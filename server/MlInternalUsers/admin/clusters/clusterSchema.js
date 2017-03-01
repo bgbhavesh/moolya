@@ -16,7 +16,9 @@ let clusterSchema = `
         latitude:String 
         longitude:String
     }
-    
+    type AllClusters {
+      data: [Cluster]
+    }
       input clusterUpdateObject{
         _id:String,
         countryName: String
@@ -47,6 +49,7 @@ let clusterSchema = `
     type Query{ 
         fetchCluster(_id: String, moduleName:String!, actionName:String!):Cluster
         fetchClustersForMap:[Cluster]
+        fetchAllClusters: AllClusters
         fetchActiveClusters:[Cluster]
     }
    

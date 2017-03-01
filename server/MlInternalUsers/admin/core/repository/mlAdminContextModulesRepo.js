@@ -7,7 +7,7 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={isActive:true};
+    let query={};
     const data= MlClusters.find(query,fieldsProj).fetch();
     const totalRecords=MlClusters.find(query,fieldsProj).count();
 
@@ -18,11 +18,11 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
    // let contextQuery=contextQuery||{};
-    let query={isActive:true};
+    let query={};
     //User selection filter.
     let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(clusterId){
-        query={"clusterId":clusterId,isActive:true};
+        query={"clusterId":clusterId};
     }
 
     const data= MlChapters.find(query,fieldsProj).fetch();
@@ -38,7 +38,7 @@ export default CoreModulesRepo={
     //User selection filter.
     let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
     if(chapterId){
-      query={"chapterId":chapterId,isActive:true};
+      query={"chapterId":chapterId};
     }
 
     const data= MlSubChapters.find(query,fieldsProj).fetch();
@@ -51,11 +51,11 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={isActive:true};
+    let query={};
     //User selection filter.
     let subChapterId=requestParams&&requestParams.subChapterId?requestParams.subChapterId:null;
     if(subChapterId){
-      query={"subChapterId":subChapterId,isActive:true};
+      query={"subChapterId":subChapterId};
     }
 
     const data= MlCommunity.find(query,fieldsProj).fetch();

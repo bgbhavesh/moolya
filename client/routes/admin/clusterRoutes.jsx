@@ -30,7 +30,7 @@ adminSection.route('/clusters/:clusterId/clusterDetails', {
 adminSection.route('/clusters/:clusterId/chapters', {
   name: 'cluster_chapters',
   action(params){
-    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params.clusterId} listConfig={mlClusterChapterListConfig}/>})
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterChapterListConfig}/>})
   }
 });
 

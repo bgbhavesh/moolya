@@ -1,7 +1,7 @@
 import React from 'react';
-import MlInfinity from "./MlInfinity";
-import MlListViewContainer from "../../core/containers/MlListViewContainer";
-import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
+import MlInfinity from "../../dashboard/component/MlInfinity";
+import MlListViewContainer from "../containers/MlListViewContainer";
+import MlMapViewContainer from "../containers/MlMapViewContainer"
 
 /*
  Created by mohammed.mohasin on 01/03/17.

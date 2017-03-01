@@ -7,7 +7,7 @@ MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{
     let result=MlCountries.find().fetch();
     let code = 200;
     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-    return response
+    return result
 }
 MlResolver.MlQueryResolver['fetchCountry'] = (obj, args, context, info) =>{
     let country=null;

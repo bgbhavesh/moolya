@@ -26,9 +26,10 @@ var app = express().use('*',cors());
 
 const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
 //console.log(resolvers);
+const typeDefs = MlSchemaDef['schema']
 const executableSchema = makeExecutableSchema({
-  typeDefs: MlSchemaDef['schema'],
-  resolvers: resolvers
+  typeDefs,
+  resolvers
 });
 
 const expressServer = graphqlExpress((req) => {
@@ -50,19 +51,14 @@ const expressServer = graphqlExpress((req) => {
 
 app.use('/graphql', bodyParser.json(), Meteor.bindEnvironment(expressServer));
 
-app.listen(Meteor.settings.public.graphqlPort);
-console.log('Running a GraphQL API server at localhost:8090/graphql');
 // This binds the specified paths to the Express server running Apollo + GraphiQL
 WebApp.connectHandlers.use(Meteor.bindEnvironment(app));
-
-WebApp.rawConnectHandlers.use(proxyMiddleware(Meteor.settings.private.graphql_proxy_url));
 
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql'
 }))
 
-app.post('/assignusers', multipartMiddleware, Meteor.bindEnvironment(function (req, res)
-{
+app.post('/assignusers', multipartMiddleware, Meteor.bindEnvironment(function (req, res) {
     var context = {};
     context = getContext({req});
     context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;

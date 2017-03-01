@@ -56,7 +56,10 @@ const defaultClientConfig =
     dataIdFromObject: r =>r.id
 };
 
-export const client = new ApolloClient({defaultClientConfig});
+const networkInterface = defaultClientConfig.networkInterface;
+const dataIdFromObject = defaultClientConfig.dataIdFromObject;
+
+export const client = new ApolloClient({networkInterface, dataIdFromObject});
 
 
 /*

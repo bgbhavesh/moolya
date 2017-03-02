@@ -4,6 +4,13 @@ import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) => {
   // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
   if (MlCommunityDefinition.findOne({code:args.communityCode})){
     args.communityName=MlCommunityDefinition.findOne({code:args.communityCode}).name;
   }
@@ -11,20 +18,29 @@ MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) =
   if (id) {
     let code = 200;
     let result = {lookingForId: id}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+    let response = new MlRespPayload().successPayload(result, code);
     return response
   }
 }
 MlResolver.MlMutationResolver['UpdateLookingFor'] = (obj, args, context, info) => {
   // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
   if (MlCommunityDefinition.findOne({code:args.communityCode})){
     args.communityName=MlCommunityDefinition.findOne({code:args.communityCode}).name;
   }
   if (args._id) {
     var id= args._id;
     args=_.omit(args,'_id');
-    let updatedResponse = MlLookingFor.update(id, {$set: args});
-    return updatedResponse
+    let result = MlLookingFor.update(id, {$set: args});
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
   }
 
 }

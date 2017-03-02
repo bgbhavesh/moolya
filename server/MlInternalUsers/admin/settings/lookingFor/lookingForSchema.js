@@ -13,8 +13,8 @@ let LookingForSchema = `
     }
    type Mutation 
     {
-        CreateLookingFor(_id:String,lookingForName:String, lookingForDisplayName:String, communityCode:String,communityName:String,about:String, isActive:Boolean):String
-        UpdateLookingFor(_id:String,lookingForName:String, lookingForDisplayName:String, communityCode:String,communityName:String,about:String, isActive:Boolean):String
+        CreateLookingFor(_id:String,lookingForName:String, lookingForDisplayName:String, communityCode:String,communityName:String,about:String, isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateLookingFor(_id:String,lookingForName:String, lookingForDisplayName:String, communityCode:String,communityName:String,about:String, isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
         FindLookingFor(_id:String): LookingFor

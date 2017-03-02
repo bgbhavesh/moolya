@@ -139,8 +139,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];
 
-
-
     });
 
     totalRecords=MlSubDepartments.find({},findOptions).count();
@@ -261,9 +259,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data[index].clustersList = clusterNames || [];
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];
-
-
-
     });
     totalRecords=MlRoles.find(query,findOptions).count();
   }

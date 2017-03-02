@@ -9,8 +9,8 @@ let Specification = `
       isActive:Boolean
     }
     type Mutation{
-        CreateSpecification(_id:String,specificationName:String,specificationDisplayName:String,about:String,isActive:Boolean):String
-        UpdateSpecification(_id:String,specificationName:String,specificationDisplayName:String,about:String,isActive:Boolean):String
+        CreateSpecification(_id:String,specificationName:String,specificationDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateSpecification(_id:String,specificationName:String,specificationDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
       FindSpecification(_id: String):Specification

@@ -23,7 +23,12 @@ class MlAddSpecification extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/specificationList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/specificationList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createSpecification() {

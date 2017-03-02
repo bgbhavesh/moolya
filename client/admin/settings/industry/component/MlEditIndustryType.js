@@ -35,8 +35,14 @@ class MlEditIndustryType extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/industryList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/industryList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findIndustryType(){
     let IndustryTypeId=this.props.config
     const response = await findIndustryActionHandler(IndustryTypeId);
@@ -71,11 +77,11 @@ class MlEditIndustryType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateIndustryType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -89,7 +95,7 @@ class MlEditIndustryType extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Edit Stage Of Company Type</h2>
+              <h2>Edit Industry Type</h2>
               <div className="col-md-6">
                 <div className="form_bg">
                   <div className="form-group">

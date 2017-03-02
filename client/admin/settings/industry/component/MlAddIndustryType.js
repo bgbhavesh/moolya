@@ -23,7 +23,12 @@ class MlAddIndustry extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/industryList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/industryList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createIndustry() {

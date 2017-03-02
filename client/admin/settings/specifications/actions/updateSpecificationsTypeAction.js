@@ -9,14 +9,20 @@ export async function updateSpecificationTypeActionHandler(SpecificationType) {
   let isActive = SpecificationType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$specificationName: String, $specificationDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$specificationName: String, $specificationDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateSpecification(
           _id:$_id
           specificationName: $specificationName,
           specificationDisplayName: $specificationDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateSpecificationTypeActionHandler(SpecificationType) {
       specificationName,
       specificationDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName: "SPECIFICATION",
+      actionName: "UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateSpecification;
   return id
 }

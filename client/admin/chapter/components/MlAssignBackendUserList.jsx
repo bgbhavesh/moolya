@@ -28,7 +28,8 @@ export default class MlAssignChapterBackendUserList extends React.Component{
       let clusterId = this.props.clusterId;
       let chapterId = this.props.chapterId;
       let subChapterId = this.props.subChapterId;
-      const response = await fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, "");
+      let subChapterName = this.props.subChapterName;
+      const response = await fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, "",subChapterName);
       let data = response ? response : []
       this.setState({loading:false, backendUsers:data});
     }

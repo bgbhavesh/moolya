@@ -26,21 +26,21 @@ adminSection.route('/chapters/:clusterId/:chapterId/subChapters', {
   }
 });
 
-adminSection.route('/chapters/:subChapterId/subChapterDetails', {
+adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
   name: 'chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params}/>})
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
 
 adminSection.route('/chapters/:subChapterId/communities', {
   name: 'chapter_communities',
   action(params){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params}/>})
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
 
-adminSection.route('/chapters/:subChapterId/assignusers', {
+adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
   name: 'chapter_assignusers',
   action(params){
     mount(AdminLayout,{adminContent:< MlAssignChapterBackendUsers params={params}/>})

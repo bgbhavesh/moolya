@@ -25,8 +25,8 @@ MlResolver.MlMutationResolver['updateTaxation'] = (obj, args, context, info) => 
 
 MlResolver.MlQueryResolver['fetchTaxation'] = (obj, args, context, info) => {
   // TODO : Authorization
-  if (args._id) {
-    var id= args._id;
+  if (args.id) {
+    var id= args.id;
     let response = MlTaxation.findOne({"_id":id});
     return response;
   }

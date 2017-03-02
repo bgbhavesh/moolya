@@ -34,7 +34,7 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={};
+    let query={isActive:true};
     //User selection filter.
     let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
     if(chapterId){

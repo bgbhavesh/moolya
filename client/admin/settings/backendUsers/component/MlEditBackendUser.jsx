@@ -33,7 +33,8 @@ class MlEditBackendUser extends React.Component{
       roleId:'',
       isDefault:null,
       isActive:null,
-      globalStatus:null
+      globalStatus:null,
+      selectedSubChapter:'',
      /* selectedCluster:'',
       selectedChapter:'',
       selectedDepartment:'',
@@ -95,6 +96,7 @@ class MlEditBackendUser extends React.Component{
     this.setState({loading:false,data:response});
    if(response){
      this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
+     this.setState({selectedSubChapter:this.state.data.profile.InternalUprofile.moolyaProfile.subChapter})
       this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
      this.setState({isActive:this.state.data.profile.InternalUprofile.moolyaProfile.isActive})
      this.setState({globalStatus:this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment})
@@ -174,6 +176,7 @@ class MlEditBackendUser extends React.Component{
       middleName: this.refs.middleName.value,
       lastName: this.refs.lastName.value,
       userType:this.state.selectedBackendUserType,
+      subChapter:this.state.selectedSubChapter,
       roleType:this.state.selectedBackendUser,
       assignedDepartment:this.state.mlAssignDepartmentDetails,
       displayName:this.refs.displayName.value,
@@ -222,6 +225,9 @@ class MlEditBackendUser extends React.Component{
   }
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
+  }
+  optionsBySelectSubChapter(val){
+    this.setState({selectedSubChapter:val})
   }
   /*onClusterSelect(val){
     this.setState({selectedCluster:val})
@@ -274,6 +280,10 @@ class MlEditBackendUser extends React.Component{
     data:fetchActiveRoles{label:roleName,value:_id}
     }
 `;
+    let subChapterQuery=gql` query{
+  data:fetchActiveSubChapters{label:subChapterName,value:_id}
+}
+`;
     const showLoader=this.state.loading;
 
     return (
@@ -301,9 +311,12 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="lastName" placeholder="Last Name" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.lastName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <Select name="form-field-name"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)}
+                    <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)}
                     />
                   </div>
+                  {this.state.selectedBackendUserType=='non-moolya'&&(<div className="form-group">
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
+                  </div>)}
                   <div className="form-group">
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
                     <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)}
@@ -318,7 +331,7 @@ class MlEditBackendUser extends React.Component{
                   </div>
                   <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
-                  <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} departments={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />
+                  <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} departments={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />
 
                 </div>
               </ScrollArea>

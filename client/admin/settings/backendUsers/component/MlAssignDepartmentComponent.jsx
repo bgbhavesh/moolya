@@ -47,6 +47,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
      this.setState({
        assignDepartmentForm: assignDepartmentForm
      })
+   this.props.getAssignedDepartments(assignDepartmentForm);
  }
   optionsBySelectDepartment(index, selectedValue){
     let assignDepartmentDetails=this.state.assignDepartmentForm
@@ -62,11 +63,29 @@ export default class MlAssignDepartmentComponent extends React.Component {
   }
   render() {
     let that=this;
-  //  let queryOptions={options: { variables: {searchQuery:null}}};
-    let query=gql` query{
-  data:fetchActiveDepartment{label:departmentName,value:_id}
+    let departmentqueryOptions=''
+    let departmentQuery=gql` query($isMoolya:Boolean){
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+          }
+          `;
+    let selectedUserType=this.props.selectedBackendUserType
+    let selectedSubChapter=this.props.selectedSubChapter
+    if(selectedUserType=='moolya'&&selectedSubChapter==''){
+      departmentqueryOptions={options: { variables: {isMoolya:false}}};
+      departmentQuery=gql` query($isMoolya:Boolean){
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+          }
+          `;
+    }
+    if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){
+      departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:selectedSubChapter}}};
+      departmentQuery=gql` query($isMoolya:Boolean,$subChapter:String){
+  data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
 }
 `;
+    }
+
+
    let subDepartmentquery=gql`query($id:String){
       data:fetchSubDepartments(id:$id) {
         value:_id
@@ -76,18 +95,18 @@ export default class MlAssignDepartmentComponent extends React.Component {
 
    return(
      <div>
-   <div className="form-group"> <a onClick={that.AssignDepartment.bind(this)} className="mlUpload_btn">Assign  Department</a></div>
+  {/* <div className="form-group"> <a onClick={that.AssignDepartment.bind(this)} className="mlUpload_btn">Assign  Departments</a></div>*/}
        {that.state.assignDepartmentForm.map(function(assignDepartmentForm, idx){
          let subDepartmentOptions = {options: { variables: {id:assignDepartmentForm.department}}};
          return(
          <div className="panel panel-default" key={idx}>
-           <div className="panel-heading"> Assign Departments
-             <div className="pull-right block_action" onClick={that.RemoveAssignDepartmentForm.bind(that,idx)}><img src="/images/remove.png"/></div>
+           <div className="panel-heading"> Assign Departments{idx==0&&(<div className="pull-right block_action" onClick={that.AssignDepartment.bind(that)}><img src="/images/add.png"/></div>)}
+             {idx>0&&(<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentForm.bind(that,idx)}><img src="/images/remove.png"/></div>)}
            </div>
            <div className="panel-body">
              <div className="form-group">
               {/* <Select name="form-field-name" value={assignDepartmentForm.department} options={options2} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
-               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />
+               <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />
 
              </div>
              <div className="form-group">

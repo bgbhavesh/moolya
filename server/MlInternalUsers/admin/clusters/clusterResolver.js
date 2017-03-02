@@ -22,6 +22,7 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
             cluster.longitude = data.results[0].geometry.location.lng;
             let id = MlClusters.insert(cluster);
             if(id){
+                MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:id, moduleName:"CLUSTER", actionName:"CREATE"}, context, info)
                 let code = 200;
                 let result = {clusterid: id}
                 let response = JSON.stringify(new MlRespPayload().successPayload(result, code));

@@ -22,6 +22,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
         chapter.longitude = data.results[0].geometry.location.lng;
         let id = MlChapters.insert(chapter);
         if (id) {
+          MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:chapter.clusterId, chapterId: id, moduleName:"CHAPTER", actionName:"CREATE"}, context, info)
           let subChapter = {
             clusterId: chapter.clusterId,
             clusterName: chapter.clusterName,
@@ -46,7 +47,10 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             isBespokeWorkFlow: false,
             subChapterDataAcessMatrix: []
           }
-          createSubChapter(subChapter);
+          let subchapterid = createSubChapter(subChapter);
+          if(subchapterid){
+              MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:subChapter.clusterId, chapterId:subChapter.chapterId, subChapterId:subchapterid, moduleName:"SUBCHAPTER", actionName:"CREATE"}, context, info)
+          }
           let code = 200;
           let result = {chapterId: id}
           let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
@@ -109,6 +113,12 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
   return result
 }
 
+MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
+  let result=MlSubChapters.find({isActive: true}&&{subChapterName:{$ne:"Moolya"}}).fetch()||[];
+  return result
+}
+
+
 MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) => {
   let result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'}}).fetch()||[];
   return result
@@ -140,5 +150,6 @@ createSubChapter = (subChapter) =>{
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
     check(subChapter, Object)
-    MlSubChapters.insert(subChapter);
+    let id = MlSubChapters.insert(subChapter);
+    return id
 }

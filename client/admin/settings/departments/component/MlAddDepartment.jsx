@@ -59,8 +59,6 @@ class MlAddDepartment extends React.Component{
   };
 
   async  createDepartment() {
-
-
     let DepartmentDetails = {
       departmentName: this.refs.departmentName.value,
       displayName: this.refs.displayName.value,

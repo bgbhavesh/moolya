@@ -17,7 +17,6 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 
-import  MlCommunityView from '../../admin/community/components/MlCommunity'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
@@ -43,13 +42,6 @@ adminSection.route('/', {
     redirect("/admin/dashboard");
   }]
 });
-/*adminSection.route('/dashboard', {
-  name: 'dashboard',
-  action(){
-   /!* mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<LeftNavConnection navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})*!/
-  mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlClusterDashboardMapConfig} listConfig={mlClusterDashboardListConfig} />})
-  }
-});*/
 
 adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',
@@ -58,39 +50,6 @@ adminSection.route('/dashboard/subChapters/:chapterId', {
     mount(AdminLayout,{adminContent:<MlViews showInfinity={true} mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} queryOptions={{"id":params.chapterId}}/>})
   }
 });
-
-
- /* adminSection.route('/dashboard/clusters', {
-  name: 'dashboard_clusters',
-  action(){
-    mount(AdminLayout,{adminContent:<MoolyaAdminViewContainer/>})
-  }
-});*/
-
-
-
-
-
-// adminSection.route('/cluster/clusters', {
-//   name: 'cluster',
-//   action(){
-//     mount(AdminLayout,{adminContent:<MlChapterView mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig} />})
-//   }
-// });
-//
-// adminSection.route('/cluster/clusterDetails/:clusterId/', {
-//   name: 'cluster',
-//   action(params){
-//     mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
-//   }
-// });
-//
-// adminSection.route('/cluster/internal_users', {
-//   name: 'cluster',
-//   action(params){
-//       mount(AdminLayout,{adminContent:< MlAssignBackendUsers />})
-//   }
-// });
 
 adminSection.route('/chapter', {
   name: 'chapter',
@@ -110,17 +69,12 @@ adminSection.route('/chapters/:chapterId', {
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
-//
-// adminSection.route('/community', {
-//   name: 'community',
-//   action(){
-//     mount(AdminLayout,{adminContent:< MlAddCommunityFormComponent/>})
-//   }
-// });
+
+
 adminSection.route('/community', {
   name: 'community',
   action(){
-    mount(AdminLayout,{adminContent:< MlCommunityView listConfig={mlCommunityListConfig}/>})
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} listConfig={mlCommunityListConfig}/>})
   }
 });
 adminSection.route('/community/:communityId', {

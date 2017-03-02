@@ -10,6 +10,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
+
 let Select = require('react-select');
 
 
@@ -22,7 +23,8 @@ class MlAddBackendUser extends React.Component{
       password:'',
       confirmPassword:'',
       selectedBackendUserType:'',
-      selectedBackendUser:'',
+      selectedBackendUser:'Internal User',
+      selectedSubChapter:'',
      /* selectedCluster:'',
       selectedChapter:'',
       selectedDepartment:'',
@@ -90,6 +92,7 @@ class MlAddBackendUser extends React.Component{
       middleName: this.refs.middleName.value,
       lastName: this.refs.lastName.value,
       userType:this.state.selectedBackendUserType,
+      subChapter:this.state.selectedSubChapter,
       roleType:this.state.selectedBackendUser,
       assignedDepartment:this.state.mlAssignDepartmentDetails,
       displayName:this.refs.displayName.value,
@@ -131,6 +134,9 @@ class MlAddBackendUser extends React.Component{
   }
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
+  }
+  optionsBySelectSubChapter(val){
+    this.setState({selectedSubChapter:val})
   }
   /*onClusterSelect(val){
     this.setState({selectedCluster:val})
@@ -178,10 +184,15 @@ class MlAddBackendUser extends React.Component{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
 `;
-    let rolequery=gql` query{
+  /*  let rolequery=gql` query{
     data:fetchActiveRoles{label:roleName,value:_id}
     }
+`;*/
+    let subChapterQuery=gql` query{
+  data:fetchActiveSubChapters{label:subChapterName,value:_id}
+}
 `;
+
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -204,12 +215,16 @@ class MlAddBackendUser extends React.Component{
                       <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)}
+                      <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  clearable={true} onChange={this.onBackendUserTypeSelect.bind(this)}
                       />
                     </div>
+
+                    {this.state.selectedBackendUserType=='non-moolya'&&(<div className="form-group">
+                   <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
+                   </div>)}
                     <div className="form-group">
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
-                      <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)}
+                      <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true}
                       />
                    {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} placeholder="Select Role" queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
                     </div>
@@ -221,7 +236,7 @@ class MlAddBackendUser extends React.Component{
                     </div>
                     <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
-                    <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} />
+                    <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} />
                 </div>
               </ScrollArea>
             </div>

@@ -28,6 +28,7 @@ const mlSubChapterMapConfig=new MlViewer.View({
                                    text:subChapterName
                                    lat:latitude
                                    lng:longitude
+                                   isActive:isActive
                           }
                       }
               }

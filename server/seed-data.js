@@ -2,66 +2,62 @@
  * Created by venkatasrinag on 19/12/16.
  */
 
-/*********************************** Default Moolya Admin Creation <Start> ********************************************/
-var _ = require('lodash');
-var adminPassword = "Admin@123";
-var platformAdminId;
-let mlModules = MlModules.find().fetch();
-let actions = MlActions.find().fetch();
-let permissions = [{actionId:"all", isActive:true}]
 
+let _ = require('lodash'),
+  adminPassword = "Admin@123",
+  platformAdminId,
+  mlModules = MlModules.find().fetch(),
+  actions = MlActions.find().fetch(),
+  permissions = [{actionId:"all", isActive:true}]
 
+/*********************************** Default Department/SubDepartment Creation <Start> ********************************************/
+let department = MlDepartments.findOne({departmentName:"operations"})
+if(!department) {
+  let departmentAvailiable = [{cluster: [{clusterId: "all"}], chapter: "all", subChapter: "all"}]
+  department = {
+    departmentName: "operations",
+    displayName: "Operations",
+    departmentDesc: "Operations Department",
+    isActive: true,
+    isMoolya: false,
+    departmentAvailiable: departmentAvailiable
+  };
 
-var options = {
-    profile:{
-        isInternaluser : true,
-        isExternaluser : false,
-        email: 'platformadmin@moolya.com',
-        InternalUprofile:{
-            moolyaProfile:{
-                email:"platformadmin@moolya.com",
-                phoneNumber:"9999999999",
-                userProfiles:[]
-            }
-        }
-    },
-    username: 'platformadmin@moolya.com',
-    password: adminPassword,
-};
-
-var userObj = Meteor.users.findOne({username: "platformadmin@moolya.com"});
-if(!userObj){
-    console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
-    platformAdminId = Accounts.createUser(options);
-}else{
-    Accounts.setPassword(userObj._id, adminPassword);
-    console.log("Admin password set from settings file");
+  MlDepartments.insert(department);
 }
 
-var role = MlRoles.findOne({roleName:"platformadmin"})
-if(!role){
-      let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
-    let modules = [{moduleId:"all", actions:permissions}]
-    role = {
-        roleName:"platformadmin",
-        displayName:"Platform Admin",
-        assignRoles: assignRoles,
-        modules:modules,
-        isActive:true
-    }
-    var roleId = MlRoles.insert(role);
-    var userRoles = [{roleId:roleId, chapterId:"all", subchapterId:"all", communityId:"all", hierarchyLevel:"4", hierarchyCode:"PLATFORM"}]
-    var userProfiles = [{
-        clusterId:"all",
-        userRoles:userRoles,
-        isDefault:true
-    }]
-    Meteor.users.update({_id:platformAdminId}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":userProfiles}})
+let subDepartment = MlSubDepartments.findOne({subDepartmentName:"systemadmin"})
+if(!subDepartment) {
+  let dep = MlDepartments.findOne({"departmentName":"operations"});
+  let subDepatmentAvailable = [{cluster: [{clusterId: "all"}], chapter: "all", subChapter: "all"}]
+  subDepartment = {
+    subDepartmentName: "systemadmin",
+    displayName: "System Admin",
+    aboutSubDepartment: "System Adminstration",
+    isActive: true,
+    isMoolya: false,
+    departmentId: dep._id,
+    subDepatmentAvailable: subDepatmentAvailable
+  };
+  MlSubDepartments.insert(subDepartment);
 }
-
-/*********************************** Default Moolya Admin Creation <End> **********************************************/
+/*********************************** Default Department/SubDepartment Creation <END> **********************************************/
 
 /*********************************** Default Moolya Roles Creation <Start> **********************************************/
+
+var platformrole = MlRoles.findOne({roleName:"platformadmin"})
+if(!platformrole){
+  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:"all", subDepartment:"all", isActive:true}]
+  let modules = [{moduleId:"all", actions:permissions}]
+  platformrole = {
+    roleName:"platformadmin",
+    displayName:"Platform Admin",
+    assignRoles: assignRoles,
+    modules:modules,
+    isActive:true
+  }
+  MlRoles.insert(platformrole);
+}
 
 var clusterAdmin = MlRoles.findOne({roleName:"clusteradmin"})
 if(!clusterAdmin){
@@ -136,10 +132,52 @@ if(!chapterAdmin){
   }
   MlRoles.insert(role);
 }
-
-
-
 /*********************************** Default Moolya Roles Creation <End> **********************************************/
+
+
+/*********************************** Default Moolya Admin Creation <Start> ********************************************/
+let dep = MlDepartments.findOne({"departmentName":"operations"});
+let subDep = MlSubDepartments.findOne({"subDepartmentName":"systemadmin"});
+var options = {
+  profile:{
+    assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
+    isInternaluser : true,
+    isExternaluser : false,
+    email: 'platformadmin@moolya.com',
+    InternalUprofile:{
+      moolyaProfile:{
+        email:"platformadmin@moolya.com",
+        phoneNumber:"9999999999",
+        userProfiles:[]
+      }
+    }
+  },
+  username: 'platformadmin@moolya.com',
+  password: adminPassword,
+};
+
+var userObj = Meteor.users.findOne({username: "platformadmin@moolya.com"});
+if(!userObj){
+  console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
+  platformAdminId = Accounts.createUser(options);
+}else{
+  Accounts.setPassword(userObj._id, adminPassword);
+  console.log("Admin password set from settings file");
+}
+
+var role = MlRoles.findOne({roleName:"platformadmin"})
+if(role){
+  var userRoles = [{roleId:role._id, chapterId:"all", subchapterId:"all", communityId:"all", hierarchyLevel:"4", hierarchyCode:"PLATFORM"}]
+  var userProfiles = [{
+    clusterId:"all",
+    userRoles:userRoles,
+    isDefault:true
+  }]
+  Meteor.users.update({_id:platformAdminId}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":userProfiles}})
+}
+
+/*********************************** Default Moolya Admin Creation <End> **********************************************/
+
 
 /******************************************* User Login <Start> *******************************************************/
 

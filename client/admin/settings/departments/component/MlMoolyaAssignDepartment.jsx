@@ -9,7 +9,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
     super(props);
     this.state={
       selectedValue:null,
-      departmentAvailability:[{cluster: [{clusterId:''}],chapter:'All',subChapter:'All',email:'',isActive:false }]
+      departmentAvailability:[{cluster: [],chapter:'All',subChapter:'All',email:'',isActive:false }]
     }
     return this;
   }
@@ -33,7 +33,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
 
     if(availabilityDetails){
       let  availabilityDetailsForm=[{
-        cluster:[{clusterId: availabilityDetails[0].cluster[0].clusterId}],
+        cluster :availabilityDetails[0].cluster,
         chapter:'All',
         subChapter:'All',
         email:availabilityDetails[0].email,
@@ -44,10 +44,9 @@ export default class MlMoolyaAssignDepartment extends React.Component {
     }
   }
   optionsBySelectCluster(index, selectedIndex){
-
     let availabilityDetails=this.state.departmentAvailability
     console.log("Selected--"+availabilityDetails);
-    availabilityDetails[index]['cluster'][0]['clusterId']=selectedIndex
+    availabilityDetails[index]['cluster'] = selectedIndex;
     this.setState({departmentAvailability:availabilityDetails})
     this.props.getMoolyaDepartmentAvailability(this.state.departmentAvailability)
   }
@@ -91,15 +90,17 @@ export default class MlMoolyaAssignDepartment extends React.Component {
                 <div className="panel-body">
 
                   <div className="form-group" disabled="true">
-                    <Moolyaselect multiSelect={true} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster[0].clusterId} queryType={"graphql"} query={clusterQuery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
+                    <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
+
                   </div>
+
                   <div className="form-group"  disabled="true">
                     <div className="form-group">
-                      <input type="text" id="" placeholder="Chapters" className="form-control float-label"  value="All" disabled="true"/>
+                      <input type="text" id="" placeholder="Select Chapter" className="form-control float-label"  value="All" disabled="true"/>
                     </div>
                   </div>
                   <div className="form-group">
-                    <input type="text" id="" placeholder="SubChapters" className="form-control float-label"  value="All" disabled="true"/>
+                    <input type="text" id="" placeholder="Select Sub Chapter" className="form-control float-label"  value="All" disabled="true"/>
                   </div>
                   <div className="form-group">
                     <input placeholder="Department Email Id" className="form-control float-label" defaultValue={options.email} onBlur={that.onEmailChange.bind(that,id)}/>
@@ -107,7 +108,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" name={'isActive'} checked={options.isActive}   value={options.isActive} onChange={that.onChange.bind(that,id)} />
+                      <input type="checkbox" name={'isActive'} value={options.isActive} onChange={that.onChange.bind(that,id)} />
                       <div className="slider"></div>
                     </label>
                   </div>

@@ -85,10 +85,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
 
     });
-
-
-
-    console.log(data);
     totalRecords=MlDepartments.find({},findOptions).count();
   }
 

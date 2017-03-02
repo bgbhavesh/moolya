@@ -51,6 +51,13 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       initSwiper();
     }, 1000)
 
+    if(this.props.userId) {
+      const resp = this.findUserDepartments();
+      if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
+        this.setState({roleDetails: this.props.assignedRoles})
+      }
+    }
+
   }
 
   optionsBySelectRole(index, selectedValue){
@@ -61,7 +68,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       this.props.getAssignedRoles(this.state.roleDetails)
   }
 
-  addRoleComponent(){
+  addRoleComponent(id){
       var mySwiper = new Swiper('.blocks_in_form', {
         // speed: 400,
         pagination: '.swiper-pagination',
@@ -72,9 +79,12 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       });
       mySwiper.updateContainerSize()
       this.setState({
-          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"", communityId:"", hierarchyLevel:"", hierarchyCode:""}])
+          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:this.props.chapterId, subChapterId:this.props.subChapterId, communityId:"", hierarchyLevel:"", hierarchyCode:""}])
+
       });
   }
+
+
 
   onChange(id,event){
       let roleDetails=this.state.roleDetails
@@ -136,8 +146,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                   <div className="swiper-wrapper">
                     {roleDetails.map(function (details, idx) {
                       return(
-                        <div className="form_inner_block swiper-slide">
-                          <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, department)}/></div>
+                        <div className="form_inner_block swiper-slide" key={details.roleId}>
+                          <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, idx)}/></div>
                           <div className="form-group">
                             <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>
                           </div>

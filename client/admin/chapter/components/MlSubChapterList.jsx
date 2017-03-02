@@ -9,7 +9,7 @@ export default class MlSubChapterList extends Component {
       <div className="col-md-2" key={prop._id}>
         <div className="list_block">
           <div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>
-          <a href={chapterRoutes.subChapterDetails(prop._id)}> <div className={"hex_outer"}><img src={prop.subChapterImageLink}/></div></a>
+          <a href={chapterRoutes.subChapterDetails(prop.clusterId,prop.chapterId,prop._id,prop.subChapterName)}> <div className={"hex_outer"}><img src={prop.subChapterImageLink}/></div></a>
           <h3>{prop.subChapterName} </h3>
         </div>
       </div>

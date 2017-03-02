@@ -173,8 +173,8 @@ class MlAddBackendUser extends React.Component{
       }
     ]
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya'},
-      {value: 'non-moolya', label: 'non-moolya'}
+      {value: 'moolya', label: 'moolya' , clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya',clearableValue: true}
     ];
     let BackendUserOptions=[
       {value: 'Internal User', label: 'Internal User'},
@@ -209,13 +209,13 @@ class MlAddBackendUser extends React.Component{
                       <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="middleName" placeholder="middle Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="middleName" placeholder="Middle Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  clearable={true} onChange={this.onBackendUserTypeSelect.bind(this)}
+                      <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)}
                       />
                     </div>
 

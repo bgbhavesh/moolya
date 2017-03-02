@@ -10,7 +10,7 @@ import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 class MlEditDepartment extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{},departmentAvailability:[]};
+    this.state = {loading:true,data:{},departmentAvailability:[],isMoolyaChecked:''};
     this.addEventHandler.bind(this);
     this.editDepartment.bind(this)
     this.findDepartment.bind(this);
@@ -45,6 +45,7 @@ class MlEditDepartment extends React.Component{
       console.log(departmentId)
       const response = await findDepartmentActionHandler(departmentId);
     this.setState({loading:false,data:response});
+    this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
       //return response;
     }
   async  editDepartment() {
@@ -93,11 +94,11 @@ class MlEditDepartment extends React.Component{
   }
 
   onMoolyaChange(e){
-    const data=this.state.data;
+    const dataDetails=this.state.data;
     if(e.currentTarget.checked){
-      this.setState({"data":{"isMoolya":true}});
+      this.setState({"isMoolyaChecked":true});
     }else{
-      this.setState({"data":{"isMoolya":false}});
+      this.setState({"isMoolyaChecked":false});
     }
   }
 
@@ -160,12 +161,12 @@ class MlEditDepartment extends React.Component{
                   <div className="form-group switch_wrap switch_names">
                     <label>Select Type</label><br/>
                     <span className="state_label acLabel">moolya</span><label className="switch">
-                    <input type="checkbox" ref="appType" disabled="true" checked={this.state.data&&this.state.data.isMoolya} onChange={this.onMoolyaChange.bind(this)}/>
+                    <input type="checkbox" ref="appType" disabled="true" checked={this.state.isMoolyaChecked} onChange={this.onMoolyaChange.bind(this)}/>
                     <div className="slider"></div>
                   </label>
                     <span className="state_label">non-moolya</span>
                   </div><br className="brclear"/>
-                  {this.state.data&&this.state.data.isMoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
+                  {this.state.isMoolyaChecked?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
                 </form>
               </div>
             </div>

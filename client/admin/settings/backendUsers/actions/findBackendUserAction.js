@@ -19,6 +19,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                   middleName,
                   lastName,
                   userType,
+                  subChapter,
                   roleType,
                   assignedDepartment{
                     department,

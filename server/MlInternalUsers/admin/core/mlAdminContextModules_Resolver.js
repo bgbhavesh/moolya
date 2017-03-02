@@ -1,6 +1,6 @@
 import MlResolver from '../mlAdminResolverDef'
 import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
-
+import MlAdminContextQueryConstructor from './repository/mlAdminContextQueryConstructor';
 MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   let totalRecords=0;
   let findOptions = {};
@@ -20,7 +20,9 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   //Authorization layer
 
   //Context Specific Search layer
-  const contextQuery={};
+
+  let contextQuery={};
+  contextQuery=new MlAdminContextQueryConstructor(context.userId,{module:args.module,action:args.action}).contextQuery();
   let result=null;
   switch(moduleName){
     case "cluster":

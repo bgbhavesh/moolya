@@ -10,12 +10,12 @@ class MlAdminUserContext
 
   }
 
-  getDefaultMenu(userId)
+  userProfileDetails(userId)
   {
     check(userId, String)
     let hierarchyLevel =null;
     let hierarchyCode=null;
-    let hierarchy=null;
+    let defaultCluster=null;
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -28,11 +28,13 @@ class MlAdminUserContext
          for(var i = 0; i < user_profiles.length; i++){
              if(user_profiles[i].isDefault == true){
                   user_roles = user_profiles[i].userRoles;
+                  defaultCluster=user_profiles[i].clusterId;
                   break;
              }
           }
       }else{ //else pick the first profile
         user_roles=user_profiles&&user_profiles[0]&&user_profiles[0].userRoles?user_profiles[0].userRoles:[];
+        defaultCluster=user_profiles&&user_profiles[0]?user_profiles[0]["clusterId"]:null;
       }
 
       if(user_roles && user_roles.length > 0)
@@ -49,14 +51,23 @@ class MlAdminUserContext
 
       }
     }
-    if(hierarchyLevel){
-      hierarchy = MlHierarchy.findOne({level:Number(hierarchyLevel)});
+        return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,
+                defaultProfileHierarchyCode:"CLUSTER",
+                defaultProfileHierarchyRefId:defaultCluster};
+  }
+
+  getDefaultMenu(userId){
+       check(userId,String);
+        let userProfile=this.userProfileDetails(userId)||{};
+        let hierarchy=null;
+    if(userProfile&&userProfile.hierarchyLevel&&userProfile.hierarchyLevel){
+      hierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
       return hierarchy&&hierarchy.menuName?hierarchy.menuName:null;
     }
     //return default menu
-        return null;
+       return null;
   }
-  
+
 }
 
 module.exports = MlAdminUserContext

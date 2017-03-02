@@ -38,18 +38,17 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module=="department"){
-    data= MlDepartments.find(query,findOptions).fetch();
-    totalRecords=MlDepartments.find(query,findOptions).count();
     data= MlDepartments.find({},findOptions).fetch() || [];
     data.map(function (doc,index) {
       let clusterIds = [];
+      let clusterIdsArray = [];
       let chapterIdsArray = [];
       let subchapterIdsArray = [];
       let departments=doc&&doc.depatmentAvailable?doc.depatmentAvailable:[];
       departments.map(function (department) {
-        let clustersIds = department&&department.cluster&&department.cluster?department.cluster:[];
-        let currentDepClusterIds = _.pluck(clustersIds,"clusterId") || [];
-        clusterIds = clusterIds.concat(currentDepClusterIds);
+         let currentDepClusterIds = department&&department.cluster&&department.cluster?department.cluster:[];
+         clusterIds = clusterIds.concat(currentDepClusterIds);
+
         let chapterId =  department&&department.chapter&&department.chapter?department.chapter:"";
         if(chapterId != "All"){
           chapterIdsArray.push(chapterId);
@@ -89,8 +88,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module=="subDepartment"){
-    data= MlSubDepartments.find(query,findOptions).fetch();
-    totalRecords=MlSubDepartments.find(query,findOptions).count();
     data= MlSubDepartments.find({},findOptions).fetch();
 
     data.map(function (doc,index) {
@@ -101,8 +98,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       let departments=doc&&doc.subDepatmentAvailable?doc.subDepatmentAvailable:[];
       const departmentDetails =  MlDepartments.findOne({_id : doc.departmentId}).departmentName || {};
       departments.map(function (department) {
-        let clustersIds = department&&department.cluster&&department.cluster?department.cluster:[];
-        let currentDepClusterIds = _.pluck(clustersIds,"clusterId") || [];
+        let currentDepClusterIds = department&&department.cluster&&department.cluster?department.cluster:[];
+        //let currentDepClusterIds = _.pluck(clustersIds,"clusterId") || [];
         clusterIds = clusterIds.concat(currentDepClusterIds);
         let chapterId =  department&&department.chapter&&department.chapter?department.chapter:"";
         if(chapterId != "All"){
@@ -206,6 +203,63 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   if(args.module == 'roles'){
     data= MlRoles.find(query,findOptions).fetch();
+    data.map(function (doc,index) {
+      let departmentsIdsArray = [];
+      let subdepartmentsIdsArray = [];
+      let clusterIdsArray = [];
+      let chapterIdsArray = [];
+      let subchapterIdsArray = [];
+
+      let assignRolesData=doc&&doc.assignRoles?doc.assignRoles:[];
+      assignRolesData.map(function (doc) {
+        departmentsIdsArray.push(doc.department);
+        subdepartmentsIdsArray.push(doc.subDepartment);
+        clusterIdsArray.push(doc.cluster);
+        chapterIdsArray.push(doc.chapter);
+        subchapterIdsArray.push(doc.subChapter);
+      });
+
+      const departmentData =  MlDepartments.find({ _id: { $in: departmentsIdsArray } } ).fetch() || [];
+      const subdepartmentData = MlSubDepartments.find( { _id: { $in: subdepartmentsIdsArray } } ).fetch() || [];
+      const clusterData =  MlClusters.find( { _id: { $in: clusterIdsArray } } ).fetch() || [];
+      const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
+      const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
+
+      let departmentNames = [];  //@array of strings
+      departmentData.map(function (doc) {
+        departmentNames.push(doc.departmentName)
+      });
+
+      let subdepartmentsNames = [];  //@array of strings
+      subdepartmentData.map(function (doc) {
+        subdepartmentsNames.push(doc.subDepartmentName)
+      });
+
+
+      let clusterNames = [];  //@array of strings
+      clusterData.map(function (doc) {
+        clusterNames.push(doc.clusterName)
+      });
+
+      let chapterNamesArray = [];
+      chapterData.map(function (doc) {
+        chapterNamesArray.push(doc.chapterName)
+      });
+
+      let subchapterNamesArray = [];
+      subchapterData.map(function (doc) {
+        subchapterNamesArray.push(doc.subChapterName)
+      });
+
+      data[index].departmentsList = departmentNames || [];
+      data[index].subdepartmentsList = subdepartmentsNames || [];
+      data[index].clustersList = clusterNames || [];
+      data[index].chaptersList = chapterNamesArray || [];
+      data[index].subChapterList = subchapterNamesArray || [];
+
+
+
+    });
     totalRecords=MlRoles.find(query,findOptions).count();
   }
 

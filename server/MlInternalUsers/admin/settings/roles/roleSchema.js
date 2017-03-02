@@ -31,6 +31,8 @@ let Role = `
         roleType:String,
         userType:String,
         about:String,
+        departmentsList : [String],
+        subdepartmentsList : [String],
         clustersList   : [String],
         chaptersList   : [String],
         subChapterList : [String],

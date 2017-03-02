@@ -93,7 +93,7 @@ const defaultGraphQLOptions = {
       }
 
       if(config.assignUsersPath){
-          graphQLServer.post('assignusers', multipartMiddleware, Meteor.bindEnvironment(function (req, res) {
+          graphQLServer.post(config.assignUsersPath, multipartMiddleware, Meteor.bindEnvironment(function (req, res) {
               var context = {};
               context = getContext({req});
               context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;

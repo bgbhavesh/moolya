@@ -5,9 +5,9 @@ let subDepartmentSchema = `
    
     type SubDepartment{
         _id:String,
-         subDepartmentName:String,
+        subDepartmentName:String,
         displayName:String,
-        aboutSubDepartment:String,
+          aboutSubDepartment:String,
         isActive:Boolean,
         departmentId:String,
         isMoolya:Boolean,

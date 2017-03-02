@@ -121,16 +121,16 @@ MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) =>
   let users = [];
 
   if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.communityId != ""){
-      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.subChapterId":args.subChapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.communityId":args.communityId}]}).fetch();
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId":args.subChapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.communityId":args.communityId}]}).fetch();
   }
-  else if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.subChapterName !="Moolya"){
-      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.subChapterId":args.subChapterId},{"profile.InternalUprofile.moolyaProfile.userType":'non-moolya'}]}).fetch();
+  else if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != ""){
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId":args.subChapterId}]}).fetch();
   }
-  else if(args.clusterId != "" && args.chapterId != "" && args.subChapterName=="Moolya"){
-      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userType":'moolya'}]}).fetch();
+  else if(args.clusterId != "" && args.chapterId != ""){
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}]}).fetch();
   }
   else if(args.clusterId != "" ){
-      users = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.clusterId":args.clusterId}).fetch();
+      users = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}).fetch();
   }
   return users;
 }
@@ -265,8 +265,8 @@ MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
     let user_roles;
     // Selecting Default Profile
     for (var i = 0; i < user_profiles.length; i++) {
-      let user_roles = user_profiles[i].userroles;
-        if (user_profiles[i].userroles && user_profiles[i].userroles.length > 0) {
+      let user_roles = user_profiles[i].userRoles;
+        if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
           for (var j = 0; j < user_roles.length; j++) {
            roles.push(user_roles[j]);
           }

@@ -135,7 +135,7 @@ const defaultGraphQLOptions = {
                   }
                   let userProfile = {
                       clusterId: data.clusterId,
-                      userroles:  roles,
+                      userRoles:  roles,
                       isDefault: false
                   }
                   let response = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)

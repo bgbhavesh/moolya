@@ -11,7 +11,7 @@ export async function updateLookingForTypeActionHandler(LookingForType) {
   let isActive = LookingForType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$lookingForName: String, $lookingForDisplayName: String, $communityCode:String, $communityName:String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$lookingForName: String, $lookingForDisplayName: String, $communityCode:String, $communityName:String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateLookingFor(
           _id:$_id
           lookingForName: $lookingForName,
@@ -19,8 +19,14 @@ export async function updateLookingForTypeActionHandler(LookingForType) {
           communityCode: $communityCode,
           communityName : $communityName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -30,9 +36,11 @@ export async function updateLookingForTypeActionHandler(LookingForType) {
       communityCode,
       communityName,
       about,
-      isActive
+      isActive,
+      moduleName: "LOOKINGFOR",
+      actionName: "UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateLookingFor;
   return id
 }

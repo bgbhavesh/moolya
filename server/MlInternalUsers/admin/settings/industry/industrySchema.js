@@ -9,8 +9,8 @@ let Industry = `
       isActive:Boolean
     }
     type Mutation{
-        CreateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean):String
-        UpdateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean):String        
+        CreateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response        
     }
     type Query{
       FindIndustry(_id: String):Industry

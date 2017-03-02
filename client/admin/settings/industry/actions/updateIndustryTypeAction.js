@@ -9,14 +9,20 @@ export async function updateIndustryTypeActionHandler(IndustryType) {
   let isActive = IndustryType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$industryName: String, $industryDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$industryName: String, $industryDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateIndustry(
           _id:$_id
           industryName: $industryName,
           industryDisplayName: $industryDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateIndustryTypeActionHandler(IndustryType) {
       industryName,
       industryDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName: "INDUSTRY",
+      actionName: "UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateIndustry;
   return id
 }

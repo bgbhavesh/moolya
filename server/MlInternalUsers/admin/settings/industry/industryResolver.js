@@ -4,22 +4,36 @@ import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => {
   // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
   let id = MlIndustries.insert({...args});
   if (id) {
     let code = 200;
     let result = {industryId: id}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+    let response = new MlRespPayload().successPayload(result, code);
     return response
   }
 }
 MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => {
   // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
 
   if (args._id) {
     var id= args._id;
     args=_.omit(args,'_id');
-    let updatedResponse= MlIndustries.update(id, {$set: args});
-    return updatedResponse
+    let result= MlIndustries.update(id, {$set: args});
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
   }
 
 }

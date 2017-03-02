@@ -22,7 +22,12 @@ class MlAddEntity extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/entityList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/entityList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createEntity() {

@@ -11,15 +11,21 @@ export async function addLookingForActionHandler(LookingForDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($lookingForName: String, $lookingForDisplayName: String, $communityCode: String,$communityName:String,$about:String,$isActive: Boolean){
+    mutation  ($lookingForName: String, $lookingForDisplayName: String, $communityCode: String,$communityName:String,$about:String,$isActive: Boolean, $moduleName:String, $actionName:String){
         CreateLookingFor(
           lookingForName: $lookingForName,
           lookingForDisplayName: $lookingForDisplayName,
           communityCode: $communityCode,
           communityName:$communityName,
           about:$about,
-          isActive :$isActive
-        )
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -28,7 +34,9 @@ export async function addLookingForActionHandler(LookingForDetails) {
       communityCode,
       communityName,
       about,
-      isActive
+      isActive,
+      moduleName: "LOOKINGFOR",
+      actionName: "CREATE"
     }
   })
   const id = result.data.CreateLookingFor;

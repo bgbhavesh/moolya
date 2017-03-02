@@ -94,9 +94,7 @@ const mlDepartmentTableConfig=new MlViewer.View({
                               departmentName
                               displayName
                                depatmentAvailable {
-                                cluster {
-                                  clusterId
-                                }
+                                cluster 
                                 chapter
                                 subChapter
                                 email

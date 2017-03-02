@@ -101,7 +101,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       let subchapterIdsArray = [];
 
       let departments=doc&&doc.subDepatmentAvailable?doc.subDepatmentAvailable:[];
-      const departmentDetails =  MlDepartments.findOne({_id : doc.departmentId}).departmentName || {};
+      const departmentDetails =  MlDepartments.findOne({_id : doc.departmentId}).departmentName || "";
       departments.map(function (department) {
         let currentDepClusterIds = department&&department.cluster&&department.cluster?department.cluster:[];
         //let currentDepClusterIds = _.pluck(clustersIds,"clusterId") || [];
@@ -134,7 +134,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         subchapterNamesArray.push(doc.subChapterName)
       });
 
-      data[index].departmentAliasName = departmentDetails;
+      data[index].departmentAliasName = departmentDetails || "";
       data[index].clustersList = clusterNames || [];
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];

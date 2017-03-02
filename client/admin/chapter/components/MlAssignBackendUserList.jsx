@@ -17,6 +17,7 @@ export default class MlAssignChapterBackendUserList extends React.Component{
         }
 
         this.fetchAssignUsers.bind(this);
+        this.onBackEndUserClick.bind(this);
         return this;
     }
 
@@ -34,6 +35,10 @@ export default class MlAssignChapterBackendUserList extends React.Component{
       this.setState({loading:false, backendUsers:data});
     }
 
+    onBackEndUserClick(user){
+      this.props.updateSelectedBackEndUser(user._id);
+    }
+
     render(){
         let that = this
         let backendUsers = that.state.backendUsers
@@ -41,7 +46,7 @@ export default class MlAssignChapterBackendUserList extends React.Component{
           <div>
             {backendUsers.map(function (user) {
                 return(
-                    <div className="col-md-4 col-sm-4">
+                    <div className="col-md-4 col-sm-4" key={user.username} onClick={that.onBackEndUserClick.bind(that,user)}>
                         <div className="list_block provider_block">
                             <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
                             <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/ideator_01.png" /> </div>

@@ -51,6 +51,13 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       initSwiper();
     }, 1000)
 
+    if(this.props.userId) {
+      const resp = this.findUserDepartments();
+      if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
+        this.setState({roleDetails: this.props.assignedRoles})
+      }
+    }
+
   }
 
   optionsBySelectRole(index, selectedValue){
@@ -139,7 +146,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                   <div className="swiper-wrapper">
                     {roleDetails.map(function (details, idx) {
                       return(
-                        <div className="form_inner_block swiper-slide">
+                        <div className="form_inner_block swiper-slide" key={details.roleId}>
                           <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, idx)}/></div>
                           <div className="form-group">
                             <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>

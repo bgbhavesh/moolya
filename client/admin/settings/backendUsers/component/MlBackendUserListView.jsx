@@ -14,6 +14,9 @@ export default class MlClusterListView extends Component {
         if (status == true) {
           StatusActive = 'active'
           fontName='check'
+        }else{
+          StatusActive = 'inactive'
+          fontName='times'
         }
       }
 

@@ -2,10 +2,10 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) => {
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+   /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
     if(!isValidAuth)
       return "Not Authorized"
-
+*/
     if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
@@ -68,3 +68,12 @@ MlResolver.MlQueryResolver['findDepartments'] = (obj, args, context, info) => {
 
 }
 
+MlResolver.MlQueryResolver['fetchMoolyaBasedDepartment'] = (obj, args, context, info) => {
+  let resp = MlDepartments.find({isMoolya: args.isMoolya}).fetch();
+  return resp;
+}
+
+MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
+  let resp = MlDepartments.find({isMoolya: args.isMoolya},{ depatmentAvailable: { $elemMatch: { subChapter: args.subChapter } }} ).fetch();
+  return resp;
+}

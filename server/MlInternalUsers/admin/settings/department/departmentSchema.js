@@ -2,12 +2,8 @@ import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let departmentSchema = `        
     
-    type ClusterListSchema{
-        clusterId   : String
-    }
-    
     type DepatmentAvailableSchema{
-        cluster     : [ClusterListSchema]
+        cluster     : [String]
         chapter     : String
         subChapter  : String
         email       : String
@@ -23,13 +19,9 @@ let departmentSchema = `
          isMoolya       : Boolean
          depatmentAvailable:[DepatmentAvailableSchema]
     }
-    
-    input ClusterList{
-        clusterId     : String
-    }
-    
+   
     input DepatmentAvailable{
-        cluster     : [ClusterList]
+        cluster     : [String]
         chapter     : String
         subChapter  : String
         email       : String
@@ -54,6 +46,8 @@ let departmentSchema = `
         findDepartments:String
         fetchDepartments:[Department]
         fetchActiveDepartment:[Department]
+        fetchMoolyaBasedDepartment(isMoolya:Boolean):[Department]
+        fetchNonMoolyaBasedDepartment(isMoolya:Boolean,subChapter:String):[Department]
     }
 `
 

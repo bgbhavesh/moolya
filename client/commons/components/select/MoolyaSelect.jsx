@@ -99,8 +99,13 @@ export default class MoolyaSelect extends Component {
    const query=this.props.query;
    const labelKey=this.props.labelKey||'label';
    const valueKey=this.props.valueKey||'value';
-   let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{}}};
+
+   let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{},forceFetch:true}};
     queryOptions.options.variables.searchQuery=this.state.searchTerm;
+    if(this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables){
+      queryOptions.options.forceFetch=true;
+    }
+
    let QueryExecutor=null;
    if(isDynamic&&query&&executeQuery){
      queryOptions['options']['variables']['callBackHandler']=this.onChangeCallBackHandler;

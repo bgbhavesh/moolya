@@ -109,6 +109,11 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
   return result
 }
 
+MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) => {
+  let result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'}}).fetch()||[];
+  return result
+}
+
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
     createSubChapter(args.subChapter)
 }

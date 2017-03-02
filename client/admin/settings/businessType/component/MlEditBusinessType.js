@@ -37,7 +37,12 @@ class MlEditBusinessType extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/businessList");
+      if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/businessList");
+      else
+        toastr.error(response.result);
+    }
   };
   async findBusinessType(){
     let BusinessTypeId=this.props.config
@@ -73,11 +78,11 @@ class MlEditBusinessType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateBusinessType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -91,7 +96,7 @@ class MlEditBusinessType extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Edit Stage Of Company Type</h2>
+              <h2>Edit Business Type</h2>
               <div className="col-md-6">
                 <div className="form_bg">
                   <div className="form-group">

@@ -22,7 +22,12 @@ class MlAddBusinessType extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/businessList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/businessList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createBusinessType() {

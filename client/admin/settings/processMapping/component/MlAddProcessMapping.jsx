@@ -113,9 +113,7 @@ class MlAddProcessMapping extends React.Component{
   }
 
   optionsBySelectUserType(val){
-    let userTypes=this.state.userTypes
-    userTypes[0]['id']=val;
-    this.setState({userTypes:userTypes})
+    this.setState({userTypes:val.value})
   }
 
   optionsBySelectIdentity(val){
@@ -180,9 +178,17 @@ class MlAddProcessMapping extends React.Component{
       {value: 'Company', label: 'Company'},
       {value: 'Individual', label: 'Individual'}
     ];
+    let UserTypeOptions = [
+      {value: 'moolya', label: 'moolya'},
+      {value: 'non-moolya', label: 'non-moolya'}
+    ];
     let query=gql` query{
     data:fetchCountriesSearch{label:country,value:countryCode}
     }
+`;
+    let fetchcommunities = gql` query{
+  data:fetchCommunityDefinition{label:name,value:code}
+}
 `;
     let industriesquery=gql` query{
     data:fetchIndustries{label:industryName,value:_id}
@@ -234,11 +240,12 @@ class MlAddProcessMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Community"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities[0].id} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectCommunities.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Community"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities[0].id} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} id={'fetchcommunities'} onSelect={this.optionsBySelectCommunities.bind(this)} />
                     </div>
 
+
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"UserType"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes[0].id} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectUserType.bind(this)} />
+                      <Select name="form-field-name"  placeholder={"UserType"}  className="float-label"  options={UserTypeOptions}  value={this.state.userTypes}  onChange={this.optionsBySelectUserType.bind(this)}/>
                     </div>
 
                     <div className="form-group">

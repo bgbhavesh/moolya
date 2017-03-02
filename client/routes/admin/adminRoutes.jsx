@@ -7,20 +7,16 @@ import MoolyaAdminViewContainer from '../../commons/containers/adminview/AdminVi
 import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import MlSubChapterDetails from '../../admin/subChapter/components/MlSubChapterDetails'
-import MlDashboard from '../../admin/dashboard/component/MlDashboard'
 import MlEditCommunityFormComponent from '../../admin/community/components/MlEditCommunityFormComponent'
 import MlAsignInternalUsers from'../../admin/internalUsers/components/MlassignInternalUsers'
-import MlClusterListView from '../../admin/cluster/components/MlClusterListView'
-import MlClusterView from '../../admin/cluster/components/MlClusterView'
 import MlChapterView from '../../admin/chapter/components/MlChapter'
 import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../admin/dashboard/config/mlClusterDashboardConfig";
 import {mlChapterMapConfig, mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
 import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapterConfig'
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
-
+import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 
-import  MlCommunityView from '../../admin/community/components/MlCommunity'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
@@ -58,7 +54,7 @@ adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',
   action(params){
     /* mount(AdminLayout,{adminHeader:<MoolyaHeader module="dashboard" tabOptions={tabOptions}/>,adminLeftNav:<LeftNavConnection navOptions={navOptions} imageField="image" linkField="link" nameField="name"/>,adminView:<MoolyaAdminViewContainer clusterListOptions={clusterListOptions} listRouterPath="listRouterPath" nameField="nameField" imageLink="imageLink" statusField="statusField"  footerOptions={footerOptions} routerPath="route" imagePath="imagefield"/>})*/
-    mount(AdminLayout,{adminContent:<MlDashboard mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} queryOptions={{"id":params.chapterId}}/>})
+    mount(AdminLayout,{adminContent:<MlViews showInfinity={true} mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} queryOptions={{"id":params.chapterId}}/>})
   }
 });
 
@@ -104,7 +100,7 @@ adminSection.route('/chapter', {
 adminSection.route('/chapters/:chapterId', {
   name: 'chapter',
   action(params){
-    mount(AdminLayout,{adminContent:<MlDashboard params={params} mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} /> })
+    mount(AdminLayout,{adminContent:<MlViews showInfinity={true} params={params} mapConfig={mlClusterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} /> })
   }
 });
   adminSection.route('/chapter/subChapterDetails/:subChapterId', {
@@ -123,7 +119,7 @@ adminSection.route('/chapters/:chapterId', {
 adminSection.route('/community', {
   name: 'community',
   action(){
-    mount(AdminLayout,{adminContent:< MlCommunityView listConfig={mlCommunityListConfig}/>})
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} listConfig={mlCommunityListConfig}/>})
   }
 });
 adminSection.route('/community/:communityId', {

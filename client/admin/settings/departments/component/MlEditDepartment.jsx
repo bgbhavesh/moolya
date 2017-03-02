@@ -160,7 +160,7 @@ class MlEditDepartment extends React.Component{
                   <div className="form-group switch_wrap switch_names">
                     <label>Select Type</label><br/>
                     <span className="state_label acLabel">moolya</span><label className="switch">
-                    <input type="checkbox" ref="appType" checked={this.state.data&&this.state.data.isMoolya} onChange={this.onMoolyaChange.bind(this)}/>
+                    <input type="checkbox" ref="appType" disabled="true" checked={this.state.data&&this.state.data.isMoolya} onChange={this.onMoolyaChange.bind(this)}/>
                     <div className="slider"></div>
                   </label>
                     <span className="state_label">non-moolya</span>

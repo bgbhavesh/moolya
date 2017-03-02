@@ -116,7 +116,7 @@ export default class MlAssignDepartments extends React.Component {
   }  
 }`;
     let subChapterquery=gql`query($id:String){  
-  data:fetchSubChaptersSelect(id:$id) {
+  data:fetchSubChaptersSelectNonMoolya(id:$id) {
     value:_id
     label:subChapterName
   }  

@@ -3,19 +3,20 @@ import React from 'react';
 import { render } from 'react-dom';
 import {mount} from 'react-mounter';
 import AdminLayout from '../../admin/layouts/AdminLayout'
-import MlClusterListView from '../../admin/cluster/components/MlClusterListView'
 import MlClusterChapterList from '../../admin/cluster/components/MlClusterChapterList'
-import MlClusterView from '../../admin/cluster/components/MlClusterView'
 import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlChapterList from '../../admin/dashboard/component/MlChapterList'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
-
+import {mlClusterChapterListConfig} from '../../admin/cluster/config/mlClusterChapterConfig'
+import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
+import MlViews from '../../admin/core/components/MlViews';
 
 adminSection.route('/clusters', {
   name: 'cluster',
   action(){
-    mount(AdminLayout,{adminContent:<MlClusterListView mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
+    // To Show map, make showInfinity={true} and remove 'viewMode' parameter from the line.
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
   }
 });
 
@@ -29,14 +30,20 @@ adminSection.route('/clusters/:clusterId/clusterDetails', {
 adminSection.route('/clusters/:clusterId/chapters', {
   name: 'cluster_chapters',
   action(params){
-    mount(AdminLayout,{adminContent:< MlClusterChapterList params={params.clusterId}/>})
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterChapterListConfig}/>})
   }
 });
 
-adminSection.route('/clusters/:clusterId/communities', {
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities', {
   name: 'cluster_communities',
   action(params){
-    mount(AdminLayout,{adminContent:< MlClusterChapterList params={params.clusterId}/>})
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} />})
+  }
+});
+adminSection.route('/clusters/:clusterId/:chapterId/subChapters', {
+  name: 'cluster_chapters',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
   }
 });
 

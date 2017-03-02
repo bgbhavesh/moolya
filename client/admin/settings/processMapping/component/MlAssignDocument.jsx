@@ -94,7 +94,7 @@ export default class MlAssignDocument extends React.Component {
     let that=this;
 
     let docTypequery=gql` query{
-    data:fetchDocuments{label:docTypeName,value:_id}
+    data:fetchDocumentsType{label:docTypeName,value:_id}
     }
 `;
     let docKycquery=gql` query{

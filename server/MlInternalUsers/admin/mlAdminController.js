@@ -74,7 +74,7 @@ const defaultGraphQLOptions = {
                       ...customOptionsObject,
                   };
                   context = getContext({req});
-                  console.log(context);
+
                 return {
                     schema  : executableSchema,
                     context : context

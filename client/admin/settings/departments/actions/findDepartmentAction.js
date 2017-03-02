@@ -14,9 +14,7 @@ export async function findDepartmentActionHandler(DepartmentId) {
     isActive
     isMoolya
     depatmentAvailable{
-      cluster{
-        clusterId
-      }
+      cluster
       chapter
       subChapter
       email

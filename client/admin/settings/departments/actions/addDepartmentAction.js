@@ -8,28 +8,20 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
   let isActive = DepartmentDetails.departmentStatus;
   let isMoolya = DepartmentDetails.appType;
   let departmentAvailable = DepartmentDetails.departmentAvailablity;
-/*
-  var arrayLength = departmentAvailable.length;
-  for (var j = 0; j < arrayLength; j++) {
-    let clusters = departmentAvailable[j].cluster;
-    departmentAvailable[j].cluster=null;
-    let clustersList = [];
-    if(isMoolya==true){
-      clustersList.push({
-          "clusterId" : clusters
-        });
 
-    }else{
-      for(var i in clusters) {
-        var cluster = clusters[i];
-        clustersList.push({
-          "clusterId" : cluster
-        });
-      }
-    }
-
-    departmentAvailable[j].cluster=clustersList;
-  }*/
+  //   let clusters = departmentAvailableArray[0].cluster[0].clusterId;
+  //   let clusterObject = '';
+  //   let clusterArray = null;
+  //
+  //     for(var i in clusters) {
+  //       var cluster = clusters[i];
+  //       clusterObject=clusterObject+'"'+cluster+'"' +",";
+  //     }
+  //   clusterArray = "["+clusterObject+"]";
+  // console.log(clusterArray);
+  // departmentAvailableArray[0].cluster[0].clusterId=clusterArray;
+  //
+  //  let departmentAvailable = departmentAvailableArray;
 
   const result = await client.mutate({
     mutation: gql`

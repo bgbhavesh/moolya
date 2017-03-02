@@ -2,10 +2,10 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) => {
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+   /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
     if(!isValidAuth)
       return "Not Authorized"
-
+*/
     if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
@@ -21,12 +21,18 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
 
 MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) => {
     let department = MlDepartments.findOne({_id: args.departmentId});
+    let deactivate = args.department.isActive;
     if(department)
     {
-       /* for(key in args.department){
-            cluster[key] = args.department[key]
-        }*/
         let resp = MlDepartments.update({_id:args.departmentId}, {$set:args.department}, {upsert:true})
+        //de-activate department should de-activate all subDepartments
+        if(!deactivate){
+           let subDepartments = MlSubDepartments.find({"departmentId": args.departmentId}).fetch();
+           subDepartments.map(function (subDepartment) {
+              subDepartment.isActive=false
+              let deactivate = MlSubDepartments.update({_id:subDepartment._id}, {$set:subDepartment}, {upsert:true})
+           })
+        }
         if(resp){
             let code = 200;
             let result = {cluster: resp}
@@ -68,3 +74,12 @@ MlResolver.MlQueryResolver['findDepartments'] = (obj, args, context, info) => {
 
 }
 
+MlResolver.MlQueryResolver['fetchMoolyaBasedDepartment'] = (obj, args, context, info) => {
+  let resp = MlDepartments.find({isMoolya: args.isMoolya}).fetch();
+  return resp;
+}
+
+MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
+  let resp = MlDepartments.find({isMoolya: args.isMoolya},{ depatmentAvailable: { $elemMatch: { subChapter: args.subChapter } }} ).fetch();
+  return resp;
+}

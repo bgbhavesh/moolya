@@ -80,7 +80,7 @@ class MlAddLookingFor extends React.Component {
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Create Profession</h2>
+              <h2>Create Looking For</h2>
               <div className="col-md-6">
                 <div className="form_bg">
                   <div className="form-group">

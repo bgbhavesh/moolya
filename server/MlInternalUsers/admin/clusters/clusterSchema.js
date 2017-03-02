@@ -16,7 +16,6 @@ let clusterSchema = `
         latitude:String 
         longitude:String
     }
-    
       input clusterUpdateObject{
         _id:String,
         countryName: String

@@ -166,16 +166,17 @@ export default class MlAssignModulesToRoles extends React.Component {
 
     return (
       <div>
-        <div className="form-group"><a onClick={that.assignModuleToRoles.bind(this)} className="mlUpload_btn">Add</a>
+        <div className="form-group">
         </div>
         {that.state.assignModulesToRoles.map(function (options, id) {
 
           return (
 
                     <div className="panel panel-default"  key={id}>
-                      <div className="panel-heading">Add Module
+                      <div className="panel-heading">Add Module{id==0?( <div className="pull-right block_action" onClick={that.assignModuleToRoles.bind(that, id)}><img
+                          src="/images/add.png"/></div>):
                         <div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that, id)}><img
-                          src="/images/remove.png"/></div>
+                          src="/images/remove.png"/></div>}
                       </div>
                       <div className="panel-body">
                         <div className="row">

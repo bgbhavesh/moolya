@@ -99,6 +99,7 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
                              text:chapterName
                              lat:latitude
                              lng:longitude
+                             isActive:isActive
                           }
                       }
               }

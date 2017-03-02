@@ -59,8 +59,6 @@ class MlAddDepartment extends React.Component{
   };
 
   async  createDepartment() {
-
-
     let DepartmentDetails = {
       departmentName: this.refs.departmentName.value,
       displayName: this.refs.displayName.value,
@@ -123,10 +121,10 @@ class MlAddDepartment extends React.Component{
                 </div>
 
                 <div className="form-group">
-                  <input ref="displayName" placeholder="diplay Name" className="form-control float-label" id=""></input>
+                  <input ref="displayName" placeholder="Display Name" className="form-control float-label" id=""></input>
                 </div>
                 <div className="form-group">
-                  <textarea ref="aboutDepartment" placeholder="about Depatment" className="form-control float-label" id=""></textarea>
+                  <textarea ref="aboutDepartment" placeholder="About Department" className="form-control float-label" id=""></textarea>
                 </div>
 
                 <div className="form-group switch_wrap inline_switch">

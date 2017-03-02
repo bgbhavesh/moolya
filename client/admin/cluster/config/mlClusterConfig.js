@@ -15,19 +15,25 @@ const mlClusterListConfig=new MlViewer.View({
   sort:true,
   viewComponent:<MlClustersList />,
   graphQlQuery:gql`
-              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-                    data:ContextSpecSearch(module:"cluster",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+                   query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
+                    data:ContextSpecSearch(module:"cluster",context:$context,searchSpec:$searchSpec){
                     totalRecords
                     data{
                      ...on Cluster{
-                              countryId
-                              displayName
-                              about
-                              link
-                              id:_id
-                              email
-                              showOnMap
-                              countryFlag
+                                id:_id
+                                about
+                                displayName
+                                latitude
+                                longitude
+                                countryId
+                                countryFlag
+                                countryName
+                                isActive
+                                showOnMap
+                                clusterCode
+                                about
+                                email
+                    	
                           }
                       }
               }
@@ -45,20 +51,20 @@ const mlClusterMapConfig=new MlViewer.View({
   pagination:false,
   viewComponent:<MlMapViewContainer />,
   graphQlQuery:gql`
-              query{
-                  data:fetchClustersForMap{
-                     _id
-                     isActive
-                    countryName
-                    countryId
-                    displayName
-                    about
-                    showOnMap
-                    countryFlag
-                    latitude
-                    longitude
-                    
-                  }
+              query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
+                    data:ContextSpecSearch(module:"cluster",context:$context,searchSpec:$searchSpec){
+                    totalRecords
+                    data{
+                     ...on Cluster{
+                             _id
+                             desc:about
+                             text:displayName
+                             lat:latitude
+                             lng:longitude
+                             isActive:isActive
+                          }
+                      }
+              }
               }
               `
 });

@@ -47,6 +47,7 @@ export default class MlContactFormComponent extends React.Component {
     this.setState({
       contactForm: assignContactForm
     })
+    this.props.getAssignedContacts(assignContactForm);
   }
   optionsBySelectNumberType(index, selectedValue){
     let assignContactDetails=this.state.contactForm
@@ -86,12 +87,12 @@ export default class MlContactFormComponent extends React.Component {
     let that = this;
     return(
       <div>
-        <div className="form-group"> <a onClick={that.AssignDepartment.bind(this)} className="mlUpload_btn">Assign  Contacts</a></div>
+        {/*<div className="form-group"> <a onClick={that.AssignDepartment.bind(this)} className="mlUpload_btn">Assign  Contacts</a></div>*/}
         {that.state.contactForm.map(function(contactForm, idx){
           return(
             <div className="panel panel-default" key={idx}>
-              <div className="panel-heading"> Assign Contacts
-                <div className="pull-right block_action" onClick={that.RemoveAssignContactForm.bind(that,idx)}><img src="/images/remove.png"/></div>
+              <div className="panel-heading"> Assign Contacts{idx==0&& (<div className="pull-right block_action" onClick={that.AssignDepartment.bind(that)}><img src="/images/add.png"/></div>)}
+                { idx>0&& (<div className="pull-right block_action" onClick={that.RemoveAssignContactForm.bind(that,idx)}><img src="/images/remove.png"/></div>)}
               </div>
               <div className="panel-body">
                 <div className="form-group">

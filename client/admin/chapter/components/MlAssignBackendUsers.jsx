@@ -70,8 +70,7 @@ class MlAssignChapterBackendUsers extends React.Component{
         userProfile['clusterId'] = this.state.data.clusterId;*/
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        // alert(JSON.stringify(userProfile))
-        let response = await multipartFormHandler(userProfile, Meteor.settings.public.assignUserMultiPartUrl, this.refs.profilePic.files[0]);
+        let response = await multipartFormHandler(userProfile, Meteor.absoluteUrl('assignusers'), this.refs.profilePic.files[0]);
         return response;
     }
 

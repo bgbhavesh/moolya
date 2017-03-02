@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
-import communityRoutes from '../actions/routesActionHandler';
+import communityRoutes from '../actions/communityRouteHandler';
 export default class MlCommunityList extends Component {
 
   render(){

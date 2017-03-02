@@ -13,13 +13,28 @@ export default class MlAssignTaxInformation extends Component {
     return this;
   }
   componentDidMount() {
-    const resp=this.findClusterBasedStates();
-    return resp;
-
+    this.props.onGetTaxDetails(this.state.states)
   }
   componentWillMount(){
     let selectaxName=this.props.id
     this.setState({taxId:selectaxName})
+    let StatesInfoDetails=this.props.statesInfo
+    if(StatesInfoDetails){
+      let statesInfo=[]
+      for(i=0;i<StatesInfoDetails.length;i++){
+        let json={
+          stateName:StatesInfoDetails[i].stateName,
+          isChecked:StatesInfoDetails[i].isChecked,
+        taxPercentage:StatesInfoDetails[i].taxPercentage,
+          taxId:StatesInfoDetails[i].taxId
+        }
+        statesInfo.push(json)
+      }
+      this.setState({"states":statesInfo})
+    }else{
+      const resp=this.findClusterBasedStates();
+      return resp;
+    }
   }
   async findClusterBasedStates() {
     let stateDetails = await findClusterBasedStatesDeatilsActionHandler();
@@ -43,7 +58,7 @@ export default class MlAssignTaxInformation extends Component {
    if(event.currentTarget.checked){
      let  stateDetails=this.state.states
      stateDetails[id]['isChecked']=true;
-     this.setState({taxName:selectaxName})
+     this.setState({'states':stateDetails})
      this.props.onGetTaxDetails(this.state.states)
    }else{
      let  stateDetails=this.state.states
@@ -66,59 +81,62 @@ export default class MlAssignTaxInformation extends Component {
 `;
     console.log(taxQuery)
     let that=this;
-    if (that.props.id) {
-      return (
-        <div id={that.props.id}>
 
-          <ul className="nav nav-tabs" role="tablist">
-            <li role="presentation" className="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Tax
+      return (
+        <div className="ml_tabs" id={that.props.id}>
+
+          <ul className="nav nav-pills" role="tablist">
+            <li role="presentation" className="active">
+              <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Tax
               Information</a></li>
-            <li role="presentation"><a href={`#profile${that.props.id}`} aria-controls="profile" role="tab" data-toggle="tab">Applicable
+            <li role="presentation">
+              <a href={`#profile${that.props.id}`} aria-controls="profile" role="tab" data-toggle="tab">Applicable
               States</a></li>
           </ul>
-          <div className="tab-content">
+          <div className="tab-content clearfix">
             <div role="tabpanel" className="tab-pane active" id="home">
-              <table className="table table-striped">
-                <thead>
+              <div className="padding_wrap">
+                <div className="col-md-3">
+                  <div className="form-group">
+                    {/*<Select name="form-field-name"value="select"options={options} className="float-label"/>*/}
+                    <Moolyaselect multiSelect={false} className="float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.taxId} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>
+                  </div>
+                </div>
+                <div className="col-md-9">
+                  <div className="form-group">
 
-                <tr>
-                  <td><br /><br />
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.taxId} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>
-                  </td>
-                  <td><textarea placeholder="About" className="form-control float-label" id="cl_about" defaultValue={that.props.about}>
+                    <textarea placeholder="About" className="form-control float-label" id="cl_about" value={that.props.about}>
 
-                        </textarea></td>
+                        </textarea>
 
-                </tr>
-
-                </thead>
-
-              </table>
+                  </div>
+                </div>
+            </div>
             </div>
             <div role="tabpanel" className="tab-pane" id={`profile${this.props.id}`}>
               <ul>
-              {that.state.states.map(function (options,id) {
-               return( <li key={options.stateName}>
-                   <div className="form-group">
-                     <div className="input_types"><input type="checkbox" checked={options.isChecked} onChange={that.onSelectState.bind(that,id)}  />
-                       <label htmlFor="checkbox1"><span></span>{options.stateName}</label></div>
-                     <input type="text" placeholder="%" defaultValue={options.taxPercentage} onBlur={that.ontaxPercentage.bind(that,id)} className="form-control float-label" id="cluster_name"/>
-                   </div>
-                 </li>
-               )
-              })
+                {that.state.states.map(function (options,id) {
+                  return( <li key={options.stateName}>
+                      <div className="form-group">
+                        <div className="input_types">
+                          <input type="checkbox" checked={options.isChecked} onChange={that.onSelectState.bind(that,id)}  />
+                          <label htmlFor="checkbox1"><span></span>{options.stateName}</label>
+                        <input type="text" placeholder="%" defaultValue={options.taxPercentage} onBlur={that.ontaxPercentage.bind(that,id)} id="cluster_name"/>
+                        </div>
+                        </div>
+                    </li>
+                  )
+                })
 
-              }
+                }
               </ul>
+
             </div>
           </div>
 
         </div>
-      );
-    } else {
-      return (
-        <p>?</p>
-      );
-    }
+
+
+      )
   }
-}
+        }

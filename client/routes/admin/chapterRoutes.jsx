@@ -10,38 +10,39 @@ import {mlChapterMapConfig,mlChapterListConfig} from '../../admin/chapter/config
 import {mlSubChapterMapConfig,mlSubChapterListConfig} from '../../admin/chapter/config/mlSubChapterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
+import MlViews from '../../admin/core/components/MlViews';
 
 adminSection.route('/chapters/', {
   name: 'chapter_chapters',
   action(){
-    mount(AdminLayout,{adminContent:<MlChaptersView  mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig}/>})
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false}  mapConfig={mlChapterMapConfig} listConfig={mlChapterListConfig}/>})
   }
 });
 
 adminSection.route('/chapters/:clusterId/:chapterId/subChapters', {
   name: 'chapter_subChapters',
   action(params){
-    mount(AdminLayout,{adminContent:<MlSubChapterView mapConfig={mlSubChapterMapConfig} listConfig={mlSubChapterListConfig} params={params}/>})
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlSubChapterMapConfig} listConfig={mlSubChapterListConfig} params={params}/>})
   }
 });
 
 adminSection.route('/chapters/:subChapterId/subChapterDetails', {
   name: 'chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params}/>})
   }
 });
 
 adminSection.route('/chapters/:subChapterId/communities', {
   name: 'chapter_communities',
   action(params){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params}/>})
   }
 });
 
 adminSection.route('/chapters/:subChapterId/assignusers', {
   name: 'chapter_assignusers',
   action(params){
-    mount(AdminLayout,{adminContent:< MlAssignChapterBackendUsers params={params.subChapterId}/>})
+    mount(AdminLayout,{adminContent:< MlAssignChapterBackendUsers params={params}/>})
   }
 });

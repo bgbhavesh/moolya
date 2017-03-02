@@ -13,7 +13,8 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else {
-      geocoder.geocode(chapter.displayName, Meteor.bindEnvironment(function (err, data) {
+      let geoCIty=chapter.cityName+chapter.stateName?", "+chapter.stateName:"";
+      geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
         if (err) {
           return "Invalid Country Name";
         }
@@ -105,6 +106,11 @@ MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info) => {
   let result=MlSubChapters.find({chapterId: args.id}).fetch()||[];
+  return result
+}
+
+MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) => {
+  let result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'}}).fetch()||[];
   return result
 }
 

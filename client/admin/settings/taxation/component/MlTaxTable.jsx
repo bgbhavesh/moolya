@@ -13,8 +13,26 @@ export default class MlTaxTable extends Component {
     return this;
   }
   componentWillMount() {
-    const resp=this.findTaxTypDetails();
-    return resp;
+      let taxTableDetails=this.props.taxTableDetails
+    if(taxTableDetails){
+      let taxInfo = []
+      for (let i = 0; i < taxTableDetails.length; i++) {
+        let json = {
+          taxName: taxTableDetails[i].taxName,
+          taxPercentage: taxTableDetails[i].taxPercentage,
+          applicableStates: taxTableDetails[i].applicableStates,
+          taxId:taxTableDetails[i].taxId,
+          aboutTax:taxTableDetails[i].aboutTax,
+          statesInfo:taxTableDetails[i].statesInfo
+        }
+        taxInfo.push(json)
+      }
+      this.setState({'taxTypeInfo':taxInfo})
+    }else{
+      const resp=this.findTaxTypDetails();
+      return resp;
+    }
+
   }
   onGetTaxDetails(taxDetails){
     console.log(taxDetails)
@@ -72,7 +90,7 @@ export default class MlTaxTable extends Component {
 
   expandComponent(row) {
     return (
-     <MlAssignTaxInformation id={ row.taxId }  onGetTaxDetails={this.onGetTaxDetails} about={row.aboutTax}/>
+     <MlAssignTaxInformation id={ row.taxId }  onGetTaxDetails={this.onGetTaxDetails} statesInfo={row.statesInfo} about={row.aboutTax}/>
     );
   }
   render() {
@@ -81,9 +99,9 @@ export default class MlTaxTable extends Component {
     };
     const selectRow = {
       mode: 'checkbox',
-     bgColor: '#feeebf',
+      bgColor: '#feeebf',
       clickToSelect: true,  // click to select, default is false
-      clickToExpand: true  // click to expand row, default is false
+      clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
     }
     return (
       <BootstrapTable  data={ this.state.taxTypeInfo }
@@ -91,6 +109,7 @@ export default class MlTaxTable extends Component {
                        expandableRow={ this.isExpandableRow }
                        expandComponent={ this.expandComponent.bind(this) }
                        selectRow={ selectRow }
+                       pagination
       >
         <TableHeaderColumn dataField="taxId" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>
         <TableHeaderColumn dataField="taxName">Tax Name</TableHeaderColumn>

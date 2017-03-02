@@ -112,7 +112,7 @@ class MlAddSubDepartment extends React.Component{
                                   <input type="text" ref="subDepartmentName" placeholder="Sub Department Name" className="form-control float-label" id=""/>
                               </div>
                               <div className="form-group">
-                                  <input type="text" ref="displayName" placeholder="Displayname" className="form-control float-label" id=""/>
+                                  <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                               </div>
                               <div className="form-group">
                                   <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>

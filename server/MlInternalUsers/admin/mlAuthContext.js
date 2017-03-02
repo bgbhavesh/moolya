@@ -4,11 +4,11 @@ import {Accounts} from 'meteor/accounts-base'
 import {Meteor} from 'meteor/meteor'
 const Fiber = Npm.require('fibers')
 
-export default function ({req}) {
+export default function ({req})
+{
   // Get the token from the header
-  if (!req.headers.authorization) return {}
-
-  const token = req.headers.authorization
+  const token = req.headers['meteor-login-token'];
+  if (!token) return {}
   check(token, String)
   const hashedToken = Accounts._hashLoginToken(token)
 

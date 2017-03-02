@@ -35,6 +35,7 @@ class MlAssignBackendUsers extends React.Component{
     }
 
     componentDidMount(){
+
     }
 
     enableAssignUser(){
@@ -81,7 +82,7 @@ class MlAssignBackendUsers extends React.Component{
     }
 
   updateSelectedBackEndUser(userId){
-   this.setState({"selectedBackendUser":userId});
+   // this.setState({"selectedBackendUser":userId});
     const resp= this.findUserAssignedRoles(userId);
     //console.log(resp);
   }

@@ -51,8 +51,14 @@ export default class MlAssignBackednUserRoles extends React.Component{
       initSwiper();
     }, 1000)
 
-  }
+    if(this.props.userId) {
+      const resp = this.findUserDepartments();
+      if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
+        this.setState({roleDetails: this.props.assignedRoles})
+      }
+    }
 
+  }
   optionsBySelectRole(index, selectedValue){
       console.log(index)
       let roleDetails = this.state.roleDetails

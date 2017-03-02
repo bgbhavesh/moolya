@@ -66,7 +66,7 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
         if(index >= 0)
         {
             // userProfiles[index].userroles.push(profile.userroles)
-            let roles     = profile.userroles;
+            let roles     = profile.userRoles;
             let userRoles = userProfiles[index].userroles;
             // _.merge(userRoles, roles)
             roles.map(function (role) {

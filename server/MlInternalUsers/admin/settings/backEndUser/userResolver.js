@@ -243,3 +243,23 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   }
   return dep
 }
+
+MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
+  // let roleId = Meteor.users.findOne({"_id":args.userId}).profile.InternalUprofile.moolyaProfile.userProfiles[0].userroles;
+  var user = Meteor.users.findOne({_id: args.userId});
+  var roles = [];
+  if (user && user.profile && user.profile.isInternaluser == true) {
+    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+    let user_roles;
+    // Selecting Default Profile
+    for (var i = 0; i < user_profiles.length; i++) {
+      let user_roles = user_profiles[i].userroles;
+        if (user_profiles[i].userroles && user_profiles[i].userroles.length > 0) {
+          for (var j = 0; j < user_roles.length; j++) {
+           roles.push(user_roles[j]);
+          }
+        }
+    }
+  }
+  return roles;
+}

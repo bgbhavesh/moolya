@@ -8,9 +8,10 @@ let BusinessType = `
       _id:String
       isActive:Boolean
     }
+        
     type Mutation{
-        CreateBusinessType(_id:String,businessTypeName:String,businessTypeDisplayName:String,about:String,isActive:Boolean):String
-        UpdateBusinessType(_id:String,businessTypeName:String,businessTypeDisplayName:String,about:String,isActive:Boolean):String
+        CreateBusinessType(_id:String,businessTypeName:String,businessTypeDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateBusinessType(_id:String,businessTypeName:String,businessTypeDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
       FindBusinessType(_id: String):BusinessType

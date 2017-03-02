@@ -61,6 +61,7 @@ const mlClusterMapConfig=new MlViewer.View({
                              text:displayName
                              lat:latitude
                              lng:longitude
+                             isActive:isActive
                           }
                       }
               }

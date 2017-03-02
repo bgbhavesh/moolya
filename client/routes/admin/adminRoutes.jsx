@@ -17,7 +17,6 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 
-import  MlCommunityView from '../../admin/community/components/MlCommunity'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
@@ -120,7 +119,7 @@ adminSection.route('/chapters/:chapterId', {
 adminSection.route('/community', {
   name: 'community',
   action(){
-    mount(AdminLayout,{adminContent:< MlCommunityView listConfig={mlCommunityListConfig}/>})
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} listConfig={mlCommunityListConfig}/>})
   }
 });
 adminSection.route('/community/:communityId', {

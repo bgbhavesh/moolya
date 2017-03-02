@@ -84,7 +84,7 @@ export default class MapMarkers extends Component {
     let HoverComponent = React.cloneElement(hoverComp, {data: data});
     return (
 
-      <div style={{'width': '200px'}} className="cluster_map inactive" id={this.props.markerId}
+      <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
            onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
            onClick={this.markerClickHandler.bind(this, this.props)}>
         <div className="hex_btn hex_btn_in">

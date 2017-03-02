@@ -19,9 +19,7 @@ export async function findSubDepartmentActionHandler(SubDepartmentId) {
       subChapter
       email
       isActive
-      cluster{
-        clusterId
-      }
+      cluster
     }
    
   }

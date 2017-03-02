@@ -50,7 +50,7 @@ export default class MlAssignDepartments extends React.Component {
       let availabilityDetailsForm=[]
       for(let i=0;i<availabilityDetails.length;i++){
         let json={
-          cluster:availabilityDetails[i].cluster,
+          cluster:availabilityDetails[i].cluster[0],
           chapter:availabilityDetails[i].chapter,
           subChapter:availabilityDetails[i].subChapter,
           email:availabilityDetails[i].email,

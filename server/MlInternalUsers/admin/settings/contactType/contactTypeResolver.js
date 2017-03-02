@@ -35,3 +35,9 @@ MlResolver.MlQueryResolver['findContactType'] = (obj, args, context, info) => {
   }
 
 }
+MlResolver.MlQueryResolver['fetchContactTypes'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+    let response= MlGlobalSettings.find({"isActive":true}).fetch();
+    return response;
+}

@@ -1,13 +1,43 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+
+//@for displaying  list of clusters under dep in departments list
+function departmentsFormatter (data){
+
+  let departments=data&&data.data&&data.data.clustersList?data.data.clustersList:[];
+  return <div>{departments.join()}</div>;
+}
+
+//@for displaying chapters under dep in departments list
+function chapterFormatter(data){
+  let departments = [];
+  departments=data&&data.data&&data.data.chaptersList?data.data.chaptersList:[];
+  if(departments.length>0){
+    return <div>{departments.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+
+//@for displaying subchapters under dep in departments list
+function subChapterFormatter(data){
+  let departments=data&&data.data&&data.data.subChapterList?data.data.subChapterList:[];
+  if(departments.length>0){
+    return <div>{departments.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+}
+
 const mlDepartmentTableConfig=new MlViewer.View({
   name:"departmentTable",
   module:"department",//Module name for filter.
   action:"READ",
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["departmentName","displayName","isActive"],
+  fields:["departmentName","displayName","depatmentAvailable","isActive"],
   searchFields:["departmentName","displayName","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
@@ -16,9 +46,12 @@ const mlDepartmentTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "departmentName", title: "Department Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "isActive", title: "Active",dataSort:true},
-    //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
-  ],
+    {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:departmentsFormatter},
+    {dataField: "chaptersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
+    {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
+    {dataField: "isActive", title: "Active",dataSort:true}
+
+  ], //@departmentsFormatter,@chapterFormatter,@subChapterFormatter custom functions for looping an array and displaying data in table
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
   actionConfiguration:[
@@ -55,8 +88,18 @@ const mlDepartmentTableConfig=new MlViewer.View({
                     totalRecords
                     data{
                      ...on Department{
+                              clustersList
+                              chaptersList
+                              subChapterList
                               departmentName
                               displayName
+                               depatmentAvailable {
+                                cluster 
+                                chapter
+                                subChapter
+                                email
+                                isActive
+                              }
                               isActive
                               id:_id
                           }

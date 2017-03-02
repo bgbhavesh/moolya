@@ -9,14 +9,20 @@ export async function updateBusinessTypeActionHandler(BusinessType) {
   let isActive = BusinessType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$businessTypeName: String, $businessTypeDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$businessTypeName: String, $businessTypeDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateBusinessType(
           _id:$_id
           businessTypeName: $businessTypeName,
           businessTypeDisplayName: $businessTypeDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateBusinessTypeActionHandler(BusinessType) {
       businessTypeName,
       businessTypeDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName: "BUSINESSTYPE",
+      actionName: "UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateBusinessType
   return id
 }

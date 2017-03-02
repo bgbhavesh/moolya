@@ -5,6 +5,12 @@ import { Meteor } from 'meteor/meteor';
 import {mergeStrings} from 'gql-merge'
 
 const schema = `
+  type response{
+      success : Boolean,
+      code : Int,
+      result: String
+  }
+  
   type Query {
       genericQuery(id: String): String
     }

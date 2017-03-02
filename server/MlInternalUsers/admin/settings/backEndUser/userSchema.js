@@ -45,6 +45,8 @@ let BackEndUser = `
         roleId:String,
         clusterId:String,
         chapterId:String,
+        validFrom: String,
+        validTo: String,
         subChapterId:String,
         communityId:String,
         isActive:Boolean,
@@ -144,6 +146,7 @@ let BackEndUser = `
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
+        fetchUserRoles(userId:String): [UserRoles]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersBysubChapterDepSubDep(subChapterId:String): [BackendUsers]

@@ -51,8 +51,14 @@ export default class MlAssignBackednUserRoles extends React.Component{
       initSwiper();
     }, 1000)
 
-  }
+    if(this.props.userId) {
+      const resp = this.findUserDepartments();
+      if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
+        this.setState({roleDetails: this.props.assignedRoles})
+      }
+    }
 
+  }
   optionsBySelectRole(index, selectedValue){
       console.log(index)
       let roleDetails = this.state.roleDetails
@@ -98,9 +104,17 @@ export default class MlAssignBackednUserRoles extends React.Component{
       $("#"+fieldId).focus();
   }
 
-  componentWillReceiveProps(nextProps, nextState){
+  componentWillReceiveProps(nextProps){
+    // console.log("recieved");
+    // console.log(this.props);
+    // console.log("sssss");
+    // console.log(nextProps);
       if((this.props.userId !==nextProps.userId)) {
           const resp=this.findUserDepartments();
+        if(nextProps.assignedRoles&&nextProps.assignedRoles.length>0){
+          this.setState({roleDetails:nextProps.assignedRoles})
+        }
+
       }
   }
 
@@ -113,9 +127,10 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   render(){
+    // console.log(this.props.userId);
     let that = this
     let userDepartments = that.state.roleForm || [];
-    let roleDetails = that.state.roleDetails
+    let roleDetails =  that.state.roleDetails;
     return(
       <div>
         {userDepartments.map(function (department) {
@@ -136,7 +151,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
                   <div className="swiper-wrapper">
                     {roleDetails.map(function (details, idx) {
                       return(
-                        <div className="form_inner_block swiper-slide">
+                        <div className="form_inner_block swiper-slide" key={details.roleId}>
                           <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, department)}/></div>
                           <div className="form-group">
                             <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>
@@ -150,7 +165,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
                           <div className="form-group switch_wrap">
                             <label>Status</label>
                             <label className="switch">
-                                <input type="checkbox" name={'status'} value={details.isActive} onChange={that.onChange.bind(that,idx)}/>
+                                <input type="checkbox" name={'status'} checked={details && details.isActive} onChange={that.onChange.bind(that,idx)}/>
                                 <div className="slider"></div>
                             </label>
                           </div>

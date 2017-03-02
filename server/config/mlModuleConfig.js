@@ -2,9 +2,9 @@
  * Created by venkatasrinag on 28/1/17.
  */
 
-let modules = ["community", "chapter", "subchapter", "cluster", "department", "subdepartment", "permissions", "roles", "users", "settings", "documents", "conversations", "countries", "states", "cities"];
-
+let modules = ["community", "chapter", "subchapter", "cluster", "department", "subdepartment", "permissions", "roles", "users", "settings", "documents", "conversations", "countries", "states", "cities", "request", "userType", "roleType", "documentType", "documentFormat", "kycCategory", "documentMapping", "transaction", "template", "BackendUsers", "industry", "specification", "profession", "entity", "stageOfCompany", "process", "process", "businessType", "citizenship", "lookingFor", "EmployeeType", "tax", "taxation", "title", "regional", "language", "dateAndTime", "numericalFormat", "addressType", "CompanyType", "emailType", "contactType", "socialLinks", "gender"];
 // Meteor.startup(function () {
+
 for (i = 0; i < modules.length; i++) {
   let module = MlModules.findOne({name: modules[i]});
   if (!module) {

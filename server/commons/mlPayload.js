@@ -8,24 +8,18 @@ module.exports = class MlRespPayload{
     constructor(){
     }
     successPayload(object, code){
-        let result = {};
-        result.success = true;
-        result.data = {
-            code: code,
-            result:object
-        }
-
-        return JSON.stringify(result);
-
+        let response = {};
+        response.success = true;
+        response.code = code;
+        response.result = JSON.stringify(object);
+        return response;
     }
 
     errorPayload(errMsg, code){
-        let result = {};
-        result.success = false;
-        result.data = {
-            code: code,
-            result:{error:errMsg}
-        }
-        return JSON.stringify(result);
+        let response = {};
+        response.success = false;
+        response.code = code;
+        response.result = errMsg;
+        return response;
     }
 }

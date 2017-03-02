@@ -11,6 +11,10 @@ let subDepartmentSchema = `
         isActive:Boolean,
         departmentId:String,
         isMoolya:Boolean,
+        departmentAliasName : String,
+        clustersList   : [String],
+        chaptersList   : [String],
+        subChapterList : [String],
         subDepatmentAvailable: [subDepatmentAvailable]
     }
     

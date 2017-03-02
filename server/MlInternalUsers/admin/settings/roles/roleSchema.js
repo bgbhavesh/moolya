@@ -31,6 +31,9 @@ let Role = `
         roleType:String,
         userType:String,
         about:String,
+        clustersList   : [String],
+        chaptersList   : [String],
+        subChapterList : [String],
         assignRoles:[AssignRoles],
         modules: [Modules],
         isActive:Boolean

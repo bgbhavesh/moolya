@@ -1,6 +1,43 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+
+//@for displaying  list of clusters under dep in departments list
+function departmentNameFormatter (data){
+
+  let departments=data&&data.data&&data.data.departmentName?data.data.departmentName:"";
+  return <div>{departments}</div>;
+}
+
+//@for displaying  list of clusters under dep in departments list
+function clustersFormatter (data){
+
+  let departments=data&&data.data&&data.data.clustersList?data.data.clustersList:[];
+  return <div>{departments.join()}</div>;
+}
+
+//@for displaying chapters under dep in departments list
+function chapterFormatter(data){
+  let departments = [];
+  departments=data&&data.data&&data.data.chaptersList?data.data.chaptersList:[];
+  if(departments.length>0){
+    return <div>{departments.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+
+//@for displaying subchapters under dep in departments list
+function subChapterFormatter(data){
+  let departments=data&&data.data&&data.data.subChapterList?data.data.subChapterList:[];
+  if(departments.length>0){
+    return <div>{departments.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+}
+
 const mlSubDepartmentTableConfig=new MlViewer.View({
   name:"subDepartmentTable",
   module:"subDepartment",//Module name for filter.
@@ -13,9 +50,14 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "subDepartmentName", title: "Department Name",dataSort:true},
+    {dataField: "subDepartmentName", title: "Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
+    {dataField: "departmentAliasName", title: "Department Name",dataSort:true},
+    {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},
+    {dataField: "clustersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
+    {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
     {dataField: "isActive", title: "Active",dataSort:true},
+
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
   tableHeaderClass:'react_table_head',
@@ -51,6 +93,10 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
                     totalRecords
                     data{
                      ...on SubDepartment{
+                              clustersList
+                              chaptersList
+                              subChapterList
+                              departmentAliasName
                               subDepartmentName
                               displayName
                               aboutSubDepartment

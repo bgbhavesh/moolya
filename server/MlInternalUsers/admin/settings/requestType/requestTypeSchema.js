@@ -11,8 +11,8 @@ let RequestTypeSchema = `
     }
    type Mutation 
     {
-        CreateRequestType(_id:String,requestName:String, displayName:String, requestDesc:String, isActive:Boolean):String
-        UpdateRequestType(_id:String,requestName:String, displayName:String, requestDesc:String, isActive:Boolean):String
+        CreateRequestType(_id:String,requestName:String, displayName:String, requestDesc:String, isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateRequestType(_id:String,requestName:String, displayName:String, requestDesc:String, isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
         FindRequestType(_id:String): Requests

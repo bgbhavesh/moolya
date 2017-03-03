@@ -9,20 +9,28 @@ export async function addStageOfCompanyActionHandler(StageOfCompanyDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($stageOfCompanyName: String, $stageOfCompanyDisplayName: String, $about:String, $isActive: Boolean){
+    mutation  ($stageOfCompanyName: String, $stageOfCompanyDisplayName: String, $about:String, $isActive: Boolean, $moduleName:String, $actionName:String){
         CreateStageOfCompany(
           stageOfCompanyName: $stageOfCompanyName,
           stageOfCompanyDisplayName: $stageOfCompanyDisplayName,
           about:$about,
-          isActive :$isActive
-        )
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }
       }
     `,
     variables: {
       stageOfCompanyName,
       stageOfCompanyDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName:"STAGEOFCOMPANY",
+      actionName:"CREATE"
     }
   })
   const id = result.data.CreateStageOfCompany;

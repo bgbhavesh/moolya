@@ -74,7 +74,7 @@ class MlAssignBackendUsers extends React.Component{
         }
       }
       this.setState({user_Roles:roles,selectedBackendUser:userId});
-      return response;
+      return user;
     }
 
     async assignBackendUsers(){

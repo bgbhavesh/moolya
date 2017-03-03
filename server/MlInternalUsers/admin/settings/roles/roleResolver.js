@@ -90,4 +90,15 @@ MlResolver.MlQueryResolver['fetchActiveRoles'] = (obj, args, context, info) =>{
   return MlRoles.find({isActive:true}).fetch();
 }
 
+// Input is Array type.
+MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info) =>{
+  let roleNames = [];
+  let roleIds = args.roleIds;
+  roleIds.map(function(roleId){
+    let roleName = MlRoles.findOne({_id:roleId}).displayName;
+    roleNames.push(roleName);
+  })
+  return roleNames;
+}
+
 

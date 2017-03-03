@@ -138,8 +138,8 @@ let BackEndUser = `
     }
     
     type Mutation{
-        createUser(user:userObject!, moduleName:String, actionName:String):String
-        updateUser(userId:String!, user:userObject!): String
+        createUser(user:userObject!, moduleName:String, actionName:String):response
+        updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject): response
     }

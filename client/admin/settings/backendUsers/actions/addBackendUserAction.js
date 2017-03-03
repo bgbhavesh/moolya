@@ -9,8 +9,14 @@ let user=userObjectDetails
         createUser(          
           user :$user,
           moduleName:$moduleName,
+          actionName:$actionName,
+          moduleName:$moduleName,
           actionName:$actionName
-        )
+        ){
+            success,
+            code,
+            result
+        }
       }
     `,
     variables: {

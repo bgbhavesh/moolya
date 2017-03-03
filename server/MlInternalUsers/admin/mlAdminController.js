@@ -33,7 +33,7 @@ const defaultServerConfig = {
     configServer: graphQLServer => {},
     graphiql: Meteor.isDevelopment,
     graphiqlPath: '/graphiql',
-    assignUsersPath: '/assignusers',
+    assignUsersPath: '/adminMultipartFormData',
     graphiqlOptions : {
         passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
     },
@@ -93,53 +93,72 @@ const defaultGraphQLOptions = {
       }
 
       if(config.assignUsersPath){
-          graphQLServer.post(config.assignUsersPath, multipartMiddleware, Meteor.bindEnvironment(function (req, res) {
+          graphQLServer.post(config.assignUsersPath, multipartMiddleware, Meteor.bindEnvironment(function (req, res)
+          {
               var context = {};
               context = getContext({req});
               context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
               if(req && req.body && req.body.data)
               {
                   let data = JSON.parse(req.body.data)
-                  let userId = data.userId;
-                  let roles  = data && data.userRoles;
-                  // let file  = req.files
-                  let levelCode = ""
-                  if(roles)
-                  {
-                      let hierarchy = "";
-                      roles.map(function (role)
-                      {
-                          if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
-                              levelCode = "COMMUNITY"
-                          }
-                          else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
-                              levelCode = "SUBCHAPTER"
-                              role.communityId = "all"
-                          }
-                          else if(role.clusterId != "" && role.chapterId != "" ){
-                              levelCode = "CHAPTER"
-                              role.subChapterId = "all"
-                              role.communityId = "all"
-                          }
-                          else if(role.clusterId != ""){
-                              levelCode = "CLUSTER"
-                              role.chapterId = "all"
-                              role.subChapterId = "all"
-                              role.communityId = "all"
-                          }
+                  let moduleName = data && data.moduleName
+                  let response;
+                  let file  = req.files;
+                  if(file){
 
-                          hierarchy = MlHierarchy.findOne({code:levelCode})
-                          role.hierarchyLevel = hierarchy.level;
-                          role.hierarchyCode  = hierarchy.code;
-                      })
                   }
-                  let userProfile = {
-                      clusterId: data.clusterId,
-                      userroles:  roles,
-                      isDefault: false
+                  switch (moduleName){
+                      case "USERS":{
+                          response = MlResolver.MlMutationResolver['assignUsers'](null, {data:data}, context, null);
+                      }
+                      break;
+                      case "COMMUNITY":{
+                        // response = MlResolver.MlMutationResolver['assignUsers'](null, {data:data}, context, null);
+                      }
+                      break;
                   }
-                  let response = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)
-                  res.send(true)
+
+                  return response;
+                  // let userId = data.userId;
+                  // let roles  = data && data.userRoles;
+                  // // let file  = req.files
+                  // let levelCode = ""
+                  // if(roles)
+                  // {
+                  //     let hierarchy = "";
+                  //     roles.map(function (role)
+                  //     {
+                  //         if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
+                  //             levelCode = "COMMUNITY"
+                  //         }
+                  //         else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
+                  //             levelCode = "SUBCHAPTER"
+                  //             role.communityId = "all"
+                  //         }
+                  //         else if(role.clusterId != "" && role.chapterId != "" ){
+                  //             levelCode = "CHAPTER"
+                  //             role.subChapterId = "all"
+                  //             role.communityId = "all"
+                  //         }
+                  //         else if(role.clusterId != ""){
+                  //             levelCode = "CLUSTER"
+                  //             role.chapterId = "all"
+                  //             role.subChapterId = "all"
+                  //             role.communityId = "all"
+                  //         }
+                  //
+                  //         hierarchy = MlHierarchy.findOne({code:levelCode})
+                  //         role.hierarchyLevel = hierarchy.level;
+                  //         role.hierarchyCode  = hierarchy.code;
+                  //     })
+                  // }
+                  // let userProfile = {
+                  //     clusterId: data.clusterId,
+                  //     userroles:  roles,
+                  //     isDefault: false
+                  // }
+                  // let response = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)
+                  // res.send(true)
               }
           }))
       }

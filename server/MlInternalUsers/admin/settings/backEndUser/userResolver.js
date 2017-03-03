@@ -5,35 +5,6 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 var _ = require('lodash');
-// MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
-//         // TODO : Authorization
-//     var userDetails = {
-//         profile:{
-//           isInternaluser : "yes",
-//           isExternaluser : "no",
-//           email: args.user.email,
-//           InternalUprofile:{
-//             moolyaProfile: args.user
-//           }
-//         },
-//         username: args.user.email,
-//         password: args.user.password,
-//     };
-//      let userId = Accounts.createUser(userDetails);
-//      Accounts.setPassword(userId, adminPassword);
-//         if(userId){
-//             let code = 200;
-//             let result = {userId: userId}
-//             let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-//             return response
-//         }
-// }
-// MlResolver.MlMutationResolver['assignUser'] = (obj, args, context, info) => {
-//     // TODO : Authorization
-//     Meteor.users.update({_id:args.user.id}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":args.user}})
-//     response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-// }
-
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
    /* let cluster = args.cluster;
     let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.cluster);
@@ -92,6 +63,8 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
       return response
     }
   }
+  let response = new MlRespPayload().errorPayload("User Not Found", 404);
+  return response
 }
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
@@ -241,4 +214,56 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
     }
   }
   return dep
+}
+
+
+
+MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
+    let data = args.data;
+    let userId = data.userId;
+    let roles  = data && data.userRoles;
+    let levelCode = ""
+    if(!userId){
+        let response = new MlRespPayload().errorPayload("No User Found", 404);
+        return response
+    }
+    if(!roles){
+        let response = new MlRespPayload().errorPayload("No Roles Found", 404);
+        return response
+    }
+    let hierarchy = "";
+    roles.map(function (role)
+    {
+        if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
+            levelCode = "COMMUNITY"
+        }
+        else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
+            levelCode = "SUBCHAPTER"
+            role.communityId = "all"
+        }
+        else if(role.clusterId != "" && role.chapterId != "" ){
+            levelCode = "CHAPTER"
+            role.subChapterId = "all"
+            role.communityId = "all"
+        }
+        else if(role.clusterId != ""){
+            levelCode = "CLUSTER"
+            role.chapterId = "all"
+            role.subChapterId = "all"
+            role.communityId = "all"
+        }
+
+        hierarchy = MlHierarchy.findOne({code:levelCode})
+        role.hierarchyLevel = hierarchy.level;
+        role.hierarchyCode  = hierarchy.code;
+    })
+
+    let userProfile = {
+        clusterId: data.clusterId,
+        userroles:  roles,
+        isDefault: false
+    }
+
+    let resp = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)
+    return resp;
 }

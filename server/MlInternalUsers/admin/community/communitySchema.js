@@ -192,8 +192,9 @@ let communitySchema = `
     type Query{
         fetchCommunitiesDef:SearchResp
         fecthCommunitiesAccess:[CommunityAccessObject]
-        fecthCommunityDef:Community
+        fecthCommunityDef(communityId:String):Community
         fecthCommunityAccess:CommunityAccessObject
+        fetchActiveCommunityAccess:[CommunityAccessObject]
     }
 `
 

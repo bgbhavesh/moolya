@@ -1,7 +1,7 @@
 /**
  * Created by venkatasrinag on 21/2/17.
  */
-export async function multipartFormHandler(data, url, file) {
+export async function multipartFormHandler(data, file) {
     // if(!file)
     //     return  false;
 
@@ -22,7 +22,7 @@ export async function multipartFormHandler(data, url, file) {
         }
 
         if(filexmlhttp){
-            filexmlhttp.open('POST', url, true);
+            filexmlhttp.open('POST', Meteor.absoluteUrl('adminMultipartFormData'), true);
             filexmlhttp.setRequestHeader("enctype", "multipart/form-data");
             filexmlhttp.onreadystatechange = function() {
                 if (filexmlhttp.readyState === 4 && filexmlhttp.status === 200) {

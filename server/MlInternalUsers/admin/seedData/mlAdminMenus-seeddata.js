@@ -179,15 +179,32 @@ if(Meteor.isServer){
         "name" : "community",
         "isLink" : true,
         "isMenu" : true,
+        "hideSubMenu":true,
         "subMenu" : [
           {
-            "link" : "/admin/community",
+            "link" : "/admin/community/communityDetails",
             "name" : "Community Details",
             "uniqueId" : "community_Community_Details",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "subMenuMappingId":"community_Community_Details"
           },
+          {
+            "link" : "/admin/community/assignusers",
+            "name" : "Backend Users",
+            "uniqueId" : "community_assignusers",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "subMenuMappingId":"community_assignusers"
+          }
         ]
       },
       {

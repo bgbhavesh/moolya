@@ -61,7 +61,6 @@ class MlEditRole extends React.Component{
   };
 
   getassignRoleToClusters(details){
-    console.log("details->"+details);
     this.setState({'assignRoleToClusters':details})
   }
 

@@ -37,8 +37,14 @@ class MlEditStageOfCompanyType extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/stageOfCompanyList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/stageOfCompanyList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findStageOfCompanyType(){
     let StageOfCompanyTypeId=this.props.config
     const response = await findStageOfCompanyTypeActionHandler(StageOfCompanyTypeId);
@@ -73,11 +79,11 @@ class MlEditStageOfCompanyType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateStageOfCompanyType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

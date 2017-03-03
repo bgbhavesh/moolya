@@ -19,8 +19,8 @@ let DocumentTypesSchema = `
     
    type Mutation 
     {
-        updateDocumentType(_id:String, docTypeName:String, docTypeDisplayName:String, about:String, isActive:Boolean):String
-        createDocumentType(documentType:documentTypeObject):String
+        updateDocumentType(_id:String, docTypeName:String, docTypeDisplayName:String, about:String, isActive:Boolean, moduleName:String, actionName:String):response
+        createDocumentType(documentType:documentTypeObject, moduleName:String, actionName:String):response
     }
     type Query{
         findDocumentType(_id:String): DocumentTypes

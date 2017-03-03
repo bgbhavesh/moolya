@@ -36,9 +36,14 @@ class MlEditDocumentType extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/documentTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/documentTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findDocumentType(){
     let documentTypeId=this.props.config
     const response = await findDocumentTypeActionHandler(documentTypeId);
@@ -53,8 +58,6 @@ class MlEditDocumentType extends React.Component{
       about: this.refs.about.value,
       isActive: this.refs.documentTypeStatus.checked,
     }
-    console.log(DocTypeDetails)
-
     const response = await updateDocumentTypeActionHandler(DocTypeDetails);
     return response;
 
@@ -75,13 +78,13 @@ class MlEditDocumentType extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateDocumentType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

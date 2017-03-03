@@ -71,7 +71,7 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
         {
             // userProfiles[index].userroles.push(profile.userroles)
             let roles     = profile.userRoles;
-            let userRoles = userProfiles[index].userroles;
+            let userRoles = userProfiles[index].userRoles;
             // _.merge(userRoles, roles)
             roles.map(function (role) {
                   let action =_.find(userRoles, {"roleId": role.roleId, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId});
@@ -80,7 +80,7 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
                   }
 
             })
-            userProfiles[index].userroles = userRoles;
+            userProfiles[index].userRoles = userRoles;
         }else{
             userProfiles.push(profile);
         }
@@ -88,6 +88,9 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
         userProfiles.push(profile);
     }
     user.profile.InternalUprofile.moolyaProfile.userProfiles = userProfiles;
+    if(args.moolyaProfile && args.moolyaProfile.displayName){
+      user.profile.InternalUprofile.moolyaProfile.displayName = args.moolyaProfile.displayName
+    }
     let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
     if(resp){
       let code = 200;

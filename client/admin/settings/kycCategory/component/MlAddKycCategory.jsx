@@ -28,8 +28,12 @@ class MlAddKycCategory extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/kycCategoryList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/kycCategoryList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createKycCategory() {
@@ -39,11 +43,8 @@ class MlAddKycCategory extends React.Component{
       about: this.refs.about.value,
       isActive: this.refs.documentTypeStatus.checked,
     }
-    console.log(Details)
-
     const response = await addKycCategoryActionHandler(Details);
     return response;
-
   }
 
   // getSubDepartmentAvailability(details){
@@ -53,11 +54,11 @@ class MlAddKycCategory extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

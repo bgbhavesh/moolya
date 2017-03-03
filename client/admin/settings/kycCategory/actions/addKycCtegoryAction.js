@@ -10,17 +10,24 @@ export async function addKycCategoryActionHandler(Details)
 
   const result = await client.mutate({
     mutation: gql`
-        mutation ($kycCategory:kycCategoryObject){
+        mutation ($kycCategory:kycCategoryObject, $moduleName:String, $actionName:String){
             createKycCategory(
-                kycCategory: $kycCategory
-            ) 
+                kycCategory: $kycCategory,
+                moduleName:$moduleName,
+                actionName:$actionName
+            ){
+            success,
+            code,
+            result
+            }  
          }
         `,
     variables: {
-      kycCategory: Details
+      kycCategory: Details,
+      moduleName:"KYCCATEGORY",
+      actionName:"CREATE"
     }
   })
-  console.log(result)
   const id = result.data.createKycCategory;
   return id
 }

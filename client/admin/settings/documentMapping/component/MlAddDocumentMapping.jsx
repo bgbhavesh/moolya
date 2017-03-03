@@ -59,8 +59,12 @@ class MlAddDocumentMapping extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/documentMappingList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/documentMappingList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   // getassignDocuments(details){
@@ -91,7 +95,6 @@ class MlAddDocumentMapping extends React.Component{
       issuingAuthority   : this.refs.issuingAuthority.value,
       isActive    : this.refs.status.checked,
     }
-    // console.log(processDetails)
     const response = await addDocumentMappingActionHandler(documentDetails)
     return response;
   }
@@ -133,11 +136,11 @@ class MlAddDocumentMapping extends React.Component{
   }
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

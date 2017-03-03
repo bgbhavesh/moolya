@@ -133,8 +133,10 @@ let BackEndUser = `
     }
     
     type dep{
-      department:String,
-       subDepartment:String
+        department:String,
+        departmentName:String,
+        subDepartment:String
+        subDepartmentName:String
     }
     
     type Mutation{
@@ -147,7 +149,6 @@ let BackEndUser = `
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
-        fetchUserRoles(userId:String): [UserRoles]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersBysubChapterDepSubDep(subChapterId:String): [BackendUsers]

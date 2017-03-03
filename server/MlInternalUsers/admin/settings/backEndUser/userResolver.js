@@ -135,10 +135,10 @@ MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) =>
       users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId":args.subChapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.communityId":args.communityId}]}).fetch();
   }
   else if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.subChapterName !="Moolya"){
-      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.subChapterId":args.subChapterId},{"profile.InternalUprofile.moolyaProfile.userType":'non-moolya'}]}).fetch();
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId":args.subChapterId},{"profile.InternalUprofile.moolyaProfile.userType":'non-moolya'}]}).fetch();
   }
   else if(args.clusterId != "" && args.chapterId != "" && args.subChapterName=="Moolya"){
-      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userroles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userType":'moolya'}]}).fetch();
+      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userType":'moolya'}]}).fetch();
   }
   else if(args.clusterId != "" ){
       users = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}).fetch();
@@ -198,6 +198,14 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
 
     console.log(dep)
   }
+  for(var i = 0; i < dep.length; i++){
+    depId = dep[i].department;
+    subDeptId = dep[i].subDepartment;
+    let departmentName = MlDepartments.findOne({"_id":depId}).departmentName;
+    let subDepartmentName = MlSubDepartments.findOne({"_id":subDeptId}).subDepartmentName;
+    dep[i].departmentName =departmentName;
+    dep[i].subDepartmentName = subDepartmentName;
+  }
   return dep
 }
 
@@ -252,7 +260,7 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   }
   }else{
     let user = Meteor.users.findOne({"_id":args.userId})
-    let clusterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter.subChapterId}).fetch();
+    let clusterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
     if(user && clusterDep && clusterDep.length > 0) {
       let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
       for (var i = 0; i < clusterDep.length; i++) {
@@ -267,22 +275,3 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   return dep
 }
 
-MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
-  // let roleId = Meteor.users.findOne({"_id":args.userId}).profile.InternalUprofile.moolyaProfile.userProfiles[0].userroles;
-  var user = Meteor.users.findOne({_id: args.userId});
-  var roles = [];
-  if (user && user.profile && user.profile.isInternaluser == true) {
-    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-    let user_roles;
-    // Selecting Default Profile
-    for (var i = 0; i < user_profiles.length; i++) {
-      let user_roles = user_profiles[i].userRoles;
-        if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
-          for (var j = 0; j < user_roles.length; j++) {
-           roles.push(user_roles[j]);
-          }
-        }
-    }
-  }
-  return roles;
-}

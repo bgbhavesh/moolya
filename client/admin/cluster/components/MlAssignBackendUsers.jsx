@@ -12,7 +12,7 @@ import MlAssignBackendUserList from './MlAssignBackendUserList'
 import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
 import {mlClusterConfig } from '../config/mlClusterConfig'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
-import {findUserAssignedRoles} from '../actions/findUserRoles'
+import {findUserDetails} from '../actions/findUserDetails'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -43,7 +43,7 @@ class MlAssignBackendUsers extends React.Component{
 
     optionsBySelectUser(index, selectedIndex){
         this.setState({selectedBackendUser:index})
-        const resp= this.findUserAssignedRoles(index);
+        const resp= this.findUserDetails(index);
     }
 
     getAssignedRoles(roles){
@@ -57,9 +57,23 @@ class MlAssignBackendUsers extends React.Component{
       return resp;
     }
 
-    async findUserAssignedRoles(userId){
-      const response = await findUserAssignedRoles(userId);
-      this.setState({user_Roles:response,selectedBackendUser:userId});
+    async findUserDetails(userId){
+      const user = await findUserDetails(userId);
+      var roles = [];
+      if (user && user.profile && user.profile.isInternaluser == true) {
+        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+        // let user_roles;
+        // Selecting Default Profile
+        for (var i = 0; i < user_profiles.length; i++) {
+          let user_roles = user_profiles[i].userRoles;
+          if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
+            for (var j = 0; j < user_roles.length; j++) {
+              roles.push(user_roles[j]);
+            }
+          }
+        }
+      }
+      this.setState({user_Roles:roles,selectedBackendUser:userId});
       return response;
     }
 
@@ -83,7 +97,7 @@ class MlAssignBackendUsers extends React.Component{
 
   updateSelectedBackEndUser(userId){
    // this.setState({"selectedBackendUser":userId});
-    const resp= this.findUserAssignedRoles(userId);
+    const resp= this.findUserDetails(userId);
     //console.log(resp);
   }
 

@@ -143,7 +143,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                         value={department.subDepartment}/>
+                         value={department.subDepartmentName}/>
                 </div>
                 <div className="swiper-container blocks_in_form">
                   <div className="swiper-wrapper">

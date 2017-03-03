@@ -23,6 +23,7 @@ class MlAddRole extends React.Component{
       assignModulesToRoles:[],
       selectedUserType:'',
       selectedBackendUser:'',
+      selectedSubChapter:''
     }
     this.addEventHandler.bind(this);
     return this;
@@ -133,7 +134,7 @@ class MlAddRole extends React.Component{
     let BackendUserOptions=[
       {value: 'Internal User', label: 'Internal User'},
       {value: 'External User', label: 'External User'}
-    ];
+    ]
     let query=gql` query{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
@@ -172,13 +173,13 @@ class MlAddRole extends React.Component{
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
                     </div>)}
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true}/>
+                      <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} />
                     </div>
                     <div className="form-group">
                       <textarea placeholder="About" ref="about" className="form-control float-label"></textarea>
                     </div>
 
-                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)}/>
+                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} selectedBackendUserType={this.state.selectedUserType} selectedSubChapter={this.state.selectedSubChapter}/>
 
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>

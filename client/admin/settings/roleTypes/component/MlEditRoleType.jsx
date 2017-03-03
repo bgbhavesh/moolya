@@ -102,6 +102,7 @@ class MlEditRole extends React.Component{
   }
 
   async findRole(){
+
     let roleid=this.props.config
     const response = await findRoleActionHandler(roleid);
     this.setState({loading:false,data:response});
@@ -142,8 +143,11 @@ class MlEditRole extends React.Component{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
 `;
+    const showLoader=this.state.loading;
 
     return (
+      <div>
+        {showLoader===true?( <div className="loader_container"><div className="loader_wrap"></div></div>):(
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Create Role</h2>
@@ -218,6 +222,7 @@ class MlEditRole extends React.Component{
         </div>
 
 
+      </div>)}
       </div>
     )
   }

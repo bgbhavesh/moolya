@@ -325,12 +325,12 @@ class MlEditBackendUser extends React.Component{
                     />
                    {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
                   </div>
-                  <div className="form-group">
+                  {/*<div className="form-group">
                     <input type="Password" ref="password" placeholder="Create Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
                     <input type="Password" ref="confirmPassword"  placeholder="Confirm Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
-                  </div>
+                  </div>*/}
                   <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
                   <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} departments={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />

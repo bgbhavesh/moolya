@@ -50,7 +50,12 @@ class MlAddRole extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/rolesList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/rolesList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   getassignRoleToClusters(details){
@@ -65,12 +70,12 @@ class MlAddRole extends React.Component{
   }
 
   async findRole(){
-    let roleId=this.props.config
+    let roleId=this.props.config;
     const response = await findRoleActionHandler(roleId);
     this.setState({loading:false,data:response});
   }
 
-  async  editRole() {
+  async  addRole() {
     let roleDetails = {
       roleName: this.refs.roleName.value,
       displayName:this.refs.diplayName.value,
@@ -80,12 +85,11 @@ class MlAddRole extends React.Component{
       assignRoles:this.state.assignRoleToClusters,
       modules:this.state.assignModulesToRoles,
       isActive:this.refs.status.checked
-    }
-    console.log(roleDetails)
+    };
     const response = await addRoleActionHandler(roleDetails)
     return response;
-
   }
+
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
   }
@@ -100,15 +104,15 @@ class MlAddRole extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.editRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.addRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,

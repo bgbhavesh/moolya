@@ -52,8 +52,12 @@ class MlEditRole extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/rolesList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/rolesList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   getassignRoleToClusters(details){
@@ -62,7 +66,6 @@ class MlEditRole extends React.Component{
   }
 
   getassignModulesToRoles(details){
-    console.log("details->"+details);
     this.setState({'assignModulesToRoles':details})
   }
   onSubmit(){
@@ -80,7 +83,6 @@ class MlEditRole extends React.Component{
       modules:this.state.assignModulesToRoles,
       isActive:this.refs.status.checked
     }
-    console.log(roleDetails)
     let roleDetails={
       id:this.props.config,
       roleObject:roleObject
@@ -93,7 +95,6 @@ class MlEditRole extends React.Component{
     this.setState({'mlAssignDepartmentDetails':departments})
   }
 
-
   onUserTypeSelect(val){
     this.setState({selectedUserType:val.value})
   }
@@ -102,8 +103,7 @@ class MlEditRole extends React.Component{
   }
 
   async findRole(){
-
-    let roleid=this.props.config
+    let roleid=this.props.config;
     const response = await findRoleActionHandler(roleid);
     this.setState({loading:false,data:response});
     if(response) {
@@ -122,13 +122,13 @@ class MlEditRole extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -150,7 +150,7 @@ class MlEditRole extends React.Component{
         {showLoader===true?( <div className="loader_container"><div className="loader_wrap"></div></div>):(
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Create Role</h2>
+          <h2>Edit Role</h2>
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea

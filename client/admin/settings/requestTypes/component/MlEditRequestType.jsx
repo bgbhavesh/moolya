@@ -37,15 +37,19 @@ class MlEditRequestType extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/requestTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/requestTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
   async findRequestType(){
-    let requestTypeId=this.props.config
-    //console.log(requestTypeId)
+    let requestTypeId=this.props.config;
     const response = await findRequestTypeActionHandler(requestTypeId);
     this.setState({loading:false,data:response});
   }
+
   async  updateRequestType() {
     let RequestTypeDetails = {
       id: this.refs.id.value,
@@ -53,10 +57,9 @@ class MlEditRequestType extends React.Component{
       displayName: this.refs.displayName.value,
       requestDesc: this.refs.requestDesc.value,
       isActive: this.refs.isActive.checked
-    }
+    };
     const response = await updateRequestTypeActionHandler(RequestTypeDetails)
     return response;
-
   }
 
   onStatusChange(e){
@@ -75,11 +78,11 @@ class MlEditRequestType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateRequestType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

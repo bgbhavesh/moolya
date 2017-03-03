@@ -33,7 +33,7 @@ const defaultServerConfig = {
     configServer: graphQLServer => {},
     graphiql: Meteor.isDevelopment,
     graphiqlPath: '/graphiql',
-    assignUsersPath: '/assignusers',
+    assignUsersPath: '/adminMultipartFormData',
     graphiqlOptions : {
         passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
     },
@@ -100,8 +100,8 @@ const defaultGraphQLOptions = {
               if(req && req.body && req.body.data)
               {
                   let data = JSON.parse(req.body.data)
-                  let userId = data.userId;
-                  let roles  = data && data.userRoles;
+                  let userId = data && data.userProfile && data.userProfile.userId;
+                  let roles  = data && data.userProfile && data.userProfile.userRoles;
                   // let file  = req.files
                   let levelCode = ""
                   if(roles)
@@ -134,7 +134,7 @@ const defaultGraphQLOptions = {
                       })
                   }
                   let userProfile = {
-                      clusterId: data.clusterId,
+                      clusterId:  data && data.userProfile && data.userProfile.clusterId,
                       userRoles:  roles,
                       isDefault: false
                   }

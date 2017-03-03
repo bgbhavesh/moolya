@@ -52,7 +52,7 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
     if(userId){
         let code = 200;
         let result = {userId: userId}
-        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        let response = new MlRespPayload().successPayload(result, code);
         return response
     }
 }

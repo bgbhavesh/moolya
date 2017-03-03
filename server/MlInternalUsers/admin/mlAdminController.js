@@ -33,7 +33,7 @@ const defaultServerConfig = {
     configServer: graphQLServer => {},
     graphiql: Meteor.isDevelopment,
     graphiqlPath: '/graphiql',
-    assignUsersPath: '/assignusers',
+    assignUsersPath: '/adminMultipartFormData',
     graphiqlOptions : {
         passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
     },

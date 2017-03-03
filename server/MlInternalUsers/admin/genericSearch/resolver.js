@@ -202,7 +202,42 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   if(args.module == 'BackendUsers'){
       data = Meteor.users.find().fetch();
-      totalRecords=Meteor.users.find({},findOptions).count();
+
+    data.map(function (doc,index) {
+      let roleIds=[]
+      let hirarichyLevel=[]
+      let userProfiles=doc&&doc.profile.InternalUprofile.moolyaProfile.userProfiles?doc.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+      userProfiles.map(function (doc,index) {
+      let  userRoles=doc&&doc.userRoles?doc.userRoles:[];
+        userRoles.map(function (doc,index) {
+          hirarichyLevel.push(doc.hierarchyLevel)
+
+        });
+        hirarichyLevel.sort(function(a, b){return b-a});
+        for(let i=0;i<userRoles.length;i++){
+          if(userRoles[i].hierarchyLevel==hirarichyLevel[0]) {
+            roleIds.push(userRoles[i].roleId);
+            break
+          }
+        }
+      /*  userRoles.map(function (doc,index) {
+          if(doc.hierarchyLevel===hirarichyLevel[0]) {
+            roleIds.push(doc.roleId);
+            "<br>"
+          }
+        });*/
+      });
+
+
+      let roleNames=[]
+      const rolesData =  MlRoles.find({ _id: { $in: roleIds} } ).fetch() || [];
+      rolesData.map(function (doc) {
+        roleNames.push(doc.roleName)
+      });
+      data[index].roleNames = roleNames || [];
+    });
+
+    totalRecords=Meteor.users.find({},findOptions).count();
   }
   if(args.module == 'roles'){
     data= MlRoles.find(query,findOptions).fetch();

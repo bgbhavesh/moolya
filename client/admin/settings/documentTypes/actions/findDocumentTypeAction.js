@@ -22,6 +22,5 @@ export async function findDocumentTypeActionHandler(documentTypeId)
     forceFetch:true
   })
   const id = result.data.findDocumentType;
-  console.log("DAta "+id);
   return id
 }

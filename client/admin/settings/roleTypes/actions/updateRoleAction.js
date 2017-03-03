@@ -7,20 +7,27 @@ export async function updateRoleActionHandler(roleDetails) {
   let role=roleDetails.roleObject
   const result = await client.mutate({
     mutation: gql`
-   mutation  ($id:String!, $role: roleObject!){
+   mutation  ($id:String!, $role: roleObject!, $moduleName:String, $actionName:String){
        updateRole(
-       id: $id,
-       role: $role,
-       )
+        id: $id,
+        role: $role,
+        moduleName:$moduleName,
+        actionName:$actionName
+       ){
+            success,
+            code,
+            result
+        } 
    }
    `,
     variables: {
       id,
-      role
+      role,
+      moduleName:"ROLES",
+      actionName:"UPDATE"
     }
   })
-  console.log(result)
-  const res = result;
+  const res = result.data.updateRole;
   return res
 }
 

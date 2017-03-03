@@ -105,16 +105,11 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log("recieved");
-    // console.log(this.props);
-    // console.log("sssss");
-    // console.log(nextProps);
       if((this.props.userId !==nextProps.userId)) {
           const resp=this.findUserDepartments();
-        if(nextProps.assignedRoles&&nextProps.assignedRoles.length>0){
-          this.setState({roleDetails:nextProps.assignedRoles})
-        }
-
+      }
+      if(nextProps.assignedRoles&&nextProps.assignedRoles.length>0){
+        this.setState({roleDetails:nextProps.assignedRoles})
       }
   }
 
@@ -127,7 +122,6 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   render(){
-    // console.log(this.props.userId);
     let that = this
     let userDepartments = that.state.roleForm || [];
     let roleDetails =  that.state.roleDetails;
@@ -141,11 +135,11 @@ export default class MlAssignBackednUserRoles extends React.Component{
               <div className="panel-heading">Assign Role</div>
               <div className="panel-body">
                 <div className="form-group">
-                  <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.department}/>
+                  <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.departmentName}/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                         value={department.subDepartment}/>
+                         value={department.subDepartmentName}/>
                 </div>
                 <div className="swiper-container blocks_in_form">
                   <div className="swiper-wrapper">

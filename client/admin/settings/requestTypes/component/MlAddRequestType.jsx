@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addPermissionActionHandler} from '../actions/addRequestTypeAction'
+import {addRequestActionHandler} from '../actions/addRequestTypeAction'
 let FontAwesome = require('react-fontawesome');
 class MlAddRequestType extends React.Component{
   constructor(props) {
@@ -12,7 +12,6 @@ class MlAddRequestType extends React.Component{
     this.createRequestType.bind(this)
     return this;
   }
-
 
   async addEventHandler() {
     const resp=await this.createPermission();
@@ -24,8 +23,12 @@ class MlAddRequestType extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/requestTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/requestTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createRequestType() {
@@ -35,18 +38,17 @@ class MlAddRequestType extends React.Component{
       requestDesc: this.refs.requestDesc.value,
       isActive: this.refs.isActive.checked
     }
-    console.log(RequestTypeDetails)
-    const response = await addPermissionActionHandler(RequestTypeDetails)
+    const response = await addRequestActionHandler(RequestTypeDetails)
     return response;
 
   }
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

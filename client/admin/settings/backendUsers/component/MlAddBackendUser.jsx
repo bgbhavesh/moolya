@@ -66,8 +66,12 @@ class MlAddBackendUser extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/backendUserList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/backendUserList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createBackendUser() {
@@ -156,11 +160,11 @@ class MlAddBackendUser extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

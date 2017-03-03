@@ -24,8 +24,11 @@ MlResolver.MlQueryResolver['fetchCountriesSearch'] = (obj, args, context, info) 
 MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
     let cluster = args.cluster;
     let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-    if(!isValidAuth)
-      return "Not Authorized"
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
 
     let country = MlCountries.findOne({_id: args.countryId});
     if(country){
@@ -56,7 +59,7 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
           }
             let code = 200;
             let result = {country: resp}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            let response = new MlRespPayload().successPayload(result, code);
             return response
         }
     }

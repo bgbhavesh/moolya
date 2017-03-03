@@ -19,7 +19,7 @@ class MlEditCommunityFormComponent extends React.Component {
     }
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
-    this.updateComDEf.bind(this)
+    this.updateCommunityAccess.bind(this)
     return this;
   }
 
@@ -40,7 +40,7 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   async addEventHandler() {
-    const resp=await this.updateComDEf();
+    const resp=await this.updateCommunityAccess();
     return resp;
   }
 
@@ -68,20 +68,21 @@ class MlEditCommunityFormComponent extends React.Component {
     this.setState({loading:false,data:response});
   }
 
-  async  updateComDEf() {
-    let communityDetails = {
-      displayName: this.refs.displayName.value,
-      clusters    : this.state.clusters,
-      chapters    : this.state.chapters,
-      aboutCommunity : this.refs.about.value,
-      communityImageLink: this.refs.upload.value,
-      showOnMap: this.refs.showOnMap.checked,
-      isActive: this.refs.status.checked
-    }
-    let id = this.props.params;
-    console.log(communityDetails)
-    const response = await updateCommunityActionHandler(id,communityDetails)
+  async  updateCommunityAccess()
+  {
+      let communityDetails = {
+          displayName         : this.refs.displayName.value,
+          clusters            : this.state.clusters,
+          chapters            : this.state.chapters,
+          aboutCommunity      : this.refs.about.value,
+          communityImageLink  : this.refs.upload.value,
+          showOnMap           : this.refs.showOnMap.checked,
+          isActive            : this.refs.status.checked
+      }
+      let id = this.props.params;
+      const response = await updateCommunityActionHandler(id, communityDetails)
   }
+
   optionsBySelectClusters(val){
     let clusters=this.state.clusters
     clusters[0]['id']=val;
@@ -109,9 +110,9 @@ class MlEditCommunityFormComponent extends React.Component {
         handler: null
       },
       {
-        showAction: true,
-        actionName: 'add',
-        handler: async(event) => this.props.handler(this.updateComDEf.bind(this), this.handleSuccess.bind(this))
+          showAction: true,
+          actionName: 'add',
+          handler: async(event) => this.props.handler(this.updateCommunityAccess.bind(this), this.handleSuccess.bind(this))
       },
       {
         showAction: true,

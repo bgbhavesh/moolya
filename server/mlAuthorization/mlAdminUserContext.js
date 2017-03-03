@@ -12,7 +12,7 @@ class MlAdminUserContext
 
   userProfileDetails(userId)
   {
-    check(userId, String)
+   check(userId, String)
     let hierarchyLevel =null;
     let hierarchyCode=null;
     let defaultCluster=null;

@@ -22,7 +22,12 @@ class MlAddStageOfCompany extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/stageOfCompanyList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/stageOfCompanyList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createStageOfCompany() {

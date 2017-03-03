@@ -23,6 +23,7 @@ class MlAssignBackendUsers extends React.Component{
     constructor(props){
         super(props)
         this.state={
+            loading: false,
             selectedBackendUser:'',
             users:[{username: '', _id:''}]
         }
@@ -42,6 +43,7 @@ class MlAssignBackendUsers extends React.Component{
     }
 
     optionsBySelectUser(index, selectedIndex){
+        this.setState({loading: true});
         this.setState({selectedBackendUser:index})
         const resp= this.findUserDetails(index);
     }
@@ -74,6 +76,7 @@ class MlAssignBackendUsers extends React.Component{
         }
       }
       this.setState({user_Roles:roles,selectedBackendUser:userId});
+      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
       return user;
     }
 
@@ -83,7 +86,8 @@ class MlAssignBackendUsers extends React.Component{
         userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let response = await multipartFormHandler(userProfile, Meteor.absoluteUrl('assignusers'), this.refs.profilePic.files[0]);
+        let data = {moduleName:"USERS", actionName:"CREATE", userProfile:userProfile}
+        let response = await multipartFormHandler(data, this.refs.profilePic.files[0]);
         return response;
     }
 
@@ -97,8 +101,8 @@ class MlAssignBackendUsers extends React.Component{
 
   updateSelectedBackEndUser(userId){
    // this.setState({"selectedBackendUser":userId});
+    this.setState({loading: true});
     const resp= this.findUserDetails(userId);
-    //console.log(resp);
   }
 
     render(){
@@ -123,7 +127,13 @@ class MlAssignBackendUsers extends React.Component{
         let queryOptions = {options: { variables: {clusterId:that.props.params}}};
         let query   = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
-        return(
+        let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
+        let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
+        const showLoader = this.state.loading;
+
+      return (
+        <div>
+          {showLoader === true ? ( <div className="loader_wrap"></div>) : (
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
                     <h2>Assign internal user to Cluster</h2>
@@ -165,7 +175,10 @@ class MlAssignBackendUsers extends React.Component{
                                               <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"/>
                                           </div>
                                           <div className="form-group">
-                                              <input type="text" placeholder="Display Name" className="form-control float-label" id="dName"  ref="displayName"/>
+                                              <input type="text" placeholder="Display Name" ref="displayName" defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
+                                          </div>
+                                          <div className="form-group">
+                                            <input type="text" readOnly="true" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
                                           </div>
                                           <br className="brclear"/>
                                       </div>
@@ -186,7 +199,8 @@ class MlAssignBackendUsers extends React.Component{
                     </div>
                 </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
-            </div>
+            </div>)}
+        </div>
         )
     }
 }

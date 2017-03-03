@@ -101,6 +101,20 @@ export default class MlTabView extends Component {
           if(_.has(dynamicParams,"subChapterId")){
             return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/assignusers`;
           }
+        },
+
+        "community_Community_Details":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"communityId")){
+            return `/admin/community/${dynamicParams.communityId}/communityDetails`;
+          }
+        },
+
+        "community_assignusers":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"communityId")){
+            return `/admin/community/${dynamicParams.communityId}/assignusers`;
+          }
         }
       }
       let menuLinkHandler=menuLinkHandlerConfig[path];

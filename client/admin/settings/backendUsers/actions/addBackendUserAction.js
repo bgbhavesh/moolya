@@ -10,7 +10,11 @@ let user=userObjectDetails
           user :$user,
           moduleName:$moduleName,
           actionName:$actionName
-        )
+        ){
+            success,
+            code,
+            result
+        }
       }
     `,
     variables: {
@@ -18,7 +22,8 @@ let user=userObjectDetails
       moduleName:"USERS",
       actionName:"CREATE"
     }
-  })
+  });
+
   const id = result.data.createUser;
   return id
 }

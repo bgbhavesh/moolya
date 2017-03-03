@@ -77,14 +77,14 @@ adminSection.route('/community', {
     mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} listConfig={mlCommunityListConfig}/>})
   }
 });
-adminSection.route('/community/:communityId', {
-  name: 'community',
+adminSection.route('/community/:communityId/communityDetails', {
+  name: 'community_Community_Details',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditCommunityFormComponent params={params.communityId}/>})
   }
 });
-adminSection.route('/internalusers', {
-  name: 'community',
+adminSection.route('/community/:communityId/assignusers', {
+  name: 'community_assignusers',
   action(){
     mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
   }

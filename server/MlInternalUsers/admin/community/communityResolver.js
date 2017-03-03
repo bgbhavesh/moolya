@@ -81,10 +81,17 @@ MlResolver.MlQueryResolver['fecthCommunitiesAccess'] = (obj, args, context, info
 
 MlResolver.MlQueryResolver['fecthCommunityDef'] = (obj, args, context, info) => {
 
+    let result = MlCommunityDefinition.findOne({"_id": args.communityId});
+    return result;
 }
 
 MlResolver.MlQueryResolver['fecthCommunityAccess'] = (obj, args, context, info) => {
 
+}
+
+MlResolver.MlQueryResolver['fetchActiveCommunityAccess'] = (obj, args, context, info) => {
+    let result = MlCommunityAccess.find({"isActive":true}).fetch();
+    return result;
 }
 
 MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) => {

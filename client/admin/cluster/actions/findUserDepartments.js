@@ -14,7 +14,9 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
         data: fetchUserDepSubDep(userId: $id, clusterId:$clusterId) 
         {
             department
+            departmentName
             subDepartment
+            subDepartmentName
         }
       }
     `,

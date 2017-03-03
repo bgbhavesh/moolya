@@ -193,8 +193,9 @@ let communitySchema = `
         FetchMapData(moduleName:String,id:String):[MapData]
         fetchCommunitiesDef:SearchResp
         fecthCommunitiesAccess:[CommunityAccessObject]
-        fecthCommunityDef:Community
+        fecthCommunityDef(communityId:String):Community
         fecthCommunityAccess:CommunityAccessObject
+        fetchActiveCommunityAccess:[CommunityAccessObject]
     }
 `
 

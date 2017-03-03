@@ -35,8 +35,12 @@ class MlEditCountry extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/countriesList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/countriesList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  findCountry() {
@@ -44,7 +48,6 @@ class MlEditCountry extends React.Component{
     const response = await findCountryActionHandler(id);
     this.setState({loading:false,data:response});
     this.setState({url:this.state.data.url})
-
   }
 
   async  editCountry() {
@@ -77,11 +80,11 @@ class MlEditCountry extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.editCountry.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

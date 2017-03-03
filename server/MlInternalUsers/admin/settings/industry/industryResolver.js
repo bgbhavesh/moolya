@@ -3,7 +3,6 @@ import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => {
-  // TODO : Authorization
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -19,7 +18,6 @@ MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => 
   }
 }
 MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => {
-  // TODO : Authorization
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;

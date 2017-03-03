@@ -95,8 +95,8 @@ let Role = `
   }
   
   type Mutation {
-     createRole(role:roleObject): String
-     updateRole(id:String,role:roleObject):String
+     createRole(role:roleObject, moduleName:String, actionName:String):response
+     updateRole(id:String, role:roleObject, moduleName:String, actionName:String):response
   }
 `
 

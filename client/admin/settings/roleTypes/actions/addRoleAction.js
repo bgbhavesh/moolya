@@ -5,14 +5,22 @@ export async function addRoleActionHandler(roleDetails) {
 let role = roleDetails;
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($role: roleObject){
+    mutation  ($role: roleObject, $moduleName:String, $actionName:String){
         createRole(
-          role : $role
-        )
+          role : $role,
+          moduleName:$moduleName,
+          actionName:$actionName
+          ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
-      role
+      role,
+      moduleName:"ROLES",
+      actionName:"CREATE"
     }
   })
   const id = result.data.createRole;

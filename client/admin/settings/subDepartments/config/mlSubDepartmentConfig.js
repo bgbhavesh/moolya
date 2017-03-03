@@ -44,7 +44,7 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["subDepartmentName","displayName","isActive"],
-  searchFields:["subDepartmentName","displayName","isActive"],
+  searchFields:["subDepartmentName","displayName","departmentAliasName","clustersList","subChapterList","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -88,8 +88,8 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"subDepartment"){
+              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+              data:SearchQuery(module:"subDepartment",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on SubDepartment{

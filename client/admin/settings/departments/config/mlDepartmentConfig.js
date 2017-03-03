@@ -38,7 +38,7 @@ const mlDepartmentTableConfig=new MlViewer.View({
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["departmentName","displayName","depatmentAvailable","isActive"],
-  searchFields:["departmentName","displayName","isActive"],
+  searchFields:["departmentName","displayName","depatmentAvailable","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.

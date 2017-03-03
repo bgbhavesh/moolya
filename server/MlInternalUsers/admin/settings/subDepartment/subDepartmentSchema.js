@@ -11,26 +11,25 @@ let subDepartmentSchema = `
         isActive:Boolean,
         departmentId:String,
         isMoolya:Boolean,
+        departmentAliasName : String,
+        clustersList   : [String],
+        chaptersList   : [String],
+        subChapterList : [String],
         subDepatmentAvailable: [subDepatmentAvailable]
     }
     
     type subDepatmentAvailable{ 
-        cluster     : [clusterListSchema],
+        cluster     : [String],
         chapter     : String,
         subChapter  : String,
         email       : String,
         isActive    : Boolean
     }
-     type clusterListSchema{
-        clusterId     : String
-    }
-     input ClusterList{
-     
-        clusterId     : String
-    }
+    
+    
     input SubDepatmentAvailable
     {
-        cluster     : [ClusterList],
+        cluster     : [String],
         chapter     : String,
         subChapter  : String,
         email       : String,

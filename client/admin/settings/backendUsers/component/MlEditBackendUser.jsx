@@ -305,7 +305,7 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="firstName" placeholder="First Name" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.firstName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <input type="text" ref="middleName" placeholder="middle Name" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.middleName} className="form-control float-label" id=""/>
+                    <input type="text" ref="middleName" placeholder="Middle Name" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.middleName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref="lastName" placeholder="Last Name" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.lastName} className="form-control float-label" id=""/>

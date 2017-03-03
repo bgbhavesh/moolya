@@ -12,6 +12,7 @@ import MlAssignBackendUserList from './MlAssignBackendUserList'
 import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
 import {mlClusterConfig } from '../config/mlClusterConfig'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
+import {findUserDetails} from '../actions/findUserDetails'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -27,12 +28,14 @@ class MlAssignBackendUsers extends React.Component{
         }
 
         this.addEventHandler.bind(this);
-        this.assignBackendUsers.bind(this)
+        this.assignBackendUsers.bind(this);
+        this.updateSelectedBackEndUser.bind(this);
         // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
 
     componentDidMount(){
+
     }
 
     enableAssignUser(){
@@ -40,6 +43,7 @@ class MlAssignBackendUsers extends React.Component{
 
     optionsBySelectUser(index, selectedIndex){
         this.setState({selectedBackendUser:index})
+        const resp= this.findUserDetails(index);
     }
 
     getAssignedRoles(roles){
@@ -51,6 +55,26 @@ class MlAssignBackendUsers extends React.Component{
     async addEventHandler() {
       const resp = await this.assignBackendUsers();
       return resp;
+    }
+
+    async findUserDetails(userId){
+      const user = await findUserDetails(userId);
+      var roles = [];
+      if (user && user.profile && user.profile.isInternaluser == true) {
+        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+        // let user_roles;
+        // Selecting Default Profile
+        for (var i = 0; i < user_profiles.length; i++) {
+          let user_roles = user_profiles[i].userRoles;
+          if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
+            for (var j = 0; j < user_roles.length; j++) {
+              roles.push(user_roles[j]);
+            }
+          }
+        }
+      }
+      this.setState({user_Roles:roles,selectedBackendUser:userId});
+      return user;
     }
 
     async assignBackendUsers(){
@@ -70,6 +94,12 @@ class MlAssignBackendUsers extends React.Component{
     handleError(){
 
     }
+
+  updateSelectedBackEndUser(userId){
+   // this.setState({"selectedBackendUser":userId});
+    const resp= this.findUserDetails(userId);
+    //console.log(resp);
+  }
 
     render(){
         let MlActionConfig = [
@@ -108,7 +138,7 @@ class MlAssignBackendUsers extends React.Component{
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
-                                      <MlAssignBackendUserList clusterId={that.props.params}/>
+                                      <MlAssignBackendUserList clusterId={that.props.params} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
                                   </ScrollArea>
                               </div>
                           </div>
@@ -140,7 +170,7 @@ class MlAssignBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
+                                      {userid?(<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params} assignedRoles={this.state.user_Roles} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

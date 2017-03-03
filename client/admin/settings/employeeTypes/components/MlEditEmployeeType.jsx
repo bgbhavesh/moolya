@@ -39,6 +39,7 @@ class MlEditEmployeeType extends React.Component{
   async handleSuccess(response) {
     FlowRouter.go("/admin/settings/employeeTypesList");
   };
+
   async findEmployeeType(){
     let EmpTypeId=this.props.config
     const response = await findEmployeeTypeActionHandler(EmpTypeId);

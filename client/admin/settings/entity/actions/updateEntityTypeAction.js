@@ -9,14 +9,20 @@ export async function updateEntityTypeActionHandler(EntityType) {
   let isActive = EntityType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$entityName: String, $entityDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$entityName: String, $entityDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateEntity(
           _id:$_id
           entityName: $entityName,
           entityDisplayName: $entityDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateEntityTypeActionHandler(EntityType) {
       entityName,
       entityDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName: "ENTITY",
+      actionName: "UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateEntity;
   return id
 }

@@ -1,12 +1,13 @@
-import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
 
-export async function findBackendUserActionHandler(userTypeId) {
-  let did=userTypeId
+import gql from 'graphql-tag'
+import {client} from '../../core/apolloConnection';
+
+
+export async function findUserDetails(userId) {
+  let id=userId
   const result = await client.query({
     query: gql`
-    
-          query($id: String){
+    query($id: String){
             fetchUser(userId:$id){
               _id,
               profile{
@@ -38,12 +39,16 @@ export async function findBackendUserActionHandler(userTypeId) {
                   userProfiles{
                     isDefault,
                     userRoles{
-                      clusterId,
-                      chapterId,
-                      subChapterId,
-                      communityId,
-                      isActive,
+                      roleId
+                      clusterId
+                      chapterId
+                      validFrom
+                      validTo
+                      subChapterId
+                      communityId
+                      isActive
                       hierarchyLevel
+                      hierarchyCode
                       
                     }
                   }
@@ -56,10 +61,10 @@ export async function findBackendUserActionHandler(userTypeId) {
           }
     `,
     variables: {
-      id:did
+      id
     },
     forceFetch:true
   })
-  const id = result.data.fetchUser;
-  return id
+  const did = result.data.fetchUser;
+  return did
 }

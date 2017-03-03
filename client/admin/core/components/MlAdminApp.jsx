@@ -25,7 +25,7 @@ class MlAdminAppComponent extends Component {
   }
 
   async fetchMenu(){
-    const menuData=await client.query({query: query,
+    const menuData=await client.query({forceFetch:true,query: query,
                   variables: { name:'mlAdminMenu' }
      });
     this.setState({loading:false,menu:menuData&&menuData.data&&menuData.data.data?menuData.data.data.menu:[]});

@@ -30,7 +30,7 @@ let citiesSchema = `
     }
     
     type Mutation {
-        updateCity(cityId: String, city:cityObject): String      
+        updateCity(cityId: String, city:cityObject, moduleName:String, actionName:String):response      
     }
 `
 

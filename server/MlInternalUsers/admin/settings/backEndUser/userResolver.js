@@ -241,7 +241,7 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   }
   }else{
     let user = Meteor.users.findOne({"_id":args.userId})
-    let clusterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter.subChapterId}).fetch();
+    let clusterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
     if(user && clusterDep && clusterDep.length > 0) {
       let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
       for (var i = 0; i < clusterDep.length; i++) {

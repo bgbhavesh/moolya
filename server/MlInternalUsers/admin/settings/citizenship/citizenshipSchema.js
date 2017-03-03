@@ -9,8 +9,8 @@ let Citizenship = `
       isActive:Boolean
     }
     type Mutation{
-        CreateCitizenship(_id:String,citizenshipTypeName:String,citizenshipTypeDisplayName:String,about:String,isActive:Boolean):String
-        UpdateCitizenship(_id:String,citizenshipTypeName:String,citizenshipTypeDisplayName:String,about:String,isActive:Boolean):String
+        CreateCitizenship(_id:String,citizenshipTypeName:String,citizenshipTypeDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateCitizenship(_id:String,citizenshipTypeName:String,citizenshipTypeDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
       FindCitizenship(_id: String):Citizenship

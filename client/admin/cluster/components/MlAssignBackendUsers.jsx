@@ -86,7 +86,8 @@ class MlAssignBackendUsers extends React.Component{
         userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let response = await multipartFormHandler(userProfile, this.refs.profilePic.files[0]);
+        let data = {moduleName:"USERS", actionName:"CREATE", userProfile:userProfile}
+        let response = await multipartFormHandler(data, this.refs.profilePic.files[0]);
         return response;
     }
 
@@ -177,7 +178,7 @@ class MlAssignBackendUsers extends React.Component{
                                               <input type="text" placeholder="Display Name" ref="displayName" defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
                                           </div>
                                           <div className="form-group">
-                                            <input type="text" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
+                                            <input type="text" readOnly="true" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
                                           </div>
                                           <br className="brclear"/>
                                       </div>

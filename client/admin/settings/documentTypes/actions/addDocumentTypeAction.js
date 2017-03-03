@@ -10,17 +10,24 @@ export async function addDocumentTypeActionHandler(DocTypeDetails)
 
   const result = await client.mutate({
     mutation: gql`
-        mutation ($documentType:documentTypeObject){
+        mutation ($documentType:documentTypeObject, $moduleName:String, $actionName:String){
             createDocumentType(
-                documentType: $documentType
-            ) 
+                documentType: $documentType,
+                moduleName:$moduleName,
+                actionName:$actionName
+                ){
+                success,
+                code,
+                result
+            }  
          }
         `,
     variables: {
-      documentType: DocTypeDetails
+      documentType: DocTypeDetails,
+      moduleName:"DOCUMENTTYPE",
+      actionName:"CREATE"
     }
   })
-  console.log(result)
   const id = result.data.createDocumentType;
   return id
 }

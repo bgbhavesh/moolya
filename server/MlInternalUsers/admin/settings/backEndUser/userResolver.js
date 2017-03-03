@@ -187,6 +187,14 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
 
     console.log(dep)
   }
+  for(var i = 0; i < dep.length; i++){
+    depId = dep[i].department;
+    subDeptId = dep[i].subDepartment;
+    let departmentName = MlDepartments.findOne({"_id":depId}).departmentName;
+    let subDepartmentName = MlSubDepartments.findOne({"_id":subDeptId}).subDepartmentName;
+    dep[i].departmentName =departmentName;
+    dep[i].subDepartmentName = subDepartmentName;
+  }
   return dep
 }
 
@@ -256,22 +264,3 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   return dep
 }
 
-MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
-  // let roleId = Meteor.users.findOne({"_id":args.userId}).profile.InternalUprofile.moolyaProfile.userProfiles[0].userroles;
-  var user = Meteor.users.findOne({_id: args.userId});
-  var roles = [];
-  if (user && user.profile && user.profile.isInternaluser == true) {
-    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-    let user_roles;
-    // Selecting Default Profile
-    for (var i = 0; i < user_profiles.length; i++) {
-      let user_roles = user_profiles[i].userRoles;
-        if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
-          for (var j = 0; j < user_roles.length; j++) {
-           roles.push(user_roles[j]);
-          }
-        }
-    }
-  }
-  return roles;
-}

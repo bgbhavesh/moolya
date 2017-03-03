@@ -9,8 +9,8 @@ let StageOfCompany = `
       isActive:Boolean
     }
     type Mutation{
-        CreateStageOfCompany(_id:String,stageOfCompanyName:String,stageOfCompanyDisplayName:String,about:String,isActive:Boolean):String
-        UpdateStageOfCompany(_id:String,stageOfCompanyName:String,stageOfCompanyDisplayName:String,about:String,isActive:Boolean):String
+        CreateStageOfCompany(_id:String,stageOfCompanyName:String,stageOfCompanyDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateStageOfCompany(_id:String,stageOfCompanyName:String,stageOfCompanyDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
       FindStageOfCompany(_id: String):StageOfCompany

@@ -11,14 +11,20 @@ export async function updateDocumentTypeActionHandler(DocTypeDetails)
 
   const result = await client.mutate({
     mutation: gql`
-        mutation ($_id:String,$docTypeName: String, $docTypeDisplayName: String, $about: String,$isActive: Boolean){
+        mutation ($_id:String,$docTypeName: String, $docTypeDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
             updateDocumentType(
                 _id:$_id
                 docTypeName: $docTypeName,
                 docTypeDisplayName: $docTypeDisplayName,
                 about: $about,
-                isActive :$isActive
-            ) 
+                isActive :$isActive,
+                moduleName:$moduleName,
+                actionName:$actionName
+             ){
+                success,
+                code,
+                result
+            }  
          }
         `,
     variables: {
@@ -26,10 +32,11 @@ export async function updateDocumentTypeActionHandler(DocTypeDetails)
       docTypeName,
       docTypeDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName:"DOCUMENTTYPE",
+      actionName:"UPDATE"
     }
   })
-  console.log(result)
   const id = result.data.updateDocumentType;
   return id
 }

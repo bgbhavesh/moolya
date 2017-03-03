@@ -112,6 +112,9 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       if((this.props.userId !==nextProps.userId)) {
           const resp=this.findUserDepartments();
       }
+      if(nextProps.assignedRoles&&nextProps.assignedRoles.length>0){
+         this.setState({roleDetails:nextProps.assignedRoles})
+      }
   }
 
   async findUserDepartments(){

@@ -43,7 +43,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module=="department"){
-    data= MlDepartments.find({},findOptions).fetch() || [];
+    data= MlDepartments.find(query,findOptions).fetch() || [];
     data.map(function (doc,index) {
       let clusterIds = [];
       let clusterIdsArray = [];
@@ -93,7 +93,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module=="subDepartment"){
-    data= MlSubDepartments.find({},findOptions).fetch();
+    data= MlSubDepartments.find(query,findOptions).fetch();
 
     data.map(function (doc,index) {
       let clusterIds = [];

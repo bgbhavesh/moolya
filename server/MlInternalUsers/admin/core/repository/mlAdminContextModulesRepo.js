@@ -7,7 +7,7 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={};
+    let query=contextQuery;
     const data= MlClusters.find(query,fieldsProj).fetch();
     const totalRecords=MlClusters.find(query,fieldsProj).count();
 
@@ -18,7 +18,8 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
    // let contextQuery=contextQuery||{};
-    let query={};
+    let query=contextQuery;
+
     //User selection filter.
     let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(clusterId){
@@ -34,7 +35,7 @@ export default CoreModulesRepo={
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
-    let query={isActive:true};
+    let query=contextQuery;
     //User selection filter.
     let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
     if(chapterId){

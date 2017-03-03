@@ -8,9 +8,19 @@ export default class MlClusterListView extends Component {
   render() {
     const data = this.props.data || [];
     const list = data.map(function (prop) {
-      let StatusActive = '',fontName='';
+      let StatusActive = '',fontName=''; let userRoleList=[]
       if( prop.profile.InternalUprofile){
         let status = prop.profile.InternalUprofile.moolyaProfile.isActive;
+        /*let userProfile=prop.profile.InternalUprofile.moolyaProfile.userProfiles;
+        for(let i=0;i<userProfile.length;i++){
+          let userRoles=userProfile[i].userRoles
+          if(userRoles!=undefined){
+              if(userRoles[0].roleId!=undefined){
+                userRoleList.push(userRoles[0].roleId);
+              }
+
+          }
+        }*/
         if (status == true) {
           StatusActive = 'active'
           fontName='check'
@@ -19,7 +29,6 @@ export default class MlClusterListView extends Component {
           fontName='times'
         }
       }
-
       return (
         <div className="col-md-2" key={prop._id}>
           <div className="list_block provider_block">
@@ -30,7 +39,8 @@ export default class MlClusterListView extends Component {
                 <img className="user_pic" src="/images/def_profile.png"/>
               </div>
             </a>
-            <h3>{prop.username} </h3>
+            <h3>{prop.username}  <br />
+            {prop.roleNames}</h3>
           </div>
         </div>)
 

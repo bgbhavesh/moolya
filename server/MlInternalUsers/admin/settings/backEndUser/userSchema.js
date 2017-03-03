@@ -10,6 +10,7 @@ let BackEndUser = `
         password: String,
         username: String,
         profile:userProfile
+        roleNames:[String]
     }
     
     type userProfile{
@@ -143,7 +144,6 @@ let BackEndUser = `
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
-        assignUsers(userId:String, user:userObject): response
     }
     
     type Query{

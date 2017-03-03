@@ -7,19 +7,26 @@ export async function updateBackendUserActionHandler(updateUserObject) {
 
    const result = await client.mutate({
    mutation: gql`
-   mutation  ($userId:String!, $user: userObject!){
+   mutation  ($userId:String!, $user: userObject!, $moduleName:String, $actionName:String){
    updateUser(
    userId: $userId,
    user: $user,
-   )
+   moduleName:$moduleName,
+   actionName:$actionName
+   ){
+      success,
+      code,
+      result
+      } 
    }
    `,
    variables: {
      userId,
-     user
+     user,
+     moduleName:"USERS",
+     actionName:"UPDATE"
    }
    })
-  console.log(result)
-  const id = result;
+  const id = result.data.updateUser;
   return id
 }

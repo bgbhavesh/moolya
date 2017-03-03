@@ -35,20 +35,24 @@ var _ = require('lodash');
 // }
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
-   /* let cluster = args.cluster;
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.cluster);
-    if(!isValidAuth)
-      return "Not Authorized"*/
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
+
     if(Meteor.users.find({username:args.user.username}).count() > 0) {
         let code = 409;
-        return new MlRespPayload().errorPayload("Already Exist", code);
+        let response = new MlRespPayload().errorPayload("Already Exist", code);
+        return response;
     }
 
     let userId = Accounts.createUser(args.user);
     if(userId){
         let code = 200;
         let result = {userId: userId}
-        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        let response = new MlRespPayload().successPayload(result, code);
         return response
     }
 }
@@ -95,6 +99,13 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
+
     let user = Meteor.users.findOne({_id: args.userId});
     if(user){
         for(key in args.user){
@@ -103,12 +114,12 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
         let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
         if(resp){
           let code = 200;
-          let result = {user: resp}
-          let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+          let result = {user: resp};
+          let response = new MlRespPayload().successPayload(result, code);
           return response
         }
     }
-}
+};
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     let user = Meteor.users.findOne({_id: args.userId});

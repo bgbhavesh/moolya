@@ -40,6 +40,7 @@ export const mlBackendUserListConfig=new MlViewer.View({
                     totalRecords
                     data{
                      ...on BackendUsers{
+                            roleNames,
                             username,
                             _id,
                             profile {
@@ -48,7 +49,17 @@ export const mlBackendUserListConfig=new MlViewer.View({
                                       email
                                       InternalUprofile{
                                           moolyaProfile{
-                                            isActive
+                                            isActive,
+                                            userProfiles {
+                                              isDefault
+                                              userRoles{
+                                                roleId
+                                                hierarchyLevel
+                                              }
+                                          
+                                        }
+                                          
+                                          
                                           }
                                        }
                                  }

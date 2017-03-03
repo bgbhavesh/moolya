@@ -79,17 +79,21 @@ class MlEditBackendUser extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/backendUserList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/backendUserList");
+      else
+        toastr.error(response.result);
+    }
   };
-  componentWillMount() {
 
+  componentWillMount() {
     const resp=this.findBackendUser();
     return resp;
-
   }
+
   async findBackendUser(){
-    let userTypeId=this.props.config
+    let userTypeId=this.props.config;
     //console.log(userTypeId)
     const response = await findBackendUserActionHandler(userTypeId);
     console.log(response)
@@ -202,8 +206,6 @@ class MlEditBackendUser extends React.Component{
     }
 
     console.log(userObject)
-
-    console.log(userObject)
     let updateUserObject={
       userId:this.refs.id.value,
       userObject:userObject
@@ -211,8 +213,8 @@ class MlEditBackendUser extends React.Component{
     }
     const response = await updateBackendUserActionHandler(updateUserObject)
     return response;
-
   }
+
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
   }
@@ -250,13 +252,13 @@ class MlEditBackendUser extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

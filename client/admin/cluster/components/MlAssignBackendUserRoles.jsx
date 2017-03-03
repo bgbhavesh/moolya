@@ -105,16 +105,11 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log("recieved");
-    // console.log(this.props);
-    // console.log("sssss");
-    // console.log(nextProps);
       if((this.props.userId !==nextProps.userId)) {
           const resp=this.findUserDepartments();
-        if(nextProps.assignedRoles&&nextProps.assignedRoles.length>0){
-          this.setState({roleDetails:nextProps.assignedRoles})
-        }
-
+      }
+      if(nextProps.assignedRoles&&nextProps.assignedRoles.length>0){
+        this.setState({roleDetails:nextProps.assignedRoles})
       }
   }
 
@@ -127,7 +122,6 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   render(){
-    // console.log(this.props.userId);
     let that = this
     let userDepartments = that.state.roleForm || [];
     let roleDetails =  that.state.roleDetails;

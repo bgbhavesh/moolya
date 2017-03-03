@@ -272,6 +272,14 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
       }
     }
   }
+  for(var i = 0; i < dep.length; i++){
+    depId = dep[i].department;
+    subDeptId = dep[i].subDepartment;
+    let departmentName = MlDepartments.findOne({"_id":depId}).departmentName;
+    let subDepartmentName = MlSubDepartments.findOne({"_id":subDeptId}).subDepartmentName;
+    dep[i].departmentName =departmentName;
+    dep[i].subDepartmentName = subDepartmentName;
+  }
   return dep
 }
 

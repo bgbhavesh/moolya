@@ -6,19 +6,26 @@ export async function updateCityActionHandler(CityDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation updateCity($cityId:String, $city: cityObject){
+    mutation updateCity($cityId:String, $city: cityObject, $moduleName:String, $actionName:String){
       updateCity(
         cityId:$cityId,
-        city: $city
-      ) 
+        city: $city,
+        moduleName:$moduleName,
+        actionName:$actionName
+      ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
       cityId:cityId,
-      city:CityDetails
+      city:CityDetails,
+      moduleName:"CITIES",
+      actionName:"UPDATE"
     }
   })
-  console.log(result)
   const id = result.data.updateCity;
   return id
 }

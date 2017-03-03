@@ -9,14 +9,20 @@ export async function updateUserTypeActionHandler(UserTypeDetails) {
   let isActive = UserTypeDetails.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String, $userTypeName: String, $displayName: String, $userTypeDesc: String,$isActive: Boolean){
+    mutation  ($_id:String, $userTypeName: String, $displayName: String, $userTypeDesc: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateUserType(
           _id: $_id,
           userTypeName: $userTypeName,
           displayName: $displayName,
           userTypeDesc: $userTypeDesc,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -24,10 +30,11 @@ export async function updateUserTypeActionHandler(UserTypeDetails) {
       userTypeName,
       displayName,
       userTypeDesc,
-      isActive
+      isActive,
+      moduleName:"USERTYPE",
+      actionName:"UPDATE"
     }
   })
-  console.log(result)
-  const id = result;
+  const id = result.data.UpdateUserType;
   return id
 }

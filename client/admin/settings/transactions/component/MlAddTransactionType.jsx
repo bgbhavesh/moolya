@@ -24,8 +24,12 @@ class MlAddTransaction extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/transactionTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/transactionTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createTransaction() {
@@ -35,18 +39,17 @@ class MlAddTransaction extends React.Component{
       transactionDescription: this.refs.transactionDescription.value,
       isActive: this.refs.isActive.checked
     }
-    console.log(TransactionDetails)
     const response = await addTransactionActionHandler(TransactionDetails)
     return response;
 
   }
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

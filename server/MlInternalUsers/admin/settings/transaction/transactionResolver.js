@@ -3,24 +3,37 @@ import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateTransaction'] = (obj, args, context, info) => {
-  // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
   let id = MlTransactions.insert({...args});
   if (id) {
     let code = 200;
     let result = {transactionId: id}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+    let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-}
+};
+
 MlResolver.MlMutationResolver['UpdateTransaction'] = (obj, args, context, info) => {
-  // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
 
   if (args._id) {
     var id= args._id;
     args=_.omit(args,'_id');
-    let updatedResponse= MlTransactions.update(id, {$set: args});
-
-    return updatedResponse
+    let result= MlTransactions.update(id, {$set: args});
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
   }
 
 }

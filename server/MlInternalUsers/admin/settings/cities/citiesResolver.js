@@ -28,8 +28,14 @@ MlResolver.MlQueryResolver['fetchCity'] = (obj, args, context, info) =>{
 }
 
 MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
 
-    let city = MlCities.findOne({_id: args.cityId});
+  let city = MlCities.findOne({_id: args.cityId});
     if(city){
         let state = MlStates.findOne({_id:city.stateId})
         for(key in args.city){
@@ -65,7 +71,7 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
 
             let code = 200;
             let result = {city: resp}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            let response = new MlRespPayload().successPayload(result, code);
             return response
         }
     }

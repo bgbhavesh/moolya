@@ -11,7 +11,7 @@ class ActiveStateFormatter extends React.Component {
       this.refs.status.checked = true
     }
   }
-  onChange(data) {
+  async onChange(data) {
     if (this.refs.status.checked == true) {
       this.refs.status.checked = true;
       this.setState({"data": {"isActive": true}});
@@ -26,9 +26,14 @@ class ActiveStateFormatter extends React.Component {
       countryId: data.countryId,
       countryCode: data.countryCode,
       isActive: this.refs.status.checked
+    };
+    const response = await updateStateActionHandler(StateDetails);
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/statesList");
+      else
+        toastr.error(response.result);
     }
-
-    updateStateActionHandler(StateDetails);
   }
 
   render() {

@@ -12,7 +12,9 @@ export async function findUserDepartmentypeActionHandler(userId, subChapterId) {
         data: fetchsubChapterUserDepSubDep(userId: $id, subChapterId:$subChapterId) 
         {
             department
+            departmentName
             subDepartment
+            subDepartmentName
         }
       }
     `,

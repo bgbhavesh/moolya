@@ -6,19 +6,26 @@ export async function updateStateActionHandler(StateDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation updateState($stateId:String, $state: stateObject){
+    mutation updateState($stateId:String, $state: stateObject, $moduleName:String, $actionName:String){
       updateState(
         stateId:$stateId,
-        state: $state
-      ) 
+        state: $state,
+        moduleName:$moduleName,
+        actionName:$actionName
+      ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
       stateId:stateId,
-      state:StateDetails
+      state:StateDetails,
+      moduleName:"STATES",
+      actionName:"UPDATE"
     }
   })
-  console.log(result)
   const id = result.data.updateState;
   return id
 }

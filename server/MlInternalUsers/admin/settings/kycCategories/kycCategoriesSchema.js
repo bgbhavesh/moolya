@@ -19,8 +19,8 @@ let KycCategoriesSchema = `
     
    type Mutation 
     {
-        updateKycCategory(_id:String, docCategoryName:String, docCategoryDisplayName:String, about:String, isActive:Boolean):String
-        createKycCategory(kycCategory:kycCategoryObject):String
+        updateKycCategory(_id:String, docCategoryName:String, docCategoryDisplayName:String, about:String, isActive:Boolean , moduleName:String, actionName:String):response
+        createKycCategory(kycCategory:kycCategoryObject, moduleName:String, actionName:String):response
     }
     type Query{
         findKycCategory(_id:String): KycCategories

@@ -29,7 +29,7 @@ let States = `
     }
     
     type Mutation{
-        updateState(stateId: String, state:stateObject): String
+        updateState(stateId: String, state:stateObject , moduleName:String, actionName:String):response
     }
 `
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],States]);

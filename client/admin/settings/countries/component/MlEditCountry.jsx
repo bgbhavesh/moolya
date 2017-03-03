@@ -99,7 +99,7 @@ class MlEditCountry extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="country" defaultValue={this.state.data && this.state.data.country} placeholder="Country Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="country" defaultValue={this.state.data && this.state.data.country} placeholder="Country Name" className="form-control float-label" id="" disabled="disabled"/>
 
                     </div>
                     <div className="form-group">
@@ -107,7 +107,7 @@ class MlEditCountry extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capital} placeholder="Capital" className="form-control float-label" id=""/>
+                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capital} placeholder="Capital" className="form-control float-label" id="" disabled="disabled"/>
 
                     </div>
                   </form>
@@ -135,7 +135,7 @@ class MlEditCountry extends React.Component{
                     <div className="form-group switch_wrap inline_switch">
                       <label>Available on System</label>
                       <label className="switch">
-                        <input type="checkbox" ref="status" id="status" checked={this.state.data && this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
+                        <input type="checkbox" ref="status" id="status" checked={this.state.data && this.state.data.isActive} onChange={this.onStatusChange.bind(this)}  disabled="disabled"/>
                         <div className="slider"></div>
                       </label>
                     </div>

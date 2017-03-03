@@ -269,7 +269,7 @@ class MlEditProcessMapping extends React.Component{
                   <form>
 
                     <div className="form-group">
-                      <input type="text"   readOnly="true" defaultValue={this.state.data&&this.state.data.processId} placeholder="process Id" className="form-control float-label" id=""/>
+                      <input type="text"   readOnly="true" defaultValue={this.state.data&&this.state.data.processId} placeholder="process Id" className="form-control float-label" id="" disabled="disabled"/>
                     </div>
 
 

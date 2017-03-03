@@ -100,7 +100,7 @@ class MlEditState extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" id=""/>
+                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" id="" disabled="disabled"/>
 
                   </div>
                   <div className="form-group">
@@ -115,7 +115,7 @@ class MlEditState extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="State Name" ref="stateName" defaultValue={this.state.data && this.state.data.name} className="form-control float-label" id=""/>
+                    <input type="text" placeholder="State Name" ref="stateName" defaultValue={this.state.data && this.state.data.name} className="form-control float-label" id="" disabled="disabled"/>
 
                   </div>
 

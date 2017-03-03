@@ -26,7 +26,8 @@ export async function updateDepartmentActionHandler(DepartmentDetails) {
       department
     }
   })
-  console.log(result)
-  const id = result;
+  const id = result.data.updateDepartment;
+  console.log(id);
+
   return id
 }

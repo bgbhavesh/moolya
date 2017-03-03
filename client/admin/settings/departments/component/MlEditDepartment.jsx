@@ -37,7 +37,6 @@ class MlEditDepartment extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/departmentsList");
   };
   async findDepartment(){
@@ -135,20 +134,20 @@ class MlEditDepartment extends React.Component{
             <div className="col-md-6">
               <div className="form_bg">
                 <div className="form-group">
-                  <input type="text" ref="departmentName" defaultValue={this.state.data&&this.state.data.departmentName} placeholder="Department Name" className="form-control float-label" id=""/>
+                  <input type="text" ref="departmentName" defaultValue={this.state.data&&this.state.data.departmentName} placeholder="Department Name" className="form-control float-label" id="" disabled={this.state.data&&this.state.data.isSystemDefined}/>
                 </div>
 
                 <div className="form-group">
-                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="diplay Name" className="form-control float-label" id=""></input>
+                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="diplay Name" className="form-control float-label" id="" disabled={this.state.data&&this.state.data.isSystemDefined}></input>
                 </div>
                 <div className="form-group">
-                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="about Depatment" className="form-control float-label" id=""></textarea>
+                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="about Depatment" className="form-control float-label" id="" disabled={this.state.data&&this.state.data.isSystemDefined}></textarea>
                 </div>
 
                 <div className="form-group switch_wrap">
                   <label>Status</label><br/>
                   <label className="switch">
-                    <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
+                    <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)} disabled={this.state.data&&this.state.data.isSystemDefined}/>
                     <div className="slider"></div>
                   </label>
                 </div>
@@ -161,12 +160,12 @@ class MlEditDepartment extends React.Component{
                   <div className="form-group switch_wrap switch_names">
                     <label>Select Type</label><br/>
                     <span className="state_label acLabel">moolya</span><label className="switch">
-                    <input type="checkbox" ref="appType" disabled="true" checked={this.state.isMoolyaChecked} onChange={this.onMoolyaChange.bind(this)}/>
+                    <input type="checkbox" ref="appType" disabled="true" checked={this.state.isMoolyaChecked} onChange={this.onMoolyaChange.bind(this)} />
                     <div className="slider"></div>
                   </label>
                     <span className="state_label">non-moolya</span>
                   </div><br className="brclear"/>
-                  {this.state.isMoolyaChecked?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
+                  {this.state.isMoolyaChecked?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} isSystemDefined={this.state.data&&this.state.data.isSystemDefined}/>:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
                 </form>
               </div>
             </div>

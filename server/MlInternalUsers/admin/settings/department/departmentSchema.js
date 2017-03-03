@@ -16,6 +16,7 @@ let departmentSchema = `
          displayName    : String
          departmentDesc : String
          isActive       : Boolean
+         isSystemDefined : Boolean
          clustersList   : [String]
          chaptersList   : [String]
          subChapterList : [String]
@@ -37,6 +38,7 @@ let departmentSchema = `
           departmentDesc:String,
           isActive:Boolean,
           isMoolya:Boolean,
+          isSystemDefined : Boolean
           depatmentAvailable:[DepatmentAvailable]
     }
     

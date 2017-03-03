@@ -24,22 +24,28 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
     let deactivate = args.department.isActive;
     if(department)
     {
-        let resp = MlDepartments.update({_id:args.departmentId}, {$set:args.department}, {upsert:true})
-        //de-activate department should de-activate all subDepartments
-        if(!deactivate){
-           let subDepartments = MlSubDepartments.find({"departmentId": args.departmentId}).fetch();
-           subDepartments.map(function (subDepartment) {
+      if(department.isSystemDefined){
+          let code = 409;
+          return new MlRespPayload().errorPayload("Cannot edit system defined department", code);
+      }else{
+          let resp = MlDepartments.update({_id:args.departmentId}, {$set:args.department}, {upsert:true})
+          //de-activate department should de-activate all subDepartments
+          if(!deactivate){
+            let subDepartments = MlSubDepartments.find({"departmentId": args.departmentId}).fetch();
+            subDepartments.map(function (subDepartment) {
               subDepartment.isActive=false
               let deactivate = MlSubDepartments.update({_id:subDepartment._id}, {$set:subDepartment}, {upsert:true})
-           })
-        }
-        if(resp){
+            })
+          }
+          if(resp){
             let code = 200;
             let result = {cluster: resp}
             let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
             return response
+          }
         }
-    }
+      }
+
 
 }
 

@@ -10,7 +10,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
-
+let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
 
@@ -25,6 +25,7 @@ class MlAddBackendUser extends React.Component{
       selectedBackendUserType:'',
       selectedBackendUser:'Internal User',
       selectedSubChapter:'',
+      pwdErrorMsg:''
      /* selectedCluster:'',
       selectedChapter:'',
       selectedDepartment:'',
@@ -55,6 +56,23 @@ class MlAddBackendUser extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+    $('.ConfirmPassword').click(function() {
+      let pwd = document.getElementById("confirmPassword")
+      if(pwd.getAttribute("type")=="password"){
+        pwd.setAttribute("type","text");
+      } else {
+        pwd.setAttribute("type","password");
+      }
+    });
+    $('.Password').click(function() {
+      let pwd = document.getElementById("password");
+      if(pwd.getAttribute("type")=="password"){
+        pwd.setAttribute("type","text");
+      } else {
+        pwd.setAttribute("type","password");
+      }
+    });
+
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -75,6 +93,11 @@ class MlAddBackendUser extends React.Component{
   };
 
   async  createBackendUser() {
+    let password=this.refs.password.value;
+    let confirmPassword=this.refs.confirmPassword.value;
+    if(confirmPassword!=password){
+      alert("ur confirm pwd not match with pwd")
+    }
    /* let userroles=[{
       roleId:this.refs.role.value,
       clusterId:this.refs.cluster.value,
@@ -141,6 +164,16 @@ class MlAddBackendUser extends React.Component{
   }
   optionsBySelectSubChapter(val){
     this.setState({selectedSubChapter:val})
+  }
+  onCheckPassword(){
+    let password=this.refs.password.value;
+    let confirmPassword=this.refs.confirmPassword.value;
+    if(confirmPassword!=password){
+      this.setState({"pwdErrorMsg":'Confirm Password does not match with Password'})
+      //alert("ur confirm pwd not match with pwd")
+    }else{
+      this.setState({"pwdErrorMsg":''})
+    }
   }
   /*onClusterSelect(val){
     this.setState({selectedCluster:val})
@@ -233,12 +266,15 @@ class MlAddBackendUser extends React.Component{
                    {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} placeholder="Select Role" queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
                     </div>
                     <div className="form-group">
-                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label"/>
+                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
+                      <FontAwesome name='eye' className="password_icon Password"/>
                     </div>
                     <div className="form-group">
-                      <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label"/>
+                      <text style={{float:'right',color:'#ef4647',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                      <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
+                      <FontAwesome name='eye' className="password_icon ConfirmPassword"/>
                     </div>
-                    <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
+                  {/*  <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>*/}
 
                     <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} />
                 </div>

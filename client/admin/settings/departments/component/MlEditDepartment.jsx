@@ -37,7 +37,14 @@ class MlEditDepartment extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/departmentsList");
+    //FlowRouter.go("/admin/settings/departmentsList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/departmentsList");
+      else
+        toastr.error(response.result);
+      FlowRouter.go("/admin/settings/departmentsList");
+    }
   };
   async findDepartment(){
       let departmentId=this.props.config
@@ -134,20 +141,20 @@ class MlEditDepartment extends React.Component{
             <div className="col-md-6">
               <div className="form_bg">
                 <div className="form-group">
-                  <input type="text" ref="departmentName" defaultValue={this.state.data&&this.state.data.departmentName} placeholder="Department Name" className="form-control float-label" id="" disabled={this.state.data&&this.state.data.isSystemDefined}/>
+                  <input type="text" ref="departmentName" defaultValue={this.state.data&&this.state.data.departmentName} placeholder="Department Name" className="form-control float-label" id=""/>
                 </div>
 
                 <div className="form-group">
-                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="diplay Name" className="form-control float-label" id="" disabled={this.state.data&&this.state.data.isSystemDefined}></input>
+                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="diplay Name" className="form-control float-label" id=""></input>
                 </div>
                 <div className="form-group">
-                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="about Depatment" className="form-control float-label" id="" disabled={this.state.data&&this.state.data.isSystemDefined}></textarea>
+                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="about Depatment" className="form-control float-label" id=""></textarea>
                 </div>
 
                 <div className="form-group switch_wrap">
                   <label>Status</label><br/>
                   <label className="switch">
-                    <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)} disabled={this.state.data&&this.state.data.isSystemDefined}/>
+                    <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                     <div className="slider"></div>
                   </label>
                 </div>

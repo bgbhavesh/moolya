@@ -43,8 +43,8 @@ let departmentSchema = `
     }
     
     type Mutation{
-         createDepartment(department: departmentObject!, moduleName:String!, actionName:String!):String
-         updateDepartment(departmentId:String, department: departmentObject):String
+         createDepartment(department: departmentObject!, moduleName:String!, actionName:String!):response
+         updateDepartment(departmentId:String, department: departmentObject, moduleName:String, actionName:String):response
     }
     type Query{
         findDepartment(departmentId:String):Department

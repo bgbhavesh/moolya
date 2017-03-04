@@ -26,7 +26,8 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
     {
       if(department.isSystemDefined){
           let code = 409;
-          return new MlRespPayload().errorPayload("Cannot edit system defined department", code);
+          let response = new MlRespPayload().errorPayload("Cannot edit system defined department", code);
+          return response;
       }else{
           let resp = MlDepartments.update({_id:args.departmentId}, {$set:args.department}, {upsert:true})
           //de-activate department should de-activate all subDepartments

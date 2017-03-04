@@ -63,13 +63,18 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
     /* for(key in args.department){
      cluster[key] = args.department[key]
      }*/
-
-    let resp = MlSubDepartments.update({_id:args.subDepartmentId}, {$set:args.subDepartment}, {upsert:true})
-    if(resp){
-      let code = 200;
-      let result = {cluster: resp}
-      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-      return response
+    if(subDepartment.isSystemDefined){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Cannot edit system defined sub-department", code);
+      return response;
+    }else {
+      let resp = MlSubDepartments.update({_id: args.subDepartmentId}, {$set: args.subDepartment}, {upsert: true})
+      if (resp) {
+        let code = 200;
+        let result = {cluster: resp}
+        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        return response
+      }
     }
   }
 

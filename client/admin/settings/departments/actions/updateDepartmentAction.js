@@ -14,20 +14,28 @@ export async function updateDepartmentActionHandler(DepartmentDetails) {
   let isMoolya = DepartmentDetails.appType*/
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($departmentId: String, $department: departmentObject){
+    mutation  ($departmentId: String, $department: departmentObject, $moduleName:String, $actionName:String){
         updateDepartment(
           departmentId:$departmentId,
-          department: $department
-          ) 
+          department: $department,
+          moduleName:$moduleName,
+          actionName:$actionName
+          ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
       departmentId,
-      department
+      department,
+      moduleName: "DEPARTMENT",
+      actionName: "UPDATE"
     }
   })
   const id = result.data.updateDepartment;
-  console.log(id);
-
+  console.log(result.data.updateDepartment);
+  console.log("//////////////////////////");
   return id
 }

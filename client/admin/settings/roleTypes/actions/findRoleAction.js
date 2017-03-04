@@ -10,6 +10,7 @@ export async function findRoleActionHandler(roleId) {
           roleName
           displayName
           roleType
+          subChapter
           userType
           about
           assignRoles{

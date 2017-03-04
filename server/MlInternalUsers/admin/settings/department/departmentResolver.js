@@ -6,6 +6,12 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
     if(!isValidAuth)
       return "Not Authorized"
 */
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
     if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
@@ -14,21 +20,28 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
     if(id){
         let code = 200;
         let result = {clusterid: id}
-        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        let response = new MlRespPayload().successPayload(result, code);
         return response
     }
 }
 
 MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) => {
-    let department = MlDepartments.findOne({_id: args.departmentId});
-    let deactivate = args.department.isActive;
-    if(department)
-    {
-      if(department.isSystemDefined){
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
+    if(args.departmentId){
+      let department = MlDepartments.findOne({_id: args.departmentId});
+      let deactivate = args.department.isActive;
+      if(department)
+      {
+        if(department.isSystemDefined){
           let code = 409;
           let response = new MlRespPayload().errorPayload("Cannot edit system defined department", code);
           return response;
-      }else{
+        }else{
           let resp = MlDepartments.update({_id:args.departmentId}, {$set:args.department}, {upsert:true})
           //de-activate department should de-activate all subDepartments
           if(!deactivate){
@@ -41,11 +54,13 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
           if(resp){
             let code = 200;
             let result = {cluster: resp}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            let response = new MlRespPayload().successPayload(result, code);
             return response
           }
         }
       }
+
+    }
 
 
 }

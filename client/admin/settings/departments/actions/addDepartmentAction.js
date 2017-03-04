@@ -37,7 +37,11 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
           },
           moduleName:$moduleName,
           actionName:$actionName
-        ) 
+        ){
+            success,
+            code,
+            result
+         } 
       }
     `,
     variables: {

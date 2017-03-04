@@ -9,14 +9,20 @@ export async function updateTemplateTypeActionHandler(TemplateType) {
   let isActive = TemplateType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$templateName: String, $templateDisplayName: String, $templateDescription: String,$isActive: Boolean){
+    mutation  ($_id:String,$templateName: String, $templateDisplayName: String, $templateDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateTemplate(
           _id:$_id
           templateName: $templateName,
           templateDisplayName: $templateDisplayName,
           templateDescription: $templateDescription,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateTemplateTypeActionHandler(TemplateType) {
       templateName,
       templateDisplayName,
       templateDescription,
-      isActive
+      isActive,
+      moduleName:"TEMPLATE",
+      actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateTemplate;
   return id
 }

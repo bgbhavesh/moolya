@@ -10,15 +10,15 @@ import MoolyaSelect from '../../../commons/components/select/MoolyaSelect'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
-let initSwiper = () => {
-  new Swiper('.blocks_in_form', {
-    speed: 400,
-    spaceBetween: 25,
-    slidesPerView:2,
-    pagination: '.swiper-pagination',
-    paginationClickable: true
-  });
-}
+// let initSwiper = () => {
+//   new Swiper('.blocks_in_form', {
+//     speed: 400,
+//     spaceBetween: 25,
+//     slidesPerView:2,
+//     pagination: '.swiper-pagination',
+//     paginationClickable: true
+//   });
+// }
 
 
 export default class MlAssignBackednUserRoles extends React.Component{
@@ -48,14 +48,14 @@ export default class MlAssignBackednUserRoles extends React.Component{
       }
     });
     setTimeout(function () {
-      initSwiper();
+      // initSwiper();
     }, 1000)
 
     if(this.props.userId) {
       const resp = this.findUserDepartments();
-      if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
-        this.setState({roleDetails: this.props.assignedRoles})
-      }
+      // if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
+      //   this.setState({roleDetails: this.props.assignedRoles})
+      // }
     }
 
   }
@@ -68,15 +68,15 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   addRoleComponent(){
-      var mySwiper = new Swiper('.blocks_in_form', {
-        // speed: 400,
-        pagination: '.swiper-pagination',
-        spaceBetween: 0,
-        slidesPerView:'auto',
-        freeMode:true,
-        paginationClickable: false
-      });
-      mySwiper.updateContainerSize()
+      // var mySwiper = new Swiper('.blocks_in_form', {
+      //   // speed: 400,
+      //   pagination: '.swiper-pagination',
+      //   spaceBetween: 0,
+      //   slidesPerView:'auto',
+      //   freeMode:true,
+      //   paginationClickable: false
+      // });
+      // mySwiper.updateContainerSize()
       this.setState({
           roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"", communityId:"", hierarchyLevel:"", hierarchyCode:""}])
       });
@@ -108,9 +108,6 @@ export default class MlAssignBackednUserRoles extends React.Component{
       if((this.props.userId !==nextProps.userId)) {
           const resp=this.findUserDepartments();
       }
-      if(nextProps.assignedRoles&&nextProps.assignedRoles.length>0){
-        this.setState({roleDetails:nextProps.assignedRoles})
-      }
   }
 
   async findUserDepartments(){
@@ -119,6 +116,10 @@ export default class MlAssignBackednUserRoles extends React.Component{
     const response = await findUserDepartmentypeActionHandler(userId, clusterId);
     let data = response ? response : []
     this.setState({loading:false,roleForm:data});
+
+    if(this.props.assignedRoles && this.props.assignedRoles.length>0){
+      this.setState({roleDetails: this.props.assignedRoles})
+    }
   }
 
   render(){
@@ -141,11 +142,11 @@ export default class MlAssignBackednUserRoles extends React.Component{
                   <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
                          value={department.subDepartmentName}/>
                 </div>
-                <div className="swiper-container blocks_in_form">
-                  <div className="swiper-wrapper">
+                <div className="">
+                  <div className="">
                     {roleDetails.map(function (details, idx) {
                       return(
-                        <div className="form_inner_block swiper-slide" key={details.roleId}>
+                        <div className="form_inner_block" key={details.roleId}>
                           <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, department)}/></div>
                           <div className="form-group">
                             <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>
@@ -169,7 +170,6 @@ export default class MlAssignBackednUserRoles extends React.Component{
                     })}
                   </div>
                   <br className="brclear"/>
-                  <div className="swiper-pagination"></div>
                 </div>
               </div>
             </div>

@@ -5,19 +5,26 @@ export async function updateDocumentMappingActionHandler(did,details) {
 
   const result = await client.mutate({
     mutation: gql`
-   mutation  ($documentId:String, $document: documentInput){
+   mutation  ($documentId:String, $document: documentInput, $moduleName:String, $actionName:String){
        updateDocument(
        documentId: $documentId,
        document: $document,
-       )
+        moduleName:$moduleName,
+        actionName:$actionName
+       ){
+            success,
+            code,
+            result
+        } 
    }
    `,
     variables: {
       documentId : did,
-      document: details
+      document: details,
+      moduleName:"DOCUMENTMAPPING",
+      actionName:"UPDATE"
     }
   })
-  console.log(result)
-  const id = result;
+  const id = result.data.updateDocument;
   return id
 }

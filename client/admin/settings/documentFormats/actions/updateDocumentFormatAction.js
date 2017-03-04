@@ -9,14 +9,20 @@ export async function updateDocumentFormatActionHandler(Details) {
   let isActive = Details.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$docFormatName: String, $docFormatDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$docFormatName: String, $docFormatDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         updateDocumentFormat(
           _id:$_id
           docFormatName: $docFormatName,
           docFormatDisplayName: $docFormatDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateDocumentFormatActionHandler(Details) {
       docFormatName,
       docFormatDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName:"DOCUMENTFORMAT",
+      actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.updateDocumentFormat;
   return id
 }

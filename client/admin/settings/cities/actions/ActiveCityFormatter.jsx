@@ -11,7 +11,7 @@ class ActiveCityFormatter extends React.Component {
       this.refs.status.checked = true
     }
   }
-  onChange(data) {
+  async onChange(data) {
     if (this.refs.status.checked == true) {
       this.refs.status.checked = true;
       this.setState({"data": {"isActive": true}});
@@ -29,7 +29,13 @@ class ActiveCityFormatter extends React.Component {
       isActive: this.refs.status.checked
     }
 
-    updateCityActionHandler(StateDetails);
+   let response = await updateCityActionHandler(StateDetails);
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/citiesList");
+      else
+        toastr.error(response.result);
+    }
   }
 
   render() {

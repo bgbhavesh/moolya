@@ -80,8 +80,8 @@ let DocumentMapping = `
       
      
       type Mutation {
-         createDocument(document:documentInput): String
-         updateDocument(documentId:String,document:documentInput):String
+         createDocument(document:documentInput, moduleName:String, actionName:String):response
+         updateDocument(documentId:String,document:documentInput, moduleName:String, actionName:String):response
       }
       type Query{
         findDocument(documentId:String): DocumentOutput

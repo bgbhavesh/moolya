@@ -29,6 +29,7 @@ let Role = `
         roleName: String, 
         displayName:String, 
         roleType:String,
+        subChapter:String,
         userType:String,
         about:String,
         departmentsList : [String],
@@ -81,6 +82,7 @@ let Role = `
       displayName:String, 
       roleType:String,
       userType:String,
+      subChapter:String,
       about:String, 
       assignRoles:[assignroles],
       modules:[modules], 
@@ -92,6 +94,7 @@ let Role = `
       fetchRolesByDepSubDep(departmentId:String, clusterId:String): [Roles]
       findRole(id:String):Roles
       fetchActiveRoles: [Roles]
+      fetchAllAssignedRoles(roleIds:[String]):[String]
   }
   
   type Mutation {

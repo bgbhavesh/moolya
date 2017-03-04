@@ -9,8 +9,8 @@ let Template = `
       isActive:Boolean
     }
     type Mutation{
-        CreateTemplate(_id:String,templateName:String,templateDisplayName:String,templateDescription:String,isActive:Boolean):String
-        UpdateTemplate(_id:String,templateName:String,templateDisplayName:String,templateDescription:String,isActive:Boolean):String
+        CreateTemplate(_id:String,templateName:String,templateDisplayName:String,templateDescription:String,isActive:Boolean, moduleName:String, actionName:String):response
+        UpdateTemplate(_id:String,templateName:String,templateDisplayName:String,templateDescription:String,isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
       FindTemplate(_id: String):Template

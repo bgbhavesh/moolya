@@ -44,6 +44,5 @@ export async function findDocumentMappingActionHandler(Id)
     forceFetch:true
   })
   const id = result.data.findDocument;
-  console.log("DAta "+id);
   return id
 }

@@ -13,6 +13,7 @@ import MlAssignChapterBackendUserRoles from './MlAssignBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findUserDetails} from '../actions/findUserDetails'
+import {findRoles} from '../actions/fetchRoles'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -24,6 +25,7 @@ class MlAssignChapterBackendUsers extends React.Component{
         super(props)
         this.state={
             loading: false,
+            alsoAssignedAs:[],
             selectedBackendUser:'',
             users:[{username: '', _id:''}]
 
@@ -32,6 +34,7 @@ class MlAssignChapterBackendUsers extends React.Component{
         this.addEventHandler.bind(this);
         this.assignBackendUsers.bind(this);
         this.findSubChapter.bind(this);
+        this.updateSelectedBackEndUser.bind(this);
         // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
@@ -74,7 +77,20 @@ class MlAssignChapterBackendUsers extends React.Component{
               }
            this.setState({user_Roles:roles,selectedBackendUser:userId});
            this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
+           this.findRoleDetails();
       return user;
+    }
+
+    async findRoleDetails(){
+         let roleIds = [];
+         if(this.state.user_Roles && this.state.user_Roles.length>0){
+             this.state.user_Roles.map(function (role) {
+                  roleIds.push(role.roleId);
+                });
+           }
+          const roles= await findRoles(roleIds);
+          this.setState({alsoAssignedAs: roles});
+          return roles;
     }
 
     getAssignedRoles(roles){
@@ -111,6 +127,7 @@ class MlAssignChapterBackendUsers extends React.Component{
     updateSelectedBackEndUser(userId){
       this.setState({loading: true});
       const resp= this.findUserDetails(userId);
+      //const resp= this.findUserDetails(userId);
     }
 
     render(){
@@ -140,6 +157,7 @@ class MlAssignChapterBackendUsers extends React.Component{
       }`
       let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
       let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
+      let alsoAssignedAs = this.state.alsoAssignedAs;
       const showLoader = this.state.loading;
       let userid  = this.state.selectedBackendUser||"";
         let clusterId = this.state.data&&this.state.data.clusterId||"";
@@ -185,13 +203,13 @@ class MlAssignChapterBackendUsers extends React.Component{
                                       </div>
                                       <div>
                                           <div className="form-group">
-                                              <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"/>
+                                              <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"  defaultValue={alsoAssignedAs}/>
                                           </div>
                                         <div className="form-group">
-                                               <input type="text" placeholder="Display Name" ref="displayName" defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
+                                               <input type="text" placeholder="Display Name" readOnly="true" ref="displayName" defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
                                         </div>
                                         <div className="form-group">
-                                                <input type="text" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
+                                                <input type="text" placeholder="User Name" readOnly="true" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
                                       </div>
                                           <br className="brclear"/>
                                       </div>

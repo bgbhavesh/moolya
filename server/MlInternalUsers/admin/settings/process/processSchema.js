@@ -104,8 +104,8 @@ let Process = `
     }
     
     type Mutation {
-       createProcess(process:processInput): String
-       updateProcess(id:String,process:processInput):String
+       createProcess(process:processInput, moduleName:String, actionName:String):response
+       updateProcess(id:String,process:processInput, moduleName:String, actionName:String):response
     }
     
     type Query{

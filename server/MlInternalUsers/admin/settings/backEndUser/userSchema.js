@@ -83,7 +83,7 @@ let BackEndUser = `
         isOTPValidated:Boolean
     }
     
-    input userroles{
+    input userRoles{
         roleId:String,
         clusterId:String,
         chapterId:String,
@@ -96,7 +96,7 @@ let BackEndUser = `
     input userprofiles{
         isDefault: Boolean,
         clusterId: String,
-        userRoles:[userroles]
+        userRoles:[userRoles]
     }
   
     input moolyaProfile{

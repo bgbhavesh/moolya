@@ -11,6 +11,7 @@ import {addRoleActionHandler} from '../actions/addRoleAction'
 import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 
 let Select = require('react-select');
 
@@ -21,7 +22,8 @@ class MlAddRole extends React.Component{
       assignRoleToClusters:[],
       assignModulesToRoles:[],
       selectedUserType:'',
-      selectedroleType:'',
+      selectedBackendUser:'Internal User',
+      selectedSubChapter:''
     }
     this.addEventHandler.bind(this);
     return this;
@@ -80,7 +82,8 @@ class MlAddRole extends React.Component{
       roleName: this.refs.roleName.value,
       displayName:this.refs.diplayName.value,
       roleType:this.state.selectedUserType,
-      userType:this.state.selectedroleType,
+      subChapter:this.state.selectedSubChapter,
+      userType:this.state.selectedBackendUser,
       about:this.refs.about.value,
       assignRoles:this.state.assignRoleToClusters,
       modules:this.state.assignModulesToRoles,
@@ -98,9 +101,14 @@ class MlAddRole extends React.Component{
   onUserTypeSelect(val){
     this.setState({selectedUserType:val.value})
   }
-  onRoleTypeSelect(val){
-    this.setState({selectedroleType:val.value})
+  onBackendUserSelect(val){
+    this.setState({selectedBackendUser:val.value})
   }
+  optionsBySelectSubChapter(val){
+    this.setState({selectedSubChapter:val})
+  }
+
+
 
   render(){
     let MlActionConfig = [
@@ -121,11 +129,19 @@ class MlAddRole extends React.Component{
       }
     ]
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya'},
-      {value: 'non-moolya', label: 'non-moolya'}
+      {value: 'moolya', label: 'moolya' , clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya',clearableValue: true}
     ];
+    let BackendUserOptions=[
+      {value: 'Internal User', label: 'Internal User'},
+      {value: 'External User', label: 'External User'}
+    ]
     let query=gql` query{
   data:fetchCountriesSearch{label:country,value:countryCode}
+}
+`;
+    let subChapterQuery=gql` query{
+  data:fetchActiveSubChapters{label:subChapterName,value:_id}
 }
 `;
 
@@ -152,19 +168,19 @@ class MlAddRole extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" ref="userType" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
-
+                      <Select name="form-field-name" ref="userType" placeholder="Backend User Role Type" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
                     </div>
+                    {this.state.selectedUserType=='non-moolya'&&(<div className="form-group">
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
+                    </div>)}
                     <div className="form-group">
-                      <Select
-                        name="form-field-name" ref="roleType" options={UserTypeOptions} value={this.state.selectedroleType}  onChange={this.onRoleTypeSelect.bind(this)} className="float-label"/>
-
+                      <Select name="form-field-name" placeholder="Role Type"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled="true" />
                     </div>
                     <div className="form-group">
                       <textarea placeholder="About" ref="about" className="form-control float-label"></textarea>
                     </div>
 
-                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)}/>
+                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} selectedBackendUserType={this.state.selectedUserType} selectedSubChapter={this.state.selectedSubChapter}/>
 
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>

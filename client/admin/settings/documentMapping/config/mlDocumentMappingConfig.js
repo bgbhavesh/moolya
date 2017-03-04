@@ -37,7 +37,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
   fields:["documentName","roleTypeDisplayName","isActive"],
   searchFields:["documentName","roleTypeDisplayName","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "documentId",title:"Id",'isKey':true,isHidden:true},

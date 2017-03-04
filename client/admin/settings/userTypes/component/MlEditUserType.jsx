@@ -37,12 +37,16 @@ class MlEditUserType extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/UserTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/UserTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findUserType(){
     let userTypeId=this.props.config
-    //console.log(userTypeId)
     const response = await findUserTypeActionHandler(userTypeId);
     this.setState({loading:false,data:response});
   }
@@ -56,7 +60,6 @@ class MlEditUserType extends React.Component{
     }
     const response = await updateUserTypeActionHandler(UserTypeDetails)
     return response;
-
   }
 
   onStatusChange(e){
@@ -75,11 +78,11 @@ class MlEditUserType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateUserType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

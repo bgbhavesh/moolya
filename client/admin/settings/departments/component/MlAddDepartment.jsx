@@ -64,6 +64,7 @@ class MlAddDepartment extends React.Component{
       displayName: this.refs.displayName.value,
       aboutDepartment: this.refs.aboutDepartment.value,
       departmentStatus: this.refs.departmentStatus.checked,
+      //isSystemDefined: this.refs.isSystemDefined.checked,
       appType:this.refs.appType.checked,
       departmentAvailablity:this.state.departmentAvailability
     }
@@ -134,6 +135,15 @@ class MlAddDepartment extends React.Component{
                     <div className="slider"></div>
                   </label>
                 </div>
+
+               {/* <div className="form-group switch_wrap inline_switch">
+                  <label>Is SystemDefined </label>
+                  <label className="switch">
+                    <input type="checkbox" ref="isSystemDefined" />
+                    <div className="slider"></div>
+                  </label>
+                </div>*/}
+
             </div>
           </div>
 

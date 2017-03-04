@@ -42,8 +42,14 @@ class MlEditSubDepartment extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/subDepartmentsList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/subDepartmentsList");
+      else
+        toastr.error(response.result);
+        FlowRouter.go("/admin/settings/subDepartmentsList");
+    }
+    //FlowRouter.go("/admin/settings/subDepartmentsList");
   };
 
 
@@ -153,7 +159,7 @@ class MlEditSubDepartment extends React.Component{
                     <div className="form-group switch_wrap inline_switch">
                       <label>Status</label>
                       <label className="switch">
-                        <input type="checkbox" ref="subDepartmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onSubDepartmentStatusChange.bind(this)}/>
+                        <input type="checkbox" ref="subDepartmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onSubDepartmentStatusChange.bind(this)} />
                         <div className="slider"></div>
                       </label>
                     </div>

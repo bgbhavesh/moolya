@@ -10,17 +10,24 @@ export async function addDocumentFormatActionHandler(DocFormatDetails)
 
   const result = await client.mutate({
     mutation: gql`
-        mutation ($documentFormat:documentFormatObject){
+        mutation ($documentFormat:documentFormatObject, $moduleName:String, $actionName:String){
             createDocumentFormat(
-                documentFormat: $documentFormat
-            ) 
+                documentFormat: $documentFormat,
+                moduleName:$moduleName,
+                actionName:$actionName
+            ){
+            success,
+            code,
+            result
+            } 
          }
         `,
     variables: {
-      documentFormat: DocFormatDetails
+      documentFormat: DocFormatDetails,
+      moduleName:"DOCUMENTFORMAT",
+      actionName:"CREATE"
     }
   })
-  console.log(result)
   const id = result.data.createDocumentFormat;
   return id
 }

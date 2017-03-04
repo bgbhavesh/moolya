@@ -8,20 +8,28 @@ export async function addTemplateActionHandler(TemplateDetails) {
   let isActive = TemplateDetails.isActive;
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($templateName: String, $templateDisplayName: String, $templateDescription: String,$isActive: Boolean){
+    mutation  ($templateName: String, $templateDisplayName: String, $templateDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         CreateTemplate(
           templateName: $templateName,
           templateDisplayName: $templateDisplayName,
           templateDescription: $templateDescription,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
       templateName,
       templateDisplayName,
       templateDescription,
-      isActive
+      isActive,
+      moduleName:"TEMPLATE",
+      actionName:"CREATE"
     }
   })
   const id = result.data.CreateTemplate;

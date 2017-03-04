@@ -12,7 +12,6 @@ class MlEditProfessionType extends React.Component{
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
-    this.addEventHandler.bind(this);
     this.updateProfessionType.bind(this)
     this.findProfessionType.bind(this);
     this.onIndustrySelect.bind(this);
@@ -36,18 +35,19 @@ class MlEditProfessionType extends React.Component{
     }
   }
 
-  async addEventHandler() {
-    // const resp=await this.findRequestType
-    //  return resp;
-  }
-
   async handleError(response) {
     alert(response)
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/professionList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/professionList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findProfessionType(){
     let ProfessionTypeId=this.props.config
     const response = await findProfessionActionHandler(ProfessionTypeId);

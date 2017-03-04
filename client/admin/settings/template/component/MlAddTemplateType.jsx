@@ -23,8 +23,12 @@ class MlAddTemplate extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/templateTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/templateTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createTemplate() {
@@ -40,11 +44,11 @@ class MlAddTemplate extends React.Component{
   }
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

@@ -19,8 +19,8 @@ let DocumentFormatsSchema = `
     
    type Mutation 
     {
-        updateDocumentFormat(_id:String, docFormatName:String, docFormatDisplayName:String, about:String, isActive:Boolean):String
-        createDocumentFormat(documentFormat:documentFormatObject):String
+        updateDocumentFormat(_id:String, docFormatName:String, docFormatDisplayName:String, about:String, isActive:Boolean , moduleName:String, actionName:String):response
+        createDocumentFormat(documentFormat:documentFormatObject, moduleName:String, actionName:String):response
     }
     type Query{
         findDocumentFormat(_id:String): DocumentFormats

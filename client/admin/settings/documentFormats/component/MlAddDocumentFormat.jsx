@@ -28,8 +28,12 @@ class MlAddDocumentFormat extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/documentFormatList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/documentFormatList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createDocumentFormat() {
@@ -39,25 +43,18 @@ class MlAddDocumentFormat extends React.Component{
       about: this.refs.about.value,
       isActive: this.refs.status.checked,
     }
-    console.log(DocFormatDetails)
-
     const response = await addDocumentFormatActionHandler(DocFormatDetails);
     return response;
 
   }
 
-  // getSubDepartmentAvailability(details){
-  //   console.log("details->"+details);
-  //   this.setState({'subdepartmentAvailability':details})
-  // }
-
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

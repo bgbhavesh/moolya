@@ -11,7 +11,7 @@ export async function updateProfessionTypeActionHandler(ProfessionType) {
   let isActive = ProfessionType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$professionName: String, $professionDisplayName: String, $industryId:String, $industryName:String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$professionName: String, $professionDisplayName: String, $industryId:String, $industryName:String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateProfession(
           _id:$_id
           professionName: $professionName,
@@ -19,8 +19,14 @@ export async function updateProfessionTypeActionHandler(ProfessionType) {
           industryId: $industryId,
           industryName : $industryName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -30,9 +36,11 @@ export async function updateProfessionTypeActionHandler(ProfessionType) {
       industryId,
       industryName,
       about,
-      isActive
+      isActive,
+      moduleName:"PROFESSION",
+      actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateProfession;
   return id
 }

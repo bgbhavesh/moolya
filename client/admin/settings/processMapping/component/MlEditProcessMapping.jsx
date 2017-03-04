@@ -68,8 +68,12 @@ class MlEditProcessMapping extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/processList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/processList");
+      else
+        toastr.error(response.result);
+    }
   };
 
 
@@ -79,7 +83,6 @@ class MlEditProcessMapping extends React.Component{
     this.setState({loading: false, data: response});
     if(response) {
 
-      console.log(this.state.data.documents)
       this.setState({processId: this.state.data.processId});
       this.setState({id: this.state.data._id});
       if (this.state.data.process) {
@@ -138,7 +141,6 @@ class MlEditProcessMapping extends React.Component{
     }
      let id       = this.state.id;
      let process  = processDetails;
-    console.log(processDetails)
     const response = await updateProcessActionHandler(id,process)
     return response;
   }
@@ -204,14 +206,14 @@ class MlEditProcessMapping extends React.Component{
 
   render(){
     let MlActionConfig = [
+      // {
+      //   actionName: 'add',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
+        showAction: true,
         actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateProcess.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
@@ -227,18 +229,18 @@ class MlEditProcessMapping extends React.Component{
     let query=gql` query{
     data:fetchCountriesSearch{label:country,value:countryCode}
     }
-`;
+    `;
     let industriesquery=gql` query{
     data:fetchIndustries{label:industryName,value:_id}
     }
-`;
+    `;
     let professionquery=gql` query{
     data:fetchProfessions{label:professionName,value:_id}
     }
 `;
     let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterquery=gql`query($id:String){  
-  data:fetchChapters(id:$id) {
+    data:fetchChapters(id:$id) {
     value:_id
     label:chapterName
   }  

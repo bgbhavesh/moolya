@@ -91,7 +91,7 @@ let Process = `
         processId   : String,
         process     : String,
         communities : [community],
-        userTypes   : [userType],
+        userTypes   : String,
         identity    : String,
         industries  : [industry],
         professions : [profession],

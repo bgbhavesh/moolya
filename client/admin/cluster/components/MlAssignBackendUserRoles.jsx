@@ -27,7 +27,8 @@ export default class MlAssignBackednUserRoles extends React.Component{
       this.state={
           roleForm:[],
           roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"",  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
-          selectedRole:""
+          selectedRole:"",
+          hierarchyLevel:''
       }
       this.findUserDepartments.bind(this);
       return this;
@@ -111,12 +112,13 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   async findUserDepartments(){
+    let hierarchyLevel = Meteor.user().profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].hierarchyLevel;
+    this.setState({hierarchyLevel: hierarchyLevel})
     let userId = this.props.userId;
     let clusterId = this.props.clusterId;
     const response = await findUserDepartmentypeActionHandler(userId, clusterId);
     let data = response ? response : []
     this.setState({loading:false,roleForm:data});
-
     if(this.props.assignedRoles && this.props.assignedRoles.length>0){
       this.setState({roleDetails: this.props.assignedRoles})
     }
@@ -129,8 +131,11 @@ export default class MlAssignBackednUserRoles extends React.Component{
     return(
       <div>
         {userDepartments.map(function (department) {
-          let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId}}};
-          let query = gql`query($departmentId:String, $clusterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId) {value:_id, label:roleName}}`;
+          {/*let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId}}};
+          let query = gql`query($departmentId:String, $clusterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId) {value:_id, label:roleName}}`;*/}
+          let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId,hierarchyLevel:that.state.hierarchyLevel}}};
+          let query = gql`query($departmentId:String, $clusterId:String, $hierarchyLevel:String){data:fetchRolesByDepSubDepTest(departmentId: $departmentId, clusterId: $clusterId,hierarchyLevel:$hierarchyLevel) {value:_id, label:roleName}}`;
+
           return(
             <div className="panel panel-default">
               <div className="panel-heading">Assign Role</div>

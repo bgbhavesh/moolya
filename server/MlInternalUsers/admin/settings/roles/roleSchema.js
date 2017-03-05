@@ -95,6 +95,7 @@ let Role = `
       findRole(id:String):Roles
       fetchActiveRoles: [Roles]
       fetchAllAssignedRoles(roleIds:[String]):[String]
+      fetchRolesByDepSubDepTest(departmentId:String, clusterId:String, hierarchyLevel:String): [Roles]
   }
   
   type Mutation {

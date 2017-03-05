@@ -59,7 +59,7 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
     }
   };
 
-MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) =>
+/*MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) =>
 {
   let roles = [];
 
@@ -74,7 +74,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   return roles;
     // let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
 
-}
+}*/
 
 MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -99,6 +99,47 @@ MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info)
     roleNames.push(roleName);
   })
   return roleNames;
+}
+
+MlResolver.MlQueryResolver['fetchRolesByDepSubDepTest'] = (obj, args, context, info) =>
+{
+  let roles = [];
+  let hierarchyLevel=args.hierarchyLevel;
+  let users = null;
+  if(hierarchyLevel==3){
+    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[0, 3]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+  }else if(hierarchyLevel==2){
+    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[2]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+  }else if(hierarchyLevel==1){
+    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[1]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+  }else if(hierarchyLevel==0){
+    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[0]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+  }else{
+    if(args.departmentId && args.clusterId){
+      roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
+    }
+    _.remove(roles, function (role) {
+      return role.roleName == 'platformadmin'
+    })
+    return roles;
+  }
+  let filteredUsers=[];
+  users.map(function (user) {
+    let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleId;
+    if(userProfiles){
+      filteredUsers.push(userProfiles)
+    }
+  })
+  var uniqueRoleId = filteredUsers.filter(function(elem, index, self) {
+    return index == self.indexOf(elem);
+  })
+  if(args.departmentId && args.clusterId){
+    roles = MlRoles.find( {"$and":[{"_id":{"$in":[uniqueRoleId.toString()]}},{"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}]}).fetch()
+  }
+
+  return roles;
+  // let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
+
 }
 
 

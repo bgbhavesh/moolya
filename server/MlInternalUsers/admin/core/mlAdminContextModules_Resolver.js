@@ -1,6 +1,7 @@
 import MlResolver from '../mlAdminResolverDef'
 import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
 import MlAdminContextQueryConstructor from './repository/mlAdminContextQueryConstructor';
+import getQuery from "../genericSearch/queryConstructor";
 MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   let totalRecords=0;
   let findOptions = {};
@@ -13,6 +14,16 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   // `limit` may be `null`
   if (args.limit&&args.limit > 0) {
     findOptions.limit = args.limit;
+  }
+
+  //'filter' applied by user
+  let userFilterQuery={};
+  if (args.fieldsData){
+    userFilterQuery = getQuery.searchFunction(args);
+  }
+  if(args.sortData){
+    let sortObj = getQuery.sortFunction(args);
+    findOptions.sort=sortObj||{};
   }
 
   let moduleName=args.module;
@@ -37,6 +48,10 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "community":
       result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions);
       break;
+    case "MASTER_SETTINGS":
+      let requestParams=args.context;
+      requestParams.userId=context.userId;
+      result=CoreModulesRepo.MlMasterSettingsRepo(requestParams,userFilterQuery,contextQuery,findOptions);
 
   }
 
@@ -62,6 +77,10 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
 
     if (data.chapterName&&!data.subChapterName&&!data.communityName) {
       return 'Chapter';
+    }
+
+    if(data.hierarchyLevel&&data.type){
+      return 'MasterSettings';
     }
 
     return null;

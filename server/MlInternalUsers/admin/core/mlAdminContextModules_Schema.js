@@ -3,7 +3,7 @@ import MlSchemaDef from '../mlAdminSchemaDef'
 
 
 let contextSpecificSearch = `
-union ContextSpecSearchResult = Cluster | Chapter | SubChapter  | Community
+union ContextSpecSearchResult = Cluster | Chapter | SubChapter  | Community | MasterSettings
 
 
 type ContextSpecSearchResp {
@@ -15,7 +15,8 @@ input ContextParams{
    clusterId:String,
    chapterId:String,
    subChapterId:String,
-   communityId:String
+   communityId:String,
+   settingsType:String
 }
 
 input SearchSpec{
@@ -24,7 +25,7 @@ input SearchSpec{
 }
 
 type Query {
-  ContextSpecSearch(module: String!,context:ContextParams,offset:Int,limit:Int,searchSpec:SearchSpec): ContextSpecSearchResp!
+  ContextSpecSearch(module: String!,context:ContextParams,offset:Int,limit:Int,searchSpec:SearchSpec,fieldsData:[GenericFilter],sortData:[SortFilter]): ContextSpecSearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],contextSpecificSearch]);

@@ -9,27 +9,20 @@ class MlEditTransactionType extends React.Component{
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
-    this.addEventHandler.bind(this);
     this.updateTemplateType.bind(this)
     this.findTemplateType.bind(this);
     return this;
   }
 
   componentWillMount() {
-
     const resp=this.findTemplateType();
     return resp;
-
   }
+
   componentDidMount(){
     /*if(this.state.data.isActive){
      $('#status').prop('checked', true);
      }*/
-  }
-
-  async addEventHandler() {
-    // const resp=await this.findRequestType
-    //  return resp;
   }
 
   async handleError(response) {
@@ -37,8 +30,14 @@ class MlEditTransactionType extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/templateTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/templateTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findTemplateType(){
     let TemplateTypeId=this.props.config
     const response = await findTemplateTypeActionHandler(TemplateTypeId);
@@ -73,11 +72,11 @@ class MlEditTransactionType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateTemplateType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

@@ -36,9 +36,14 @@ class MlEditDocumentFormat extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/documentFormatList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/documentFormatList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findDocument(){
     let documentTypeId=this.props.config
     const response = await findDocumentFormatActionHandler(documentTypeId);
@@ -53,8 +58,6 @@ class MlEditDocumentFormat extends React.Component{
       about: this.refs.about.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await updateDocumentFormatActionHandler(Details);
     return response;
 
@@ -72,14 +75,14 @@ class MlEditDocumentFormat extends React.Component{
 
   render(){
     let MlActionConfig = [
+      // {
+      //   actionName: 'add',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
+        showAction: true,
         actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateDocument.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {

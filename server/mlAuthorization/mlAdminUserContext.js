@@ -6,8 +6,8 @@ var _ = require('lodash');
 
 class MlAdminUserContext
 {
-  constructor(){
-
+  constructor(userId){
+    this.userId=userId;
   }
 
   userProfileDetails(userId)

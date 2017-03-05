@@ -10,7 +10,7 @@ export default class MlAssignModulesToRoles extends React.Component {
     super(props);
     this.state = {
       selectedValue: null,
-      assignModulesToRoles: [{moduleId: '',moduleName: '',validFrom: '',validTo: '',isActive: '', actions: []}]
+      assignModulesToRoles: [{moduleId: '',moduleName: '',validFrom: '',validTo: '',isActive: '', actions: [{actionId:''}]}]
     }
     this.addDepartmentComponent.bind(this);
     this.optionsBySelectAction=this.optionsBySelectAction.bind(this);
@@ -58,7 +58,9 @@ export default class MlAssignModulesToRoles extends React.Component {
         let actions=assignModulesToRolesDetails[i].actions
         let actionVal=[{actionId:''}]
         if(actions){
-          actionVal.push({"actionId":actions[0].actionId})
+          for(let j=0;j<actions.length;j++){
+            actionVal.push({"actionId":actions[j].actionId})
+          }
         }
         let json={
           moduleId:assignModulesToRolesDetails[i].moduleId,
@@ -199,7 +201,7 @@ export default class MlAssignModulesToRoles extends React.Component {
                               Actions
                             </div>
                             <div className="form-group">
-                              <div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
+                              <div className="input_types"><input id="chapter_admin_check" type="checkbox"   name="CREATE"
                                                                   onChange={that.optionsBySelectAction.bind(that, id)}/><label
                                 htmlFor="chapter_admin_check"><span></span>Create</label></div>
                               <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="READ"

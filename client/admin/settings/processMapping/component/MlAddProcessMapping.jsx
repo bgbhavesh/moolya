@@ -58,12 +58,15 @@ class MlAddProcessMapping extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/processList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/processList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   getassignDocuments(details){
-    console.log("details->"+details);
     this.setState({'assignDocuments':details})
   }
 
@@ -94,7 +97,6 @@ class MlAddProcessMapping extends React.Component{
       isActive    : this.refs.status.checked,
       documents   : this.state.assignDocument
     }
-    console.log(processDetails)
     const response = await addProcessActionHandler(processDetails)
     return response;
   }
@@ -158,11 +160,11 @@ class MlAddProcessMapping extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',
@@ -200,7 +202,7 @@ class MlAddProcessMapping extends React.Component{
 `;
     let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterquery=gql`query($id:String){  
-  data:fetchChapters(id:$id) {
+    data:fetchChapters(id:$id) {
     value:_id
     label:chapterName
   }  
@@ -307,15 +309,11 @@ class MlAddProcessMapping extends React.Component{
                 </ScrollArea>
               </div>
             </div>
-
-
           </div>
 
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
 
         </div>
-
-
       </div>
     )
   }

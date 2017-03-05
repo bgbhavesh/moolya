@@ -11,7 +11,7 @@ import {findRoleActionHandler} from '../actions/findRoleAction'
 import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
 
 class MlEditRole extends React.Component{
@@ -112,6 +112,7 @@ class MlEditRole extends React.Component{
     if(response) {
       this.setState({selectedUserType:this.state.data.roleType})
       this.setState({selectedBackendUser:this.state.data.userType})
+      this.setState({selectedSubChapter:this.state.data.subChapter})
     }
   }
 
@@ -188,7 +189,7 @@ class MlEditRole extends React.Component{
                     </div>)}
                     <div className="form-group">
                       <Select
-                        name="form-field-name" ref="roleType" options={BackendUserOptions} value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} className="float-label"/>
+                        name="form-field-name" ref="roleType" options={BackendUserOptions} value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} className="float-label" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>

@@ -22,7 +22,7 @@ class MlAddRole extends React.Component{
       assignRoleToClusters:[],
       assignModulesToRoles:[],
       selectedUserType:'',
-      selectedBackendUser:'',
+      selectedBackendUser:'Internal User',
       selectedSubChapter:''
     }
     this.addEventHandler.bind(this);
@@ -82,6 +82,7 @@ class MlAddRole extends React.Component{
       roleName: this.refs.roleName.value,
       displayName:this.refs.diplayName.value,
       roleType:this.state.selectedUserType,
+      subChapter:this.state.selectedSubChapter,
       userType:this.state.selectedBackendUser,
       about:this.refs.about.value,
       assignRoles:this.state.assignRoleToClusters,
@@ -167,13 +168,13 @@ class MlAddRole extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" ref="userType" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
+                      <Select name="form-field-name" ref="userType" placeholder="Backend User Role Type" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
                     </div>
                     {this.state.selectedUserType=='non-moolya'&&(<div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
                     </div>)}
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} />
+                      <Select name="form-field-name" placeholder="Role Type"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true} />
                     </div>
                     <div className="form-group">
                       <textarea placeholder="About" ref="about" className="form-control float-label"></textarea>

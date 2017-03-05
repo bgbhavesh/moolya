@@ -13,6 +13,7 @@ export async function findDepartmentActionHandler(DepartmentId) {
     departmentDesc
     isActive
     isMoolya
+    isSystemDefined
     depatmentAvailable{
       cluster
       chapter

@@ -1,29 +1,32 @@
+/**
+ * Created by mohammed.mohasin on 05/03/17.
+ */
 import MlResolver from '../../mlAdminResolverDef'
-
+import MlMasterSettingRepo from './repository/mlMasterSettingRepo';
 
 MlResolver.MlQueryResolver['fetchMasterSettings'] = (obj, args, context, info) => {
   // TODO : Authorization
          console.log(args);
-     return MlMasterData.find({type:args.type}).fetch();
+     return MlMasterSettings.find({type:args.type}).fetch();
 }
 
+MlResolver.MlQueryResolver['findMasterSetting'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  console.log(args);
+
+  return MlMasterSettings.findOne({_id:args._id});
+}
 
 MlResolver.MlMutationResolver['createMasterSetting'] = (obj, args, context, info) => {
   // TODO : Authorization
-  console.log(args);
-  let settingsObj=null;
-  switch(args.type){
-    case "LANGUAGE":
-      settingsObj={"type":"LANGUAGE","languageInfo":args.settingsData.languageInfo};
-      break;
-  }
-  settingsObj["hierarchyLevel"]=1;
-  settingsObj["hierarchyCode"]="aaa";
-  settingsObj["hierarchyRefId"]="sss";
-  settingsObj["hierarchyRefName"]="sss";
+  let masterRecord=new MlMasterSettingRepo(context.userId).updateMasterSetting(args);
+  return masterRecord;
+};
 
-  MlMasterData.insert(settingsObj);
-
-}
+MlResolver.MlMutationResolver['updateMasterSetting'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  let masterRecord=new MlMasterSettingRepo(context.userId).updateMasterSetting(args);
+  return masterRecord;
+};
 
 

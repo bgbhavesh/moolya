@@ -194,6 +194,7 @@ if(Meteor.isServer){
         "image" : "/images/documents_icon.png",
         "link" : "/admin/documents",
         "name" : "documents",
+        "uniqueId" : "documents",
         "isLink" : true,
         "isMenu" : true
       },
@@ -201,6 +202,7 @@ if(Meteor.isServer){
         "image" : "/images/services_icon.png",
         "link" : "/admin/services",
         "name" : "services",
+        "uniqueId" : "services",
         "isLink" : true,
         "isMenu" : true
       },
@@ -378,13 +380,12 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/languagesList",
-            "name" : "Regional",
+            "name" : "Language",
             "uniqueId" : "settings_Language",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
             "subMenu": [
-
               {
                 "link": "/admin/settings/addLanguage",
                 "name": "Add Language",

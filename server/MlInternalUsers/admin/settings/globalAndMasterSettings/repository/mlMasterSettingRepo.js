@@ -24,14 +24,25 @@ export default class MlMasterSettingRepo{
      let query={"hierarchyLevel":3,"hierarchyCode":"CLUSTER","hierarchyRefId":userProfile.defaultProfileHierarchyRefId,"hierarchyRefName":cluster.clusterName};
 
     switch(requestParams.type){
+      case "TAXTYPE":
+        settingsObj={"type":"TAXTYPE","taxTypeInfo":requestParams.masterData.taxTypeInfo,isActive:requestParams.masterData.isActive};
+        break;
      case "TITLE":
         settingsObj={"type":"TITLE","titleInfo":requestParams.masterData.titleInfo,isActive:requestParams.masterData.isActive};
         break;
+
+      case "LANGUAGE":
+        settingsObj={"type":"LANGUAGE","languageInfo":requestParams.masterData.languageInfo,isActive:requestParams.masterData.isActive};
+        break;
+    }
 
       case "EMPLOYMENTTYPE":
         settingsObj={"type":"EMPLOYMENTTYPE","employmentTypeInfo":requestParams.masterData.employmentTypeInfo,isActive:requestParams.masterData.isActive};
         break;
      }
+
+
+
 
       if(actionName==="CREATE"){
         settingsObj=_.extend(query,settingsObj);

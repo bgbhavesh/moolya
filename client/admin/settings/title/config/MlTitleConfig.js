@@ -24,8 +24,8 @@ const mlTitleTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler:  (data)=>{
-        if(data&&data.id){
-          FlowRouter.go("/admin/settings/editTitle/"+data.id)
+        if(data&&data._id){
+          FlowRouter.go("/admin/settings/editTitle/"+data._id)
         }
         else{
           alert("Please select a Title")

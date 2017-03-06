@@ -67,7 +67,6 @@ class MlAdminUserContext
     //return default menu
        return null;
   }
-
 }
 
 module.exports = MlAdminUserContext

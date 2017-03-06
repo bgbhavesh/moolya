@@ -171,7 +171,7 @@ let communitySchema = `
     
     type Mutation{
         createCommunityAccess(clusterId:String, chapterId:String, subChapterId:String): String
-        updateCommunityDef(community:community): String
+        updateCommunityDef(community:community): response
     }
 `
 

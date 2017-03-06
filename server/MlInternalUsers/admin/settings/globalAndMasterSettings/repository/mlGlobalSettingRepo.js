@@ -22,7 +22,7 @@ export default class MlGlobalSettingRepo{
         settingsObj={"type":"GLOBALSETTING","dateAndTimeInfo":requestParams.settingsData.dateAndTimeInfo};
         break;
       case "NUMERICAL":
-        settingsObj={"type":"GLOBALSETTING","numericalInfo":requestParams.settingsData.numericalInfo};
+        settingsObj={"type":"GLOBALSETTING","numericalFormatInfo":requestParams.settingsData.numericalInfo};
         break;
       case "REGIONAL":
         settingsObj={"type":"GLOBALSETTING","regionalInfo":requestParams.settingsData.regionalInfo};

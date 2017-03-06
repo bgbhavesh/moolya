@@ -56,6 +56,8 @@ let GlobalSettingsSchema = `
       }
       
       input RegionalInfoRequest{
+             clusterName:String,
+             capitalName:String,
              regionalPhoneNumber:String,
              regionalCurrencyName:String,
              regionalCurrencyMarking:String,

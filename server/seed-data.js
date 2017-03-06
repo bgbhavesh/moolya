@@ -167,7 +167,7 @@ if(!userObj){
 
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(role){
-  var userRoles = [{roleId:role._id, chapterId:"all", subchapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM"}]
+  var userRoles = [{roleId:role._id, chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM"}]
   var userProfiles = [{
     clusterId:"all",
     userRoles:userRoles,

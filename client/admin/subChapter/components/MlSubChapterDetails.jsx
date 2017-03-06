@@ -24,7 +24,12 @@ class MlSubChapterDetails extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/dashboard");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/dashboard");
+      else
+        toastr.error(response.result);
+    }
   };
 
   onStatusChangeActive(e) {
@@ -67,17 +72,17 @@ class MlSubChapterDetails extends React.Component {
 
   async updateSubChapter() {
     let subChapterDetails = {
-      _id: this.refs.id.value,
+      subChapterId: this.refs.id.value,
       subChapterDisplayName: this.refs.subChapterDisplayName.value,
       aboutSubChapter: this.refs.aboutSubChapter.value,
       // subChapterImageLink: this.refs.subChapterImageLink.value,
       subChapterEmail: this.refs.subChapterEmail.value,
       // isEmailNotified: this.refs.isEmailNotified.value,
+      chapterId:this.state.data.chapterId,
       showOnMap: this.refs.showOnMap.checked,
       isActive: this.refs.isActive.checked
     }
 
-    // updateSubChapterActionHandler(subChapterDetails)
     const response = await updateSubChapterActionHandler(subChapterDetails)
     return response;
   }

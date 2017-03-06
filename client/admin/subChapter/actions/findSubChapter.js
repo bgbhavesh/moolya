@@ -15,6 +15,7 @@ export async function findSubChapterActionHandler(subChapterId) {
         aboutSubChapter
         subChapterImageLink
         subChapterEmail
+        chapterId
         isEmailNotified
         showOnMap
         isActive

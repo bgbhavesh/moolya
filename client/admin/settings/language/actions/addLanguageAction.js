@@ -1,21 +1,23 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function addLanguageActionHandler(Details)
+export async function addLanguageActionHandler(LangauageDetails)
 {
+  let languageName = LangauageDetails.languageName||null;
+  let languageDisplayName = LangauageDetails.languageDisplayName||null;
+  let aboutLanguage = LangauageDetails.aboutLanguage||null;
+  let isActive = LangauageDetails.isActive;
+  let languageInfo={languageName,languageDisplayName,aboutLanguage};
   const result = await client.mutate({
     mutation: gql`
-        mutation ($language:languageObject){
-            createLanguage(
-                language: $language
-            ) 
-         }
-        `,
+    mutation ($masterData:MasterSettingsRequest){
+        createMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"CREATE",type:LANGUAGE,masterData:$masterData) 
+      }
+    `,
     variables: {
-      language: Details
+      masterData:{"languageInfo":languageInfo,"isActive":isActive},
     }
   })
-  console.log(result)
-  const id = result.data.createLanguage;
+  const id = result.createMasterSetting;
   return id
 }

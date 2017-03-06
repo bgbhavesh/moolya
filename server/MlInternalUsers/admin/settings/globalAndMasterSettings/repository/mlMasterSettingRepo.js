@@ -27,7 +27,14 @@ export default class MlMasterSettingRepo{
      case "TITLE":
         settingsObj={"type":"TITLE","titleInfo":requestParams.masterData.titleInfo,isActive:requestParams.masterData.isActive};
         break;
-     }
+
+      case "LANGUAGE":
+        settingsObj={"type":"LANGUAGE","languageInfo":requestParams.masterData.languageInfo,isActive:requestParams.masterData.isActive};
+        break;
+    }
+
+
+
 
       if(actionName==="CREATE"){
         settingsObj=_.extend(query,settingsObj);

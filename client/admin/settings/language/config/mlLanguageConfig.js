@@ -7,16 +7,16 @@ const mlLanguageTableConfig=new MlViewer.View({
   module:"language",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["languageName","languageDisplayName","isActive"],
-  searchFields:["languageName","languageDisplayName","isActive"],
+  fields:["languageInfo.languageName","languageInfo.languageDisplayName","isActive"],
+  searchFields:["languageInfo.languageName","languageInfo.languageDisplayName","isActive"],
   throttleRefresh:false,
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "languageName", title: "Name",dataSort:true},
-    {dataField: "languageDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "aboutLanguage", title: "About",dataSort:true},
+    {dataField: "languageInfo.languageName", title: "Name",dataSort:true,customComponent:function(data){ return <div>{data.data.languageInfo.languageName}</div>}},
+    {dataField: "languageInfo.languageDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.languageInfo.languageDisplayName}</div>}},
+    {dataField: "languageInfo.aboutLanguage", title: "About",dataSort:true,dataSort:true,customComponent:function(data){ return <div>{data.data.languageInfo.aboutLanguage}</div>}},
     {dataField: "isActive", title: "Active",dataSort:true,customComponent:ActiveFormatter},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
@@ -47,17 +47,25 @@ const mlLanguageTableConfig=new MlViewer.View({
       handler: (data)=>{console.log(data);}
     }
   ],
+  sizePerPage:5,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"LANGUAGE"}}
+  },
   graphQlQuery:gql`
-              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"language", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on Language{
-                              _id  
-                              languageName
-                              languageDisplayName
-                              aboutLanguage
-                              isActive
+             query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 languageInfo{
+                                    languageName
+                                    aboutLanguage
+                                    languageDisplayName
+                                 }
+                                    
                           }
                       }
               }

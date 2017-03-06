@@ -7,14 +7,17 @@ export async function findCommunityDefActionHandler(Id)
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        data:fecthCommunityDef(communityId:$id){
+        data:fetchCommunityDef(communityId:$id){
             name,
             displayName,
             communityImageLink,
             code,
             aboutCommunity,
             showOnMap,
-            isActive
+            isActive,
+            clusters,
+            chapters,
+            subchapters
         }
       }
     `,

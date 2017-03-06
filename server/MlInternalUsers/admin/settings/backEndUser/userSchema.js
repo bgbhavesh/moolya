@@ -144,11 +144,13 @@ let BackEndUser = `
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
+        assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
     }
     
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
+        fetchUserRoles(userId:String): [UserRoles]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersBysubChapterDepSubDep(subChapterId:String): [BackendUsers]

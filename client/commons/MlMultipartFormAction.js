@@ -22,8 +22,11 @@ export async function multipartFormHandler(data, file) {
         }
 
         if(filexmlhttp){
+            const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
+
             filexmlhttp.open('POST', Meteor.absoluteUrl('adminMultipartFormData'), true);
             filexmlhttp.setRequestHeader("enctype", "multipart/form-data");
+            filexmlhttp.setRequestHeader('meteor-login-token',localStorageLoginToken);
             filexmlhttp.onreadystatechange = function() {
                 if (filexmlhttp.readyState === 4 && filexmlhttp.status === 200) {
                     resolve(filexmlhttp.response);

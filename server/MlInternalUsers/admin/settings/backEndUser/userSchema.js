@@ -141,7 +141,7 @@ let BackEndUser = `
         createUser(user:userObject!, moduleName:String, actionName:String):String
         updateUser(userId:String!, user:userObject!): String
         addUserProfile(userId:String, user:userObject): String
-        assignUsers(userId:String, user:userObject): response
+        assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
     }
     
     type Query{

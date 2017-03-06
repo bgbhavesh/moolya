@@ -76,7 +76,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         userProfile['clusterId'] = this.state.data.clusterId;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let data = {moduleName:"USERS", actionName:"CREATE", userProfile:userProfile}
+        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfiles}}}}
+        let data = {moduleName:"USERS", actionName:"UPDATE", userId:this.state.selectedBackendUser, user:user}
         let response = await multipartFormHandler(data, this.refs.profilePic.files[0]);
         return response;
     }

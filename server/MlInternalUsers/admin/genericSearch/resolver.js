@@ -37,11 +37,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlSubChapters.find({},findOptions).count();
   }
 
-  if(args.module=="community"){
-    data = MlCommunityDefinition.find({"isActive": true}).fetch();
-    totalRecords=MlCommunityDefinition.find({"isActive": true}).count();
-  }
-
   if(args.module=="department"){
     data= MlDepartments.find(query,findOptions).fetch() || [];
     data.map(function (doc,index) {
@@ -384,9 +379,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'SubChapter';
     }
 
-    if (data.aboutCommunity) {
-      return 'Community';
-    }
 
     if (data.departmentName) {
       return 'Department';
@@ -504,6 +496,10 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.contactName){
       return 'ContactType'
+    }
+
+    if(data.code){
+      return 'Community'
     }
     return null;
   }

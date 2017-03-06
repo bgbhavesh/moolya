@@ -7,26 +7,17 @@ export async function updateTaxTypeActionHandler(TaxType) {
   let taxDisplayName = TaxType.taxDisplayName;
   let aboutTax = TaxType.aboutTax;
   let isActive = TaxType.isActive
+  let taxTypeInfo={taxName,taxDisplayName,aboutTax};
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$taxName: String, $taxDisplayName: String, $aboutTax: String,$isActive: Boolean){
-        UpdateTax(
-          _id:$_id
-          taxName: $taxName,
-          taxDisplayName: $taxDisplayName,
-          aboutTax: $aboutTax,
-          isActive :$isActive
-        ) 
+    mutation ($masterData:MasterSettingsRequest){
+        updateMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"UPDATE",type:TAXTYPE,masterData:$masterData) 
       }
     `,
     variables: {
-      _id,
-      taxName,
-      taxDisplayName,
-      aboutTax,
-      isActive
+      masterData:{"taxTypeInfo":taxTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result;
+  const id = result.updateMasterSetting;
   return id
 }

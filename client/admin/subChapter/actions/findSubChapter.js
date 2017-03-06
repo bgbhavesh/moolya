@@ -12,6 +12,7 @@ export async function findSubChapterActionHandler(subChapterId) {
         chapterName
         subChapterName
         subChapterDisplayName
+        stateName
         aboutSubChapter
         subChapterImageLink
         subChapterEmail

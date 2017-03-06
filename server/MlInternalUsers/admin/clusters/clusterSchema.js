@@ -15,6 +15,11 @@ let clusterSchema = `
         countryFlag:String
         latitude:String 
         longitude:String
+        status:status
+    }
+    type status{
+      code: String
+      description: String
     }
       input clusterUpdateObject{
         _id:String,

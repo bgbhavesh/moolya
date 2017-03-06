@@ -22,16 +22,15 @@ class ActiveFormatter extends React.Component {
       this.setState({"data": {"isActive": false}});
     }
 
-    let CountryDetails = {
-      id: data.id,
-      country: data.country,
-      countryCode: data.countryCode,
-      displayName:data.displayName,
-      url: data.url,
+    let LanguageDetails = {
+      id: data._id,
+      languageName: data.languageInfo.languageName,
+      languageDisplayName: data.languageInfo.languageDisplayName,
+      aboutLanguage:data.languageInfo.aboutLanguage,
       isActive: this.refs.status.checked
     }
 
-    updateLanguageActionHandler(CountryDetails);
+    updateLanguageActionHandler(LanguageDetails);
   }
 
   render() {

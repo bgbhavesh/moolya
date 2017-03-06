@@ -90,9 +90,7 @@ import MlRegional from '../../admin/settings/regional/component/MlRegional'
 import MlAddLanguage from '../../admin/settings/language/component/MlAddLanguage'
 import MlLanguagesList from '../../admin/settings/language/component/MlLanguagesList'
 import MlEditLanguage from '../../admin/settings/language/component/MlEditLanguage'
-import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlAddDateAndTime'
-import MlDateAndTimeList from '../../admin/settings/dateAndTime/component/MlDateAndTimeList'
-import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEditDateAndTime'
+import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlDateAndTime'
 import MlAddAddressType from '../../admin/settings/addressType/component/MlAddAddressType'
 import MlAddressTypeList from '../../admin/settings/addressType/component/MlAddressTypeList'
 import MlEditAddressType from '../../admin/settings/addressType/component/MlEditAddressType'
@@ -106,7 +104,7 @@ import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
-// @Importing Cluster Admin Setting Employee Type Components from parent directory
+// @Importing Cluster Admin SettNing Employee Type Components from parent directory
 
 import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
 import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'
@@ -610,20 +608,8 @@ adminSection.route('/settings/editLanguage/:id', {
 });
 adminSection.route('/settings/dateAndTimeList', {
   name: 'settings_DateAndTimeList',
-  action(){
-    mount(AdminLayout,{adminContent:< MlDateAndTimeList/>})
-  }
-});
-adminSection.route('/settings/addDateAndTime', {
-  name: 'settings_AddDateAndTime',
-  action(){
-    mount(AdminLayout,{adminContent:< MlAddDateAndTime />})
-  }
-});
-adminSection.route('/settings/editDateAndTime/:id', {
-  name: 'settings_EditDateAndTime',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlEditDateAndTime config={params.id} />})
+  action(){``
+    mount(AdminLayout,{adminContent:< MlAddDateAndTime/>})
   }
 });
 

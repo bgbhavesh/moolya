@@ -47,7 +47,7 @@ class MlEditEmployeeType extends React.Component{
   }
   async  updateEmployeeType() {
     let EmpType = {
-      id: this.refs.id.value,
+      id: this.props.config,
       employmentName: this.refs.employmentName.value,
       employmentDisplayName: this.refs.employmentDisplayName.value,
       aboutEmployment: this.refs.aboutEmployment.value,

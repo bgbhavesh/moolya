@@ -6,15 +6,15 @@ const mlCompanyTypeTableConfig=new MlViewer.View({
   module:"CompanyType",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["companyName","companyDisplayName","isActive"],
-  searchFields:["companyName","companyDisplayName","isActive"],
+  fields:["companyTypeInfo.companyName","companyTypeInfo.companyDisplayName","isActive"],
+  searchFields:["companyTypeInfo.companyName","companyTypeInfo.companyDisplayName","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "companyName", title: "Company Type",dataSort:true},
-    {dataField: "companyDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "companyTypeInfo.companyName", title: "Company Type",dataSort:true,customComponent:function(data){ return <div>{data.data.companyTypeInfo.companyName}</div>}},
+    {dataField: "companyTypeInfo.companyDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.companyTypeInfo.companyDisplayName}</div>}},
     {dataField: "isActive", title: "Active",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -24,8 +24,8 @@ const mlCompanyTypeTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler:  (data)=>{
-        if(data&&data.id){
-          FlowRouter.go("/admin/settings/editCompanyType/"+data.id)
+        if(data&&data._id){
+          FlowRouter.go("/admin/settings/editCompanyType/"+data._id)
         }
         else{
           alert("Please select a company type ")
@@ -47,16 +47,24 @@ const mlCompanyTypeTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"COMPANYTYPE"}}
+  },
   graphQlQuery:gql`
-                query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"CompanyType",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on CompanyType{
-                              companyName
-                              companyDisplayName
-                              isActive
-                              id:_id
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 companyTypeInfo{
+                                    companyName
+                                    aboutCompany
+                                    companyDisplayName
+                                 }
+                                    
                           }
                       }
               }

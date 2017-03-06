@@ -13,14 +13,14 @@ let _ = require('lodash'),
 /*********************************** Default Department/SubDepartment Creation <Start> ********************************************/
 let department = MlDepartments.findOne({departmentName:"operations"})
 if(!department) {
-  let departmentAvailiable = [{cluster: [{clusterId: "all"}], chapter: "all", subChapter: "all"}]
+  let departmentAvailiable = [{cluster: "all", chapter: "all", subChapter: "all"}]
   department = {
     departmentName: "operations",
     displayName: "Operations",
     departmentDesc: "Operations Department",
     isActive: true,
     isMoolya: false,
-    departmentAvailiable: departmentAvailiable
+    depatmentAvailable: departmentAvailiable
   };
 
   MlDepartments.insert(department);
@@ -29,7 +29,7 @@ if(!department) {
 let subDepartment = MlSubDepartments.findOne({subDepartmentName:"systemadmin"})
 if(!subDepartment) {
   let dep = MlDepartments.findOne({"departmentName":"operations"});
-  let subDepatmentAvailable = [{cluster: [{clusterId: "all"}], chapter: "all", subChapter: "all"}]
+  let subDepatmentAvailable = [{cluster: "all", chapter: "all", subChapter: "all"}]
   subDepartment = {
     subDepartmentName: "systemadmin",
     displayName: "System Admin",

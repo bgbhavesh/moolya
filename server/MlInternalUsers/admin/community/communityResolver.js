@@ -263,23 +263,56 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
     }
 }
 
-MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) =>
-{
-    let hierarchy;
-    let levelCode;
-    let community = {};
-    if(args.clusterId != undefined && args.chapterId != undefined && args.subChapterId != undefined ){
-      levelCode = "SUBCHAPTER"
+MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) => {
+    let query,
+      community = {},
+      communitiesAccess,
+      communityAccess,
+      diff,
+      isActive,
+      clusters = [];
+    if(!args.communityId)
+        return new MlRespPayload.successPayload("Failed to update community", 400);
+    if(!context.userId){
+        return new MlRespPayload.successPayload("Failed to update community", 400);
     }
-    else if(args.clusterId != undefined && args.chapterId != undefined ){
-      levelCode = "CHAPTER"
+    let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    if(!userProfile||!userProfile.hierarchyLevel){
+        return new MlRespPayload.successPayload("Failed to update community", 400);
     }
-    else if(args.clusterId != undefined){
-      levelCode = "CLUSTER"
+    hierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    if(!hierarchy){
+        return new MlRespPayload.successPayload("Failed to update community", 400);
     }
-    hierarchy = MlHierarchy.findOne({code:levelCode})
-    let communities = MlCommunityAccess.find({"communityDefCode":args.communityId}).fetch();
+    //platform admin
+    if(hierarchy.isParent===true){
+        communitiesAccess = MlCommunityAccess.find({"$and":[{communityDefCode:args.communityId, "isActive":true}]}).fetch();
+        if(communitiesAccess.length == 0){
+            diff = args.clusters;
+            isActive = true;
+        }
+        else{
+            clusters = _.map(communitiesAccess, 'clusterId');
+            if(clusters.length > args.clusters && args.clusters.length){
+              diff = _.difference(clusters, args.clusters)
+              isActive = true;
+            }
+            else if(args.clusters && args.clusters.length > clusters.length){
+              diff = _.difference(args.clusters, clusters)
+              isActive = false;
+            }
+        }
+        diff.map(function (clusterId) {
+            resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId, clusterId:clusterId}]}, {$set:{isActive:isActive}})
+        })
+        if(resp){
+            return new MlRespPayload.successPayload("Community updated successfully", 200)
+        }
+    }
+
+    return new MlRespPayload.successPayload("Failed to update community", 400);
 }
+
 
 // MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {
 //

@@ -6,28 +6,18 @@ export async function updateEmployeeTypeActionHandler(EmpType) {
   let employmentName = EmpType.employmentName;
   let employmentDisplayName = EmpType.employmentDisplayName;
   let aboutEmployment = EmpType.aboutEmployment;
-  let isActive = EmpType.isActive
+  let isActive = EmpType.isActive;
+  let employmentTypeInfo={employmentName,employmentDisplayName,aboutEmployment};
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$employmentName: String, $employmentDisplayName: String, $aboutEmployment: String,$isActive: Boolean){
-        UpdateEmployeeType(
-          _id:$_id
-          employmentName: $employmentName,
-          employmentDisplayName: $employmentDisplayName,
-          aboutEmployment: $aboutEmployment,
-          isActive :$isActive
-        ) 
+    mutation ($masterData:MasterSettingsRequest){
+        updateMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"UPDATE",type:EMPLOYMENTTYPE,masterData:$masterData) 
       }
     `,
     variables: {
-      _id,
-      employmentName,
-      employmentDisplayName,
-      aboutEmployment,
-      isActive
+      masterData:{"employmentTypeInfo":employmentTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  console.log(result)
   const id = result;
   return id
 }

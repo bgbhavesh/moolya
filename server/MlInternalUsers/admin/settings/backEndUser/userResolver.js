@@ -138,7 +138,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
     console.log(args);
     let users = [];
     if(args.clusterId){
-        let departments = MlDepartments.find({"depatmentAvailable.cluster":args.clusterId}).fetch();
+        let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
         if(departments && departments.length > 0){
             for(var i = 0; i < departments.length; i++){
                 let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
@@ -155,7 +155,7 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
   console.log(args);
   let dep = []
   let user = Meteor.users.findOne({"_id":args.userId})
-  let clusterDep = MlDepartments.find({"depatmentAvailable.cluster":args.clusterId}).fetch();
+  let clusterDep = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
   if(user && clusterDep && clusterDep.length > 0){
     let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
     // let dep = _.intersectionWith(clusterDep, userDep, _.isEqual);
@@ -284,7 +284,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let actionName = args.actionName
   let userId = args.userId;
   let data = args.user;
-  let roles  = data && data.userRoles;
+  let roles  = data && data.profile && data.profile.InternalUprofile &&  data.profile.InternalUprofile.moolyaProfile.userProfiles && data.profile.InternalUprofile.moolyaProfile.userProfiles.userRoles;
   let levelCode = ""
   if(!userId){
     let response = new MlRespPayload().errorPayload("No User Found", 404);
@@ -323,7 +323,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
 
   let userProfile = {
     clusterId: data.clusterId,
-    userroles:  roles,
+    userRoles:  roles,
     isDefault: false
   }
 

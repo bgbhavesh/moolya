@@ -6,7 +6,8 @@ export async function addEmployeeTypeActionHandler(EmpTypeDetails) {
   let employmentDisplayName = EmpTypeDetails.employmentDisplayName;
   let aboutEmployment = EmpTypeDetails.aboutEmployment;
   let isActive = EmpTypeDetails.isActive;
-  const result = await client.mutate({
+  let employmentTypeInfo={employmentName,employmentDisplayName,aboutEmployment};
+ /* const result = await client.mutate({
     mutation: gql`
     mutation  ($employmentName: String, $employmentDisplayName: String, $aboutEmployment: String,$isActive: Boolean){
         CreateEmployeeType(
@@ -14,7 +15,7 @@ export async function addEmployeeTypeActionHandler(EmpTypeDetails) {
           employmentDisplayName: $employmentDisplayName,
           aboutEmployment: $aboutEmployment,
           isActive :$isActive
-        ) 
+        )
       }
     `,
     variables: {
@@ -23,7 +24,22 @@ export async function addEmployeeTypeActionHandler(EmpTypeDetails) {
       aboutEmployment,
       isActive
     }
+  })*/
+  const result = await client.mutate({
+    mutation: gql`
+    mutation  ($masterData:MasterSettingsRequest){
+        createMasterSetting(
+          moduleName:"MASTER_SETTINGS",
+          actionName:"CREATE",
+          type:EMPLOYMENTTYPE,
+          masterData:$masterData
+        ) 
+      }
+    `,
+    variables: {
+      masterData:{"employmentTypeInfo":employmentTypeInfo,"isActive":isActive},
+    }
   })
-  const id = result.data.CreateEmployeeType;
+  const id = result.data.createMasterSetting;
   return id
 }

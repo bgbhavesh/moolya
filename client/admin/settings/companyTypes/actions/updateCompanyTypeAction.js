@@ -6,28 +6,18 @@ export async function updateCompanyTypeActionHandler(CmpType) {
   let companyName = CmpType.companyName;
   let companyDisplayName = CmpType.companyDisplayName;
   let aboutCompany = CmpType.aboutCompany;
-  let isActive = CmpType.isActive
+  let isActive = CmpType.isActive;
+  let companyTypeInfo={companyName,companyDisplayName,aboutCompany};
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$companyName: String, $companyDisplayName: String, $aboutCompany: String,$isActive: Boolean){
-        UpdateCompanyType(
-          _id:$_id
-          companyName: $companyName,
-          companyDisplayName: $companyDisplayName,
-          aboutCompany: $aboutCompany,
-          isActive :$isActive
-        ) 
+    mutation ($masterData:MasterSettingsRequest){
+        updateMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"UPDATE",type:COMPANYTYPE,masterData:$masterData) 
       }
     `,
     variables: {
-      _id,
-      companyName,
-      companyDisplayName,
-      aboutCompany,
-      isActive
+      masterData:{"companyTypeInfo":companyTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  console.log(result)
   const id = result;
   return id
 }

@@ -25,7 +25,7 @@ export default class MoolyaMapView extends Component {
     const places = this.props.data&&this.props.data.data?this.props.data.data.map(place => {
       // const { ...data} = place;
       return (
-        <MapMarkers {...this.props} module={this.props.module} key={place._id} lat={place.lat} isActive ={place.isActive} lng={place.lng} text={place.text} markerId={place._id} hover={this.props.hoverKey === place._id} desc={place.desc}/>
+        <MapMarkers {...this.props} module={this.props.module} key={place._id} lat={place.lat} isActive ={place.isActive} status ={place.status} lng={place.lng} text={place.text} markerId={place._id} hover={this.props.hoverKey === place._id} desc={place.desc}/>
           );
     }):[];
 

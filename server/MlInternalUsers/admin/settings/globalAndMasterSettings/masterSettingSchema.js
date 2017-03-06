@@ -7,7 +7,7 @@ let MasterSettingsSchema = `
    enum MASTER_SETTINGS_TYPE {
             LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
             EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
-}
+    }
       type LanguageInfo{
           languageName:String
           aboutLanguage:String
@@ -46,6 +46,18 @@ let MasterSettingsSchema = `
           titleDisplayName:String
       }
       
+      type EmploymentTypeInfo{
+          employmentName:String
+          employmentDisplayName:String
+          aboutEmployment:String
+      }
+      
+      input EmploymentTypeInfoRequest{
+          employmentName:String
+          employmentDisplayName:String
+          aboutEmployment:String
+      }
+      
       
       type MasterSettings{
          _id:String,
@@ -53,6 +65,7 @@ let MasterSettingsSchema = `
          languageInfo:LanguageInfo
          addressTypeInfo:AddressTypeInfo
          titleInfo:TitleInfo
+         employmentTypeInfo:EmploymentTypeInfo
       }
       
       input MasterSettingsRequest{
@@ -61,6 +74,7 @@ let MasterSettingsSchema = `
          languageInfo:LanguageInfoRequest
          addressTypeInfo:AddressTypeInfoRequest
          titleInfo:TitleInfoRequest
+         employmentTypeInfo:EmploymentTypeInfoRequest
       }
 
       type Query{

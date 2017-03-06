@@ -2,16 +2,19 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function findEmployeeTypeActionHandler(EmpTypeId) {
+
   let did=EmpTypeId
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        FindEmployeeType(_id:$id){
+        findMasterSetting(_id:$id){
          id:_id
-        employmentName
-        employmentDisplayName
         isActive
-        aboutEmployment
+        employmentTypeInfo{
+             employmentName
+             aboutEmployment
+             employmentDisplayName
+        }
       }
       }
     `,
@@ -19,7 +22,11 @@ export async function findEmployeeTypeActionHandler(EmpTypeId) {
       id:did
     },
     forceFetch:true
-  })
-  const id = result.data.FindEmployeeType;
-  return id
+  });
+  const masterSetting= result.data.findMasterSetting||{};
+  const {employmentName,aboutEmployment,employmentDisplayName}=masterSetting.employmentTypeInfo||{};
+  if(result){
+    return {isActive:masterSetting.isActive,employmentName,aboutEmployment,employmentDisplayName};
+  }
+  return {};
 }

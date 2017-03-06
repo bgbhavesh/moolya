@@ -121,10 +121,14 @@ let MasterSettingsSchema = `
          companyTypeInfo:CompanyTypeInfoRequest
          emailTypeInfo:EmailTypeInfoRequest
       }
-
+      type MasterSettingsDropData{
+          label:String,
+          value:String
+      }
       type Query{
         fetchMasterSettings(type:MASTER_SETTINGS_TYPE!):[MasterSettings]
         findMasterSetting(_id:String):MasterSettings
+        fetchMasterSettingsForDropDown(type:MASTER_SETTINGS_TYPE!):[MasterSettingsDropData]
     }
     
     type Mutation{

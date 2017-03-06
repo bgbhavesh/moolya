@@ -50,18 +50,18 @@ class MlAuthorization
             {
                 let role;
                 if(moduleName == "COMMUNITY" && req.chapterId != "" && req.subChapterId != "" && req.communityId != ""){
-                    let userRole = _.find(user_roles, {chapterId:req.chapterId || "all", subChapterId:req.subChapterId || "all", communityId:req.communityId || "all"})
-                    return validateRole(userRole.roleId, module, action)
+                    let userRole = _.find(user_roles, {chapterId:"all" || req.chapterId, subChapterId:"all" || req.subChapterId, communityId:"all" || req.communityId})
+                    return self.validateRole(userRole.roleId, module, action)
                 }
 
                 else if(moduleName == "SUBCHAPTER" && req.chapterId != "" && req.subChapterId != ""){
-                    let userRole = _.find(user_roles, {chapterId:req.chapterId || "all", subChapterId:req.subChapterId || "all"})
-                    return validateRole(userRole.roleId, module, action)
+                    let userRole = _.find(user_roles, {chapterId:"all" || req.chapterId, subChapterId:"all" || req.subChapterId})
+                    return self.validateRole(userRole.roleId, module, action)
                 }
 
                 else if(moduleName == "CHAPTER" && req.chapterId != ""){
                     let userRole = _.find(user_roles, {chapterId:req.chapterId || "all"})
-                    return validateRole(userRole.roleId, module, action)
+                    return self.validateRole(userRole.roleId, module, action)
                 }
 
                 else {

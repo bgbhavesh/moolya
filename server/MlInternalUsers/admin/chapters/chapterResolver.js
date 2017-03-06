@@ -128,6 +128,13 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.subChapterDetails);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
     let subChapter = MlSubChapters.findOne({_id: args.subChapterId});
     if(subChapter){
         for(key in args.subChapterDetails){
@@ -137,7 +144,7 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         if(resp){
             let code = 200;
             let result = {subChapter: resp}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            let response = new MlRespPayload().successPayload(result, code);
             return response
         }
     }

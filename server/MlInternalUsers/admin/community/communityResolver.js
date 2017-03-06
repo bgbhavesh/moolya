@@ -303,7 +303,7 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
             }
         }
         diff.map(function (clusterId) {
-            MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId, clusterId:clusterId}]}, {$set:{isActive:isActive}})
+            resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId, clusterId:clusterId}]}, {$set:{isActive:isActive}})
         })
         if(resp){
             return new MlRespPayload.successPayload("Community updated successfully", 200)

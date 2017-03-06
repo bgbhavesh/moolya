@@ -30,7 +30,6 @@ export async function createChapterActionHandler(chapterDetails) {
       isActive
     }
   })
-  console.log(result)
   const id = result.data.createChapter;
   return id
 }

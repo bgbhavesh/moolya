@@ -53,6 +53,7 @@ let chapterSchema = `
         chapterId:String
         subChapterImageLink:String
         chapterName :String
+        stateName : String
         subChapterName :String
         subChapterDisplayName: String
         subChapterCode:String,
@@ -81,6 +82,7 @@ let chapterSchema = `
         stateId:String,
         chapterId:String,
         chapterName:String,
+        stateName : String,
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,

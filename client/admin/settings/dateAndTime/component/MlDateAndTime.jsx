@@ -1,12 +1,13 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {addDateAndTimeActionHandler} from '../actions/addDateAndTimeAction'
+import {upsertDateAndTimeActionHandler} from '../actions/upsertDateAndTimeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import {findDateAndTimeActionHandler} from '../actions/findDateAndTimeAction'
 
 class MlAddDateAndTime extends React.Component{
   constructor(props) {
@@ -18,15 +19,32 @@ class MlAddDateAndTime extends React.Component{
       dateFormat: '',
       numberOfDaysInWeek: '',
       firstDayOfWeek: '',
+      hoursFormat:''
     }
     this.addEventHandler.bind(this);
     this.createDT.bind(this);
+    this.findDateAndTime.bind(this);
     return this;
   }
 
   componentDidMount() {
 
   }
+
+  componentWillMount() {
+    const resp=this.findDateAndTime();
+    return resp;
+  }
+
+  onHoursFormatChange(e){
+    const dataDetails=this.state.data;
+    if(e.currentTarget.checked){
+      this.setState({"hoursFormat":true});
+    }else{
+      this.setState({"hoursFormat":false});
+    }
+  }
+
 
   async addEventHandler() {
     const resp=await this.createDT();
@@ -42,6 +60,39 @@ class MlAddDateAndTime extends React.Component{
     FlowRouter.go("/admin/settings/dateAndTimeList");
   };
 
+  async findDateAndTime(){
+    let Id=this.props.config;
+    const response = await findDateAndTimeActionHandler(Id);
+
+    if(response.length > 0) {
+      this.setState({loading:false,data:response[0].dateAndTimeInfo});
+      // this.setState({documentId: this.state.data.documentId});
+      // this.setState({id: this.state.data._id});
+      if (this.state.data.timeFormat) {
+        this.setState({timeFormat: this.state.data.timeFormat});
+      }
+      if (this.state.data.amSymbol) {
+        this.setState({amSymbol: this.state.data.amSymbol});
+      }
+      if (this.state.data.pmSymbol) {
+        this.setState({pmSymbol: this.state.data.pmSymbol});
+      }
+      if (this.state.data.dateFormat) {
+        this.setState({dateFormat: this.state.data.dateFormat});
+      }
+      if (this.state.data.numberOfDaysInWeek) {
+        this.setState({numberOfDaysInWeek: this.state.data.numberOfDaysInWeek});
+      }
+      if (this.state.data.firstDayOfWeek) {
+        this.setState({firstDayOfWeek: this.state.data.firstDayOfWeek});
+      }
+      if (this.state.data.hoursFormat) {
+        this.setState({hoursFormat: this.state.data.hoursFormat});
+      }
+    }
+    this.setState({loading:false,data:response});
+  }
+
   async  createDT() {
     let Details = {
       timeFormat: this.state.timeFormat,
@@ -50,10 +101,9 @@ class MlAddDateAndTime extends React.Component{
       dateFormat: this.state.dateFormat,
       numberOfDaysInWeek: this.state.numberOfDaysInWeek,
       firstDayOfWeek: this.state.firstDayOfWeek,
+      hoursFormat: this.state.hoursFormat,
     }
-    console.log(Details)
-
-    const response = await addDateAndTimeActionHandler(Details);
+    const response = await upsertDateAndTimeActionHandler(Details);
     return response;
 
   }
@@ -78,11 +128,6 @@ class MlAddDateAndTime extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
       {
         showAction: true,
         actionName: 'add',
@@ -143,7 +188,7 @@ class MlAddDateAndTime extends React.Component{
                   <div className="form-group switch_wrap inline_switch">
                     <label>24</label>
                     <label className="switch">
-                      <input type="checkbox" ref="status" />
+                      <input type="checkbox" ref="status" checked={this.state.hoursFormat} onChange={this.onHoursFormatChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
                     <label>12</label>

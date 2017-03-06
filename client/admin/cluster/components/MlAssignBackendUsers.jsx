@@ -97,12 +97,12 @@ class MlAssignBackendUsers extends React.Component{
 
     async assignBackendUsers(){
         let userProfile = {};
-        userProfile['userId']   = this.state.selectedBackendUser
         userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let data = {moduleName:"USERS", actionName:"CREATE", userProfile:userProfile}
-        let response = await multipartFormHandler(data, this.refs.profilePic.files[0]);
+        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfiles}}}}
+        let data = {moduleName:"USERS", actionName:"UPDATE", userId:this.state.selectedBackendUser, user:user}
+        let response = await multipartFormHandler(data, this.refs.profilePic.files[0])
         return response;
     }
 

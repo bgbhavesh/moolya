@@ -12,9 +12,10 @@ let GlobalSettingsSchema = `
            timeFormat:String
            amSymbol:String
            pmSymbol:String
-           ateFormat:String
+           dateFormat:String
            numberOfDaysInWeek:String
-           firstDayOfWeek:String    
+           firstDayOfWeek:String   
+           hoursFormat:Boolean
       }
       
       type NumericalInfo{
@@ -22,7 +23,7 @@ let GlobalSettingsSchema = `
              firstDayOfWeek:String,
              currencySymbol:String,
              measurementSystem:String,
-             currencyFormat:String,
+             currencyFormat:Boolean,
              valueSeparator:String
       }
       
@@ -43,10 +44,10 @@ let GlobalSettingsSchema = `
            timeFormat:String
            amSymbol:String
            pmSymbol:String
-           ateFormat:String
+           dateFormat:String
            numberOfDaysInWeek:String
            firstDayOfWeek:String 
-      
+           hoursFormat:Boolean
       }
       
       input NumericalInfoRequest{
@@ -54,7 +55,7 @@ let GlobalSettingsSchema = `
            firstDayOfWeek:String,
            currencySymbol:String,
            measurementSystem:String,
-           currencyFormat:String,
+           currencyFormat:Boolean,
            valueSeparator:String
       }
       

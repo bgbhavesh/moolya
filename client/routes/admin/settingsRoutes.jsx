@@ -86,22 +86,15 @@ import MlEditTaxation from '../../admin/settings/taxation/component/MlEditTaxati
 import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
 import MlTitleList from '../../admin/settings/title/component/MlTitleList'
 import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
-/*import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
-import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
-import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'*/
 import MlRegional from '../../admin/settings/regional/component/MlRegional'
 import MlAddLanguage from '../../admin/settings/language/component/MlAddLanguage'
 import MlLanguagesList from '../../admin/settings/language/component/MlLanguagesList'
 import MlEditLanguage from '../../admin/settings/language/component/MlEditLanguage'
-import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlAddDateAndTime'
-import MlDateAndTimeList from '../../admin/settings/dateAndTime/component/MlDateAndTimeList'
-import MlEditDateAndTime from '../../admin/settings/dateAndTime/component/MlEditDateAndTime'
+import MlAddDateAndTime from '../../admin/settings/dateAndTime/component/MlDateAndTime'
 import MlAddAddressType from '../../admin/settings/addressType/component/MlAddAddressType'
 import MlAddressTypeList from '../../admin/settings/addressType/component/MlAddressTypeList'
 import MlEditAddressType from '../../admin/settings/addressType/component/MlEditAddressType'
-import MlNumericalFormatList from '../../admin/settings/numericalFormats/component/MlNumericalFormatList'
-import MlAddNumericalFormat from '../../admin/settings/numericalFormats/component/MlAddNumericalFormat'
-import MlEditNumericalFormat from '../../admin/settings/numericalFormats/component/MlEditNumericalFormat'
+import MlNumericalFormat from '../../admin/settings/numericalFormats/component/MlNumericalFormat'
 import MlAddSocialLinkType from '../../admin/settings/socialLinks/component/MlAddSocialLinkType'
 import MlSocialLinksTypeList from '../../admin/settings/socialLinks/component/MlSocialLinksTypeList'
 import MlEditSocialLinkType from  '../../admin/settings/socialLinks/component/MlEditSocialLinksType'
@@ -595,18 +588,6 @@ adminSection.route('/settings/regionalsList', {
     mount(AdminLayout,{adminContent:< MlRegional/>})
   }
 });
-/*adminSection.route('/settings/addregional', {
-  name: 'settings_AddRegional',
-  action(){
-    mount(AdminLayout,{adminContent:< MlAddRegional />})
-  }
-});
-adminSection.route('/settings/editRegional/:id', {
-  name: 'settings_EditRegional',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlEditRegional config={params.id} />})
-  }
-});*/
 adminSection.route('/settings/languagesList', {
   name: 'settings_LanguagesList',
   action(){
@@ -627,20 +608,8 @@ adminSection.route('/settings/editLanguage/:id', {
 });
 adminSection.route('/settings/dateAndTimeList', {
   name: 'settings_DateAndTimeList',
-  action(){
-    mount(AdminLayout,{adminContent:< MlDateAndTimeList/>})
-  }
-});
-adminSection.route('/settings/addDateAndTime', {
-  name: 'settings_AddDateAndTime',
-  action(){
-    mount(AdminLayout,{adminContent:< MlAddDateAndTime />})
-  }
-});
-adminSection.route('/settings/editDateAndTime/:id', {
-  name: 'settings_EditDateAndTime',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlEditDateAndTime config={params.id} />})
+  action(){``
+    mount(AdminLayout,{adminContent:< MlAddDateAndTime/>})
   }
 });
 
@@ -748,19 +717,7 @@ adminSection.route('/settings/editAddressType/:id', {
 adminSection.route('/settings/numericalFormatList', {
   name: 'settings_NumericalFormatList',
   action(){
-    mount(AdminLayout,{adminContent:< MlNumericalFormatList/>})
-  }
-});
-adminSection.route('/settings/addNumericalFormat', {
-  name: 'settings_AddNumericalFormat',
-  action(){
-    mount(AdminLayout,{adminContent:<MlAddNumericalFormat />})
-  }
-});
-adminSection.route('/settings/editNumericalFormat/:id', {
-  name: 'settings_EditNumericalFormat',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlEditNumericalFormat config={params.id} />})
+    mount(AdminLayout,{adminContent:< MlNumericalFormat/>})
   }
 });
 adminSection.route('/settings/socialLinkTypeList', {

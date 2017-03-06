@@ -7,11 +7,14 @@
 module.exports = class MlRespPayload{
     constructor(){
     }
-    successPayload(object, code){
+    successPayload(result, code){
         let response = {};
         response.success = true;
         response.code = code;
-        response.result = JSON.stringify(object);
+        if(typeof result == 'object')
+          response.result = JSON.stringify(result);
+        else
+          response.result = result;
         return response;
     }
 

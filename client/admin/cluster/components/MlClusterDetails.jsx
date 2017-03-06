@@ -73,7 +73,12 @@ class MlClusterDetails extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/dashboard");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/dashboard");
+      else
+        toastr.error(response.result);
+    }
   };
 
   render() {

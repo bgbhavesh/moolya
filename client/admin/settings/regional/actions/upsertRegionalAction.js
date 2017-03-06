@@ -4,19 +4,6 @@ import {client} from '../../../core/apolloConnection';
 export async function upsertRegionalActionHandler(regionalDetails)
 {
 let regionalInfo=regionalDetails
- /* const result = await client.mutate({
-    mutation: gql`
-        mutation ($regional: regionalObject){
-            createRegional(
-                regional: $regional
-            )
-         }
-        `,
-    variables: {
-      regional: Details
-    }
-  })
-  console.log(result)*/
   const result = await client.mutate({
    mutation: gql`
    mutation($regionalInfo:RegionalInfoRequest){

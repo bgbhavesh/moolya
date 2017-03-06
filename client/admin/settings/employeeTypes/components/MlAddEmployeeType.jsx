@@ -35,7 +35,7 @@ class MlAddEmployeeType extends React.Component{
       aboutEmployment: this.refs.aboutEmployment.value,
       isActive: this.refs.isActive.checked
     }
-    console.log(EmpTypeDetails)
+
     const response = await addEmployeeTypeActionHandler(EmpTypeDetails)
     return response;
 

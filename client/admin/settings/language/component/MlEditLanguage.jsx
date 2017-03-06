@@ -47,7 +47,7 @@ class MlEditLanguage extends React.Component{
 
   async  updateLang() {
     let Details = {
-      _id: this.refs.id.value,
+      id: this.props.config,
       languageName: this.refs.name.value,
       languageDisplayName: this.refs.displayName.value,
       aboutLanguage: this.refs.about.value,
@@ -99,7 +99,6 @@ class MlEditLanguage extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="id" defaultValue={this.state.data&&this.state.data._id} hidden="true"/>
                       <input type="text" ref="name" placeholder="Name" defaultValue={this.state.data&&this.state.data.languageName} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">

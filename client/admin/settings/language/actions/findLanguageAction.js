@@ -6,14 +6,16 @@ export async function findLanguageActionHandler(Id)
   let did=Id;
   const result = await client.query({
     query: gql`
-    query  ($id: String){
-        findLanguage(_id:$id){
+       query  ($id: String){
+        findMasterSetting(_id:$id){
+         id:_id
+        isActive
+        languageInfo{
           languageName
           languageDisplayName
           aboutLanguage
-          _id
-          isActive
         }
+      }
       }
     `,
     variables: {
@@ -21,6 +23,10 @@ export async function findLanguageActionHandler(Id)
     },
     forceFetch:true
   })
-  const id = result.data.findLanguage;
-  return id
+  const masterSetting= result.data.findMasterSetting||{};
+  const {languageName,aboutLanguage,languageDisplayName}=masterSetting.languageInfo||{};
+  if(result){
+    return {isActive:masterSetting.isActive,languageName,aboutLanguage,languageDisplayName};
+  }
+  return {};
 }

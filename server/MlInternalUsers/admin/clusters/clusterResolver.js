@@ -48,6 +48,21 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
         for(key in args.cluster){
             cluster[key] = args.cluster[key]
         }
+        if(cluster.isActive){
+          if(cluster.status && cluster.status.code != 101){
+            cluster.status= {
+              code: 101,
+              description :"Work In Progress"
+            }
+          }
+        }else{
+        if(cluster.status && cluster.status.code != 110){
+          cluster.status= {
+            code: 110,
+            description :"Inactive"
+          }
+        }
+      }
         let resp = MlClusters.update({_id:args.clusterId}, {$set:cluster}, {upsert:true})
         if(resp){
             let code = 200;

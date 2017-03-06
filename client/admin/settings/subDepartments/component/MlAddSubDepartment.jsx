@@ -40,7 +40,6 @@ class MlAddSubDepartment extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/subDepartmentsList");
   };
 

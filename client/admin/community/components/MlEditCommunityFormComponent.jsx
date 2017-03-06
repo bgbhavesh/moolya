@@ -141,7 +141,7 @@ class MlEditCommunityFormComponent extends React.Component {
               <form>
                 <div className="form-group">
                   <input type="text" ref="communityName" defaultValue={this.state.data&&this.state.data.name} readOnly="true" placeholder="Community Name"
-                         className="form-control float-label" id=""/>
+                         className="form-control float-label" id="" disabled="disabled"/>
 
                 </div>
                 <div className="form-group">

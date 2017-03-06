@@ -43,6 +43,12 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
 // }
 
 MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info) =>{
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
     if(MlSubDepartments.find({subDepartmentName:args.subDepartment.subDepartmentName}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
@@ -51,26 +57,55 @@ MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info
     if(id){
         let code = 200;
         let result = {subDepartmentId: id}
-        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        let response = new MlRespPayload().successPayload(result, code);
         return response
     }
 }
 
 MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info) =>{
-  let subDepartment = MlSubDepartments.findOne({_id: args.subDepartmentId});
+/*  let subDepartment = MlSubDepartments.findOne({_id: args.subDepartmentId});
   if(subDepartment)
   {
-    /* for(key in args.department){
-     cluster[key] = args.department[key]
-     }*/
-
-    let resp = MlSubDepartments.update({_id:args.subDepartmentId}, {$set:args.subDepartment}, {upsert:true})
-    if(resp){
-      let code = 200;
-      let result = {cluster: resp}
-      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-      return response
+    if(subDepartment.isSystemDefined){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Cannot edit system defined sub-department", code);
+      return response;
+    }else {
+      let resp = MlSubDepartments.update({_id: args.subDepartmentId}, {$set: args.subDepartment}, {upsert: true})
+      if (resp) {
+        let code = 200;
+        let result = {cluster: resp}
+        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        return response
+      }
     }
+  }*/
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
+  if (args.subDepartmentId) {
+    let subDepartment = MlSubDepartments.findOne({_id: args.subDepartmentId});
+    if(subDepartment)
+    {
+      if(subDepartment.isSystemDefined){
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Cannot edit system defined sub-department", code);
+        return response;
+      }else {
+        let resp = MlSubDepartments.update({_id: args.subDepartmentId}, {$set: args.subDepartment}, {upsert: true})
+        if (resp) {
+          let code = 200;
+          let result = {cluster: resp}
+          let response = new MlRespPayload().successPayload(result, code);
+          return response
+        }
+      }
+    }
+
   }
 
 }

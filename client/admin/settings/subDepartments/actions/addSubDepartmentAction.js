@@ -15,17 +15,26 @@ export async function addSubDepartmentActionHandler(SubDepartmentDetails)
 */
     const result = await client.mutate({
         mutation: gql`
-        mutation ($subDepartment:subDepartmentObject){
+        mutation ($subDepartment:subDepartmentObject,$moduleName:String, $actionName:String){
             createSubDepartment(
-                subDepartment: $subDepartment
-            ) 
+                subDepartment: $subDepartment,
+                moduleName:$moduleName,
+                actionName:$actionName
+            ){
+              success,
+              code,
+              result
+            } 
          }
         `,
         variables: {
-            subDepartment
+            subDepartment,
+            moduleName:"SUBDEPARTMENT",
+            actionName:"CREATE"
         }
     })
-    console.log(result)
+
     const id = result.data.createSubDepartment;
+  console.log(id)
     return id
 }

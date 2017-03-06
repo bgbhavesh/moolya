@@ -47,8 +47,8 @@ let subDepartmentSchema = `
     }
     
     type Mutation{
-        createSubDepartment(subDepartment:subDepartmentObject):String
-        updateSubDepartment(subDepartmentId:String, subDepartment:subDepartmentObject):String
+        createSubDepartment(subDepartment:subDepartmentObject, moduleName:String, actionName:String):response
+        updateSubDepartment(subDepartmentId:String, subDepartment:subDepartmentObject, moduleName:String, actionName:String):response
     }
     type Query{
         findSubDepartment(_id: String): SubDepartment

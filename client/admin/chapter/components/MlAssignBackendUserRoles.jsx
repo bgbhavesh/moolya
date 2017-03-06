@@ -27,7 +27,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       this.state={
           roleForm:[],
           roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:this.props.chapterId, subChapterId:this.props.subChapterId,  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
-          selectedRole:""
+          selectedRole:"",
+          hierarchyLevel:''
       }
       this.findUserDepartments.bind(this);
       return this;
@@ -84,7 +85,24 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       });
   }
 
+  optionsBySelectAction(index, event) {
 
+   /* if (event.target.checked) {
+      let value = event.target.name
+      actions.push({actionId: value})
+    }else {
+      let flag='';
+      _.each(actions,function (item,key) {
+        if (item.actionId==event.target.name){
+          flag=key;
+        }
+      })
+      actions.splice(flag,1);
+    }
+
+    this.setState({assignModulesToRoles: assignModulesToRoles})
+    this.props.getassignModulesToRoles(this.state.assignModulesToRoles)*/
+  }
 
   onChange(id,event){
       let roleDetails=this.state.roleDetails
@@ -116,6 +134,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
   }
 
   async findUserDepartments(){
+    let hierarchyLevel = Meteor.user().profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].hierarchyLevel;
+    this.setState({hierarchyLevel: hierarchyLevel})
     let userId = this.props.userId;
     let subChapterId = this.props.subChapterId;
     const response = await findUserDepartmentypeActionHandler(userId, subChapterId);
@@ -133,8 +153,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
     return(
       <div>
         {userDepartments.map(function (department) {
-          let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId}}};
-          let query = gql`query($departmentId:String, $clusterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId) {value:_id, label:roleName}}`;
+          let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId,hierarchyLevel:that.state.hierarchyLevel}}};
+          let query = gql`query($departmentId:String, $clusterId:String, $hierarchyLevel:String){data:fetchRolesByDepSubDepTest(departmentId: $departmentId, clusterId: $clusterId,hierarchyLevel:$hierarchyLevel) {value:_id, label:roleName}}`;
           return(
             <div className="panel panel-default">
               <div className="panel-heading">Assign Role</div>
@@ -146,6 +166,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                   <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
                          value={department.subDepartmentName}/>
                 </div>
+
+                  {/*<div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
+                                                      onChange={that.optionsBySelectAction.bind(that)}/><label
+                    htmlFor="chapter_admin_check"><span></span>is ChapterAdmin</label></div>*/}
+
                 <div className="">
                   <div className="">
                     {roleDetails.map(function (details, idx) {

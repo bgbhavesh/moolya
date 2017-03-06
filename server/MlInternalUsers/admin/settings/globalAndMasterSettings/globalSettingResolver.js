@@ -1,3 +1,6 @@
+/**
+ * Created by mohammed.mohasin on 04/03/17.
+ */
 import MlResolver from '../../mlAdminResolverDef'
 import MlGlobalSettingRepo from './repository/mlGlobalSettingRepo';
 

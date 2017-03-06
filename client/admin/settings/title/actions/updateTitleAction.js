@@ -3,30 +3,21 @@ import {client} from '../../../core/apolloConnection';
 
 export async function updateTitleActionHandler(TitleDetails) {
   let _id=TitleDetails.id;
-  let titleName = TitleDetails.titleName;
-  let titleDisplayName = TitleDetails.titleDisplayName;
-  let aboutTitle = TitleDetails.aboutTitle;
-  let isActive = TitleDetails.isActive
+  let titleName = TitleDetails.titleName||null;
+  let titleDisplayName = TitleDetails.titleDisplayName||null;
+  let aboutTitle = TitleDetails.aboutTitle||null;
+  let isActive = TitleDetails.isActive;
+  let titleInfo={titleName,titleDisplayName,aboutTitle};
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$titleName: String, $titleDisplayName: String, $aboutTitle: String,$isActive: Boolean){
-        UpdateTitle(
-          _id:$_id
-          titleName: $titleName,
-          titleDisplayName: $titleDisplayName,
-          aboutTitle: $aboutTitle,
-          isActive :$isActive
-        ) 
+    mutation ($masterData:MasterSettingsRequest){
+        updateMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"UPDATE",type:TITLE,masterData:$masterData) 
       }
     `,
     variables: {
-      _id,
-      titleName,
-      titleDisplayName,
-      aboutTitle,
-      isActive
+      masterData:{"titleInfo":titleInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result;
+  const id = result.updateMasterSetting;
   return id
 }

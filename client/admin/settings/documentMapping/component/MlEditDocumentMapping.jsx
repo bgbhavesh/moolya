@@ -265,7 +265,7 @@ class MlEditDocumentMapping extends React.Component{
                     <div className="form_bg">
                       <form>
                         <div className="form-group">
-                          <input type="text"  ref="documentId" defaultValue={this.state.data&&this.state.data.documentId} placeholder="Document Id" className="form-control float-label" id=""/>
+                          <input type="text"  ref="documentId" defaultValue={this.state.data&&this.state.data.documentId} placeholder="Document Id" className="form-control float-label" id="" disabled="disabled"/>
                         </div>
 
                         <div className="form-group">

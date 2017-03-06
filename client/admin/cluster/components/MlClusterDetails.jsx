@@ -104,7 +104,7 @@ class MlClusterDetails extends React.Component {
                       <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
                       <input type="text" ref="countryName" placeholder="Cluster Name"
                              defaultValue={this.state.data && this.state.data.countryName}
-                             className="form-control float-label"/>
+                             className="form-control float-label" disabled="disabled"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="displayName" placeholder="Display Name"
@@ -149,7 +149,7 @@ class MlClusterDetails extends React.Component {
                       <label>Status</label><br/>
                       <label className="switch">
                         <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
-                               onChange={this.onStatusChangeActive.bind(this)}/>
+                               onChange={this.onStatusChangeActive.bind(this)} disabled="disabled"/>
                         <div className="slider"></div>
                       </label>
                     </div>

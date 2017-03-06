@@ -183,7 +183,7 @@ class MlAddProcessMapping extends React.Component{
     let UserTypeOptions = [
       {value: 'moolya', label: 'moolya'},
       {value: 'non-moolya', label: 'non-moolya'}
-    ];
+    ]
     let query=gql` query{
     data:fetchCountriesSearch{label:country,value:countryCode}
     }
@@ -247,11 +247,11 @@ class MlAddProcessMapping extends React.Component{
 
 
                     <div className="form-group">
-                      <Select name="form-field-name"  placeholder={"UserType"}  className="float-label"  options={UserTypeOptions}  value={this.state.userTypes}  onChange={this.optionsBySelectUserType.bind(this)}/>
+                      <Select name="form-field-name"  placeholder="UserType"  className="float-label"  options={UserTypeOptions}  value={this.state.userTypes}  onChange={this.optionsBySelectUserType.bind(this)}/>
                     </div>
 
                     <div className="form-group">
-                      <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
+                      <Select name="form-field-name"  placeholder="Identity"  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
                     </div>
 
                     <div className="form-group">

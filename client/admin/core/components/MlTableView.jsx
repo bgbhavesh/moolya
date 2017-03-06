@@ -21,15 +21,21 @@ export default class MlTableView extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
+    let hasQueryOptions = this.props.queryOptions ? true : false;
+    let context=null;
+    if (hasQueryOptions) {
+      let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
+      context=dynamicQueryOptions&&dynamicQueryOptions.context?dynamicQueryOptions.context:null;
+    }
     if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
       let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
-      this.props.fetchMore(nextState.sizePerPage, nextState.pageNumber,searchCriteria,nextState.sort);
+      this.props.fetchMore(nextState.sizePerPage, nextState.pageNumber,searchCriteria,nextState.sort,context);
     }else if(this.state.searchValue!==nextState.searchValue){
        let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
-       this.props.fetchMore(this.state.sizePerPage,1,searchCriteria,nextState.sort);
+       this.props.fetchMore(this.state.sizePerPage,1,searchCriteria,nextState.sort,context);
     }else if(this.state.sort!==nextState.sort){
       let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
-      this.props.fetchMore(this.state.sizePerPage,1,searchCriteria,nextState.sort);
+      this.props.fetchMore(this.state.sizePerPage,1,searchCriteria,nextState.sort,context);
     }
   }
 

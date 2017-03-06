@@ -6,12 +6,14 @@ export async function findTitleActionHandler(TitleId) {
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        FindTitle(_id:$id){
+        findMasterSetting(_id:$id){
          id:_id
-        titleName
-        titleDisplayName
         isActive
-        aboutTitle
+        titleInfo{
+             titleName
+             aboutTitle
+             titleDisplayName
+        }
       }
       }
     `,
@@ -19,7 +21,11 @@ export async function findTitleActionHandler(TitleId) {
       id:did
     },
     forceFetch:true
-  })
-  const id = result.data.FindTitle;
-  return id
+  });
+  const masterSetting= result.data.findMasterSetting||{};
+  const {titleName,aboutTitle,titleDisplayName}=masterSetting.titleInfo||{};
+  if(result){
+    return {isActive:masterSetting.isActive,titleName,aboutTitle,titleDisplayName};
+  }
+  return {};
 }

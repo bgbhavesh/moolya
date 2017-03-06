@@ -6,7 +6,13 @@ import gql from 'graphql-tag'
 function departmentsFormatter (data){
 
   let departments=data&&data.data&&data.data.clustersList?data.data.clustersList:[];
-  return <div>{departments.join()}</div>;
+  if(departments.length>0){
+    return <div>{departments.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+  //return <div>{departments.join()}</div>;
 }
 
 //@for displaying chapters under dep in departments list

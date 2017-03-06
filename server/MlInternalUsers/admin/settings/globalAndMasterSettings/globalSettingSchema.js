@@ -12,9 +12,10 @@ let GlobalSettingsSchema = `
            timeFormat:String
            amSymbol:String
            pmSymbol:String
-           ateFormat:String
+           dateFormat:String
            numberOfDaysInWeek:String
-           firstDayOfWeek:String    
+           firstDayOfWeek:String   
+           hoursFormat:Boolean
       }
       
       type NumericalInfo{
@@ -43,10 +44,10 @@ let GlobalSettingsSchema = `
            timeFormat:String
            amSymbol:String
            pmSymbol:String
-           ateFormat:String
+           dateFormat:String
            numberOfDaysInWeek:String
            firstDayOfWeek:String 
-      
+           hoursFormat:Boolean
       }
       
       input NumericalInfoRequest{

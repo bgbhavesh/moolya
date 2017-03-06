@@ -7,21 +7,27 @@ export async function findGenderActionHandler(Id)
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        findGender(_id:$id){
-              genderName
-              genderDisplayName
-              aboutGender
-              genderUploadIcon
-              _id
-              isActive
+        findMasterSetting(_id:$id){
+        _id:_id
+        isActive
+        genderInfo{
+             genderName
+             aboutGender
+             genderDisplayName
+             genderUploadIcon
         }
+      }
       }
     `,
     variables: {
       id:did
     },
     forceFetch:true
-  })
-  const id = result.data.findGender;
-  return id
+  });
+  const masterSetting= result.data.findMasterSetting||{};
+  const {genderName,aboutGender,genderDisplayName,genderUploadIcon}=masterSetting.genderInfo||{};
+  if(result){
+    return {isActive:masterSetting.isActive,genderName,aboutGender,genderDisplayName,genderUploadIcon,_id:masterSetting._id};
+  }
+  return {};
 }

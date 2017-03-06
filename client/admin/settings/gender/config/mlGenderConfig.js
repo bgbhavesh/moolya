@@ -9,19 +9,17 @@ const mlGenderTableConfig=new MlViewer.View({
   module:"gender",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["genderName","genderDisplayName","aboutGender","isActive"],
-  searchFields:["genderName","genderDisplayName","aboutGender","isActive"],
+  fields:["genderInfo.genderName","genderInfo.genderDisplayName","genderInfo.aboutGender","isActive"],
+  searchFields:["genderInfo.genderName","genderInfo.","genderInfo.genderDisplayName","genderInfo.aboutGender","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "genderName", title: "Name",dataSort:true},
-    {dataField: "genderDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "aboutGender", title: "About",dataSort:true},
-    // {dataField: "addressUploadIcon", title: "Icon",dataSort:true,customComponent:FlagFormatter},
-    {dataField: "isActive", title: "Status",dataSort:true,customComponent:ActiveFormatter},
-    // {dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
+    {dataField: "genderInfo.genderName", title: "Name",dataSort:true,customComponent:function(data){ return <div>{data.data.genderInfo.genderName}</div>}},
+    {dataField: "genderInfo.genderDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.genderInfo.genderDisplayName}</div>}},
+    {dataField: "genderInfo.aboutGender", title: "About",dataSort:true,customComponent:function(data){ return <div>{data.data.genderInfo.aboutGender}</div>}},
+    {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -43,30 +41,32 @@ const mlGenderTableConfig=new MlViewer.View({
       handler: (data)=>{
         FlowRouter.go("/admin/settings/addGender")
       }
-    },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
     }
   ],
   sizePerPage:5,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"GENDER"}}
+  },
   graphQlQuery:gql`
-              query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"gender",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                      ...on Gender{
-                             _id
-                            genderName
-                            aboutGender
-                            genderUploadIcon
-                            genderDisplayName
-                            isActive
+                query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 genderInfo{
+                                    genderName
+                                    aboutGender
+                                    genderDisplayName
+                                 }
+                                    
                           }
                       }
-                }
               }
+              }
+            
               `
 });
 

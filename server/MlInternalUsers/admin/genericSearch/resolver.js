@@ -184,6 +184,42 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   if(args.module=="documentMapping"){
     data= MlDocumentMapping.find(query,findOptions).fetch();
+    data.map(function (doc,index) {
+      let clusterIds =[];
+      let kycCategoryIds = [];
+      let allowableFormatIds = [];
+      doc.clusters.map(function (ids) {
+        clusterIds.push(ids.id)
+      });
+      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
+      let clusterNames = [];  //@array of strings
+      clusterData.map(function (doc) {
+        clusterNames.push(doc.clusterName)
+      });
+
+      doc.kycCategory.map(function (ids) {
+        kycCategoryIds.push(ids.id)
+      });
+      const kycCategoryData =  MlDocumentCategories.find( { _id: { $in: kycCategoryIds } } ).fetch() || [];
+      let kycCategoryNames = [];  //@array of strings
+      kycCategoryData.map(function (doc) {
+        kycCategoryNames.push(doc.docCategoryName)
+      });
+
+      doc.allowableFormat.map(function (ids) {
+        allowableFormatIds.push(ids.id)
+      });
+      const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: allowableFormatIds } } ).fetch() || [];
+      let allowableFormatNames = [];  //@array of strings
+      allowableFormatData.map(function (doc) {
+        allowableFormatNames.push(doc.docFormatName)
+      });
+
+      data[index].clusters = clusterNames || [];
+      data[index].kycCategory = kycCategoryNames || [];
+      data[index].allowableFormat = allowableFormatNames || [];
+
+    });
     totalRecords=MlDocumentMapping.find(query,findOptions).count();
   }
   if(args.module=="transaction"){
@@ -445,7 +481,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'KycCategories'
     }
     if(data.documentDisplayName){
-      return 'DocumentOutput'
+      return 'DocumentMapping'
     }
     if(data.transactionName){
       return 'Transaction'

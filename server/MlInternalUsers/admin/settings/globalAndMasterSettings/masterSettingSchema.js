@@ -97,6 +97,20 @@ let MasterSettingsSchema = `
           emailUploadIcon:String
       }
       
+      type GenderInfo{
+          genderName:String
+          genderDisplayName:String
+          aboutGender:String
+          genderUploadIcon:String
+      }
+      
+      input GenderInfoRequest{
+          genderName:String
+          genderDisplayName:String
+          aboutGender:String
+          genderUploadIcon:String
+      }
+      
       
       type MasterSettings{
          _id:String,
@@ -108,6 +122,7 @@ let MasterSettingsSchema = `
          employmentTypeInfo:EmploymentTypeInfo
          companyTypeInfo:CompanyTypeInfo
          emailTypeInfo:EmailTypeInfo
+         genderInfo:GenderInfo
       }
       
       input MasterSettingsRequest{
@@ -120,6 +135,7 @@ let MasterSettingsSchema = `
          employmentTypeInfo:EmploymentTypeInfoRequest
          companyTypeInfo:CompanyTypeInfoRequest
          emailTypeInfo:EmailTypeInfoRequest
+         genderInfo:GenderInfoRequest
       }
       type MasterSettingsDropData{
           label:String,

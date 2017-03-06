@@ -322,7 +322,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   })
 
   let userProfile = {
-    clusterId: data.clusterId,
+    clusterId:  data.profile.InternalUprofile.moolyaProfile.userProfiles.clusterId,
     userRoles:  roles,
     isDefault: false
   }

@@ -6,24 +6,17 @@ export async function addTaxActionHandler(TaxTypeDetails) {
   let taxDisplayName = TaxTypeDetails.taxDisplayName;
   let aboutTax = TaxTypeDetails.aboutTax;
   let isActive = TaxTypeDetails.isActive;
+  let taxTypeInfo={taxName,taxDisplayName,aboutTax};
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($taxName: String, $taxDisplayName: String, $aboutTax: String,$isActive: Boolean){
-        CreateTax(
-          taxName: $taxName,
-          taxDisplayName: $taxDisplayName,
-          aboutTax: $aboutTax,
-          isActive :$isActive
-        ) 
+    mutation ($masterData:MasterSettingsRequest){
+        createMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"CREATE",type:TAXTYPE,masterData:$masterData) 
       }
     `,
     variables: {
-      taxName,
-      taxDisplayName,
-      aboutTax,
-      isActive
+      masterData:{"taxTypeInfo":taxTypeInfo,"isActive":isActive},
     }
   })
-  const id = result.data.CreateTax;
+  const id = result.createMasterSetting;
   return id
 }

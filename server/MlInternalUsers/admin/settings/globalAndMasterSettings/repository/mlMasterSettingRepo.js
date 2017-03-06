@@ -24,6 +24,9 @@ export default class MlMasterSettingRepo{
      let query={"hierarchyLevel":3,"hierarchyCode":"CLUSTER","hierarchyRefId":userProfile.defaultProfileHierarchyRefId,"hierarchyRefName":cluster.clusterName};
 
     switch(requestParams.type){
+      case "TAXTYPE":
+        settingsObj={"type":"TAXTYPE","taxTypeInfo":requestParams.masterData.taxTypeInfo,isActive:requestParams.masterData.isActive};
+        break;
      case "TITLE":
         settingsObj={"type":"TITLE","titleInfo":requestParams.masterData.titleInfo,isActive:requestParams.masterData.isActive};
         break;

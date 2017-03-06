@@ -8,6 +8,16 @@ let MasterSettingsSchema = `
             LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
             EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
 }
+      type TaxTypeInfo{
+          taxName:String
+          aboutTax:String
+          taxDisplayName:String
+      }
+      input TaxTypeInfoRequest{
+          taxName:String
+          aboutTax:String
+          taxDisplayName:String
+      }
       type LanguageInfo{
           languageName:String
           aboutLanguage:String
@@ -50,6 +60,7 @@ let MasterSettingsSchema = `
       type MasterSettings{
          _id:String,
          isActive:Boolean
+         taxTypeInfo:TaxTypeInfo
          languageInfo:LanguageInfo
          addressTypeInfo:AddressTypeInfo
          titleInfo:TitleInfo
@@ -58,6 +69,7 @@ let MasterSettingsSchema = `
       input MasterSettingsRequest{
          _id:String
          isActive:Boolean
+         taxTypeInfo:TaxTypeInfoRequest
          languageInfo:LanguageInfoRequest
          addressTypeInfo:AddressTypeInfoRequest
          titleInfo:TitleInfoRequest

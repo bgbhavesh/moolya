@@ -12,7 +12,7 @@ const mlTitleTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "titleInfo.titleName", title: "Title",dataSort:true,customComponent:function(data){ return <div>{data.data.titleInfo.titleName}</div>}},
     {dataField: "titleInfo.titleDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.titleInfo.titleDisplayName}</div>}},
     {dataField: "isActive", title: "Active",dataSort:true}

@@ -4,10 +4,21 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let MasterSettingsSchema = `
-   enum MASTER_SETTINGS_TYPE {
-            LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
-            EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
-}
+       enum MASTER_SETTINGS_TYPE {
+                LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
+                EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
+      }
+      type TaxTypeInfo{
+          taxName:String
+          aboutTax:String
+          taxDisplayName:String
+      }
+      input TaxTypeInfoRequest{
+          taxName:String
+          aboutTax:String
+          taxDisplayName:String
+      }
+    
       type LanguageInfo{
           languageName:String
           aboutLanguage:String
@@ -46,26 +57,78 @@ let MasterSettingsSchema = `
           titleDisplayName:String
       }
       
+      type EmploymentTypeInfo{
+          employmentName:String
+          employmentDisplayName:String
+          aboutEmployment:String
+      }
+      
+      input EmploymentTypeInfoRequest{
+          employmentName:String
+          employmentDisplayName:String
+          aboutEmployment:String
+      }
+      
+      
+      type CompanyTypeInfo{
+          companyName:String
+          companyDisplayName:String
+          aboutCompany:String
+      }
+      
+      input CompanyTypeInfoRequest{
+          companyName:String
+          companyDisplayName:String
+          aboutCompany:String
+      }
+      
+      
+      type EmailTypeInfo{
+          emailName:String
+          emailDisplayName:String
+          aboutEmail:String
+          emailUploadIcon:String
+      }
+      
+      input EmailTypeInfoRequest{
+          emailName:String
+          emailDisplayName:String
+          aboutEmail:String
+          emailUploadIcon:String
+      }
+      
       
       type MasterSettings{
          _id:String,
          isActive:Boolean
+         taxTypeInfo:TaxTypeInfo
          languageInfo:LanguageInfo
          addressTypeInfo:AddressTypeInfo
          titleInfo:TitleInfo
+         employmentTypeInfo:EmploymentTypeInfo
+         companyTypeInfo:CompanyTypeInfo
+         emailTypeInfo:EmailTypeInfo
       }
       
       input MasterSettingsRequest{
          _id:String
          isActive:Boolean
+         taxTypeInfo:TaxTypeInfoRequest
          languageInfo:LanguageInfoRequest
          addressTypeInfo:AddressTypeInfoRequest
          titleInfo:TitleInfoRequest
+         employmentTypeInfo:EmploymentTypeInfoRequest
+         companyTypeInfo:CompanyTypeInfoRequest
+         emailTypeInfo:EmailTypeInfoRequest
       }
-
+      type MasterSettingsDropData{
+          label:String,
+          value:String
+      }
       type Query{
         fetchMasterSettings(type:MASTER_SETTINGS_TYPE!):[MasterSettings]
         findMasterSetting(_id:String):MasterSettings
+        fetchMasterSettingsForDropDown(type:MASTER_SETTINGS_TYPE!):[MasterSettingsDropData]
     }
     
     type Mutation{

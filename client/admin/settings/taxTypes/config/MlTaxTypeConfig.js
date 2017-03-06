@@ -6,15 +6,15 @@ const mlTaxTypeTableConfig=new MlViewer.View({
   module:"tax",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["taxName","taxDisplayName","isActive"],
-  searchFields:["taxName","taxDisplayName","isActive"],
+  fields:["taxTypeInfo.taxName","taxTypeInfo.taxDisplayName","isActive"],
+  searchFields:["taxTypeInfo.taxName","taxTypeInfo.taxDisplayName","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "taxName", title: "Tax Type",dataSort:true},
-    {dataField: "taxDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "taxTypeInfo.taxName", title: "Tax Type",dataSort:true,customComponent:function(data){ return <div>{data.data.taxTypeInfo.taxName}</div>}},
+    {dataField: "taxTypeInfo.taxDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.taxTypeInfo.taxDisplayName}</div>}},
     {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -24,11 +24,11 @@ const mlTaxTypeTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler:  (data)=>{
-        if(data&&data.id){
-          FlowRouter.go("/admin/settings/editTaxType/"+data.id)
+        if(data&&data._id){
+          FlowRouter.go("/admin/settings/editTaxType/"+data._id)
         }
         else{
-          alert("Please select a Tax")
+          alert("Please select a Tax Type")
         }
       }
 
@@ -47,20 +47,30 @@ const mlTaxTypeTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"TAXTYPE"}}
+  },
+  sizePerPage:5,
   graphQlQuery:gql`
-                query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"tax",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on Tax{
-                              taxName
-                              taxDisplayName
-                              isActive
-                              id:_id
+           query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 taxTypeInfo {
+                                   taxName
+                                   aboutTax
+                                   taxDisplayName
+                                 }
+                                    
                           }
                       }
               }
               }
+            
             
               `
 });

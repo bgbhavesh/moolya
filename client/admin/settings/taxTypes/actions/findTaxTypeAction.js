@@ -6,12 +6,14 @@ export async function findTaxTypeActionHandler(TaxTypeId) {
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        FindTax(_id:$id){
+        findMasterSetting(_id:$id){
          id:_id
-        taxName
-        taxDisplayName
         isActive
-        aboutTax
+         taxTypeInfo {
+                 taxName
+                 aboutTax
+                 taxDisplayName
+               }
       }
       }
     `,
@@ -20,6 +22,10 @@ export async function findTaxTypeActionHandler(TaxTypeId) {
     },
     forceFetch:true
   })
-  const id = result.data.FindTax;
-  return id
+  const masterSetting= result.data.findMasterSetting||{};
+  const {taxName,aboutTax,taxDisplayName}=masterSetting.taxTypeInfo||{};
+  if(result){
+    return {isActive:masterSetting.isActive,taxName,aboutTax,taxDisplayName};
+  }
+  return {};
 }

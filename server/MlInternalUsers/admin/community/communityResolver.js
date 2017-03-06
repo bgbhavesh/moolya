@@ -272,17 +272,17 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
       isActive,
       clusters = [];
     if(!args.communityId)
-        return new MlRespPayload.successPayload("Failed to update community", 400);
+        return new MlRespPayload().errorPayload("Failed to update community", 400);
     if(!context.userId){
-        return new MlRespPayload.successPayload("Failed to update community", 400);
+        return new MlRespPayload().errorPayload("Failed to update community", 400);
     }
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
     if(!userProfile||!userProfile.hierarchyLevel){
-        return new MlRespPayload.successPayload("Failed to update community", 400);
+        return new MlRespPayload().errorPayload("Failed to update community", 400);
     }
     hierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
     if(!hierarchy){
-        return new MlRespPayload.successPayload("Failed to update community", 400);
+        return new MlRespPayload().errorPayload("Failed to update community", 400);
     }
     //platform admin
     if(hierarchy.isParent===true){
@@ -303,14 +303,14 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
             }
         }
         diff.map(function (clusterId) {
-            MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId, clusterId:clusterId}]}, {$set:{isActive:isActive}})
+            resp = MlCommunityAccess.update({"$and":[{communityDefId:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {$set:{isActive:isActive}})
         })
         if(resp){
-            return new MlRespPayload.successPayload("Community updated successfully", 200)
+            return new MlRespPayload().successPayload("Community updated successfully", 200)
         }
     }
 
-    return new MlRespPayload.successPayload("Failed to update community", 400);
+    return new MlRespPayload().errorPayload("Failed to update community", 400);
 }
 
 

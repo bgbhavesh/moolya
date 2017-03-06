@@ -3,15 +3,18 @@ import {client} from '../../../core/apolloConnection';
 
 export async function findCompanyTypeActionHandler(CompanyTypeId) {
   let did=CompanyTypeId
+
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        FindCompanyType(_id:$id){
+        findMasterSetting(_id:$id){
          id:_id
-        companyName
-        companyDisplayName
         isActive
-        aboutCompany
+        companyTypeInfo{
+             companyName
+             aboutCompany
+             companyDisplayName
+        }
       }
       }
     `,
@@ -19,7 +22,11 @@ export async function findCompanyTypeActionHandler(CompanyTypeId) {
       id:did
     },
     forceFetch:true
-  })
-  const id = result.data.FindCompanyType;
-  return id
+  });
+  const masterSetting= result.data.findMasterSetting||{};
+  const {companyName,aboutCompany,companyDisplayName}=masterSetting.companyTypeInfo||{};
+  if(result){
+    return {isActive:masterSetting.isActive,companyName,aboutCompany,companyDisplayName};
+  }
+  return {};
 }

@@ -76,7 +76,7 @@ let chapterSchema = `
     }
     
     input subChapterObject{
-        _id:String,
+        subChapterId:String,
         clusterId:String, 
         clusterName:String,
         stateId:String,
@@ -121,7 +121,7 @@ let chapterSchema = `
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
         createSubChapter(subChapter:subChapterObject):String
-        updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject):String
+        updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
      }
 `
 

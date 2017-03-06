@@ -104,7 +104,7 @@ import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
-// @Importing Cluster Admin Setting Employee Type Components from parent directory
+// @Importing Cluster Admin SettNing Employee Type Components from parent directory
 
 import MlEmployeeTypesList from '../../admin/settings/employeeTypes/components/MlEmployeeTypesList'
 import MlAddEmployeeType from '../../admin/settings/employeeTypes/components/MlAddEmployeeType'

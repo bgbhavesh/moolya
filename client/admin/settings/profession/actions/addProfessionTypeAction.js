@@ -11,15 +11,21 @@ export async function addProfessionActionHandler(ProfessionDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($professionName: String, $professionDisplayName: String, $industryId: String,$industryName:String,$about:String,$isActive: Boolean){
+    mutation  ($professionName: String, $professionDisplayName: String, $industryId: String,$industryName:String,$about:String,$isActive: Boolean, $moduleName:String, $actionName:String){
         CreateProfession(
           professionName: $professionName,
           professionDisplayName: $professionDisplayName,
           industryId: $industryId,
           industryName:$industryName,
           about:$about,
-          isActive :$isActive
-        )
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -28,7 +34,9 @@ export async function addProfessionActionHandler(ProfessionDetails) {
       industryId,
       industryName,
       about,
-      isActive
+      isActive,
+      moduleName:"PROFESSION",
+      actionName:"CREATE"
     }
   })
   const id = result.data.CreateProfession;

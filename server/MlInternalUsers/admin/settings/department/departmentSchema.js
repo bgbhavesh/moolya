@@ -16,6 +16,7 @@ let departmentSchema = `
          displayName    : String
          departmentDesc : String
          isActive       : Boolean
+         isSystemDefined : Boolean
          clustersList   : [String]
          chaptersList   : [String]
          subChapterList : [String]
@@ -37,12 +38,13 @@ let departmentSchema = `
           departmentDesc:String,
           isActive:Boolean,
           isMoolya:Boolean,
+          isSystemDefined : Boolean
           depatmentAvailable:[DepatmentAvailable]
     }
     
     type Mutation{
-         createDepartment(department: departmentObject!, moduleName:String!, actionName:String!):String
-         updateDepartment(departmentId:String, department: departmentObject):String
+         createDepartment(department: departmentObject!, moduleName:String!, actionName:String!):response
+         updateDepartment(departmentId:String, department: departmentObject, moduleName:String, actionName:String):response
     }
     type Query{
         findDepartment(departmentId:String):Department

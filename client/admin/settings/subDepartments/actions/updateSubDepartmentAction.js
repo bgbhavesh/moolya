@@ -16,19 +16,27 @@ export async function updateSubDepartmentActionHandler(SubDepartmentDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation ($subDepartmentId:String,$subDepartment:subDepartmentObject){
+    mutation ($subDepartmentId:String,$subDepartment:subDepartmentObject,$moduleName:String, $actionName:String){
         updateSubDepartment(
           subDepartmentId:$subDepartmentId,
-          subDepartment:$subDepartment
-        )
+          subDepartment:$subDepartment,
+          moduleName:$moduleName,
+          actionName:$actionName
+          ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
       subDepartmentId:subDepartmentId,
-      subDepartment:subDepartment
+      subDepartment:subDepartment,
+      moduleName: "SUBDEPARTMENT",
+      actionName: "UPDATE"
     }
   })
-  console.log(result)
-  const id = result;
+
+  const id = result.data.updateSubDepartment;
   return id
 }

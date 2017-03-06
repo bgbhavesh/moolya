@@ -9,14 +9,20 @@ export async function updateKycCategoryActionHandler(Details) {
   let isActive = Details.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$docCategoryName: String, $docCategoryDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$docCategoryName: String, $docCategoryDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         updateKycCategory(
           _id:$_id
           docCategoryName: $docCategoryName,
           docCategoryDisplayName: $docCategoryDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateKycCategoryActionHandler(Details) {
       docCategoryName,
       docCategoryDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName:"KYCCATEGORY",
+      actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.updateKycCategory;
   return id
 }

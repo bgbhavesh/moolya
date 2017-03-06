@@ -121,15 +121,15 @@ class MlSubChapterDetails extends React.Component {
                     <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
                     <input type="text" placeholder="Cluster Name" ref="clusterName" readOnly
                           defaultValue={this.state.data && this.state.data.clusterName}
-                          className="form-control float-label" />
+                          className="form-control float-label" disabled="disabled"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Chapter Name" ref="chapterName" className="form-control float-label"
-                           readOnly defaultValue={this.state.data && this.state.data.chapterName}/>
+                           readOnly defaultValue={this.state.data && this.state.data.chapterName} disabled="disabled"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Sub-Chapter Name" ref="subChapterName" readOnly
-                           className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterName}/>
+                           className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterName} disabled="disabled"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
@@ -157,7 +157,7 @@ class MlSubChapterDetails extends React.Component {
                   <br className="brclear"/>
                   <div className="form-group">
                     <input type="text" ref="state" placeholder="State" className="form-control float-label"
-                        defaultValue="check hard coded state will be here"/>
+                           defaultValue={this.state.data && this.state.data.stateName}/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"

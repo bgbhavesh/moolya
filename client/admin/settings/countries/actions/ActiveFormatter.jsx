@@ -11,10 +11,8 @@ class ActiveFormatter extends React.Component {
       this.refs.status.checked = true
     }
   }
-  onChange(data) {
-
+  async onChange(data) {
     if (this.refs.status.checked == true) {
-      // $('#status').prop('checked', true);
       this.refs.status.checked = true;
       this.setState({"data": {"isActive": true}});
     } else {
@@ -31,7 +29,13 @@ class ActiveFormatter extends React.Component {
         isActive: this.refs.status.checked
       }
 
-      updateCountryActionHandler(CountryDetails);
+    const response= await updateCountryActionHandler(CountryDetails);
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/countriesList");
+      else
+        toastr.error(response.result);
+    }
   }
 
   render() {

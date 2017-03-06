@@ -86,9 +86,10 @@ import MlEditTaxation from '../../admin/settings/taxation/component/MlEditTaxati
 import MlAddTitle from '../../admin/settings/title/component/MlAddTitle'
 import MlTitleList from '../../admin/settings/title/component/MlTitleList'
 import MlEditTitle from '../../admin/settings/title/component/MlEditTitle'
-import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
+/*import MlAddRegional from '../../admin/settings/regional/component/MlAddRegional'
 import MlRegionalsList from '../../admin/settings/regional/component/MlRegionalsList'
-import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'
+import MlEditRegional from '../../admin/settings/regional/component/MlEditRegionl'*/
+import MlRegional from '../../admin/settings/regional/component/MlRegional'
 import MlAddLanguage from '../../admin/settings/language/component/MlAddLanguage'
 import MlLanguagesList from '../../admin/settings/language/component/MlLanguagesList'
 import MlEditLanguage from '../../admin/settings/language/component/MlEditLanguage'
@@ -591,10 +592,10 @@ adminSection.route('/settings/editLookingFor/:id', {
 adminSection.route('/settings/regionalsList', {
   name: 'settings_RegionalsList',
   action(){
-    mount(AdminLayout,{adminContent:< MlRegionalsList/>})
+    mount(AdminLayout,{adminContent:< MlRegional/>})
   }
 });
-adminSection.route('/settings/addregional', {
+/*adminSection.route('/settings/addregional', {
   name: 'settings_AddRegional',
   action(){
     mount(AdminLayout,{adminContent:< MlAddRegional />})
@@ -605,7 +606,7 @@ adminSection.route('/settings/editRegional/:id', {
   action(params){
     mount(AdminLayout,{adminContent:<MlEditRegional config={params.id} />})
   }
-});
+});*/
 adminSection.route('/settings/languagesList', {
   name: 'settings_LanguagesList',
   action(){

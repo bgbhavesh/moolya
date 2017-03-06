@@ -12,7 +12,8 @@ import MlAssignChapterBackendUserList from './MlAssignBackendUserList'
 import MlAssignChapterBackendUserRoles from './MlAssignBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
-import {findUserAssignedRoles} from '../actions/findUserRoles'
+import {findUserDetails} from '../actions/findUserDetails'
+import {findRoles} from '../actions/fetchRoles'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -23,6 +24,8 @@ class MlAssignChapterBackendUsers extends React.Component{
     constructor(props){
         super(props)
         this.state={
+            loading: false,
+            alsoAssignedAs:[],
             selectedBackendUser:'',
             users:[{username: '', _id:''}]
 
@@ -31,6 +34,7 @@ class MlAssignChapterBackendUsers extends React.Component{
         this.addEventHandler.bind(this);
         this.assignBackendUsers.bind(this);
         this.findSubChapter.bind(this);
+        this.updateSelectedBackEndUser.bind(this);
         // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
@@ -49,14 +53,44 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     optionsBySelectUser(index, selectedIndex){
-        this.setState({selectedBackendUser:index})
-      const resp= this.findUserAssignedRoles(index);
+      this.setState({loading: true});
+      this.setState({selectedBackendUser:index})
+      const resp= this.findUserDetails(index);
     }
 
-    async findUserAssignedRoles(userId){
-      const response = await findUserAssignedRoles(userId);
-      this.setState({user_Roles:response,selectedBackendUser:userId});
-      return response;
+
+    async findUserDetails(userId){
+           const user = await findUserDetails(userId);
+      var roles = [];
+           if (user && user.profile && user.profile.isInternaluser == true) {
+               let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+               // get user_roles;
+                 // Selecting Default Profile
+                   for (var i = 0; i < user_profiles.length; i++) {
+                    let user_roles = user_profiles[i].userRoles;
+                   if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
+                        for (var j = 0; j < user_roles.length; j++) {
+                           roles.push(user_roles[j]);
+                         }
+                     }
+                 }
+              }
+           this.setState({user_Roles:roles,selectedBackendUser:userId});
+           this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
+           this.findRoleDetails();
+      return user;
+    }
+
+    async findRoleDetails(){
+         let roleIds = [];
+         if(this.state.user_Roles && this.state.user_Roles.length>0){
+             this.state.user_Roles.map(function (role) {
+                  roleIds.push(role.roleId);
+                });
+           }
+          const roles= await findRoles(roleIds);
+          this.setState({alsoAssignedAs: roles});
+          return roles;
     }
 
     getAssignedRoles(roles){
@@ -73,7 +107,7 @@ class MlAssignChapterBackendUsers extends React.Component{
     async assignBackendUsers(){
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
-        userProfile['clusterId'] = this.state.data.clusterId;
+        userProfile['clusterId'] = this.props.params.clusterId;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfiles}}}}
@@ -92,7 +126,9 @@ class MlAssignChapterBackendUsers extends React.Component{
 
 
     updateSelectedBackEndUser(userId){
-      const resp= this.findUserAssignedRoles(userId);
+      this.setState({loading: true});
+      const resp= this.findUserDetails(userId);
+      //const resp= this.findUserDetails(userId);
     }
 
     render(){
@@ -120,10 +156,16 @@ class MlAssignChapterBackendUsers extends React.Component{
         data: fetchAssignedAndUnAssignedUsers(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,subChapterName:$subChapterName )
         {label:username,value:_id}
       }`
+      let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
+      let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
+      let alsoAssignedAs = this.state.alsoAssignedAs;
+      const showLoader = this.state.loading;
       let userid  = this.state.selectedBackendUser||"";
         let clusterId = this.state.data&&this.state.data.clusterId||"";
         let chapterId = this.state.data&&this.state.data.chapterId||"";
         return(
+          <div>
+             {showLoader === true ? ( <div className="loader_wrap"></div>) : (
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
                     <h2>Assign internal user to Chapter</h2>
@@ -162,14 +204,14 @@ class MlAssignChapterBackendUsers extends React.Component{
                                       </div>
                                       <div>
                                           <div className="form-group">
-                                              <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"/>
+                                              <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"  defaultValue={alsoAssignedAs}/>
                                           </div>
-                                          <div className="form-group">
-                                              <input type="text" placeholder="Display Name" className="form-control float-label" id="dName"  ref="displayName"/>
-                                          </div>
-                                          <div className="form-group">
-                                            <input type="text" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName"/>
-                                          </div>
+                                        <div className="form-group">
+                                               <input type="text" placeholder="Display Name" readOnly="true" ref="displayName" defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
+                                        </div>
+                                        <div className="form-group">
+                                                <input type="text" placeholder="User Name" readOnly="true" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
+                                      </div>
                                           <br className="brclear"/>
                                       </div>
 
@@ -189,7 +231,8 @@ class MlAssignChapterBackendUsers extends React.Component{
                     </div>
                 </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
-            </div>
+           </div>)}
+          </div>
         )
     }
 }

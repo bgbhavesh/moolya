@@ -37,8 +37,14 @@ class MlEditDepartment extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/departmentsList");
+    //FlowRouter.go("/admin/settings/departmentsList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/departmentsList");
+      else
+        toastr.error(response.result);
+      FlowRouter.go("/admin/settings/departmentsList");
+    }
   };
   async findDepartment(){
       let departmentId=this.props.config
@@ -161,12 +167,12 @@ class MlEditDepartment extends React.Component{
                   <div className="form-group switch_wrap switch_names">
                     <label>Select Type</label><br/>
                     <span className="state_label acLabel">moolya</span><label className="switch">
-                    <input type="checkbox" ref="appType" disabled="true" checked={this.state.isMoolyaChecked} onChange={this.onMoolyaChange.bind(this)}/>
+                    <input type="checkbox" ref="appType" disabled="true" checked={this.state.isMoolyaChecked} onChange={this.onMoolyaChange.bind(this)} />
                     <div className="slider"></div>
                   </label>
                     <span className="state_label">non-moolya</span>
                   </div><br className="brclear"/>
-                  {this.state.isMoolyaChecked?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
+                  {this.state.isMoolyaChecked?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} isSystemDefined={this.state.data&&this.state.data.isSystemDefined}/>:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
                 </form>
               </div>
             </div>

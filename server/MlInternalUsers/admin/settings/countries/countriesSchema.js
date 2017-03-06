@@ -35,8 +35,9 @@ let countriesSchema = `
     }
     
     type Mutation{
-        updateCountry(countryId: String, country: countryObject, moduleName:String, actionName:String): String
+        updateCountry(countryId: String, country: countryObject, moduleName:String, actionName:String): response
     }
 `
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], countriesSchema]);
+// String

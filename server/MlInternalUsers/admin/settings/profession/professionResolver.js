@@ -3,7 +3,13 @@ import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) => {
-  // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
   if (MlIndustries.findOne({_id:args.industryId})){
     args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
   }
@@ -11,20 +17,28 @@ MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) =
   if (id) {
     let code = 200;
     let result = {professionId: id}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+    let response = new MlRespPayload().successPayload(result, code);
     return response
   }
 }
 MlResolver.MlMutationResolver['UpdateProfession'] = (obj, args, context, info) => {
-  // TODO : Authorization
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
   if (MlIndustries.findOne({_id:args.industryId})){
     args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
   }
   if (args._id) {
     var id= args._id;
     args=_.omit(args,'_id');
-    let updatedResponse= MlProfessions.update(id, {$set: args});
-    return updatedResponse
+    let result= MlProfessions.update(id, {$set: args});
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
   }
 
 }

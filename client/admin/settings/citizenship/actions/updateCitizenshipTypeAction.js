@@ -9,14 +9,20 @@ export async function updateCitizenshipTypeActionHandler(CitizenshipType) {
   let isActive = CitizenshipType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$citizenshipTypeName: String, $citizenshipTypeDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$citizenshipTypeName: String, $citizenshipTypeDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateCitizenship(
           _id:$_id
           citizenshipTypeName: $citizenshipTypeName,
           citizenshipTypeDisplayName: $citizenshipTypeDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateCitizenshipTypeActionHandler(CitizenshipType) {
       citizenshipTypeName,
       citizenshipTypeDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName:"CITIZENSHIP",
+      actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateCitizenship;
   return id
 }

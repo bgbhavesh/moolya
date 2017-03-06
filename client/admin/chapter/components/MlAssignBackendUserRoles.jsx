@@ -10,15 +10,15 @@ import MoolyaSelect from '../../../commons/components/select/MoolyaSelect'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
-let initSwiper = () => {
-  new Swiper('.blocks_in_form', {
-    speed: 400,
-    spaceBetween: 25,
-    slidesPerView:2,
-    pagination: '.swiper-pagination',
-    paginationClickable: true
-  });
-}
+/*let initSwiper = () => {
+ new Swiper('.blocks_in_form', {
+ speed: 400,
+ spaceBetween: 25,
+ slidesPerView:2,
+ pagination: '.swiper-pagination',
+ paginationClickable: true
+ });
+ }*/
 
 
 export default class MlAssignChapterBackendUserRoles extends React.Component{
@@ -27,7 +27,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       this.state={
           roleForm:[],
           roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:this.props.chapterId, subChapterId:this.props.subChapterId,  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
-          selectedRole:""
+          selectedRole:"",
+          hierarchyLevel:''
       }
       this.findUserDepartments.bind(this);
       return this;
@@ -48,14 +49,14 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       }
     });
     setTimeout(function () {
-      initSwiper();
+     // initSwiper();
     }, 1000)
 
     if(this.props.userId) {
       const resp = this.findUserDepartments();
-      if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
+      /*if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
         this.setState({roleDetails: this.props.assignedRoles})
-      }
+      }*/
     }
 
   }
@@ -69,7 +70,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
   }
 
   addRoleComponent(id){
-      var mySwiper = new Swiper('.blocks_in_form', {
+     /* var mySwiper = new Swiper('.blocks_in_form', {
         // speed: 400,
         pagination: '.swiper-pagination',
         spaceBetween: 0,
@@ -77,14 +78,31 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
         freeMode:true,
         paginationClickable: false
       });
-      mySwiper.updateContainerSize()
+      mySwiper.updateContainerSize()*/
       this.setState({
           roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:this.props.chapterId, subChapterId:this.props.subChapterId, communityId:"", hierarchyLevel:"", hierarchyCode:""}])
 
       });
   }
 
+  optionsBySelectAction(index, event) {
 
+   /* if (event.target.checked) {
+      let value = event.target.name
+      actions.push({actionId: value})
+    }else {
+      let flag='';
+      _.each(actions,function (item,key) {
+        if (item.actionId==event.target.name){
+          flag=key;
+        }
+      })
+      actions.splice(flag,1);
+    }
+
+    this.setState({assignModulesToRoles: assignModulesToRoles})
+    this.props.getassignModulesToRoles(this.state.assignModulesToRoles)*/
+  }
 
   onChange(id,event){
       let roleDetails=this.state.roleDetails
@@ -112,14 +130,20 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       if((this.props.userId !==nextProps.userId)) {
           const resp=this.findUserDepartments();
       }
+
   }
 
   async findUserDepartments(){
+    let hierarchyLevel = Meteor.user().profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].hierarchyLevel;
+    this.setState({hierarchyLevel: hierarchyLevel})
     let userId = this.props.userId;
     let subChapterId = this.props.subChapterId;
     const response = await findUserDepartmentypeActionHandler(userId, subChapterId);
     let data = response ? response : []
     this.setState({loading:false,roleForm:data});
+    if(this.props.assignedRoles && this.props.assignedRoles.length>0){
+      this.setState({roleDetails: this.props.assignedRoles})
+    }
   }
 
   render(){
@@ -129,24 +153,29 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
     return(
       <div>
         {userDepartments.map(function (department) {
-          let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId}}};
-          let query = gql`query($departmentId:String, $clusterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId) {value:_id, label:roleName}}`;
+          let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId,hierarchyLevel:that.state.hierarchyLevel}}};
+          let query = gql`query($departmentId:String, $clusterId:String, $hierarchyLevel:String){data:fetchRolesByDepSubDepTest(departmentId: $departmentId, clusterId: $clusterId,hierarchyLevel:$hierarchyLevel) {value:_id, label:roleName}}`;
           return(
             <div className="panel panel-default">
               <div className="panel-heading">Assign Role</div>
               <div className="panel-body">
                 <div className="form-group">
-                  <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.department}/>
+                  <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.departmentName}/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                         value={department.subDepartment}/>
+                         value={department.subDepartmentName}/>
                 </div>
-                <div className="swiper-container blocks_in_form">
-                  <div className="swiper-wrapper">
+
+                  {/*<div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
+                                                      onChange={that.optionsBySelectAction.bind(that)}/><label
+                    htmlFor="chapter_admin_check"><span></span>is ChapterAdmin</label></div>*/}
+
+                <div className="">
+                  <div className="">
                     {roleDetails.map(function (details, idx) {
                       return(
-                        <div className="form_inner_block swiper-slide" key={details.roleId}>
+                        <div className="form_inner_block" key={details.roleId}>
                           <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, idx)}/></div>
                           <div className="form-group">
                             <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>
@@ -160,7 +189,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                           <div className="form-group switch_wrap">
                             <label>Status</label>
                             <label className="switch">
-                                <input type="checkbox" name={'status'} value={details.isActive} onChange={that.onChange.bind(that,idx)}/>
+                                <input type="checkbox" name={'status'}  value={details.isActive} onChange={that.onChange.bind(that,idx)}/>
                                 <div className="slider"></div>
                             </label>
                           </div>
@@ -170,7 +199,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                     })}
                   </div>
                   <br className="brclear"/>
-                  <div className="swiper-pagination"></div>
+
                 </div>
               </div>
             </div>

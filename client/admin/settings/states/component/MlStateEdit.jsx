@@ -35,8 +35,12 @@ class MlEditState extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/statesList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/statesList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  findState() {
@@ -55,8 +59,6 @@ class MlEditState extends React.Component{
       about: this.refs.about.value,
       isActive: this.refs.status.checked
     }
-    console.log(StateDetails)
-
     const response = await updateStateActionHandler(StateDetails)
     return response;
 
@@ -75,13 +77,13 @@ class MlEditState extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.editState.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -100,7 +102,7 @@ class MlEditState extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" id=""/>
+                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" id="" disabled="disabled"/>
 
                   </div>
                   <div className="form-group">
@@ -115,7 +117,7 @@ class MlEditState extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="State Name" ref="stateName" defaultValue={this.state.data && this.state.data.name} className="form-control float-label" id=""/>
+                    <input type="text" placeholder="State Name" ref="stateName" defaultValue={this.state.data && this.state.data.name} className="form-control float-label" id="" disabled="disabled"/>
 
                   </div>
 

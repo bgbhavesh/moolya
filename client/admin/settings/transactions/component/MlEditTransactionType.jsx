@@ -37,8 +37,14 @@ class MlEditTransactionType extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/transactionTypeList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/transactionTypeList");
+      else
+        toastr.error(response.result);
+    }
   };
+
   async findTransactionType(){
     let TransactionTypeId=this.props.config
     const response = await findTransactionTypeActionHandler(TransactionTypeId);
@@ -73,11 +79,11 @@ class MlEditTransactionType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateTransactionType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

@@ -10,8 +10,8 @@ let Transaction = `
       isActive:Boolean
     }
     type Mutation{
-        CreateTransaction(_id:String,transactionName:String,transactionDisplayName:String,transactionDescription:String,isActive:Boolean):String
-        UpdateTransaction(_id:String,transactionName:String,transactionDisplayName:String,transactionDescription:String,isActive:Boolean):String
+        CreateTransaction(_id:String,transactionName:String,transactionDisplayName:String,transactionDescription:String,isActive:Boolean , moduleName:String, actionName:String):response
+        UpdateTransaction(_id:String,transactionName:String,transactionDisplayName:String,transactionDescription:String,isActive:Boolean , moduleName:String, actionName:String):response
     }
     type Query{
       FindTransaction(_id: String):Transaction

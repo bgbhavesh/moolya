@@ -3,13 +3,13 @@ import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 
 MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => {
-  // TODO : Authorization
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
+
   let id = MlIndustries.insert({...args});
   if (id) {
     let code = 200;
@@ -17,9 +17,8 @@ MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => 
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-}
+};
 MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => {
-  // TODO : Authorization
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -35,8 +34,8 @@ MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => 
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
+};
 
-}
 MlResolver.MlQueryResolver['FindIndustry'] = (obj, args, context, info) => {
   // TODO : Authorization
 

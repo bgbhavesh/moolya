@@ -9,14 +9,20 @@ export async function updateStageOfCompanyTypeActionHandler(StageOfCompanyType) 
   let isActive = StageOfCompanyType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$stageOfCompanyName: String, $stageOfCompanyDisplayName: String, $about: String,$isActive: Boolean){
+    mutation  ($_id:String,$stageOfCompanyName: String, $stageOfCompanyDisplayName: String, $about: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateStageOfCompany(
           _id:$_id
           stageOfCompanyName: $stageOfCompanyName,
           stageOfCompanyDisplayName: $stageOfCompanyDisplayName,
           about: $about,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -24,9 +30,11 @@ export async function updateStageOfCompanyTypeActionHandler(StageOfCompanyType) 
       stageOfCompanyName,
       stageOfCompanyDisplayName,
       about,
-      isActive
+      isActive,
+      moduleName:"STAGEOFCOMPANY",
+      actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.UpdateStageOfCompany;
   return id
 }

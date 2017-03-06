@@ -33,7 +33,12 @@ class MlAddProfession extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/professionList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/professionList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  createProfession() {

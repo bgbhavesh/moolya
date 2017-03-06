@@ -16,7 +16,9 @@ export default class  MlListViewComposer extends Component {
         offset: 0,
         limit: config.sizePerPage||100,
         context:null,
-        searchSpec:null
+        searchSpec:null,
+        fieldsData:config.fieldsData||null,
+        sortData:config.sort||null
       }
     };
     if(DataComposerType==='graphQl'){

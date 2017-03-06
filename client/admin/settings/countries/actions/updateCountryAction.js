@@ -12,7 +12,11 @@ export async function updateCountryActionHandler(CountryDetails) {
         country: $country,
         moduleName:$moduleName,
         actionName:$actionName
-      ) 
+      ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -22,7 +26,6 @@ export async function updateCountryActionHandler(CountryDetails) {
       actionName:"UPDATE"
     }
   })
-  console.log(result)
   const id = result.data.updateCountry;
   return id
 }

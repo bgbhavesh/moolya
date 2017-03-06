@@ -9,14 +9,20 @@ export async function updateTransactionTypeActionHandler(TransactionType) {
   let isActive = TransactionType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$transactionName: String, $transactionDisplayName: String, $transactionDescription: String,$isActive: Boolean){
+    mutation  ($_id:String,$transactionName: String, $transactionDisplayName: String, $transactionDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
         UpdateTransaction(
           _id:$_id
           transactionName: $transactionName,
           transactionDisplayName: $transactionDisplayName,
           transactionDescription: $transactionDescription,
-          isActive :$isActive
-        ) 
+          isActive :$isActive,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        }  
       }
     `,
     variables: {
@@ -24,10 +30,11 @@ export async function updateTransactionTypeActionHandler(TransactionType) {
       transactionName,
       transactionDisplayName,
       transactionDescription,
-      isActive
+      isActive,
+      moduleName:"TRANSACTION",
+      actionName:"UPDATE"
     }
   })
-  console.log(result)
-  const id = result;
+  const id = result.data.UpdateTransaction;
   return id
 }

@@ -36,11 +36,15 @@ class MlEditKycCategory extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/kycCategoryList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/kycCategoryList");
+      else
+        toastr.error(response.result);
+    }
   };
   async findDocument(){
-    let documentTypeId=this.props.config
+    let documentTypeId=this.props.config;
     const response = await findKycCategoryActionHandler(documentTypeId);
     this.setState({loading:false,data:response});
   }
@@ -53,11 +57,8 @@ class MlEditKycCategory extends React.Component{
       about: this.refs.about.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await updateKycCategoryActionHandler(Details);
     return response;
-
   }
 
   onStatusChange(e){
@@ -72,14 +73,14 @@ class MlEditKycCategory extends React.Component{
 
   render(){
     let MlActionConfig = [
+      // {
+      //   actionName: 'add',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
+        showAction: true,
         actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateDocument.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {

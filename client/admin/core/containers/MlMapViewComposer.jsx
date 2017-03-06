@@ -14,7 +14,9 @@ export default class  MlMapViewComposer extends Component {
       forceFetch: true,
       variables: {
         context:null,
-        searchSpec:null
+        searchSpec:null,
+        fieldsData:config.fieldsData||null,
+        sortData:config.sort||null
       }
     };
     if(DataComposerType==='graphQl'){

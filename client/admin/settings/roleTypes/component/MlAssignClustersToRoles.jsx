@@ -131,27 +131,49 @@ export default class MlAssignClustersToRoles extends React.Component {
 
   render() {
     let that=this;
+    let departmentqueryOptions=''
     let queryOptions={options: { variables: {searchQuery:null}}};
+    let departmentQuery=gql` query($isMoolya:Boolean){
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+          }
+          `;
     let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
     let chapterquery=gql`query($id:String){  
-  data:fetchChapters(id:$id) {
-    value:_id,
-    label:chapterName
-  }  
-}`;
+    data:fetchChapters(id:$id) {
+        value:_id,
+        label:chapterName
+      }  
+    }`;
     let subChapterquery=gql`query($id:String){  
-  data:fetchSubChaptersSelect(id:$id) {
-    value:_id
-    label:subChapterName
-  }  
-}`;
-    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
+      data:fetchSubChaptersSelect(id:$id) {
+        value:_id
+        label:subChapterName
+      }  
+    }`;
+  //  let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
+
     let subDepartmentquery=gql`query($id:String){  
-  data:fetchSubDepartments(id:$id) {
-    value:_id
-    label:subDepartmentName
-  }  
-}`;
+      data:fetchSubDepartments(id:$id) {
+        value:_id
+        label:subDepartmentName
+      }  
+    }`;
+    let selectedUserType=this.props.selectedBackendUserType
+    let selectedSubChapter=this.props.selectedSubChapter
+    if(selectedUserType=='moolya'&&selectedSubChapter==''){
+      departmentqueryOptions={options: { variables: {isMoolya:false}}};
+      departmentQuery=gql` query($isMoolya:Boolean){
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+          }
+          `;
+    }
+    if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){
+      departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:selectedSubChapter}}};
+      departmentQuery=gql` query($isMoolya:Boolean,$subChapter:String){
+      data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
+    }
+    `;
+    }
 
     return (
 
@@ -184,7 +206,7 @@ export default class MlAssignClustersToRoles extends React.Component {
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">

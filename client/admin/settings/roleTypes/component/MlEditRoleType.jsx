@@ -11,7 +11,7 @@ import {findRoleActionHandler} from '../actions/findRoleAction'
 import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
 
 class MlEditRole extends React.Component{
@@ -23,7 +23,8 @@ class MlEditRole extends React.Component{
       assignRoleToClusters:[],
       assignModulesToRoles:[],
       selectedUserType:'',
-      selectedroleType:'',
+      selectedBackendUser:'',
+      selectedSubChapter:''
     }
     this.addEventHandler.bind(this);
     return this;
@@ -52,17 +53,19 @@ class MlEditRole extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/rolesList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/rolesList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   getassignRoleToClusters(details){
-    console.log("details->"+details);
     this.setState({'assignRoleToClusters':details})
   }
 
   getassignModulesToRoles(details){
-    console.log("details->"+details);
     this.setState({'assignModulesToRoles':details})
   }
   onSubmit(){
@@ -74,13 +77,12 @@ class MlEditRole extends React.Component{
       roleName: this.refs.roleName.value,
       displayName:this.refs.diplayName.value,
       roleType:this.state.selectedUserType,
-      userType:this.state.selectedroleType,
+      userType:this.state.selectedBackendUser,
       about:this.refs.about.value,
       assignRoles:this.state.assignRoleToClusters,
       modules:this.state.assignModulesToRoles,
       isActive:this.refs.status.checked
     }
-    console.log(roleDetails)
     let roleDetails={
       id:this.props.config,
       roleObject:roleObject
@@ -93,21 +95,24 @@ class MlEditRole extends React.Component{
     this.setState({'mlAssignDepartmentDetails':departments})
   }
 
-
   onUserTypeSelect(val){
     this.setState({selectedUserType:val.value})
   }
-  onRoleTypeSelect(val){
-    this.setState({selectedroleType:val.value})
+  onBackendUserSelect(val){
+    this.setState({selectedBackendUser:val.value})
+  }
+  optionsBySelectSubChapter(val){
+    this.setState({selectedSubChapter:val})
   }
 
   async findRole(){
-    let roleid=this.props.config
+    let roleid=this.props.config;
     const response = await findRoleActionHandler(roleid);
     this.setState({loading:false,data:response});
     if(response) {
-      this.setState({selectedUserType:this.state.data.userType})
-      this.setState({selectedroleType:this.state.data.roleType})
+      this.setState({selectedUserType:this.state.data.roleType})
+      this.setState({selectedBackendUser:this.state.data.userType})
+      this.setState({selectedSubChapter:this.state.data.subChapter})
     }
   }
 
@@ -121,13 +126,13 @@ class MlEditRole extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -135,18 +140,29 @@ class MlEditRole extends React.Component{
       }
     ]
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya'},
-      {value: 'non-moolya', label: 'non-moolya'}
+      {value: 'moolya', label: 'moolya' , clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya',clearableValue: true}
     ];
+    let BackendUserOptions=[
+      {value: 'Internal User', label: 'Internal User'},
+      {value: 'External User', label: 'External User'}
+    ]
     let query=gql` query{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
 `;
+    let subChapterQuery=gql` query{
+  data:fetchActiveSubChapters{label:subChapterName,value:_id}
+}
+`;
+    const showLoader=this.state.loading;
 
     return (
+      <div>
+        {showLoader===true?( <div className="loader_container"><div className="loader_wrap"></div></div>):(
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Create Role</h2>
+          <h2>Edit Role</h2>
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea
@@ -167,18 +183,19 @@ class MlEditRole extends React.Component{
                     </div>
                     <div className="form-group">
                       <Select name="form-field-name" ref="userType" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
-
                     </div>
+                    {this.state.selectedUserType=='non-moolya'&&(<div className="form-group">
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
+                    </div>)}
                     <div className="form-group">
                       <Select
-                        name="form-field-name" ref="roleType" options={UserTypeOptions} value={this.state.selectedroleType}  onChange={this.onRoleTypeSelect.bind(this)} className="float-label"/>
-
+                        name="form-field-name" ref="roleType" options={BackendUserOptions} value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} className="float-label" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>
                     </div>
 
-                    {this.state.data&&this.state.data.assignRoles?(<MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} assignedClusterDetails={this.state.data&&this.state.data.assignRoles}/>):""}
+                    {this.state.data&&this.state.data.assignRoles?(<MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} selectedBackendUserType={this.state.data&&this.state.selectedUserType} selectedSubChapter={this.state.data&&this.state.selectedSubChapter} assignedClusterDetails={this.state.data&&this.state.data.assignRoles}/>):""}
 
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>
@@ -218,6 +235,7 @@ class MlEditRole extends React.Component{
         </div>
 
 
+      </div>)}
       </div>
     )
   }

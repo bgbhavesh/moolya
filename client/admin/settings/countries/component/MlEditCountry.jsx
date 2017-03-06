@@ -35,8 +35,12 @@ class MlEditCountry extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/countriesList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/countriesList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   async  findCountry() {
@@ -44,7 +48,6 @@ class MlEditCountry extends React.Component{
     const response = await findCountryActionHandler(id);
     this.setState({loading:false,data:response});
     this.setState({url:this.state.data.url})
-
   }
 
   async  editCountry() {
@@ -77,11 +80,11 @@ class MlEditCountry extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.editCountry.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -99,7 +102,7 @@ class MlEditCountry extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="country" defaultValue={this.state.data && this.state.data.country} placeholder="Country Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="country" defaultValue={this.state.data && this.state.data.country} placeholder="Country Name" className="form-control float-label" id="" disabled="disabled"/>
 
                     </div>
                     <div className="form-group">
@@ -107,7 +110,7 @@ class MlEditCountry extends React.Component{
 
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capital} placeholder="Capital" className="form-control float-label" id=""/>
+                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capital} placeholder="Capital" className="form-control float-label" id="" disabled="disabled"/>
 
                     </div>
                   </form>
@@ -135,7 +138,7 @@ class MlEditCountry extends React.Component{
                     <div className="form-group switch_wrap inline_switch">
                       <label>Available on System</label>
                       <label className="switch">
-                        <input type="checkbox" ref="status" id="status" checked={this.state.data && this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
+                        <input type="checkbox" ref="status" id="status" checked={this.state.data && this.state.data.isActive} onChange={this.onStatusChange.bind(this)}  disabled="disabled"/>
                         <div className="slider"></div>
                       </label>
                     </div>

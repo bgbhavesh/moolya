@@ -63,8 +63,12 @@ class MlEditDocumentMapping extends React.Component{
   };
 
   async handleSuccess(response) {
-
-    FlowRouter.go("/admin/settings/documentMappingList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/documentMappingList");
+      else
+        toastr.error(response.result);
+    }
   };
 
   // getassignDocuments(details){
@@ -138,8 +142,6 @@ class MlEditDocumentMapping extends React.Component{
       isActive    : this.refs.status.checked,
     }
     let id   = this.refs.documentId.value;
-    // let detail  = Details;
-    console.log(Details)
     const response = await updateDocumentMappingActionHandler(id,Details)
     return response;
   }
@@ -193,13 +195,13 @@ class MlEditDocumentMapping extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.updateDocument.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -263,7 +265,7 @@ class MlEditDocumentMapping extends React.Component{
                     <div className="form_bg">
                       <form>
                         <div className="form-group">
-                          <input type="text"  ref="documentId" defaultValue={this.state.data&&this.state.data.documentId} placeholder="Document Id" className="form-control float-label" id=""/>
+                          <input type="text"  ref="documentId" defaultValue={this.state.data&&this.state.data.documentId} placeholder="Document Id" className="form-control float-label" id="" disabled="disabled"/>
                         </div>
 
                         <div className="form-group">

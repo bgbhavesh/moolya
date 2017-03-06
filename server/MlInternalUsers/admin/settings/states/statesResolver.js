@@ -27,7 +27,12 @@ MlResolver.MlQueryResolver['fetchState'] = (obj, args, context, info) =>{
 }
 
 MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {
-
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
     let state = MlStates.findOne({_id: args.stateId});
     if(state){
         for(key in args.state){
@@ -37,7 +42,7 @@ MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {
         if(resp){
             let code = 200;
             let result = {state: resp}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            let response = new MlRespPayload().successPayload(result, code);
             return response
         }
     }
@@ -47,6 +52,5 @@ MlResolver.MlQueryResolver['FetchActiveStates'] = (obj, args, context, info) => 
     let resp = MlStates.find({"countryId":args.countryId}).fetch()
     return resp;
   }
-
-}
+};
 

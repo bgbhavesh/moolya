@@ -5,19 +5,26 @@ export async function updateProcessActionHandler(pid,process) {
    pid = pid;
    const result = await client.mutate({
    mutation: gql`
-   mutation  ($pid:String, $process: processInput){
+   mutation  ($pid:String, $process: processInput, $moduleName:String, $actionName:String){
        updateProcess(
        id: $pid,
        process: $process,
-       )
+        moduleName:$moduleName,
+        actionName:$actionName
+       ){
+            success,
+            code,
+            result
+        }
    }
    `,
    variables: {
      pid,
-     process
+     process,
+     moduleName:"PROCESS",
+     actionName:"UPDATE"
    }
    })
-  console.log(result)
-  const id = result;
+  const id = result.data.updateProcess;
   return id
 }

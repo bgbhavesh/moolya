@@ -10,6 +10,7 @@ let BackEndUser = `
         password: String,
         username: String,
         profile:userProfile
+        roleNames:[String]
     }
     
     type userProfile{
@@ -82,7 +83,7 @@ let BackEndUser = `
         isOTPValidated:Boolean
     }
     
-    input userroles{
+    input userRoles{
         roleId:String,
         clusterId:String,
         chapterId:String,
@@ -95,7 +96,7 @@ let BackEndUser = `
     input userprofiles{
         isDefault: Boolean,
         clusterId: String,
-        userRoles:[userroles]
+        userRoles:[userRoles]
     }
   
     input moolyaProfile{
@@ -133,13 +134,15 @@ let BackEndUser = `
     }
     
     type dep{
-      department:String,
-       subDepartment:String
+        department:String,
+        departmentName:String,
+        subDepartment:String
+        subDepartmentName:String
     }
     
     type Mutation{
-        createUser(user:userObject!, moduleName:String, actionName:String):String
-        updateUser(userId:String!, user:userObject!): String
+        createUser(user:userObject!, moduleName:String, actionName:String):response
+        updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
     }

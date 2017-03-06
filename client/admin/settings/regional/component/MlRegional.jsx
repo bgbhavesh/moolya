@@ -1,33 +1,42 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {updateRegionalActionHandler} from '../actions/updateRegionalAction'
+import {upsertRegionalActionHandler} from '../actions/upsertRegionalAction'
 import {findRegionalActionHandler} from '../actions/findRegionalAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 
-class MlEditRegional extends React.Component{
+class MlRegional extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}};
-    this.addEventHandler.bind(this);
-    this.updateRegional.bind(this);
-    this.findRegional.bind(this);
-    return this;
-  }
-  componentDidMount() {
-    if(this.state.data.isAcive){
-      $('#status').prop('checked', true);
+    this.state={
+      data:[],
+      loading:true
     }
+    this.addEventHandler.bind(this);
+    this.createRegional.bind(this);
+    return this;
+  }s
+
+  componentDidMount() {
+
   }
   componentWillMount() {
     const resp=this.findRegional();
     return resp;
   }
+  async findRegional(){
+    const response = await findRegionalActionHandler();
+    if(response.length>0) {
+      this.setState({loading: false, data: response[0].regionalInfo});
+    }else{
+      this.setState({loading: false});
+    }
+  }
 
   async addEventHandler() {
-    const resp=await this.updateRegional();
+    const resp=await this.createRegional();
     return resp;
   }
 
@@ -39,18 +48,12 @@ class MlEditRegional extends React.Component{
 
     FlowRouter.go("/admin/settings/regionalsList");
   };
-  async findRegional(){
-    let documentTypeId=this.props.config
-    const response = await findRegionalActionHandler(documentTypeId);
-    this.setState({loading:false,data:response});
-  }
 
-  async  updateRegional() {
-    let Details = {
-      _id : this.state.data._id,
-      clusterName : this.state.data.cluster,
-      capitalName : this.state.data.capital,
-      regionalFlag : this.state.data.url,
+  async  createRegional() {
+    let regionalInfo = {
+      clusterName :this.refs.cluster.value ,
+      capitalName : '',
+      regionalFlag : '',
       regionalPhoneNumber: this.refs.phoneNumberFormat.value,
       regionalCurrencyName: this.refs.currencyName.value,
       regionalCurrencyMarking: this.refs.currencyMarking.value,
@@ -59,34 +62,19 @@ class MlEditRegional extends React.Component{
       regionalCurrencyValue: this.refs.currencyValue.value,
       aboutRegion: this.refs.about.value,
     }
-    console.log(Details)
+    console.log(regionalInfo)
 
-    const response = await updateRegionalActionHandler(Details);
+    const response = await upsertRegionalActionHandler(regionalInfo);
     return response;
 
   }
-
-  onStatusChange(e){
-    const data=this.state.data;
-    if(e.currentTarget.checked){
-      this.setState({"data":{"isActive":true}});
-    }else{
-      this.setState({"data":{"isActive":false}});
-    }
-  }
-
-
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.updateRegional.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.createRegional.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -100,9 +88,8 @@ class MlEditRegional extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Edit Regional</h2>
+              <h2>Regional</h2>
               <div className="col-md-6 nopadding-left">
-                <input type="text" ref="id" defaultValue={this.state.data._id} hidden="true"/>
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
@@ -132,9 +119,9 @@ class MlEditRegional extends React.Component{
                     default={true}
                   >
                     <form>
-                      <div className="previewImg">
-                        <img ref="url" src={this.state.data.regionalFlag}/>
-                      </div>
+                     {/* <div className="previewImg">
+                        <img ref="url" src='https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png'/>
+                      </div>*/}
                       <div className="form-group">
                         <textarea ref="about" defaultValue={this.state.data && this.state.data.aboutRegion} placeholder="About" className="form-control float-label" id=""></textarea>
 
@@ -148,13 +135,6 @@ class MlEditRegional extends React.Component{
                       <div className="form-group">
                         <input type="text" ref="currencyValue" defaultValue={this.state.data && this.state.data.regionalCurrencyValue} placeholder="Currency Value" className="form-control float-label" id=""/>
                       </div>
-                      {/*<div className="form-group switch_wrap inline_switch">*/}
-                      {/*<label>Status</label>*/}
-                      {/*<label className="switch">*/}
-                      {/*<input type="checkbox" ref="documentTypeStatus" />*/}
-                      {/*<div className="slider"></div>*/}
-                      {/*</label>*/}
-                      {/*</div>*/}
                       <br className="brclear"/>
                     </form>
                   </ScrollArea>
@@ -169,4 +149,4 @@ class MlEditRegional extends React.Component{
   }
 };
 
-export default MlEditRegional = formHandler()(MlEditRegional);
+export default MlRegional = formHandler()(MlRegional);

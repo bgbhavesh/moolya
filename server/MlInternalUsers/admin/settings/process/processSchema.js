@@ -91,7 +91,7 @@ let Process = `
         processId   : String,
         process     : String,
         communities : [community],
-        userTypes   : [userType],
+        userTypes   : String,
         identity    : String,
         industries  : [industry],
         professions : [profession],
@@ -104,8 +104,8 @@ let Process = `
     }
     
     type Mutation {
-       createProcess(process:processInput): String
-       updateProcess(id:String,process:processInput):String
+       createProcess(process:processInput, moduleName:String, actionName:String):response
+       updateProcess(id:String,process:processInput, moduleName:String, actionName:String):response
     }
     
     type Query{

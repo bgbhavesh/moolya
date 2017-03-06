@@ -9,19 +9,16 @@ const mlAddressTypeTableConfig=new MlViewer.View({
   module:"addressType",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["addressName","addressDisplayName","addressUploadIcon","isActive"],
-  searchFields:["addressName","addressDisplayName","addressUploadIcon","isActive"],
+  fields:["addressTypeInfo.addressName","addressTypeInfo.addressDisplayName","addressTypeInfo.isActive"],
+  searchFields:["addressTypeInfo.addressName","addressTypeInfo.addressDisplayName","addressTypeInfo.isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "addressName", title: "Name",dataSort:true},
-    {dataField: "addressDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "aboutAddress", title: "About",dataSort:true},
-    // {dataField: "addressUploadIcon", title: "Icon",dataSort:true,customComponent:FlagFormatter},
-    // {dataField: "isActive", title: "Available in System",dataSort:true,customComponent:ActiveFormatter},
-    //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
+    {dataField: "addressTypeInfo.addressName", title: "Name",dataSort:true,customComponent:function(data){ return <div>{data.data.addressTypeInfo.addressName}</div>}},
+    {dataField: "addressTypeInfo.addressDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.addressTypeInfo.addressDisplayName}</div>}},
+    {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -51,19 +48,27 @@ const mlAddressTypeTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"ADDRESSTYPE"}}
+  },
   graphQlQuery:gql`
-              query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"addressType",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                      ...on AddressType{
-                             _id
-                            addressName
-                            aboutAddress
-                            addressDisplayName
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 addressTypeInfo{
+                                    addressName
+                                    aboutAddress
+                                    addressDisplayName
+                                 }
+                                    
                           }
                       }
-                }
+              }
               }
               `
 });

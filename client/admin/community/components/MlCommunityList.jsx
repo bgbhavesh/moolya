@@ -10,7 +10,7 @@ export default class MlCommunityList extends Component {
       <div className="col-lg-2 col-md-3 col-sm-3" key={prop.displayName}>
         <div className="list_block">
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.isActive?"check":"times"}/></div>
-          <a href={communityRoutes.communityListRoute(prop._id)}>
+          <a href={communityRoutes.communityListRoute(prop.name)}>
             <div className={"hex_outer"}>
               <img src={prop.communityImageLink}/>
             </div>

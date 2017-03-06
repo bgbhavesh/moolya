@@ -4,6 +4,10 @@ let DocumentMapping = `
      type DocumentMapping{
         documentId   : String
         documentName : String
+        allowableMaxSize  : String
+        allowableFormat : [String]
+        clusters :[String]
+        kycCategory  : [String]
         isActive : Boolean
      }
      

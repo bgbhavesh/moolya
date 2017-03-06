@@ -46,7 +46,7 @@ class MlEditCompanyType extends React.Component{
   }
   async  updateCompanyType() {
     let CmpType = {
-      id: this.refs.id.value,
+      id: this.props.config,
       companyName: this.refs.companyName.value,
       companyDisplayName: this.refs.companyDisplayName.value,
       aboutCompany: this.refs.aboutCompany.value,

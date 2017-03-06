@@ -2,21 +2,29 @@ import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
 export async function updateSubChapterActionHandler(subChapterDetails) {
-  let _id = subChapterDetails._id;
+  let subChapterId = subChapterDetails.subChapterId;
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($subChapterId:String,$subChapterDetails:subChapterObject){
+    mutation  ($subChapterId:String,$subChapterDetails:subChapterObject, $moduleName:String, $actionName:String){
         updateSubChapter(
           subChapterId:$subChapterId,
-          subChapterDetails:$subChapterDetails
-        )
+          subChapterDetails:$subChapterDetails,
+          moduleName:$moduleName,
+          actionName:$actionName
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
-      subChapterId:_id,
-      subChapterDetails:subChapterDetails
+      subChapterId:subChapterId,
+      subChapterDetails:subChapterDetails,
+      moduleName:"SUBCHAPTER",
+      actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.updateSubChapter;
   return id
 }

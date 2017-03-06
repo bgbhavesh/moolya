@@ -6,22 +6,20 @@ export async function addCompanyTypeActionHandler(CompanyTypeDetails) {
   let companyDisplayName = CompanyTypeDetails.companyDisplayName;
   let aboutCompany = CompanyTypeDetails.aboutCompany;
   let isActive = CompanyTypeDetails.isActive;
+  let companyTypeInfo={companyName,companyDisplayName,aboutCompany};
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($companyName: String, $companyDisplayName: String, $aboutCompany: String,$isActive: Boolean){
-        CreateCompanyType(
-          companyName: $companyName,
-          companyDisplayName: $companyDisplayName,
-          aboutCompany: $aboutCompany,
-          isActive :$isActive
+    mutation  ($masterData:MasterSettingsRequest){
+       createMasterSetting(
+          moduleName:"MASTER_SETTINGS",
+          actionName:"CREATE",
+          type:COMPANYTYPE,
+          masterData:$masterData
         ) 
       }
     `,
     variables: {
-      companyName,
-      companyDisplayName,
-      aboutCompany,
-      isActive
+      masterData:{"companyTypeInfo":companyTypeInfo,"isActive":isActive},
     }
   })
   const id = result.data.CreateCompanyType;

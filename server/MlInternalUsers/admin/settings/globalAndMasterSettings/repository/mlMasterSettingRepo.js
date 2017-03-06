@@ -8,7 +8,38 @@ export default class MlMasterSettingRepo{
       this.userId=userId;
    };
 
+  getDroDownMasterSettings(requestParams) {
+    check(requestParams.type, String);
+    let userProfile = new MlAdminUserContext().userProfileDetails(this.userId);
+    let settingsObj = null;
+    let result = null;
+    //todo:dynamic handling of resource
+    let cluster = MlClusters.findOne(userProfile.defaultProfileHierarchyRefId);
+    let query = {
+      "hierarchyLevel": 3,
+      "hierarchyCode": "CLUSTER",
+      "hierarchyRefId": userProfile.defaultProfileHierarchyRefId,
+      "hierarchyRefName": cluster.clusterName
+    };
+    let  options=[]
+   switch (requestParams.type) {
+      case "TAXTYPE":
+        settingsObj = {
+          "type": "TAXTYPE",
+          isActive:true
+        };
+        settingsObj=_.extend(query,settingsObj);
+        result= MlMasterSettings.find({...settingsObj}).fetch();
+        let resultResponse=_.each(result,function (option,id) {
+          options.push({"label":option.taxTypeInfo.taxName,"value":option._id})
+        })
 
+        break;
+    }
+
+
+    return options;
+  }
 
   updateMasterSetting(requestParams){
     check(requestParams.type,String);
@@ -43,6 +74,10 @@ export default class MlMasterSettingRepo{
 
       case "COMPANYTYPE":
         settingsObj={"type":"COMPANYTYPE","companyTypeInfo":requestParams.masterData.companyTypeInfo,isActive:requestParams.masterData.isActive};
+        break;
+
+      case "EMAILTYPE":
+        settingsObj={"type":"EMAILTYPE","emailTypeInfo":requestParams.masterData.emailTypeInfo,isActive:requestParams.masterData.isActive};
         break;
      }
 

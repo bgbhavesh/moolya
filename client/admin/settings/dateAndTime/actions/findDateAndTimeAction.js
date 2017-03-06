@@ -6,23 +6,24 @@ export async function findDateAndTimeActionHandler(Id)
   let did=Id;
   const result = await client.query({
     query: gql`
-    query  ($id: String){
-        findDateAndTime(_id:$id){
-        _id
-        timeFormat
-        amSymbol
-        pmSymbol
-        dateFormat
-        numberOfDaysInWeek
-        firstDayOfWeek
+           query{
+          fetchGlobalSettings(type:DATEANDTIME){
+            dateAndTimeInfo{
+              timeFormat
+              amSymbol
+              pmSymbol
+              dateFormat
+              numberOfDaysInWeek
+              firstDayOfWeek
+              hoursFormat
+            }
+          }
+            
+          
         }
-      }
     `,
-    variables: {
-      id:did
-    },
     forceFetch:true
   })
-  const id = result.data.findDateAndTime;
+  const id = result.data.fetchGlobalSettings;
   return id
 }

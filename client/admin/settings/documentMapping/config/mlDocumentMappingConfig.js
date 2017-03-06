@@ -3,30 +3,30 @@ import React from 'react';
 import gql from 'graphql-tag'
 function categoriesformatter (data){
     let categories=data&&data.data&&data.data.kycCategory?data.data.kycCategory:[];
-    let ids =[];
-  categories.map(function (doc) {
-      ids.push(doc.id)
-    })
-    return <div>{ids}</div>;
+  //   let ids =[];
+  // categories.map(function (doc) {
+  //     ids.push(doc.id)
+  //   })
+    return <div>{categories.join()}</div>;
 }
 function allowableFormatformatter (data){
 
   let allowableFormat=data&&data.data&&data.data.allowableFormat?data.data.allowableFormat:[];
-  let ids =[];
-  allowableFormat.map(function (doc) {
-    ids.push(doc.id)
-  })
-  return <div>{ids}</div>;
+  // let ids =[];
+  // allowableFormat.map(function (doc) {
+  //   ids.push(doc.id)
+  // })
+  return <div>{allowableFormat.join()}</div>;
 
 }
 function clustersformatter (data){
 
   let clusters=data&&data.data&&data.data.clusters?data.data.clusters:[];
-  let ids =[];
-  clusters.map(function (doc) {
-    ids.push(doc.id)
-  })
-  return <div>{ids}</div>;
+  // let ids =[];
+  // clusters.map(function (doc) {
+  //   ids.push(doc.id)
+  // })
+  return <div>{clusters.join()}</div>;
 
 }
 const mlDocumentMappingTableConfig=new MlViewer.View({
@@ -106,19 +106,14 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
               data:SearchQuery(module:"documentMapping", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on DocumentOutput{
+                     ...on DocumentMapping{
                               documentId
                               documentName
-                      				kycCategory {
-                      				  id
-                      				}
-                              allowableFormat{
-                                id
-                              }
                               allowableMaxSize
-                              clusters{
-                                id
-                              }
+                              allowableFormat
+                              clusters
+                              kycCategory
+                              isActive
                           }
                       }
               }

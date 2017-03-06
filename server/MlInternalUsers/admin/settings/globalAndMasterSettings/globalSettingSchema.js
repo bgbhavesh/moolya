@@ -23,7 +23,7 @@ let GlobalSettingsSchema = `
              firstDayOfWeek:String,
              currencySymbol:String,
              measurementSystem:String,
-             currencyFormat:String,
+             currencyFormat:Boolean,
              valueSeparator:String
       }
       
@@ -55,7 +55,7 @@ let GlobalSettingsSchema = `
            firstDayOfWeek:String,
            currencySymbol:String,
            measurementSystem:String,
-           currencyFormat:String,
+           currencyFormat:Boolean,
            valueSeparator:String
       }
       

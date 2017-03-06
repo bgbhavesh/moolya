@@ -47,12 +47,11 @@ const mlCommunityListConfig=new MlViewer.View({
   sort:true,
   viewComponent:<MlCommunityList />,
   graphQlQuery:gql`
-              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"community", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+              query{
+              data:fetchCommunities{
                     totalRecords
                     data{
                      ...on Community{
-                             _id,
                             name,
                             displayName,
                             code,

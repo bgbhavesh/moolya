@@ -20,7 +20,11 @@ export async function updateClusterActionHandler(clusterDetails)
           cluster:$clusterDetails,
           moduleName:$moduleName,
           actionName:$actionName
-        )
+        ){
+            success,
+            code,
+            result
+        } 
       }
     `,
     variables: {
@@ -30,6 +34,6 @@ export async function updateClusterActionHandler(clusterDetails)
       actionName:"UPDATE"
     }
   })
-  const id = result;
+  const id = result.data.upsertCluster;
   return id
 }

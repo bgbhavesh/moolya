@@ -1,27 +1,26 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findNumericalFormatActionHandler(Id)
+export async function findNumericalFormatActionHandler()
 {
-  let did=Id;
   const result = await client.query({
-    query: gql`
-    query  ($id: String){
-        findNumericalFormat(_id:$id){
-          _id
-          numberOfDigitsAfterDecimal
-          measurementSystem
-          currencyFormat
-          currencySymbol
-          valueSeparator
-        }
-      }
+      query: gql`
+       query{
+              fetchGlobalSettings(type:NUMERICAL){
+                numericalInfo{
+                  numberOfDigitsAfterDecimal,
+                  measurementSystem,
+                  valueSeparator,
+                  currencySymbol,
+                  currencyFormat
+                }
+              }
+                
+              
+            }
     `,
-    variables: {
-      id:did
-    },
     forceFetch:true
   })
-  const id = result.data.findNumericalFormat;
+  const id = result.data.fetchGlobalSettings;
   return id
 }

@@ -7,6 +7,7 @@ import MlActionComponent from '../../../commons/components/actions/ActionCompone
 import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 
 class MlEditCommunityFormComponent extends React.Component {
   constructor(props) {
@@ -14,8 +15,8 @@ class MlEditCommunityFormComponent extends React.Component {
     this.state = {};
     this.state={
       loading:true,data:{},
-      clusters: [{id:''}],
-      chapters:[{id:''}],
+      clusters: [],
+      chapters:[],
     }
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
@@ -54,14 +55,12 @@ class MlEditCommunityFormComponent extends React.Component {
 
     if(response) {
       this.setState({loading:false,data:response});
-      // this.setState({documentId: this.state.data.documentId});
-      // this.setState({id: this.state.data._id});
       if (this.state.data.clusters) {
-        let clustersId = this.state.data.clusters[0].id;
-        this.setState({clusters: [{id: clustersId}]});
+        let clustersId = this.state.data.clusters;
+        this.setState({clusters: this.state.data.clusters});
       }
       if (this.state.data.chapters) {
-        let chaptersId = this.state.data.chapters[0].id;
+        let chaptersId = this.state.data.chapters;
         this.setState({chapters: [{id: chaptersId}]});
       }
     }
@@ -72,20 +71,19 @@ class MlEditCommunityFormComponent extends React.Component {
   {
       let communityDetails = {
           displayName         : this.refs.displayName.value,
-          clusters            : this.state.clusters,
-          chapters            : this.state.chapters,
           aboutCommunity      : this.refs.about.value,
           communityImageLink  : this.refs.upload.value,
           showOnMap           : this.refs.showOnMap.checked,
           isActive            : this.refs.status.checked
       }
-      let id = this.props.params;
-      const response = await updateCommunityActionHandler(id, communityDetails)
+      let data = {moduleName:"COMMUNITY", actionName:"UPDATE", community:communityDetails, communityId:this.props.params, clusters:this.state.clusters, chapters:this.state.chapters}
+      let response = await multipartFormHandler(data, this.refs.upload.files[0]);
+      return response;
   }
 
   optionsBySelectClusters(val){
     let clusters=this.state.clusters
-    clusters[0]['id']=val;
+    clusters=val;
     this.setState({clusters:clusters})
   }
 
@@ -128,7 +126,7 @@ class MlEditCommunityFormComponent extends React.Component {
           label:chapterName
         }  
       }`;
-    let chapterOption={options: { variables: {id:this.state.clusters[0].id}}};
+    let chapterOption={options: { variables: {id:this.state.clusters}}};
     const showLoader=this.state.loading;
     return (
       <div>
@@ -141,21 +139,17 @@ class MlEditCommunityFormComponent extends React.Component {
               <form>
                 <div className="form-group">
                   <input type="text" ref="communityName" defaultValue={this.state.data&&this.state.data.name} readOnly="true" placeholder="Community Name"
-                         className="form-control float-label" id="" disabled="disabled"/>
-
+                         className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label"
-                         id=""/>
-
+                  <input type="text" ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectClusters.bind(this)} />
+                  <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectClusters.bind(this)} />
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+                  <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
                 </div>
-
               </form>
             </div>
           </div>

@@ -47,7 +47,7 @@ class MlEditEmailType extends React.Component{
 
   async  updateEmailType() {
     let Details = {
-      _id : this.refs.id.value,
+      _id : this.props.config,
       emailName: this.refs.name.value,
       emailDisplayName: this.refs.displayName.value,
       aboutEmail: this.refs.about.value,

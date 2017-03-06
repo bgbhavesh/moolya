@@ -83,6 +83,21 @@ let MasterSettingsSchema = `
       }
       
       
+      type EmailTypeInfo{
+          emailName:String
+          emailDisplayName:String
+          aboutEmail:String
+          emailUploadIcon:String
+      }
+      
+      input EmailTypeInfoRequest{
+          emailName:String
+          emailDisplayName:String
+          aboutEmail:String
+          emailUploadIcon:String
+      }
+      
+      
       type MasterSettings{
          _id:String,
          isActive:Boolean
@@ -92,6 +107,7 @@ let MasterSettingsSchema = `
          titleInfo:TitleInfo
          employmentTypeInfo:EmploymentTypeInfo
          companyTypeInfo:CompanyTypeInfo
+         emailTypeInfo:EmailTypeInfo
       }
       
       input MasterSettingsRequest{
@@ -103,6 +119,7 @@ let MasterSettingsSchema = `
          titleInfo:TitleInfoRequest
          employmentTypeInfo:EmploymentTypeInfoRequest
          companyTypeInfo:CompanyTypeInfoRequest
+         emailTypeInfo:EmailTypeInfoRequest
       }
 
       type Query{

@@ -22,7 +22,7 @@ let multipart 	= require('connect-multiparty'),
 
 const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
 const typeDefs = MlSchemaDef['schema']
-const executableSchema = makeExecutableSchema({
+  const executableSchema = makeExecutableSchema({
   typeDefs,
   resolvers
 });

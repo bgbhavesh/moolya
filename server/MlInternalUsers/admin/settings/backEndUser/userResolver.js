@@ -6,22 +6,26 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 var _ = require('lodash');
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
-  /* let cluster = args.cluster;
-   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.cluster);
-   if(!isValidAuth)
-   return "Not Authorized"*/
-  if(Meteor.users.find({username:args.user.username}).count() > 0) {
-    let code = 409;
-    return new MlRespPayload().errorPayload("Already Exist", code);
-  }
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
 
-  let userId = Accounts.createUser(args.user);
-  if(userId){
-    let code = 200;
-    let result = {userId: userId}
-    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-    return response
-  }
+    if(Meteor.users.find({username:args.user.username}).count() > 0) {
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Already Exist", code);
+        return response;
+    }
+
+    let userId = Accounts.createUser(args.user);
+    if(userId){
+        let code = 200;
+        let result = {userId: userId}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+    }
 }
 
 MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => {
@@ -255,25 +259,25 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   return dep
 }
 
-MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
-  // let roleId = Meteor.users.findOne({"_id":args.userId}).profile.InternalUprofile.moolyaProfile.userProfiles[0].userroles;
-  var user = Meteor.users.findOne({_id: args.userId});
-  var roles = [];
-  if (user && user.profile && user.profile.isInternaluser == true) {
-    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-    let user_roles;
-    // Selecting Default Profile
-    for (var i = 0; i < user_profiles.length; i++) {
-      let user_roles = user_profiles[i].userRoles;
-        if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
-          for (var j = 0; j < user_roles.length; j++) {
-           roles.push(user_roles[j]);
-          }
-        }
-    }
-  }
-  return roles;
-}
+// MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
+//   // let roleId = Meteor.users.findOne({"_id":args.userId}).profile.InternalUprofile.moolyaProfile.userProfiles[0].userroles;
+//   var user = Meteor.users.findOne({_id: args.userId});
+//   var roles = [];
+//   if (user && user.profile && user.profile.isInternaluser == true) {
+//     let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+//     let user_roles;
+//     // Selecting Default Profile
+//     for (var i = 0; i < user_profiles.length; i++) {
+//       let user_roles = user_profiles[i].userRoles;
+//         if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
+//           for (var j = 0; j < user_roles.length; j++) {
+//            roles.push(user_roles[j]);
+//           }
+//         }
+//     }
+//   }
+//   return roles;
+// }
 
 MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let moduleName = args.moduleName

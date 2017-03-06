@@ -94,7 +94,6 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
 {
     // TODO : Authorization
-
     let query,
     community = {},
     communitiesAccess,
@@ -264,8 +263,22 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
     }
 }
 
-MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) => {
-
+MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) =>
+{
+    let hierarchy;
+    let levelCode;
+    let community = {};
+    if(args.clusterId != undefined && args.chapterId != undefined && args.subChapterId != undefined ){
+      levelCode = "SUBCHAPTER"
+    }
+    else if(args.clusterId != undefined && args.chapterId != undefined ){
+      levelCode = "CHAPTER"
+    }
+    else if(args.clusterId != undefined){
+      levelCode = "CLUSTER"
+    }
+    hierarchy = MlHierarchy.findOne({code:levelCode})
+    let communities = MlCommunityAccess.find({"communityDefCode":args.communityId}).fetch();
 }
 
 // MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {

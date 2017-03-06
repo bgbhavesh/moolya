@@ -151,6 +151,19 @@ let communitySchema = `
         subchapters:[String]
     }
     
+    input community{
+        name:String,
+        displayName:String,
+        code:String,
+        communityImageLink:String,
+        showOnMap:String,
+        aboutCommunity:String,
+        isActive:Boolean,
+        clusters:[String],
+        chapters:[String],
+        subchapters:[String]
+    }
+    
     type Query{
         fetchCommunities:SearchResp
         fetchCommunityDef(communityId:String):Community
@@ -158,7 +171,7 @@ let communitySchema = `
     
     type Mutation{
         createCommunityAccess(clusterId:String, chapterId:String, subChapterId:String): String
-        updateCommunityDef(community:Community): String
+        updateCommunityDef(community:community): String
     }
 `
 

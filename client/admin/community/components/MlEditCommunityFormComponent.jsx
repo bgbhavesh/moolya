@@ -126,7 +126,7 @@ class MlEditCommunityFormComponent extends React.Component {
           label:chapterName
         }  
       }`;
-    let chapterOption={options: { variables: {id:this.state.chapters}}};
+    let chapterOption={options: { variables: {id:this.state.clusters}}};
     const showLoader=this.state.loading;
     return (
       <div>

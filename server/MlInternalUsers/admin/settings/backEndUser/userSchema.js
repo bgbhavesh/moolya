@@ -150,8 +150,8 @@ let BackEndUser = `
     type Query{
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
-        fetchUserRoles(userId:String): [UserRoles]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
+        fetchUserRoles(userId:String):[UserRoles]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersBysubChapterDepSubDep(subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  

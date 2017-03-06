@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {updateNumericalFormatActionHandler} from '../actions/updateNumericalFormatAction'
+import {upsertNumericalFormatActionHandler} from '../actions/upsertNumericalFormatAction'
 import {findNumericalFormatActionHandler} from '../actions/findNumericalFormatAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
@@ -9,21 +9,14 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 
-class MlEditNumericalFormat extends React.Component{
+class MlNumericalFormat extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
       loading:true,
       data:{},
-      // numberOfDigitsAfterDecimal: '',
-      // measurementSystem: '',
-      // // currencyFormat: '',
-      // currencySymbol: '',
-      // valueSeparator: '',
-      // firstDayOfWeek: '',
     };
-    this.addEventHandler.bind(this);
-    this.updateLang.bind(this);
+    this.upsertNumaericalFormate.bind(this);
     this.findLang.bind(this);
     return this;
   }
@@ -37,10 +30,10 @@ class MlEditNumericalFormat extends React.Component{
     return resp;
   }
 
-  async addEventHandler() {
-    const resp=await this.updateLang();
+  /*async addEventHandler() {
+    const resp=await this.upsertNumaericalFormate();
     return resp;
-  }
+  }*/
 
   async handleError(response) {
     alert(response)
@@ -51,11 +44,11 @@ class MlEditNumericalFormat extends React.Component{
     FlowRouter.go("/admin/settings/numericalFormatList");
   };
   async findLang(){
-    let Id=this.props.config;
-    const response = await findNumericalFormatActionHandler(Id);
+   // let Id=this.props.config;
+    const response = await findNumericalFormatActionHandler();
 
-    if(response) {
-      this.setState({loading:false,data:response});
+    if(response.length>0) {
+      this.setState({loading:false,data:response[0].numericalInfo});
       if (this.state.data.numberOfDigitsAfterDecimal) {
         this.setState({numberOfDigitsAfterDecimal: this.state.data.numberOfDigitsAfterDecimal});
       }
@@ -71,13 +64,14 @@ class MlEditNumericalFormat extends React.Component{
       if (this.state.data.valueSeparator) {
         this.setState({valueSeparator: this.state.data.valueSeparator});
       }
+    }else{
+      this.setState({loading:false});
     }
-    this.setState({loading:false,data:response});
+
   }
 
-  async  updateLang() {
+  async  upsertNumaericalFormate() {
     let Details = {
-      _id: this.refs.id.value,
       numberOfDigitsAfterDecimal: this.state.numberOfDigitsAfterDecimal,
       measurementSystem: this.state.measurementSystem,
       currencyFormat: this.state.currencyFormat,
@@ -86,7 +80,7 @@ class MlEditNumericalFormat extends React.Component{
     }
     console.log(Details)
 
-    const response = await updateNumericalFormatActionHandler(Details);
+    const response = await upsertNumericalFormatActionHandler(Details);
     return response;
 
   }
@@ -106,9 +100,9 @@ class MlEditNumericalFormat extends React.Component{
   onStatusChange(e){
     const data=this.state.data;
     if(e.currentTarget.checked){
-      this.setState({"data":{"currencyFormat":true}});
+      this.setState({"currencyFormat":true});
     }else{
-      this.setState({"data":{"currencyFormat":false}});
+      this.setState({"currencyFormat":false});
     }
   }
 
@@ -116,14 +110,9 @@ class MlEditNumericalFormat extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
-      {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.updateLang.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.upsertNumaericalFormate.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
@@ -144,9 +133,9 @@ class MlEditNumericalFormat extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Edit Numerical Format</h2>
+              <h2>Numerical Format</h2>
               <div className="col-md-6 nopadding-left">
-                <input type="text" ref="id" defaultValue={this.state.data._id} hidden="true"/>
+               {/* <input type="text" ref="id" defaultValue={this.state.data._id} hidden="true"/>*/}
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
@@ -177,10 +166,11 @@ class MlEditNumericalFormat extends React.Component{
                       <div className="form-group switch_wrap inline_switch">
                         <label>Currency Format</label>
                         <label className="switch">
-                          <input type="checkbox" ref="status"  checked={this.state.data&&this.state.data.currencyFormat} onChange={this.onStatusChange.bind(this)}/>
+                          <input type="checkbox" ref="status"  checked={this.state.currencyFormat} onChange={this.onStatusChange.bind(this)}/>
                           <div className="slider"></div>
                         </label>
                       </div>
+
                       <br className="brclear"/>
                     </form>
                   </ScrollArea>
@@ -194,4 +184,4 @@ class MlEditNumericalFormat extends React.Component{
   }
 };
 
-export default MlEditNumericalFormat = formHandler()(MlEditNumericalFormat);
+export default MlNumericalFormat = formHandler()(MlNumericalFormat);

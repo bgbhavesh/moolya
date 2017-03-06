@@ -79,6 +79,14 @@ export default class MlMasterSettingRepo{
       case "EMAILTYPE":
         settingsObj={"type":"EMAILTYPE","emailTypeInfo":requestParams.masterData.emailTypeInfo,isActive:requestParams.masterData.isActive};
         break;
+
+      case "GENDER":
+        settingsObj={"type":"GENDER","genderInfo":requestParams.masterData.genderInfo,isActive:requestParams.masterData.isActive};
+        break;
+
+      case "ADDRESSTYPE":
+        settingsObj={"type":"ADDRESSTYPE","addressTypeInfo":requestParams.masterData.addressTypeInfo,isActive:requestParams.masterData.isActive};
+        break;
      }
 
 

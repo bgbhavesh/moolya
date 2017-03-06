@@ -12,8 +12,8 @@ class MlEditAddressType extends React.Component{
     super(props);
     this.state = {loading:true,data:{}};
     this.addEventHandler.bind(this);
-    this.updateLang.bind(this);
-    this.findLang.bind(this);
+    this.updateAddressType.bind(this);
+    this.findAddressType.bind(this);
     return this;
   }
   componentDidMount() {
@@ -22,12 +22,12 @@ class MlEditAddressType extends React.Component{
     }
   }
   componentWillMount() {
-    const resp=this.findLang();
+    const resp=this.findAddressType();
     return resp;
   }
 
   async addEventHandler() {
-    const resp=await this.updateLang();
+    const resp=await this.updateAddressType();
     return resp;
   }
 
@@ -36,26 +36,24 @@ class MlEditAddressType extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/addressTypeList");
   };
-  async findLang(){
+
+  async findAddressType(){
     let Id=this.props.config;
     const response = await findAddressTypeActionHandler(Id);
     this.setState({loading:false,data:response});
   }
 
-  async  updateLang() {
+  async  updateAddressType() {
     let Details = {
-      _id : this.refs.id.value,
+      id : this.props.config,
       addressName: this.refs.name.value,
       addressDisplayName: this.refs.displayName.value,
       aboutAddress: this.refs.about.value,
       addressUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await updateAddressTypeActionHandler(Details);
     return response;
 
@@ -76,13 +74,13 @@ class MlEditAddressType extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
+        handler: async(event) => this.props.handler(this.updateAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: async(event) => this.props.handler(this.updateLang.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -95,9 +93,8 @@ class MlEditAddressType extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Create Address Type</h2>
+              <h2>Edit Address Type</h2>
               <div className="col-md-6 nopadding-left">
-                <input type="text" ref="id" defaultValue={this.state.data&&this.state.data._id} hidden="true"/>
                 <div className="form_bg">
                   <form>
                     <div className="form-group">

@@ -89,10 +89,14 @@ let MasterSettingsSchema = `
          titleInfo:TitleInfoRequest
          employmentTypeInfo:EmploymentTypeInfoRequest
       }
-
+      type MasterSettingsDropData{
+          label:String,
+          value:String
+      }
       type Query{
         fetchMasterSettings(type:MASTER_SETTINGS_TYPE!):[MasterSettings]
         findMasterSetting(_id:String):MasterSettings
+        fetchMasterSettingsForDropDown(type:MASTER_SETTINGS_TYPE!):[MasterSettingsDropData]
     }
     
     type Mutation{

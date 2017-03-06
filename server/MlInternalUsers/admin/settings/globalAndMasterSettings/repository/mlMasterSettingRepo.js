@@ -38,6 +38,12 @@ export default class MlMasterSettingRepo{
       case "EMPLOYMENTTYPE":
         settingsObj={"type":"EMPLOYMENTTYPE","employmentTypeInfo":requestParams.masterData.employmentTypeInfo,isActive:requestParams.masterData.isActive};
         break;
+
+
+
+      case "COMPANYTYPE":
+        settingsObj={"type":"COMPANYTYPE","companyTypeInfo":requestParams.masterData.companyTypeInfo,isActive:requestParams.masterData.isActive};
+        break;
      }
 
 

@@ -4,10 +4,10 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../mlAdminSchemaDef'
 let MasterSettingsSchema = `
-   enum MASTER_SETTINGS_TYPE {
-            LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
-            EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
-  }
+       enum MASTER_SETTINGS_TYPE {
+                LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
+                EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
+      }
       type TaxTypeInfo{
           taxName:String
           aboutTax:String
@@ -70,6 +70,19 @@ let MasterSettingsSchema = `
       }
       
       
+      type CompanyTypeInfo{
+          companyName:String
+          companyDisplayName:String
+          aboutCompany:String
+      }
+      
+      input CompanyTypeInfoRequest{
+          companyName:String
+          companyDisplayName:String
+          aboutCompany:String
+      }
+      
+      
       type MasterSettings{
          _id:String,
          isActive:Boolean
@@ -78,6 +91,7 @@ let MasterSettingsSchema = `
          addressTypeInfo:AddressTypeInfo
          titleInfo:TitleInfo
          employmentTypeInfo:EmploymentTypeInfo
+         companyTypeInfo:CompanyTypeInfo
       }
       
       input MasterSettingsRequest{
@@ -88,6 +102,7 @@ let MasterSettingsSchema = `
          addressTypeInfo:AddressTypeInfoRequest
          titleInfo:TitleInfoRequest
          employmentTypeInfo:EmploymentTypeInfoRequest
+         companyTypeInfo:CompanyTypeInfoRequest
       }
 
       type Query{

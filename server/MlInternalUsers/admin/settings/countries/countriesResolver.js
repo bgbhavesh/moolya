@@ -39,8 +39,20 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
         if(resp){
           let cluster = MlClusters.findOne({"countryId":args.countryId});
           if(cluster){
+            let status = {};
+            if(country.isActive){
+              status= {
+                code: 101,
+                description :"Work In Progress"
+              }
+            }else{
+              status= {
+                code: 110,
+                description :"Inactive"
+              }
+            }
             // let Args = {clusterId:cluster._id, cluster:{isActive:country.isActive}};
-            MlResolver.MlMutationResolver['upsertCluster'] (obj, {clusterId:cluster._id, cluster:{isActive:country.isActive, clusterName:country.country}, moduleName:"CLUSTER",actionName:"UPDATE"}, context, info)
+            MlResolver.MlMutationResolver['upsertCluster'] (obj, {clusterId:cluster._id, cluster:{isActive:country.isActive, clusterName:country.country, status}, moduleName:"CLUSTER",actionName:"UPDATE"}, context, info)
           }
           else {
             cluster = {
@@ -53,7 +65,11 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
               about:"",
               email:"",
               showOnMap:false,
-              isActive:false
+              isActive:false,
+              status:{
+                code:100,
+                description:"To Be Assigned"
+              },
             }
             MlResolver.MlMutationResolver['createCluster'](obj, {cluster:cluster, moduleName:"CLUSTER", actionName:"CREATE"}, context, info)
           }

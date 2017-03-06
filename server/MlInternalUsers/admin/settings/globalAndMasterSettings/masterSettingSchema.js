@@ -7,7 +7,7 @@ let MasterSettingsSchema = `
    enum MASTER_SETTINGS_TYPE {
             LANGUAGE,TITLE,ADDRESSTYPE,EMAILTYPE,CONTACTTYPE,SOCIALLINKS,GENDER,
             EMPLOYMENTTYPE,COMPANYTYPE,TAXTYPE,TAXATION
-}
+  }
       type TaxTypeInfo{
           taxName:String
           aboutTax:String
@@ -18,7 +18,7 @@ let MasterSettingsSchema = `
           aboutTax:String
           taxDisplayName:String
       }
-    }
+    
       type LanguageInfo{
           languageName:String
           aboutLanguage:String

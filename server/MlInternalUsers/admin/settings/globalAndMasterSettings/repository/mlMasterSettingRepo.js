@@ -34,7 +34,6 @@ export default class MlMasterSettingRepo{
       case "LANGUAGE":
         settingsObj={"type":"LANGUAGE","languageInfo":requestParams.masterData.languageInfo,isActive:requestParams.masterData.isActive};
         break;
-    }
 
       case "EMPLOYMENTTYPE":
         settingsObj={"type":"EMPLOYMENTTYPE","employmentTypeInfo":requestParams.masterData.employmentTypeInfo,isActive:requestParams.masterData.isActive};

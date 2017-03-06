@@ -73,7 +73,12 @@ class MlClusterDetails extends React.Component {
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/dashboard");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/dashboard");
+      else
+        toastr.error(response.result);
+    }
   };
 
   render() {
@@ -149,7 +154,7 @@ class MlClusterDetails extends React.Component {
                       <label>Status</label><br/>
                       <label className="switch">
                         <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
-                               onChange={this.onStatusChangeActive.bind(this)} disabled="disabled"/>
+                               onChange={this.onStatusChangeActive.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>

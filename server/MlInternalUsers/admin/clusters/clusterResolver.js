@@ -5,11 +5,14 @@ import geocoder from 'geocoder'
 
 
 MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
-    let cluster = args.cluster;
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.cluster);
-    if(!isValidAuth)
-        return "Not Authorized"
+    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    if (!isValidAuth) {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
 
+  let cluster = args.cluster;
     if(MlClusters.find({countryId:cluster.countryId}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
@@ -33,10 +36,14 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
-    let cluster = MlClusters.findOne({_id: args.clusterId});
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, {clusterId:cluster._id});
-    if(!isValidAuth)
-      return "Not Authorized"
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
+  let cluster = MlClusters.findOne({_id: args.clusterId});
     if(cluster){
         for(key in args.cluster){
             cluster[key] = args.cluster[key]
@@ -45,7 +52,7 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
         if(resp){
             let code = 200;
             let result = {cluster: resp}
-            let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+            let response = new MlRespPayload().successPayload(result, code);
             return response
         }
     }

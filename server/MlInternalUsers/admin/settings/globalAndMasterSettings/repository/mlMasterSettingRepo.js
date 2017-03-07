@@ -87,10 +87,12 @@ export default class MlMasterSettingRepo{
       case "ADDRESSTYPE":
         settingsObj={"type":"ADDRESSTYPE","addressTypeInfo":requestParams.masterData.addressTypeInfo,isActive:requestParams.masterData.isActive};
         break;
-     }
 
 
-
+      case "CONTACTTYPE":
+        settingsObj={"type":"CONTACTTYPE","contactTypeInfo":requestParams.masterData.contactTypeInfo,isActive:requestParams.masterData.isActive};
+        break;
+      }
 
       if(actionName==="CREATE"){
         settingsObj=_.extend(query,settingsObj);

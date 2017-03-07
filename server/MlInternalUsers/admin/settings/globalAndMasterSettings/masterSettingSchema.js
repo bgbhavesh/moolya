@@ -111,6 +111,20 @@ let MasterSettingsSchema = `
           genderUploadIcon:String
       }
       
+      type ContactTypeInfo{
+          contactName:String
+          contactDisplayName:String
+          aboutContact:String
+          contactUploadIcon:String
+      }
+      
+      input ContactTypeInfoRequest{
+          contactName:String
+          contactDisplayName:String
+          aboutContact:String
+          contactUploadIcon:String
+      }
+      
       
       type MasterSettings{
          _id:String,
@@ -123,6 +137,7 @@ let MasterSettingsSchema = `
          companyTypeInfo:CompanyTypeInfo
          emailTypeInfo:EmailTypeInfo
          genderInfo:GenderInfo
+         contactTypeInfo:ContactTypeInfo
       }
       
       input MasterSettingsRequest{
@@ -136,6 +151,7 @@ let MasterSettingsSchema = `
          companyTypeInfo:CompanyTypeInfoRequest
          emailTypeInfo:EmailTypeInfoRequest
          genderInfo:GenderInfoRequest
+         contactTypeInfo:ContactTypeInfoRequest
       }
       type MasterSettingsDropData{
           label:String,

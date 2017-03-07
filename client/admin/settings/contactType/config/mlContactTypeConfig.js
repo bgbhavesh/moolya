@@ -9,16 +9,17 @@ const mlContactTypeTableConfig=new MlViewer.View({
   module:"contactType",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["contactName","contactDisplayName","contactUploadIcon","isActive"],
-  searchFields:["contactName","contactDisplayName","contactUploadIcon","isActive"],
+  fields:["contactTypeInfo.contactName","contactTypeInfo.contactDisplayName","contactTypeInfo.contactUploadIcon","isActive"],
+  searchFields:["contactTypeInfo.contactName","contactTypeInfo.contactDisplayName","contactTypeInfo.contactUploadIcon","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "contactName", title: "Name",dataSort:true},
-    {dataField: "contactDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "aboutContact", title: "About",dataSort:true}
+    {dataField: "contactTypeInfo.contactName", title: "Name",dataSort:true,customComponent:function(data){ return <div>{data.data.contactTypeInfo.contactName}</div>}},
+    {dataField: "contactTypeInfo.contactDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.contactTypeInfo.contactDisplayName}</div>}},
+    {dataField: "contactTypeInfo.aboutContact", title: "About",dataSort:true,customComponent:function(data){ return <div>{data.data.contactTypeInfo.aboutContact}</div>}},
+    {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -48,7 +49,7 @@ const mlContactTypeTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
-  graphQlQuery:gql`
+/*  graphQlQuery:gql`
               query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
               data:SearchQuery(module:"contactType",offset: $offset, limit: $limit,fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
@@ -62,6 +63,30 @@ const mlContactTypeTableConfig=new MlViewer.View({
                       }
                 }
               }
+              `*/
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"CONTACTTYPE"}}
+  },
+  graphQlQuery:gql`
+               query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 contactTypeInfo{
+                                    contactName
+                                    aboutContact
+                                    contactDisplayName
+                                 }
+                                    
+                          }
+                      }
+              }
+              }
+              
               `
 });
 

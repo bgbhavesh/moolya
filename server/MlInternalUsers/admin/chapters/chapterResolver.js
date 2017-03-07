@@ -67,6 +67,21 @@ MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
         for(key in args.chapter){
           chapter[key] = args.chapter[key]
         }
+        if(chapter.isActive){
+          if(chapter.status && chapter.status.code != 101){
+            cluster.status= {
+              code: 101,
+              description :"Work In Progress"
+            }
+          }
+        }else{
+          if(chapter.status && chapter.status.code != 110){
+            chapter.status= {
+              code: 110,
+              description :"Inactive"
+            }
+          }
+        }
         let resp = MlChapters.update({_id:args.chapterId}, {$set:chapter}, {upsert:true})
         if(resp){
           let code = 200;

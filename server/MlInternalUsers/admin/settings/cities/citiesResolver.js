@@ -46,7 +46,19 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
         {
             let chapter = MlChapters.findOne({"cityId":args.cityId});
             if(chapter){
-                MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:chapter._id, chapter:{isActive:city.isActive}}, context, info)
+                let status = {};
+                if(city.isActive){
+                  status= {
+                    code: 101,
+                    description :"Work In Progress"
+                  }
+                }else{
+                  status= {
+                    code: 110,
+                    description :"Inactive"
+                  }
+                }
+                MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:chapter._id, chapter:{isActive:city.isActive,status}}, context, info)
             }
             else {
                 let cluster = MlClusters.findOne({"countryId":city.countryId});
@@ -64,7 +76,11 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
                     cityName:city.name,
                     email:"moolya@moolya.com",
                     showOnMap:false,
-                    isActive:city.isActive
+                    isActive:city.isActive,
+                    status:{
+                      code:100,
+                      description:"To Be Assigned"
+                    },
                 }
                 MlResolver.MlMutationResolver['createChapter'](obj, {chapter:chapter}, context, info)
             }

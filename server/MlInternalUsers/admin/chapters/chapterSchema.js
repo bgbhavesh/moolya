@@ -18,6 +18,7 @@ let chapterSchema = `
         email:String,
         showOnMap:Boolean,
         isActive:Boolean
+        status:status
         
     }
     

@@ -37,3 +37,8 @@ transform: translateX(-50%);color: #fff;text-shadow: none;font-size: 20px;}
 .login_block_in p{color: #B9C5CC;font-size: 12px;text-align: left;text-shadow: none; }
 .login_block_in a{    color: #B9C5CC; padding:0px 5px;        }
 .login_block_in a:hover{color: #fff;text-decoration: none;}
+.login_block_in input:-webkit-autofill{
+  -webkit-box-shadow: 0 0 0px 1000px #273545 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  background-color: rgba(0,0,0,1) !important;
+}

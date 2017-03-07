@@ -12,7 +12,7 @@ MlResolver.MlQueryResolver['fetchMasterSettingsForDropDown'] = (obj, args, conte
 MlResolver.MlQueryResolver['fetchMasterSettings'] = (obj, args, context, info) => {
   // TODO : Authorization
          console.log(args);
-     return MlMasterSettings.find({type:args.type},{isActive:true}).fetch();
+     return MlMasterSettings.find({type:args.type,isActive:true}).fetch();
 }
 
 MlResolver.MlQueryResolver['findMasterSetting'] = (obj, args, context, info) => {

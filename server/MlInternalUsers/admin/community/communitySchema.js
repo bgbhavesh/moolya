@@ -115,11 +115,6 @@ import MlSchemaDef from '../mlAdminSchemaDef'
 //
 //     }
 //
-//     type MapData {
-//        key:String,
-//        count:Int
-//     }
-//
 //     type Mutation{
 //         updateCommunityDef(communityId: String!, community:communityDefObject, clusters:[String], chapters:[String], subChapters:[String]): response,
 //         updateCommunityAccess(community:communityAccessObject): String,
@@ -128,7 +123,6 @@ import MlSchemaDef from '../mlAdminSchemaDef'
 //     }
 //
 //     type Query{
-//         FetchMapData(moduleName:String,id:String):[MapData]
 //         fetchCommunitiesDef:SearchResp
 //         fecthCommunitiesAccess:[CommunityAccessObject]
 //         fecthCommunityDef(communityId:String):Community
@@ -164,7 +158,13 @@ let communitySchema = `
         subchapters:[String]
     }
     
+    type MapData {
+        key:String,
+        count:Int
+     }
+    
     type Query{
+        FetchMapData(moduleName:String,id:String):[MapData]
         fetchCommunities:SearchResp
         fetchCommunityDef(communityId:String):Community
     }

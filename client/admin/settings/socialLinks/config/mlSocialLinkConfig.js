@@ -9,16 +9,16 @@ const mlSocialLinksTypeTableConfig=new MlViewer.View({
   module:"socialLinks",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["addressName","addressDisplayName","addressUploadIcon","isActive"],
-  searchFields:["addressName","addressDisplayName","addressUploadIcon","isActive"],
+  fields:["socialLinksInfo.socialName","socialLinksInfo.socialDisplayName","socialLinksInfo.socialUploadIcon","isActive"],
+  searchFields:["socialLinksInfo.socialName","socialLinksInfo.socialDisplayName","socialLinksInfo.socialUploadIcon","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "socialName", title: "Name",dataSort:true},
-    {dataField: "socialDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "aboutSocial", title: "About",dataSort:true},
+    {dataField: "socialLinksInfo.socialName", title: "Name",dataSort:true,customComponent:function(data){ return <div>{data.data.socialLinksInfo.socialName}</div>}},
+    {dataField: "socialLinksInfo.socialDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.socialLinksInfo.socialDisplayName}</div>}},
+    {dataField: "socialLinksInfo.aboutSocial", title: "About",dataSort:true,customComponent:function(data){ return <div>{data.data.socialLinksInfo.aboutSocial}</div>}},
     // {dataField: "addressUploadIcon", title: "Icon",dataSort:true,customComponent:FlagFormatter},
     {dataField: "isActive", title: "Status",dataSort:true,customComponent:ActiveFormatter},
     // {dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
@@ -51,7 +51,11 @@ const mlSocialLinksTypeTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
-  graphQlQuery:gql`
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"SOCIALLINKS"}}
+  },
+/*  graphQlQuery:gql`
               query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
               data:SearchQuery(module:"socialLinks",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
@@ -66,6 +70,26 @@ const mlSocialLinksTypeTableConfig=new MlViewer.View({
                           }
                       }
                 }
+              }
+              `*/
+  graphQlQuery:gql`
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 socialLinksInfo{
+                                     socialName
+                                    aboutSocial
+                                    socialDisplayName
+                                    socialUploadIcon
+                                 }
+                                    
+                          }
+                      }
+              }
               }
               `
 });

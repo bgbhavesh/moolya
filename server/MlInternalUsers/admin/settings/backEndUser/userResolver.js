@@ -101,6 +101,18 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     let user = Meteor.users.findOne({_id: args.userId});
     return user;
 }
+MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) => {
+  let user = Meteor.users.findOne({_id: args.userId});
+  if (user && user.profile && user.profile.isInternaluser == true) {
+    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+    for (var i = 0; i < user_profiles.length; i++) {
+      let clusterId = user_profiles[i].clusterId;
+      if (clusterId == args.clusterId) {
+         return user_profiles[i];
+      }
+    }
+  }
+}
 
 MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) => {
 
@@ -322,7 +334,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   })
 
   let userProfile = {
-    clusterId: data.clusterId,
+    clusterId:  data.profile.InternalUprofile.moolyaProfile.userProfiles.clusterId,
     userRoles:  roles,
     isDefault: false
   }

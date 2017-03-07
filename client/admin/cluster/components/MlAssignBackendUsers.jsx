@@ -14,6 +14,7 @@ import {mlClusterConfig } from '../config/mlClusterConfig'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findUserDetails} from '../actions/findUserDetails'
 import {findRoles} from '../actions/fetchRoles'
+import {findCluster_Roles} from '../actions/findCluster_Roles'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -64,30 +65,26 @@ class MlAssignBackendUsers extends React.Component{
 
     async findUserDetails(userId){
       const user = await findUserDetails(userId);
-      var roles = [];
-      if (user && user.profile && user.profile.isInternaluser == true) {
-        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-        // let user_roles;
-        // Selecting Default Profile
-        for (var i = 0; i < user_profiles.length; i++) {
-          let user_roles = user_profiles[i].userRoles;
-          if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
-            for (var j = 0; j < user_roles.length; j++) {
-              roles.push(user_roles[j]);
-            }
-          }
-        }
-      }
-      this.setState({user_Roles:roles,selectedBackendUser:userId});
-      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile, mlroleDetails:roles});
+      let that = this;
+      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
+      this.find_Cluster_Roles(userId, that.props.params);
       this.findRoleDetails();
       return user;
     }
+  async find_Cluster_Roles(userId, clusterId){
+    const userProfile = await findCluster_Roles(userId, clusterId);
+    var roles = userProfile.userRoles || [];
+    this.setState({user_Roles:roles,selectedBackendUser:userId,mlroleDetails:roles});
+    return roles
+  }
     async findRoleDetails(){
       let roleIds = [];
-      if(this.state.user_Roles && this.state.user_Roles.length>0){
-        this.state.user_Roles.map(function (role) {
-          roleIds.push(role.roleId);
+      let that = this;
+      if(that.state.user_Roles && that.state.user_Roles.length>0){
+        that.state.user_Roles.map(function (role) {
+          if(that.props.params == role.clusterId){
+            roleIds.push(role.roleId);
+          }
         });
       }
       const roles= await findRoles(roleIds);

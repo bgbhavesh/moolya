@@ -47,15 +47,13 @@ class MlEditContactType extends React.Component{
 
   async  updateContact() {
     let Details = {
-      _id : this.refs.id.value,
+      _id : this.props.config,
       contactName: this.refs.name.value,
       contactDisplayName: this.refs.displayName.value,
       aboutContact: this.refs.about.value,
       contactUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await updateContactTypeActionHandler(Details);
     return response;
 

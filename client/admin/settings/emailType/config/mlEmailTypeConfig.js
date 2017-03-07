@@ -9,16 +9,16 @@ const mlEmailTypeTableConfig=new MlViewer.View({
   module:"emailType",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["emailName","emailDisplayName","emailUploadIcon","isActive"],
-  searchFields:["emailName","emailDisplayName","emailUploadIcon","isActive"],
+  fields:["emailTypeInfo.emailName","emailTypeInfo.emailDisplayName","emailTypeInfo.emailUploadIcon","isActive"],
+  searchFields:["emailTypeInfo.emailName","emailTypeInfo.emailDisplayName","emailTypeInfo.emailUploadIcon","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "emailName", title: "Name",dataSort:true},
-    {dataField: "emailDisplayName", title: "Display Name",dataSort:true},
-    {dataField: "aboutEmail", title: "About",dataSort:true},
+    {dataField: "emailTypeInfo.emailName", title: "Name",dataSort:true,customComponent:function(data){ return <div>{data.data.emailTypeInfo.emailName}</div>}},
+    {dataField: "emailTypeInfo.emailDisplayName", title: "Display Name",dataSort:true,customComponent:function(data){ return <div>{data.data.emailTypeInfo.emailDisplayName}</div>}},
+    {dataField: "emailTypeInfo.aboutEmail", title: "About",dataSort:true,customComponent:function(data){ return <div>{data.data.emailTypeInfo.aboutEmail}</div>}},
     // {dataField: "addressUploadIcon", title: "Icon",dataSort:true,customComponent:FlagFormatter},
     // {dataField: "isActive", title: "Available in System",dataSort:true,customComponent:ActiveFormatter},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
@@ -51,19 +51,27 @@ const mlEmailTypeTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context:{settingsType:"EMAILTYPE"}}
+  },
   graphQlQuery:gql`
-              query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"emailType",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                      ...on EmailType{
-                             _id
-                            emailName
-                            aboutEmail
-                            emailDisplayName
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData: [GenericFilter], $sortData: [SortFilter]){
+                   data:ContextSpecSearch(module:"MASTER_SETTINGS",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData: $fieldsData, sortData: $sortData){
+                        totalRecords
+                           data{
+                            ...on MasterSettings{
+                                 _id
+                                 isActive
+                                 emailTypeInfo{
+                                    emailName
+                                    aboutEmail
+                                    emailDisplayName
+                                 }
+                                    
                           }
                       }
-                }
+              }
               }
               `
 });

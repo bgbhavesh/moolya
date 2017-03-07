@@ -125,6 +125,20 @@ let MasterSettingsSchema = `
           contactUploadIcon:String
       }
       
+       type SocialLinksInfo{
+          socialName:String
+          socialDisplayName:String
+          aboutSocial:String
+          socialUploadIcon:String
+      }
+      
+      input SocialLinksInfoRequest{
+          socialName:String
+          socialDisplayName:String
+          aboutSocial:String
+          socialUploadIcon:String
+      }
+      
       
       type MasterSettings{
          _id:String,
@@ -138,6 +152,7 @@ let MasterSettingsSchema = `
          emailTypeInfo:EmailTypeInfo
          genderInfo:GenderInfo
          contactTypeInfo:ContactTypeInfo
+         socialLinksInfo:SocialLinksInfo
       }
       
       input MasterSettingsRequest{
@@ -152,6 +167,7 @@ let MasterSettingsSchema = `
          emailTypeInfo:EmailTypeInfoRequest
          genderInfo:GenderInfoRequest
          contactTypeInfo:ContactTypeInfoRequest
+         socialLinksInfo:SocialLinksInfoRequest
       }
       type MasterSettingsDropData{
           label:String,

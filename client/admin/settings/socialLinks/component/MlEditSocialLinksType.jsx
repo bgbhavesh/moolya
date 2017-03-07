@@ -47,7 +47,7 @@ class MlEditSocialLinkType extends React.Component{
 
   async  updateLang() {
     let Details = {
-      _id : this.refs.id.value,
+      _id : this.props.config,
       socialName: this.refs.name.value,
       socialDisplayName: this.refs.displayName.value,
       aboutSocial: this.refs.about.value,

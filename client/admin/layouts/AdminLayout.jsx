@@ -14,11 +14,9 @@ export default class AdminLayout extends Component {
       //To Provide Context for Theme,Language and Menu/Role
 
       <ApolloProvider client={client}>
-      <div>
         <div className="moolya_admin">
           <MlAdminApp {...this.props}/>
         </div>
-      </div>
       </ApolloProvider>
     )
   }

@@ -19,7 +19,7 @@ export default class MlAssignTaxInformation extends Component {
     let selectaxName=this.props.id
     this.setState({taxId:selectaxName})
     let StatesInfoDetails=this.props.statesInfo
-    if(StatesInfoDetails){
+    if(StatesInfoDetails.length>0){
       let statesInfo=[]
       for(i=0;i<StatesInfoDetails.length;i++){
         let json={
@@ -76,7 +76,10 @@ export default class MlAssignTaxInformation extends Component {
   }
   render() {
     let taxQuery=gql`query{
-  data:FetchActiveTax { label:taxName,value:_id    }
+ data: fetchMasterSettingsForDropDown(type:TAXTYPE) {
+    label
+    value
+  }
 }
 `;
     console.log(taxQuery)
@@ -87,14 +90,14 @@ export default class MlAssignTaxInformation extends Component {
 
           <ul className="nav nav-pills" role="tablist">
             <li role="presentation" className="active">
-              <a href="#home" aria-controls="home" role="tab" data-toggle="tab">Tax
+              <a href={`#home${that.props.id}`} aria-controls="home" role="tab" data-toggle="tab">Tax
               Information</a></li>
             <li role="presentation">
               <a href={`#profile${that.props.id}`} aria-controls="profile" role="tab" data-toggle="tab">Applicable
               States</a></li>
           </ul>
           <div className="tab-content clearfix">
-            <div role="tabpanel" className="tab-pane active" id="home">
+            <div role="tabpanel" className="tab-pane active" id={`home${this.props.id}`}>
               <div className="padding_wrap">
                 <div className="col-md-3">
                   <div className="form-group">

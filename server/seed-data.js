@@ -20,7 +20,8 @@ if(!department) {
     departmentDesc: "Operations Department",
     isActive: true,
     isMoolya: false,
-    depatmentAvailable: departmentAvailiable
+    depatmentAvailable: departmentAvailiable,
+    isSystemDefined: true
   };
 
   MlDepartments.insert(department);
@@ -37,7 +38,8 @@ if(!subDepartment) {
     isActive: true,
     isMoolya: false,
     departmentId: dep._id,
-    subDepatmentAvailable: subDepatmentAvailable
+    subDepatmentAvailable: subDepatmentAvailable,
+    isSystemDefined: true
   };
   MlSubDepartments.insert(subDepartment);
 }

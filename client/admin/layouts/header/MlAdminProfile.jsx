@@ -31,7 +31,7 @@ export default class  MlAdminProfile extends Component {
             <li><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
           </ol>
         </div>
-        <div className="profile-name">Welcome Suresh Garimalla{/*<br/><span>Plotform Admin</span>*/}</div>
+        {/*<div className="profile-name">Welcome Mohasin</div>*/}
       </div>
 
 

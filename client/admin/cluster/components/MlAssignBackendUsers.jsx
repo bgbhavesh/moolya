@@ -146,9 +146,8 @@ class MlAssignBackendUsers extends React.Component{
       const showLoader = this.state.loading;
 
       return (
-        <div>
+        <div className="admin_main_wrap">
           {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-            <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
                     <h2>Assign internal user to Cluster</h2>
                     <div className="col-md-6 nopadding-left">
@@ -181,10 +180,8 @@ class MlAssignBackendUsers extends React.Component{
                                           </div>
                                       </div>
                                       <br className="brclear"/>
-                                      <div className="form-group">
+
                                           <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query}  queryOptions={queryOptions}  isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>
-                                      </div>
-                                      <div>
                                           <div className="form-group">
                                               <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true" defaultValue={alsoAssignedAs}/>
                                           </div>
@@ -194,12 +191,9 @@ class MlAssignBackendUsers extends React.Component{
                                           <div className="form-group">
                                             <input type="text" readOnly="true" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
                                           </div>
-                                          <br className="brclear"/>
-                                      </div>
 
                                       {userid?(<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params} assignedRoles={this.state.user_Roles} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
 
-                                      <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
                                           <label className="switch">
@@ -211,7 +205,7 @@ class MlAssignBackendUsers extends React.Component{
                             </ScrollArea>
                         </div>
                     </div>
-                </div>
+
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </div>)}
         </div>

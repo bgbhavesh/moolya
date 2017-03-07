@@ -6,6 +6,17 @@ import {findClusterTypeActionHandler} from '../actions/findCluster'
 import {updateClusterActionHandler} from '../actions/updateCluster'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import _ from 'lodash';
+
+function toggleSwitch(){
+  $('.switch input').change(function() {
+    if ($(this).is(':checked')) {
+      $(this).parent('.switch').addClass('on');
+    }else{
+      $(this).parent('.switch').removeClass('on');
+    }
+  });
+}
+
 class MlClusterDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +31,16 @@ class MlClusterDetails extends React.Component {
   componentWillMount() {
     const resp = this.findCluster();
     return resp;
+  }
+
+  componentDidMount(){
+    toggleSwitch();
+    $('.float-label').jvFloat();
+  }
+
+  componentDidUpdate(){
+    toggleSwitch();
+    $('.float-label').jvFloat();
   }
 
   async findCluster() {
@@ -97,13 +118,14 @@ class MlClusterDetails extends React.Component {
 
     const showLoader = this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-          <div className="admin_main_wrap">
+
             <div className="admin_padding_wrap">
+              <h2>Edit Cluster Details</h2>
               <form >
-                <h2>Edit Cluster Details</h2>
-                <div className="col-md-6">
+
+                <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <div className="form-group">
                       <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
@@ -124,7 +146,7 @@ class MlClusterDetails extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-6 nopadding-right">
                   <div className="form_bg">
                     <div className="form-group ">
                       <div className="fileUpload mlUpload_btn">
@@ -142,16 +164,16 @@ class MlClusterDetails extends React.Component {
                              defaultValue={this.state.data && this.state.data.email}
                              className="form-control float-label"/>
                     </div>
-                    <div className="form-group switch_wrap">
-                      <label>Show on map</label><br/>
+                    <div className="form-group switch_wrap inline_switch">
+                      <label>Show on map</label>
                       <label className="switch">
                         <input type="checkbox" id="showOnMap" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
                                onChange={this.onStatusChangeMap.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>
-                    <div className="form-group switch_wrap">
-                      <label>Status</label><br/>
+                    <div className="form-group switch_wrap inline_switch">
+                      <label>Status</label>
                       <label className="switch">
                         <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
                                onChange={this.onStatusChangeActive.bind(this)}/>
@@ -162,7 +184,7 @@ class MlClusterDetails extends React.Component {
                 </div>
 
               </form>
-            </div>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
             />
           </div>)}

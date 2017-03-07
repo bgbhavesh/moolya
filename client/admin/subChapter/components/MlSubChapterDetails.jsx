@@ -114,13 +114,13 @@ class MlSubChapterDetails extends React.Component {
      // let chapterData=this.state.data;
     const showLoader = this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-          <div className="admin_main_wrap">
+
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>
           <form>
-            <div className="col-md-6">
+            <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                   <div className="form-group ">
                     <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
@@ -177,16 +177,16 @@ class MlSubChapterDetails extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <div className="form-group switch_wrap">
-                    <label>Show on Map</label><br/>
+                  <div className="form-group switch_wrap inline_switch">
+                    <label>Show on Map</label>
                     <label className="switch">
                       <input type="checkbox" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
                       onChange={this.onStatusChangeMap.bind(this)} />
                       <div className="slider"></div>
                     </label>
                   </div>
-                  <div className="form-group switch_wrap">
-                    <label>Status</label><br/>
+                  <div className="form-group switch_wrap inline_switch">
+                    <label>Status</label>
                     <label className="switch">
                       <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
                         onChange={this.onStatusChangeActive.bind(this)} />
@@ -197,7 +197,6 @@ class MlSubChapterDetails extends React.Component {
             </div>
           </form>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName" />
-          </div>
 
         </div>
         )}

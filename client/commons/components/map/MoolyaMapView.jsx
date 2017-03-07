@@ -15,7 +15,7 @@ export default class MoolyaMapView extends Component {
   }
   componentWillMount(){
     this.setState({
-      center: {lat: 23.6850, lng: 90.3563},
+      center: {lat: 17.1144718, lng: 5.7694891},
       zoom: 1,
     });
   }

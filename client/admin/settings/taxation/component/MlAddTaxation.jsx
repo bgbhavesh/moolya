@@ -47,12 +47,12 @@ class MlAddTaxation extends React.Component{
     const response = await addTaxationActionHandler(TaxationDetails)
     return response;
   }
-  onClickDate(event){
+ /* onClickDate(event){
    let filedName=event.target.name
     let fieldId=filedName+id
     $("#"+fieldId).datepicker({ format: this.state.dateformate });
     $("#"+fieldId).focus();
-  }
+  }*/
   componentDidMount(){
     $('.switch input').change(function() {
       if ($(this).is(':checked')) {
@@ -89,12 +89,12 @@ class MlAddTaxation extends React.Component{
         <div className="admin_padding_wrap">
           <h2>Taxation</h2>
           <div className="main_wrap_scroll">
-            <ScrollArea
+           {/* <ScrollArea
               speed={0.8}
               className="main_wrap_scroll"
               smoothScrolling={true}
               default={true}
-            >
+            >*/}
 
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
@@ -115,8 +115,8 @@ class MlAddTaxation extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group col-md-6 nopadding-left">
-                 {/* <input type="text" ref="taxationValidityFrom" placeholder="Valid from" className="form-control float-label" id="cluster_name"/>*/}
-                  <input type="text" placeholder="Valid from" ref="taxationValidityFrom" onClick={this.onClickDate.bind(this)} className="form-control float-label" name={'validFrom'}   id="#validFrom"/>
+                 <input type="text" ref="taxationValidityFrom" placeholder="Valid from" className="form-control float-label" id="cluster_name"/>
+                 {/* <input type="text" placeholder="Valid from" ref="taxationValidityFrom" onClick={this.onClickDate.bind(this)} className="form-control float-label" name={'validFrom'}   id="#validFrom"/>*/}
                   <FontAwesome name='calendar' className="password_icon" />
                 </div>
                 <div className="form-group col-md-6 nopadding-right">
@@ -144,7 +144,7 @@ class MlAddTaxation extends React.Component{
          < MlTaxTable getTaxTableDetails={this.getTaxTableDetails.bind(this)}/>
 
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
-            </ScrollArea>
+            {/*</ScrollArea>*/}
           </div>
         </div>
       </div>

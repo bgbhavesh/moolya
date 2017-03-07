@@ -4,18 +4,20 @@ import {client} from '../../../core/apolloConnection';
 export async function findTaxTypeDetailsActionHandler() {
   const result = await client.query({
     query: gql`
-      query{
-           FetchTax {
-             taxName
-             taxDisplayName
-             aboutTax
-             _id
-             isActive
-           }
-      }
+     query{
+  fetchMasterSettings(type:TAXTYPE) {
+    _id
+    isActive
+    taxTypeInfo{
+      taxName,
+      taxDisplayName
+      aboutTax
+    }
+  }
+}
     `,
     forceFetch:true
   })
-  const id = result.data.FetchTax;
+  const id = result.data.fetchMasterSettings;
   return id
 }

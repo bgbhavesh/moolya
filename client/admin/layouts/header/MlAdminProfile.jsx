@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {logout} from "../header/actions/logoutAction";
-export default class MlAdminProfile extends Component {
+export default class  MlAdminProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,11 +26,12 @@ export default class MlAdminProfile extends Component {
           <ol>
             <li><a href="/admin/myprofile"><img className="profile-img" src="/images/1.png" /></a></li>
             <li><a href="/admin/logas"><img className="profile-img" src="/images/2.png" /></a></li>
-          {/*  <li><a href="#"><img className="profile-img" src="/images/3.png" /></a></li>*/}
+            <li><a href="#"><img className="profile-img" src="/images/3.png" /></a></li>
             <li><a href="/admin/switchprofile"><img className="profile-img" src="/images/4.png" /></a></li>
             <li><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
           </ol>
         </div>
+        <div className="profile-name">Welcome Suresh Garimalla{/*<br/><span>Plotform Admin</span>*/}</div>
       </div>
 
 

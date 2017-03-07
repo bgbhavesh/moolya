@@ -88,9 +88,12 @@ export default class MlMasterSettingRepo{
         settingsObj={"type":"ADDRESSTYPE","addressTypeInfo":requestParams.masterData.addressTypeInfo,isActive:requestParams.masterData.isActive};
         break;
 
-
       case "CONTACTTYPE":
         settingsObj={"type":"CONTACTTYPE","contactTypeInfo":requestParams.masterData.contactTypeInfo,isActive:requestParams.masterData.isActive};
+        break;
+
+      case "SOCIALLINKS":
+        settingsObj={"type":"SOCIALLINKS","socialLinksInfo":requestParams.masterData.socialLinksInfo,isActive:requestParams.masterData.isActive};
         break;
       }
 

@@ -28,7 +28,9 @@ export default class MlGlobalSettingRepo{
         settingsObj={"type":"GLOBALSETTING","numericalInfo":requestParams.settingsData.numericalInfo};
         break;
       case "REGIONAL":
-        settingsObj={"type":"GLOBALSETTING","regionalInfo":requestParams.settingsData.regionalInfo};
+        let regionalInfo= requestParams.settingsData.regionalInfo
+        regionalInfo.clusterName=cluster.clusterName;
+        settingsObj={"type":"GLOBALSETTING","regionalInfo":regionalInfo};
         break;
     }
 

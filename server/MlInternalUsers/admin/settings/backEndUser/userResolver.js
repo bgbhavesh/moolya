@@ -84,16 +84,25 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 
     let user = Meteor.users.findOne({_id: args.userId});
     if(user){
-        for(key in args.user){
-          user[key] = args.user[key]
-        }
-        let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
-        if(resp){
-          let code = 200;
-          let result = {user: resp};
-          let response = new MlRespPayload().successPayload(result, code);
-          return response
-        }
+
+
+          for(key in args.user){
+            user[key] = args.user[key]
+          }
+          if(!args.user.username){
+            let code = 409;
+            let response = new MlRespPayload().errorPayload("Email/Username is required", code);
+            return response;
+          }
+          let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
+          if(resp){
+            let code = 200;
+            let result = {user: resp};
+            let response = new MlRespPayload().successPayload(result, code);
+            return response
+          }
+
+
     }
 };
 

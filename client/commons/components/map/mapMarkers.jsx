@@ -84,23 +84,34 @@ export default class MapMarkers extends Component {
     let HoverComponent = React.cloneElement(hoverComp, {data: data});
 
     let status = "";
-    if(this.props.status.code == 100){
+    if(this.props.status && (this.props.status.code == 100)){
       status = "tobeassign"
     }
-    if(this.props.status.code == 101){
+    if(this.props.status && (this.props.status.code == 101)){
       status = "workinprogress"
     }
-    if(this.props.status.code == 110){
+    if(this.props.status && (this.props.status.code == 110)){
       status = "inactive"
     }
-    if(this.props.status.code == 111){
+    if(this.props.status && (this.props.status.code == 111)){
       status = "active"
     }
     return (
-
-      <div style={{'width': '200px'}} className={`cluster_map ${status}`} id={this.props.markerId}
-           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-           onClick={this.markerClickHandler.bind(this, this.props)}>
+      <div>{this.props.status?
+        <div style={{'width': '200px'}} className={`cluster_map ${status}`} id={this.props.markerId}
+                          onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
+                          onClick={this.markerClickHandler.bind(this, this.props)}>
+          <div className="hex_btn hex_btn_in">
+            <span><img src="/images/hover_image.png"/><b>{this.props.text}</b></span>
+            <div className="indec"></div>
+          </div>
+          {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
+          {this.state.isHover ? (<div>{HoverComponent}</div>) : ""}
+        </div>
+        :
+        <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
+                          onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
+                          onClick={this.markerClickHandler.bind(this, this.props)}>
         <div className="hex_btn hex_btn_in">
           <span><img src="/images/hover_image.png"/><b>{this.props.text}</b></span>
           <div className="indec"></div>
@@ -108,6 +119,7 @@ export default class MapMarkers extends Component {
         {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
         {this.state.isHover ? (<div>{HoverComponent}</div>) : ""}
       </div>
+      }</div>
     );
   }
 }

@@ -17,7 +17,7 @@ const mlStatesTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "name", title: "Name",dataSort:true},
-    {dataField: "countryCode", title: "Country",dataSort:true},
+    {dataField: "countryName", title: "Country",dataSort:true},
     {dataField: "isActive", title: "Available in System",dataSort:true, customComponent:ActiveStateFormatter},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
@@ -49,23 +49,6 @@ const mlStatesTableConfig=new MlViewer.View({
     }
   ],
   sizePerPage:5,
-//   graphQlQuery:gql`
-//       query{
-//   data:fetchStates{
-//      totalRecords
-//                     data{
-//                      ...on States{
-//                              name
-//                             countryId
-//                            countryCode
-//                              isActive
-//                               id:_id
-//                           }
-//                       }
-//
-//   }
-// }
-//   `
   graphQlQuery:gql`
               query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
               data:SearchQuery(module:"states",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
@@ -74,6 +57,7 @@ const mlStatesTableConfig=new MlViewer.View({
                       ...on States{
                               name
                               countryCode
+                              countryName
                               countryId
                               isActive
                               id:_id

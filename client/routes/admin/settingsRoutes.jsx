@@ -26,7 +26,7 @@ import MlEditCity from "../../admin/settings/cities/component/MlEditCity";
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
-import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
+import MlRoleList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
 import MlAddDocumentType from '../../admin/settings/documentTypes/component/MlAddDocumentType'
 import MlEditDocumentType from '../../admin/settings/documentTypes/component/MlEditDocumentType'
@@ -42,7 +42,7 @@ import MlEditDocumentMapping from '../../admin/settings/documentMapping/componen
 
 /*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
 import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'
-import MlEditRoleType from '../../admin/settings/roleTypes/component/MlEditRoleType'
+import MlEditRole from '../../admin/settings/roleTypes/component/MlEditRoleType'
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
@@ -101,6 +101,8 @@ import MlEditSocialLinkType from  '../../admin/settings/socialLinks/component/Ml
 import MlAddGender from '../../admin/settings/gender/component/MlAddGender'
 import MlGenderList from '../../admin/settings/gender/component/MlGenderList'
 import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
+import MlRoleTypeList from '../../admin/settings/roleType/component/MlRoleTypeList'
+import MlEditRoleType from '../../admin/settings/roleType/component/MlEditRoleType'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -313,7 +315,7 @@ adminSection.route('/settings/editUserType/:id', {
 adminSection.route('/settings/rolesList', {
   name: 'settings_rolesList',
   action(){
-    mount(AdminLayout,{adminContent:< MlRoleTypeList/>})
+    mount(AdminLayout,{adminContent:< MlRoleList/>})
 
   }
 });
@@ -324,9 +326,9 @@ adminSection.route('/settings/createRole', {
   }
 });
 adminSection.route('/settings/editRole/:id', {
-  name: 'settings_EditRoleType',
+  name: 'settings_EditRole',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditRoleType  config={params.id}/>})
+    mount(AdminLayout,{adminContent:< MlEditRole  config={params.id}/>})
   }
 });
 adminSection.route('/settings/transactionTypeList', {
@@ -839,4 +841,16 @@ adminSection.route('/settings/contactTypesList', {
   }
 });
 
+adminSection.route('/settings/roleTypeList', {
+    name: 'settings_RoleTypeList',
+    action(){
+        mount(AdminLayout,{adminContent:< MlRoleTypeList/>})
+    }
+});
+adminSection.route('/settings/editRoleType/:id', {
+    name: 'settings_EditRoleType',
+    action(params){
+        mount(AdminLayout,{adminContent:< MlEditRoleType  config={params.id}/>})
+    }
+});
 //  @End

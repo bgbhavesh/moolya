@@ -49,13 +49,13 @@ adminSection.route('/clusters/:clusterId/:chapterId/subChapters', {
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
-  name: 'cluster_subChapterDetails',
+  name: 'cluster_chapter_subChapterDetails',
   action(params){
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
-  name: 'cluster_subChapterAssignusers',
+  name: 'cluster_chapter_assignusers',
   action(params){
     mount(AdminLayout,{adminContent:< MlAssignChapterBackendUsers params={params}/>})
   }

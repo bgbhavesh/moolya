@@ -102,38 +102,38 @@ if(Meteor.isServer){
               {
                 "link" : "/admin/clusters/subChapters/subChapterDetails",
                 "name" : "Sub Chapter Details",
-                "uniqueId" : "cluster_subChapterDetails",
+                "uniqueId" : "cluster_chapter_subChapterDetails",
                 "isLink" : true,
                 "isMenu" : true,
                 "image" : "",
                 "dynamicLink" : true,
                 "dynamicLinkHandler" : "",
                 "subMenusId":"cluster_chapters",
-                "subMenuMappingId":"cluster_subChapterDetails"
+                "subMenuMappingId":"cluster_chapter_subChapterDetails"
               },
               {
                 "link" : "/admin/clusters/subChapters/communities",
                 "name" : "Communities",
-                "uniqueId" : "cluster_subChapterCommunities",
+                "uniqueId" : "cluster_chapter_communities",
                 "isLink" : true,
                 "isMenu" : true,
                 "image" : "",
                 "dynamicLink" : true,
                 "dynamicLinkHandler" : "",
                 "subMenusId":"cluster_chapters",
-                "subMenuMappingId":"cluster_subChapterCommunities"
+                "subMenuMappingId":"cluster_chapter_communities"
               },
               {
                 "link" : "/admin/clusters/subChapters/assignusers",
                 "name" : "Backend Users",
-                "uniqueId" : "cluster_subChapterAssignusers",
+                "uniqueId" : "cluster_chapter_assignusers",
                 "isLink" : true,
                 "isMenu" : true,
                 "image" : "",
                 "dynamicLink" : true,
                 "dynamicLinkHandler" : "",
                 "subMenusId":"cluster_chapters",
-                "subMenuMappingId":"cluster_subChapterAssignusers"
+                "subMenuMappingId":"cluster_chapter_assignusers"
               }
             ]
           },

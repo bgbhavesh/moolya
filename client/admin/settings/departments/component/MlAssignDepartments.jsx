@@ -27,6 +27,8 @@ export default class MlAssignDepartments extends React.Component {
     this.setState({
       departmentAvailability: departmentAvailability
     })
+    this.props.getDepartmentAvailability(departmentAvailability)
+
   }
 
   componentDidMount() {

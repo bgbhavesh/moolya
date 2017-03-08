@@ -108,14 +108,40 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDepTest'] = (obj, args, context, i
   let users = null;
   if(hierarchyLevel==3){
     users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[0, 3]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+    _.remove(roles, function (role) {
+      return role.roleName == 'clusteradmin'
+    })
   }else if(hierarchyLevel==2){
-    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[2]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[2,1]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+    _.remove(roles, function (role) {
+      return role.roleName == 'chapteradmin'
+    })
   }else if(hierarchyLevel==1){
     users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[1]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+    _.remove(roles, function (role) {
+      return role.roleName == 'subchapteradmin'
+    })
   }else if(hierarchyLevel==0){
     users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[0]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
+    _.remove(roles, function (role) {
+      return role.roleName == 'communityadmin'
+    })
   }else{
-    if(args.departmentId && args.clusterId){
+    /*if(args.departmentId && args.clusterId){
+      roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
+    }*/
+
+   /* if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.communityId != ""){
+
+    }
+    else if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.subChapterName !="Moolya"){
+
+    }
+    else if(args.clusterId != "" && args.chapterId != "" && args.subChapterName=="Moolya"){
+
+    }
+    else*/
+      if(args.clusterId != "" ){
       roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
     }
     _.remove(roles, function (role) {

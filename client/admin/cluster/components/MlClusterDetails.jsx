@@ -96,7 +96,7 @@ class MlClusterDetails extends React.Component {
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/dashboard");
+        FlowRouter.go("/admin/clusters");
       else
         toastr.error(response.result);
     }

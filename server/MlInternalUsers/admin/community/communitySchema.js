@@ -161,10 +161,19 @@ let communitySchema = `
         isActive:Boolean,
         clusters:[String],
         chapters:[String],
-        subchapters:[String]
+        subchapters:[String],
+        clusterId:String, 
+        chapterId:String, 
+        subChapterId:String
+    }
+    
+    type MapData {
+        key:String,
+        count:Int
     }
     
     type Query{
+        FetchMapData(moduleName:String,id:String):[MapData]
         fetchCommunities:SearchResp
         fetchCommunityDef(communityId:String):Community
     }

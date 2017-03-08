@@ -191,7 +191,8 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
   if(args.subChapterId){
     let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
     if(subChapter.subChapterName=='Moolya'){
-      let departments = MlDepartments.find({"depatmentAvailable.cluster":subChapter.clusterId}).fetch();
+
+      let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":subChapter.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
       if(departments && departments.length > 0){
         for(var i = 0; i < departments.length; i++){
           let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id},{"profile.InternalUprofile.moolyaProfile.globalAssignment":true}).fetch();
@@ -222,7 +223,7 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
 
   if(subChapter.subChapterName=='Moolya'){
   let user = Meteor.users.findOne({"_id":args.userId})
-  let clusterDep = MlDepartments.find({"depatmentAvailable.cluster":subChapter.clusterId}).fetch();
+  let clusterDep = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":subChapter.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
   if(user && clusterDep && clusterDep.length > 0) {
     let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
 

@@ -152,7 +152,9 @@ var options = {
         email:"platformadmin@moolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
-        isActive:true
+        isActive:true,
+        firstName:'Platform',
+        lastName:'Admin'
       }
     }
   },

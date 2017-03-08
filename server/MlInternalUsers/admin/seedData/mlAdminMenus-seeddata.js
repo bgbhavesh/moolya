@@ -111,18 +111,18 @@ if(Meteor.isServer){
             "subMenusId":"cluster",
             "subMenuMappingId":"cluster_communities"
           },
-          // {
-          //   "link" : "/admin/clusters/assignusers",
-          //   "name" : "Backend Users",
-          //   "uniqueId" : "cluster_assignusers",
-          //   "isLink" : true,
-          //   "isMenu" : true,
-          //   "image" : "",
-          //   "dynamicLink" : true,
-          //   "dynamicLinkHandler" : "",
-          //   "subMenusId":"cluster",
-          //   "subMenuMappingId":"cluster_assignusers"
-          // }
+          {
+            "link" : "/admin/clusters/assignusers",
+            "name" : "Backend Users",
+            "uniqueId" : "cluster_assignusers",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"cluster",
+            "subMenuMappingId":"cluster_assignusers"
+          }
         ]
 
       },

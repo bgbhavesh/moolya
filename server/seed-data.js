@@ -4,7 +4,7 @@
 
 
 let _ = require('lodash'),
-  adminPassword = "Admin@123",
+  adminPassword = "MoolyaAdmin@123",
   platformAdminId,
   mlModules = MlModules.find().fetch(),
   actions = MlActions.find().fetch(),

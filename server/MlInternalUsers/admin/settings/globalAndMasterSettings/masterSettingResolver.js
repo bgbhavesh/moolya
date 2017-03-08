@@ -3,6 +3,8 @@
  */
 import MlResolver from '../../mlAdminResolverDef'
 import MlMasterSettingRepo from './repository/mlMasterSettingRepo';
+// import MlRespPayload from '../../../../commons/mlPayload'
+
 MlResolver.MlQueryResolver['fetchMasterSettingsForDropDown'] = (obj, args, context, info) => {
   // TODO : Authorization
   console.log(args);
@@ -30,6 +32,13 @@ MlResolver.MlMutationResolver['createMasterSetting'] = (obj, args, context, info
 
 MlResolver.MlMutationResolver['updateMasterSetting'] = (obj, args, context, info) => {
   // TODO : Authorization
+  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  // if (!isValidAuth) {
+  //   let code = 401;
+  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+  //   return response;
+  // }
+
   let masterRecord=new MlMasterSettingRepo(context.userId).updateMasterSetting(args);
   return masterRecord;
 };

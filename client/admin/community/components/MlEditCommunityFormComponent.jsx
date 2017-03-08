@@ -61,7 +61,7 @@ class MlEditCommunityFormComponent extends React.Component {
       }
       if (this.state.data.chapters) {
         let chaptersId = this.state.data.chapters;
-        this.setState({chapters: [{id: chaptersId}]});
+        this.setState({chapters: this.state.data.chapters});
       }
     }
     this.setState({loading:false,data:response});
@@ -75,7 +75,7 @@ class MlEditCommunityFormComponent extends React.Component {
           communityImageLink  : this.refs.upload.value,
           showOnMap           : this.refs.showOnMap.checked,
           isActive            : this.refs.status.checked
-      }
+       }
       let data = {moduleName:"COMMUNITY", actionName:"UPDATE", community:communityDetails, communityId:this.props.params, clusters:this.state.clusters, chapters:this.state.chapters}
       let response = await multipartFormHandler(data, this.refs.upload.files[0]);
       return response;

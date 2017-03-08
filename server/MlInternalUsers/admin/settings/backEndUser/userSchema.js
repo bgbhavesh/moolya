@@ -158,7 +158,6 @@ let BackEndUser = `
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
         fetchAssignedAndUnAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
     }
-    
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);

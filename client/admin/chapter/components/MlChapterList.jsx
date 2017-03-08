@@ -1,9 +1,27 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import chapterRoutes from '../actions/chapterRoutes';
+import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 export default class MlChapterList extends Component {
 
   render(){
+    let MlActionConfig = [
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this))
+      // },
+      {
+        showAction: true,
+        actionName: 'logout',
+        handler: null
+      }
+    ]
     const data=this.props.data||[];
     const list=  data.map((prop) =>
       <div className="col-md-2" key={prop._id}>
@@ -15,7 +33,14 @@ export default class MlChapterList extends Component {
       </div>
   );
 
-    return (<div>{list}</div>);
+    return (
+      <div className="admin_main_wrap">
+        <div className="admin_padding_wrap">
+          {list}
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        </div>
+      </div>
+    );
 
   }
 

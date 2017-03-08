@@ -19,7 +19,8 @@ class MlAuthorization
 
         let ret = false;
 
-        let self = this
+        let self = this;
+        let isAuthorized=false;
 
 
         let action = MlActions.findOne({code:actionName})
@@ -52,29 +53,41 @@ class MlAuthorization
                 if(moduleName == "COMMUNITY" && req.chapterId != "" && req.subChapterId != "" && req.communityId != ""){
                     let userRole = _.find(user_roles, {chapterId:"all" || req.chapterId, subChapterId:"all" || req.subChapterId, communityId:"all" || req.communityId})
                     return self.validateRole(userRole.roleId, module, action)
+                  // isAuthorized= self.validateRole(userRole.roleId, module, action)
                 }
 
                 else if(moduleName == "SUBCHAPTER" && req.chapterId != "" && req.subChapterId != ""){
                     let userRole = _.find(user_roles, {chapterId:"all" || req.chapterId, subChapterId:"all" || req.subChapterId})
                     return self.validateRole(userRole.roleId, module, action)
+                  // isAuthorized= self.validateRole(userRole.roleId, module, action)
                 }
 
                 else if(moduleName == "CHAPTER" && req.chapterId != ""){
                     let userRole = _.find(user_roles, {chapterId:req.chapterId || "all"})
                     return self.validateRole(userRole.roleId, module, action)
+                  // isAuthorized= self.validateRole(userRole.roleId, module, action)
                 }
 
                 else {
                     user_roles.map(function (userRole) {
-                        ret = self.validateRole(userRole.roleId, module, action)
-                        if(ret)
+                      // isAuthorized = self.validateRole(userRole.roleId, module, action)
+                      //   if(isAuthorized)
+                      ret = self.validateRole(userRole.roleId, module, action)
+                      if(ret)
                             return;
                     })
                 }
             }
+            // if(isAuthorized){
+            //      try{
+            //       isAuthorized= this.hasAccessBasedOnContext({userId:userId},moduleName,actionName,req)
+            //      }catch(e){
+            //        isAuthorized=false;
+            //      }
+            // }
         }
-
         return ret;
+        // return isAuthorized;
     }
 
     validateRole(roleId, module, action){
@@ -98,8 +111,15 @@ class MlAuthorization
         return ret;
     }
 
+  // hasAccessBasedOnContext(context,moduleName,actionName,req){
+  //   let hasAccessBasedOnContext=true;
+  //   switch(moduleName){
+  //     case "MASTER_SETTINGS":
+  //       hasAccessBasedOnContext=new MlAdminMasterSettingsAuthorization(context).authorize(actionName,context,req);
+  //   }
+  //   return hasAccessBasedOnContext;
+  // }
 
 }
-
 
 module.exports = MlAuthorization

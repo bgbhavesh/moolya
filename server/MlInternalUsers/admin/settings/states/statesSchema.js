@@ -7,6 +7,7 @@ let States = `
         name        : String
         countryId   : String
         countryCode : String
+        countryName : String
         displayName : String
         about       : String
         isActive    : Boolean
@@ -16,6 +17,7 @@ let States = `
         id          : String
         name        : String
         countryId   : String
+        countryName : String
         countryCode : String
         displayName : String
         about       : String
@@ -23,7 +25,6 @@ let States = `
     }
     
     type Query {
-        fetchStates: SearchResp  
         fetchState(stateId: String): States
         FetchActiveStates:[States]
     }

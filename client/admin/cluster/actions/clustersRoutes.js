@@ -13,6 +13,9 @@ const clusterRoutes={
   subChapterListRoute:(clusterId,chapterId,router) =>{
     return `/admin/clusters/${clusterId}/${chapterId}/subChapters`;
   },
+  subChapterDetails:(clusterId,chapterId,subChapterId,subChapterName ,route)=> {
+    return `/admin/clusters/${clusterId}/${chapterId}/${subChapterId}/${subChapterName}/subChapterDetails`;
+  },
   communityListRoute:(clusterId,chapterId,subChapterId,router)=>{
     return `/admin/clusters/${clusterId}/${chapterId}/${subChapterId}/communities`;
   }

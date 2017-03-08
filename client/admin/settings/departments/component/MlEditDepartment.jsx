@@ -7,6 +7,7 @@ import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
 import  {updateDepartmentActionHandler} from '../actions/updateDepartmentAction'
 import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
+import ScrollArea from 'react-scrollbar';
 class MlEditDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -25,6 +26,11 @@ class MlEditDepartment extends React.Component{
     if(this.state.data.isActive){
       $('#status').prop('checked', true);
     }
+  }
+
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
   async addEventHandler() {
@@ -131,15 +137,23 @@ class MlEditDepartment extends React.Component{
     const showLoader=this.state.loading;
 
     return (
-      <div>
+      <div className="admin_main_wrap">
       {showLoader===true?( <div className="loader_wrap"></div>):(
 
 
-        <div className="admin_main_wrap">
+
           <div className="admin_padding_wrap">
             <h2>Edit Department</h2>
-            <div className="col-md-6">
+            <div className="main_wrap_scroll">
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}
+              >
+            <div className="col-md-6 nopadding-left">
               <div className="form_bg">
+                <form>
                 <div className="form-group">
                   <input type="text" ref="departmentName" defaultValue={this.state.data&&this.state.data.departmentName} placeholder="Department Name" className="form-control float-label" id=""/>
                 </div>
@@ -158,6 +172,7 @@ class MlEditDepartment extends React.Component{
                     <div className="slider"></div>
                   </label>
                 </div>
+                  </form>
               </div>
             </div>
 
@@ -176,6 +191,7 @@ class MlEditDepartment extends React.Component{
                 </form>
               </div>
             </div>
+                </ScrollArea>
           </div>
 
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

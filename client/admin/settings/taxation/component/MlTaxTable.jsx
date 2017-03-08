@@ -56,11 +56,14 @@ export default class MlTaxTable extends Component {
 
     let taxTypeInfoDetails=this.state.taxTypeInfo
     for(let i=0;i<taxTypeInfoDetails.length;i++){
-     if (taxTypeInfoDetails[i].taxId==taxDetails[0].taxId){
-       taxTypeInfoDetails[i].statesInfo=taxDetails;
-       taxTypeInfoDetails[i].applicableStates=states
-       taxTypeInfoDetails[i].taxPercentage=percentages.min()+"-"+percentages.max()+"%"
+      if(taxDetails.length>0){
+        if (taxTypeInfoDetails[i].taxId==taxDetails[0].taxId){
+          taxTypeInfoDetails[i].statesInfo=taxDetails;
+          taxTypeInfoDetails[i].applicableStates=states
+          taxTypeInfoDetails[i].taxPercentage=percentages.min()+"-"+percentages.max()+"%"
+        }
       }
+
     }
     this.setState({taxTypeInfo:taxTypeInfoDetails})
     this.props.getTaxTableDetails(this.state.taxTypeInfo)
@@ -70,11 +73,11 @@ export default class MlTaxTable extends Component {
         let taxInfo = []
         for (let i = 0; i < taxDetails.length; i++) {
           let json = {
-            taxName: taxDetails[i].taxName,
+            taxName: taxDetails[i].taxTypeInfo.taxName,
             taxPercentage: '',
             applicableStates: '',
             taxId:taxDetails[i]._id,
-            aboutTax:taxDetails[i].aboutTax,
+            aboutTax:taxDetails[i].taxTypeInfo.aboutTax,
             statesInfo:[]
           }
           taxInfo.push(json)

@@ -13,7 +13,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else {
-      let geoCIty=chapter.cityName+chapter.stateName?", "+chapter.stateName:"";
+      let geoCIty=chapter.cityName+", "+chapter.stateName?chapter.cityName+", "+chapter.stateName:"";
       geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
         if (err) {
           return "Invalid Country Name";
@@ -66,6 +66,21 @@ MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
     if(chapter){
         for(key in args.chapter){
           chapter[key] = args.chapter[key]
+        }
+        if(chapter.isActive){
+          if(chapter.status && chapter.status.code != 101){
+            chapter.status= {
+              code: 101,
+              description :"Work In Progress"
+            }
+          }
+        }else{
+          if(chapter.status && chapter.status.code != 110){
+            chapter.status= {
+              code: 110,
+              description :"Inactive"
+            }
+          }
         }
         let resp = MlChapters.update({_id:args.chapterId}, {$set:chapter}, {upsert:true})
         if(resp){
@@ -142,6 +157,9 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         }
         let resp = MlSubChapters.update({_id:args.subChapterId}, {$set:subChapter})
         if(resp){
+          if((subChapter.subChapterName == "Moolya") && args.subChapterDetails.chapterId){
+            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive}}, context, info)
+          }
             let code = 200;
             let result = {subChapter: resp}
             let response = new MlRespPayload().successPayload(result, code);

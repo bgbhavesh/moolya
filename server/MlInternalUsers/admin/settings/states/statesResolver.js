@@ -2,6 +2,7 @@
 
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
+import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
 
 let _ = require('lodash');
 MlResolver.MlQueryResolver['fetchStates'] = (obj, args, context, info) =>
@@ -48,8 +49,10 @@ MlResolver.MlMutationResolver['updateState'] = (obj, args, context, info) => {
     }
 }
 MlResolver.MlQueryResolver['FetchActiveStates'] = (obj, args, context, info) => {
-  if(args.countryId){
-    let resp = MlStates.find({"countryId":args.countryId}).fetch()
+  let userProfile = new MlAdminUserContext().getDefaultCountry(context.userId);
+  console.log(userProfile)
+  if(userProfile.countryId){
+    let resp = MlStates.find({"countryId":userProfile.countryId,"isActive":true}).fetch()
     return resp;
   }
 };

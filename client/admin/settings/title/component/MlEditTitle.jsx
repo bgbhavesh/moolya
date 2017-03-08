@@ -49,7 +49,6 @@ class MlEditTitle extends React.Component{
     }
     const response = await updateTitleActionHandler(TitleDetails)
     return response;
-
   }
 
   onStatusChange(e){

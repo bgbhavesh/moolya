@@ -141,7 +141,7 @@ export default class MoolyaSelect extends Component {
     //   QueryExecutor= graphql(query,queryOptions)(QueryHandler);
     // }
     return(
-      <div>
+      <div className=""form-group>
         {/*{executeQuery&&<QueryExecutor />}*/}
         {<Select  multi={this.props.multiSelect} disabled={this.props.disabled} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch} onChange={this.onchangeOption}/>}
       </div>

@@ -53,7 +53,8 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     })
   });
     return response;
-}
+};
+
 MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) => {
     // TODO : Authorization
 

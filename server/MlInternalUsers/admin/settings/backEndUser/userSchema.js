@@ -148,6 +148,7 @@ let BackEndUser = `
     }
     
     type Query{
+        fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]

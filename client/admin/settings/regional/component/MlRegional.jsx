@@ -93,7 +93,7 @@ class MlRegional extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="cluster" defaultValue={this.state.data && this.state.data.clusterName} placeholder="Cluster" className="form-control float-label" id=""/>
+                      <input type="text" ref="cluster" defaultValue={this.state.data && this.state.data.clusterName} placeholder="Cluster" className="form-control float-label" readOnly="readOnly"  id=""/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capitalName} placeholder="Capital" className="form-control float-label" id=""/>

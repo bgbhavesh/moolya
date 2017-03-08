@@ -14,6 +14,7 @@ import {mlClusterConfig } from '../config/mlClusterConfig'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findUserDetails} from '../actions/findUserDetails'
 import {findRoles} from '../actions/fetchRoles'
+import {findCluster_Roles} from '../actions/findCluster_Roles'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -64,30 +65,26 @@ class MlAssignBackendUsers extends React.Component{
 
     async findUserDetails(userId){
       const user = await findUserDetails(userId);
-      var roles = [];
-      if (user && user.profile && user.profile.isInternaluser == true) {
-        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-        // let user_roles;
-        // Selecting Default Profile
-        for (var i = 0; i < user_profiles.length; i++) {
-          let user_roles = user_profiles[i].userRoles;
-          if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
-            for (var j = 0; j < user_roles.length; j++) {
-              roles.push(user_roles[j]);
-            }
-          }
-        }
-      }
-      this.setState({user_Roles:roles,selectedBackendUser:userId});
-      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile, mlroleDetails:roles});
+      let that = this;
+      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
+      this.find_Cluster_Roles(userId, that.props.params);
       this.findRoleDetails();
       return user;
     }
+  async find_Cluster_Roles(userId, clusterId){
+    const userProfile = await findCluster_Roles(userId, clusterId);
+    var roles = userProfile.userRoles || [];
+    this.setState({user_Roles:roles,selectedBackendUser:userId,mlroleDetails:roles});
+    return roles
+  }
     async findRoleDetails(){
       let roleIds = [];
-      if(this.state.user_Roles && this.state.user_Roles.length>0){
-        this.state.user_Roles.map(function (role) {
-          roleIds.push(role.roleId);
+      let that = this;
+      if(that.state.user_Roles && that.state.user_Roles.length>0){
+        that.state.user_Roles.map(function (role) {
+          if(that.props.params == role.clusterId){
+            roleIds.push(role.roleId);
+          }
         });
       }
       const roles= await findRoles(roleIds);
@@ -149,9 +146,8 @@ class MlAssignBackendUsers extends React.Component{
       const showLoader = this.state.loading;
 
       return (
-        <div>
+        <div className="admin_main_wrap">
           {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-            <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
                     <h2>Assign internal user to Cluster</h2>
                     <div className="col-md-6 nopadding-left">
@@ -184,10 +180,8 @@ class MlAssignBackendUsers extends React.Component{
                                           </div>
                                       </div>
                                       <br className="brclear"/>
-                                      <div className="form-group">
+
                                           <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query}  queryOptions={queryOptions}  isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>
-                                      </div>
-                                      <div>
                                           <div className="form-group">
                                               <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true" defaultValue={alsoAssignedAs}/>
                                           </div>
@@ -197,12 +191,9 @@ class MlAssignBackendUsers extends React.Component{
                                           <div className="form-group">
                                             <input type="text" readOnly="true" placeholder="User Name" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
                                           </div>
-                                          <br className="brclear"/>
-                                      </div>
 
                                       {userid?(<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params} assignedRoles={this.state.user_Roles} getAssignedRoles={this.getAssignedRoles.bind(this)}/>):<div></div>}
 
-                                      <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
                                           <label className="switch">
@@ -214,7 +205,7 @@ class MlAssignBackendUsers extends React.Component{
                             </ScrollArea>
                         </div>
                     </div>
-                </div>
+
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </div>)}
         </div>

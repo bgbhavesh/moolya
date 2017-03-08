@@ -97,6 +97,48 @@ let MasterSettingsSchema = `
           emailUploadIcon:String
       }
       
+      type GenderInfo{
+          genderName:String
+          genderDisplayName:String
+          aboutGender:String
+          genderUploadIcon:String
+      }
+      
+      input GenderInfoRequest{
+          genderName:String
+          genderDisplayName:String
+          aboutGender:String
+          genderUploadIcon:String
+      }
+      
+      type ContactTypeInfo{
+          contactName:String
+          contactDisplayName:String
+          aboutContact:String
+          contactUploadIcon:String
+      }
+      
+      input ContactTypeInfoRequest{
+          contactName:String
+          contactDisplayName:String
+          aboutContact:String
+          contactUploadIcon:String
+      }
+      
+       type SocialLinksInfo{
+          socialName:String
+          socialDisplayName:String
+          aboutSocial:String
+          socialUploadIcon:String
+      }
+      
+      input SocialLinksInfoRequest{
+          socialName:String
+          socialDisplayName:String
+          aboutSocial:String
+          socialUploadIcon:String
+      }
+      
       
       type MasterSettings{
          _id:String,
@@ -108,6 +150,9 @@ let MasterSettingsSchema = `
          employmentTypeInfo:EmploymentTypeInfo
          companyTypeInfo:CompanyTypeInfo
          emailTypeInfo:EmailTypeInfo
+         genderInfo:GenderInfo
+         contactTypeInfo:ContactTypeInfo
+         socialLinksInfo:SocialLinksInfo
       }
       
       input MasterSettingsRequest{
@@ -120,6 +165,9 @@ let MasterSettingsSchema = `
          employmentTypeInfo:EmploymentTypeInfoRequest
          companyTypeInfo:CompanyTypeInfoRequest
          emailTypeInfo:EmailTypeInfoRequest
+         genderInfo:GenderInfoRequest
+         contactTypeInfo:ContactTypeInfoRequest
+         socialLinksInfo:SocialLinksInfoRequest
       }
       type MasterSettingsDropData{
           label:String,

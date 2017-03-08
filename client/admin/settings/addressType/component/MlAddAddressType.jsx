@@ -10,7 +10,7 @@ class MlAddAddressType extends React.Component{
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
-    this.createLanguage.bind(this)
+    this.createAddressType.bind(this)
     return this;
   }
 
@@ -19,7 +19,7 @@ class MlAddAddressType extends React.Component{
   }
 
   async addEventHandler() {
-    const resp=await this.createLanguage();
+    const resp=await this.createAddressType();
     return resp;
   }
 
@@ -32,7 +32,7 @@ class MlAddAddressType extends React.Component{
     FlowRouter.go("/admin/settings/addressTypeList");
   };
 
-  async  createLanguage() {
+  async  createAddressType() {
     let Details = {
       addressName: this.refs.name.value,
       addressDisplayName: this.refs.displayName.value,
@@ -40,29 +40,22 @@ class MlAddAddressType extends React.Component{
       addressUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await addAddressTypeActionHandler(Details);
     return response;
-
   }
 
-  // getSubDepartmentAvailability(details){
-  //   console.log("details->"+details);
-  //   this.setState({'subdepartmentAvailability':details})
-  // }
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createLanguage.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.createAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,

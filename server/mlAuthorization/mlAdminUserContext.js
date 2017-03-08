@@ -67,6 +67,20 @@ class MlAdminUserContext
     //return default menu
        return null;
   }
+  getDefaultCountry(userId){
+    check(userId,String);
+    let userProfile=this.userProfileDetails(userId)||{};
+    if(userProfile&&userProfile.defaultProfileHierarchyCode&&userProfile.defaultProfileHierarchyCode==="CLUSTER"){
+      let defaultProfileHierarchyRefId=userProfile.defaultProfileHierarchyRefId;
+      let clusterDetails=MlClusters.findOne(defaultProfileHierarchyRefId);
+      if(clusterDetails&&clusterDetails.countryId){
+         let countryDetails=MlCountries.findOne(clusterDetails.countryId);
+        return {countryId:countryDetails._id,countryCode:countryDetails.countryCode,countryName:countryDetails.country};
+      }
+
+    }
+    return {};
+  }
 }
 
 module.exports = MlAdminUserContext

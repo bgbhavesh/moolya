@@ -158,7 +158,7 @@ export default class MlAssignDepartments extends React.Component {
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" name={'isActive'} value={options.isActive} onChange={that.onChange.bind(that,id)} />
+                    <input type="checkbox" name={'isActive'} checked={options.isActive} onChange={that.onChange.bind(that,id)} />
                     <div className="slider"></div>
                   </label>
                 </div>

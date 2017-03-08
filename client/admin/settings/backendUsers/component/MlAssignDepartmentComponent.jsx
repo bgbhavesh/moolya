@@ -70,7 +70,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
           `;
     let selectedUserType=this.props.selectedBackendUserType
     let selectedSubChapter=this.props.selectedSubChapter
-    if(selectedUserType=='moolya'&&selectedSubChapter==''){
+    if(selectedUserType=='moolya'){
       departmentqueryOptions={options: { variables: {isMoolya:false}}};
       departmentQuery=gql` query($isMoolya:Boolean){
             data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}

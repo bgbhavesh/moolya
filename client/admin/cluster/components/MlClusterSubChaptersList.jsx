@@ -19,7 +19,7 @@ export default class MlClusterSubChaptersList extends Component
         <div className="col-md-2" key={prop.subChapterCode}>
           <div className="list_block">
             <div className={`cluster_status ${prop.isActive|| ""}_cl `}></div>
-            <a href={clusterRoutes.communityListRoute(prop.clusterId,prop.chapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
+            <a href={clusterRoutes.subChapterDetails(prop.clusterId,prop.chapterId,prop._id,prop.subChapterName)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
             <h3>{prop.subChapterName}</h3>
           </div>
         </div>

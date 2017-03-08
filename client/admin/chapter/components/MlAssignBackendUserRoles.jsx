@@ -28,10 +28,12 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
           roleForm:[],
           roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:this.props.chapterId, subChapterId:this.props.subChapterId,  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
           selectedRole:"",
-          hierarchyLevel:''
+          hierarchyLevel:'',
+          isClusterAdmin:''
       }
       this.findUserDepartments.bind(this);
-      return this;
+      this.isClusterAdmin.bind(this);
+    return this;
       // this.getUserDepSubDep = this.getUserDepSubDep.bind(this);
   }
 
@@ -85,23 +87,13 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
       });
   }
 
-  optionsBySelectAction(index, event) {
-
-   /* if (event.target.checked) {
-      let value = event.target.name
-      actions.push({actionId: value})
-    }else {
-      let flag='';
-      _.each(actions,function (item,key) {
-        if (item.actionId==event.target.name){
-          flag=key;
-        }
-      })
-      actions.splice(flag,1);
+  isClusterAdmin(event) {
+    let ca=false;
+    if (event.target.checked) {
+      ca = true;
     }
-
-    this.setState({assignModulesToRoles: assignModulesToRoles})
-    this.props.getassignModulesToRoles(this.state.assignModulesToRoles)*/
+    this.setState({isClusterAdmin: ca})
+    this.props.getClusterAdmin(ca)
   }
 
   onChange(id,event){
@@ -167,10 +159,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                          value={department.subDepartmentName}/>
                 </div>
 
-                  {/*<div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
-                                                      onChange={that.optionsBySelectAction.bind(that)}/><label
-                    htmlFor="chapter_admin_check"><span></span>is ChapterAdmin</label></div>*/}
-
+                  <div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
+                                                      onChange={that.isClusterAdmin.bind(that)}/><label
+                    htmlFor="chapter_admin_check"><span></span>is ChapterAdmin</label></div>
+<br className="brclear"/>
                 <div className="">
                   <div className="">
                     {roleDetails.map(function (details, idx) {

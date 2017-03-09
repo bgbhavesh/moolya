@@ -11,6 +11,7 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {findBackendUserActionHandler} from '../actions/findBackendUserAction'
 import {updateBackendUserActionHandler} from '../actions/updateBackendUserAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 let Select = require('react-select');
 
 
@@ -57,18 +58,15 @@ class MlEditBackendUser extends React.Component{
   }
   componentDidMount()
   {
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
   }
+
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+  }
+
   async addEventHandler() {
     const resp=await this.createBackendUser();
     return resp;

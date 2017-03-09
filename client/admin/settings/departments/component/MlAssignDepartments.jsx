@@ -127,7 +127,7 @@ export default class MlAssignDepartments extends React.Component {
 
     <div>
 
-      <div className="form-group"> </div>
+
         {that.state.departmentAvailability.map(function(options,id){
           let chapterOption={options: { variables: {id:options.cluster}}};
           let subChapterOption={options: { variables: {id:options.chapter}}}

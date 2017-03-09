@@ -11,6 +11,8 @@ import {mlClusterChapterListConfig} from '../../admin/cluster/config/mlClusterCh
 import {mlClusterCommunityListConfig} from '../../admin/cluster/config/mlClusterCommunityConfig'
 import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
+import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
+import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
 import MlViews from '../../admin/core/components/MlViews';
 
 adminSection.route('/clusters', {
@@ -52,6 +54,18 @@ adminSection.route('/clusters/:clusterId/:chapterId/subChapters', {
   name: 'cluster_chapters',
   action(params){
     mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
+  }
+});
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
+  name: 'cluster_chapter_subChapterDetails',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+  }
+});
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
+  name: 'cluster_chapter_assignusers',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlAssignChapterBackendUsers params={params}/>})
   }
 });
 

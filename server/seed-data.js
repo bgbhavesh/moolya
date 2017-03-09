@@ -4,7 +4,7 @@
 
 
 let _ = require('lodash'),
-  adminPassword = "Admin@123",
+  adminPassword = "MoolyaAdmin@123",
   platformAdminId,
   mlModules = MlModules.find().fetch(),
   actions = MlActions.find().fetch(),
@@ -142,15 +142,19 @@ let dep = MlDepartments.findOne({"departmentName":"operations"});
 let subDep = MlSubDepartments.findOne({"subDepartmentName":"systemadmin"});
 var options = {
   profile:{
-    assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
+
     isInternaluser : true,
     isExternaluser : false,
     email: 'platformadmin@moolya.com',
     InternalUprofile:{
       moolyaProfile:{
+        assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
         email:"platformadmin@moolya.com",
         phoneNumber:"9999999999",
-        userProfiles:[]
+        userProfiles:[],
+        isActive:true,
+        firstName:'Platform',
+        lastName:'Admin'
       }
     }
   },

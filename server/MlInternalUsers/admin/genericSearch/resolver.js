@@ -153,11 +153,22 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if(args.module=="states"){
     let countries = MlCountries.find({"isActive": true}).fetch();
     let allIds=_.pluck(countries,'_id');
-      data = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
+      let ary = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
+
+      _.each(ary,function (item,key) {
+        _.each(countries, function (s,v) {
+          if (item.countryId == s._id)
+            item.countryName = s.country;
+        })
+      })
+      data=ary;
       totalRecords = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).count();
   }
   if(args.module=="cities"){
-    let states = MlStates.find({"isActive": true}).fetch();
+    let countries = MlCountries.find({"isActive": true}).fetch();
+    let cIds=_.pluck(countries,'_id');
+    let states = MlStates.find({$and:[{"countryId":{$in:cIds}},query]},findOptions).fetch();
+    // let states = MlStates.find({"isActive": true}).fetch();
     let allIds=_.pluck(states,'_id');
     data = MlCities.find({$and:[{"stateId":{$in:allIds}},query]},findOptions).fetch();
     totalRecords = MlCities.find({$and:[{"stateId":{$in:allIds}},query]},findOptions).count();

@@ -1,22 +1,21 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-const mlUserTypeTableConfig=new MlViewer.View({
-  name:"userTypeTable",
-  module:"userType",//Module name for filter.
+const mlRoleTypeTableConfig=new MlViewer.View({
+  name:"roleTypeTable",
+  module:"roleType",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["userTypeName","displayName","isActive"],
-  searchFields:["userTypeName","displayName","isActive"],
+  fields:["roleTypeName","roleTypeDisplayName","isActive"],
+  searchFields:["roleTypeName","roleTypeDisplayName","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "userTypeName", title: "User Type Name",dataSort:true},
-    {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "isActive", title: "Active",dataSort:true},
-    //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
+    {dataField: "roleTypeName", title: "RoleType Name",dataSort:true},
+    {dataField: "roleTypeDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -26,9 +25,9 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editUserType/"+data.id);
+          FlowRouter.go("/admin/settings/editRoleType/"+data.id);
         } else{
-          alert("Please select a User Type");
+          alert("Please select a Role Type");
         }
       }
     },
@@ -45,20 +44,20 @@ const mlUserTypeTableConfig=new MlViewer.View({
   ],
   graphQlQuery:gql`
               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"userType", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+              data:SearchQuery(module:"roleType", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on UserTypes{
-                             userTypeName
-                              displayName
-                              userTypeDesc
+                     ...on RoleTypes{
+                              roleTypeName
+                              roleTypeDisplayName
+                              roleTypeDescription
                               isActive
                               id:_id
                           }
                       }
               }
-              }
+             }
               `
 });
 
-export {mlUserTypeTableConfig};
+export {mlRoleTypeTableConfig};

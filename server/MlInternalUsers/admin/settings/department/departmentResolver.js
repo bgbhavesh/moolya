@@ -12,10 +12,35 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
       let response = new MlRespPayload().errorPayload("Not Authorized", code);
       return response;
     }
-    if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
+   /* if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
+    }*/
+    //MlDepartments.find( { $and: [ { depatmentAvailable.cluster : { $in: 1.99 } }, { price: { $exists: true } } ] } )
+
+  if(args.department && args.department.depatmentAvailable){
+    for(var i=0; i < args.department.depatmentAvailable.length; i++){
+      var departmentExist =  MlDepartments.find( {
+        $and : [
+          { departmentName:args.department.departmentName },
+          {"depatmentAvailable.cluster" :  {$in : ["All",args.department.depatmentAvailable[i].cluster]}},
+          { "depatmentAvailable":{
+            $elemMatch: {
+              chapter: args.department.depatmentAvailable[i].chapter,
+              subChapter:args.department.depatmentAvailable[i].subChapter,
+            }} },
+        ]
+      } ).fetch()
+     /* console.log("///////////////////////////");
+      console.log(departmentExist);*/
+      if(departmentExist.length>0){
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+        return response;
+      }
     }
+  }
+
     let id = MlDepartments.insert({...args.department});
     if(id){
         let code = 200;

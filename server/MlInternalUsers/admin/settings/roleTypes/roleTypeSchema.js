@@ -12,7 +12,7 @@ let RoleTypesSchema = `
     
    type Mutation 
     {
-        UpdateRoleType(_id:String, roleTypeName:String, roleTypeDisplayName:String, roleTypeDescription:String, isActive:Boolean):String
+        UpdateRoleType(_id:String, roleTypeDisplayName:String, roleTypeDescription:String, isActive:Boolean, moduleName:String, actionName:String):response
     }
     type Query{
         FindRoleType(_id:String): RoleTypes

@@ -210,7 +210,7 @@ class MlAssignBackendUsers extends React.Component{
                                               <input type="file" className="upload" ref="profilePic"/>
                                           </div>
                                           <div className="previewImg ProfileImg">
-                                              <img src="/images/ideator_01.png"/>
+                                              <img src="/images/def_profile.png"/>
                                           </div>
                                       </div>
                                       <br className="brclear"/>

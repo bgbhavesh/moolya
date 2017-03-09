@@ -181,7 +181,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                       <div className="col-md-4 col-sm-4">
                                           <div className="list_block provider_block">
                                               <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
-                                              <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>
+                                              <div className="provider_mask"> <img src="/images/funder_bg.png" />  <img className="user_pic" src="/images/def_profile.png"/> </div>
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
@@ -200,7 +200,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                               <input type="file" className="upload" ref="profilePic"/>
                                           </div>
                                           <div className="previewImg ProfileImg">
-                                              <img src="/images/ideator_01.png"/>
+                                              <img src="/images/def_profile.png"/>
                                           </div>
                                       </div>
                                       <br className="brclear"/>

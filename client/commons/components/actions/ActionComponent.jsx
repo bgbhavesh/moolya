@@ -30,22 +30,27 @@ export default class MlActionComponent extends Component {
       {
         imagefield:'/images/edit_icon.png',
         actionName:'edit',
+        iconClass:'ml ml-edit'
       },
       {
         imagefield:'/images/act_add_icon.png',
         actionName:'add',
+        iconClass:'ml ml-plus'
       },
       {
         imagefield:'/images/act_logout_icon.png',
         actionName:'logout',
+        iconClass:'ml ml-active'
       },
       {
         imagefield:'/images/act_progress_icon.png',
         actionName:'progress',
+        iconClass:'ml'
       },
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'select',
+        iconClass:'ml ml-select-all'
       }
     ]
 
@@ -71,7 +76,8 @@ export default class MlActionComponent extends Component {
         return (
           <div className={`${activeClass} `} key={option.actionName}  >
             <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `}>
-              <img src={action['imagefield']} />
+              {/*<img src={action['imagefield']} />*/}
+              <span className={action['iconClass']}></span>
             </div></div>
         )
        })
@@ -93,5 +99,16 @@ MlActionComponent.PropTypes={
   routerPath:React.PropTypes.string,
   imagePath:React.PropTypes.string
 }
+
+{/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-plus"></span> </a></div>
+<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-edit"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-delete"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-select-all"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-import"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-export"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-save"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-active"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-share"></span> </a></div>
+  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <span className="ml ml-annotate"></span> </a></div>*/}
 
 

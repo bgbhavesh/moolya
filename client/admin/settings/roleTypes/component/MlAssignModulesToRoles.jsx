@@ -4,6 +4,7 @@ import {render} from 'react-dom';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {graphql} from 'react-apollo';
 import ScrollArea from 'react-scrollbar';
+let FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag'
 export default class MlAssignModulesToRoles extends React.Component {
   constructor(props) {

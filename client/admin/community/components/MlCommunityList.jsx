@@ -12,7 +12,8 @@ export default class MlCommunityList extends Component {
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.isActive?"check":"times"}/></div>
           <a href={communityRoutes.communityListRoute(prop.code)}>
             <div className={"hex_outer"}>
-              <img src={prop.communityImageLink}/>
+              {/*<img src={prop.communityImageLink}/>*/}
+              <span className={prop.communityImageLink}></span>
             </div>
           </a>
           <h3>{prop.displayName}</h3>
@@ -21,7 +22,7 @@ export default class MlCommunityList extends Component {
   );
 
     return (
-        <div className="row">
+        <div className="row communities_list">
           <h2>Communities</h2>
           {list}
         </div>

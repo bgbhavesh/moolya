@@ -37,6 +37,6 @@ export async function multipartFormHandler(data, file) {
     })
 
     console.log(result)
-    const id = result.data;
+    const id = result;
     return id
 }

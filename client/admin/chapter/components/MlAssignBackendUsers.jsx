@@ -28,8 +28,9 @@ class MlAssignChapterBackendUsers extends React.Component{
             alsoAssignedAs:[],
             selectedBackendUser:'',
             users:[{username: '', _id:''}],
-            isClusterAdmin:false
-
+            isClusterAdmin:false,
+            userDisplayName: '',
+            username: ''
         }
 
         this.addEventHandler.bind(this);
@@ -63,23 +64,38 @@ class MlAssignChapterBackendUsers extends React.Component{
     async findUserDetails(userId){
            const user = await findUserDetails(userId);
       var roles = [];
-           if (user && user.profile && user.profile.isInternaluser == true) {
-               let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-               // get user_roles;
-                 // Selecting Default Profile
-                   for (var i = 0; i < user_profiles.length; i++) {
-                    let user_roles = user_profiles[i].userRoles;
-                   if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
-                        for (var j = 0; j < user_roles.length; j++) {
-                           roles.push(user_roles[j]);
-                         }
-                     }
-                 }
+      if(user){
+        if (user && user.profile && user.profile.isInternaluser == true) {
+          let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+          // get user_roles;
+          // Selecting Default Profile
+          for (var i = 0; i < user_profiles.length; i++) {
+            let user_roles = user_profiles[i].userRoles;
+            if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
+              for (var j = 0; j < user_roles.length; j++) {
+                roles.push(user_roles[j]);
               }
-           this.setState({user_Roles:roles,selectedBackendUser:userId});
-           this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
-           this.findRoleDetails();
-      return user;
+            }
+          }
+        }
+        this.setState({user_Roles:roles,selectedBackendUser:userId});
+        this.setState({loading: false,
+          userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile,
+          userDisplayName:user.profile.InternalUprofile.moolyaProfile.displayName,
+          username:user.profile.InternalUprofile.moolyaProfile.email,
+        });
+        this.findRoleDetails();
+        return user;
+      }else {
+        this.setState({
+          userDisplayName:'',
+          username:'',
+          alsoAssignedAs:[],
+          // deActive:false,
+          loading: false,
+        });
+      }
+
     }
 
     async findRoleDetails(){
@@ -121,8 +137,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         return response;
     }
 
-    handleScuccess(){
-
+    handleSuccess(){
+      this.resetBackendUers();
     }
 
     handleError(){
@@ -135,6 +151,11 @@ class MlAssignChapterBackendUsers extends React.Component{
       const resp= this.findUserDetails(userId);
       //const resp= this.findUserDetails(userId);
     }
+    resetBackendUers(){
+      this.setState({loading: true});
+      this.setState({selectedBackendUser: ''})
+      this.findUserDetails('');
+    }
 
     render(){
         let MlActionConfig = [
@@ -146,7 +167,7 @@ class MlAssignChapterBackendUsers extends React.Component{
           {
             showAction: true,
             actionName: 'add',
-            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this))
+            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this),this.handleSuccess.bind(this))
           },
           {
             showAction: true,
@@ -161,9 +182,9 @@ class MlAssignChapterBackendUsers extends React.Component{
         data: fetchAssignedAndUnAssignedUsers(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,subChapterName:$subChapterName )
         {label:username,value:_id}
       }`
-      let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
-      let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
-      let alsoAssignedAs = this.state.alsoAssignedAs;
+      let userDisplayName = this.state.userDisplayName || "";
+      let username = this.state.username || "";
+      let alsoAssignedAs = this.state.alsoAssignedAs || [];
       const showLoader = this.state.loading;
       let userid  = this.state.selectedBackendUser||"";
         let clusterId = this.state.data&&this.state.data.clusterId||"";
@@ -178,7 +199,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                           <div className="row">
                               <div className="left_wrap left_user_blocks">
                                   <ScrollArea speed={0.8} className="left_wrap">
-                                      <div className="col-md-4 col-sm-4">
+                                      <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
                                           <div className="list_block provider_block">
                                               <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
                                               <div className="provider_mask"> <img src="/images/funder_bg.png" />  <img className="user_pic" src="/images/def_profile.png"/> </div>

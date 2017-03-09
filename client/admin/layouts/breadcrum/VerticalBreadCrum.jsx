@@ -73,7 +73,7 @@ export default class VerticalBreadCrum extends Component {
     //counter to check if its last link and use the class based on that
      let counter=0;
      let linksLength=this.state.breadCrumList.length;
-    const list=  this.state.breadCrumList.map((prop) =>{
+    const list=  this.state.breadCrumList.map((prop,id) =>{
        ++counter;
       let lastLinkClass='';
       let linkUrl=prop.linkUrl&&linkUrl.trim()!==''?prop.linkUrl:'';
@@ -82,7 +82,7 @@ export default class VerticalBreadCrum extends Component {
        }
         return ( <li key={prop.linkId} className={lastLinkClass}><a href={linkUrl}>{prop.linkName}</a></li>);
    });
-     if(linksLength>0){ list.push(<li className='timelineLast'></li>)};
+     if(linksLength>0){ list.push(<li key={'last'} className='timelineLast'></li>)};
 
     return(
 

@@ -5,12 +5,19 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addTemplateActionHandler} from '../actions/addTemplateTypeAction'
 let FontAwesome = require('react-fontawesome');
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlAddTemplate extends React.Component{
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
     this.createTemplate.bind(this)
     return this;
+  }
+
+  componentDidMount() {
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {
@@ -67,26 +74,30 @@ class MlAddTemplate extends React.Component{
           <h2>Create Template Type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="templateName" placeholder="Name" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
                 <textarea  ref="templateDescription" placeholder="About" className="form-control float-label" id=""></textarea>
               </div>
+                </form>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="templateDisplayName" placeholder="Display Name" className="form-control float-label" id=""/>
               </div>
-              <div className="form-group switch_wrap">
-                <label>Status</label><br/>
+              <div className="form-group switch_wrap inline_switch">
+                <label>Status</label>
                 <label className="switch">
                   <input type="checkbox" ref="isActive"/>
                   <div className="slider"></div>
                 </label>
               </div>
+                </form>
             </div>
           </div>
 

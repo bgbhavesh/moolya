@@ -74,6 +74,24 @@ export default class MlTabView extends Component {
             return `/admin/clusters/${dynamicParams.clusterId}/chapters`;
           }
         },
+        "cluster_chapter_subChapterDetails":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"clusterId")){
+            return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/subChapterDetails`;
+          }
+        },
+        "cluster_chapter_communities":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"clusterId")){
+            return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/communities`;
+          }
+        },
+        "cluster_chapter_assignusers":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"clusterId")){
+            return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/assignusers`;
+          }
+        },
 
         "cluster_communities":function (params,queryParams) {
           let dynamicParams=params||{};

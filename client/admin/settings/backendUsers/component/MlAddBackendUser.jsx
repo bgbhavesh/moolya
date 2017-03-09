@@ -25,7 +25,7 @@ class MlAddBackendUser extends React.Component{
       selectedBackendUserType:'',
       selectedBackendUser:'Internal User',
       selectedSubChapter:'',
-      pwdErrorMsg:''
+      pwdErrorMsg:'',
      /* selectedCluster:'',
       selectedChapter:'',
       selectedDepartment:'',
@@ -93,10 +93,44 @@ class MlAddBackendUser extends React.Component{
   };
 
   async  createBackendUser() {
-    let password=this.refs.password.value;
-    let confirmPassword=this.refs.confirmPassword.value;
-    if(confirmPassword!=password){
-      alert("ur confirm pwd not match with pwd")
+    let email=this.refs.email.value;
+    if(!email){
+      toastr.error("Need to set a username or email")
+
+    }else{
+      let moolyaProfile = {
+        firstName: this.refs.firstName.value,
+        middleName: this.refs.middleName.value,
+        lastName: this.refs.lastName.value,
+        userType:this.state.selectedBackendUserType,
+        subChapter:this.state.selectedSubChapter,
+        roleType:this.state.selectedBackendUser,
+        assignedDepartment:this.state.mlAssignDepartmentDetails,
+        displayName:this.refs.displayName.value,
+        email:this.refs.email.value,
+        contact:this.state.mlAssignContactDetails,
+        globalAssignment:this.refs.globalAssignment.checked,
+        isActive:this.refs.isActive.checked,
+        userProfiles:[]
+      }
+      let InternalUprofile={
+        moolyaProfile: moolyaProfile
+      }
+      let profile={
+        isInternaluser: true,
+        isExternaluser: false,
+        email: this.refs.email.value,
+        InternalUprofile: InternalUprofile
+      }
+      let userObject={
+        username: moolyaProfile.email,
+        password: this.refs.password.value,
+        profile:profile
+      }
+
+      console.log(userObject)
+      const response = await addBackendUserActionHandler(userObject)
+      return response;
     }
    /* let userroles=[{
       roleId:this.refs.role.value,
@@ -114,39 +148,7 @@ class MlAddBackendUser extends React.Component{
       userRoles:userroles
     }]*/
 
-    let moolyaProfile = {
-      firstName: this.refs.firstName.value,
-      middleName: this.refs.middleName.value,
-      lastName: this.refs.lastName.value,
-      userType:this.state.selectedBackendUserType,
-      subChapter:this.state.selectedSubChapter,
-      roleType:this.state.selectedBackendUser,
-      assignedDepartment:this.state.mlAssignDepartmentDetails,
-      displayName:this.refs.displayName.value,
-      email:this.refs.email.value,
-      contact:this.state.mlAssignContactDetails,
-      globalAssignment:this.refs.globalAssignment.checked,
-      isActive:this.refs.isActive.checked,
-      userProfiles:[]
-    }
-    let InternalUprofile={
-      moolyaProfile: moolyaProfile
-    }
-    let profile={
-      isInternaluser: true,
-        isExternaluser: false,
-        email: this.refs.email.value,
-        InternalUprofile: InternalUprofile
-    }
-    let userObject={
-      username: moolyaProfile.email,
-      password: this.refs.password.value,
-      profile:profile
-    }
 
-    console.log(userObject)
-    const response = await addBackendUserActionHandler(userObject)
-    return response;
 
   }
   getAssignedDepartments(departments){

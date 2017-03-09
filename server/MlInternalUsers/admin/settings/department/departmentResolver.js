@@ -122,11 +122,11 @@ MlResolver.MlQueryResolver['findDepartments'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchMoolyaBasedDepartment'] = (obj, args, context, info) => {
-  let resp = MlDepartments.find({isMoolya: args.isMoolya}).fetch();
+  let resp = MlDepartments.find({isMoolya: args.isMoolya,isActive : true}).fetch();
   return resp;
 }
 
 MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
-  let resp = MlDepartments.find({isMoolya: args.isMoolya},{ depatmentAvailable: { $elemMatch: { subChapter: args.subChapter } }} ).fetch();
+  let resp = MlDepartments.find({isMoolya: args.isMoolya,isActive : true},{ depatmentAvailable: { $elemMatch: { subChapter: args.subChapter } }} ).fetch();
   return resp;
 }

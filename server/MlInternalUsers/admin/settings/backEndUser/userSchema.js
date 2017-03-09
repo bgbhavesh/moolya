@@ -16,6 +16,7 @@ let BackEndUser = `
     type userProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,
+        deActive: Boolean,
         email: String,
         InternalUprofile: internalUserprofile
     }
@@ -145,6 +146,7 @@ let BackEndUser = `
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
+        deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
     }
     
     type Query{

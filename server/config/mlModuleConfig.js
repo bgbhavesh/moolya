@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 28/1/17.
  */
 
-let modules = ["community", "chapter", "subchapter", "cluster", "department", "subdepartment", "permissions", "roles", "users", "settings", "documents", "conversations", "countries", "states", "cities", "request", "userType", "roleType", "documentType", "documentFormat", "kycCategory", "documentMapping", "transaction", "template", "BackendUsers", "industry", "specification", "profession", "entity", "stageOfCompany", "process", "process", "businessType", "citizenship", "lookingFor", "EmployeeType", "tax", "taxation", "title", "regional", "language", "dateAndTime", "numericalFormat", "addressType", "CompanyType", "emailType", "contactType", "socialLinks", "gender"];
+let modules = ["community", "chapter", "subchapter", "cluster", "department", "subdepartment", "permissions", "roles", "users", "settings", "documents", "conversations", "countries", "states", "cities", "request", "userType", "roleType", "documentType", "documentFormat", "kycCategory", "documentMapping", "transaction", "template", "BackendUsers", "industry", "specification", "profession", "entity", "stageOfCompany", "process", "process", "businessType", "citizenship", "lookingFor", "EmployeeType", "tax","taxation","globalSettings","masterSettings"];
 // Meteor.startup(function () {
 
 for (i = 0; i < modules.length; i++) {

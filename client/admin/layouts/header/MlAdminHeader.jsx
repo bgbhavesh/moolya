@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import MlTabView from  './MlAdminTabView'
 import MlAdminSearch from  './MlAdminSearch'
 import  MlAdminProfile from './MlAdminProfile'
-import VerticalBreadCrum from "../../../commons/components/breadcrum/VerticalBreadCrum";
+import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
 export default class MlAdminHeader extends Component {
   constructor(props,context){
     super(props,context);
@@ -26,7 +26,7 @@ export default class MlAdminHeader extends Component {
       <div className="admin_header">
       <MlAdminProfile/>
 
-        <VerticalBreadCrum />
+        <VerticalBreadCrum {...this.props}/>
         <div className="header_bottom">
           <MlTabView tabOptions={tabsubMenu}  linkField="link" nameField="name"/>
         </div>

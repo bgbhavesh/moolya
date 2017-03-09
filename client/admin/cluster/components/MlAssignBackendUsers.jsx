@@ -75,7 +75,7 @@ class MlAssignBackendUsers extends React.Component{
     async findUserDetails(userId){
       const user = await findUserDetails(userId);
       let that = this;
-      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
+      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile, deActive:user.profile.deActive});
       this.find_Cluster_Roles(userId, that.props.params);
       this.findRoleDetails();
       return user;
@@ -106,7 +106,7 @@ class MlAssignBackendUsers extends React.Component{
         userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}}
+        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}, deActive:this.refs.deActive.checked}}
         let data = {moduleName:"USERS", actionName:"UPDATE", userId:this.state.selectedBackendUser, user:user}
         let response = await multipartFormHandler(data, this.refs.profilePic.files[0])
         return response;
@@ -150,6 +150,7 @@ class MlAssignBackendUsers extends React.Component{
         let query   = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
         let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
+        let deActive = that.state.deActive
         let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
         let alsoAssignedAs = this.state.alsoAssignedAs;
       const showLoader = this.state.loading;
@@ -206,7 +207,7 @@ class MlAssignBackendUsers extends React.Component{
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
                                           <label className="switch">
-                                              <input type="checkbox" />
+                                              <input type="checkbox" ref="deActive" checked={deActive}/>
                                               <div className="slider"></div>
                                           </label>
                                       </div>

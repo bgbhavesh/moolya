@@ -23,7 +23,7 @@ export default class MlClusterChapterList extends Component
       </div>
     );
 
-    return (<div>{list}</div>);
+    return (<div className="row">{list}</div>);
 
   }
 }

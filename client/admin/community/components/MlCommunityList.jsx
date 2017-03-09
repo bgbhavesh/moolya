@@ -21,7 +21,7 @@ export default class MlCommunityList extends Component {
   );
 
     return (
-        <div>
+        <div className="row">
           <h2>Communities</h2>
           {list}
         </div>

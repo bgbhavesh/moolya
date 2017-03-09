@@ -13,6 +13,12 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
       return response;
     }
 
+    if(!args.user.username){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Username is required", code);
+      return response;
+    }
+
     if(Meteor.users.find({username:args.user.username}).count() > 0) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);

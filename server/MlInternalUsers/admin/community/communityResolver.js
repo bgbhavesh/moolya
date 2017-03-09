@@ -189,6 +189,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
 
     if(communityAccess){
         community["name"] = communityAccess.communityDefName;
+        community["aboutCommunity"] = communityAccess.about;
         community["displayName"] = communityAccess.displayName;
         community["code"] = communityAccess.communityDefCode;
         community["showOnMap"] = communityAccess.showOnMap;
@@ -388,9 +389,23 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
         if(communityAccess){
             let isUpdate = false;
 
-            // if(communityAccess.about != args.community.aboutCommunity){
-            //     isUpdate = true;
-            // }
+            if(communityAccess.about != args.community.aboutCommunity){
+                isUpdate = true;
+                communityAccess.about = args.community.aboutCommunity
+            }
+
+            if(communityAccess.isActive != args.community.isActive){
+                isUpdate = true;
+                communityAccess.isActive = args.community.isActive
+            }
+
+          if(communityAccess.showOnMap != args.community.showOnMap){
+            isUpdate = true;
+            communityAccess.showOnMap = args.community.showOnMap
+          }
+
+          if(isUpdate == true)
+            resp = MlCommunityAccess.update({"_id":communityAccess._id}, {"$set":communityAccess}, {upsert:true})
         }
 
         communitiesAccess = MlCommunityAccess.find({"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}).fetch();

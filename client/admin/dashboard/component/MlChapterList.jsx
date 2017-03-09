@@ -15,7 +15,7 @@ export default class MlChapterList extends Component {
       </div>
   );
 
-    return (<div>{list}</div>);
+    return (<div className="row">{list}</div>);
 
   }
 

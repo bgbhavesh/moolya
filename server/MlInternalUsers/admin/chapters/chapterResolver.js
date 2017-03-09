@@ -129,12 +129,12 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'}}).fetch()||[];
+  let result=MlSubChapters.find({chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
   return result
 }
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({isActive: true}&&{subChapterName:{$ne:"Moolya"}}).fetch()||[];
+  let result=MlSubChapters.find({isActive: true,subChapterName:{$ne:"Moolya"}}).fetch()||[];
   return result
 }
 

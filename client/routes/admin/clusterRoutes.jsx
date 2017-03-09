@@ -62,6 +62,12 @@ adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterNam
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {
+  name: 'cluster_chapter_communities',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
+  }
+});
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
   name: 'cluster_chapter_assignusers',
   action(params){

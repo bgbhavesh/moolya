@@ -190,7 +190,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
         let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
         if(departments && departments.length > 0){
             for(var i = 0; i < departments.length; i++){
-                let depusers = Meteor.users.find({"$and":[{"$or":[{"$and":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}]},{"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]},{"profile.InternalUprofile.moolyaProfile.userType":'moolya'}]}).fetch();
+                let depusers = Meteor.users.find({"$and":[{"$or":[{"$and":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}]},{"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]},{"profile.InternalUprofile.moolyaProfile.userType":'moolya'},{"profile.InternalUprofile.moolyaProfile.isActive":true}]}).fetch();
                 depusers.map(function (user) {
                   user.username = user.profile.InternalUprofile.moolyaProfile.firstName+" "+user.profile.InternalUprofile.moolyaProfile.lastName;
                     if(_.isEmpty(_.find(users, user))){

@@ -93,6 +93,12 @@ export default class MlTabView extends Component {
           }
         },
 
+        "cluster_communities":function (params,queryParams) {
+          let dynamicParams=params||{};
+          if(_.has(dynamicParams,"clusterId")){
+            return `/admin/clusters/${dynamicParams.clusterId}/communities`;
+          }
+        },
         "cluster_assignusers":function (params,queryParams) {
           let dynamicParams=params||{};
           if(_.has(dynamicParams,"clusterId")){
@@ -110,7 +116,7 @@ export default class MlTabView extends Component {
         "chapter_communities":function (params,queryParams) {
           let dynamicParams=params||{};
           if(_.has(dynamicParams,"subChapterId")){
-            return `/admin/chapters/${dynamicParams.subChapterId}/communities`;
+            return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/communities`;
           }
         },
 

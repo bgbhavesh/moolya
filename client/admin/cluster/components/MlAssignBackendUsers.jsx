@@ -15,6 +15,7 @@ import {findUserDetails} from '../actions/findUserDetails'
 import {findRoles} from '../actions/fetchRoles'
 import {findCluster_Roles} from '../actions/findCluster_Roles'
 import {findClusterTypeActionHandler} from '../actions/findCluster'
+import {OnToggleSwitch} from '../../utils/formElemUtil'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');

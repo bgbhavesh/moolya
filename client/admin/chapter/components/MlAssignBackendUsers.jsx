@@ -14,6 +14,7 @@ import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findUserDetails} from '../actions/findUserDetails'
 import {findRoles} from '../actions/fetchRoles'
+import {OnToggleSwitch} from '../../utils/formElemUtil'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');

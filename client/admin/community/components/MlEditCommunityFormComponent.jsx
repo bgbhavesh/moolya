@@ -78,6 +78,19 @@ class MlEditCommunityFormComponent extends React.Component {
 
     if(response) {
       this.setState({loading:false,data:response});
+
+      if (this.state.data.aboutCommunity) {
+        this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
+      }
+
+      if (this.state.data.showOnMap) {
+        this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
+      }
+
+      if (this.state.data.showOnMap) {
+        this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
+      }
+
       if (this.state.data.clusters) {
         this.setState({clusters: this.state.data.clusters});
       }

@@ -86,12 +86,13 @@ export default class MlListView extends Component {
       <div className="list_view_block">
         <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
       <div className="col-md-12">
-        <div className="row">
+        {/*<div className="row">*/}
           {ListComponent}
-        </div>
+        {/*</div>*/}
       </div>
-     {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
-    </div>)}</div>)
+    </div>)}
+      {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
+    </div>)
   }
 
 }

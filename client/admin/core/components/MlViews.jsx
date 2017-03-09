@@ -38,12 +38,10 @@ export default class MlViews extends React.Component {
     let listConfig=this.props.listConfig;
      let params=this.props.params?this.props.params:null;
     return (
-      <div>
         <div className="admin_main_wrap">
-          {viewMode ? <MlMapViewContainer params={params} {...config.mapConfig} /> : <div><MlListViewContainer params={params} {...listConfig}/></div> }
+          {viewMode ? <MlMapViewContainer params={params} {...config.mapConfig} /> : <MlListViewContainer params={params} {...listConfig}/> }
           {showInfinity && (<MlInfinity {...infinityViewProps} />)}
         </div>
-      </div>
 
     )
 

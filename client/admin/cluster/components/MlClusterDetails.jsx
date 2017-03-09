@@ -96,7 +96,7 @@ class MlClusterDetails extends React.Component {
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/dashboard");
+        FlowRouter.go("/admin/clusters");
       else
         toastr.error(response.result);
     }
@@ -149,10 +149,10 @@ class MlClusterDetails extends React.Component {
                 <div className="col-md-6 nopadding-right">
                   <div className="form_bg">
                     <div className="form-group ">
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Country Flag</span>
-                        {/*<input type="file" ref="uploadImage" className="upload"/>*/}
-                      </div>
+                      {/*<div className="fileUpload mlUpload_btn">*/}
+                        {/*<span>Country Flag</span>*/}
+                        {/*/!*<input type="file" ref="uploadImage" className="upload"/>*!/*/}
+                      {/*</div>*/}
                       <div className="previewImg">
                           <img src={this.state.data && this.state.data.countryFlag}/>
                       </div>

@@ -54,7 +54,6 @@ class MlEditState extends React.Component{
     let StateDetails = {
       id: this.refs.id.value,
       name: this.refs.stateName.value,
-      countryCode: this.refs.countryName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
       isActive: this.refs.status.checked
@@ -102,14 +101,13 @@ class MlEditState extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" id="" disabled="disabled"/>
+                    <input type="text" defaultValue={this.state.data && this.state.data.countryName} placeholder="Country Name" className="form-control float-label" disabled="disabled"/>
 
                   </div>
                   <div className="form-group">
                     <textarea placeholder="About" ref="about" defaultValue={this.state.data && this.state.data.about} className="form-control float-label" id=""></textarea>
 
                   </div>
-
                 </form>
               </div>
             </div>

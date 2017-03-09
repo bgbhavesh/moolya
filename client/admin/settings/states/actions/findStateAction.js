@@ -12,6 +12,7 @@ export async function findStateActionHandler(Id) {
         name
         countryId
         countryCode
+        countryName
         displayName
         about
         isActive
@@ -20,9 +21,9 @@ export async function findStateActionHandler(Id) {
     `,
     variables: {
       id:did
-    }
+    },
+    forceFetch:true
   })
-  console.log(result)
   const id = result.data.fetchState;
   return id
 }

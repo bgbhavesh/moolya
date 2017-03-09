@@ -153,7 +153,15 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if(args.module=="states"){
     let countries = MlCountries.find({"isActive": true}).fetch();
     let allIds=_.pluck(countries,'_id');
-      data = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
+      let ary = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
+
+      _.each(ary,function (item,key) {
+        _.each(countries, function (s,v) {
+          if (item.countryId == s._id)
+            item.countryName = s.country;
+        })
+      })
+      data=ary;
       totalRecords = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).count();
   }
   if(args.module=="cities"){

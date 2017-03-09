@@ -24,7 +24,23 @@ export default CoreModulesRepo={
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
     let query=contextQuery;
-    const data= MlClusters.find(query,fieldsProj).fetch();
+
+    let countriesId=[]; 
+    let activeCluster = [];
+    let activeCountries = MlCountries.find({isActive:true}).fetch(); 
+    activeCountries.map(function(country){ 
+      countriesId.push(country._id);
+     })
+    let Clusters= MlClusters.find(query,fieldsProj).fetch();
+    countriesId.map(function (id){
+      Clusters.map(function(cluster){
+        if(cluster.countryId == id){
+          activeCluster.push(cluster);
+        }
+      })
+    })
+    const data = activeCluster;
+    // const data= MlClusters.find(query,fieldsProj).fetch();
     const totalRecords=MlClusters.find(query,fieldsProj).count();
 
     return {totalRecords:totalRecords,data:data};
@@ -41,8 +57,22 @@ export default CoreModulesRepo={
     if(clusterId){
         query={"clusterId":clusterId};
     }
-
-    const data= MlChapters.find(query,fieldsProj).fetch();
+    let citiesId=[];
+    let activeChapters = [];
+    let activeCities = MlCities.find({isActive:true}).fetch();
+    activeCities.map(function(city){
+      citiesId.push(city._id);
+    })
+    let Chapters= MlChapters.find(query,fieldsProj).fetch();
+    citiesId.map(function (id){
+      Chapters.map(function(chapter){
+        if(chapter.cityId == id){
+          activeChapters.push(chapter);
+        }
+      })
+    })
+    const data = activeChapters;
+    // const data= MlChapters.find(query,fieldsProj).fetch();
     const totalRecords=MlChapters.find(query,fieldsProj).count();
 
     return {totalRecords:totalRecords,data:data};

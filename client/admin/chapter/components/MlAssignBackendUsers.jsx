@@ -44,7 +44,11 @@ class MlAssignChapterBackendUsers extends React.Component{
     componentWillMount() {
       const resp=this.findSubChapter();
     }
-
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    // OnToggleSwitch(true,true);
+  }
     async findSubChapter() {
       let subChapterId = this.props.params;
       const response = await findSubChapterActionHandler(subChapterId);
@@ -195,6 +199,13 @@ class MlAssignChapterBackendUsers extends React.Component{
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
                     <h2>Assign internal user to Chapter</h2>
+                  <div className="main_wrap_scroll">
+                    <ScrollArea
+                      speed={0.8}
+                      className="main_wrap_scroll"
+                      smoothScrolling={true}
+                      default={true}
+                    >
                     <div className="col-md-6 nopadding-left">
                           <div className="row">
                               <div className="left_wrap left_user_blocks">
@@ -254,6 +265,8 @@ class MlAssignChapterBackendUsers extends React.Component{
                                   </form>
                             </ScrollArea>
                         </div>
+                    </div>
+                      </ScrollArea>
                     </div>
                 </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

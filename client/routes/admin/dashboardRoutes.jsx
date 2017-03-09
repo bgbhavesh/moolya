@@ -8,6 +8,7 @@ import {mlClusterDashboardListConfig,mlClusterDashboardMapConfig} from "../../ad
 import {mlSubChapterDashboardMapConfig,mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 import MlCommunityList from "../../admin/dashboard/component/MlCommunityList";
 import MlViews from '../../admin/core/components/MlViews'
+import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 adminSection.route('/dashboard', {
   triggersEnter: [function(context, redirect) {
@@ -40,13 +41,13 @@ adminSection.route('/dashboard/communities', {
 adminSection.route('/dashboard/:clusterId/chapters', {
   name: 'dashboard_specChapters',
   action(params){
-    mount(AdminLayout,{adminContent:<MlViews showInfinity={true} mapConfig={mlChapterDashboardMapConfig} listConfig={mlChapterDashboardListConfig} params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'dashboard'}} />,adminContent:<MlViews showInfinity={true} mapConfig={mlChapterDashboardMapConfig} listConfig={mlChapterDashboardListConfig} params={params}/>})
   }
 });
 
 adminSection.route('/dashboard/:clusterId/:chapterId/subChapters', {
   name: 'dashboard_specSubChapters',
   action(params){
-    mount(AdminLayout,{adminContent:<MlViews showInfinity={true} mapConfig={mlSubChapterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'dashboard'}} />,adminContent:<MlViews showInfinity={true} mapConfig={mlSubChapterDashboardMapConfig} listConfig={mlSubChapterDashboardListConfig} params={params}/>})
   }
 });

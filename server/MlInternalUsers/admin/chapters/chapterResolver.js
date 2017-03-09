@@ -139,13 +139,14 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) => {
+  //let result=MlSubChapters.find({chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
   let id = args.id || "";
   let result = [];
   if(args.id == "All"){
-      result=MlSubChapters.find({} && {subChapterName:{$ne:'Moolya'}}).fetch()||[];
+      result=MlSubChapters.find({} && {subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
       result.push({"subChapterName" : "All","_id" : "All"});
   }else{
-       result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'}}).fetch()||[];
+       result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
       if(result.length > 1){
            result.push({"subChapterName" : "All","_id" : "All"});
       }
@@ -155,7 +156,7 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({isActive: true}&&{subChapterName:{$ne:"Moolya"}}).fetch()||[];
+  let result=MlSubChapters.find({isActive: true,subChapterName:{$ne:"Moolya"}}).fetch()||[];
   return result
 }
 
@@ -187,6 +188,36 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
             return response
         }
     }
+}
+
+MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, info) => {
+    let clusters = args.clusters;
+    let chapters = [];
+    if(clusters && clusters.length > 0){
+        clusters.map(function (clusterId) {
+              activeChapters = MlChapters.find({"$and":[{clusterId:clusterId, isActive:true}]}).fetch();
+              if(activeChapters && activeChapters.length > 0){
+                  chapters = chapters.concat(activeChapters)
+              }
+        })
+    }
+
+    return chapters;
+}
+
+MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, context, info) => {
+  let chapters = args.chapters;
+  let subChapters = [];
+  if(chapters && chapters.length > 0){
+    chapters.map(function (chapterId) {
+      activeSubChapters = MlSubChapters.find({"$and":[{chapterId:chapterId, isActive:true}]}).fetch();
+      if(activeSubChapters && activeSubChapters.length > 0){
+        subChapters = subChapters.concat(activeSubChapters)
+      }
+    })
+  }
+
+  return subChapters;
 }
 
 createSubChapter = (subChapter) =>{

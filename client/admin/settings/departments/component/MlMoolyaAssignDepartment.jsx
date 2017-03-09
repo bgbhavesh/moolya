@@ -106,13 +106,13 @@ export default class MlMoolyaAssignDepartment extends React.Component {
                   <div className="form-group">
                     <input placeholder="Department Email Id" className="form-control float-label" defaultValue={options.email} onBlur={that.onEmailChange.bind(that,id)}/>
                   </div>
-                  <div className="form-group switch_wrap inline_switch">
+                  {/*<div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
                       <input type="checkbox" name={'isActive'} checked={options.isActive} onChange={that.onChange.bind(that,id)} />
                       <div className="slider"></div>
                     </label>
-                  </div>
+                  </div>*/}
                 </div>
             </div>
           )})}

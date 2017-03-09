@@ -11,6 +11,7 @@ export async function findUserDetails(userId) {
             fetchUser(userId:$id){
               _id,
               profile{
+                deActive,
                 isInternaluser,
                 isExternaluser,
                 email,

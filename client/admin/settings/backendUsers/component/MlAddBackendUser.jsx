@@ -14,68 +14,69 @@ let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
 
-class MlAddBackendUser extends React.Component{
-  constructor(props){
+class MlAddBackendUser extends React.Component {
+  constructor(props) {
     super(props);
-    this.state={
-      mlAssignDepartmentDetails:[],
-      mlAssignContactDetails:[],
-      password:'',
-      confirmPassword:'',
-      selectedBackendUserType:'',
-      selectedBackendUser:'Internal User',
-      selectedSubChapter:'',
-      pwdErrorMsg:''
-     /* selectedCluster:'',
-      selectedChapter:'',
-      selectedDepartment:'',
-      selectedSubDepartment:'',
-      selectedRole:''*/
+    this.state = {
+      mlAssignDepartmentDetails: [],
+      mlAssignContactDetails: [],
+      password: '',
+      confirmPassword: '',
+      selectedBackendUserType: '',
+      selectedBackendUser: 'Internal User',
+      selectedSubChapter: '',
+      pwdErrorMsg: '',
+      /* selectedCluster:'',
+       selectedChapter:'',
+       selectedDepartment:'',
+       selectedSubDepartment:'',
+       selectedRole:''*/
     }
     this.addEventHandler.bind(this);
     this.createBackendUser.bind(this);
     this.onBackendUserTypeSelect.bind(this);
     this.onBackendUserSelect.bind(this)
-   /* this.onClusterSelect.bind(this);
-    this.onChapterSelect.bind(this);
-    this.onDepartmentSelect.bind(this);
-    this.onSubDepartmentSelect.bind(this);
-    this.onROleSelect.bind(this);*/
+    /* this.onClusterSelect.bind(this);
+     this.onChapterSelect.bind(this);
+     this.onDepartmentSelect.bind(this);
+     this.onSubDepartmentSelect.bind(this);
+     this.onROleSelect.bind(this);*/
     return this;
   }
-  componentDidMount()
-  {
-   $(function() {
+
+  componentDidMount() {
+    $(function () {
       $('.float-label').jvFloat();
     });
 
-    $('.switch input').change(function() {
+    $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
-      }else{
+      } else {
         $(this).parent('.switch').removeClass('on');
       }
     });
-    $('.ConfirmPassword').click(function() {
+    $('.ConfirmPassword').click(function () {
       let pwd = document.getElementById("confirmPassword")
-      if(pwd.getAttribute("type")=="password"){
-        pwd.setAttribute("type","text");
+      if (pwd.getAttribute("type") == "password") {
+        pwd.setAttribute("type", "text");
       } else {
-        pwd.setAttribute("type","password");
+        pwd.setAttribute("type", "password");
       }
     });
-    $('.Password').click(function() {
+    $('.Password').click(function () {
       let pwd = document.getElementById("password");
-      if(pwd.getAttribute("type")=="password"){
-        pwd.setAttribute("type","text");
+      if (pwd.getAttribute("type") == "password") {
+        pwd.setAttribute("type", "text");
       } else {
-        pwd.setAttribute("type","password");
+        pwd.setAttribute("type", "password");
       }
     });
 
   }
+
   async addEventHandler() {
-    const resp=await this.createBackendUser();
+    const resp = await this.createBackendUser();
     return resp;
   }
 
@@ -84,20 +85,76 @@ class MlAddBackendUser extends React.Component{
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
+    if (response) {
+      if (response.success) {
         FlowRouter.go("/admin/settings/backendUserList");
-      else
+      }
+      else {
         toastr.error(response.result);
+      }
+    }else {
+      console.log(response)
     }
   };
 
   async  createBackendUser() {
-    let password=this.refs.password.value;
-    let confirmPassword=this.refs.confirmPassword.value;
-    if(confirmPassword!=password){
-      alert("ur confirm pwd not match with pwd")
+    let firstName= this.refs.firstName.value;
+    let lastName= this.refs.lastName.value;
+    let email = this.refs.email.value;
+    let password = this.refs.password.value;
+    let confirmPassword = this.refs.confirmPassword.value;
+    let departments=this.state.mlAssignDepartmentDetails[0].department
+    if(!firstName){
+      toastr.error("First Name is required");
     }
+    else if(!lastName){
+      toastr.error("Last Name is required");
+    }
+    else if (!email) {
+      toastr.error("Need to set a username or email")
+
+    } else if (confirmPassword != password) {
+
+      toastr.error("Confirm Password does not match with Password")
+
+    } else if(!departments){
+      toastr.error("Assign Department is required")
+    }else {
+      let moolyaProfile = {
+        firstName: this.refs.firstName.value,
+        middleName: this.refs.middleName.value,
+        lastName: this.refs.lastName.value,
+        userType: this.state.selectedBackendUserType,
+        subChapter: this.state.selectedSubChapter,
+        roleType: this.state.selectedBackendUser,
+        assignedDepartment: this.state.mlAssignDepartmentDetails,
+        displayName: this.refs.displayName.value,
+        email: this.refs.email.value,
+        contact: this.state.mlAssignContactDetails,
+        globalAssignment: this.refs.globalAssignment.checked,
+        isActive: this.refs.isActive.checked,
+        userProfiles: []
+      }
+      let InternalUprofile = {
+        moolyaProfile: moolyaProfile
+      }
+      let profile = {
+        isInternaluser: true,
+        isExternaluser: false,
+        email: this.refs.email.value,
+        InternalUprofile: InternalUprofile
+      }
+      let userObject = {
+        username: moolyaProfile.email,
+        password: this.refs.password.value,
+        profile: profile
+      }
+
+      console.log(userObject)
+      const response = await addBackendUserActionHandler(userObject)
+      return response;
+    }
+
    /* let userroles=[{
       roleId:this.refs.role.value,
       clusterId:this.refs.cluster.value,
@@ -114,39 +171,7 @@ class MlAddBackendUser extends React.Component{
       userRoles:userroles
     }]*/
 
-    let moolyaProfile = {
-      firstName: this.refs.firstName.value,
-      middleName: this.refs.middleName.value,
-      lastName: this.refs.lastName.value,
-      userType:this.state.selectedBackendUserType,
-      subChapter:this.state.selectedSubChapter,
-      roleType:this.state.selectedBackendUser,
-      assignedDepartment:this.state.mlAssignDepartmentDetails,
-      displayName:this.refs.displayName.value,
-      email:this.refs.email.value,
-      contact:this.state.mlAssignContactDetails,
-      globalAssignment:this.refs.globalAssignment.checked,
-      isActive:this.refs.isActive.checked,
-      userProfiles:[]
-    }
-    let InternalUprofile={
-      moolyaProfile: moolyaProfile
-    }
-    let profile={
-      isInternaluser: true,
-        isExternaluser: false,
-        email: this.refs.email.value,
-        InternalUprofile: InternalUprofile
-    }
-    let userObject={
-      username: moolyaProfile.email,
-      password: this.refs.password.value,
-      profile:profile
-    }
 
-    console.log(userObject)
-    const response = await addBackendUserActionHandler(userObject)
-    return response;
 
   }
   getAssignedDepartments(departments){

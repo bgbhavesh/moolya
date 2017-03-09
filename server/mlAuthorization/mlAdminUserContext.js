@@ -16,6 +16,8 @@ class MlAdminUserContext
     let hierarchyLevel =null;
     let hierarchyCode=null;
     let defaultCluster=null;
+    let defaultChapters = [];
+    let defaultSubChapters = [];
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -47,13 +49,17 @@ class MlAdminUserContext
                 hierarchyLevel=userRole.hierarchyLevel;
                 hierarchyCode=userRole.hierarchyCode;
             }
+            defaultChapters.push(userRole.chapterId)
+            defaultSubChapters.push(userRole.subChapterId)
           })
 
       }
     }
         return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,
                 defaultProfileHierarchyCode:"CLUSTER",
-                defaultProfileHierarchyRefId:defaultCluster};
+                defaultProfileHierarchyRefId:defaultCluster,
+                defaultChapters:defaultChapters,
+                defaultSubChapters:defaultSubChapters};
   }
 
   getDefaultMenu(userId){

@@ -113,52 +113,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
             }
             break;
             case "COMMUNITY":{
-              response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {communityId:data.communityId, community:data.community, clusters:data.clusters, chapters:data.chapters}, context, null);
+              response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {communityId:data.communityId, community:data.community, clusters:data.clusters, chapters:data.chapters, subchapters:data.subchapters}, context, null);
             }
             break;
         }
-
         res.send(response);
-        // let userId = data.userId;
-        // let roles  = data && data.userRoles;
-        // // let file  = req.files
-        // let levelCode = ""
-        // if(roles)
-        // {
-        //     let hierarchy = "";
-        //     roles.map(function (role)
-        //     {
-        //         if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
-        //             levelCode = "COMMUNITY"
-        //         }
-        //         else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
-        //             levelCode = "SUBCHAPTER"
-        //             role.communityId = "all"
-        //         }
-        //         else if(role.clusterId != "" && role.chapterId != "" ){
-        //             levelCode = "CHAPTER"
-        //             role.subChapterId = "all"
-        //             role.communityId = "all"
-        //         }
-        //         else if(role.clusterId != ""){
-        //             levelCode = "CLUSTER"
-        //             role.chapterId = "all"
-        //             role.subChapterId = "all"
-        //             role.communityId = "all"
-        //         }
-        //
-        //         hierarchy = MlHierarchy.findOne({code:levelCode})
-        //         role.hierarchyLevel = hierarchy.level;
-        //         role.hierarchyCode  = hierarchy.code;
-        //     })
-        // }
-        // let userProfile = {
-        //     clusterId: data.clusterId,
-        //     userroles:  roles,
-        //     isDefault: false
-        // }
-        // let response = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)
-        // res.send(true)
       }
     }))
   }

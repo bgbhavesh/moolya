@@ -34,8 +34,10 @@ export default function formHandler() {
               let resp=await handleMethod();
              this.setState({ loading: false, error: '' });
               var that=this;
-              if(handleSuccess){
-                handleSuccess(resp);
+              if(resp){
+                if(handleSuccess){
+                  handleSuccess(resp);
+                }
               }
 
             }catch(error){
@@ -55,9 +57,10 @@ export default function formHandler() {
 
         return (
           <div>
-          {showLoader===true? (<div><div className="loader_wrap"></div><SourceComponent {...this.props} handler={this.handler.bind(this)}/></div>) :
-            (<SourceComponent {...this.props} handler={this.handler.bind(this)}/>)
-          }
+            {showLoader===true&&<div className="loader_wrap"></div>}
+
+              <SourceComponent {...this.props} handler={this.handler.bind(this)}/>
+
         </div>
         )
 

@@ -187,16 +187,17 @@ if(role){
 
 /******************************************* User Login <Start> *******************************************************/
 
-Accounts.validateLoginAttempt(function (user) {
+Accounts.validateLoginAttempt(function (user)
+{
 
     let isValid=false;
-    if( user && user.user )
-    {
-        isValid=true;
+    if(user && user.user && user.user.profile && user.user.profile.deActive){
+        user.allowed = false
+        throw new Meteor.Error(403, "User account is inactive!");
     }
 
 
-    return user;
+    return true;
 })
 
 /******************************************* User Login <End> *********************************************************/

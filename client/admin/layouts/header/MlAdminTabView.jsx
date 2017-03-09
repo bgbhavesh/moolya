@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import _ from 'lodash'
+import _ from 'lodash';
+import dynamicLinkHandler from './actions/dynamicRoutesHandler.js';
 export default class MlTabView extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +46,7 @@ export default class MlTabView extends Component {
       }
     }
 
-    function dynamicLinkHandler(path,params,queryParams){
+    /*function dynamicLinkHandler(path,params,queryParams){
       const menuLinkHandlerConfig={
         "editCluster":function(params,queryParams){
               return '/admin/cluster/'+params.cluserId;
@@ -147,7 +148,7 @@ export default class MlTabView extends Component {
             return link;
           }
       return "";
-    }
+    }*/
 
     if (menu != undefined) {
       let subMenuHide=menu.hideSubMenu;

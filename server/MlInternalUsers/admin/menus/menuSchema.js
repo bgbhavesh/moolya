@@ -13,6 +13,7 @@ let Menu = `
       subMenuMappingId:String
       subMenusId:String
       hideSubMenu:Boolean
+      showInBreadCrum:Boolean
     }
     type MlMenu 
     {

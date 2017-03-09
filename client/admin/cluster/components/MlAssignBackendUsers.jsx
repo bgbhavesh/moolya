@@ -30,7 +30,10 @@ class MlAssignBackendUsers extends React.Component{
             cluster:{},
             alsoAssignedAs:[],
             selectedBackendUser:'',
-            users:[{username: '', _id:''}]
+            users:[{username: '', _id:''}],
+            userDisplayName: '',
+            username: '',
+            alsoAssignedAs: '',
         }
 
         this.addEventHandler.bind(this);
@@ -56,8 +59,8 @@ class MlAssignBackendUsers extends React.Component{
 
     optionsBySelectUser(index, selectedIndex){
         this.setState({loading: true});
-        this.setState({selectedBackendUser:index})
-        const resp= this.findUserDetails(index);
+        this.setState({selectedBackendUser: index})
+        const resp = this.findUserDetails(index);
         // this.findRoleDetails();
     }
 
@@ -74,11 +77,25 @@ class MlAssignBackendUsers extends React.Component{
 
     async findUserDetails(userId){
       const user = await findUserDetails(userId);
-      let that = this;
-      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
-      this.find_Cluster_Roles(userId, that.props.params);
-      this.findRoleDetails();
-      return user;
+      if(userId != ""){
+        let that = this;
+        this.setState({
+          loading: false,
+          userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile,
+          userDisplayName:user.profile.InternalUprofile.moolyaProfile.displayName,
+          username:user.profile.InternalUprofile.moolyaProfile.email,
+        });
+        this.find_Cluster_Roles(userId, that.props.params);
+        this.findRoleDetails();
+        return user;
+      } else {
+        this.setState({
+          userDisplayName:'',
+          username:'',
+          alsoAssignedAs:'',
+          loading: false,
+        });
+      }
     }
   async find_Cluster_Roles(userId, clusterId){
     const userProfile = await findCluster_Roles(userId, clusterId);
@@ -112,7 +129,7 @@ class MlAssignBackendUsers extends React.Component{
         return response;
     }
 
-    handleScuccess(){
+    handleSuccess(){
 
     }
 
@@ -149,11 +166,11 @@ class MlAssignBackendUsers extends React.Component{
         let queryOptions = {options: { variables: {clusterId:that.props.params}}};
         let query   = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
-        let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
-        let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
-        let alsoAssignedAs = this.state.alsoAssignedAs;
-      const showLoader = this.state.loading;
+        let userDisplayName = this.state.userDisplayName || "";
+        let username = this.state.username || "";
+        let alsoAssignedAs = this.state.alsoAssignedAs || "";
 
+      const showLoader = this.state.loading;
       return (
         <div className="admin_main_wrap">
           {showLoader === true ? ( <div className="loader_wrap"></div>) : (

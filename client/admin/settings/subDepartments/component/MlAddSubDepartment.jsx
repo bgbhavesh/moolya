@@ -98,7 +98,7 @@ class MlAddSubDepartment extends React.Component{
         }
       ]
     const showLoader=this.state.loading;
-    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
+    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:departmentName}}`;
 
       return (
           <div className="admin_main_wrap">

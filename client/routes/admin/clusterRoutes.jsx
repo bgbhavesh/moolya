@@ -8,11 +8,13 @@ import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlChapterList from '../../admin/dashboard/component/MlChapterList'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import {mlClusterChapterListConfig} from '../../admin/cluster/config/mlClusterChapterConfig'
+import {mlClusterCommunityListConfig} from '../../admin/cluster/config/mlClusterCommunityConfig'
 import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
 import MlViews from '../../admin/core/components/MlViews';
+import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 adminSection.route('/clusters', {
   name: 'cluster',
@@ -25,45 +27,58 @@ adminSection.route('/clusters', {
 adminSection.route('/clusters/:clusterId/clusterDetails', {
   name: 'cluster_clusterDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlClusterDetails params={params.clusterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlClusterDetails params={params.clusterId}/>})
   }
 });
 
 adminSection.route('/clusters/:clusterId/chapters', {
   name: 'cluster_chapters',
   action(params){
-    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterChapterListConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterChapterListConfig}/>})
+  }
+});
+
+adminSection.route('/clusters/:clusterId/communities', {
+  name: 'cluster_communities',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
   }
 });
 
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities', {
   name: 'cluster_communities',
   action(params){
-    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} />})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/subChapters', {
   name: 'cluster_chapters',
   action(params){
-    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
   name: 'cluster_chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+  }
+});
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {
+  name: 'cluster_chapter_communities',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
   name: 'cluster_chapter_assignusers',
   action(params){
-    mount(AdminLayout,{adminContent:< MlAssignChapterBackendUsers params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignChapterBackendUsers params={params}/>})
   }
 });
 
 adminSection.route('/clusters/:clusterId/assignusers', {
   name: 'cluster_assignusers',
   action(params){
-    mount(AdminLayout,{adminContent:< MlAssignBackendUsers params={params.clusterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignBackendUsers params={params.clusterId}/>})
   }
 });

@@ -30,7 +30,10 @@ class MlAssignBackendUsers extends React.Component{
             cluster:{},
             alsoAssignedAs:[],
             selectedBackendUser:'',
-            users:[{username: '', _id:''}]
+            users:[{username: '', _id:''}],
+            userDisplayName: '',
+            username: '',
+            alsoAssignedAs: '',
         }
 
         this.addEventHandler.bind(this);
@@ -56,8 +59,8 @@ class MlAssignBackendUsers extends React.Component{
 
     optionsBySelectUser(index, selectedIndex){
         this.setState({loading: true});
-        this.setState({selectedBackendUser:index})
-        const resp= this.findUserDetails(index);
+        this.setState({selectedBackendUser: index})
+        const resp = this.findUserDetails(index);
         // this.findRoleDetails();
     }
 
@@ -74,11 +77,27 @@ class MlAssignBackendUsers extends React.Component{
 
     async findUserDetails(userId){
       const user = await findUserDetails(userId);
-      let that = this;
-      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile});
-      this.find_Cluster_Roles(userId, that.props.params);
-      this.findRoleDetails();
-      return user;
+      if(userId != ""){
+        let that = this;
+        this.setState({
+          loading: false,
+          userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile,
+          userDisplayName:user.profile.InternalUprofile.moolyaProfile.displayName,
+          username:user.profile.InternalUprofile.moolyaProfile.email,
+          deActive:user.profile.deActive
+        });
+        this.find_Cluster_Roles(userId, that.props.params);
+        this.findRoleDetails();
+        return user;
+      } else {
+        this.setState({
+          userDisplayName:'',
+          username:'',
+          alsoAssignedAs:'',
+          deActive:false,
+          loading: false,
+        });
+      }
     }
   async find_Cluster_Roles(userId, clusterId){
     const userProfile = await findCluster_Roles(userId, clusterId);
@@ -106,13 +125,13 @@ class MlAssignBackendUsers extends React.Component{
         userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}}
+        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}, deActive:this.refs.deActive.checked}}
         let data = {moduleName:"USERS", actionName:"UPDATE", userId:this.state.selectedBackendUser, user:user}
         let response = await multipartFormHandler(data, this.refs.profilePic.files[0])
         return response;
     }
 
-    handleScuccess(){
+    handleSuccess(){
 
     }
 
@@ -149,9 +168,10 @@ class MlAssignBackendUsers extends React.Component{
         let queryOptions = {options: { variables: {clusterId:that.props.params}}};
         let query   = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
-        let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
-        let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
-        let alsoAssignedAs = this.state.alsoAssignedAs;
+        let userDisplayName = this.state.userDisplayName || "";
+        let username = this.state.username || "";
+        let alsoAssignedAs = this.state.alsoAssignedAs || "";
+        let deActive = that.state.deActive
       const showLoader = this.state.loading;
 
       return (
@@ -206,7 +226,7 @@ class MlAssignBackendUsers extends React.Component{
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
                                           <label className="switch">
-                                              <input type="checkbox" />
+                                              <input type="checkbox" ref="deActive" checked={deActive}/>
                                               <div className="slider"></div>
                                           </label>
                                       </div>

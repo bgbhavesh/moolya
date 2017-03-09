@@ -40,7 +40,8 @@ class MlAdminAppComponent extends Component {
       }
 
       return (<MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language}>
-        <MlAdminHeader/>
+        {props.headerContent ? (props.headerContent) : (<MlAdminHeader/>)}
+        {/*<MlAdminHeader/>*/}
         <MlAdminLeftNav/>
         {props.adminContent}
       </MlAppContextProvider>)
@@ -62,6 +63,7 @@ const query = gql`fragment subMenu on Menu{
                   subMenuMappingId
                   subMenusId
                   hideSubMenu
+                  showInBreadCrum
               }
 
               query LeftNavQuery($name: String!) {

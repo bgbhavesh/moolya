@@ -13,6 +13,12 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
       return response;
     }
 
+    if(!args.user.username){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Username is required", code);
+      return response;
+    }
+
     if(Meteor.users.find({username:args.user.username}).count() > 0) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
@@ -94,6 +100,7 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
             let response = new MlRespPayload().errorPayload("Email/Username is required", code);
             return response;
           }
+         //let resp = Meteor.users.update({_id:args.userId}, {$set:{'profile':user.profile}});
           let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
           if(resp){
             let code = 200;
@@ -152,7 +159,7 @@ MlResolver.MlQueryResolver['fetchAssignedAndUnAssignedUsers'] = (obj, args, cont
   let users = [];
   if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.subChapterName !="Moolya"){
     //users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userType":'non-moolya'},]}).fetch();
-    let departments = MlDepartments.find({"$or":[{"depatmentAvailable.subChapter":args.subChapterId}, {"depatmentAvailable.subChapter":"all"}]}).fetch();
+      let departments = MlDepartments.find({"$or":[{"depatmentAvailable.subChapter":args.subChapterId}, {"depatmentAvailable.subChapter":"all"}]}).fetch();
     if(departments && departments.length > 0){
       for(var i = 0; i < departments.length; i++){
         let depusers = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id},{"profile.InternalUprofile.moolyaProfile.userType":'non-moolya'},{"profile.InternalUprofile.moolyaProfile.isActive":true}]}).fetch();
@@ -329,17 +336,39 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
 //   return roles;
 // }
 
+MlResolver.MlMutationResolver['deActivateUser'] = (obj, args, context, info) => {
+    let user = Meteor.users.findOne({_id: args.userId});
+    let resp;
+    if(user){
+        resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.deActive":args.deActive}});
+    }
+
+    if(resp){
+        resp = new MlRespPayload().successPayload("User Deactivated Successfully", 200);
+        return resp
+    }
+
+    resp = new MlRespPayload().errorPayload("Unable to deactivate", 400);
+    return resp
+}
+
 MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let moduleName = args.moduleName
   let actionName = args.actionName
   let userId = args.userId;
   let data = args.user;
   let roles  = data && data.profile && data.profile.InternalUprofile &&  data.profile.InternalUprofile.moolyaProfile.userProfiles && data.profile.InternalUprofile.moolyaProfile.userProfiles.userRoles;
+  let deActive = data.profile.deActive;
   let levelCode = ""
   if(!userId){
     let response = new MlRespPayload().errorPayload("No User Found", 404);
     return response
   }
+
+  if(deActive){
+      return MlResolver.MlMutationResolver['deActivateUser'](obj, {userId:args.userId, deActive:deActive, moduleName:args.moduleName, actionName:args.actionName}, context, info)
+  }
+
   if(!roles){
     let response = new MlRespPayload().errorPayload("No Roles Found", 404);
     return response

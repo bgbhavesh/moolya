@@ -36,7 +36,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
   }
 
   componentDidMount() {
-    const resp=this.findUserDepartments();
+    // const resp=this.findUserDepartments();
     $(function () {
       $('.float-label').jvFloat();
     });

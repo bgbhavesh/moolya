@@ -82,18 +82,17 @@ export default class MlListView extends Component {
       actionsProxyList.push(act);
     });
     }
-    return(<div>{loading?(<div className="loader_wrap"></div>):(
-      <div className="admin_padding_wrap">
+    return(<div className="admin_padding_wrap">{loading?(<div className="loader_wrap"></div>):(
       <div className="list_view_block">
         <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
       <div className="col-md-12">
-        <div className="row">
+        {/*<div className="row">*/}
           {ListComponent}
-        </div>
+        {/*</div>*/}
       </div>
-        </div>
-     {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
-    </div>)}</div>)
+    </div>)}
+      {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
+    </div>)
   }
 
 }

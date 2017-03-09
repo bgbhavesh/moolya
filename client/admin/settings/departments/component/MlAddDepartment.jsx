@@ -55,7 +55,14 @@ class MlAddDepartment extends React.Component{
 
   async handleSuccess(response) {
 
-    FlowRouter.go("/admin/settings/departmentsList");
+    //FlowRouter.go("/admin/settings/departmentsList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/admin/settings/departmentsList");
+      else
+        toastr.error(response.result);
+      FlowRouter.go("/admin/settings/departmentsList");
+    }
   };
 
   async  createDepartment() {

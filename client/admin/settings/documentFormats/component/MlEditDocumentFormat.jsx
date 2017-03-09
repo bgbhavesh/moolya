@@ -6,6 +6,7 @@ import {findDocumentFormatActionHandler} from '../actions/findDocumentFormatActi
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 class MlEditDocumentFormat extends React.Component{
   constructor(props) {
@@ -21,6 +22,12 @@ class MlEditDocumentFormat extends React.Component{
       $('#status').prop('checked', true);
     }
   }
+
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
+  }
+
   componentWillMount() {
     const resp=this.findDocument();
     return resp;
@@ -93,9 +100,9 @@ class MlEditDocumentFormat extends React.Component{
     ]
     const showLoader=this.state.loading;
     return (
-      <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="admin_main_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
+
         <div className="admin_padding_wrap">
           <h2>Edit Document Format</h2>
           <div className="col-md-6 nopadding-left">
@@ -112,13 +119,8 @@ class MlEditDocumentFormat extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
-            <div className="form_bg left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-                smoothScrolling={true}
-                default={true}
-              >
+            <div className="form_bg">
+
                 <form>
                   <div className="form-group">
                     <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docFormatDisplayName} className="form-control float-label" id=""/>
@@ -130,14 +132,14 @@ class MlEditDocumentFormat extends React.Component{
                       <div className="slider"></div>
                     </label>
                   </div>
-                  <br className="brclear"/>
+
                 </form>
-              </ScrollArea>
+
             </div>
           </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
         </div>
-      </div>)}
+      )}
       </div>
     )
   }

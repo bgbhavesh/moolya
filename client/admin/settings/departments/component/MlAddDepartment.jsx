@@ -124,6 +124,7 @@ class MlAddDepartment extends React.Component{
           <h2>Create Department</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
+              <form>
                 <div className="form-group">
                   <input type="text" ref="departmentName" placeholder="Department Name" className="form-control float-label" id=""/>
                 </div>
@@ -150,7 +151,7 @@ class MlAddDepartment extends React.Component{
                     <div className="slider"></div>
                   </label>
                 </div>*/}
-
+</form>
             </div>
           </div>
 
@@ -159,11 +160,11 @@ class MlAddDepartment extends React.Component{
               <form>
                 <div className="form-group switch_wrap switch_names">
                   <label>Select Type</label><br/>
-                  <span className="state_label">moolya</span><label className="switch nocolor-switch">
+                  <span className="state_label acLabel">moolya</span><label className="switch nocolor-switch">
                   <input type="checkbox" ref="appType" onChange={this.onStatusChange.bind(this)} />
                   <div className="slider"></div>
                 </label>
-                  <span className="state_label acLabel">non-moolya</span>
+                  <span className="state_label">non-moolya</span>
                 </div><br className="brclear"/>
 
                 {this.state.ismoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)}/>:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)}/>}

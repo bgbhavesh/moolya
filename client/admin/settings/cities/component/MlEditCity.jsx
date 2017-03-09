@@ -5,7 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findCityActionHandler} from '../actions/findCityAction'
 import {updateCityActionHandler} from '../actions/updateCityAction'
-
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlEditCity extends React.Component{
   constructor(props) {
     super(props);
@@ -18,6 +18,11 @@ class MlEditCity extends React.Component{
     if(this.state.data.isAcive){
       $('#status').prop('checked', true);
     }
+  }
+
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
 
   componentWillMount() {
@@ -94,8 +99,8 @@ class MlEditCity extends React.Component{
     const showLoader=this.state.loading;
 
     return (
-      <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):( <div className="admin_main_wrap">
+      <div className="admin_main_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_padding_wrap">
             <h2>Edit City</h2>
             <div className="col-md-6 nopadding-left">
@@ -141,7 +146,7 @@ class MlEditCity extends React.Component{
                 </form>
               </div>
             </div>
-          </div>
+
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
           />
         </div>)}

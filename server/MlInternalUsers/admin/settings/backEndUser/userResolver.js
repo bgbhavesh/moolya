@@ -3,6 +3,7 @@
  */
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
+import passwordUtil from '../../../../commons/passwordUtil'
 
 var _ = require('lodash');
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
@@ -91,7 +92,6 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
     let user = Meteor.users.findOne({_id: args.userId});
     if(user){
 
-
           for(key in args.user){
             user[key] = args.user[key]
           }
@@ -100,8 +100,18 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
             let response = new MlRespPayload().errorPayload("Email/Username is required", code);
             return response;
           }
+
+          let salted = passwordUtil.hashPassword(user.password);
+          console.log(salted);
+          // let userId=Providers.findOne({_id:providerId}).userId;
+          //let user=Meteor.users.findOne({_id:userId});
+          let result=Meteor.users.update({_id:args.userId}, {
+            $set: { "services.password.bcrypt": salted }
+          });
          //let resp = Meteor.users.update({_id:args.userId}, {$set:{'profile':user.profile}});
-          let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
+          let resp = Meteor.users.update({_id:args.userId}, {$set:{profile:user.profile}}, {upsert:true})
+         // Accounts.setPassword(args.userId, user.password);
+
           if(resp){
             let code = 200;
             let result = {user: resp};

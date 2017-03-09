@@ -72,7 +72,7 @@ export default class MlMyProfile extends React.Component{
                         <input type="file" className="upload" />
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src="/images/ideator_01.png"/>
+                        <img src="/images/def_profile.png"/>
                       </div>
                     </div>
                   </form>

@@ -35,9 +35,11 @@ module.exports = class MlRespPayload{
         // return {difference:difference, isActive:false};
         if(a1.length > a2.length)
         {
-            return {isActive: true, difference:_.difference(a1, a2)}
+            return {isActive: false, difference:_.difference(a1, a2)}
         }else if(a2.length > a1.length){
-            return {isActive: false, difference:_.difference(a2, a1)}
+            return {isActive: true, difference:_.difference(a2, a1)}
+        }else{
+          return {isActive: false, difference:[]}
         }
     }
 }

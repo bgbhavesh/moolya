@@ -168,6 +168,36 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
     }
 }
 
+MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, info) => {
+    let clusters = args.clusters;
+    let chapters = [];
+    if(clusters && clusters.length > 0){
+        clusters.map(function (clusterId) {
+              activeChapters = MlChapters.find({"$and":[{clusterId:clusterId, isActive:true}]}).fetch();
+              if(activeChapters && activeChapters.length > 0){
+                  chapters = chapters.concat(activeChapters)
+              }
+        })
+    }
+
+    return chapters;
+}
+
+MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, context, info) => {
+  let chapters = args.chapters;
+  let subChapters = [];
+  if(chapters && chapters.length > 0){
+    chapters.map(function (chapterId) {
+      activeSubChapters = MlSubChapters.find({"$and":[{chapterId:chapterId, isActive:true}]}).fetch();
+      if(activeSubChapters && activeSubChapters.length > 0){
+        subChapters = subChapters.concat(activeSubChapters)
+      }
+    })
+  }
+
+  return subChapters;
+}
+
 createSubChapter = (subChapter) =>{
     if(MlSubChapters.find({$and:[{chapterId:subChapter.chapterId}, {subChapterName:subChapter.subChapterName}]}).count() > 0){
         let code = 409;

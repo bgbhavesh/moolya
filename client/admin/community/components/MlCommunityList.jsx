@@ -21,18 +21,11 @@ export default class MlCommunityList extends Component {
   );
 
     return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
+        <div>
           <h2>Communities</h2>
-          <div className="list_view_block communities_list" >
-            <div className="col-md-12">
-              <div className="row">
-                 {list}
-              </div>
-            </div>
-          </div>
+          {list}
         </div>
-      </div>
+
     );
 
   }

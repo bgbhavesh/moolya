@@ -8,6 +8,7 @@ import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlChapterList from '../../admin/dashboard/component/MlChapterList'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import {mlClusterChapterListConfig} from '../../admin/cluster/config/mlClusterChapterConfig'
+import {mlClusterCommunityListConfig} from '../../admin/cluster/config/mlClusterCommunityConfig'
 import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlViews from '../../admin/core/components/MlViews';
@@ -31,6 +32,13 @@ adminSection.route('/clusters/:clusterId/chapters', {
   name: 'cluster_chapters',
   action(params){
     mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterChapterListConfig}/>})
+  }
+});
+
+adminSection.route('/clusters/:clusterId/communities', {
+  name: 'cluster_communities',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
   }
 });
 

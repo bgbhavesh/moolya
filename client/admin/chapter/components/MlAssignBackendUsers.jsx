@@ -47,7 +47,7 @@ class MlAssignChapterBackendUsers extends React.Component{
   componentDidUpdate(){
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-    // OnToggleSwitch(true,true);
+    OnToggleSwitch(true,true);
   }
     async findSubChapter() {
       let subChapterId = this.props.params;

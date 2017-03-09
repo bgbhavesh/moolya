@@ -137,8 +137,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         return response;
     }
 
-    handleScuccess(){
-
+    handleSuccess(){
+      this.resetBackendUers();
     }
 
     handleError(){
@@ -167,7 +167,7 @@ class MlAssignChapterBackendUsers extends React.Component{
           {
             showAction: true,
             actionName: 'add',
-            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this))
+            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this),this.handleSuccess.bind(this))
           },
           {
             showAction: true,

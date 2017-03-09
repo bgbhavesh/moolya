@@ -7,6 +7,7 @@ import AdminLayout from '../../admin/layouts/AdminLayout'
 import MlChaptersView from '../../admin/chapter/components/MlChapters'
 import MlSubChapterView from '../../admin/chapter/components/MlSubChapterListView'
 import {mlChapterMapConfig,mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
+import {mlChapterCommunitiesConfig} from '../../admin/chapter/config/mChapterCommunitiesConfig'
 import {mlSubChapterMapConfig,mlSubChapterListConfig} from '../../admin/chapter/config/mlSubChapterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
@@ -33,10 +34,10 @@ adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterNam
   }
 });
 
-adminSection.route('/chapters/:subChapterId/communities', {
+adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {
   name: 'chapter_communities',
   action(params){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlChapterCommunitiesConfig}/>})
   }
 });
 

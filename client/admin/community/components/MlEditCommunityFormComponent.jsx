@@ -17,6 +17,7 @@ class MlEditCommunityFormComponent extends React.Component {
       loading:true,data:{},
       clusters: [],
       chapters:[],
+      subchapters:[],
     }
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
@@ -40,6 +41,28 @@ class MlEditCommunityFormComponent extends React.Component {
     return resp;
   }
 
+  componentDidUpdate(){
+    $(function() {
+      $('.float-label').jvFloat();
+    });
+
+    $('input[type=checkbox]').each(function () {
+      if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
+      } else {
+        $(this).parent('.switch').removeClass('on');
+      }
+    });
+
+    $('.switch input').change(function() {
+      if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
+      }else{
+        $(this).parent('.switch').removeClass('on');
+      }
+    });
+  }
+
   async addEventHandler() {
     const resp=await this.updateCommunityAccess();
     return resp;
@@ -56,15 +79,15 @@ class MlEditCommunityFormComponent extends React.Component {
     if(response) {
       this.setState({loading:false,data:response});
       if (this.state.data.clusters) {
-        let clustersId = this.state.data.clusters;
         this.setState({clusters: this.state.data.clusters});
       }
       if (this.state.data.chapters) {
-        let chaptersId = this.state.data.chapters;
         this.setState({chapters: this.state.data.chapters});
       }
+      if (this.state.data.subchapters) {
+        this.setState({subchapters: this.state.data.subchapters});
+      }
     }
-    this.setState({loading:false,data:response});
   }
 
   async  updateCommunityAccess()
@@ -72,12 +95,12 @@ class MlEditCommunityFormComponent extends React.Component {
       let communityDetails = {
           displayName         : this.refs.displayName.value,
           aboutCommunity      : this.refs.about.value,
-          communityImageLink  : this.refs.upload.value,
           showOnMap           : this.refs.showOnMap.checked,
           isActive            : this.refs.status.checked
        }
-      let data = {moduleName:"COMMUNITY", actionName:"UPDATE", community:communityDetails, communityId:this.props.params, clusters:this.state.clusters, chapters:this.state.chapters}
-      let response = await multipartFormHandler(data, this.refs.upload.files[0]);
+      let data = {moduleName:"COMMUNITY", actionName:"UPDATE", community:communityDetails, communityId:this.props.params, clusters:this.state.clusters, chapters:this.state.chapters, subchapters:this.state.subchapters}
+      let response = await multipartFormHandler(data, null);
+      this.setState({loading:false});
       return response;
   }
 
@@ -89,8 +112,14 @@ class MlEditCommunityFormComponent extends React.Component {
 
   optionsBySelectChapters(val){
     let chapters=this.state.chapters
-    chapters[0]['id']=val;
+    chapters = val;
     this.setState({chapters:chapters})
+  }
+
+  optionsBySelectSubChapters(val){
+    let subchapters=this.state.subchapters
+    subchapters=val;
+    this.setState({subchapters:subchapters})
   }
   onStatusChange(e){
     const data=this.state.data;
@@ -105,12 +134,7 @@ class MlEditCommunityFormComponent extends React.Component {
       {
         actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-          showAction: true,
-          actionName: 'add',
-          handler: async(event) => this.props.handler(this.updateCommunityAccess.bind(this), this.handleSuccess.bind(this))
+        handler: async(event) => this.props.handler(this.updateCommunityAccess.bind(this), this.handleSuccess.bind(this))
       },
       {
         showAction: true,
@@ -120,21 +144,28 @@ class MlEditCommunityFormComponent extends React.Component {
     ]
 
     let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
-    let chapterquery=gql`query($id:String){  
-        data:fetchChapters(id:$id) {
+    let chapterquery=gql`query($clusters:[String]){  
+        data:fetchActiveClusterChapters(clusters:$clusters) {
           value:_id
           label:chapterName
         }  
-      }`;
-    let chapterOption={options: { variables: {id:this.state.clusters}}};
+    }`;
+    let subChapterquery=gql`query($chapters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+          value:_id
+          label:subChapterName
+        }  
+    }`;
+    let chapterOption={options: { variables: {clusters:this.state.clusters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters}}};
     const showLoader=this.state.loading;
     return (
-      <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="admin_main_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
+
         <div className="admin_padding_wrap">
           <h2>Edit Community Details</h2>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
                 <div className="form-group">
@@ -150,32 +181,27 @@ class MlEditCommunityFormComponent extends React.Component {
                 <div className="form-group">
                   <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
                 </div>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={true}  placeholder={"Sub Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subchapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+                </div>
               </form>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-right">
             <div className="form_bg">
-              <div className="form-group ">
-                <div className="fileUpload mlUpload_btn">
-                  <span>Upload Icon</span>
-                  <input type="file" className="upload" ref="upload"/>
-                </div>
+              <div className="form-group">
+                <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.aboutCommunity} className="form-control float-label" id="cl_about"></textarea>
               </div>
-              <br className="brclear"/>
-              <br className="brclear"/>
-              <div className="form-group switch_wrap">
-                <label>Show on map</label><br/>
+              <div className="form-group switch_wrap inline_switch">
+                <label>Show on map</label>
                 <label className="switch">
                   <input type="checkbox" ref="showOnMap"/>
                   <div className="slider"></div>
                 </label>
               </div>
               <br className="brclear"/>
-              <div className="form-group">
-                <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.aboutCommunity} className="form-control float-label" id="cl_about"></textarea>
-              </div>
-              <div className="form-group switch_wrap">
-                <label>Status</label><br/>
+              <div className="form-group switch_wrap inline_switch">
+                <label>Status</label>
                 <label className="switch">
                   <input type="checkbox" ref="status" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                   <div className="slider"></div>
@@ -183,8 +209,6 @@ class MlEditCommunityFormComponent extends React.Component {
               </div>
             </div>
           </div>
-        </div>
-
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>)}
       </div>

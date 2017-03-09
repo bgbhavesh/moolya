@@ -8,6 +8,7 @@ import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlChapterList from '../../admin/dashboard/component/MlChapterList'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import {mlClusterChapterListConfig} from '../../admin/cluster/config/mlClusterChapterConfig'
+import {mlClusterCommunityListConfig} from '../../admin/cluster/config/mlClusterCommunityConfig'
 import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
@@ -36,6 +37,13 @@ adminSection.route('/clusters/:clusterId/chapters', {
   }
 });
 
+adminSection.route('/clusters/:clusterId/communities', {
+  name: 'cluster_communities',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
+  }
+});
+
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities', {
   name: 'cluster_communities',
   action(params){
@@ -52,6 +60,12 @@ adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterNam
   name: 'cluster_chapter_subChapterDetails',
   action(params){
     mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+  }
+});
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {
+  name: 'cluster_chapter_communities',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {

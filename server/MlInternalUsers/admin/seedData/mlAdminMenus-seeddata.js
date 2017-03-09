@@ -378,7 +378,7 @@ if(Meteor.isServer){
               {
                 "link": "/admin/settings/editRoleType",
                 "name": "Edit Roles",
-                "uniqueId": "settings_EditRoleType",
+                "uniqueId": "settings_EditRole",
                 "subMenuMappingId":"settings_roles",
                 "subMenusId":"settings",
                 "isLink": true,

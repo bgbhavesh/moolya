@@ -55,6 +55,9 @@ export async function addDepartmentActionHandler(DepartmentDetails) {
       actionName:"CREATE"
     }
   })
-  const id = result.data.CreateDepartment;
+
+  const id = result.data.createDepartment;
+  console.log(result.data.createDepartment);
+  console.log("//////////////////////////");
   return id
 }

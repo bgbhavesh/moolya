@@ -35,7 +35,5 @@ export async function updateDepartmentActionHandler(DepartmentDetails) {
     }
   })
   const id = result.data.updateDepartment;
-  console.log(result.data.updateDepartment);
-  console.log("//////////////////////////");
   return id
 }

@@ -4,7 +4,7 @@
 
 
 let _ = require('lodash'),
-  adminPassword = "Admin@123",
+  adminPassword = "MoolyaAdmin@123",
   platformAdminId,
   mlModules = MlModules.find().fetch(),
   actions = MlActions.find().fetch(),
@@ -152,7 +152,9 @@ var options = {
         email:"platformadmin@moolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
-        isActive:true
+        isActive:true,
+        firstName:'Platform',
+        lastName:'Admin'
       }
     }
   },

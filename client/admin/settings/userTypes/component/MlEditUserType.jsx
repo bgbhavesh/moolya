@@ -53,7 +53,6 @@ class MlEditUserType extends React.Component{
   async updateUserType() {
     let UserTypeDetails = {
       id: this.refs.id.value,
-      userTypeName: this.refs.userTypeName.value,
       displayName: this.refs.displayName.value,
       userTypeDesc: this.refs.userTypeDesc.value,
       isActive: this.refs.isActive.checked
@@ -101,11 +100,11 @@ class MlEditUserType extends React.Component{
             <div className="form_bg">
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  <input type="text" ref="userTypeName" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.userTypeName} className="form-control float-label" id=""/>
+                  <input type="text" ref="userTypeName" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.userTypeName} className="form-control float-label"/>
 
                 </div>
                 <div className="form-group">
-                  <textarea  ref="userTypeDesc" placeholder="About" defaultValue={this.state.data&&this.state.data.userTypeDesc}className="form-control float-label" id=""></textarea>
+                  <textarea  ref="userTypeDesc" placeholder="About" defaultValue={this.state.data&&this.state.data.userTypeDesc}className="form-control float-label"></textarea>
 
                 </div>
             </div>

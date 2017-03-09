@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
 import {mlRoleTypeTableConfig} from "../config/mlRoleTypeConfig";
-export default class MlRoleList extends Component {
+export default class MlRoleTypeList extends Component {
 
   componentDidMount() {
   }
@@ -11,7 +11,7 @@ export default class MlRoleList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Roles List</h2>
+          <h2>Role Type List</h2>
 
           <MlTableViewContainer {...mlRoleTypeTableConfig}/>
 

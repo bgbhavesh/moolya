@@ -15,26 +15,26 @@ const mlClusterListConfig=new MlViewer.View({
   sort:true,
   showActionComponent:true,
   actionConfiguration:[
-    {
-      actionName: 'edit',
-      showAction: true,
-      handler:  (data)=>{
-        if(data&&data.id){
-          // FlowRouter.go("/admin/settings/editCitizenship/"+data.id)
-        }
-        else{
-          // alert("Please select a Citizenship to edit")
-        }
-      }
-
-    },
-    {
-      showAction: true,
-      actionName: 'add',
-      handler: (data)=>{
-        // FlowRouter.go("/admin/settings/addCitizenship")
-      }
-    },
+    // {
+    //   actionName: 'edit',
+    //   showAction: true,
+    //   handler:  (data)=>{
+    //     if(data&&data.id){
+    //       // FlowRouter.go("/admin/settings/editCitizenship/"+data.id)
+    //     }
+    //     else{
+    //       // alert("Please select a Citizenship to edit")
+    //     }
+    //   }
+    //
+    // },
+    // {
+    //   showAction: true,
+    //   actionName: 'add',
+    //   handler: (data)=>{
+    //     // FlowRouter.go("/admin/settings/addCitizenship")
+    //   }
+    // },
     {
       showAction: true,
       actionName: 'logout',

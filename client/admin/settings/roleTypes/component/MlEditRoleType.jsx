@@ -178,7 +178,7 @@ class MlEditRole extends React.Component {
         </div>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Edit Role</h2>
+              <h2>Edit Roles & Permissions</h2>
               <div className="col-md-6 nopadding-left">
                 <div className="left_wrap">
                   <ScrollArea

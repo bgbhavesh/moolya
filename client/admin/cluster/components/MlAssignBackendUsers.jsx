@@ -30,7 +30,9 @@ class MlAssignBackendUsers extends React.Component{
             cluster:{},
             alsoAssignedAs:[],
             selectedBackendUser:'',
-            users:[{username: '', _id:''}]
+            users:[{username: '', _id:''}],
+            userDisplayName: '',
+            username: '',
         }
 
         this.addEventHandler.bind(this);
@@ -56,8 +58,8 @@ class MlAssignBackendUsers extends React.Component{
 
     optionsBySelectUser(index, selectedIndex){
         this.setState({loading: true});
-        this.setState({selectedBackendUser:index})
-        const resp= this.findUserDetails(index);
+        this.setState({selectedBackendUser: index})
+        const resp = this.findUserDetails(index);
         // this.findRoleDetails();
     }
 
@@ -74,11 +76,27 @@ class MlAssignBackendUsers extends React.Component{
 
     async findUserDetails(userId){
       const user = await findUserDetails(userId);
-      let that = this;
-      this.setState({loading: false,userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile, deActive:user.profile.deActive});
-      this.find_Cluster_Roles(userId, that.props.params);
-      this.findRoleDetails();
-      return user;
+      if(userId != ""){
+        let that = this;
+        this.setState({
+          loading: false,
+          userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile,
+          userDisplayName:user.profile.InternalUprofile.moolyaProfile.displayName,
+          username:user.profile.InternalUprofile.moolyaProfile.email,
+          deActive:user.profile.deActive
+        });
+        this.find_Cluster_Roles(userId, that.props.params);
+        this.findRoleDetails();
+        return user;
+      } else {
+        this.setState({
+          userDisplayName:'',
+          username:'',
+          alsoAssignedAs:[],
+          deActive:false,
+          loading: false,
+        });
+      }
     }
   async find_Cluster_Roles(userId, clusterId){
     const userProfile = await findCluster_Roles(userId, clusterId);
@@ -112,7 +130,7 @@ class MlAssignBackendUsers extends React.Component{
         return response;
     }
 
-    handleScuccess(){
+    handleSuccess(){
 
     }
 
@@ -125,6 +143,11 @@ class MlAssignBackendUsers extends React.Component{
     this.setState({loading: true});
     const resp= this.findUserDetails(userId);
     // this.findRoleDetails();
+  }
+  resetBackendUers(){
+    this.setState({loading: true});
+    this.setState({selectedBackendUser: ''})
+    this.findUserDetails('');
   }
 
     render(){
@@ -149,10 +172,10 @@ class MlAssignBackendUsers extends React.Component{
         let queryOptions = {options: { variables: {clusterId:that.props.params}}};
         let query   = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
         let userid  = this.state.selectedBackendUser||"";
-        let userDisplayName = that.state.userMoolyaProfile && that.state.userMoolyaProfile.displayName? that.state.userMoolyaProfile.displayName: "";
+        let userDisplayName = this.state.userDisplayName || "";
+        let username = this.state.username || "";
+        let alsoAssignedAs = this.state.alsoAssignedAs || [];
         let deActive = that.state.deActive
-        let username = that.state.userMoolyaProfile && that.state.userMoolyaProfile.email? that.state.userMoolyaProfile.email: "";
-        let alsoAssignedAs = this.state.alsoAssignedAs;
       const showLoader = this.state.loading;
 
       return (
@@ -164,7 +187,7 @@ class MlAssignBackendUsers extends React.Component{
                           <div className="row">
                               <div className="left_wrap left_user_blocks">
                                   <ScrollArea speed={0.8} className="left_wrap">
-                                      <div className="col-md-4 col-sm-4">
+                                      <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
                                           <div className="list_block provider_block">
                                               <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
                                               <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>

@@ -147,7 +147,7 @@ class MlAddRole extends React.Component{
    return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Create Role</h2>
+          <h2>Create Roles & Permissions</h2>
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea

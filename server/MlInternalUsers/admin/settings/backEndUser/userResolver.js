@@ -94,6 +94,7 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
             let response = new MlRespPayload().errorPayload("Email/Username is required", code);
             return response;
           }
+         //let resp = Meteor.users.update({_id:args.userId}, {$set:{'profile':user.profile}});
           let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
           if(resp){
             let code = 200;

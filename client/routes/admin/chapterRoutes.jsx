@@ -12,6 +12,7 @@ import {mlSubChapterMapConfig,mlSubChapterListConfig} from '../../admin/chapter/
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
 import MlViews from '../../admin/core/components/MlViews';
+import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 adminSection.route('/chapters/', {
   name: 'chapter_chapters',
@@ -23,27 +24,27 @@ adminSection.route('/chapters/', {
 adminSection.route('/chapters/:clusterId/:chapterId/subChapters', {
   name: 'chapter_subChapters',
   action(params){
-    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlSubChapterMapConfig} listConfig={mlSubChapterListConfig} params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlSubChapterMapConfig} listConfig={mlSubChapterListConfig} params={params}/>})
   }
 });
 
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
   name: 'chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
 
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {
   name: 'chapter_communities',
   action(params){
-    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlChapterCommunitiesConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlChapterCommunitiesConfig}/>})
   }
 });
 
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
   name: 'chapter_assignusers',
   action(params){
-    mount(AdminLayout,{adminContent:< MlAssignChapterBackendUsers params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlAssignChapterBackendUsers params={params}/>})
   }
 });

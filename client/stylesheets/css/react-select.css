@@ -1,9 +1,6 @@
 /**
  * React Select
  * ============
- * Created by Jed Watson and Joss Mackison for KeystoneJS, http://www.keystonejs.com/
- * https://twitter.com/jedwatson https://twitter.com/jossmackison https://twitter.com/keystonejs
- * MIT License: https://github.com/JedWatson/react-select
 */
 .Select {
   position: relative;
@@ -46,7 +43,7 @@
   /*box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);*/
 }
 .Select-control .Select-input:focus {
-  
+
 }
 .is-searchable.is-open > .Select-control {
   cursor: text;
@@ -106,7 +103,7 @@
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:hover,
 .has-value.Select--single > .Select-control .Select-value a.Select-value-label:focus,
 .has-value.is-pseudo-focused.Select--single > .Select-control .Select-value a.Select-value-label:focus {
-  
+
 }
 .Select-input {
   height: 34px;
@@ -277,9 +274,7 @@
   color: #333;
 }
 .Select-option.is-focused {
-  background-color: #ebf5ff;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.08);
+  background-color: #f5ecec;
   color: #333;
 }
 .Select-option.is-disabled {
@@ -295,27 +290,26 @@
 }
 .Select--multi .Select-input {
   vertical-align: middle;
-  margin-left: 10px;
+  margin-left: 0px;
   padding: 0;
 }
 .Select--multi.has-value .Select-input {
   margin-left: 5px;
 }
 .Select--multi .Select-value {
-  background-color: #ebf5ff;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.08);
+  background-color: #273545;
+
   border-radius: 2px;
-  border: 1px solid #c2e0ff;
-  /* Fallback color for IE 8 */
-  border: 1px solid rgba(0, 126, 255, 0.24);
-  color: #007eff;
+  border: 1px solid #273545;
+
+  color: #fff;
   display: inline-block;
   font-size: 0.9em;
   line-height: 1.4;
-  margin-left: 5px;
+  margin-right: 5px;
   margin-top: 5px;
   vertical-align: top;
+  text-shadow: none;
 }
 .Select--multi .Select-value-icon,
 .Select--multi .Select-value-label {
@@ -340,17 +334,14 @@
   cursor: pointer;
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
-  border-right: 1px solid #c2e0ff;
-  /* Fallback color for IE 8 */
-  border-right: 1px solid rgba(0, 126, 255, 0.24);
+  border-right: 1px solid #222;
+
   padding: 1px 5px 3px;
 }
 .Select--multi .Select-value-icon:hover,
 .Select--multi .Select-value-icon:focus {
-  background-color: #d8eafd;
-  /* Fallback color for IE 8 */
-  background-color: rgba(0, 113, 230, 0.08);
-  color: #0071e6;
+  background-color: #273545;
+  color: #fff;
 }
 .Select--multi .Select-value-icon:active {
   background-color: #c2e0ff;

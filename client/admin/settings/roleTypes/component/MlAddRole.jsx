@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
-import {findRoleActionHandler} from '../actions/findRoleAction'
+// import {findRoleActionHandler} from '../actions/findRoleAction'
 import {addRoleActionHandler} from '../actions/addRoleAction'
 import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'
@@ -71,11 +71,11 @@ class MlAddRole extends React.Component{
     console.log(this.state.assignRoleToClusters)
   }
 
-  async findRole(){
-    let roleId=this.props.config;
-    const response = await findRoleActionHandler(roleId);
-    this.setState({loading:false,data:response});
-  }
+  // async findRole(){
+  //   let roleId=this.props.config;
+  //   const response = await findRoleActionHandler(roleId);
+  //   this.setState({loading:false,data:response});
+  // }
 
   async  addRole() {
     let roleDetails = {
@@ -87,7 +87,7 @@ class MlAddRole extends React.Component{
       about:this.refs.about.value,
       assignRoles:this.state.assignRoleToClusters,
       modules:this.state.assignModulesToRoles,
-      isActive:this.refs.status.checked
+      isActive:this.refs.isActive.checked
     };
     const response = await addRoleActionHandler(roleDetails)
     return response;
@@ -96,7 +96,6 @@ class MlAddRole extends React.Component{
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
   }
-
 
   onUserTypeSelect(val){
     this.setState({selectedUserType:val.value})
@@ -185,7 +184,7 @@ class MlAddRole extends React.Component{
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>
                       <label className="switch">
-                        <input type="checkbox" ref="status"/>
+                        <input type="checkbox" ref="isActive" />
                         <div className="slider"></div>
                       </label>
                     </div>

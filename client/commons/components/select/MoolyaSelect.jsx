@@ -77,7 +77,6 @@ export default class MoolyaSelect extends Component {
     selectionOptionsPromise.then(data =>{
       if(queryCallbackHandler){
         queryCallbackHandler(data.data.data);
-        console.log(data.data.data);
       }
     })
   };

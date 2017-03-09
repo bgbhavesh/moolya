@@ -159,10 +159,10 @@ class MlEditDepartment extends React.Component{
                 </div>
 
                 <div className="form-group">
-                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="diplay Name" className="form-control float-label" id=""></input>
+                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""></input>
                 </div>
                 <div className="form-group">
-                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="about Depatment" className="form-control float-label" id=""></textarea>
+                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="About Department" className="form-control float-label" id=""></textarea>
                 </div>
 
                 <div className="form-group switch_wrap">

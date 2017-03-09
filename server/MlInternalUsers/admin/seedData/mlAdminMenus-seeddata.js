@@ -350,7 +350,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/rolesList",
-            "name" : "Roles",
+            "name" : "Roles & Permissions",
             "uniqueId" : "settings_roles",
             "isLink" : true,
             "isMenu" : true,

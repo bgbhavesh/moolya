@@ -33,7 +33,6 @@ class MlAssignBackendUsers extends React.Component{
             users:[{username: '', _id:''}],
             userDisplayName: '',
             username: '',
-            alsoAssignedAs: '',
         }
 
         this.addEventHandler.bind(this);
@@ -93,7 +92,7 @@ class MlAssignBackendUsers extends React.Component{
         this.setState({
           userDisplayName:'',
           username:'',
-          alsoAssignedAs:'',
+          alsoAssignedAs:[],
           deActive:false,
           loading: false,
         });
@@ -175,7 +174,7 @@ class MlAssignBackendUsers extends React.Component{
         let userid  = this.state.selectedBackendUser||"";
         let userDisplayName = this.state.userDisplayName || "";
         let username = this.state.username || "";
-        let alsoAssignedAs = this.state.alsoAssignedAs || "";
+        let alsoAssignedAs = this.state.alsoAssignedAs || [];
         let deActive = that.state.deActive
       const showLoader = this.state.loading;
 

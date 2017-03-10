@@ -98,8 +98,18 @@ MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
   if (args.id) {
-    var id= args.id;
-    let response= MlChapters.find({"clusterId":id}).fetch()||[];
+    let id= args.id;
+    let response = [];
+    if(id == "All"){
+      response= MlChapters.find({}).fetch()||[];
+      response.push({"chapterName" : "All","_id" : "All"});
+    }else{
+      response= MlChapters.find({"clusterId":id}).fetch()||[];
+      if(response.length > 1){
+        response.push({"chapterName" : "All","_id" : "All"});
+      }
+    }
+
     return response;
   }
 }
@@ -129,7 +139,19 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
+  //let result=MlSubChapters.find({chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
+  let id = args.id || "";
+  let result = [];
+  if(args.id == "All"){
+      result=MlSubChapters.find({} && {subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
+      result.push({"subChapterName" : "All","_id" : "All"});
+  }else{
+       result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
+      if(result.length > 1){
+           result.push({"subChapterName" : "All","_id" : "All"});
+      }
+  }
+
   return result
 }
 

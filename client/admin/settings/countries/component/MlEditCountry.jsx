@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findCountryActionHandler} from '../actions/findCountryAction'
 import {updateCountryActionHandler} from '../actions/updateCountryAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 class MlEditCountry extends React.Component{
   constructor(props) {
@@ -23,6 +24,11 @@ class MlEditCountry extends React.Component{
   componentWillMount() {
     const resp=this.findCountry();
     return resp;
+  }
+
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {
@@ -93,8 +99,8 @@ class MlEditCountry extends React.Component{
     ]
     const showLoader=this.state.loading;
     return (
-      <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):( <div className="admin_main_wrap">
+      <div className="admin_main_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
             <div className="admin_padding_wrap">
               <h2>Edit Country</h2>
               <div className="col-md-6 nopadding-left">
@@ -119,10 +125,10 @@ class MlEditCountry extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group ">
-                      <div className="fileUpload mlUpload_btn">
+                      {/*<div className="fileUpload mlUpload_btn">
                         <span>Upload Image</span>
                         <input type="file" className="upload" />
-                      </div>
+                      </div>*/}
                       <div className="previewImg">
                         <img ref="url" src={this.state.url}/>
                       </div>
@@ -142,7 +148,7 @@ class MlEditCountry extends React.Component{
                   </form>
                 </div>
               </div>
-            </div>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
             />
         </div>)}

@@ -17,6 +17,12 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) =>{
   }
 
     let role = args.role;
+
+    if(!role.roleName){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Rolename is required", code);
+      return response;
+    }
     if(MlClusters.find({roleName:role.roleName}).count() > 0){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
@@ -47,6 +53,12 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
     if (!isValidAuth) {
       let code = 401;
       let response = new MlRespPayload().errorPayload("Not Authorized", code);
+      return response;
+    }
+
+    if(!args.role.roleName){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Rolename is required", code);
       return response;
     }
 

@@ -12,6 +12,7 @@ import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
 import ScrollArea from 'react-scrollbar';
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlEditSubDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -30,6 +31,14 @@ class MlEditSubDepartment extends React.Component{
   componentWillMount() {
     const resp=this.findSubDepartment();
       return resp;
+  }
+
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {
@@ -137,14 +146,21 @@ class MlEditSubDepartment extends React.Component{
       }
     ]
     const showLoader=this.state.loading;
-    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
+    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:departmentName}}`;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_main_wrap">
+
             <div className="admin_padding_wrap">
               <h2>Edit Sub Department</h2>
-              <div className="col-md-6 nopadding-left">
+              <div className="main_wrap_scroll">
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
@@ -166,14 +182,8 @@ class MlEditSubDepartment extends React.Component{
                   </form>
                 </div>
               </div>
-              <div className="col-md-6 nopadding-right">
-                <div className="form_bg left_wrap">
-                  <ScrollArea
-                    speed={0.8}
-                    className="left_wrap"
-                    smoothScrolling={true}
-                    default={true}
-                  >
+                <div className="col-md-6 nopadding-right">
+                <div className="form_bg">
                     <form>
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} disabled={true} selectedValue={this.state.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'} onSelect={this.optionsBySelectDepartment.bind(this)} />
@@ -190,11 +200,14 @@ class MlEditSubDepartment extends React.Component{
                         {this.state.data&&this.state.data.isMoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.subDepatmentAvailable} />:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.subDepatmentAvailable}/>}
                       </div> )}
                     </form>
+
+                </div>
+
+
+            </div>
                   </ScrollArea>
                 </div>
-              </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
-            </div>
           </div>
         )}
       </div>

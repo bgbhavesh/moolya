@@ -98,7 +98,7 @@ class MlAddSubDepartment extends React.Component{
         }
       ]
     const showLoader=this.state.loading;
-    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
+    let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:departmentName}}`;
 
       return (
           <div className="admin_main_wrap">
@@ -141,7 +141,7 @@ class MlAddSubDepartment extends React.Component{
                                 {this.state.data!=''&&(<div>
                                 <div className="form-group switch_wrap switch_names" disabled="true">
                                   <label>Select Type</label><br/>
-                                  <span className="state_label acLabel">moolya</span><label className="switch">
+                                  <span className="state_label acLabel">moolya</span><label className="switch nocolor-switch">
                                   <input type="checkbox" ref="appType" checked={this.state.data&&this.state.data.isMoolya} disabled="true"/>
                                   <div className="slider"></div>
                                 </label>

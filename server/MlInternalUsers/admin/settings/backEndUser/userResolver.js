@@ -101,13 +101,13 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
             return response;
           }
 
-          let salted = passwordUtil.hashPassword(user.password);
+         /* let salted = passwordUtil.hashPassword(user.password);
           console.log(salted);
           // let userId=Providers.findOne({_id:providerId}).userId;
           //let user=Meteor.users.findOne({_id:userId});
           let result=Meteor.users.update({_id:args.userId}, {
             $set: { "services.password.bcrypt": salted }
-          });
+          });*/
          //let resp = Meteor.users.update({_id:args.userId}, {$set:{'profile':user.profile}});
           let resp = Meteor.users.update({_id:args.userId}, {$set:{profile:user.profile}}, {upsert:true})
          // Accounts.setPassword(args.userId, user.password);

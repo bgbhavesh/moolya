@@ -331,6 +331,37 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
     }
 }
 
+MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {
+  let communitiesDef = MlCommunityAccess.find({"subChapterId":args.subChapterId}).fetch()
+  for(var i = 0; i < communitiesDef.length; i++){
+    if(communitiesDef[i]){
+      let community = {
+        communityName:communitiesDef[i].communityDefName,
+        communityDisplayName:communitiesDef[i].communityDefName,
+        communityDescription:"",
+        communityDefId:communitiesDef[i].communityDefId,
+        communityDefCode:communitiesDef[i].communityDefCode,
+        communityDefName:communitiesDef[i].communityDefName,
+        communityAccessId:communitiesDef[i]._id,
+        clusterId:args.clusterId,
+        clusterName:args.clusterName,
+        chapterId:args.chapterId,
+        chapterName:args.chapterName,
+        subChapterId:args.subChapterId,
+        subChapterName:args.subChapterName,
+        communityCode:communitiesDef[i].communityDefCode,
+        communityImageLink:communitiesDef[i].communityImageLink,
+        showOnMap:communitiesDef[i].showOnMap,
+        isActive:communitiesDef[i].isActive,
+        hierarchyLevel:communitiesDef[i].hierarchyLevel,
+        hierarchyCode:communitiesDef[i].hierarchyCode
+      }
+
+      MlCommunity.insert(community)
+    }
+  }
+}
+
 MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) => {
     let doEdit = false
     let query,
@@ -436,6 +467,7 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
 
         subchapters.difference.map(function(subChapterId){
           resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
+          resp = MlCommunity.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
         })
 
         if(resp)

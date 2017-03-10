@@ -11,10 +11,66 @@ export default class MapDetails extends Component {
     const mapData=this.props.data&&this.props.data.length>0?this.props.data:[];
 
     const mapDataList=mapData.map(function(m) {
-      return ( <li key={m.key}> <img src="/images/hover_image.png" /><div className="hex_btn2 hex_btn_in2">{m.count}</div></li>)
+      if(m.key == "ideators"){
+        return (
+          <li key={m.key}>
+            <span className="ml ml-ideator"></span>
+            <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+          </li>
+        )
+      }
+      if(m.key == "funders"){
+        return (
+          <li key={m.key}>
+            <span className="ml ml-funder"></span>
+            <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+          </li>
+        )
+      }
+      if(m.key == "startups"){
+        return (
+          <li key={m.key}>
+            <span className="ml ml-startup"></span>
+            <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+          </li>
+        )
+      }
+      if(m.key == "institutions"){
+        return (
+          <li key={m.key}>
+            <span className="ml ml-institutions"></span>
+            <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+          </li>
+        )
+      }
+      if(m.key == "serviceproviders"){
+        return (
+          <li key={m.key}>
+            <span className="ml ml-users"></span>
+            <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+          </li>
+        )
+      }
+      if(m.key == "companies"){
+        return (
+          <li key={m.key}>
+            <span className="ml ml-company"></span>
+            <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+          </li>
+        )
+      }
+      if(m.key == "others"){
+        return (
+          <li key={m.key}>
+            <span className="ml ml-moolya-symbol"></span>
+            <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+          </li>
+        )
+      }
+
     });
 
-    return (<div>
+    return (
       <div className="chapter_map_hover">
         <div className="chapter_map_hover_content">
           {/*<h2>{this.props.allData.text}</h2>*/}
@@ -23,6 +79,6 @@ export default class MapDetails extends Component {
           </ul>
         </div>
       </div>
-      </div>);
+      );
   }
 }

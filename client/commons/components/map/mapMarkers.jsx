@@ -102,7 +102,8 @@ export default class MapMarkers extends Component {
                           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
                           onClick={this.markerClickHandler.bind(this, this.props)}>
           <div className="hex_btn hex_btn_in">
-            <span><img src="/images/hover_image.png"/><b>{this.props.text}</b></span>
+            <span>
+              <b>{this.props.text}</b></span>
             <div className="indec"></div>
           </div>
           {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
@@ -113,7 +114,8 @@ export default class MapMarkers extends Component {
                           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
                           onClick={this.markerClickHandler.bind(this, this.props)}>
         <div className="hex_btn hex_btn_in">
-          <span><img src="/images/hover_image.png"/><b>{this.props.text}</b></span>
+          <span>
+            <b>{this.props.text}</b></span>
           <div className="indec"></div>
         </div>
         {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}

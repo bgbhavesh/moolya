@@ -112,6 +112,7 @@ class MlEditBackendUser extends React.Component{
            for(let j=0;j<userRole.length;j++){
              let json={
                roleId:userRole[j].roleId,
+               roleName:userRole[j].roleName,
                clusterId:userRole[j].clusterId,
                chapterId:userRole[j].chapterId,
                validFrom:userRole[j].validFrom,
@@ -127,6 +128,7 @@ class MlEditBackendUser extends React.Component{
          let json={
            isDefault:userProfiles[i].isDefault,
            clusterId:userProfiles[i].clusterId,
+           clusterName:userProfiles[i].clusterName,
            userRoles:userRolesDetails
          }
            userProfilesDetails.push(json)
@@ -186,23 +188,32 @@ class MlEditBackendUser extends React.Component{
     let dataDetails=this.state.data
     let userprofiles=[]
     if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
-      userprofiles=this.state.userProfiles;
-     /* let userRoles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0].userRoles
-      let userroles=[{
-        roleId:this.state.roleId,
-        clusterId:this.state.clusterId,
-        chapterId:this.state.chapterId,
-        subChapterId:this.state.subChapterId,
-        communityId:this.state.communityId,
-        isActive: userRoles[0].isActive,
-        hierarchyLevel:userRoles[0].hierarchyLevel
-
-      }]
-      userprofiles=[{
-        isDefault: this.state.isDefault,
-        clusterId: this.state.clusterId,
-        userRoles:userroles
-      }]*/
+      let userProfilesDetails=this.state.userProfiles;
+      for(let i=0;i<userProfilesDetails.length;i++){
+        let userRolesDetails=[]
+        let userRole=userProfilesDetails[i].userRoles
+        for(let j=0;j<userRole.length;j++){
+          let json={
+            roleId:userRole[j].roleId,
+            clusterId:userRole[j].clusterId,
+            chapterId:userRole[j].chapterId,
+            validFrom:userRole[j].validFrom,
+            validTo:userRole[j].validTo,
+            subChapterId:userRole[j].subChapterId,
+            communityId:userRole[j].communityId,
+            isActive:userRole[j].isActive,
+            hierarchyLevel:userRole[j].hierarchyLevel,
+            hierarchyCode:userRole[j].hierarchyCode
+          }
+          userRolesDetails.push(json)
+        }
+        let json={
+          isDefault:userProfilesDetails[i].isDefault,
+          clusterId:userProfilesDetails[i].clusterId,
+          userRoles:userRolesDetails
+        }
+        userprofiles.push(json)
+      }
     }
 
 
@@ -244,6 +255,19 @@ class MlEditBackendUser extends React.Component{
     }
     const response = await updateBackendUserActionHandler(updateUserObject)
     return response;
+  }
+
+  async  resetPassword() {
+    let userObject={
+      password:this.refs.confirmPassword.value
+    }
+    console.log(userObject)
+    let updateUserObject={
+      userId:this.refs.id.value,
+      userObject:userObject
+    }
+    const response = await updateBackendUserActionHandler(updateUserObject)
+    toastr.error(response.result);
   }
 
   getAssignedDepartments(departments){
@@ -383,7 +407,7 @@ class MlEditBackendUser extends React.Component{
                   <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
                   <FontAwesome name='eye' className="password_icon ConfirmPassword"/>
                 </div>
-                  <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
+                  <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
                   <MlAssignDepartmentComponent getAssignedDepartments={that.getAssignedDepartments.bind(that)} selectedBackendUserType={that.state.selectedBackendUserType} selectedSubChapter={that.state.selectedSubChapter} departments={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />
                   </form>
@@ -433,7 +457,7 @@ class MlEditBackendUser extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group">
-                      <input type="text" ref="cluster"  placeholder="Cluster" value={userProfiles.clusterId}  className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="cluster"  placeholder="Cluster" value={userProfiles.clusterName}  className="form-control float-label" id="" disabled="true"/>
                       </div>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
@@ -449,7 +473,7 @@ class MlEditBackendUser extends React.Component{
                               <input type="text" ref="subDepartment" value={userRoles.communityId}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="role" value={userRoles.roleId}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="role" value={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
                             </div>
                           </div>
                         )

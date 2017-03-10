@@ -38,8 +38,10 @@ export async function findBackendUserActionHandler(userTypeId) {
                   userProfiles{
                     isDefault,
                     clusterId,
+                    clusterName,
                     userRoles{
                       roleId,
+                      roleName,
                       clusterId,
                       chapterId,
                       validFrom,

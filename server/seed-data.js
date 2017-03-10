@@ -161,10 +161,12 @@ var options = {
         firstName:'Platform',
         lastName:'Admin'
       }
-    }
+    },
+    isSystemDefined: true
   },
   username: 'platformadmin@moolya.com',
-  password: adminPassword,
+  password: adminPassword
+
 };
 
 var userObj = Meteor.users.findOne({username: "platformadmin@moolya.com"});

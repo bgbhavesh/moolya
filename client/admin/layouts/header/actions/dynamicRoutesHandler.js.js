@@ -15,6 +15,17 @@ export default function dynamicLinkHandler(path,params,queryParams){
       return '';
     },
 
+    "dashboard_communities":function(params,queryParams){
+        let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")&&_.has(dynamicParams,"chapterId")&&_.has(dynamicParams,"subChapterId")){
+        return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/communities`;
+      }
+      else{
+        return '/admin/dashboard/communities';
+      }
+      return '';
+    },
+
     "cluster_clusterDetails":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")){

@@ -8,7 +8,7 @@ import MlClusterDetails from '../../admin/cluster/components/MlClusterDetails'
 import MlChapterList from '../../admin/dashboard/component/MlChapterList'
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 import {mlClusterChapterListConfig} from '../../admin/cluster/config/mlClusterChapterConfig'
-import {mlClusterCommunityListConfig} from '../../admin/cluster/config/mlClusterCommunityConfig'
+import {mlClusterCommunityListConfig, mlClusterChapterCommunityListConfig} from '../../admin/cluster/config/mlClusterCommunityConfig'
 import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
@@ -66,7 +66,7 @@ adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterNam
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {
   name: 'cluster_chapter_communities',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterChapterCommunityListConfig}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {

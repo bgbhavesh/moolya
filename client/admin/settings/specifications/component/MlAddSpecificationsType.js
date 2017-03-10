@@ -13,8 +13,7 @@ class MlAddSpecification extends React.Component{
     this.createSpecification.bind(this)
     return this;
   }
-  componentDidMount()
-  {
+  componentDidMount()  {
     OnToggleSwitch(false,true);
     initalizeFloatLabel();
   }

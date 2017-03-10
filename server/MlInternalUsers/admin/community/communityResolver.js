@@ -322,7 +322,6 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
                 hierarchyLevel:hierarchy.level,
                 hierarchyCode:hierarchy.code
             }
-
             MlCommunityAccess.insert(community)
         }
     }

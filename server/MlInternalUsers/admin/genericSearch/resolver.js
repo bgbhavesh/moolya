@@ -264,24 +264,22 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       let hirarichyLevel=[]
       let userProfiles=doc&&doc.profile.InternalUprofile.moolyaProfile.userProfiles?doc.profile.InternalUprofile.moolyaProfile.userProfiles:[];
       userProfiles.map(function (doc,index) {
-      let  userRoles=doc&&doc.userRoles?doc.userRoles:[];
-        userRoles.map(function (doc,index) {
-          hirarichyLevel.push(doc.hierarchyLevel)
+        if(doc.isDefault) {
+          let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+          userRoles.map(function (doc, index) {
+            hirarichyLevel.push(doc.hierarchyLevel)
 
-        });
-        hirarichyLevel.sort(function(a, b){return b-a});
-        for(let i=0;i<userRoles.length;i++){
-          if(userRoles[i].hierarchyLevel==hirarichyLevel[0]) {
-            roleIds.push(userRoles[i].roleId);
-            break
+          });
+          hirarichyLevel.sort(function (a, b) {
+            return b - a
+          });
+          for (let i = 0; i < userRoles.length; i++) {
+            if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
+              roleIds.push(userRoles[i].roleId);
+              break
+            }
           }
         }
-      /*  userRoles.map(function (doc,index) {
-          if(doc.hierarchyLevel===hirarichyLevel[0]) {
-            roleIds.push(doc.roleId);
-            "<br>"
-          }
-        });*/
       });
 
 

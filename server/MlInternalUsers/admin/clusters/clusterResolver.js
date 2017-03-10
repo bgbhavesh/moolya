@@ -104,7 +104,7 @@ MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) => {
   let result = [];
   let clusterData = MlClusters.find({isActive:true}).fetch()||[];
-  if(clusterData.length>1){
+  if(clusterData.length>0){
     result = clusterData;
     result.push({"countryName" : "All", "_id" : "All"});
   }

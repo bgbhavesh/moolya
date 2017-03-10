@@ -154,82 +154,65 @@ class MlEditBackendUser extends React.Component{
   }
 
   async  updateBackendUser() {
-    let firstName= this.refs.firstName.value;
-    let lastName= this.refs.lastName.value;
-    let email = this.refs.email.value;
-    let departments=this.state.mlAssignDepartmentDetails[0].department
-    if(!firstName){
-      toastr.error("First Name is required");
+    let dataDetails=this.state.data
+    let userprofiles=[]
+    if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
+      let userRoles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0].userRoles
+      let userroles=[{
+        roleId:this.state.roleId,
+        clusterId:this.state.clusterId,
+        chapterId:this.state.chapterId,
+        subChapterId:this.state.subChapterId,
+        communityId:this.state.communityId,
+        isActive: userRoles[0].isActive,
+        hierarchyLevel:userRoles[0].hierarchyLevel
+      }]
+      userprofiles=[{
+        isDefault: this.state.isDefault,
+        clusterId: this.state.clusterId,
+        userRoles:userroles
+      }]
     }
-    else if(!lastName){
-      toastr.error("Last Name is required");
+
+
+    let moolyaProfile = {
+      firstName: this.refs.firstName.value,
+      middleName: this.refs.middleName.value,
+      lastName: this.refs.lastName.value,
+      userType:this.state.selectedBackendUserType,
+      subChapter:this.state.selectedSubChapter,
+      roleType:this.state.selectedBackendUser,
+      assignedDepartment:this.state.mlAssignDepartmentDetails,
+      displayName:this.refs.displayName.value,
+      email:this.refs.email.value,
+      contact:this.state.mlAssignContactDetails,
+      globalAssignment:this.refs.globalAssignment.checked,
+      isActive:this.refs.isActive.checked,
+      userProfiles:userprofiles
     }
-    else if (!email) {
-      toastr.error("Need to set a username or email")
-
-    } else if(!departments){
-      toastr.error("Assign Department is required")
-    }else {
-      let dataDetails = this.state.data
-      let userprofiles = []
-      if (dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]) {
-        let userRoles = dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0].userRoles
-        let userroles = [{
-          roleId: this.state.roleId,
-          clusterId: this.state.clusterId,
-          chapterId: this.state.chapterId,
-          subChapterId: this.state.subChapterId,
-          communityId: this.state.communityId,
-          isActive: userRoles[0].isActive,
-          hierarchyLevel: userRoles[0].hierarchyLevel
-        }]
-        userprofiles = [{
-          isDefault: this.state.isDefault,
-          clusterId: this.state.clusterId,
-          userRoles: userroles
-        }]
-      }
-
-
-      let moolyaProfile = {
-        firstName: this.refs.firstName.value,
-        middleName: this.refs.middleName.value,
-        lastName: this.refs.lastName.value,
-        userType: this.state.selectedBackendUserType,
-        subChapter: this.state.selectedSubChapter,
-        roleType: this.state.selectedBackendUser,
-        assignedDepartment: this.state.mlAssignDepartmentDetails,
-        displayName: this.refs.displayName.value,
-        email: this.refs.email.value,
-        contact: this.state.mlAssignContactDetails,
-        globalAssignment: this.refs.globalAssignment.checked,
-        isActive: this.refs.isActive.checked,
-        userProfiles: userprofiles
-      }
-      let InternalUprofile = {
-        moolyaProfile: moolyaProfile
-      }
-      let profile = {
-        isInternaluser: true,
-        isExternaluser: false,
-        email: this.refs.email.value,
-        InternalUprofile: InternalUprofile
-      }
-      let userObject = {
-        username: moolyaProfile.email,
-        password: this.state.data.profile.InternalUprofile.moolyaProfile.password,
-        profile: profile
-      }
-
-      console.log(userObject)
-      let updateUserObject = {
-        userId: this.refs.id.value,
-        userObject: userObject
-
-      }
-      const response = await updateBackendUserActionHandler(updateUserObject)
-      return response;
+    let InternalUprofile={
+      moolyaProfile: moolyaProfile
     }
+    let profile={
+      isInternaluser: true,
+      isExternaluser: false,
+      email: this.refs.email.value,
+      InternalUprofile: InternalUprofile
+    }
+    let userObject={
+      username: moolyaProfile.email,
+      password:this.state.data.profile.InternalUprofile.moolyaProfile.password,
+      profile:profile
+    }
+
+    console.log(userObject)
+    let updateUserObject={
+      userId:this.refs.id.value,
+      userObject:userObject
+
+    }
+    const response = await updateBackendUserActionHandler(updateUserObject)
+    return response;
   }
 
   getAssignedDepartments(departments){

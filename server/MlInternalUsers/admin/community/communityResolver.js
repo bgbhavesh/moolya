@@ -49,7 +49,8 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     query.communityDefId=item._id;
     response.push({
       key: item._id,
-      count: MlCommunity.find(query).count()
+      count: MlCommunity.find(query).count(),
+      icon: item.communityImageLink
     })
   });
     return response;

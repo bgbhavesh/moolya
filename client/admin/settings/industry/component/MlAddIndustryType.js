@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addIndustryActionHandler} from '../actions/addIndustryTypeAction'
 let FontAwesome = require('react-fontawesome');
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlAddIndustry extends React.Component{
   constructor(props) {
     super(props);
@@ -12,7 +13,10 @@ class MlAddIndustry extends React.Component{
     this.createIndustry.bind(this)
     return this;
   }
-
+  componentDidMount(){
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
+  }
   async addEventHandler() {
     const resp=await this.createIndustry();
     return resp;
@@ -67,26 +71,30 @@ class MlAddIndustry extends React.Component{
           <h2>Create Industry</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="industryName" placeholder="Industry Name" className="form-control float-label"/>
               </div>
               <div className="form-group">
                 <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
               </div>
+              </form>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="industryDisplayName" placeholder="Display Name" className="form-control float-label"/>
               </div>
-              <div className="form-group switch_wrap">
-                <label>Status</label><br/>
+              <div className="form-group switch_wrap inline_switch">
+                <label>Status</label>
                 <label className="switch">
                   <input type="checkbox" ref="isActive"/>
                   <div className="slider"></div>
                 </label>
               </div>
+              </form>
             </div>
           </div>
 

@@ -68,24 +68,6 @@ const mlCitiesTableConfig=new MlViewer.View({
               }
               }
              `
-  // graphQlQuery:gql`
-  //            query{
-  // data:fetchCities{
-  //                   totalRecords
-  //                   data{
-  //                     ...on Cities{
-  //                             name
-  //                             countryCode
-  //                             countryId
-  //                             displayName
-  //                             stateId
-  //                             isActive
-  //                             id:_id
-  //                         }
-  //                     }
-  //             }
-  //             }
-  //             `
 });
 const mlStateModuleConfig={
   moduleName:"cities",

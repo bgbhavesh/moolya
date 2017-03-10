@@ -6,6 +6,7 @@ import {findKycCategoryActionHandler} from '../actions/findKycCategoryAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 class MlEditKycCategory extends React.Component{
   constructor(props) {
@@ -20,6 +21,10 @@ class MlEditKycCategory extends React.Component{
     if(this.state.data.isAcive){
       $('#status').prop('checked', true);
     }
+  }
+  componentDidUpdate() {
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
   componentWillMount() {
     const resp=this.findDocument();
@@ -91,9 +96,8 @@ class MlEditKycCategory extends React.Component{
     ]
     const showLoader=this.state.loading;
     return (
-      <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="admin_main_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
         <div className="admin_padding_wrap">
           <h2>Edit KYC Category</h2>
           <div className="col-md-6 nopadding-left">
@@ -110,13 +114,8 @@ class MlEditKycCategory extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
-            <div className="form_bg left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-                smoothScrolling={true}
-                default={true}
-              >
+            <div className="form_bg">
+
                 <form>
                   <div className="form-group">
                     <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docCategoryDisplayName} className="form-control float-label" id=""/>
@@ -130,11 +129,11 @@ class MlEditKycCategory extends React.Component{
                   </div>
                   <br className="brclear"/>
                 </form>
-              </ScrollArea>
+
             </div>
           </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
-        </div>
+
       </div>)}
     </div>
     )

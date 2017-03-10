@@ -57,6 +57,8 @@ if(Meteor.isServer){
           {
             "link" : "/admin/dashboard/communities",
             "name" : "Communities",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
             "uniqueId" : "dashboard_communities",
             "subMenuMappingId":"dashboard_communities",
             "subMenusId":"dashboard",

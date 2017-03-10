@@ -101,7 +101,8 @@ export default class MlAssignBackednUserRoles extends React.Component{
   onClickDate(id,event){
       let filedName=event.target.name
       let fieldId=filedName+id
-      $("#"+fieldId).datepicker({ format: this.state.dateformate });
+      // $("#"+fieldId).datepicker({ format: this.state.dateformate });
+      $("#"+fieldId).datepicker({ format: 'dd-mm-yyyy', startDate:'+0d',autoclose:true });
       $("#"+fieldId).focus();
   }
 

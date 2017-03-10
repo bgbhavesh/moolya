@@ -39,5 +39,40 @@ const mlClusterCommunityListConfig=new MlViewer.View({
               `
 });
 
+const mlClusterChapterCommunityListConfig=new MlViewer.View({
+  name:"clusterCommunityList",
+  module:"community",
+  viewType:MlViewerTypes.LIST,
+  extraFields:[],
+  throttleRefresh:true,
+  pagination:true,
+  sort:true,
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+      chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+      subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
+  },
+  viewComponent:<MlClusterCommunitiesList />,
+  graphQlQuery:gql`
+    query($clusterId:String, $chapterId:String, $subChapterId:String){
+      data:fetchCommunities(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
+        totalRecords
+          data{
+            ...on Community{
+              name,
+              displayName,
+              code,
+              communityImageLink,
+              showOnMap,
+              aboutCommunity,
+              isActive
+            }
+          }
+        }
+      }
+    `
+});
 
-export {mlClusterCommunityListConfig};
+
+export {mlClusterCommunityListConfig, mlClusterChapterCommunityListConfig};

@@ -30,7 +30,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             chapterId: id,
             chapterName: chapter.chapterName,
             subChapterCode: "ML_" + chapter.chapterName + "_" + subChapterName,
-            subChapterName: subChapterName,
+            subChapterName: subChapterName+"-"+chapter.chapterName,
             subChapterDisplayName: subChapterName,
             associatedChapters: [],
             subChapterUrl: "",
@@ -49,7 +49,8 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
           }
           let subchapterid = createSubChapter(subChapter);
           if(subchapterid){
-              MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:subChapter.clusterId, chapterId:subChapter.chapterId, subChapterId:subchapterid, moduleName:"SUBCHAPTER", actionName:"CREATE"}, context, info)
+              MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:subChapter.clusterId, chapterId:subChapter.chapterId, subChapterId:subchapterid, moduleName:"COMMUNITY", actionName:"CREATE"}, context, info)
+              MlResolver.MlMutationResolver['createCommunity'](obj, {clusterId:subChapter.clusterId, clusterName:subChapter.clusterName, chapterId:subChapter.chapterId, chapterName:subChapter.chapterName, subChapterId:subchapterid, subChapterName:subChapter.subChapterName, moduleName:"COMMUNITY", actionName:"CREATE"}, context, info)
           }
           let code = 200;
           let result = {chapterId: id}

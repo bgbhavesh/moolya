@@ -192,6 +192,80 @@ if(role){
 /*********************************** Default Moolya Admin Creation <End> **********************************************/
 
 
+// db.users.insert({
+//   "_id":1,
+//   "username":"rakesh.naik@moolya.in",
+//   "password":"Welcome123$%^",
+//   "profile":{
+//     "isInternaluser":true,
+//     "isExternaluser":false,
+//     "email":"rakesh.naik@moolya.in",
+//     "InternalUprofile":{
+//       "moolyaProfile":{
+//         "assignedDepartment":[{
+//           "department" : "NuKJytcAFPuMGFxha",
+//           "subDepartment" : "Rr75SpSMRvN6HgSEt"
+//         }],
+//         "email":"rakesh.naik@moolya.in",
+//         "phoneNumber":"996408213",
+//         "userProfiles":[{
+//           "clusterId" : "all",
+//           "isDefault":true,
+//           "userRoles" : [ {
+//             "roleId" : "Qk3rfoWwsMqAyKTPb",
+//             "chapterId" : "all",
+//             "subChapterId" : "all",
+//             "communityId" : "all",
+//             "hierarchyLevel" : 4,
+//             "hierarchyCode" : "PLATFORM"
+//           }],
+//         }],
+//         "isActive" : true,
+//         "firstName" : "Rakesh",
+//         "lastName" : "Naik"
+//       }
+//     }
+//   }
+// })
+//
+//
+// db.users.insert({
+//   "_id":2,
+//   "username":"suresh.garimella@moolya.in",
+//   "password":"Welcome123$%^",
+//   "profile":{
+//     "isInternaluser":true,
+//     "isExternaluser":false,
+//     "email":"suresh.garimella@moolya.in",
+//     "InternalUprofile":{
+//       "moolyaProfile":{
+//         "assignedDepartment":[{
+//           "department" : "NuKJytcAFPuMGFxha",
+//           "subDepartment" : "Rr75SpSMRvN6HgSEt"
+//         }],
+//         "email":"suresh.garimella@moolya.in",
+//         "phoneNumber":"9490167831",
+//         "userProfiles":[{
+//           "clusterId" : "all",
+//           "isDefault":true,
+//           "userRoles" : [ {
+//             "roleId" : "Qk3rfoWwsMqAyKTPb",
+//             "chapterId" : "all",
+//             "subChapterId" : "all",
+//             "communityId" : "all",
+//             "hierarchyLevel" : 4,
+//             "hierarchyCode" : "PLATFORM"
+//           }],
+//         }],
+//         "isActive" : true,
+//         "firstName" : "Suresh",
+//         "lastName" : "Garimella"
+//       }
+//     }
+//   }
+// })
+
+
 /******************************************* User Login <Start> *******************************************************/
 
 Accounts.validateLoginAttempt(function (user)

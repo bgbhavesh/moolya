@@ -208,7 +208,7 @@ class MlEditCommunityFormComponent extends React.Component {
               <div className="form-group switch_wrap inline_switch">
                 <label>Show on map</label>
                 <label className="switch">
-                  <input type="checkbox" ref="showOnMap"/>
+                  <input type="checkbox" ref="showOnMap" defaultValue={this.state.data&&this.state.data.showOnMap}/>
                   <div className="slider"></div>
                 </label>
               </div>

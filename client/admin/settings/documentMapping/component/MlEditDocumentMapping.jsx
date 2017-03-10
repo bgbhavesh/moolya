@@ -11,7 +11,7 @@ import {findDocumentMappingActionHandler} from '../actions/findDocumentMappingAc
 // import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 let Select = require('react-select');
 
 class MlEditDocumentMapping extends React.Component{
@@ -39,20 +39,8 @@ class MlEditDocumentMapping extends React.Component{
     // this.addEventHandler.bind(this);
     return this;
   }
-  componentDidMount()
-  {
-    $(function() {
-      $('.float-label').jvFloat();
-    });
+  componentDidMount()  {  }
 
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-  }
   // async addEventHandler() {
   //   const resp=await this.createBackendUser();
   //   return resp;
@@ -189,7 +177,13 @@ class MlEditDocumentMapping extends React.Component{
       this.setState({"data":{"isActive":false}});
     }
   }
-
+  componentDidUpdate()
+  {
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
+  }
   render(){
     let MlActionConfig = [
       {
@@ -249,9 +243,9 @@ class MlEditDocumentMapping extends React.Component{
     let subChapterOption={options: { variables: {id:this.state.chapters[0].id}}};
     const showLoader=this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_main_wrap">
+
             <div className="admin_padding_wrap">
               <h2>Edit Document</h2>
               <div className="col-md-6 nopadding-left">
@@ -272,22 +266,21 @@ class MlEditDocumentMapping extends React.Component{
                           <input type="text"  ref="displayName" defaultValue={this.state.data&&this.state.data.documentDisplayName} placeholder="Display Name" className="form-control float-label" id=""/>
                         </div>
 
-                        <div className="form-group">
+
                           <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat[0].id} queryType={"graphql"} query={documentFormatquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
-                        </div>
+
                         <div className="panel panel-default">
                           <div className="panel-heading">Jurisdiction</div>
                           <div className="panel-body">
 
-                            <div className="form-group">
+
                               <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
-                            </div>
-                            <div className="form-group">
+
+
                               <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
-                            </div>
-                            <div className="form-group">
+
                               <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters[0].id} queryType={"graphql"} query={subChapterquery}  queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
-                            </div>
+
                             <div className="form-group">
                               <input type="text"  ref="validity" defaultValue={this.state.data&&this.state.data.validity} placeholder="Validity" className="form-control float-label" id=""/>
                             </div>
@@ -306,29 +299,29 @@ class MlEditDocumentMapping extends React.Component{
                             </div>
                           </div>
                         </div>
-                        <br className="brclear"/>
-
-
                       </form>
                     </div>
                   </ScrollArea>
                 </div>
               </div>
               <div className="col-md-6 nopadding-right"  >
+                <div className="form_bg">
+                  <form>
                 <div className="form-group">
                   <input type="text"  ref="documentName" defaultValue={this.state.data&&this.state.data.documentName} placeholder="Name" className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group">
+
                   <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory[0].id} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />
-                </div>
-                <div className="form-group">
+
                   <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType[0].id} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
-                </div>
+
                 <div className="form-group">
                   <input type="text"  ref="allowableSize" defaultValue={this.state.data&&this.state.data.allowableMaxSize} placeholder="Allowable Size" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text"  ref="issuingAuthority" defaultValue={this.state.data&&this.state.data.issuingAuthority} placeholder="Issuing Authority" className="form-control float-label" id=""/>
+                </div>
+                  </form>
                 </div>
               </div>
 
@@ -337,7 +330,7 @@ class MlEditDocumentMapping extends React.Component{
             </div>
 
 
-          </div>)}
+          )}
       </div>
     )
   }

@@ -20,9 +20,9 @@ export async function findCityActionHandler(Id) {
     `,
     variables: {
       id:did
-    }
+    },
+    forceFetch:true
   })
-  console.log(result)
   const id = result.data.fetchCity;
   return id
 }

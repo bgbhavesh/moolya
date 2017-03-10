@@ -19,10 +19,13 @@ MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) =>
     // }
     // return {data:allCities,totalRecords:allCities&&allCities.length?allCities.length:0};
 }
+
 MlResolver.MlQueryResolver['fetchCity'] = (obj, args, context, info) =>{
   let city=null;
   if(args.cityId){
     city =  MlCities.findOne({"_id":args.cityId});
+    city.countryCode=MlCountries.findOne({_id : city.countryId}).country;
+    city.stateId=MlStates.findOne({_id : city.stateId}).name;
   }
   return city?city:null;
 }

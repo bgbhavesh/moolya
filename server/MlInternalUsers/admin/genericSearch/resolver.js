@@ -164,27 +164,41 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data=ary;
       totalRecords = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).count();
   }
+
   if(args.module=="cities"){
     let countries = MlCountries.find({"isActive": true}).fetch();
-    let cIds=_.pluck(countries,'_id');
-    // let states = MlStates.find({$and:[{"countryId":{$in:cIds}},query, {"isActive": true}]},findOptions).fetch();
     let states = MlStates.find({"isActive": true}).fetch();
     let allIds=_.pluck(states,'_id');
-    data = MlCities.find({$and:[{"stateId":{$in:allIds}},query]},findOptions).fetch();
+    let cities = MlCities.find({$and:[{"stateId":{$in:allIds}},query]},findOptions).fetch();
+    _.each(cities,function (item,key) {
+      _.each(states, function (s,v) {
+        if (item.stateId == s._id)
+          item.stateId = s.name;
+      })
+      _.each(countries, function (s,v) {
+        if (item.countryId == s._id)
+          item.countryCode = s.country;
+      })
+    })
+    data=cities;
     totalRecords = MlCities.find({$and:[{"stateId":{$in:allIds}},query]},findOptions).count();
   }
+
   if(args.module=="userType"){
     data= MlUserTypes.find(query,findOptions).fetch();
     totalRecords=MlUserTypes.find(query,findOptions).count();
   }
+
   if(args.module=="roleType"){
     data= MlRoleTypes.find(query,findOptions).fetch();
     totalRecords=MlRoleTypes.find(query,findOptions).count();
   }
+
   if(args.module=="documentType"){
     data= MlDocumentTypes.find(query,findOptions).fetch();
     totalRecords=MlDocumentTypes.find(query,findOptions).count();
   }
+
   if(args.module=="documentFormat"){
     data= MlDocumentFormats.find(query,findOptions).fetch();
     totalRecords=MlDocumentFormats.find(query,findOptions).count();

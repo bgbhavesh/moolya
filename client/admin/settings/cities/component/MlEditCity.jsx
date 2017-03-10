@@ -108,15 +108,15 @@ class MlEditCity extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" id="" disabled="disabled"/>
+                    <input type="text" ref="countryName" defaultValue={this.state.data && this.state.data.countryCode} placeholder="Country Name" className="form-control float-label" readOnly="readOnly" disabled="disabled"/>
 
                   </div>
                   <div className="form-group">
-                    <input type="text" ref="name" defaultValue={this.state.data && this.state.data.name} placeholder="City Name" className="form-control float-label" id="" disabled="disabled"/>
+                    <input type="text" ref="name" defaultValue={this.state.data && this.state.data.name} placeholder="City Name" className="form-control float-label" readOnly="readOnly" disabled="disabled"/>
 
                   </div>
                   <div className="form-group">
-                    <textarea placeholder="About" ref="about" defaultValue={this.state.data && this.state.data.about} className="form-control float-label" id=""></textarea>
+                    <textarea placeholder="About" ref="about" defaultValue={this.state.data && this.state.data.about} className="form-control float-label"></textarea>
 
                   </div>
 

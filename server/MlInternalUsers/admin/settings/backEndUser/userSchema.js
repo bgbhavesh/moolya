@@ -131,6 +131,7 @@ let BackEndUser = `
         isInternaluser: Boolean,
         isExternaluser: Boolean,
         email: String,
+        deActive:Boolean,
         InternalUprofile: InternalUprofile
     }
     

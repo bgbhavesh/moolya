@@ -199,7 +199,7 @@ MlResolver.MlQueryResolver['fetchAssignedAndUnAssignedUsers'] = (obj, args, cont
   }
   else if(args.clusterId != "" && args.chapterId != "" && args.subChapterName.startsWith("Moolya-")){
     //users = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.userType":'moolya'}).fetch();
-    let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
+    let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"All"}]}).fetch();
     if(departments && departments.length > 0){
       for(var i = 0; i < departments.length; i++){
         let depusers = Meteor.users.find({"$and":[{"$or":[{"$and":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}]},{"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]},{"profile.InternalUprofile.moolyaProfile.userType":'moolya'},{"profile.InternalUprofile.moolyaProfile.isActive":true}]}).fetch();
@@ -219,7 +219,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
     console.log(args);
     let users = [];
     if(args.clusterId){
-        let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
+        let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"All"}]}).fetch();
         if(departments && departments.length > 0){
             for(var i = 0; i < departments.length; i++){
                 let depusers = Meteor.users.find({"$and":[{"$or":[{"$and":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}]},{"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]},{"profile.InternalUprofile.moolyaProfile.userType":'moolya'},{"profile.InternalUprofile.moolyaProfile.isActive":true}]}).fetch();
@@ -241,7 +241,7 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
   let user = Meteor.users.findOne({"_id": args.userId})
 /*  let isGlobalAvailable = user.profile.InternalUprofile.moolyaProfile.globalAssignment;
   if (isGlobalAvailable) {*/
-  let clusterDep = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
+  let clusterDep = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "All"}]}).fetch();
   if (user && clusterDep && clusterDep.length > 0) {
     let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
     for (var i = 0; i < clusterDep.length; i++) {
@@ -273,7 +273,7 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
     let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
     if(subChapter.subChapterName.startsWith("Moolya-")){
 
-      let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":subChapter.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
+      let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":subChapter.clusterId}, {"depatmentAvailable.cluster":"All"}]}).fetch();
       if(departments && departments.length > 0){
         for(var i = 0; i < departments.length; i++){
           let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id},{"profile.InternalUprofile.moolyaProfile.globalAssignment":true}).fetch();
@@ -304,7 +304,7 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
 
   if(subChapter.subChapterName.startsWith("Moolya-")){
   let user = Meteor.users.findOne({"_id":args.userId})
-  let clusterDep = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":subChapter.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
+  let clusterDep = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":subChapter.clusterId}, {"depatmentAvailable.cluster":"All"}]}).fetch();
   if(user && clusterDep && clusterDep.length > 0) {
     let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
 
@@ -383,17 +383,12 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let userId = args.userId;
   let data = args.user;
   let roles  = data && data.profile && data.profile.InternalUprofile &&  data.profile.InternalUprofile.moolyaProfile.userProfiles && data.profile.InternalUprofile.moolyaProfile.userProfiles.userRoles;
-  let deActive = data.profile.deActive;
+  // let deActive = data.profile.deActive;
   let levelCode = ""
   if(!userId){
     let response = new MlRespPayload().errorPayload("No User Found", 404);
     return response
   }
-
-  if(deActive){
-      return MlResolver.MlMutationResolver['deActivateUser'](obj, {userId:args.userId, deActive:deActive, moduleName:args.moduleName, actionName:args.actionName}, context, info)
-  }
-
   if(!roles){
     let response = new MlRespPayload().errorPayload("No Roles Found", 404);
     return response

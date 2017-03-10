@@ -30,7 +30,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             chapterId: id,
             chapterName: chapter.chapterName,
             subChapterCode: "ML_" + chapter.chapterName + "_" + subChapterName,
-            subChapterName: subChapterName,
+            subChapterName: subChapterName+"-"+chapter.chapterName,
             subChapterDisplayName: subChapterName,
             associatedChapters: [],
             subChapterUrl: "",

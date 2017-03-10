@@ -106,7 +106,7 @@ class MlAssignBackendUsers extends React.Component{
         userProfile['clusterId'] = this.props.params;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}, deActive:this.refs.deActive.checked}}
+        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}}
         let data = {moduleName:"USERS", actionName:"UPDATE", userId:this.state.selectedBackendUser, user:user}
         let response = await multipartFormHandler(data, this.refs.profilePic.files[0])
         return response;
@@ -207,7 +207,7 @@ class MlAssignBackendUsers extends React.Component{
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
                                           <label className="switch">
-                                              <input type="checkbox" ref="deActive" checked={deActive}/>
+                                              <input type="checkbox" checked={deActive} readOnly="true"/>
                                               <div className="slider"></div>
                                           </label>
                                       </div>

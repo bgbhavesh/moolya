@@ -1,13 +1,15 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-
+import {OnToggleSwitch} from '../../../admin/utils/formElemUtil';
 
 export default class MlTable extends React.Component {
   constructor(props) {
     super(props);
   }
 
-
+  componentDidMount(){
+    OnToggleSwitch(true,true);
+  }
 
   render() {
     const selectRow = {

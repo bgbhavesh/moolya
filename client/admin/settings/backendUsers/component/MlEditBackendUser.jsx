@@ -11,6 +11,8 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {findBackendUserActionHandler} from '../actions/findBackendUserAction'
 import {updateBackendUserActionHandler} from '../actions/updateBackendUserAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
 
@@ -57,18 +59,15 @@ class MlEditBackendUser extends React.Component{
   }
   componentDidMount()
   {
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
   }
+
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+  }
+
   async addEventHandler() {
     const resp=await this.createBackendUser();
     return resp;
@@ -154,82 +153,65 @@ class MlEditBackendUser extends React.Component{
   }
 
   async  updateBackendUser() {
-    let firstName= this.refs.firstName.value;
-    let lastName= this.refs.lastName.value;
-    let email = this.refs.email.value;
-    let departments=this.state.mlAssignDepartmentDetails[0].department
-    if(!firstName){
-      toastr.error("First Name is required");
+    let dataDetails=this.state.data
+    let userprofiles=[]
+    if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
+      let userRoles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0].userRoles
+      let userroles=[{
+        roleId:this.state.roleId,
+        clusterId:this.state.clusterId,
+        chapterId:this.state.chapterId,
+        subChapterId:this.state.subChapterId,
+        communityId:this.state.communityId,
+        isActive: userRoles[0].isActive,
+        hierarchyLevel:userRoles[0].hierarchyLevel
+      }]
+      userprofiles=[{
+        isDefault: this.state.isDefault,
+        clusterId: this.state.clusterId,
+        userRoles:userroles
+      }]
     }
-    else if(!lastName){
-      toastr.error("Last Name is required");
+
+
+    let moolyaProfile = {
+      firstName: this.refs.firstName.value,
+      middleName: this.refs.middleName.value,
+      lastName: this.refs.lastName.value,
+      userType:this.state.selectedBackendUserType,
+      subChapter:this.state.selectedSubChapter,
+      roleType:this.state.selectedBackendUser,
+      assignedDepartment:this.state.mlAssignDepartmentDetails,
+      displayName:this.refs.displayName.value,
+      email:this.refs.email.value,
+      contact:this.state.mlAssignContactDetails,
+      globalAssignment:this.refs.globalAssignment.checked,
+      isActive:this.refs.isActive.checked,
+      userProfiles:userprofiles
     }
-    else if (!email) {
-      toastr.error("Need to set a username or email")
-
-    } else if(!departments){
-      toastr.error("Assign Department is required")
-    }else {
-      let dataDetails = this.state.data
-      let userprofiles = []
-      if (dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]) {
-        let userRoles = dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0].userRoles
-        let userroles = [{
-          roleId: this.state.roleId,
-          clusterId: this.state.clusterId,
-          chapterId: this.state.chapterId,
-          subChapterId: this.state.subChapterId,
-          communityId: this.state.communityId,
-          isActive: userRoles[0].isActive,
-          hierarchyLevel: userRoles[0].hierarchyLevel
-        }]
-        userprofiles = [{
-          isDefault: this.state.isDefault,
-          clusterId: this.state.clusterId,
-          userRoles: userroles
-        }]
-      }
-
-
-      let moolyaProfile = {
-        firstName: this.refs.firstName.value,
-        middleName: this.refs.middleName.value,
-        lastName: this.refs.lastName.value,
-        userType: this.state.selectedBackendUserType,
-        subChapter: this.state.selectedSubChapter,
-        roleType: this.state.selectedBackendUser,
-        assignedDepartment: this.state.mlAssignDepartmentDetails,
-        displayName: this.refs.displayName.value,
-        email: this.refs.email.value,
-        contact: this.state.mlAssignContactDetails,
-        globalAssignment: this.refs.globalAssignment.checked,
-        isActive: this.refs.isActive.checked,
-        userProfiles: userprofiles
-      }
-      let InternalUprofile = {
-        moolyaProfile: moolyaProfile
-      }
-      let profile = {
-        isInternaluser: true,
-        isExternaluser: false,
-        email: this.refs.email.value,
-        InternalUprofile: InternalUprofile
-      }
-      let userObject = {
-        username: moolyaProfile.email,
-        password: this.state.data.profile.InternalUprofile.moolyaProfile.password,
-        profile: profile
-      }
-
-      console.log(userObject)
-      let updateUserObject = {
-        userId: this.refs.id.value,
-        userObject: userObject
-
-      }
-      const response = await updateBackendUserActionHandler(updateUserObject)
-      return response;
+    let InternalUprofile={
+      moolyaProfile: moolyaProfile
     }
+    let profile={
+      isInternaluser: true,
+      isExternaluser: false,
+      email: this.refs.email.value,
+      InternalUprofile: InternalUprofile
+    }
+    let userObject={
+      username: moolyaProfile.email,
+      password:this.state.data.profile.InternalUprofile.moolyaProfile.password,
+      profile:profile
+    }
+
+    console.log(userObject)
+    let updateUserObject={
+      userId:this.refs.id.value,
+      userObject:userObject
+
+    }
+    const response = await updateBackendUserActionHandler(updateUserObject)
+    return response;
   }
 
   getAssignedDepartments(departments){
@@ -263,6 +245,16 @@ class MlEditBackendUser extends React.Component{
   onROleSelect(val){
     this.setState({selectedRole:val})
   }*/
+  onCheckPassword(){
+    let password=this.refs.password.value;
+    let confirmPassword=this.refs.confirmPassword.value;
+    if(confirmPassword!=password){
+      this.setState({"pwdErrorMsg":'Confirm Password does not match with Password'})
+      //alert("ur confirm pwd not match with pwd")
+    }else{
+      this.setState({"pwdErrorMsg":''})
+    }
+  }
 
   render(){
     let MlActionConfig = [
@@ -347,7 +339,17 @@ class MlEditBackendUser extends React.Component{
                   </div>
                   <div className="form-group">
                     <input type="Password" hidden="true"  ref="confirmPassword"  placeholder="Confirm Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
-                  </div>*/}
+                  </div>
+                </div>*/}
+                <div className="form-group">
+                  <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
+                  <FontAwesome name='eye' className="password_icon Password"/>
+                </div>
+                <div className="form-group">
+                  <text style={{float:'right',color:'#ef1012',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                  <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
+                  <FontAwesome name='eye' className="password_icon ConfirmPassword"/>
+                </div>
                   <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
                   <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} departments={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />

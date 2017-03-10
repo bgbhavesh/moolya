@@ -37,13 +37,18 @@ export async function findBackendUserActionHandler(userTypeId) {
                   isActive,
                   userProfiles{
                     isDefault,
+                    clusterId,
                     userRoles{
+                      roleId,
                       clusterId,
                       chapterId,
+                      validFrom,
+                      validTo,
                       subChapterId,
                       communityId,
                       isActive,
-                      hierarchyLevel
+                      hierarchyLevel,
+                      hierarchyCode
                       
                     }
                   }

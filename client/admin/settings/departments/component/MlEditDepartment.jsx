@@ -8,6 +8,7 @@ import  {updateDepartmentActionHandler} from '../actions/updateDepartmentAction'
 import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import ScrollArea from 'react-scrollbar';
+import {OnToggleSwitch} from '../../../utils/formElemUtil';
 class MlEditDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -31,6 +32,7 @@ class MlEditDepartment extends React.Component{
   componentDidUpdate(){
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    OnToggleSwitch(true,true);
   }
 
   async addEventHandler() {
@@ -159,14 +161,14 @@ class MlEditDepartment extends React.Component{
                 </div>
 
                 <div className="form-group">
-                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="diplay Name" className="form-control float-label" id=""></input>
+                  <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""></input>
                 </div>
                 <div className="form-group">
-                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="about Depatment" className="form-control float-label" id=""></textarea>
+                  <textarea ref="aboutDepartment" defaultValue={this.state.data&&this.state.data.departmentDesc} placeholder="About Department" className="form-control float-label" id=""></textarea>
                 </div>
 
-                <div className="form-group switch_wrap">
-                  <label>Status</label><br/>
+                <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
                   <label className="switch">
                     <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                     <div className="slider"></div>
@@ -181,7 +183,7 @@ class MlEditDepartment extends React.Component{
                 <form>
                   <div className="form-group switch_wrap switch_names">
                     <label>Select Type</label><br/>
-                    <span className="state_label acLabel">moolya</span><label className="switch">
+                    <span className="state_label acLabel">moolya</span><label className="switch nocolor-switch">
                     <input type="checkbox" ref="appType" disabled="true" checked={this.state.isMoolyaChecked} onChange={this.onMoolyaChange.bind(this)} />
                     <div className="slider"></div>
                   </label>

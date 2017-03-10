@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addTransactionActionHandler} from '../actions/addTransactionTypeAction'
 let FontAwesome = require('react-fontawesome');
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlAddTransaction extends React.Component{
   constructor(props) {
     super(props);
@@ -12,7 +13,10 @@ class MlAddTransaction extends React.Component{
     this.createTransaction.bind(this)
     return this;
   }
-
+  componentDidMount() {
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
+  }
 
   async addEventHandler() {
     const resp=await this.createTransaction();
@@ -69,28 +73,32 @@ class MlAddTransaction extends React.Component{
           <h2>Create Transaction type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                   <input type="text" ref="transactionName" placeholder="Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <textarea  ref="transactionDescription" placeholder="About" className="form-control float-label" id=""></textarea>
                 </div>
+                </form>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
+              <form>
                 <div className="form-group">
                   <input type="text" ref="transactionDisplayName" placeholder="Display Name" className="form-control float-label" id=""/>
                 </div>
 
 
-                <div className="form-group switch_wrap">
-                  <label>Status</label><br/>
+                <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
                   <label className="switch">
                     <input type="checkbox" ref="isActive"/>
                     <div className="slider"></div>
                   </label>
                 </div>
+                </form>
             </div>
           </div>
 

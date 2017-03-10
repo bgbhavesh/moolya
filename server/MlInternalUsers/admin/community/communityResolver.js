@@ -101,7 +101,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         community["code"] = communityAccess.communityDefCode;
         community["showOnMap"] = communityAccess.showOnMap;
         community["isActive"] = communityAccess.isActive;
-        community["communityImageLink"] = "";
+        community["communityImageLink"] = communityAccess.communityImageLink;
         communities.push(community);
     })
     return {data:communities, totalRecords:communities&&communities.length?communities.length:0};
@@ -316,6 +316,7 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
                 communityDefId:communitiesDef[i].communityDefId,
                 communityDefCode:communitiesDef[i].communityDefCode,
                 communityDefName:communitiesDef[i].communityDefName,
+                communityImageLink:communitiesDef[i].communityImageLink,
                 showOnMap:false,
                 isRoot: false,
                 isLeaf:false,

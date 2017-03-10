@@ -5,6 +5,7 @@ import {addDocumentTypeActionHandler} from '../actions/addDocumentTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 class MlAddDocumentType extends React.Component{
   constructor(props) {
@@ -15,7 +16,8 @@ class MlAddDocumentType extends React.Component{
   }
 
   componentDidMount() {
-
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {
@@ -91,13 +93,8 @@ class MlAddDocumentType extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
-            <div className="form_bg left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-                smoothScrolling={true}
-                default={true}
-              >
+            <div className="form_bg">
+
                 <form>
                   <div className="form-group">
                     <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
@@ -109,9 +106,9 @@ class MlAddDocumentType extends React.Component{
                       <div className="slider"></div>
                     </label>
                   </div>
-                  <br className="brclear"/>
+
                 </form>
-              </ScrollArea>
+
             </div>
           </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

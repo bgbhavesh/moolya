@@ -126,6 +126,20 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     let user = Meteor.users.findOne({_id: args.userId});
+
+    let roleIds=[]
+    let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+    userProfiles.map(function (doc,index) {
+      let clusterName=doc.clusterId
+      const clusterData=MlClusters.findOne({ _id:clusterName} )||[];
+      doc.clusterName=clusterData.clusterName||[]
+      let  userRoles=doc&&doc.userRoles?doc.userRoles:[];
+      userRoles.map(function (Rdoc,key) {
+        let roleName=Rdoc.roleId
+        const rolesData =  MlRoles.findOne({ _id:roleName} )||[];
+        Rdoc.roleName=rolesData.roleName||[]
+      });
+    });
     return user;
 }
 MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) => {

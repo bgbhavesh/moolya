@@ -87,11 +87,15 @@ let BackEndUser = `
     input userRoles{
         roleId:String,
         clusterId:String,
+        validFrom:String,
+        validTo:String,
         chapterId:String,
         subChapterId:String,
         communityId:String,
         isActive:Boolean,
-        hierarchyLevel:String
+        hierarchyLevel:Int,
+        hierarchyCode:String
+        
     }
     
     input userprofiles{

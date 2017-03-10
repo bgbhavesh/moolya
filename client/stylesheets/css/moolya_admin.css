@@ -101,7 +101,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;}
 .admin_main_wrap .list_block{height: 200px;background-color:#fff;box-shadow: 0px 0px 5px #888;border-radius: 4px;margin-top: 15px;text-align: center;position: relative;margin-bottom: 15px;}
 .admin_main_wrap .list_block img{width: 113px;z-index: 2;position: absolute;left: -7px;top: 34px;border: 1px solid #ddd;}
 .admin_main_wrap .communities_list .list_block img{width: auto;border: 0px;left: 2px;top: 10px;}
-.admin_main_wrap .communities_list .ml{font-size: 75px; line-height: 130px; color: #273545;}
+.admin_main_wrap .list_block .ml{font-size: 75px; line-height: 130px; color: #273545;}
 .admin_main_wrap .list_block .hex_outer{display: inline-block;background: #B9C5CC;border: 0px;position: relative;height: 136px;z-index: 1;width: 99px;margin-top: 8px;}
 .admin_main_wrap .list_block .hex_outer:after{position:absolute;right:-30px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 67px 0px 67px 30px;border-color: transparent transparent transparent #B9C5CC;top: 1px;}
 .admin_main_wrap .list_block .hex_outer:before{position: absolute;left: -30px;content: " ";width: 0px;height: 0px;border-style: solid;border-width: 67px 30px 67px 0px;border-color: transparent #B9C5CC transparent transparent;top: 1px;}
@@ -137,11 +137,11 @@ span.actions_switch.show_act{bottom: 50px;}
 .bottom_actions_block .hex_btn:hover{background: #ffc20e;color:#EF4647;}
 .bottom_actions_block .hex_btn:hover:after{border-color: transparent transparent transparent #ffc20e;}
 .bottom_actions_block .hex_btn:hover:before{border-color: transparent #ffc20e transparent transparent;}
-.bottom_actions_block .hex_btn.hex_btn_in:hover{background: #fff;color: #ef4647}
+.bottom_actions_block .hex_btn.hex_btn_in:hover{background: #fff;color: #ef4647;cursor: pointer;}
 .bottom_actions_block .hex_btn.hex_btn_in:hover:after{border-color: transparent transparent transparent #fff;color: #ef4647}
 .bottom_actions_block .hex_btn.hex_btn_in:hover:before{border-color: transparent #fff transparent transparent;color: #ef4647}
 .bottom_actions_block .ml{font-size: 22px; text-shadow: none; }
-.bottom_actions_block .ml.ml-import,.ml.ml-export,.ml.ml-annotate,.ml.ml-plus,.ml.ml-save{font-weight: bold; }
+.bottom_actions_block .ml.ml-import,.ml.ml-export,.ml.ml-annotate,.ml.ml-plus,.ml.ml-save, .ml.ml-delete{font-weight: bold; }
 .panel-heading{font-weight: bold;}
 .panel-heading .block_action img{width: 25px; margin-top: -2px;}
 .form-control{padding: 6px 0px;border: 0px; border-bottom: 2px solid #273545;box-shadow: none;color: #273545;background-color: transparent;border-radius: 0px;font-size: 15px;}

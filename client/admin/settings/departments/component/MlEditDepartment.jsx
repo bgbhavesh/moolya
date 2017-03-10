@@ -120,20 +120,20 @@ class MlEditDepartment extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.editDepartment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'cancel',
         handler: null
-      },
+      }/*,
       {
         showAction: true,
         actionName: 'logout',
         handler: null
-      }
+      }*/
     ];
 
     const showLoader=this.state.loading;

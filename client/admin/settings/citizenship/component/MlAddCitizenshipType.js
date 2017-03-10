@@ -4,6 +4,7 @@ import {render} from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addCitizenshipActionHandler} from '../actions/addCitizenshipTypeAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlAddCitizenship extends React.Component {
   constructor(props) {
     super(props);
@@ -41,7 +42,10 @@ class MlAddCitizenship extends React.Component {
     const response = await addCitizenshipActionHandler(CitizenshipDetails)
     return response;
   }
-
+  componentDidMount()  {
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
+  }
   render() {
     let MlActionConfig = [
       // {
@@ -51,25 +55,26 @@ class MlAddCitizenship extends React.Component {
       // },
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.createCitizenship.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]
 
     // const showLoader=this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {/*{showLoader===true?( <div className="loader_wrap"></div>):(*/}
-          <div className="admin_main_wrap">
+
           <div className="admin_padding_wrap">
           <h2>Create Citizenship</h2>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-left">
           <div className="form_bg">
+          <form>
           <div className="form-group">
           <input type="text" ref="citizenshipTypeName" placeholder="Citizenship Name"
           className="form-control float-label"/>
@@ -77,24 +82,27 @@ class MlAddCitizenship extends React.Component {
           <div className="form-group">
           <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
           </div>
+          </form>
           </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-right">
           <div className="form_bg">
+          <form>
           <div className="form-group">
           <input type="text" ref="citizenshipTypeDisplayName" placeholder="Display Name"
           className="form-control float-label"/>
           </div>
-          <div className="form-group switch_wrap">
-          <label>Status</label><br/>
+          <div className="form-group switch_wrap inline_switch">
+          <label>Status</label>
           <label className="switch">
           <input type="checkbox" ref="isActive"/>
           <div className="slider"></div>
           </label>
           </div>
+          </form>
           </div>
           </div>
-          </div>
+
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
           />
           </div>

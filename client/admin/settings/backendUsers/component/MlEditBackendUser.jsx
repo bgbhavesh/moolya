@@ -39,11 +39,6 @@ class MlEditBackendUser extends React.Component{
       isActive:null,
       globalStatus:null,
       selectedSubChapter:'',
-     /* selectedCluster:'',
-      selectedChapter:'',
-      selectedDepartment:'',
-      selectedSubDepartment:'',
-      selectedRole:''*/
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -133,19 +128,7 @@ class MlEditBackendUser extends React.Component{
          }
            userProfilesDetails.push(json)
          }
-       this.setState({'userProfiles':userProfilesDetails})
-         /*let isDefault=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"
-         ][0].isDefault
-         this.setState({"isDefault":isDefault})
-         let userRoles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0].userRoles
-*/
-        /* if(userRoles){
-           this.setState({"clusterId":userRoles[0].clusterId})
-           this.setState({"chapterId":userRoles[0].chapterId})
-           this.setState({"subChapterId":userRoles[0].subChapterId})
-           this.setState({"communityId":userRoles[0].communityId})
-           this.setState({"roleId":userRoles[0].roleId})
-         }*/
+       this.setState({'userProfiles':userProfilesDetails});
 
        }else{
 
@@ -172,14 +155,28 @@ class MlEditBackendUser extends React.Component{
       this.setState({"isActive":false})
     }
   }
-  onMakeDefultChange(index,event){
+  onMakeDefultChange(id,event){
       let userProfilesDetails=this.state.userProfiles
-      if(event.currentTarget.checked){
-
-        userProfilesDetails[index]['isDefault']==true
+    if(event.currentTarget.checked){
+        let decision = false;
+        for(let i=0;i<userProfilesDetails.length;i++) {
+          if (userProfilesDetails[i].isDefault == true) {
+            decision = true;
+            break;
+          }
+          else {
+            decision = false;
+          }
+        }
+      if(decision){
+        userProfilesDetails[id]['isDefault']=false
+        toastr.error("Please select one default profile");
+      }else{
+        userProfilesDetails[id]['isDefault']=true
         this.setState({userProfiles:userProfilesDetails})
+      }
       }else {
-        userProfilesDetails[index]['isDefault'] ==false
+        userProfilesDetails[id]['isDefault']=false
         this.setState({userProfiles: userProfilesDetails})
       }
   }
@@ -286,21 +283,6 @@ class MlEditBackendUser extends React.Component{
   optionsBySelectSubChapter(val){
     this.setState({selectedSubChapter:val})
   }
-  /*onClusterSelect(val){
-    this.setState({selectedCluster:val})
-  }
-  onChapterSelect(val){
-    this.setState({selectedChapter:val})
-  }
-  onDepartmentSelect(val){
-    this.setState({selectedDepartment:val})
-  }
-  onSubDepartmentSelect(val){
-    this.setState({selectedSubDepartment:val})
-  }
-  onROleSelect(val){
-    this.setState({selectedRole:val})
-  }*/
   onCheckPassword(){
     let password=this.refs.password.value;
     let confirmPassword=this.refs.confirmPassword.value;
@@ -319,11 +301,6 @@ class MlEditBackendUser extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'add',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'logout',
@@ -382,15 +359,13 @@ class MlEditBackendUser extends React.Component{
                     <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={that.state.selectedBackendUserType}  onChange={that.onBackendUserTypeSelect.bind(that)}
                     />
                   </div>
-                  {that.state.selectedBackendUserType=='non-moolya'&&(<div className="form-group">
+                  {that.state.selectedBackendUserType=='non-moolya'&&(
                     <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={that.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={that.optionsBySelectSubChapter.bind(that)} />
-                  </div>)}
-                  <div className="form-group">
+                  )}
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
                     <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)}
                     />
                    {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
-                  </div>
                  {/* <div className="form-group">
                     <input type="Password" hidden="true" ref="password" placeholder="Create Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
                   </div>
@@ -488,36 +463,6 @@ class MlEditBackendUser extends React.Component{
                     )
                   })
                   }
-
-                  {/*{this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.userProfiles[0]?(<div className="panel panel-default">
-                    <div className="panel-heading">Assigned Cluster Details</div>
-                    <div className="panel-body">
-
-                      <div className="form-group">
-                        <input type="text" ref="cluster"  placeholder="Cluster" value={this.state.clusterId}  className="form-control float-label" id="" disabled="true"/>
-                        /!*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedCluster} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onClusterSelect.bind(this)} />*!/
-                      </div>
-                      <div className="form-group">
-                        <input type="text" ref="chapter" value={this.state.chapterId}  placeholder="Chapter" className="form-control float-label" id="" disabled="true"/>
-                        /!*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedChapter} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onChapterSelect.bind(this)} />*!/
-                      </div>
-                      <div className="form-group">
-                        <input type="text" ref="department" value={this.state.subChapterId}  placeholder="Department" className="form-control float-label" id="" disabled="true"/>
-                        /!* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedDepartment} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onDepartmentSelect.bind(this)} />*!/
-                      </div>
-                      <div className="form-group">
-                        <input type="text" ref="subDepartment" value={this.state.communityId}  placeholder="Sub Department" className="form-control float-label" id="" disabled="true"/>
-                        /!*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubDepartment} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onSubDepartmentSelect.bind(this)} />*!/
-                      </div>
-                      <div className="form-group">
-                        <input type="text" ref="role" value={this.state.roleId}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
-                        /!*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedRole} queryType={"graphql"} query={query}  isDynamic={true}  onSelect={this.onROleSelect.bind(this)} />*!/
-                      </div>
-                      <div className="form-group">
-                        <div className="input_types"><input  ref="isDefault" checked={this.state.isDefault} onChange={this.onMakeDefultChange.bind(this)} id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>Make Default</label></div>
-                      </div>
-                    </div>
-                  </div>):''}*/}
                   </form>
                   </div>
                 </ScrollArea>

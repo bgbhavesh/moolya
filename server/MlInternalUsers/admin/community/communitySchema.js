@@ -163,13 +163,9 @@ let communitySchema = `
     
     type MapData {
         key:String,
-        count:Int
+        count:Int,
+        icon :String
     }
-    
-    type MapData {
-        key:String,
-        count:Int
-     }
     
     type Query{
         FetchMapData(moduleName:String,id:String):[MapData]

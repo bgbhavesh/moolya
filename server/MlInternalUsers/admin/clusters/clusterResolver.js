@@ -108,7 +108,7 @@ MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) =
     result = clusterData;
     result.push({"countryName" : "All", "_id" : "all"});
   }
-  return result;
+    return result;
 }
 
 /*MlResolver.MlQueryResolver['fetchAllActiveClusters'] = (obj, args, context, info) => {

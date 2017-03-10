@@ -44,6 +44,22 @@ export default class MlMoolyaAssignDepartment extends React.Component {
       this.setState({departmentAvailability:availabilityDetailsForm})
     }
   }
+
+  componentWillReceiveProps(newProps){
+    let availabilityDetails=newProps.moolya
+
+    if(availabilityDetails){
+      let  availabilityDetailsForm=[{
+        cluster:availabilityDetails[0].cluster,
+        chapter:'all',
+        subChapter:'all',
+        email:availabilityDetails[0].email,
+        isActive:availabilityDetails[0].isActive
+
+      }]
+      this.setState({departmentAvailability:availabilityDetailsForm})
+    }
+  }
   optionsBySelectCluster(index, selectedIndex){
 
     let availabilityDetails=this.state.departmentAvailability
@@ -85,7 +101,8 @@ export default class MlMoolyaAssignDepartment extends React.Component {
       <div>
 
         {that.state.departmentAvailability.map(function(options,id){
-
+          console.log("---------------------------------------------");
+          console.log(options);
           return(
             <div className="panel panel-default" key={id}>
                 <div className="panel-heading">Assign Department<div className="pull-right block_action"></div></div>

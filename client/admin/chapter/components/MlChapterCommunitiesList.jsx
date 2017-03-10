@@ -11,13 +11,13 @@ export default class MlChapterCommunitiesList extends Component {
       <div className="col-md-2" key={prop.code}>
         <div className="list_block">
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.isActive?"check":"times"}/></div>
-          <a href={chapterRoutes.subChapterDetails(prop.clusterId,prop.chapterId,prop._id,prop.subChapterName)}> <div className={"hex_outer"}><img src={prop.subChapterImageLink}/></div></a>
+          <a href={chapterRoutes.subChapterDetails(prop.clusterId,prop.chapterId,prop._id,prop.subChapterName)}> <div className={"hex_outer"}><span className={prop.communityImageLink}></span></div></a>
           <h3>{prop.name} </h3>
         </div>
       </div>
     );
 
-    return (<div className="row">{list}</div>);
+    return (<div className="row communities_list">{list}</div>);
 
   }
 

@@ -56,7 +56,8 @@ if(!platformrole){
     displayName:"Platform Admin",
     assignRoles: assignRoles,
     modules:modules,
-    isActive:true
+    isActive:true,
+    isSystemDefined: true
   }
   MlRoles.insert(platformrole);
 }
@@ -76,7 +77,8 @@ if(!clusterAdmin){
       displayName:"Cluster Admin",
       assignRoles: assignRoles,
       modules:modules,
-      isActive:true
+      isActive:true,
+      isSystemDefined: true
     }
     MlRoles.insert(role);
 }
@@ -94,7 +96,8 @@ if(!chapterAdmin){
     displayName:"Chapter Admin",
     assignRoles: assignRoles,
     modules:modules,
-    isActive:true
+    isActive:true,
+    isSystemDefined: true
   }
   MlRoles.insert(role);
 }
@@ -113,7 +116,8 @@ if(!subchapterAdmin){
     displayName:"Sub-Chapter Admin",
     assignRoles: assignRoles,
     modules:modules,
-    isActive:true
+    isActive:true,
+    isSystemDefined: true
   }
   MlRoles.insert(role);
 }
@@ -130,7 +134,8 @@ if(!chapterAdmin){
     displayName:"Community Admin",
     assignRoles: assignRoles,
     modules:modules,
-    isActive:true
+    isActive:true,
+    isSystemDefined: true
   }
   MlRoles.insert(role);
 }

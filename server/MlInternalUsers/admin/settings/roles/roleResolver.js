@@ -20,7 +20,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) =>{
 
     if(!role.roleName){
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Rolename is required", code);
+      let response = new MlRespPayload().errorPayload("Role Name is required", code);
       return response;
     }
     if(MlClusters.find({roleName:role.roleName}).count() > 0){
@@ -58,16 +58,26 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 
     if(!args.role.roleName){
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Rolename is required", code);
+      let response = new MlRespPayload().errorPayload("Role Name is required", code);
       return response;
     }
 
-    if (args.id) {
-      var id= args.id;
-      let result= MlRoles.update(id, {$set: args.role});
-      let code = 200;
-      let response = new MlRespPayload().successPayload(result, code);
-      return response
+    if(args.id){
+      let role = MlRoles.findOne({_id: args.id});
+      if(role)
+      {
+        if(role.isSystemDefined){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Cannot edit system defined Role", code);
+          return response;
+        }else{
+            var id= args.id;
+            let result= MlRoles.update(id, {$set: args.role});
+            let code = 200;
+            let response = new MlRespPayload().successPayload(result, code);
+            return response
+        }
+      }
     }
   };
 

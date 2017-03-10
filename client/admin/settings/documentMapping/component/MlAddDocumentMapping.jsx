@@ -9,6 +9,7 @@ import {addDocumentMappingActionHandler} from '../actions/addDocumentMappingActi
 // import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 let Select = require('react-select');
 
@@ -37,17 +38,8 @@ class MlAddDocumentMapping extends React.Component{
   }
   componentDidMount()
   {
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -211,22 +203,22 @@ class MlAddDocumentMapping extends React.Component{
                       <input type="text"  ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                     </div>
 
-                    <div className="form-group">
+
                       <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat[0].id} queryType={"graphql"} query={documentFormatquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
-                    </div>
+
                     <div className="panel panel-default">
                       <div className="panel-heading">Jurisdiction</div>
                       <div className="panel-body">
 
-                        <div className="form-group">
+
                           <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters[0].id} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectClusters.bind(this)} />
-                        </div>
-                        <div className="form-group">
+
+
                           <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters[0].id} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
-                        </div>
-                        <div className="form-group">
+
+
                           <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters[0].id} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
-                        </div>
+
                         <div className="form-group">
                           <input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>
                         </div>
@@ -245,7 +237,6 @@ class MlAddDocumentMapping extends React.Component{
                         </div>
                       </div>
                     </div>
-                    <br className="brclear"/>
 
 
                   </form>
@@ -254,6 +245,8 @@ class MlAddDocumentMapping extends React.Component{
             </div>
           </div>
           <div className="col-md-6 nopadding-right"  >
+            <div className="form_bg">
+              <form>
             <div className="form-group">
               <input type="text"  ref="documentName" placeholder="Name" className="form-control float-label" id=""/>
             </div>
@@ -268,6 +261,8 @@ class MlAddDocumentMapping extends React.Component{
             </div>
             <div className="form-group">
               <input type="text"  ref="issuingAuthority" placeholder="Issuing Authority" className="form-control float-label" id=""/>
+            </div>
+              </form>
             </div>
           </div>
 

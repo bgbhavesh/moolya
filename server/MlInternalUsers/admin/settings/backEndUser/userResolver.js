@@ -91,36 +91,42 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 
     let user = Meteor.users.findOne({_id: args.userId});
     if(user){
-         if(!args.user.profile){
-           let salted = passwordUtil.hashPassword(user.password);
-           console.log(salted);
-           let resp = Meteor.users.update({_id: args.userId}, {
-             $set: {"services.password.bcrypt": salted}
-           });
-           if (resp) {
-             let code = 200;
-             let result = {user: resp};
-             let response = new MlRespPayload().successPayload("password reset complete", code);
-             return response
-           }
-         }else {
-           for (key in args.user) {
-             user[key] = args.user[key]
-           }
-           if (!args.user.username) {
-             let code = 409;
-             let response = new MlRespPayload().errorPayload("Email/Username is required", code);
-             return response;
-           }
-           //let resp = Meteor.users.update({_id:args.userId}, {$set:{'profile':user.profile}});
-           let resp = Meteor.users.update({_id: args.userId}, {$set: {profile: user.profile}}, {upsert: true})
-           if (resp) {
-             let code = 200;
-             let result = {user: resp};
-             let response = new MlRespPayload().successPayload(result, code);
-             return response
-           }
-         }
+      if(user.profile.isSystemDefined){
+                 let code = 409;
+                 let response = new MlRespPayload().errorPayload("Cannot edit system defined User", code);
+                return response;
+      }else {
+        if (!args.user.profile) {
+          let salted = passwordUtil.hashPassword(user.password);
+          console.log(salted);
+          let resp = Meteor.users.update({_id: args.userId}, {
+            $set: {"services.password.bcrypt": salted}
+          });
+          if (resp) {
+            let code = 200;
+            let result = {user: resp};
+            let response = new MlRespPayload().successPayload("password reset complete", code);
+            return response
+          }
+        } else {
+          for (key in args.user) {
+            user[key] = args.user[key]
+          }
+          if (!args.user.username) {
+            let code = 409;
+            let response = new MlRespPayload().errorPayload("Email/Username is required", code);
+            return response;
+          }
+          //let resp = Meteor.users.update({_id:args.userId}, {$set:{'profile':user.profile}});
+          let resp = Meteor.users.update({_id: args.userId}, {$set: {profile: user.profile}}, {upsert: true})
+          if (resp) {
+            let code = 200;
+            let result = {user: resp};
+            let response = new MlRespPayload().successPayload(result, code);
+            return response
+          }
+        }
+      }
     }
 };
 

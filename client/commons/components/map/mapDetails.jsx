@@ -1,6 +1,5 @@
 import {render} from 'react-dom';
 import React, {Component, PropTypes} from 'react';
-// import {findMapDetailsTypeActionHandler} from './findMapDetailsTypeAction'
 
 export default class MapDetails extends Component {
   constructor(props) {
@@ -8,10 +7,15 @@ export default class MapDetails extends Component {
   }
 
   render() {
-    const mapData=this.props.data&&this.props.data.length>0?this.props.data:[];
+    const mapData = this.props.data && this.props.data.length > 0 ? this.props.data : [];
 
-    const mapDataList=mapData.map(function(m) {
-      return ( <li key={m.key}> <img src="/images/hover_image.png" /><div className="hex_btn2 hex_btn_in2">{m.count}</div></li>)
+    const mapDataList = mapData.map(function (m) {
+      return (
+        <li key={m.key}>
+            <span className={m.icon}></span>
+           <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+        </li>
+      )
     });
 
     return (<div>
@@ -23,6 +27,6 @@ export default class MapDetails extends Component {
           </ul>
         </div>
       </div>
-      </div>);
+    </div>);
   }
 }

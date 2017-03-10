@@ -34,6 +34,7 @@ export default class MlClusterListView extends Component {
         }
       }
       return (
+
         <div className="col-md-2" key={prop._id}>
           <div className="list_block provider_block">
             <div className={`cluster_status ${StatusActive}_cl`}><FontAwesome name={fontName}/></div>
@@ -50,7 +51,7 @@ export default class MlClusterListView extends Component {
 
     });
 
-    return (<div>{list}</div>);
+    return (<div className="row">{list}</div>);
 
 
   }

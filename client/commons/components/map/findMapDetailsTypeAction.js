@@ -9,6 +9,7 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
          data: FetchMapData(moduleName: $moduleName, id: $id){
           key
           count
+          icon
       }
     }
     `,

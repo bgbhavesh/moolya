@@ -6,7 +6,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
-/*var FloatingLabel = require('react-floating-label');*/
+import ScrollArea from 'react-scrollbar';
 class MlAddDepartment extends React.Component{
 
   constructor(props) {
@@ -156,7 +156,13 @@ class MlAddDepartment extends React.Component{
           </div>
 
           <div className="col-md-6 nopadding-right">
-            <div className="form_bg">
+            <div className="form_bg left_wrap">
+              <ScrollArea
+                speed={0.8}
+                className="left_wrap"
+                smoothScrolling={true}
+                default={true}
+              >
               <form>
                 <div className="form-group switch_wrap switch_names">
                   <label>Select Type</label><br/>
@@ -171,6 +177,7 @@ class MlAddDepartment extends React.Component{
 
 
               </form>
+              </ScrollArea>
             </div>
           </div>
         </div>

@@ -95,10 +95,7 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
           }
         }
       }
-
     }
-
-
 }
 
 MlResolver.MlQueryResolver['fetchDepartments'] = (obj, args, context, info) => {

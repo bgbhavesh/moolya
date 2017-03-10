@@ -40,11 +40,13 @@ let BackEndUser = `
     type UserProfiles{
         isDefault: Boolean,
         clusterId: String,
+        clusterName:String,
         userRoles:[UserRoles]
     }
     
     type UserRoles{
         roleId:String,
+        roleName:String,
         clusterId:String,
         chapterId:String,
         validFrom: String,

@@ -92,15 +92,18 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         query= {"hierarchyCode":"PLATFORM"};
     }
 
+
+
     let communitiesAccess = MlCommunityAccess.find(query).fetch();
 
     communitiesAccess.map(function (communityAccess) {
+        let platformCommunity = MlCommunityAccess.findOne({"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode});
         let community = {};
         community["name"] = communityAccess.communityDefName;
         community["displayName"] = communityAccess.displayName;
         community["code"] = communityAccess.communityDefCode;
         community["showOnMap"] = communityAccess.showOnMap;
-        community["isActive"] = communityAccess.isActive;
+        community["isActive"] = communityAccess.isActive && ((platformCommunity.isActive == true)) ? communityAccess.isActive : platformCommunity.isActive;
         community["communityImageLink"] = communityAccess.communityImageLink;
         communities.push(community);
     })
@@ -180,12 +183,6 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
 
     }
 
-    //platform admin
-    // if(hierarchy.isParent===true){
-    //     communityAccess = MlCommunityAccess.findOne({"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId, "isActive":true}]});
-    //     communitiesAccess = MlCommunityAccess.find({"$and":[{"hierarchyCode":{"$ne":"PLATFORM"},"communityDefCode":args.communityId, "isActive":true}]}).fetch();
-    //     clusters = communitiesAccess && _.map(communitiesAccess, 'clusterId');
-    // }
 
     if(communityAccess){
         community["name"] = communityAccess.communityDefName;

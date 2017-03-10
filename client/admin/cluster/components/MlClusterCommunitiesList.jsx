@@ -19,13 +19,13 @@ export default class MlClusterCommunitiesList extends Component
       <div className="col-md-2" key={prop.code}>
         <div className="list_block">
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.isActive?"check":"times"}/></div>
-          <a href> <div className={"hex_outer"}><img src={prop.communityImagelink}/></div></a>
+          <a href> <div className={"hex_outer"}><span className={prop.communityImageLink}></span></div></a>
           <h3>{prop.name}</h3>
         </div>
       </div>
     );
 
-    return (<div className="row">{list}</div>);
+    return (<div className="row communities_list">{list}</div>);
 
   }
 }

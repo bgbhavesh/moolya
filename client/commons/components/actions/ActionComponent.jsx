@@ -51,6 +51,11 @@ export default class MlActionComponent extends Component {
         imagefield:'/images/act_select_icon.png',
         actionName:'select',
         iconClass:'ml ml-select-all'
+      },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'save',
+        iconClass:'ml ml-save'
       }
     ]
 

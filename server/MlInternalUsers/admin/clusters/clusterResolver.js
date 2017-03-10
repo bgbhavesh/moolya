@@ -106,7 +106,7 @@ MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) =
   let clusterData = MlClusters.find({isActive:true}).fetch()||[];
   if(clusterData.length>0){
     result = clusterData;
-    result.push({"countryName" : "All", "_id" : "All"});
+    result.push({"countryName" : "All", "_id" : "all"});
   }
   return result;
 }

@@ -9,7 +9,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
     super(props);
     this.state={
       selectedValue:null,
-      departmentAvailability:[{cluster:[],chapter:'All',subChapter:'All',email:'',isActive:false }]
+      departmentAvailability:[{cluster:[],chapter:'all',subChapter:'all',email:'',isActive:false }]
     }
     this.onStatusChange=this.onStatusChange.bind(this)
     return this;
@@ -35,8 +35,8 @@ export default class MlMoolyaAssignDepartment extends React.Component {
     if(availabilityDetails){
       let  availabilityDetailsForm=[{
         cluster:availabilityDetails[0].cluster,
-        chapter:'All',
-        subChapter:'All',
+        chapter:'all',
+        subChapter:'all',
         email:availabilityDetails[0].email,
         isActive:availabilityDetails[0].isActive
 

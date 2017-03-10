@@ -50,11 +50,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
          clusterIds = clusterIds.concat(currentDepClusterIds);
 
         let chapterId =  department&&department.chapter&&department.chapter?department.chapter:"";
-        if(chapterId != "All"){
+        if(chapterId != "all"){
           chapterIdsArray.push(chapterId);
         }
         let subchapterId =  department&&department.subChapter&&department.subChapter?department.subChapter:"";
-        if(subchapterId != "All"){
+        if(subchapterId != "all"){
           subchapterIdsArray.push(subchapterId);
         }
       });
@@ -102,11 +102,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         //let currentDepClusterIds = _.pluck(clustersIds,"clusterId") || [];
         clusterIds = clusterIds.concat(currentDepClusterIds);
         let chapterId =  department&&department.chapter&&department.chapter?department.chapter:"";
-        if(chapterId != "All"){
+        if(chapterId != "all"){
           chapterIdsArray.push(chapterId);
         }
         let subchapterId =  department&&department.subChapter&&department.subChapter?department.subChapter:"";
-        if(subchapterId != "All"){
+        if(subchapterId != "all"){
           subchapterIdsArray.push(subchapterId);
         }
       });

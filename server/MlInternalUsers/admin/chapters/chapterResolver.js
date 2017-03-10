@@ -49,7 +49,8 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
           }
           let subchapterid = createSubChapter(subChapter);
           if(subchapterid){
-              MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:subChapter.clusterId, chapterId:subChapter.chapterId, subChapterId:subchapterid, moduleName:"SUBCHAPTER", actionName:"CREATE"}, context, info)
+              MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:subChapter.clusterId, chapterId:subChapter.chapterId, subChapterId:subchapterid, moduleName:"COMMUNITY", actionName:"CREATE"}, context, info)
+              MlResolver.MlMutationResolver['createCommunity'](obj, {clusterId:subChapter.clusterId, clusterName:subChapter.clusterName, chapterId:subChapter.chapterId, chapterName:subChapter.chapterName, subChapterId:subchapterid, subChapterName:subChapter.subChapterName, moduleName:"COMMUNITY", actionName:"CREATE"}, context, info)
           }
           let code = 200;
           let result = {chapterId: id}
@@ -105,7 +106,7 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
       response.push({"chapterName" : "All","_id" : "All"});
     }else{
       response= MlChapters.find({"clusterId":id}).fetch()||[];
-      if(response.length > 1){
+      if(response.length > 0){
         response.push({"chapterName" : "All","_id" : "All"});
       }
     }
@@ -147,7 +148,7 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
       result.push({"subChapterName" : "All","_id" : "All"});
   }else{
        result=MlSubChapters.find({chapterId: args.id} && {subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
-      if(result.length > 1){
+      if(result.length > 0){
            result.push({"subChapterName" : "All","_id" : "All"});
       }
   }

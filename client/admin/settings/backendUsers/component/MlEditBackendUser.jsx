@@ -257,6 +257,19 @@ class MlEditBackendUser extends React.Component{
     return response;
   }
 
+  async  resetPassword() {
+    let userObject={
+      password:this.refs.confirmPassword.value
+    }
+    console.log(userObject)
+    let updateUserObject={
+      userId:this.refs.id.value,
+      userObject:userObject
+    }
+    const response = await updateBackendUserActionHandler(updateUserObject)
+    toastr.error(response.result);
+  }
+
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
   }
@@ -394,7 +407,7 @@ class MlEditBackendUser extends React.Component{
                   <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
                   <FontAwesome name='eye' className="password_icon ConfirmPassword"/>
                 </div>
-                  <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
+                  <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
                   <MlAssignDepartmentComponent getAssignedDepartments={that.getAssignedDepartments.bind(that)} selectedBackendUserType={that.state.selectedBackendUserType} selectedSubChapter={that.state.selectedSubChapter} departments={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />
                   </form>

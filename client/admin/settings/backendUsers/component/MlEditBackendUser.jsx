@@ -12,7 +12,7 @@ import MlContactFormComponent from './MlContactFormComponent'
 import {findBackendUserActionHandler} from '../actions/findBackendUserAction'
 import {updateBackendUserActionHandler} from '../actions/updateBackendUserAction'
 import {resetPasswordActionHandler} from '../actions/resetPasswordAction'
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
@@ -57,6 +57,7 @@ class MlEditBackendUser extends React.Component{
   componentDidUpdate(){
     OnToggleSwitch(true,true);
     initalizeFloatLabel();
+    passwordVisibilityHandler();
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
   }
@@ -383,12 +384,12 @@ class MlEditBackendUser extends React.Component{
                 </div>*/}
                 <div className="form-group">
                   <input type="Password" ref="password" defaultValue={that.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
-                  <FontAwesome name='eye' className="password_icon Password"/>
+                  <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                 </div>
                 <div className="form-group">
                   <text style={{float:'right',color:'#ef1012',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{that.state.pwdErrorMsg}</text>
                   <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
-                  <FontAwesome name='eye' className="password_icon ConfirmPassword"/>
+                  <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                 </div>
                   <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 

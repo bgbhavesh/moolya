@@ -81,6 +81,25 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
   return response
 }
 
+MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+    let salted = passwordUtil.hashPassword(args.password);
+    // console.log(salted);
+    let resp = Meteor.users.update({_id: args.userId}, {
+      $set: {"services.password.bcrypt": salted}
+    });
+    if (resp) {
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Password Reset complete", code);
+      return response
+    }
+};
+
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
     let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
     if (!isValidAuth) {
@@ -97,17 +116,17 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
                 return response;
       }else {
         if (!args.user.profile) {
-          let salted = passwordUtil.hashPassword(user.password);
-          console.log(salted);
-          let resp = Meteor.users.update({_id: args.userId}, {
-            $set: {"services.password.bcrypt": salted}
-          });
-          if (resp) {
-            let code = 200;
-            let result = {user: resp};
-            let response = new MlRespPayload().successPayload("password reset complete", code);
-            return response
-          }
+          // let salted = passwordUtil.hashPassword(args.user.password);
+          // console.log(salted);
+          // let resp = Meteor.users.update({_id: args.userId}, {
+          //   $set: {"services.password.bcrypt": salted}
+          // });
+          // if (resp) {
+          //   let code = 200;
+          //   let result = {user: resp};
+          //   let response = new MlRespPayload().successPayload("Password reset complete", code);
+          //   return response
+          // }
         } else {
           for (key in args.user) {
             user[key] = args.user[key]

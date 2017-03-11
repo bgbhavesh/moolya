@@ -72,14 +72,14 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;}
 .admin_main_wrap .no_padding{padding: 0px;}
 .admin_main_wrap .map_view_block{height: 100%;width: 100%;}
 .admin_main_wrap .filter{background: #ef4647;width: 28px;height: 30px;position: fixed;right: 0px;text-align: center;line-height: 24px;color: #fff;text-shadow: 0px 1px 1px #000;font-size: 20px;z-index: 4;}
-.admin_main_wrap .filter.alfa_filter{position: absolute; float: left; cursor: pointer; margin-right: 60px;}
+.admin_main_wrap .filter.alfa_filter{position: absolute; float: left; cursor: pointer; margin-right: 56px;}
 .alfa_pagination{right: -60px;position: fixed;z-index: 9999;transition: .5s linear;top: 37%;}
 .alfa_pagination.alfa_pagination_open{right: 0px;}
 .admin_main_wrap .filter.alfa_filter .fa{font-size: 16px;font-weight: normal;}
-.admin_main_wrap .alfa_filter_litters{z-index: 8; background: transparent;width: 60px;float: right;}
+.admin_main_wrap .alfa_filter_litters{z-index: 8; background: transparent;width: 56px;float: right;}
 .admin_main_wrap .alfa_filter_litters ul{  }
 /*.admin_main_wrap .alfa_filter_litters ul li{ display: block;float: left; padding: 20px;background: #ef4647;border-right: #f76a6b solid 1px;border-top: #f76a6b solid 1px;border-bottom:#d23738 solid 1px;border-left:#d23738 solid 1px; }*/
-.admin_main_wrap .alfa_filter_litters ul li a{ display: block;float: left;width: 30px;height: 30px; text-align:center;background: #ef4647;border-right: #d43536 solid 1px;border-top: #d43536 solid 1px;border-bottom:#f65354 solid 1px;border-left:#f65354 solid 1px; text-shadow: none;color: #fff;text-transform: uppercase;line-height: 30px;}
+.admin_main_wrap .alfa_filter_litters ul li a{ display: block;float: left;width: 28px;height: 28px; text-align:center;background: #ef4647;border-right: #d43536 solid 1px;border-top: #d43536 solid 1px;border-bottom:#f65354 solid 1px;border-left:#f65354 solid 1px; text-shadow: none;color: #fff;text-transform: lowercase;line-height: 20px;}
 .admin_main_wrap .alfa_filter_litters ul li a:hover{ background: #f65354;text-decoration: none;}
 .admin_main_wrap .filter.filter_settings{top: 25%;z-index: 8;}
 .admin_main_wrap .filter.alfa_filter ul{height: 30px;overflow: hidden;}

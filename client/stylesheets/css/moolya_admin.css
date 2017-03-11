@@ -246,9 +246,10 @@ a.mlUpload_btn{width: auto;margin:0px 20px;float: none;display: inline-block;}
 a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
 .mlUpload_btn:before{position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
 .mlUpload_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #273545;top: 0px;}
-.previewImg{width: 100px;height: 50px;border:0px solid #ddd;float: left;margin-left: 40px;margin-top: -13px;margin-bottom: 33px;}
+.previewImg{width: 100px;height: 50px;border:0px solid #ddd;float: left;margin-left: 0px;margin-top: -13px;margin-bottom: 33px;}
+.previewImg.ProfileImg{margin-left: 50px;}
 .ProfileImg img{width: 100%;border:1px solid #273545;width: 80px;height: 80px;border-radius: 4px;}
-.steps_pic_upload .ProfileImg{float: none;width: 200px;height: 200px;margin: 0px auto;position: relative;}
+.steps_pic_upload .ProfileImg{float: none;width: 200px;height: 200px;margin: 0px auto;position: relative; }
 .steps_pic_upload .ProfileImg img{width: 200px;height: 200px;border:2px solid #273545;}
 .steps_pic_upload .mlUpload_btn{float: none;margin: 15px auto;}
 .jvFloat {position: relative;}

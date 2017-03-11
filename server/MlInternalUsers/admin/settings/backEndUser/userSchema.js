@@ -137,7 +137,7 @@ let BackEndUser = `
     
     input userObject{
         username: String,
-       
+        password: String,
         profile:profile
     }
     
@@ -172,4 +172,4 @@ let BackEndUser = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
 // userObject changed
-// password: String,
+

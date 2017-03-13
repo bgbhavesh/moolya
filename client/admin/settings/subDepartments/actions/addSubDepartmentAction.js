@@ -3,7 +3,9 @@ import {client} from '../../../core/apolloConnection';
 
 export async function addSubDepartmentActionHandler(SubDepartmentDetails)
 {
-  let subDepartment=SubDepartmentDetails
+  let subDepartment=SubDepartmentDetails;
+  let availableSubDepts=subDepartment["subDepatmentAvailable"]||[];
+  subDepartment["subDepatmentAvailable"] = _.map(availableSubDepts, function(o) { return _.omit(o, '__typename'); })||[];
   /*  let subDepartmentName = SubDepartmentDetails.subDepartmentName;
     let displayName = SubDepartmentDetails.displayName;
     let aboutSubDepartment = SubDepartmentDetails.about;

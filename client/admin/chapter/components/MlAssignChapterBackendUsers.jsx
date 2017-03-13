@@ -8,8 +8,8 @@ import gql from 'graphql-tag'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler'
 import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
-import MlAssignChapterBackendUserList from './MlAssignBackendUserList'
-import MlAssignChapterBackendUserRoles from './MlAssignBackendUserRoles'
+import MlAssignChapterBackendUserList from './MlAssignChapterBackendUserList'
+import MlAssignChapterBackendUserRoles from './MlAssignChapterBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findUserDetails} from '../actions/findUserDetails'
@@ -18,8 +18,6 @@ import {OnToggleSwitch} from '../../utils/formElemUtil'
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
-
-
 
 class MlAssignChapterBackendUsers extends React.Component{
     constructor(props){
@@ -116,7 +114,6 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     getAssignedRoles(roles){
-        console.log(roles)
         this.setState({'mlroleDetails':roles})
         console.log(this.state.mlroleDetails)
     }
@@ -143,7 +140,7 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     handleSuccess(){
-      this.resetBackendUers();
+      this.resetBackendUsers();
     }
 
     handleError(){
@@ -156,7 +153,7 @@ class MlAssignChapterBackendUsers extends React.Component{
       const resp= this.findUserDetails(userId);
       //const resp= this.findUserDetails(userId);
     }
-    resetBackendUers(){
+  resetBackendUsers(){
       this.setState({loading: true});
       this.setState({selectedBackendUser: ''})
       this.findUserDetails('');
@@ -164,11 +161,11 @@ class MlAssignChapterBackendUsers extends React.Component{
 
     render(){
         let MlActionConfig = [
-          {
-            actionName: 'edit',
-            showAction: true,
-            handler: null
-          },
+          // {
+          //   actionName: 'edit',
+          //   showAction: true,
+          //   handler: null
+          // },
           {
             showAction: true,
             actionName: 'add',
@@ -211,7 +208,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                           <div className="row">
                               <div className="left_wrap left_user_blocks">
                                   <ScrollArea speed={0.8} className="left_wrap">
-                                      <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
+                                      <div className="col-md-4 col-sm-4" onClick={this.resetBackendUsers.bind(that)}>
                                           <div className="list_block provider_block">
                                               <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
                                               <div className="provider_mask"> <img src="/images/funder_bg.png" />  <img className="user_pic" src="/images/def_profile.png"/> </div>

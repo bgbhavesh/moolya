@@ -1,6 +1,7 @@
 
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
+import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
 
 var _ = require('lodash');
 
@@ -81,22 +82,56 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
     }
   };
 
-/*MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) =>
+MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) =>
 {
-  let roles = [];
+    let roles = [],
+      userhierarchy,
+      hierarchy,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId,
+      levelCode = "",
+      doRead = false;
+    let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    if(!userProfile||!userProfile.hierarchyLevel){
+       return roles;
+    }
 
-  if(args.departmentId && args.clusterId){
-      roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
-  }
+    userhierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    if(!userhierarchy){
+        return roles;
+    }
 
-  _.remove(roles, function (role) {
-      return role.roleName == 'platformadmin'
-  })
+    clusterId     = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
+    chapterId     = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
+    subChapterId  = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
+    communityId   = args.communityId && ((_.find(userProfile.defaultCommunities, args.communityId)) || userhierarchy.isParent) ? args.communityId: ""
 
-  return roles;
-    // let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
+    if(clusterId != ""){
+        levelCode = "CLUSTER"
+    }else{
+        return roles;
+    }
 
-}*/
+    // hierarchy = MlHierarchy.findOne({code:levelCode});
+    // if(hierarchy && hierarchy.level < userhierarchy.level){
+    //     return roles;
+    // }
+
+    let department = MlDepartments.findOne({"_id":args.departmentId})
+    if(department && department.isActive){
+        roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
+    }
+
+    _.remove(roles, {roleName:'platformadmin'})
+    if(levelCode == 'CLUSTER'){
+        _.remove(roles, {roleName:'clusteradmin'})
+        _.remove(roles, {roleName:'chapteradmin'})
+        _.remove(roles, {roleName:'subchapteradmin'})
+    }
+    return roles;
+}
 
 MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -122,72 +157,4 @@ MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info)
   })
   return roleNames;
 }
-
-MlResolver.MlQueryResolver['fetchRolesByDepSubDepTest'] = (obj, args, context, info) =>
-{
-  let roles = [];
-  let hierarchyLevel=args.hierarchyLevel;
-  let users = null;
-  if(hierarchyLevel==3){
-    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[0, 3]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
-    _.remove(roles, function (role) {
-      return role.roleName == 'clusteradmin'
-    })
-  }else if(hierarchyLevel==2){
-    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[2,1]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
-    _.remove(roles, function (role) {
-      return role.roleName == 'chapteradmin'
-    })
-  }else if(hierarchyLevel==1){
-    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[1]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
-    _.remove(roles, function (role) {
-      return role.roleName == 'subchapteradmin'
-    })
-  }else if(hierarchyLevel==0){
-    users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.hierarchyLevel":{"$in":[0]}},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.isActive":true}]},{fields:{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":1}}).fetch();
-    _.remove(roles, function (role) {
-      return role.roleName == 'communityadmin'
-    })
-  }else{
-    /*if(args.departmentId && args.clusterId){
-      roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
-    }*/
-
-   /* if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.communityId != ""){
-
-    }
-    else if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != "" && args.subChapterName !="Moolya"){
-
-    }
-    else if(args.clusterId != "" && args.chapterId != "" && args.subChapterName=="Moolya"){
-
-    }
-    else*/
-      if(args.clusterId != "" ){
-      roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
-    }
-    _.remove(roles, function (role) {
-      return role.roleName == 'platformadmin'
-    })
-    return roles;
-  }
-  let filteredUsers=[];
-  users.map(function (user) {
-    let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleId;
-    if(userProfiles){
-      filteredUsers.push(userProfiles)
-    }
-  })
-  var uniqueRoleId = filteredUsers.filter(function(elem, index, self) {
-    return index == self.indexOf(elem);
-  })
-  if(args.departmentId && args.clusterId){
-    roles = MlRoles.find( {"$and":[{"_id":{"$in":[uniqueRoleId.toString()]}},{"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}]}).fetch()
-  }
-
-  return roles;
-  // let roles = MlRoles.find({"assignRoles":{"$elemMatch":{"department":args.departmentId}, "$elemMatch":{"subDepartment":args.subDepartmentId}}}).fetch();
-
-}
-
 

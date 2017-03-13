@@ -144,11 +144,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
     let roleDetails = that.state.roleDetails
     return(
       <div>
-        {userDepartments.map(function (department) {
+        {userDepartments.map(function (department,id) {
           let queryOptions = {options: { variables: {departmentId:department.department, clusterId:that.props.clusterId,hierarchyLevel:that.state.hierarchyLevel}}};
           let query = gql`query($departmentId:String, $clusterId:String, $hierarchyLevel:String){data:fetchRolesByDepSubDepTest(departmentId: $departmentId, clusterId: $clusterId,hierarchyLevel:$hierarchyLevel) {value:_id, label:roleName}}`;
           return(
-            <div className="panel panel-default">
+            <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role</div>
               <div className="panel-body">
                 <div className="form-group">
@@ -162,12 +162,12 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                   <div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
                                                       onChange={that.isClusterAdmin.bind(that)}/><label
                     htmlFor="chapter_admin_check"><span></span>is ChapterAdmin</label></div>
-<br className="brclear"/>
+                    <br className="brclear"/>
                 <div className="">
                   <div className="">
                     {roleDetails.map(function (details, idx) {
                       return(
-                        <div className="form_inner_block" key={details.roleId}>
+                        <div className="form_inner_block" key={idx}>
                           <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, idx)}/></div>
                           <div className="form-group">
                             <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>

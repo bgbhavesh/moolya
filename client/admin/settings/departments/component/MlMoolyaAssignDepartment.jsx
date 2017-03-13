@@ -81,10 +81,7 @@ export default class MlMoolyaAssignDepartment extends React.Component {
     return (
 
       <div>
-
         {that.state.departmentAvailability.map(function(options,id){
-
-
           return(
             <div className="panel panel-default" key={id}>
                 <div className="panel-heading">Assign Department<div className="pull-right block_action"></div></div>

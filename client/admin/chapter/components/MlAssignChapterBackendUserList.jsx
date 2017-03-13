@@ -44,9 +44,9 @@ export default class MlAssignChapterBackendUserList extends React.Component{
         let backendUsers = that.state.backendUsers
         return(
           <div>
-            {backendUsers.map(function (user) {
+            {backendUsers.map(function (user,ids) {
                 return(
-                    <div className="col-md-4 col-sm-4" key={user.username} onClick={that.onBackEndUserClick.bind(that,user)}>
+                    <div className="col-md-4 col-sm-4" key={ids} onClick={that.onBackEndUserClick.bind(that,user)}>
                         <div className="list_block provider_block">
                             <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
                             <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>

@@ -12,7 +12,7 @@ import {mlClusterCommunityListConfig, mlClusterChapterCommunityListConfig} from 
 import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
-import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
+import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignChapterBackendUsers'
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 

@@ -63,6 +63,26 @@ export default class MlAssignDepartments extends React.Component {
       this.setState({departmentAvailability:availabilityDetailsForm})
     }
   }
+
+  componentWillReceiveProps(newProps){
+    let availabilityDetails=newProps.nonMoolya
+
+    if(availabilityDetails){
+      let availabilityDetailsForm=[]
+      for(let i=0;i<availabilityDetails.length;i++){
+        let json={
+          cluster:availabilityDetails[i].cluster[0],
+          chapter:availabilityDetails[i].chapter,
+          subChapter:availabilityDetails[i].subChapter,
+          email:availabilityDetails[i].email,
+          isActive:availabilityDetails[i].isActive
+
+        }
+        availabilityDetailsForm.push(json)
+      }
+      this.setState({departmentAvailability:availabilityDetailsForm})
+    }
+  }
   optionsBySelectCluster(index, selectedIndex){
 
     let availabilityDetails=this.state.departmentAvailability

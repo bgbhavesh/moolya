@@ -37,45 +37,42 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => {
   let user = Meteor.users.findOne({_id: args.userId});
-  if(user)
-  {
+  if(user){
+      let profile = args.userProfile;
+      let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
 
-    let profile = args.userProfile;
-    let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-
-    if(userProfiles && userProfiles.length > 0){
-        let index = _.findIndex(userProfiles, {clusterId:profile.clusterId})
-        if(index >= 0)
-        {
-            // userProfiles[index].userroles.push(profile.userroles)
-            let roles     = profile.userRoles;
-            let userRoles = userProfiles[index].userRoles;
-            // _.merge(userRoles, roles)
-            roles.map(function (role) {
+      if(userProfiles && userProfiles.length > 0){
+          let index = _.findIndex(userProfiles, {clusterId:profile.clusterId})
+          if(index >= 0)
+          {
+              // userProfiles[index].userroles.push(profile.userroles)
+              let roles     = profile.userRoles;
+              let userRoles = userProfiles[index].userRoles;
+              // _.merge(userRoles, roles)
+              roles.map(function (role) {
                   let action =_.find(userRoles, {"roleId": role.roleId, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId});
                   if(!action){
                       userRoles.push(role)
                   }
-
-            })
-            userProfiles[index].userRoles = userRoles;
-        }else{
-            userProfiles.push(profile);
-        }
-    }else{
-        userProfiles.push(profile);
-    }
-    user.profile.InternalUprofile.moolyaProfile.userProfiles = userProfiles;
-    if(args.moolyaProfile && args.moolyaProfile.displayName){
-      user.profile.InternalUprofile.moolyaProfile.displayName = args.moolyaProfile.displayName
-    }
-    let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
-    if(resp){
-      let code = 200;
-      let result = {user: resp}
-      let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-      return response
-    }
+              })
+              userProfiles[index].userRoles = userRoles;
+          }else{
+              userProfiles.push(profile);
+          }
+      }else{
+          userProfiles.push(profile);
+      }
+      user.profile.InternalUprofile.moolyaProfile.userProfiles = userProfiles;
+      if(args.moolyaProfile && args.moolyaProfile.displayName){
+        user.profile.InternalUprofile.moolyaProfile.displayName = args.moolyaProfile.displayName
+      }
+      let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
+      if(resp){
+        let code = 200;
+        let result = {user: resp}
+        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        return response
+      }
   }
   let response = new MlRespPayload().errorPayload("User Not Found", 404);
   return response
@@ -432,34 +429,33 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let hierarchy = "";
   roles.map(function (role)
   {
-    if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
-      levelCode = "COMMUNITY"
-    }
-    else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
-      levelCode = "SUBCHAPTER"
-      role.communityId = "all"
-    }
-    else if(role.clusterId != "" && role.chapterId != "" ){
-      levelCode = "CHAPTER"
-      role.subChapterId = "all"
-      role.communityId = "all"
-    }
-    else if(role.clusterId != ""){
-      levelCode = "CLUSTER"
-      role.chapterId = "all"
-      role.subChapterId = "all"
-      role.communityId = "all"
-    }
-
-    hierarchy = MlHierarchy.findOne({code:levelCode})
-    role.hierarchyLevel = hierarchy.level;
-    role.hierarchyCode  = hierarchy.code;
+      if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
+          levelCode = "COMMUNITY"
+      }
+      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
+          levelCode = "SUBCHAPTER"
+          role.communityId = "all"
+      }
+      else if(role.clusterId != "" && role.chapterId != "" ){
+          levelCode = "CHAPTER"
+          role.subChapterId = "all"
+          role.communityId = "all"
+      }
+      else if(role.clusterId != ""){
+          levelCode = "CLUSTER"
+          role.chapterId = "all"
+          role.subChapterId = "all"
+          role.communityId = "all"
+      }
+      hierarchy = MlHierarchy.findOne({code:levelCode})
+      role.hierarchyLevel = hierarchy.level;
+      role.hierarchyCode  = hierarchy.code;
   })
 
   let userProfile = {
-    clusterId:  data.profile.InternalUprofile.moolyaProfile.userProfiles.clusterId,
-    userRoles:  roles,
-    isDefault: false
+      clusterId:  data.profile.InternalUprofile.moolyaProfile.userProfiles.clusterId,
+      userRoles:  roles,
+      isDefault: false
   }
 
   let resp = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)

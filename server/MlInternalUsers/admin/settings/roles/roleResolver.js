@@ -106,9 +106,19 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     subChapterId  = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
     communityId   = args.communityId && ((_.find(userProfile.defaultCommunities, args.communityId)) || userhierarchy.isParent) ? args.communityId: ""
 
-    if(clusterId != ""){
+    if(clusterId != "" && chapterId != "" && subChapterId != "" && communityId != ""){
+      levelCode = "COMMUNITY"
+    }
+    else if(clusterId != "" && chapterId != "" && subChapterId != ""){
+        levelCode = "SUBCHAPTER"
+    }
+    else if(clusterId != "" && chapterId != ""){
+        levelCode = "CHAPTER"
+    }
+    else if(clusterId != ""){
         levelCode = "CLUSTER"
-    }else{
+    }
+    else{
         return roles;
     }
 
@@ -118,11 +128,23 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     }
 
     _.remove(roles, {roleName:'platformadmin'})
-    if(levelCode == 'CLUSTER' && !userhierarchy.isParent){
-        _.remove(roles, {roleName:'clusteradmin'})
+    if(levelCode == 'CLUSTER') {
+        if(!userhierarchy.isParent)
+          _.remove(roles, {roleName: 'clusteradmin'})
+
+      _.remove(roles, {roleName:'chapteradmin'})
+      _.remove(roles, {roleName:'subchapteradmin'})
     }
-    _.remove(roles, {roleName:'chapteradmin'})
-    _.remove(roles, {roleName:'subchapteradmin'})
+
+    else if(levelCode == 'SUBCHAPTER') {
+        _.remove(roles, {roleName: 'clusteradmin'})
+        _.remove(roles, {roleName:'chapteradmin'})
+        if(!userhierarchy.isParent){
+            _.remove(roles, {roleName:'subchapteradmin'})
+        }
+    }
+
+
     return roles;
 }
 

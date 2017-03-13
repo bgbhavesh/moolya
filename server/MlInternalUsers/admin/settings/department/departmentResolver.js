@@ -23,7 +23,7 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
       var departmentExist =  MlDepartments.find( {
         $and : [
           { departmentName:args.department.departmentName },
-          {"depatmentAvailable.cluster" :  {$in : ["All",args.department.depatmentAvailable[i].cluster]}},
+          {"depatmentAvailable.cluster" :  {$in : ["all",args.department.depatmentAvailable[i].cluster]}},
           { "depatmentAvailable":{
             $elemMatch: {
               chapter: args.department.depatmentAvailable[i].chapter,

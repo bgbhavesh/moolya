@@ -401,7 +401,7 @@ MlResolver.MlMutationResolver['deActivateUser'] = (obj, args, context, info) => 
     let user = Meteor.users.findOne({_id: args.userId});
     let resp;
     if(user){
-        resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.deActive":args.deActive}});
+        resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
     }
 
     if(resp){

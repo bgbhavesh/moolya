@@ -114,7 +114,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
   onClickDate(id,event){
       let filedName=event.target.name
       let fieldId=filedName+id
-      $("#"+fieldId).datepicker({ format: this.state.dateformate });
+      $("#"+fieldId).datepicker({ format: 'dd-mm-yyyy', autoclose:true ,startDate: '+0d'});
       $("#"+fieldId).focus();
   }
 

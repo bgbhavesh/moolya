@@ -58,7 +58,7 @@ class MlEditState extends React.Component{
   async  editState() {
     let StateDetails = {
       id: this.refs.id.value,
-      name: this.refs.stateName.value,
+      // name: this.refs.stateName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
       isActive: this.refs.status.checked
@@ -110,7 +110,7 @@ class MlEditState extends React.Component{
 
                   </div>
                   <div className="form-group">
-                    <textarea placeholder="About" ref="about" defaultValue={this.state.data && this.state.data.about} className="form-control float-label" id=""></textarea>
+                    <textarea placeholder="About" ref="about" defaultValue={this.state.data && this.state.data.about} className="form-control float-label"></textarea>
 
                   </div>
                 </form>

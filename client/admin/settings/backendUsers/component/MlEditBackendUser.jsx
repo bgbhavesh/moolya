@@ -37,6 +37,7 @@ class MlEditBackendUser extends React.Component{
       subChapterId:'',
       roleId:'',
       isDefault:null,
+      deActive:false,
       isActive:null,
       globalStatus:null,
       selectedSubChapter:'',
@@ -93,7 +94,8 @@ class MlEditBackendUser extends React.Component{
    if(response){
      this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
      this.setState({selectedSubChapter:this.state.data.profile.InternalUprofile.moolyaProfile.subChapter})
-      this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
+     this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
+     this.setState({deActive:this.state.data.profile.isActive})
      this.setState({isActive:this.state.data.profile.InternalUprofile.moolyaProfile.isActive})
      this.setState({globalStatus:this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment})
      let clusterId="",chapterId='',subChapterId='',communityId=''
@@ -151,9 +153,9 @@ class MlEditBackendUser extends React.Component{
 
     let dataDetails=this.state.data;
     if(event.currentTarget.checked){
-      this.setState({"isActive":true})
+      this.setState({"deActive":true})
     }else{
-      this.setState({"isActive":false})
+      this.setState({"deActive":false})
     }
   }
   onMakeDefultChange(id,event){
@@ -227,7 +229,7 @@ class MlEditBackendUser extends React.Component{
       email:this.refs.email.value,
       contact:this.state.mlAssignContactDetails,
       globalAssignment:this.refs.globalAssignment.checked,
-      isActive:this.refs.isActive.checked,
+      isActive:true,
       userProfiles:userprofiles
     }
     let InternalUprofile={
@@ -237,6 +239,7 @@ class MlEditBackendUser extends React.Component{
       isInternaluser: true,
       isExternaluser: false,
       email: this.refs.email.value,
+      isActive:this.refs.deActive.checked,
       InternalUprofile: InternalUprofile
     }
     let userObject={
@@ -429,7 +432,7 @@ class MlEditBackendUser extends React.Component{
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" ref="isActive" checked={that.state.isActive}  onChange={that.onisActiveChanged.bind(that)} />
+                      <input type="checkbox" ref="deActive" checked={that.state.deActive}  onChange={that.onisActiveChanged.bind(that)} />
                       <div className="slider"></div>
                     </label>
                   </div>

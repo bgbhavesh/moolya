@@ -102,13 +102,13 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
   if (args.id) {
     let id= args.id;
     let response = [];
-    if(id == "All"){
+    if(id == "all"){
       response= MlChapters.find({}).fetch()||[];
-      response.push({"chapterName" : "All","_id" : "All"});
+      response.push({"chapterName" : "All","_id" : "all"});
     }else{
       response= MlChapters.find({"clusterId":id}).fetch()||[];
       if(response.length > 0){
-        response.push({"chapterName" : "All","_id" : "All"});
+        response.push({"chapterName" : "All","_id" : "all"});
       }
     }
 

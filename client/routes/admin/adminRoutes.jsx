@@ -90,3 +90,9 @@ adminSection.route('/community/:communityId/assignusers', {
   }
 });
 
+adminSection.route('/transactions/requestedList', {
+  name: 'transaction_RequestList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} listConfig={mlCommunityListConfig}/>})
+  }
+});

@@ -61,15 +61,13 @@ class MlAddSubDepartment extends React.Component{
   }
 
   optionsBySelectDepartment(val){
-    this.setState({department:val})
     this.findDepartment(val);
+    this.setState({department:val})
   }
   async findDepartment(val){
     let departmentId=val
-    console.log(departmentId)
     const response = await findDepartmentActionHandler(departmentId);
-    console.log(response)
-   this.setState({data:response});
+    this.setState({data:response});
   }
   getDepartmentAvailability(details){
     console.log("details->"+details);

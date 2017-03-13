@@ -10,7 +10,7 @@ import {mlChapterMapConfig,mlChapterListConfig} from '../../admin/chapter/config
 import {mlChapterCommunitiesConfig} from '../../admin/chapter/config/mChapterCommunitiesConfig'
 import {mlSubChapterMapConfig,mlSubChapterListConfig} from '../../admin/chapter/config/mlSubChapterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
-import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignBackendUsers'
+import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignChapterBackendUsers'
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 

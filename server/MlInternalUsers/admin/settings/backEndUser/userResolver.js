@@ -88,65 +88,57 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
-    let salted = passwordUtil.hashPassword(args.password);
-    // console.log(salted);
-    let resp = Meteor.users.update({_id: args.userId}, {
-      $set: {"services.password.bcrypt": salted}
-    });
-    if (resp) {
-      let code = 200;
-      let response = new MlRespPayload().successPayload("Password Reset complete", code);
-      return response
-    }
+  let salted = passwordUtil.hashPassword(args.password);
+  let resp = Meteor.users.update({_id: args.userId}, {
+    $set: {"services.password.bcrypt": salted}
+  });
+  if (resp) {
+    let code = 200;
+    let response = new MlRespPayload().successPayload("Password Reset complete", code);
+    return response
+  }
 };
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
-    let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-    if (!isValidAuth) {
-      let code = 401;
-      let response = new MlRespPayload().errorPayload("Not Authorized", code);
-      return response;
-    }
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
 
-    let user = Meteor.users.findOne({_id: args.userId});
-    if(user){
-      if(user.profile.isSystemDefined){
-                 let code = 409;
-                 let response = new MlRespPayload().errorPayload("Cannot edit system defined User", code);
-                return response;
-      }else {
-        if (!args.user.profile) {
-          // let salted = passwordUtil.hashPassword(args.user.password);
-          // console.log(salted);
-          // let resp = Meteor.users.update({_id: args.userId}, {
-          //   $set: {"services.password.bcrypt": salted}
-          // });
-          // if (resp) {
-          //   let code = 200;
-          //   let result = {user: resp};
-          //   let response = new MlRespPayload().successPayload("Password reset complete", code);
-          //   return response
-          // }
-        } else {
-          for (key in args.user) {
-            user[key] = args.user[key]
-          }
-          if (!args.user.username) {
-            let code = 409;
-            let response = new MlRespPayload().errorPayload("Email/Username is required", code);
-            return response;
-          }
-          //let resp = Meteor.users.update({_id:args.userId}, {$set:{'profile':user.profile}});
-          let resp = Meteor.users.update({_id: args.userId}, {$set: {profile: user.profile}}, {upsert: true})
-          if (resp) {
-            let code = 200;
-            let result = {user: resp};
-            let response = new MlRespPayload().successPayload(result, code);
-            return response
-          }
+  let user = Meteor.users.findOne({_id: args.userId});
+  if (user) {
+    if (user.profile.isSystemDefined) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Cannot edit system defined User", code);
+      return response;
+    } else {
+      if (args.user.profile) {
+        for (key in args.user) {
+          user[key] = args.user[key]
         }
+
+        if (!args.user.username) {
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Email/Username is required", code);
+          return response;
+        }
+
+        let resp = Meteor.users.update({_id: args.userId}, {$set: {profile: user.profile}}, {upsert: true})
+        if (resp) {
+          let code = 200;
+          let result = {user: resp};
+          let response = new MlRespPayload().successPayload(result, code);
+          return response
+        }
+      } else {
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Profile is required", code);
+        return response;
       }
     }
+  }
 };
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
@@ -166,7 +158,8 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
       });
     });
     return user;
-}
+};
+
 MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) => {
   let user = Meteor.users.findOne({_id: args.userId});
   if (user && user.profile && user.profile.isInternaluser == true) {
@@ -178,7 +171,7 @@ MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info
       }
     }
   }
-}
+};
 
 MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) => {
 

@@ -162,7 +162,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component{
                   <div className="input_types"><input id="chapter_admin_check" type="checkbox"  name="CREATE"
                                                       onChange={that.isClusterAdmin.bind(that)}/><label
                     htmlFor="chapter_admin_check"><span></span>is ChapterAdmin</label></div>
-<br className="brclear"/>
+                    <br className="brclear"/>
                 <div className="">
                   <div className="">
                     {roleDetails.map(function (details, idx) {

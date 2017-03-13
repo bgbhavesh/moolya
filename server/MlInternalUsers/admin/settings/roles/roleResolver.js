@@ -85,11 +85,13 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) =>
 {
     let roles = [],
-      userHierarchy,
+      userhierarchy,
+      hierarchy,
       clusterId,
       chapterId,
       subChapterId,
       communityId,
+      levelCode = "",
       doRead = false;
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
     if(!userProfile||!userProfile.hierarchyLevel){
@@ -106,27 +108,28 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     subChapterId  = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
     communityId   = args.communityId && ((_.find(userProfile.defaultCommunities, args.communityId)) || userhierarchy.isParent) ? args.communityId: ""
 
-    if(clusterId != "" && chapterId != "" && subChapterId != ""){
-        levelCode = "SUBCHAPTER"
-    }
-    else if(clusterId != "" && chapterId != "" ){
-        levelCode = "CHAPTER"
-    }
-    else if(clusterId != ""){
+    if(clusterId != ""){
         levelCode = "CLUSTER"
+    }else{
+        return roles;
     }
-    else if(userhierarchy.isParent){
-        levelCode = "PLATFORM"
-    }
+
+    // hierarchy = MlHierarchy.findOne({code:levelCode});
+    // if(hierarchy && hierarchy.level < userhierarchy.level){
+    //     return roles;
+    // }
 
     let department = MlDepartments.findOne({"_id":args.departmentId})
     if(department && department.isActive){
         roles = MlRoles.find({"$or":[{"assignRoles.department":{"$in":["all", args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
     }
 
-    _.remove(roles, function (role) {
-        return role.roleName == 'platformadmin'
-    })
+    _.remove(roles, {roleName:'platformadmin'})
+    if(levelCode == 'CLUSTER'){
+        _.remove(roles, {roleName:'clusteradmin'})
+        _.remove(roles, {roleName:'chapteradmin'})
+        _.remove(roles, {roleName:'subchapteradmin'})
+    }
     return roles;
 }
 

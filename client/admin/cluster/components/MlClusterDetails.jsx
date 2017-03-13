@@ -6,16 +6,9 @@ import {findClusterTypeActionHandler} from '../actions/findCluster'
 import {updateClusterActionHandler} from '../actions/updateCluster'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import _ from 'lodash';
+import {OnToggleSwitch,initalizeFloatLabel} from '../../utils/formElemUtil';
 
-function toggleSwitch(){
-  $('.switch input').change(function() {
-    if ($(this).is(':checked')) {
-      $(this).parent('.switch').addClass('on');
-    }else{
-      $(this).parent('.switch').removeClass('on');
-    }
-  });
-}
+
 
 class MlClusterDetails extends React.Component {
   constructor(props) {
@@ -33,14 +26,10 @@ class MlClusterDetails extends React.Component {
     return resp;
   }
 
-  componentDidMount(){
-    toggleSwitch();
-    $('.float-label').jvFloat();
-  }
-
-  componentDidUpdate(){
-    toggleSwitch();
-    $('.float-label').jvFloat();
+  componentDidUpdate()
+  {
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
 
   async findCluster() {

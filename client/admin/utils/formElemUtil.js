@@ -25,3 +25,15 @@ export function OnToggleSwitch(isExisting,isChanged){
 export function initalizeFloatLabel(){
     $('.float-label').jvFloat();
 }
+
+export function passwordVisibilityHandler(){
+  $('.password_icon').unbind().click(function(){
+    if($(this).hasClass('hide_p')){
+      $(this).parents('.form-group').find('input').attr('type','text');
+      $(this).removeClass('hide_p').removeClass('fa-eye-slash').addClass('fa-eye');
+    }else{
+      $(this).parents('.form-group').find('input').attr('type','password');
+      $(this).addClass('hide_p').removeClass('fa-eye').addClass('fa-eye-slash');;
+    }
+  });
+}

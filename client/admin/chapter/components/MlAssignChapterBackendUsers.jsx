@@ -116,7 +116,7 @@ class MlAssignChapterBackendUsers extends React.Component{
 
     getAssignedRoles(roles){
         this.setState({'mlroleDetails':roles})
-        console.log(this.state.mlroleDetails)
+        // console.log(this.state.mlroleDetails)
     }
 
     isChapterAdmin(admin){
@@ -132,6 +132,7 @@ class MlAssignChapterBackendUsers extends React.Component{
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
         userProfile['clusterId'] = this.props.params.clusterId;
+        userProfile['isChapterAdmin'] = this.state.chapterAdmin;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}}

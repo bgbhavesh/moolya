@@ -121,7 +121,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       roleDetails[id]['isActive'] = fieldValue
     }
     else {
-      roleDetails[id][[filedName]] = fieldValue
+      // roleDetails[id][[filedName]] = fieldValue
+      roleDetails[id][filedName] = fieldValue
     }
     this.setState({roleDetails: roleDetails})
     this.props.getAssignedRoles(this.state.roleDetails)
@@ -130,7 +131,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   onClickDate(id, event) {
     let filedName = event.target.name
     let fieldId = filedName + id
-    $("#" + fieldId).datepicker({format: this.state.dateformate});
+    $("#" + fieldId).datepicker({format: 'dd-mm-yyyy', autoclose:true, stateDate:'+0d'});
     $("#" + fieldId).focus();
   }
 
@@ -183,7 +184,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                          value={department.subDepartmentName}/>
                 </div>
 
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="CREATE"
+                <div className="input_types"><input id="chapter_admin_check" type="checkbox"
                                                     onChange={that.isChapterAdmin.bind(that)}/><label
                   htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div>
                 <br className="brclear"/>

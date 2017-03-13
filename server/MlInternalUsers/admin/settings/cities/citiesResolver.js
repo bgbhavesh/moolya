@@ -72,7 +72,7 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
                     chapterName:city.name,
                     displayName:city.name,
                     about:"ssw",
-                    chapterImage:"image",
+                    chapterImage:"",
                     stateName:state.name,
                     stateId:state._id,
                     cityId:args.cityId,

@@ -4,6 +4,7 @@ import {render} from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addStageOfCompanyActionHandler} from '../actions/addStageOfCompanyTypeAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlAddStageOfCompany extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +42,10 @@ class MlAddStageOfCompany extends React.Component {
     const response = await addStageOfCompanyActionHandler(StageOfCompanyDetails)
     return response;
   }
+  componentDidMount()  {
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
+  }
 
   render() {
     let MlActionConfig = [
@@ -63,13 +68,14 @@ class MlAddStageOfCompany extends React.Component {
 
     // const showLoader=this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {/*{showLoader===true?( <div className="loader_wrap"></div>):(*/}
-          <div className="admin_main_wrap">
+
           <div className="admin_padding_wrap">
           <h2>Create Stage Of Company</h2>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-left">
           <div className="form_bg">
+          <form>
           <div className="form-group">
           <input type="text" ref="stageOfCompanyName" placeholder="Stage Of Company Name"
           className="form-control float-label"/>
@@ -77,24 +83,27 @@ class MlAddStageOfCompany extends React.Component {
           <div className="form-group">
           <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
           </div>
+          </form>
           </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-right">
           <div className="form_bg">
+          <form>
           <div className="form-group">
           <input type="text" ref="stageOfCompanyDisplayName" placeholder="Display Name"
           className="form-control float-label"/>
           </div>
-          <div className="form-group switch_wrap">
-          <label>Status</label><br/>
+          <div className="form-group switch_wrap inline_switch">
+          <label>Status</label>
           <label className="switch">
           <input type="checkbox" ref="isActive"/>
           <div className="slider"></div>
           </label>
           </div>
+          </form>
           </div>
           </div>
-          </div>
+
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
           />
           </div>

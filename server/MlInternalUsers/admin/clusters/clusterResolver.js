@@ -23,14 +23,19 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
             }
             cluster.latitude = data.results[0].geometry.location.lat;
             cluster.longitude = data.results[0].geometry.location.lng;
+          try{
             let id = MlClusters.insert(cluster);
             if(id){
                 MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:id, moduleName:"CLUSTER", actionName:"CREATE"}, context, info)
+
                 let code = 200;
                 let result = {clusterid: id}
                 let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
                 return response
             }
+          }catch(e){
+            throw new Error("Error while creating Cluster "+e);
+          }
         }));
     }
 }

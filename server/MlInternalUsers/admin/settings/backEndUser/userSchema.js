@@ -131,6 +131,7 @@ let BackEndUser = `
         isInternaluser: Boolean,
         isExternaluser: Boolean,
         email: String,
+        deActive:Boolean,
         InternalUprofile: InternalUprofile
     }
     
@@ -150,6 +151,7 @@ let BackEndUser = `
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
+        resetPassword (userId:String!, password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
@@ -169,4 +171,5 @@ let BackEndUser = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
+// userObject changed
 

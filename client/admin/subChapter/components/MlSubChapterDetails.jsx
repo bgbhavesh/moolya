@@ -5,7 +5,7 @@ import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {updateSubChapterActionHandler} from '../actions/updateSubChapter'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import _ from 'lodash';
-
+import {OnToggleSwitch,initalizeFloatLabel} from '../../utils/formElemUtil';
 
 class MlSubChapterDetails extends React.Component {
   constructor(props) {
@@ -91,7 +91,11 @@ class MlSubChapterDetails extends React.Component {
     const resp = this.findSubChapter();
     return resp;
   }
-
+  componentDidUpdate()
+  {
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
+  }
   async findSubChapter() {
     let subChapterId = this.props.params;
     const response = await findSubChapterActionHandler(subChapterId);
@@ -101,13 +105,13 @@ class MlSubChapterDetails extends React.Component {
   render() {
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateSubChapter.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]

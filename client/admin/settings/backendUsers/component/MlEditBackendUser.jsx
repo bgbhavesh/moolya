@@ -11,7 +11,8 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {findBackendUserActionHandler} from '../actions/findBackendUserAction'
 import {updateBackendUserActionHandler} from '../actions/updateBackendUserAction'
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {resetPasswordActionHandler} from '../actions/resetPasswordAction'
+import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
@@ -56,6 +57,7 @@ class MlEditBackendUser extends React.Component{
   componentDidUpdate(){
     OnToggleSwitch(true,true);
     initalizeFloatLabel();
+    passwordVisibilityHandler();
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
   }
@@ -87,7 +89,6 @@ class MlEditBackendUser extends React.Component{
     let userTypeId=this.props.config;
     //console.log(userTypeId)
     const response = await findBackendUserActionHandler(userTypeId);
-    console.log(response)
     this.setState({loading:false,data:response});
    if(response){
      this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
@@ -240,7 +241,7 @@ class MlEditBackendUser extends React.Component{
     }
     let userObject={
       username: moolyaProfile.email,
-      password:this.refs.password.value,
+      // password:this.refs.password.value,
       profile:profile
     }
 
@@ -254,17 +255,22 @@ class MlEditBackendUser extends React.Component{
     return response;
   }
 
-  async  resetPassword() {
-    let userObject={
+  async resetPassword() {
+    let userDetails={
+      userId:this.refs.id.value,
       password:this.refs.confirmPassword.value
     }
-    console.log(userObject)
-    let updateUserObject={
-      userId:this.refs.id.value,
-      userObject:userObject
+    this.onCheckPassword();
+    if(this.state.pwdErrorMsg)
+      toastr.error("Confirm Password does not match with Password");
+    else{
+      const response = await resetPasswordActionHandler(userDetails);
+      this.refs.id.value='';
+      this.refs.confirmPassword.value = '';
+      this.refs.password.value = '';
+      this.setState({"pwdErrorMsg":'Password reset complete'})
+      toastr.error(response.result);
     }
-    const response = await updateBackendUserActionHandler(updateUserObject)
-    toastr.error(response.result);
   }
 
   getAssignedDepartments(departments){
@@ -288,7 +294,6 @@ class MlEditBackendUser extends React.Component{
     let confirmPassword=this.refs.confirmPassword.value;
     if(confirmPassword!=password){
       this.setState({"pwdErrorMsg":'Confirm Password does not match with Password'})
-      //alert("ur confirm pwd not match with pwd")
     }else{
       this.setState({"pwdErrorMsg":''})
     }
@@ -297,24 +302,26 @@ class MlEditBackendUser extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
-    ]
+    ];
+
     let UserTypeOptions = [
       {value: 'moolya', label: 'moolya'},
       {value: 'non-moolya', label: 'non-moolya'}
     ];
+
     let BackendUserOptions=[
       {value: 'Internal User', label: 'Internal User'},
       {value: 'External User', label: 'External User'}
-    ]
+    ];
 
     let query=gql` query{
   data:fetchCountriesSearch{label:country,value:countryCode}
@@ -363,8 +370,10 @@ class MlEditBackendUser extends React.Component{
                     <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={that.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={that.optionsBySelectSubChapter.bind(that)} />
                   )}
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
+                    <div className="form-group">
                     <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)}
                     />
+                      </div>
                    {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
                  {/* <div className="form-group">
                     <input type="Password" hidden="true" ref="password" placeholder="Create Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
@@ -375,12 +384,12 @@ class MlEditBackendUser extends React.Component{
                 </div>*/}
                 <div className="form-group">
                   <input type="Password" ref="password" defaultValue={that.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
-                  <FontAwesome name='eye' className="password_icon Password"/>
+                  <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                 </div>
                 <div className="form-group">
                   <text style={{float:'right',color:'#ef1012',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{that.state.pwdErrorMsg}</text>
                   <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
-                  <FontAwesome name='eye' className="password_icon ConfirmPassword"/>
+                  <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                 </div>
                   <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
@@ -468,8 +477,6 @@ class MlEditBackendUser extends React.Component{
                 </ScrollArea>
               </div>
             </div>
-
-
 
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
         />

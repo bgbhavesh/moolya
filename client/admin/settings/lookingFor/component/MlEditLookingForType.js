@@ -8,6 +8,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findLookingForActionHandler} from '../actions/findLookingForTypeAction'
 import {updateLookingForTypeActionHandler} from '../actions/updateLookingForTypeAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlEditLookingForType extends React.Component{
   constructor(props) {
     super(props);
@@ -26,6 +27,11 @@ class MlEditLookingForType extends React.Component{
     /*if(this.state.data.isActive){
      $('#status').prop('checked', true);
      }*/
+  }
+  componentDidUpdate()
+  {
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
   onCommunitySelect(val) {
     if(val){
@@ -86,26 +92,27 @@ class MlEditLookingForType extends React.Component{
 
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateLookingForType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ];
 
     const showLoader=this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_main_wrap">
+
             <div className="admin_padding_wrap">
               <h2>Edit Looking For</h2>
-              <div className="col-md-6">
+              <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
+                  <form>
                   <div className="form-group">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                     <input type="text" ref="lookingForName" placeholder="Name" defaultValue={this.state.data&&this.state.data.lookingForName}
@@ -114,30 +121,33 @@ class MlEditLookingForType extends React.Component{
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>
                   </div>
+                  </form>
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
+                  <form>
                   <div className="form-group">
                     <input type="text" ref="lookingForDisplayName" placeholder="Display Name"
                            className="form-control float-label" defaultValue={this.state.data&&this.state.data.lookingForDisplayName}/>
                   </div>
-                  <div className="form-group">
+
                     <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"}
                                   selectedValue={this.state.selectedCommunity}
                                   query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)}/>
-                  </div>
-                  <div className="form-group switch_wrap">
-                    <label>Status</label><br/>
+
+                  <div className="form-group switch_wrap inline_switch">
+                    <label>Status</label>
                     <label className="switch">
                       <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
                   </div>
+                  </form>
                 </div>
               </div>
-            </div>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
             />
           </div>)}

@@ -7,6 +7,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addLookingForActionHandler} from '../actions/addLookingForTypeAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlAddLookingFor extends React.Component {
   constructor(props) {
     super(props);
@@ -54,7 +55,10 @@ class MlAddLookingFor extends React.Component {
     const response = await addLookingForActionHandler(LookingForDetails)
     return response;
   }
-
+  componentDidMount()  {
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
+  }
   render() {
     let query = gql` query{
   data:fetchCommunityDefinition{label:name,value:code}
@@ -69,39 +73,42 @@ class MlAddLookingFor extends React.Component {
       // },
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.CreateLookingFor.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]
 
     const showLoader=this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_main_wrap">
+
             <div className="admin_padding_wrap">
               <h2>Create Looking For</h2>
-              <div className="col-md-6">
+              <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
-                  <div className="form-group">
+                  <form>
+
                     <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"} placeholder="Select Community"
                                   selectedValue={this.state.selectedCommunity}
                                   query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)}/>
-                  </div>
+
                   <div className="form-group">
                     <input type="text" ref="lookingForDisplayName" placeholder="Display Name"
                            className="form-control float-label"/>
                   </div>
+                  </form>
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
+                  <form>
                   <div className="form-group">
                     <input type="text" ref="lookingForName" placeholder="Looking For Name"
                            className="form-control float-label"/>
@@ -109,16 +116,17 @@ class MlAddLookingFor extends React.Component {
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
                   </div>
-                  <div className="form-group switch_wrap">
-                    <label>Status</label><br/>
+                  <div className="form-group switch_wrap inline_switch">
+                    <label>Status</label>
                     <label className="switch">
                       <input type="checkbox" ref="isActive"/>
                       <div className="slider"></div>
                     </label>
                   </div>
+                  </form>
                 </div>
               </div>
-            </div>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
             />
           </div>)}

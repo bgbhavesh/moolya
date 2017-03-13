@@ -270,7 +270,6 @@ if(Meteor.isServer){
         "uniqueId"   :"transaction",
         "isLink" : true,
         "isMenu" : true,
-        "hideSubMenu":true,
         "subMenu":[
           {
             "link" : "/admin/transactions/requestedList",

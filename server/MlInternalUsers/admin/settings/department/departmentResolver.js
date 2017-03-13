@@ -12,6 +12,17 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
       let response = new MlRespPayload().errorPayload("Not Authorized", code);
       return response;
     }
+    var departmentAvailableArray = args.department.depatmentAvailable;
+    if(args.department && args.department.depatmentAvailable){
+      for(var i=0; i < args.department.depatmentAvailable.length; i++){
+         var departmentClusterLength = args.department.depatmentAvailable[i].cluster
+      }
+      if(departmentClusterLength.length<1){
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Cluster name is manditory!!!!", code);
+        return response;
+      }
+    }
    /* if(MlDepartments.find({departmentName:args.department.departmentName}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);

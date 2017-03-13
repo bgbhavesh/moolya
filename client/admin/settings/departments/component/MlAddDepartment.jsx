@@ -82,6 +82,9 @@ class MlAddDepartment extends React.Component{
 
   }
   getMoolyaDepartmentAvailability(details){
+    for(var i = 0; i < details.length; i++){
+        details[i].clusters;
+    }
     this.setState({'departmentAvailability':details})
   }
   getDepartmentAvailability(details){

@@ -144,8 +144,9 @@ let BackEndUser = `
     type dep{
         department:String,
         departmentName:String,
-        subDepartment:String
-        subDepartmentName:String
+        subDepartment:String,
+        subDepartmentName:String,
+          isAvailiable:Boolean
     }
     
     type Mutation{

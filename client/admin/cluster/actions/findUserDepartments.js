@@ -13,10 +13,11 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
       query ($id: String, $clusterId:String) {
         data: fetchUserDepSubDep(userId: $id, clusterId:$clusterId) 
         {
-            department
-            departmentName
-            subDepartment
-            subDepartmentName
+            department,
+            departmentName,
+            subDepartment,
+            subDepartmentName,
+            isAvailiable
         }
       }
     `,

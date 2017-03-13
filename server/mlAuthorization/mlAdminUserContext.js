@@ -18,6 +18,7 @@ class MlAdminUserContext
     let defaultCluster=null;
     let defaultChapters = [];
     let defaultSubChapters = [];
+    let defaultCommunities = [];
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -51,6 +52,7 @@ class MlAdminUserContext
             }
             defaultChapters.push(userRole.chapterId)
             defaultSubChapters.push(userRole.subChapterId)
+            defaultCommunities.push(userRole.communityId)
           })
 
       }
@@ -59,7 +61,8 @@ class MlAdminUserContext
                 defaultProfileHierarchyCode:"CLUSTER",
                 defaultProfileHierarchyRefId:defaultCluster,
                 defaultChapters:defaultChapters,
-                defaultSubChapters:defaultSubChapters};
+                defaultSubChapters:defaultSubChapters,
+                defaultCommunities:defaultCommunities};
   }
 
   getDefaultMenu(userId){

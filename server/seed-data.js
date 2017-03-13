@@ -13,7 +13,7 @@ let _ = require('lodash'),
 /*********************************** Default Department/SubDepartment Creation <Start> ********************************************/
 let department = MlDepartments.findOne({departmentName:"operations"})
 if(!department) {
-  let departmentAvailiable = [{cluster: "all", chapter: "all", subChapter: "all"}]
+    let departmentAvailiable = [{cluster: "all", chapter: "all", subChapter: "all"}]
   department = {
     departmentName: "operations",
     displayName: "Operations",

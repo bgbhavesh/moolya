@@ -13,12 +13,12 @@ export default class MapDetails extends Component {
       return (
         <li key={m.key}>
             <span className={m.icon}></span>
-           <div className="hex_btn2 hex_btn_in2">{m.count}</div>
+           <span className="count">{m.count}</span>
         </li>
       )
     });
 
-    return (<div>
+    return (
       <div className="chapter_map_hover">
         <div className="chapter_map_hover_content">
           {/*<h2>{this.props.allData.text}</h2>*/}
@@ -26,7 +26,6 @@ export default class MapDetails extends Component {
             {mapDataList}
           </ul>
         </div>
-      </div>
-    </div>);
+      </div>);
   }
 }

@@ -23,9 +23,9 @@ class ActiveCityFormatter extends React.Component {
     let StateDetails = {
       id: data.id,
       name: data.name,
-      countryId: data.countryId,
-      stateId: data.stateId,
-      countryCode: data.countryCode,
+      // countryId: data.countryId,
+      // stateId: data.stateId,
+      // countryCode: data.countryCode,
       isActive: this.refs.status.checked
     }
 

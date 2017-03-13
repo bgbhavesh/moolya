@@ -27,7 +27,7 @@ class MlAssignChapterBackendUsers extends React.Component{
             alsoAssignedAs:[],
             selectedBackendUser:'',
             users:[{username: '', _id:''}],
-            isClusterAdmin:false,
+            chapterAdmin:false,
             userDisplayName: '',
             username: ''
         }
@@ -36,18 +36,19 @@ class MlAssignChapterBackendUsers extends React.Component{
         this.assignBackendUsers.bind(this);
         this.findSubChapter.bind(this);
         this.updateSelectedBackEndUser.bind(this);
-        // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
 
     componentWillMount() {
       const resp=this.findSubChapter();
     }
-  componentDidUpdate(){
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-    OnToggleSwitch(true,true);
-  }
+
+    componentDidUpdate(){
+      var WinHeight = $(window).height();
+      $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+      OnToggleSwitch(true,true);
+    }
+
     async findSubChapter() {
       let subChapterId = this.props.params;
       const response = await findSubChapterActionHandler(subChapterId);
@@ -118,8 +119,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         console.log(this.state.mlroleDetails)
     }
 
-    isClusterAdmin(admin){
-      this.setState({'isClusterAdmin':admin})
+    isChapterAdmin(admin){
+      this.setState({'chapterAdmin':admin})
     }
 
     async addEventHandler() {
@@ -250,7 +251,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId}  getAssignedRoles={this.getAssignedRoles.bind(this)}  getClusterAdmin={this.isClusterAdmin.bind(this)} />):<div></div>}
+                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId}  getAssignedRoles={this.getAssignedRoles.bind(this)}  getChapterAdmin={this.isChapterAdmin.bind(this)} />):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

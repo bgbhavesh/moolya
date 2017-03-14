@@ -1191,7 +1191,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/processList",
-            "name" : "Process Types",
+            "name" : "Process Mapping",
             "uniqueId" : "settings_Process",
             "isLink" : true,
             "isMenu" : true,

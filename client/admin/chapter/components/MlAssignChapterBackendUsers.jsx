@@ -29,7 +29,8 @@ class MlAssignChapterBackendUsers extends React.Component{
             users:[{username: '', _id:''}],
             chapterAdmin:false,
             userDisplayName: '',
-            username: ''
+            username: '',
+            isActive:false
         }
 
         this.addEventHandler.bind(this);
@@ -87,6 +88,7 @@ class MlAssignChapterBackendUsers extends React.Component{
           userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile,
           userDisplayName:user.profile.InternalUprofile.moolyaProfile.displayName,
           username:user.profile.InternalUprofile.moolyaProfile.email,
+          isActive : user.profile.isActive
         });
         this.findRoleDetails();
         return user;
@@ -258,7 +260,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
                                           <label className="switch">
-                                              <input type="checkbox" />
+                                              <input type="checkbox" disabled="true" checked={this.state.isActive} />
                                               <div className="slider"></div>
                                           </label>
                                       </div>

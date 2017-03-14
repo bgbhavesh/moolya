@@ -319,8 +319,43 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   console.log(args);
   let depts = []
   let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
-  if(subChapter && subChapter.isDefaultSubChapter)
-    depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, {userId:context.userId, clusterId:subChapter.clusterId}, context, info)
+  if(subChapter && subChapter.isDefaultSubChapter) {
+    //depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, {userId: args.userId, clusterId: subChapter.clusterId}, context, info)
+    let user = Meteor.users.findOne({"_id": args.userId})
+    let clusterDepts = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
+    if (user && clusterDepts && clusterDepts.length > 0) {
+      let userDepts = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
+      userDepts.map(function (userDept) {
+        let result = _.find(clusterDepts, {"_id":userDept.department});
+        if(result && result.isActive){
+          userDept.isAvailiable = true;
+        }
+        else
+          userDept.isAvailiable = false;
+
+        depts.push(userDept)
+      })
+    }
+  }else{
+        let user = Meteor.users.findOne({"_id":args.userId})
+          let subChapterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
+        if(user && subChapterDep && subChapterDep.length > 0) {
+            let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
+            for (var i = 0; i < subChapterDep.length; i++) {
+                for (var j = 0; j < userDep.length; j++) {
+                    if (userDep[j].department == subChapterDep[i]._id) {
+                      depts.push(userDep[j]);
+                      }
+                  }
+             }
+         }
+  }
+  depts.map(function (dept) {
+    let departmentName = MlDepartments.findOne({"_id":dept.department}).departmentName;
+    let subDepartmentName = MlSubDepartments.findOne({"_id":dept.subDepartment}).subDepartmentName;
+    dept.departmentName =departmentName;
+    dept.subDepartmentName = subDepartmentName;
+  })
   return depts
 }
 

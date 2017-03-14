@@ -13,6 +13,7 @@ export async function findUserDetails(userId) {
               profile{
                 isInternaluser,
                 isExternaluser,
+                isActive,
                 email,
                 InternalUprofile{
                   moolyaProfile{

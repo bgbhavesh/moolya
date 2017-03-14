@@ -1039,7 +1039,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/stageOfCompanyList",
-            "name" : "StageOfCompany Types",
+            "name" : "Stage Of Company Types",
             "uniqueId" : "settings_stageOfCompanyTypes",
             "isLink" : true,
             "isMenu" : true,

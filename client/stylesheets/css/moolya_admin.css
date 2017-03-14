@@ -396,16 +396,6 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .cluster_map .hex_btn.hex_btn_in:after{border-color: transparent transparent transparent #ffe144;}
 .cluster_map .hex_btn.hex_btn_in:before{border-color: transparent #ffe144 transparent transparent;}
 .chapter_map_hover{position: absolute;z-index: 999;right: -159px;top:12px;}
-/*.chapter_map_hover .hex_btn2{display: inline-block; background: #273545; border: 0px; position: relative; text-decoration: none; font-size: 10px; height: 15px; padding: 0px; top: -5px;}
-.chapter_map_hover .hex_btn2 span{margin-right: 10px;}
-.chapter_map_hover .hex_btn2 .indec{background: #ff0000; border-radius: 100%; width: 12px; height: 12px; right: 0px; position: absolute; top: 14px; z-index: 999;}
-.chapter_map_hover .hex_btn span img{width: 25px; background: #fff; border-radius: 100%; padding: 2px;}
-.chapter_map_hover .hex_btn2:after{position:absolute;right:-5px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 8px 0 7px 5px;border-color: transparent transparent transparent #fff;top: 0px;}
-.chapter_map_hover .hex_btn2:before{position:absolute;left:-5px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 8px 5px 7px 0px;border-color: transparent #fff transparent transparent;top: 0px;}
-.chapter_map_hover .hex_btn2.hex_btn_in2{background: #273545; z-index: 2; !* padding-top: 5px; *! text-align: center; color: #fff; text-shadow: none;}
-.chapter_map_hover .hex_btn2.hex_btn_in2:after{border-color: transparent transparent transparent #273545;}
-.chapter_map_hover .hex_btn2.hex_btn_in2:before{border-color: transparent #273545 transparent transparent;}*/
-/*.chapter_map_hover{text-align: center; width: 250px;position: absolute;}*/
 .chapter_map_hover_content{border-radius: 10px; background: #fff; float: left; box-shadow: 0px 0px 3px 0px rgba(0,0,0,1); width: 156px; padding-bottom: 3px;}
 .chapter_map_hover_content h2{background: #ef4647; margin: 0px; border-radius: 10px 10px 0 0; padding: 2px 0px; color: #fff; text-shadow: none; text-align: center; font-size: 14px;}
 .chapter_map_hover_content ul{padding: 5px 0px 0px 10px}

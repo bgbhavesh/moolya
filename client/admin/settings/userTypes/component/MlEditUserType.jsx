@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findUserTypeActionHandler} from '../actions/findUserTypeAction'
 import {updateUserTypeActionHandler} from '../actions/updateUserTypeAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlEditUserType extends React.Component{
   constructor(props) {
     super(props);
@@ -25,6 +26,11 @@ class MlEditUserType extends React.Component{
     if(this.state.data.isActive){
       $('#status').prop('checked', true);
     }
+  }
+  componentDidUpdate()
+  {
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {
@@ -73,7 +79,7 @@ class MlEditUserType extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateUserType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
@@ -84,20 +90,21 @@ class MlEditUserType extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ];
 
     const showLoader=this.state.loading;
     return (
-      <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="admin_main_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
+
         <div className="admin_padding_wrap">
           <h2>Edit UserType</h2>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-left">
             <div className="form_bg">
+              <form>
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                   <input type="text" ref="userTypeName" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.userTypeName} className="form-control float-label"/>
@@ -107,23 +114,26 @@ class MlEditUserType extends React.Component{
                   <textarea  ref="userTypeDesc" placeholder="About" defaultValue={this.state.data&&this.state.data.userTypeDesc}className="form-control float-label"></textarea>
 
                 </div>
+              </form>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 nopadding-right">
             <div className="form_bg">
+              <form>
                 <div className="form-group">
                   <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.displayName} className="form-control float-label" id=""/>
                 </div>
-               <div className="form-group switch_wrap">
-                  <label>Status</label><br/>
+               <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
                   <label className="switch">
                     <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                     <div className="slider"></div>
                   </label>
                 </div>
+              </form>
             </div>
           </div>
-        </div>
+
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
         />
 

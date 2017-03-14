@@ -41,6 +41,7 @@ class MlEditBackendUser extends React.Component{
       isActive:null,
       globalStatus:null,
       selectedSubChapter:'',
+      showPasswordFields:false
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -259,21 +260,28 @@ class MlEditBackendUser extends React.Component{
   }
 
   async resetPassword() {
-    let userDetails={
-      userId:this.refs.id.value,
-      password:this.refs.confirmPassword.value
+    if(this.state.showPasswordFields == true){
+      let userDetails={
+        userId:this.refs.id.value,
+        password:this.refs.confirmPassword.value
+      }
+      this.onCheckPassword();
+      if(this.state.pwdErrorMsg)
+        toastr.error("Confirm Password does not match with Password");
+      else{
+        const response = await resetPasswordActionHandler(userDetails);
+        this.refs.id.value='';
+        this.refs.confirmPassword.value = '';
+        this.refs.password.value = '';
+        this.setState({"pwdErrorMsg":'Password reset complete'})
+        toastr.error(response.result);
+      }
+    } else {
+      this.setState({
+        showPasswordFields:true
+      })
     }
-    this.onCheckPassword();
-    if(this.state.pwdErrorMsg)
-      toastr.error("Confirm Password does not match with Password");
-    else{
-      const response = await resetPasswordActionHandler(userDetails);
-      this.refs.id.value='';
-      this.refs.confirmPassword.value = '';
-      this.refs.password.value = '';
-      this.setState({"pwdErrorMsg":'Password reset complete'})
-      toastr.error(response.result);
-    }
+
   }
 
   getAssignedDepartments(departments){
@@ -377,23 +385,18 @@ class MlEditBackendUser extends React.Component{
                     <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)}
                     />
                       </div>
-                   {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
-                 {/* <div className="form-group">
-                    <input type="Password" hidden="true" ref="password" placeholder="Create Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
-                  </div>
+                {that.state.showPasswordFields ?
                   <div className="form-group">
-                    <input type="Password" hidden="true"  ref="confirmPassword"  placeholder="Confirm Password" defaultValue={this.state.data&&this.state.data.profile.InternalUprofile.moolyaProfile.password} className="form-control float-label" id=""/>
-                  </div>
-                </div>*/}
-                <div className="form-group">
-                  <input type="Password" ref="password" defaultValue={that.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
-                  <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
-                </div>
-                <div className="form-group">
-                  <text style={{float:'right',color:'#ef1012',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{that.state.pwdErrorMsg}</text>
-                  <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
-                  <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
-                </div>
+                    <input type="Password" ref="password" defaultValue={that.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
+                    <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                  </div> : <div></div>}
+                {that.state.showPasswordFields ?
+                  <div className="form-group">
+                    <text style={{float:'right',color:'#ef1012',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{that.state.pwdErrorMsg}</text>
+                    <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
+                    <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
+                  </div> : <div></div>}
+
                   <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
                   <MlAssignDepartmentComponent getAssignedDepartments={that.getAssignedDepartments.bind(that)} selectedBackendUserType={that.state.selectedBackendUserType} selectedSubChapter={that.state.selectedSubChapter} departments={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.assignedDepartment} />

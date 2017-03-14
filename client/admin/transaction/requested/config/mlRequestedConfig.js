@@ -27,7 +27,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
       handler: (data)=>{
 
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editUserType/"+data.id);
+          FlowRouter.go("/admin/transactions/editRequests/"+data.id);
         } else{
           alert("Please select a User Type");
         }

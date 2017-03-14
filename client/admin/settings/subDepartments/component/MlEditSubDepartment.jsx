@@ -130,13 +130,8 @@ class MlEditSubDepartment extends React.Component{
   render(){
     let MlActionConfig = [
       {
+        showAction: true,
         actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
         handler: async(event) => this.props.handler(this.editSubDepartment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {

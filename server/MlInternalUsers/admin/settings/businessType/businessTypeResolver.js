@@ -11,12 +11,18 @@ MlResolver.MlMutationResolver['CreateBusinessType'] = (obj, args, context, info)
     return response;
   }
 
-  let id = MlBusinessType.insert({...args});
-  if (id) {
-    let code = 200;
-    let result = {businessTypeId: id}
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  if(!args.businessTypeName){
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Business Name is Required", code);
+    return response;
+  }else {
+    let id = MlBusinessType.insert({...args});
+    if (id) {
+      let code = 200;
+      let result = {businessTypeId: id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 }
 
@@ -29,13 +35,19 @@ MlResolver.MlMutationResolver['UpdateBusinessType'] = (obj, args, context, info)
     return response;
   }
 
-  if (args._id) {
-    var id = args._id;
-    args = _.omit(args, '_id');
-    let result = MlBusinessType.update(id, {$set: args});
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  if(!args.businessTypeName){
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Business Name is Required", code);
+    return response;
+  }else {
+    if (args._id) {
+      var id = args._id;
+      args = _.omit(args, '_id');
+      let result = MlBusinessType.update(id, {$set: args});
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 }
 

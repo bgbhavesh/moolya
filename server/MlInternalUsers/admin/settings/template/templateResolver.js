@@ -10,12 +10,18 @@ MlResolver.MlMutationResolver['CreateTemplate'] = (obj, args, context, info) => 
     return response;
   }
 
-  let id = MlTemplates.insert({...args});
-  if (id) {
-    let code = 200;
-    let result = {templateId: id}
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  if(!args.templateName){
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Template Name is Required", code);
+    return response;
+  }else {
+    let id = MlTemplates.insert({...args});
+    if (id) {
+      let code = 200;
+      let result = {templateId: id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 };
 
@@ -27,16 +33,22 @@ MlResolver.MlMutationResolver['UpdateTemplate'] = (obj, args, context, info) => 
     return response;
   }
 
-  if (args._id) {
-    var id= args._id;
-    args=_.omit(args,'_id');
-    let result= MlTemplates.update({_id:id}, {$set: args});
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  if(!args.templateName){
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Template Name is Required", code);
+    return response;
+  }else {
+    if (args._id) {
+      var id= args._id;
+      args=_.omit(args,'_id');
+      let result= MlTemplates.update({_id:id}, {$set: args});
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
+};
 
-}
 MlResolver.MlQueryResolver['FindTemplate'] = (obj, args, context, info) => {
   // TODO : Authorization
 

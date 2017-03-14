@@ -23,8 +23,8 @@ class MlAddBusinessType extends React.Component {
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
+    if (response) {
+      if (response.success)
         FlowRouter.go("/admin/settings/businessList");
       else
         toastr.error(response.result);
@@ -42,10 +42,12 @@ class MlAddBusinessType extends React.Component {
     const response = await addBusinessTypeActionHandler(BusinessTypeDetails)
     return response;
   }
-  componentDidMount()  {
-    OnToggleSwitch(false,true);
+
+  componentDidMount() {
+    OnToggleSwitch(false, true);
     initalizeFloatLabel();
   }
+
   render() {
     let MlActionConfig = [
       // {

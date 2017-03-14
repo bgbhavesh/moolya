@@ -1,22 +1,29 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.createdDateTime;
+  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+}
+
 const mlDocumentFormatTableConfig=new MlViewer.View({
   name:"documentFormatTable",
   module:"documentFormat",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["docFormatName","docFormatDisplayName","isActive"],
-  searchFields:["docFormatName","docFormatDisplayName","isActive"],
+  fields:["docFormatName","docFormatDisplayName","isActive","createdDateTime"],
+  searchFields:["docFormatName","docFormatDisplayName","isActive","createdDateTime"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "docFormatName", title: "Name",dataSort:true},
     {dataField: "docFormatDisplayName", title: "Display Name",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
-    //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
+    {dataField: "createdDateTime", title: "Created Date And Time",customComponent:dateFormatter},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -54,6 +61,8 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
                               docFormatName
                               docFormatDisplayName
                               isActive
+                              about
+                              createdDateTime
                               id:_id
                           }
                       }

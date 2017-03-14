@@ -1,6 +1,13 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.createdDateTime;
+  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+}
+
 const mlTransactionTypeTableConfig=new MlViewer.View({
   name:"transactionTypeTable",
   module:"transaction",//Module name for filter.
@@ -15,8 +22,8 @@ const mlTransactionTypeTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "transactionName", title: "Transaction Type",dataSort:true},
     {dataField: "transactionDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "createdDateTime", title: "Created Date And Time",customComponent:dateFormatter},
     {dataField: "isActive", title: "Active",dataSort:true},
-    //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -56,6 +63,7 @@ const mlTransactionTypeTableConfig=new MlViewer.View({
                      ...on Transaction{
                               transactionName
                               transactionDisplayName
+                              createdDateTime
                               isActive
                               id:_id
                           }

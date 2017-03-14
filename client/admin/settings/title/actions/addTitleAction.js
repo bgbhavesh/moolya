@@ -17,6 +17,6 @@ export async function addTitleActionHandler(TitleDetails) {
       masterData:{"titleInfo":titleInfo,"isActive":isActive},
     }
   })
-  const id = result.createMasterSetting;
+  const id = result.data.createMasterSetting;
   return id
 }

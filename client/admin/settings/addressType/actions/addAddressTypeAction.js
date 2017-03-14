@@ -19,6 +19,6 @@ export async function addAddressTypeActionHandler(addressDetails)
       masterData:{"addressTypeInfo":addressTypeInfo,"isActive":isActive},
     }
   })
-  const id = result.createMasterSetting;
+  const id = result.data.createMasterSetting;
   return id
 }

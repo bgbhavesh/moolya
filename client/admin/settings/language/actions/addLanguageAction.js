@@ -18,6 +18,6 @@ export async function addLanguageActionHandler(LangauageDetails)
       masterData:{"languageInfo":languageInfo,"isActive":isActive},
     }
   })
-  const id = result.createMasterSetting;
+  const id = result.data.createMasterSetting;
   return id
 }

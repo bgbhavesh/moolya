@@ -37,7 +37,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             isUrlNotified: false,
             subChapterEmail: "moolyahyd@moolya.com",
             isEmailNotified: false,
-            aboutSubChapter: "ssss",
+            aboutSubChapter: "",
             subChapterImageLink: "ssc",
             showOnMap: false,
             isActive: false,

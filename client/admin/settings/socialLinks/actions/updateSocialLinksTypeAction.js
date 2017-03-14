@@ -39,6 +39,6 @@ export async function updateSocialListsTypeActionHandler(Details)
       masterData:{"socialLinksInfo":socialLinksInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result;
+  const id = result.data.updateMasterSetting;
   return id
 }

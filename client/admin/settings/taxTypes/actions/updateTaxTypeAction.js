@@ -18,6 +18,6 @@ export async function updateTaxTypeActionHandler(TaxType) {
       masterData:{"taxTypeInfo":taxTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result.updateMasterSetting;
+  const id = result.data.updateMasterSetting;
   return id
 }

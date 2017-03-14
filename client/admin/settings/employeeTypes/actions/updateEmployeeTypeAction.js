@@ -18,6 +18,6 @@ export async function updateEmployeeTypeActionHandler(EmpType) {
       masterData:{"employmentTypeInfo":employmentTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result;
+  const id = result.data.updateMasterSetting;
   return id
 }

@@ -132,7 +132,7 @@ class MlAddBackendUser extends React.Component {
         email: this.refs.email.value,
         contact: this.state.mlAssignContactDetails,
         globalAssignment: this.refs.globalAssignment.checked,
-        isActive: this.refs.isActive.checked,
+        isActive: this.refs.deActive.checked,
         userProfiles: []
       }
       let InternalUprofile = {
@@ -142,6 +142,7 @@ class MlAddBackendUser extends React.Component {
         isInternaluser: true,
         isExternaluser: false,
         email: this.refs.email.value,
+        isActive:this.refs.deActive.checked,
         InternalUprofile: InternalUprofile
       }
       let userObject = {
@@ -333,7 +334,7 @@ class MlAddBackendUser extends React.Component {
                     <div className="form-group switch_wrap inline_switch">
                       <label>Status</label>
                       <label className="switch">
-                        <input type="checkbox" ref="isActive"/>
+                        <input type="checkbox" ref="deActive"/>
                         <div className="slider"></div>
                       </label>
                     </div>

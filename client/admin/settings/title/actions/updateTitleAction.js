@@ -18,6 +18,6 @@ export async function updateTitleActionHandler(TitleDetails) {
       masterData:{"titleInfo":titleInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result.updateMasterSetting;
+  const id = result.data.updateMasterSetting;
   return id
 }

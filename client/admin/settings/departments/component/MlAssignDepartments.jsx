@@ -129,6 +129,9 @@ export default class MlAssignDepartments extends React.Component {
 
 
         {that.state.departmentAvailability.map(function(options,id){
+          if(options.cluster && options.cluster.length < 1){
+            options.cluster = null;
+          }
           let chapterOption={options: { variables: {id:options.cluster}}};
           let subChapterOption={options: { variables: {id:options.chapter}}}
           return(

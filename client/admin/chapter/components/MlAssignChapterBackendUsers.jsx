@@ -115,7 +115,7 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     getAssignedRoles(roles){
-        this.setState({'mlroleDetails':roles})
+        this.setState({'mlroleDetails':roles});
         // console.log(this.state.mlroleDetails)
     }
 

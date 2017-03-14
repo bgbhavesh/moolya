@@ -39,8 +39,6 @@ class MlAddLanguage extends React.Component{
       aboutLanguage: this.refs.about.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await addLanguageActionHandler(Details);
     return response;
 
@@ -53,11 +51,11 @@ class MlAddLanguage extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

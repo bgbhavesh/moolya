@@ -19,6 +19,6 @@ export async function updateAddressTypeActionHandler(Details)
       masterData:{"addressTypeInfo":addressTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result.updateMasterSetting;
+  const id = result.data.updateMasterSetting;
   return id
 }

@@ -35,6 +35,6 @@ export async function updateContactTypeActionHandler(Details)
       masterData:{"contactTypeInfo":contactTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result;
+  const id = result.data.updateMasterSetting;
   return id
 }

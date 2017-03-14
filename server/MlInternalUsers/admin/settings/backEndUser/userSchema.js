@@ -167,7 +167,7 @@ let BackEndUser = `
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchUserRoles(userId:String):[UserRoles]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
-        fetchUsersBysubChapterDepSubDep(subChapterId:String): [BackendUsers]
+        fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
         fetchAssignedAndUnAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
     }

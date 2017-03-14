@@ -1039,7 +1039,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/stageOfCompanyList",
-            "name" : "StageOfCompany Types",
+            "name" : "Stage Of Company Types",
             "uniqueId" : "settings_stageOfCompanyTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -1153,7 +1153,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/lookingForList",
-            "name" : "LookingFor Types",
+            "name" : "Looking For Types",
             "uniqueId" : "settings_lookingForTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -1191,7 +1191,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/processList",
-            "name" : "Process Types",
+            "name" : "Process Mapping",
             "uniqueId" : "settings_Process",
             "isLink" : true,
             "isMenu" : true,

@@ -201,7 +201,7 @@ class MlAssignBackendUsers extends React.Component {
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_padding_wrap">
-            <h2>Assign internal user to Cluster</h2>
+            <h2>Assign Backend User to Cluster</h2>
             <div className="main_wrap_scroll">
               <ScrollArea
                 speed={0.8}

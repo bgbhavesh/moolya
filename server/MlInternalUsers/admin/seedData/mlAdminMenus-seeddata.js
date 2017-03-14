@@ -176,7 +176,7 @@ if(Meteor.isServer){
         "subMenu" : [
           {
             "link" : "/admin/chapters/subChapters/subChapterDetails",
-            "name" : "SubChapterDetails",
+            "name" : "Sub Chapter Details",
             "uniqueId" : "chapter_subChapterDetails",
             "isLink" : true,
             "isMenu" : true,

@@ -19,7 +19,6 @@ export async function addGenderActionHandler(Details)
       masterData:{"genderInfo":genderInfo,"isActive":isActive},
     }
   })
-  console.log(result)
   const id = result.data.createMasterSetting;
   return id
 }

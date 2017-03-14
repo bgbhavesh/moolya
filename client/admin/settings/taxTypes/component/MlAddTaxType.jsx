@@ -23,7 +23,6 @@ class MlAddTaxType extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/taxTypeList");
   };
 
@@ -35,18 +34,19 @@ class MlAddTaxType extends React.Component{
       isActive: this.refs.isActive.checked
     }
     const response = await addTaxActionHandler(TaxTypeDetails)
+    console.log(response);
     return response;
   }
   render(){
     let MlActionConfig = [
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
-        actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.createTaxType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {

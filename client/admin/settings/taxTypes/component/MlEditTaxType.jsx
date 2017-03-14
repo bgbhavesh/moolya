@@ -49,7 +49,6 @@ class MlEditTaxType extends React.Component{
     }
     const response = await updateTaxTypeActionHandler(TaxType)
     return response;
-
   }
 
   onStatusChange(e){
@@ -68,11 +67,11 @@ class MlEditTaxType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateTaxType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      {
-        showAction: true,
-        actionName: 'add',
-        handler: null
-      },
+      // {
+      //   showAction: true,
+      //   actionName: 'add',
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'logout',

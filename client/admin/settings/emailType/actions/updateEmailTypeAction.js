@@ -38,6 +38,6 @@ export async function updateEmailTypeActionHandler(Details)
       masterData:{"emailTypeInfo":emailTypeInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result;
+  const id = result.data.updateMasterSetting;
   return id
 }

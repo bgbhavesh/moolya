@@ -19,7 +19,7 @@ export async function updateLanguageActionHandler(LanguageDetails)
       masterData:{"languageInfo":languageInfo,"isActive":isActive,_id:_id}
     }
   })
-  const id = result.updateMasterSetting;
+  const id = result.data.updateMasterSetting;
   return id
 }
 

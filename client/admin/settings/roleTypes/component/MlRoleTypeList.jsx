@@ -11,7 +11,7 @@ export default class MlRoleList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Roles & Permissions List</h2>
+          <h2>Roles & Permissions Details</h2>
 
           <MlTableViewContainer {...mlRoleTypeTableConfig}/>
 

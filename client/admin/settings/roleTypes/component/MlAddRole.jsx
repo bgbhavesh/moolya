@@ -89,8 +89,12 @@ class MlAddRole extends React.Component{
       modules:this.state.assignModulesToRoles,
       isActive:this.refs.isActive.checked
     };
-    const response = await addRoleActionHandler(roleDetails)
-    return response;
+    if(!this.refs.diplayName.value || (this.refs.diplayName.value == "")){
+      alert("Display Name is required")
+    }else{
+      const response = await addRoleActionHandler(roleDetails)
+      return response;
+    }
   }
 
   getAssignedDepartments(departments){

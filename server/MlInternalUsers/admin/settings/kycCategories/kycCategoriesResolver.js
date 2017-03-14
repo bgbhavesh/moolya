@@ -10,13 +10,19 @@ MlResolver.MlMutationResolver['updateKycCategory'] = (obj, args, context, info) 
     return response;
   }
 
-  if (args._id) {
-    var id= args._id;
-    args=_.omit(args,'_id');
-    let result= MlDocumentCategories.update(id, {$set: args});
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  if(!args.docCategoryName){
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Category Name is Required", code);
+    return response;
+  }else {
+    if (args._id) {
+      var id= args._id;
+      args=_.omit(args,'_id');
+      let result= MlDocumentCategories.update(id, {$set: args});
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 };
 
@@ -36,18 +42,24 @@ MlResolver.MlMutationResolver['createKycCategory'] = (obj, args, context, info) 
     return response;
   }
 
-  if(MlDocumentCategories.find({docCategoryName:args.kycCategory.docCategoryName}).count() > 0){
-    let code = 409;
-    let response = new MlRespPayload().errorPayload("Already Exist", code);
+  if(!args.kycCategory.docCategoryName){
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Category Name is Required", code);
     return response;
-  }
+  }else {
+    if(MlDocumentCategories.find({docCategoryName:args.kycCategory.docCategoryName}).count() > 0){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exist", code);
+      return response;
+    }
 
-  let id = MlDocumentCategories.insert({...args.kycCategory});
-  if(id){
-    let code = 200;
-    let result = {kycCategoryId: id};
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+    let id = MlDocumentCategories.insert({...args.kycCategory});
+    if(id){
+      let code = 200;
+      let result = {kycCategoryId: id};
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 };
 

@@ -11,7 +11,7 @@ export default class MlSubDepartmentsList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Sub Departments List</h2>
+          <h2>Sub Departments Details</h2>
 
           <MlTableViewContainer {...mlSubDepartmentTableConfig}/>
 

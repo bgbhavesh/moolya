@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addRequestActionHandler} from '../actions/addRequestTypeAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 let FontAwesome = require('react-fontawesome');
 class MlAddRequestType extends React.Component{
   constructor(props) {
@@ -42,6 +43,11 @@ class MlAddRequestType extends React.Component{
     return response;
 
   }
+  componentDidMount()
+  {
+    OnToggleSwitch(false,true);
+    initalizeFloatLabel();
+  }
   render(){
     let MlActionConfig = [
       // {
@@ -51,12 +57,12 @@ class MlAddRequestType extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.createRequestType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]
@@ -68,28 +74,33 @@ class MlAddRequestType extends React.Component{
           <h2>Create Request type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
-              <div className="form-group">
+              <form>
+                <div className="form-group">
                   <input type="text" ref="requestName" placeholder="Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <textarea  ref="requestDesc" placeholder="About" className="form-control float-label" id=""></textarea>
                 </div>
-            </div>
+              </form>
+                </div>
+
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
+              <form>
                 <div className="form-group">
                   <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                 </div>
 
 
-                <div className="form-group switch_wrap">
-                  <label>Status</label><br/>
+                <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
                   <label className="switch">
                     <input type="checkbox" ref="isActive"/>
                     <div className="slider"></div>
                   </label>
                 </div>
+              </form>
             </div>
           </div>
 

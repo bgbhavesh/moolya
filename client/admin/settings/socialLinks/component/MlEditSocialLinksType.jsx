@@ -12,8 +12,8 @@ class MlEditSocialLinkType extends React.Component{
     super(props);
     this.state = {loading:true,data:{}};
     this.addEventHandler.bind(this);
-    this.updateLang.bind(this);
-    this.findLang.bind(this);
+    this.updateSocialLinks.bind(this);
+    this.findSocialLinks.bind(this);
     return this;
   }
   componentDidMount() {
@@ -22,12 +22,12 @@ class MlEditSocialLinkType extends React.Component{
     }
   }
   componentWillMount() {
-    const resp=this.findLang();
+    const resp=this.findSocialLinks();
     return resp;
   }
 
   async addEventHandler() {
-    const resp=await this.updateLang();
+    const resp=await this.updateSocialLinks();
     return resp;
   }
 
@@ -39,13 +39,13 @@ class MlEditSocialLinkType extends React.Component{
 
     FlowRouter.go("/admin/settings/socialLinkTypeList");
   };
-  async findLang(){
+  async findSocialLinks(){
     let Id=this.props.config;
     const response = await findSocialLinksTypeActionHandler(Id);
     this.setState({loading:false,data:response});
   }
 
-  async  updateLang() {
+  async  updateSocialLinks() {
     let Details = {
       _id : this.props.config,
       socialName: this.refs.name.value,
@@ -54,8 +54,6 @@ class MlEditSocialLinkType extends React.Component{
       socialUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await updateSocialListsTypeActionHandler(Details);
     return response;
 
@@ -73,15 +71,15 @@ class MlEditSocialLinkType extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.updateLang.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.updateSocialLinks.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,

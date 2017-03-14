@@ -54,6 +54,7 @@ MlResolver.MlMutationResolver['createDocumentFormat'] = (obj, args, context, inf
       let response = MlRespPayload().errorPayload("Already Exist", code);
       return response;
     }
+    args.documentFormat.createdDateTime=new Date();
     let id = MlDocumentFormats.insert({...args.documentFormat});
     if (id) {
       let code = 200;

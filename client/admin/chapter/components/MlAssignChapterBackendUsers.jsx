@@ -182,8 +182,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         let that    = this;
         let queryOptions = {options: { variables: {clusterId:that.props.params.clusterId,chapterId:that.props.params.chapterId,subChapterId:that.props.params.subChapterId,communityId:'',subChapterName:that.props.params.subChapterName}}};
         //let query   = gql`query($subChapterId:String){data:fetchUsersBysubChapterDepSubDep(subChapterId: $subChapterId){label:username,value:_id}}`;
-      let query =gql`query ($clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String, $subChapterName:String) {
-        data: fetchAssignedAndUnAssignedUsers(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,subChapterName:$subChapterName )
+      let query =gql`query ($clusterId:String, $chapterId:String, $subChapterId:String) {
+        data: fetchUsersBysubChapterDepSubDep(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId)
         {label:username,value:_id}
       }`
       let userDisplayName = this.state.userDisplayName || "";
@@ -198,7 +198,7 @@ class MlAssignChapterBackendUsers extends React.Component{
              {showLoader === true ? ( <div className="loader_wrap"></div>) : (
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
-                    <h2>Assign internal user to Chapter</h2>
+                    <h2>Assign Backend User to Sub Chapter</h2>
                   <div className="main_wrap_scroll">
                     <ScrollArea
                       speed={0.8}

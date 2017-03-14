@@ -11,7 +11,7 @@ export default class MlTransactionTypeList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Transaction Types</h2>
+          <h2>Transaction Types Details</h2>
 
           <MlTableViewContainer {...mlTransactionTypeTableConfig}/>
 

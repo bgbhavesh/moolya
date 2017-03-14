@@ -11,7 +11,7 @@ export default class MlTemplateTypeList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Template Types</h2>
+          <h2>Template Types Details</h2>
           <MlTableViewContainer {...mlTemplateTypeTableConfig}/>
         </div>
       </div>

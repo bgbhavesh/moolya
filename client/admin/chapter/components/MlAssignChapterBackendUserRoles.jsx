@@ -189,6 +189,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role</div>
+              {department.isAvailiable?(
               <div className="panel-body">
                 <div className="form-group">
                   <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
@@ -246,6 +247,17 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
                 </div>
               </div>
+              ):
+                <div className="panel-body">
+                  <div className="form-group">
+                    <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.departmentName}/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
+                           value={department.subDepartmentName}/>
+                  </div>
+
+                </div>}
             </div>
           )
         })}

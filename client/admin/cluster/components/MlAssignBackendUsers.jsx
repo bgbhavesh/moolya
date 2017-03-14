@@ -87,7 +87,7 @@ class MlAssignBackendUsers extends React.Component {
         userMoolyaProfile: user.profile.InternalUprofile.moolyaProfile,
         userDisplayName: user.profile.InternalUprofile.moolyaProfile.displayName,
         username: user.profile.InternalUprofile.moolyaProfile.email,
-        deActive: user.profile.deActive
+        deActive: user.profile.isActive
       });
       // this.findRoleDetails();
       return user;

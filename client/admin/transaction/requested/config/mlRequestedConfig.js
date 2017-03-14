@@ -1,7 +1,6 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-import MlAssignComponent from '../component/MlAssignComponent'
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"userTypeTable",
   module:"userType",//Module name for filter.
@@ -26,6 +25,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: (data)=>{
+
         if(data && data.id){
           FlowRouter.go("/admin/settings/editUserType/"+data.id);
         } else{
@@ -38,7 +38,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
        actionName: 'assign',
        handler: (data)=>{
          if(data && data.id){
-          <MlAssignComponent/>
+         const internalConfig=data;
          } else{
            alert("Please select a User Type");
          }

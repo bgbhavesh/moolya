@@ -1,11 +1,9 @@
-import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import {graphql} from 'react-apollo';
-import gql from 'graphql-tag'
-import {findUserDepartmentypeActionHandler} from '../actions/findUserDepartments'
-import MoolyaSelect from '../../../commons/components/select/MoolyaSelect'
+import React from "react";
+import {render} from "react-dom";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import {findUserDepartmentypeActionHandler} from "../actions/findUserDepartments";
+import MoolyaSelect from "../../../commons/components/select/MoolyaSelect";
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -115,6 +113,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   onChange(id, event) {
     let roleDetails = this.state.roleDetails
     let filedName = event.target.name
+    console.log(filedName);
     let fieldValue = event.target.value;
     if (filedName == 'status') {
       fieldValue = event.target.checked;
@@ -131,8 +130,24 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   onClickDate(id, event) {
     let filedName = event.target.name
     let fieldId = filedName + id
-    $("#" + fieldId).datepicker({format: 'dd-mm-yyyy', autoclose:true, stateDate:'+0d'});
+    $("#" + fieldId).datepicker({format: 'dd-mm-yyyy', autoclose: true, stateDate: '+0d'});
     $("#" + fieldId).focus();
+  }
+
+  onValidFromChange(index, event) {
+    console.log(event.target.value);
+    let roleDetails = this.state.roleDetails
+    roleDetails[index]['validFrom'] = event.target.value
+    this.setState({roleDetails: roleDetails})
+    this.props.getAssignedRoles(this.state.roleDetails)
+  }
+
+  onValidToChange(index, event) {
+    console.log(event.target.value);
+    let roleDetails = this.state.roleDetails
+    roleDetails[index]['validTo'] = event.target.value
+    this.setState({roleDetails: roleDetails})
+    this.props.getAssignedRoles(this.state.roleDetails)
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -166,7 +181,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                 departmentId: department.department,
                 clusterId: that.props.clusterId,
                 chapterId: that.props.chapterId,
-                subChapterId:that.props.subChapterId
+                subChapterId: that.props.subChapterId
               }
             }
           };
@@ -203,15 +218,15 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                           selectedValue={details.roleId}/>
                           </div>
                           <div className="form-group left_al">
-                            <input type="text" placeholder="Valid from" id={'validFrom' + idx}
+                            <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}
                                    onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                   name={'validFrom'} onBlur={that.onChange.bind(that, idx, event)}
+                                   onBlur={that.onValidFromChange.bind(that, idx)}
                                    value={details.validFrom}/>
                           </div>
                           <div className="form-group left_al">
-                            <input type="text" placeholder="Valid to" id={'validTo' + idx}
+                            <input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}
                                    onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                   name={'validTo'} onBlur={that.onChange.bind(that, idx, event)}
+                                   onBlur={that.onValidToChange.bind(that, idx)}
                                    value={details.validTo}/>
                           </div>
                           <div className="form-group switch_wrap">

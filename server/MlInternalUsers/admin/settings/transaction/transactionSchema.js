@@ -6,11 +6,12 @@ let Transaction = `
       transactionName :String
       transactionDisplayName :String
       transactionDescription: String
+      createdDateTime: String
       _id:String
       isActive:Boolean
     }
     type Mutation{
-        CreateTransaction(_id:String,transactionName:String,transactionDisplayName:String,transactionDescription:String,isActive:Boolean , moduleName:String, actionName:String):response
+        CreateTransaction(_id:String,transactionName:String,transactionDisplayName:String,transactionDescription:String,createdDateTime: String,isActive:Boolean , moduleName:String, actionName:String):response
         UpdateTransaction(_id:String,transactionName:String,transactionDisplayName:String,transactionDescription:String,isActive:Boolean , moduleName:String, actionName:String):response
     }
     type Query{

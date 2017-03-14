@@ -272,9 +272,6 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
     let clusterDepts = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
     if (user && clusterDepts && clusterDepts.length > 0) {
         let userDepts = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
-        // clusterDepts.map(function (clusterDept) {
-        // })
-
         userDepts.map(function (userDept) {
           let result = _.find(clusterDepts, {"_id":userDept.department});
           if(result && result.isActive){
@@ -320,46 +317,11 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
 
 MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context, info) =>{
   console.log(args);
-  let dep = []
+  let depts = []
   let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
-
-  if(subChapter.subChapterName.startsWith("Moolya-")){
-  let user = Meteor.users.findOne({"_id":args.userId})
-  let clusterDep = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":subChapter.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
-  if(user && clusterDep && clusterDep.length > 0) {
-    let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
-
-    for (var i = 0; i < clusterDep.length; i++) {
-      for (var j = 0; j < userDep.length; j++) {
-        if (userDep[j].department == clusterDep[i]._id) {
-          dep.push(userDep[j]);
-        }
-      }
-    }
-  }
-  }else{
-    let user = Meteor.users.findOne({"_id":args.userId})
-    let clusterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-    if(user && clusterDep && clusterDep.length > 0) {
-      let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
-      for (var i = 0; i < clusterDep.length; i++) {
-        for (var j = 0; j < userDep.length; j++) {
-          if (userDep[j].department == clusterDep[i]._id) {
-            dep.push(userDep[j]);
-          }
-        }
-      }
-    }
-  }
-  for(var i = 0; i < dep.length; i++){
-    depId = dep[i].department;
-    subDeptId = dep[i].subDepartment;
-    let departmentName = MlDepartments.findOne({"_id":depId}).departmentName;
-    let subDepartmentName = MlSubDepartments.findOne({"_id":subDeptId}).subDepartmentName;
-    dep[i].departmentName =departmentName;
-    dep[i].subDepartmentName = subDepartmentName;
-  }
-  return dep
+  if(subChapter && subChapter.isDefaultSubChapter)
+    depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, {userId:context.userId, clusterId:subChapter.clusterId}, context, info)
+  return depts
 }
 
 MlResolver.MlMutationResolver['deActivateUser'] = (obj, args, context, info) => {

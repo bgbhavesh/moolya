@@ -9,14 +9,14 @@ let BackEndUser = `
         _id: String,
         password: String,
         username: String,
-        profile:userProfile
+        profile:userProfile,
         roleNames:[String]
     }
     
     type userProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,
-        deActive: Boolean,
+        isActive: Boolean,
         email: String,
         InternalUprofile: internalUserprofile
     }
@@ -63,6 +63,7 @@ let BackEndUser = `
         middleName: String,
         lastName: String,
         userType: String,
+        isChapterAdmin : Boolean,
         subChapter: String,
         roleType: String,
         assignedDepartment:[AssignedDepartment],
@@ -115,6 +116,7 @@ let BackEndUser = `
         roleType: String,
         assignedDepartment:[assignedDepartment],
         displayName: String,
+        isChapterAdmin :Boolean,
         email:String,
         contact:[contacts],
         globalAssignment:Boolean,
@@ -131,7 +133,7 @@ let BackEndUser = `
         isInternaluser: Boolean,
         isExternaluser: Boolean,
         email: String,
-        deActive:Boolean,
+        isActive:Boolean,
         InternalUprofile: InternalUprofile
     }
     
@@ -144,8 +146,9 @@ let BackEndUser = `
     type dep{
         department:String,
         departmentName:String,
-        subDepartment:String
-        subDepartmentName:String
+        subDepartment:String,
+        subDepartmentName:String,
+        isAvailiable:Boolean
     }
     
     type Mutation{

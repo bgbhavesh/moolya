@@ -12,6 +12,7 @@ export async function findBackendUserActionHandler(userTypeId) {
               profile{
                 isInternaluser,
                 isExternaluser,
+                isActive,
                 email,
                 InternalUprofile{
                   moolyaProfile{

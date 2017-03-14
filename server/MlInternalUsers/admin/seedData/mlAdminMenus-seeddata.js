@@ -264,6 +264,46 @@ if(Meteor.isServer){
         "uniqueId" : "services"
       },
       {
+        "image" : "/images/cluster_icon.png",
+        "link" : "/admin/transactions/requestedList",
+        "name" : "transaction",
+        "uniqueId"   :"transaction",
+        "isLink" : true,
+        "isMenu" : true,
+        "subMenu":[
+          {
+            "link" : "/admin/transactions/requestedList",
+            "name" : "Requested",
+            "uniqueId" : "transaction_Requestes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/transactions/requestedList",
+                "name": "List Requests",
+                "uniqueId": "transaction_RequestList",
+                "subMenuMappingId":"transaction_Requestes",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/transactions/editRequests",
+                "name": "Edit Requestes",
+                "uniqueId": "transaction_EditRequests",
+                "subMenuMappingId":"transaction_Requestes",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          }
+      ]
+      },
+      {
         "image" : "/images/settings_icon.png",
         "link" : "/admin/settings/departmentsList",
         "name" : "settings",

@@ -16,7 +16,7 @@ import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapter
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
-
+import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
@@ -90,3 +90,9 @@ adminSection.route('/community/:communityId/assignusers', {
   }
 });
 
+adminSection.route('/transactions/requestedList', {
+  name: 'transaction_RequestList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+  }
+});

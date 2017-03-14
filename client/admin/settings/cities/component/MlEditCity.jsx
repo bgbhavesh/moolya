@@ -58,9 +58,9 @@ class MlEditCity extends React.Component{
   async  editCity() {
     let CountryDetails = {
       id: this.refs.id.value,
-      name: this.refs.name.value,
-      countryCode: this.refs.countryName.value,
-      stateId: this.refs.stateName.value,
+      // name: this.refs.name.value,
+      // countryCode: this.refs.countryName.value,
+      // stateId: this.refs.stateName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
       isActive: this.refs.status.checked

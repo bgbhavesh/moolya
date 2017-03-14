@@ -13,7 +13,7 @@ let _ = require('lodash'),
 /*********************************** Default Department/SubDepartment Creation <Start> ********************************************/
 let department = MlDepartments.findOne({departmentName:"operations"})
 if(!department) {
-  let departmentAvailiable = [{cluster: "all", chapter: "all", subChapter: "all"}]
+    let departmentAvailiable = [{cluster: "all", chapter: "all", subChapter: "all"}]
   department = {
     departmentName: "operations",
     displayName: "Operations",
@@ -151,6 +151,7 @@ var options = {
     isInternaluser : true,
     isExternaluser : false,
     email: 'platformadmin@moolya.com',
+    isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
@@ -272,7 +273,7 @@ Accounts.validateLoginAttempt(function (user)
 {
 
     let isValid=false;
-    if(user && user.user && user.user.profile && user.user.profile.deActive){
+    if(user && user.user && user.user.profile && !user.user.profile.isActive){
         user.allowed = false
         throw new Meteor.Error(403, "User account is inactive!");
     }

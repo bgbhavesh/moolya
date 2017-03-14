@@ -8,8 +8,8 @@ import gql from 'graphql-tag'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler'
 import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
-import MlAssignChapterBackendUserList from './MlAssignBackendUserList'
-import MlAssignChapterBackendUserRoles from './MlAssignBackendUserRoles'
+import MlAssignChapterBackendUserList from './MlAssignChapterBackendUserList'
+import MlAssignChapterBackendUserRoles from './MlAssignChapterBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findUserDetails} from '../actions/findUserDetails'
@@ -19,8 +19,6 @@ import {OnToggleSwitch} from '../../utils/formElemUtil'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
-
-
 class MlAssignChapterBackendUsers extends React.Component{
     constructor(props){
         super(props)
@@ -29,7 +27,7 @@ class MlAssignChapterBackendUsers extends React.Component{
             alsoAssignedAs:[],
             selectedBackendUser:'',
             users:[{username: '', _id:''}],
-            isClusterAdmin:false,
+            chapterAdmin:false,
             userDisplayName: '',
             username: ''
         }
@@ -38,18 +36,19 @@ class MlAssignChapterBackendUsers extends React.Component{
         this.assignBackendUsers.bind(this);
         this.findSubChapter.bind(this);
         this.updateSelectedBackEndUser.bind(this);
-        // this.enableAssignUser = this.enableAssignUser().bind(this);
         return this;
     }
 
     componentWillMount() {
       const resp=this.findSubChapter();
     }
-  componentDidUpdate(){
-    var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-    OnToggleSwitch(true,true);
-  }
+
+    componentDidUpdate(){
+      var WinHeight = $(window).height();
+      $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+      OnToggleSwitch(true,true);
+    }
+
     async findSubChapter() {
       let subChapterId = this.props.params;
       const response = await findSubChapterActionHandler(subChapterId);
@@ -116,13 +115,12 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     getAssignedRoles(roles){
-        console.log(roles)
         this.setState({'mlroleDetails':roles})
-        console.log(this.state.mlroleDetails)
+        // console.log(this.state.mlroleDetails)
     }
 
-    isClusterAdmin(admin){
-      this.setState({'isClusterAdmin':admin})
+    isChapterAdmin(admin){
+      this.setState({'chapterAdmin':admin})
     }
 
     async addEventHandler() {
@@ -134,6 +132,7 @@ class MlAssignChapterBackendUsers extends React.Component{
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
         userProfile['clusterId'] = this.props.params.clusterId;
+        userProfile['isChapterAdmin'] = this.state.chapterAdmin;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}}
@@ -143,7 +142,7 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     handleSuccess(){
-      this.resetBackendUers();
+      this.resetBackendUsers();
     }
 
     handleError(){
@@ -156,7 +155,7 @@ class MlAssignChapterBackendUsers extends React.Component{
       const resp= this.findUserDetails(userId);
       //const resp= this.findUserDetails(userId);
     }
-    resetBackendUers(){
+  resetBackendUsers(){
       this.setState({loading: true});
       this.setState({selectedBackendUser: ''})
       this.findUserDetails('');
@@ -164,11 +163,11 @@ class MlAssignChapterBackendUsers extends React.Component{
 
     render(){
         let MlActionConfig = [
-          {
-            actionName: 'edit',
-            showAction: true,
-            handler: null
-          },
+          // {
+          //   actionName: 'edit',
+          //   showAction: true,
+          //   handler: null
+          // },
           {
             showAction: true,
             actionName: 'add',
@@ -211,7 +210,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                           <div className="row">
                               <div className="left_wrap left_user_blocks">
                                   <ScrollArea speed={0.8} className="left_wrap">
-                                      <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
+                                      <div className="col-md-4 col-sm-4" onClick={this.resetBackendUsers.bind(that)}>
                                           <div className="list_block provider_block">
                                               <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
                                               <div className="provider_mask"> <img src="/images/funder_bg.png" />  <img className="user_pic" src="/images/def_profile.png"/> </div>
@@ -253,7 +252,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId}  getAssignedRoles={this.getAssignedRoles.bind(this)}  getClusterAdmin={this.isClusterAdmin.bind(this)} />):<div></div>}
+                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId}  getAssignedRoles={this.getAssignedRoles.bind(this)}  getChapterAdmin={this.isChapterAdmin.bind(this)} />):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

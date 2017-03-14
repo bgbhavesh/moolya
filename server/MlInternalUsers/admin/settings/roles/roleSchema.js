@@ -91,11 +91,10 @@ let Role = `
   
   type Query {
       fetchRole(roleName: String, roleValue: String, name: String): String
-      fetchRolesByDepSubDep(departmentId:String, clusterId:String): [Roles]
+      fetchRolesByDepSubDep(departmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String): [Roles]
       findRole(id:String):Roles
       fetchActiveRoles: [Roles]
       fetchAllAssignedRoles(roleIds:[String]):[String]
-      fetchRolesByDepSubDepTest(departmentId:String, clusterId:String, hierarchyLevel:String): [Roles]
   }
   
   type Mutation {

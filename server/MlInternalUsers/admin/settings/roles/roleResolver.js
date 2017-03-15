@@ -31,6 +31,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) =>
         return response;
     }
     role.createdDateTime = new Date();
+    role.createdBy = Meteor.users.findOne({_id:context.userId}).username;
     let id = MlRoles.insert({...role});
     if(id){
         let code = 200;

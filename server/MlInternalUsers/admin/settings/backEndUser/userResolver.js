@@ -200,6 +200,31 @@ MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info
     }
 }
 
+MlResolver.MlQueryResolver['fetchChapterBasedRoles'] = (obj, args, context, info) =>{
+  let user = Meteor.users.findOne({_id: args.userId});
+  if (user && user.profile && user.profile.isInternaluser == true) {
+    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+    let response =[];
+    _.each(user_profiles, function (s,v) {
+      if(s.clusterId==args.clusterId){
+        _.each(s.userRoles,function (item,value) {
+          if(item.roleName == "chpateradmin"){
+            s.isChapterAdmin=true;
+          }
+        })
+        response.push(s);
+      }
+    })
+    return response;
+    // for (var i = 0; i < user_profiles.length; i++) {
+    //   let clusterId = user_profiles[i].clusterId;
+    //   if (clusterId == args.clusterId) {
+    //     return user_profiles[i];
+    //   }
+    // }
+  }
+}
+
 MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) => {
 
   let query = ""

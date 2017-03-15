@@ -199,10 +199,10 @@ class MlAssignBackendUsers extends React.Component {
                 <ScrollArea speed={0.8} className="left_wrap">
                   <form>
                     <div className="form-group">
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Profile Pic</span>
-                        <input type="file" className="upload" ref="profilePic"/>
-                      </div>
+                      {/*<div className="fileUpload mlUpload_btn">*/}
+                        {/*<span>Profile Pic</span>*/}
+                        {/*<input type="file" className="upload" ref="profilePic"/>*/}
+                      {/*</div>*/}
                       <div className="previewImg ProfileImg">
                         <img src="/images/def_profile.png"/>
                       </div>

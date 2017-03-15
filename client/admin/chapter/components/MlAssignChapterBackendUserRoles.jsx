@@ -28,7 +28,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         roleId: null,
         validFrom: '',
         validTo: '',
-        isActive: false,
+        isActive: '',
         clusterId: this.props.clusterId,
         chapterId: this.props.chapterId,
         subChapterId: this.props.subChapterId,
@@ -37,7 +37,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         hierarchyCode: ""
       }],
       selectedRole: "",
-      chapterAdmin: false
+      chapterAdmin: ''
     }
     this.findUserDepartments.bind(this);
     this.isChapterAdmin.bind(this);
@@ -67,7 +67,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   optionsBySelectRole(index, selectedValue) {
-    console.log(index)
     let roleDetails = this.state.roleDetails
     roleDetails[index]['roleId'] = selectedValue
     this.setState({roleDetails: roleDetails})
@@ -89,7 +88,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         roleId: null,
         validFrom: '',
         validTo: '',
-        isActive: false,
+        isActive: '',
         clusterId: this.props.clusterId,
         chapterId: this.props.chapterId,
         subChapterId: this.props.subChapterId,
@@ -108,18 +107,18 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
   onChange(id, event) {
     let roleDetails = this.state.roleDetails
-    let filedName = event.target.name
-    console.log(filedName);
-    let fieldValue = event.target.value;
-    if (filedName == 'status') {
-      fieldValue = event.target.checked;
-      roleDetails[id]['isActive'] = fieldValue
-    }
-    else {
-      // roleDetails[id][[filedName]] = fieldValue
-      roleDetails[id][filedName] = fieldValue
-    }
+    // let filedName = event.target.name
+    console.log('........................');
+    console.log(id)
+    // let fieldValue = event.target.value;
+    // if (filedName == 'status') {
+    let fieldValue = event.target.checked;
+    console.log(fieldValue);
+    roleDetails[id]['isActive'] = "fieldValue"
+    console.log(roleDetails[id]['isActive']);
+    // }
     this.setState({roleDetails: roleDetails})
+    // console.log(this.state.roleDetails);
     this.props.getAssignedRoles(this.state.roleDetails)
   }
 
@@ -160,13 +159,16 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.setState({loading: false, roleForm: data});
     if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
       this.setState({roleDetails: this.props.assignedRoles})
+      this.setState({chapterAdmin: this.props.getChapterAdmin})
     }
   }
 
   render() {
     let that = this
     let userDepartments = that.state.roleForm || [];
-    let roleDetails = that.state.roleDetails
+    let roleDetails = that.state.roleDetails;
+    let chapterAdmin=that.state.chapterAdmin;
+
     return (
       <div>
         {userDepartments.map(function (department, id) {
@@ -195,7 +197,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                          value={department.subDepartmentName}/>
                 </div>
 
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox"
+                <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
                                                     onChange={that.isChapterAdmin.bind(that)}/><label
                   htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div>
                 <br className="brclear"/>

@@ -53,7 +53,7 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     async findSubChapter() {
-      let subChapterId = this.props.params;
+      let subChapterId = this.props.params.subChaterId;
       const response = await findSubChapterActionHandler(subChapterId);
       this.setState({loading: false, data: response});
     }
@@ -71,7 +71,7 @@ class MlAssignChapterBackendUsers extends React.Component{
     async findUserDetails(userId){
         const userDetails = await findAdminUserDetails(userId);
         if(userDetails){
-            this.setState({loading:false})
+
             this.setState({selectedBackendUser:userId})
             this.setState({username:userDetails.userName})
             this.setState({userDisplayName:userDetails.displayName})
@@ -92,7 +92,8 @@ class MlAssignChapterBackendUsers extends React.Component{
         }else {
            var roles = [];
         }
-        this.setState({user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
+        let chapterAdmin=userProfile&&userProfile.isChapterAdmin?userProfile.isChapterAdmin:''
+        this.setState({loading:false,user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles, chapterAdmin: chapterAdmin });
         return roles
     }
 
@@ -113,7 +114,6 @@ class MlAssignChapterBackendUsers extends React.Component{
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
         userProfile['clusterId'] = this.props.params.clusterId;
-        // userProfile['isChapterAdmin'] = this.state.chapterAdmin;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
         let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}, isChapterAdmin:this.state.chapterAdmin}
@@ -122,11 +122,18 @@ class MlAssignChapterBackendUsers extends React.Component{
         return response;
     }
 
-    handleSuccess(){
-      this.resetBackendUsers();
+    handleSuccess(response){
+      if (response){
+        this.resetBackendUsers();
+        // if(response.success)
+        //   this.resetBackendUsers();
+        // else
+        //   toastr.error(response.result);
+      }
     }
 
-    handleError(){
+    handleError(error){
+      alert(response)
     }
 
     updateSelectedBackEndUser(userId){
@@ -148,7 +155,7 @@ class MlAssignChapterBackendUsers extends React.Component{
           {
             showAction: true,
             actionName: 'add',
-            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this),this.handleSuccess.bind(this))
+            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this),this.handleSuccess.bind(this), this.handleError.bind(this))
           },
           {
             showAction: true,
@@ -167,7 +174,7 @@ class MlAssignChapterBackendUsers extends React.Component{
       let username = this.state.username || "";
       let alsoAssignedAs = this.state.alsoAssignedAs || "";
       const showLoader = this.state.loading;
-      let userid  = this.state.selectedBackendUser||"";
+        let userid  = this.state.selectedBackendUser||"";
         let clusterId = this.state.data&&this.state.data.clusterId||"";
         let chapterId = this.state.data&&this.state.data.chapterId||"";
         return(

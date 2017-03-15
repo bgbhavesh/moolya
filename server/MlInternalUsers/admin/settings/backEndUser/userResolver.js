@@ -211,19 +211,21 @@ MlResolver.MlQueryResolver['fetchChapterBasedRoles'] = (obj, args, context, info
           if(item.roleName == "chapteradmin"){
             s.isChapterAdmin=true;
           }
+          // return s;
         })
-        response.push(s);
+        // response.push(s);
       }
     })
-    return response;
-    // for (var i = 0; i < user_profiles.length; i++) {
-    //   let clusterId = user_profiles[i].clusterId;
-    //   if (clusterId == args.clusterId) {
-    //     return user_profiles[i];
-    //   }
-    // }
+
+    for (var i = 0; i < user_profiles.length; i++) {
+      let clusterId = user_profiles[i].clusterId;
+      if (clusterId == args.clusterId) {
+        return user_profiles[i];
+      }
+    }
   }
-}
+
+};
 
 MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) => {
 
@@ -437,12 +439,15 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let hierarchy = "";
   roles.map(function (role)
   {
-      let roleName = MlRoles.findOne({_id: role.roleId});
-      role.roleName = roleName.roleName;
       if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
           levelCode = "COMMUNITY"
       }
       else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && !args.user.isChapterAdmin){
+          // if(role.roleName == "chapteradmin"){
+          //   let subChapterAdminRole = MlRoles.findOne({roleName:'subchapteradmin'})
+          //   role.roleId = subChapterAdminRole._id
+          //   role.roleName = subChapterAdminRole.roleName
+          // }
           levelCode = "SUBCHAPTER"
           role.communityId = "all"
       }
@@ -461,6 +466,9 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           role.subChapterId = "all"
           role.communityId = "all"
       }
+      let roleName = MlRoles.findOne({_id: role.roleId});
+      role.roleName = roleName.roleName;
+
       hierarchy = MlHierarchy.findOne({code:levelCode})
       role.hierarchyLevel = hierarchy.level;
       role.hierarchyCode  = hierarchy.code;

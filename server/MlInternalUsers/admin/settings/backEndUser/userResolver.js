@@ -266,7 +266,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
         let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
         if(departments && departments.length > 0){
             departments.map(function (department) {
-                let depUsers = Meteor.users.find({"$or":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]}).fetch();
+                let depUsers = Meteor.users.find({"$and":[{"$or":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]},{"profile.InternalUprofile.moolyaProfile.userType":'moolya'}]}).fetch();
                 depUsers.map(function (user)
                 {
                     let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
@@ -354,6 +354,25 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
         userId: args.userId,
         clusterId: subChapter.clusterId
       }, context, info)
+  }else{
+    let user = Meteor.users.findOne({"_id":args.userId})
+    let subChapterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
+    if(user && subChapterDep && subChapterDep.length > 0) {
+      let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
+      for (var i = 0; i < subChapterDep.length; i++) {
+        for (var j = 0; j < userDep.length; j++) {
+          if (userDep[j].department == subChapterDep[i]._id) {
+            depts.push(userDep[j]);
+          }
+        }
+      }
+    }
+    depts.map(function (dept) {
+      let departmentName = MlDepartments.findOne({"_id":dept.department}).departmentName;
+      let subDepartmentName = MlSubDepartments.findOne({"_id":dept.subDepartment}).subDepartmentName;
+      dept.departmentName =departmentName;
+      dept.subDepartmentName = subDepartmentName;
+    })
   }
   return depts
 }

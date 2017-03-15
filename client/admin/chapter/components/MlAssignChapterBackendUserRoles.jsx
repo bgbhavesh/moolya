@@ -207,11 +207,12 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                           <div className="add_form_block"><img src="/images/add.png"
                                                                onClick={that.addRoleComponent.bind(that, idx)}/></div>
                           <div className="form-group">
+                            {details.roleName?<input type="text" defaultValue={details.roleName} className="form-control float-label" disabled="true"/> :
                             <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                           labelKey={'label'} queryType={"graphql"} query={query}
                                           queryOptions={queryOptions} isDynamic={true}
                                           onSelect={that.optionsBySelectRole.bind(that, idx)}
-                                          selectedValue={details.roleId}/>
+                                          selectedValue={details.roleId}/>}
                           </div>
                           <div className="form-group left_al">
                             <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}

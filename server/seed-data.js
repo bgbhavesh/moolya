@@ -160,7 +160,8 @@ var options = {
         userProfiles:[],
         isActive:true,
         firstName:'Platform',
-        lastName:'Admin'
+        lastName:'Admin',
+        displayName: 'Platform Admin'
       }
     },
     isSystemDefined: true

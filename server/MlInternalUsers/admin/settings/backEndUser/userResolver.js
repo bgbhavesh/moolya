@@ -157,18 +157,48 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     return user;
 };
 
-MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) => {
-  let user = Meteor.users.findOne({_id: args.userId});
-  if (user && user.profile && user.profile.isInternaluser == true) {
-    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-    for (var i = 0; i < user_profiles.length; i++) {
-      let clusterId = user_profiles[i].clusterId;
-      if (clusterId == args.clusterId) {
-         return user_profiles[i];
-      }
+MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
+{
+    let userDetails = {};
+    if(args.userId){
+        user = Meteor.users.findOne({_id: args.userId});
+        let assignedRoles = "";
+        let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+        let displayName = user.profile.InternalUprofile.moolyaProfile.displayName;
+        let deActive = user.profile.isActive
+        userProfiles.map(function (profile, index) {
+            let userRoles = profile.userRoles;
+            const clusterData = MlClusters.findOne({ _id:profile.clusterId})||[];
+            if(clusterData){
+                userRoles.map(function (role) {
+                    const rolesData =  MlRoles.findOne({ _id:role.roleId})||[];
+                    if(rolesData){
+                        assignedRoles += rolesData.roleName+","
+                    }
+                });
+            }
+        });
+
+        userDetails['alsoAssignedas'] = assignedRoles;
+        userDetails['displayName'] = displayName;
+        userDetails['userName'] = user.username;
+        userDetails['deActive'] = deActive;
     }
-  }
+    return userDetails;
 };
+
+MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) =>{
+    let user = Meteor.users.findOne({_id: args.userId});
+    if (user && user.profile && user.profile.isInternaluser == true) {
+        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+        for (var i = 0; i < user_profiles.length; i++) {
+            let clusterId = user_profiles[i].clusterId;
+            if (clusterId == args.clusterId) {
+                return user_profiles[i];
+            }
+        }
+    }
+}
 
 MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) => {
 
@@ -236,7 +266,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
         let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
         if(departments && departments.length > 0){
             departments.map(function (department) {
-                let depUsers = Meteor.users.find({"$and":[{"$or":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]},{"profile.InternalUprofile.moolyaProfile.userType":'moolya'}]}).fetch();
+                let depUsers = Meteor.users.find({"$or":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]}).fetch();
                 depUsers.map(function (user)
                 {
                     let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
@@ -320,42 +350,11 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   let depts = []
   let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
   if(subChapter && subChapter.isDefaultSubChapter) {
-    //depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, {userId: args.userId, clusterId: subChapter.clusterId}, context, info)
-    let user = Meteor.users.findOne({"_id": args.userId})
-    let clusterDepts = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
-    if (user && clusterDepts && clusterDepts.length > 0) {
-      let userDepts = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
-      userDepts.map(function (userDept) {
-        let result = _.find(clusterDepts, {"_id":userDept.department});
-        if(result && result.isActive){
-          userDept.isAvailiable = true;
-        }
-        else
-          userDept.isAvailiable = false;
-
-        depts.push(userDept)
-      })
-    }
-  }else{
-        let user = Meteor.users.findOne({"_id":args.userId})
-          let subChapterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-        if(user && subChapterDep && subChapterDep.length > 0) {
-            let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
-            for (var i = 0; i < subChapterDep.length; i++) {
-                for (var j = 0; j < userDep.length; j++) {
-                    if (userDep[j].department == subChapterDep[i]._id) {
-                      depts.push(userDep[j]);
-                      }
-                  }
-             }
-         }
+      depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'](obj, {
+        userId: args.userId,
+        clusterId: subChapter.clusterId
+      }, context, info)
   }
-  depts.map(function (dept) {
-    let departmentName = MlDepartments.findOne({"_id":dept.department}).departmentName;
-    let subDepartmentName = MlSubDepartments.findOne({"_id":dept.subDepartment}).subDepartmentName;
-    dept.departmentName =departmentName;
-    dept.subDepartmentName = subDepartmentName;
-  })
   return depts
 }
 
@@ -397,12 +396,15 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
       if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
           levelCode = "COMMUNITY"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
+      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && !args.user.isChapterAdmin){
           levelCode = "SUBCHAPTER"
           role.communityId = "all"
       }
-      else if(role.clusterId != "" && role.chapterId != "" ){
+      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && args.user.isChapterAdmin)
+      {
+          let chapterAdminRole = MlRoles.findOne({roleName:'chapteradmin'})
           levelCode = "CHAPTER"
+          role.roleId = chapterAdminRole._id
           role.subChapterId = "all"
           role.communityId = "all"
       }

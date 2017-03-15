@@ -12,7 +12,7 @@ import MlAssignChapterBackendUserList from './MlAssignChapterBackendUserList'
 import MlAssignChapterBackendUserRoles from './MlAssignChapterBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
-import {findUserDetails} from '../actions/findUserDetails'
+import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
 import {findRoles} from '../actions/fetchRoles'
 import {OnToggleSwitch} from '../../utils/formElemUtil'
 
@@ -24,13 +24,12 @@ class MlAssignChapterBackendUsers extends React.Component{
         super(props)
         this.state={
             loading: false,
-            alsoAssignedAs:[],
+            alsoAssignedAs:"",
             selectedBackendUser:'',
             users:[{username: '', _id:''}],
             chapterAdmin:false,
             userDisplayName: '',
-            username: '',
-            isActive:false
+            username: ''
         }
 
         this.addEventHandler.bind(this);
@@ -60,65 +59,39 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     optionsBySelectUser(index, selectedIndex){
-      this.setState({loading: true});
-      this.setState({selectedBackendUser:index})
-      const resp= this.findUserDetails(index);
+        this.setState({loading: true});
+        this.setState({selectedBackendUser:index})
+        const resp= this.findUserDetails(index);
     }
 
 
     async findUserDetails(userId){
-           const user = await findUserDetails(userId);
-      var roles = [];
-      if(user){
-        if (user && user.profile && user.profile.isInternaluser == true) {
-          let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-          // get user_roles;
-          // Selecting Default Profile
-          for (var i = 0; i < user_profiles.length; i++) {
-            let user_roles = user_profiles[i].userRoles;
-            if (user_profiles[i].userRoles && user_profiles[i].userRoles.length > 0) {
-              for (var j = 0; j < user_roles.length; j++) {
-                roles.push(user_roles[j]);
-              }
-            }
-          }
+        const userDetails = await findAdminUserDetails(userId);
+        if(userDetails){
+            this.setState({loading:false})
+            this.setState({selectedBackendUser:userId})
+            this.setState({username:userDetails.userName})
+            this.setState({userDisplayName:userDetails.displayName})
+            this.setState({alsoAssignedAs:userDetails.alsoAssignedas})
+            this.find_Cluster_Roles(userId, this.props.params);
+            return userDetails;
         }
-        this.setState({user_Roles:roles,selectedBackendUser:userId});
-        this.setState({loading: false,
-          userMoolyaProfile:user.profile.InternalUprofile.moolyaProfile,
-          userDisplayName:user.profile.InternalUprofile.moolyaProfile.displayName,
-          username:user.profile.InternalUprofile.moolyaProfile.email,
-          isActive : user.profile.isActive
-        });
-        this.findRoleDetails();
-        return user;
-      }else {
-        this.setState({
-          userDisplayName:'',
-          username:'',
-          alsoAssignedAs:[],
-          // deActive:false,
-          loading: false,
-        });
-      }
-
     }
 
-    async findRoleDetails(){
-         let roleIds = [];
-         if(this.state.user_Roles && this.state.user_Roles.length>0){
-             this.state.user_Roles.map(function (role) {
-                  roleIds.push(role.roleId);
-                });
-           }
-          const roles= await findRoles(roleIds);
-          this.setState({alsoAssignedAs: roles});
-          return roles;
+    async find_Cluster_Roles(userId, clusterId)
+    {
+        const userProfile = await findCluster_Roles(userId, clusterId);
+        if (userProfile){
+            var roles = userProfile.userRoles || [];
+        }else {
+           var roles = [];
+        }
+        this.setState({user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
+        return roles
     }
 
     getAssignedRoles(roles){
         this.setState({'mlroleDetails':roles});
-        // console.log(this.state.mlroleDetails)
     }
 
     isChapterAdmin(admin){
@@ -134,10 +107,10 @@ class MlAssignChapterBackendUsers extends React.Component{
         let userProfile = {};
         userProfile['userId']   = this.state.selectedBackendUser
         userProfile['clusterId'] = this.props.params.clusterId;
-        userProfile['isChapterAdmin'] = this.state.chapterAdmin;
+        // userProfile['isChapterAdmin'] = this.state.chapterAdmin;
         userProfile['userRoles'] = this.state.mlroleDetails;
         userProfile['displayName'] = this.refs.displayName.value;
-        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}}
+        let user = {profile:{InternalUprofile:{moolyaProfile:{userProfiles:userProfile}}}, isChapterAdmin:this.state.chapterAdmin}
         let data = {moduleName:"USERS", actionName:"UPDATE", userId:this.state.selectedBackendUser, user:user}
         let response = await multipartFormHandler(data, this.refs.profilePic.files[0]);
         return response;
@@ -148,19 +121,15 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     handleError(){
-
     }
 
-
     updateSelectedBackEndUser(userId){
-      this.setState({loading: true});
-      const resp= this.findUserDetails(userId);
-      //const resp= this.findUserDetails(userId);
+        this.setState({loading: true});
+        const resp = this.findUserDetails(userId);
     }
   resetBackendUsers(){
       this.setState({loading: true});
-      this.setState({selectedBackendUser: ''})
-      this.findUserDetails('');
+      this.setState({selectedBackendUser:'', userDisplayName:'',username:'',alsoAssignedAs:"",loading: false});
     }
 
     render(){
@@ -190,7 +159,7 @@ class MlAssignChapterBackendUsers extends React.Component{
       }`
       let userDisplayName = this.state.userDisplayName || "";
       let username = this.state.username || "";
-      let alsoAssignedAs = this.state.alsoAssignedAs || [];
+      let alsoAssignedAs = this.state.alsoAssignedAs || "";
       const showLoader = this.state.loading;
       let userid  = this.state.selectedBackendUser||"";
         let clusterId = this.state.data&&this.state.data.clusterId||"";
@@ -200,7 +169,7 @@ class MlAssignChapterBackendUsers extends React.Component{
              {showLoader === true ? ( <div className="loader_wrap"></div>) : (
             <div className="admin_main_wrap">
                 <div className="admin_padding_wrap">
-                    <h2>Assign Backend User to Sub Chapter</h2>
+                    <h2>Assign internal user to Chapter</h2>
                   <div className="main_wrap_scroll">
                     <ScrollArea
                       speed={0.8}
@@ -243,13 +212,13 @@ class MlAssignChapterBackendUsers extends React.Component{
                                       </div>
                                       <div>
                                           <div className="form-group">
-                                              <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"  defaultValue={alsoAssignedAs}/>
+                                              <input type="text" id="AssignedAs" placeholder="Also Assigned As" className="form-control float-label" disabled="true"  value={alsoAssignedAs}/>
                                           </div>
                                         <div className="form-group">
-                                               <input type="text" placeholder="Display Name" readOnly="true" ref="displayName" defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
+                                               <input type="text" placeholder="Display Name" readOnly="true" ref="displayName" value={userDisplayName} className="form-control float-label" id="dName"/>
                                         </div>
                                         <div className="form-group">
-                                                <input type="text" placeholder="User Name" readOnly="true" className="form-control float-label" id="userName"  ref="userName" defaultValue={username}/>
+                                                <input type="text" placeholder="User Name" readOnly="true" className="form-control float-label" id="userName"  ref="userName" value={username}/>
                                       </div>
                                           <br className="brclear"/>
                                       </div>
@@ -260,7 +229,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                       <div className="form-group switch_wrap inline_switch">
                                           <label className="">De-Activate User</label>
                                           <label className="switch">
-                                              <input type="checkbox" disabled="true" checked={this.state.isActive} />
+                                              <input type="checkbox" />
                                               <div className="slider"></div>
                                           </label>
                                       </div>

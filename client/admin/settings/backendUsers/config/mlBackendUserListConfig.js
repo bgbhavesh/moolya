@@ -46,10 +46,10 @@ export const mlBackendUserListConfig=new MlViewer.View({
                             profile {
                                       isInternaluser
                                       isExternaluser
-                                      email
+                                      email,
+                                      isActive,
                                       InternalUprofile{
                                           moolyaProfile{
-                                            isActive,
                                             firstName,
                                             lastName,
                                             displayName,

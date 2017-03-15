@@ -11,7 +11,7 @@ export default class MlClusterListView extends Component {
       let StatusActive = '',fontName=''; let userRoleList=[]
       let username=''
       if( prop.profile.InternalUprofile){
-        let status = prop.profile.InternalUprofile.moolyaProfile.isActive;
+        let status = prop.profile.isActive;
         if(prop.profile.InternalUprofile.moolyaProfile.displayName){
           username = prop.profile.InternalUprofile.moolyaProfile.displayName;
         } else {

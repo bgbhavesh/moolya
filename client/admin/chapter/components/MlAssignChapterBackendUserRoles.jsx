@@ -102,12 +102,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   isChapterAdmin(event) {
-    let ca = false;
-    if (event.target.checked) {
-      ca = true;
-    }
-    this.setState({chapterAdmin: event.target.checked})
-    this.props.getChapterAdmin(event.target.checked)
+      this.setState({chapterAdmin: event.target.checked})
+      this.props.getChapterAdmin(event.target.checked)
   }
 
   onChange(id, event) {
@@ -154,7 +150,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     if ((this.props.userId !== nextProps.userId)) {
       const resp = this.findUserDepartments();
     }
-
   }
 
   async findUserDepartments() {

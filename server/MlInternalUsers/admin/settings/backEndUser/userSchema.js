@@ -17,6 +17,7 @@ let BackEndUser = `
         isInternaluser: Boolean,
         isExternaluser: Boolean,
         isActive: Boolean,
+        isChapterAdmin :Boolean,
         email: String,
         InternalUprofile: internalUserprofile
     }
@@ -116,7 +117,6 @@ let BackEndUser = `
         roleType: String,
         assignedDepartment:[assignedDepartment],
         displayName: String,
-        isChapterAdmin :Boolean,
         email:String,
         contact:[contacts],
         globalAssignment:Boolean,
@@ -134,6 +134,7 @@ let BackEndUser = `
         isExternaluser: Boolean,
         email: String,
         isActive:Boolean,
+        isChapterAdmin :Boolean,
         InternalUprofile: InternalUprofile
     }
     
@@ -151,6 +152,13 @@ let BackEndUser = `
         isAvailiable:Boolean
     }
     
+    type userDetails{
+        alsoAssignedas: String,
+        displayName:String,
+        userName:String,
+        deActive: Boolean
+    }
+    
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
@@ -162,6 +170,7 @@ let BackEndUser = `
     
     type Query{
         fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
+        fetchUserDetails(userId:String): userDetails
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]

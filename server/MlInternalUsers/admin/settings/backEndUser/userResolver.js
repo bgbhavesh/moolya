@@ -157,18 +157,48 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     return user;
 };
 
-MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) => {
-  let user = Meteor.users.findOne({_id: args.userId});
-  if (user && user.profile && user.profile.isInternaluser == true) {
-    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-    for (var i = 0; i < user_profiles.length; i++) {
-      let clusterId = user_profiles[i].clusterId;
-      if (clusterId == args.clusterId) {
-         return user_profiles[i];
-      }
+MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
+{
+    let userDetails = {};
+    if(args.userId){
+        user = Meteor.users.findOne({_id: args.userId});
+        let assignedRoles = "";
+        let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+        let displayName = user.profile.InternalUprofile.moolyaProfile.displayName;
+        let deActive = user.profile.isActive
+        userProfiles.map(function (profile, index) {
+            let userRoles = profile.userRoles;
+            const clusterData = MlClusters.findOne({ _id:profile.clusterId})||[];
+            if(clusterData){
+                userRoles.map(function (role) {
+                    const rolesData =  MlRoles.findOne({ _id:role.roleId})||[];
+                    if(rolesData){
+                        assignedRoles += rolesData.roleName+","
+                    }
+                });
+            }
+        });
+
+        userDetails['alsoAssignedas'] = assignedRoles;
+        userDetails['displayName'] = displayName;
+        userDetails['userName'] = user.username;
+        userDetails['deActive'] = deActive;
     }
-  }
+    return userDetails;
 };
+
+MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) =>{
+    let user = Meteor.users.findOne({_id: args.userId});
+    if (user && user.profile && user.profile.isInternaluser == true) {
+        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+        for (var i = 0; i < user_profiles.length; i++) {
+            let clusterId = user_profiles[i].clusterId;
+            if (clusterId == args.clusterId) {
+                return user_profiles[i];
+            }
+        }
+    }
+}
 
 MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) => {
 
@@ -309,8 +339,12 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   console.log(args);
   let depts = []
   let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
-  if(subChapter && subChapter.isDefaultSubChapter)
-    depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, {userId:context.userId, clusterId:subChapter.clusterId}, context, info)
+  if(subChapter && subChapter.isDefaultSubChapter) {
+      depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'](obj, {
+        userId: args.userId,
+        clusterId: subChapter.clusterId
+      }, context, info)
+  }
   return depts
 }
 
@@ -352,12 +386,15 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
       if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
           levelCode = "COMMUNITY"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" ){
+      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && !args.user.isChapterAdmin){
           levelCode = "SUBCHAPTER"
           role.communityId = "all"
       }
-      else if(role.clusterId != "" && role.chapterId != "" ){
+      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && args.user.isChapterAdmin)
+      {
+          let chapterAdminRole = MlRoles.findOne({roleName:'chapteradmin'})
           levelCode = "CHAPTER"
+          role.roleId = chapterAdminRole._id
           role.subChapterId = "all"
           role.communityId = "all"
       }

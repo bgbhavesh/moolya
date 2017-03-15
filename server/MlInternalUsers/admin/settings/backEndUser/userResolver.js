@@ -208,7 +208,7 @@ MlResolver.MlQueryResolver['fetchChapterBasedRoles'] = (obj, args, context, info
     _.each(user_profiles, function (s,v) {
       if(s.clusterId==args.clusterId){
         _.each(s.userRoles,function (item,value) {
-          if(item.roleName == "chpateradmin"){
+          if(item.roleName == "chapteradmin"){
             s.isChapterAdmin=true;
           }
         })

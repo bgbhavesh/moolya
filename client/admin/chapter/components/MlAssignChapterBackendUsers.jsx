@@ -14,7 +14,8 @@ import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
 import {findCluster_Roles} from '../../cluster/actions/findCluster_Roles';
-import {findRoles} from '../actions/fetchRoles'
+// import {findRoles} from '../actions/fetchRoles'
+import {findAllChapter_Roles} from "../actions/fetchRoles";
 
 import {OnToggleSwitch} from '../../utils/formElemUtil'
 
@@ -75,15 +76,18 @@ class MlAssignChapterBackendUsers extends React.Component{
             this.setState({username:userDetails.userName})
             this.setState({userDisplayName:userDetails.displayName})
             this.setState({alsoAssignedAs:userDetails.alsoAssignedas})
-            this.find_Cluster_Roles(userId, this.props.params.clusterId);
-            return userDetails;
+            // this.find_Cluster_Roles(userId, this.props.params.clusterId);
+            this.find_Chapter_Roles(userId, this.props.params.clusterId);
+          return userDetails;
         }
     }
 
-    async find_Cluster_Roles(userId, clusterId)
-    {
-        const userProfile = await findCluster_Roles(userId, clusterId);
-        if (userProfile){
+    // async find_Cluster_Roles(userId, clusterId)
+    async find_Chapter_Roles(userId, clusterId)
+  {
+    // const userProfile = await findCluster_Roles(userId, clusterId);
+    const userProfile = await findAllChapter_Roles(userId, clusterId);
+    if (userProfile){
             var roles = userProfile.userRoles || [];
         }else {
            var roles = [];

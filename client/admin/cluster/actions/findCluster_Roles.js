@@ -22,6 +22,7 @@ export async function findCluster_Roles(userId, clusterId) {
             isActive
             hierarchyLevel
             hierarchyCode
+            roleName
           }
         }
       }

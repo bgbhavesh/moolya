@@ -126,6 +126,8 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
   if (args._id) {
     var id= args._id;
     let response= MlSubChapters.findOne({"_id":id});
+    let stateName = MlStates.findOne({_id: response.stateId}).name;
+    response.stateName=stateName;
     return response;
   }
 }

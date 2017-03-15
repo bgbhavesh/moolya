@@ -45,8 +45,6 @@ class MlAddDocumentType extends React.Component{
       about: this.refs.about.value,
       isActive: this.refs.documentTypeStatus.checked,
     }
-    console.log(DocTypeDetails)
-
     const response = await addDocumentTypeActionHandler(DocTypeDetails);
     return response;
 
@@ -59,11 +57,11 @@ class MlAddDocumentType extends React.Component{
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',

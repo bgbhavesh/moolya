@@ -330,6 +330,16 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
         let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
         if(subChapter && subChapter.isDefaultSubChapter){
             users = MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'](obj, {clusterId:subChapter.clusterId}, context, info)
+        }else{
+          let departments = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
+          if(departments && departments.length > 0){
+            for(var i = 0; i < departments.length; i++){
+              let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
+              if(depusers && depusers.length > 0){
+                users = users.concat(depusers)
+              }
+            }
+          }
         }
     }
     return users;

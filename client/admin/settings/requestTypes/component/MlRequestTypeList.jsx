@@ -11,7 +11,7 @@ export default class MlRequestTypeList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>RequestTypes</h2>
+          <h2>Request Type Details</h2>
 
           <MlTableViewContainer {...mlRequestTypeTableConfig}/>
 

@@ -10,7 +10,7 @@ class MlAddSocialLinkType extends React.Component{
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
-    this.createLanguage.bind(this)
+    this.createSocialLinks.bind(this)
     return this;
   }
 
@@ -19,7 +19,7 @@ class MlAddSocialLinkType extends React.Component{
   }
 
   async addEventHandler() {
-    const resp=await this.createLanguage();
+    const resp=await this.createSocialLinks();
     return resp;
   }
 
@@ -28,11 +28,10 @@ class MlAddSocialLinkType extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/socialLinkTypeList");
   };
 
-  async  createLanguage() {
+  async  createSocialLinks() {
     let Details = {
       socialName: this.refs.name.value,
       socialDisplayName: this.refs.displayName.value,
@@ -40,29 +39,21 @@ class MlAddSocialLinkType extends React.Component{
       socialUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await addSocialLinkTypeActionHandler(Details);
     return response;
-
   }
-
-  // getSubDepartmentAvailability(details){
-  //   console.log("details->"+details);
-  //   this.setState({'subdepartmentAvailability':details})
-  // }
 
   render(){
     let MlActionConfig = [
-      {
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'add',
-        handler: async(event) => this.props.handler(this.createLanguage.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.createSocialLinks.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,

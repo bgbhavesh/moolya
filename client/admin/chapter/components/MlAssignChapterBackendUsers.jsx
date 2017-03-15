@@ -13,7 +13,9 @@ import MlAssignChapterBackendUserRoles from './MlAssignChapterBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
+import {findCluster_Roles} from '../../cluster/actions/findCluster_Roles';
 import {findRoles} from '../actions/fetchRoles'
+
 import {OnToggleSwitch} from '../../utils/formElemUtil'
 
 let FontAwesome = require('react-fontawesome');
@@ -73,7 +75,7 @@ class MlAssignChapterBackendUsers extends React.Component{
             this.setState({username:userDetails.userName})
             this.setState({userDisplayName:userDetails.displayName})
             this.setState({alsoAssignedAs:userDetails.alsoAssignedas})
-            this.find_Cluster_Roles(userId, this.props.params);
+            this.find_Cluster_Roles(userId, this.props.params.clusterId);
             return userDetails;
         }
     }

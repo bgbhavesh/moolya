@@ -12,9 +12,13 @@ export default class MlClusterListView extends Component {
       let username=''
       if( prop.profile.InternalUprofile){
         let status = prop.profile.InternalUprofile.moolyaProfile.isActive;
-        let firstname=prop.profile.InternalUprofile.moolyaProfile.firstName;
-        let lastname=prop.profile.InternalUprofile.moolyaProfile.lastName
-        username=firstname+" "+lastname
+        if(prop.profile.InternalUprofile.moolyaProfile.displayName){
+          username = prop.profile.InternalUprofile.moolyaProfile.displayName;
+        } else {
+          let firstname=prop.profile.InternalUprofile.moolyaProfile.firstName;
+          let lastname=prop.profile.InternalUprofile.moolyaProfile.lastName
+          username=firstname+" "+lastname
+        }
         /*let userProfile=prop.profile.InternalUprofile.moolyaProfile.userProfiles;
         for(let i=0;i<userProfile.length;i++){
           let userRoles=userProfile[i].userRoles

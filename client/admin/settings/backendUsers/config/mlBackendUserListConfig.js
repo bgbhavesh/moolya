@@ -52,6 +52,7 @@ export const mlBackendUserListConfig=new MlViewer.View({
                                             isActive,
                                             firstName,
                                             lastName,
+                                            displayName,
                                             userProfiles {
                                               isDefault
                                               userRoles{

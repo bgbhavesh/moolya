@@ -135,3 +135,11 @@ MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) =
     return response;
   }
 }
+
+MlResolver.MlQueryResolver['fetchSubDepartmentsForRegistration'] = (obj, args, context, info) => {
+  if (args.id) {
+    var id= args.id;
+    let response= MlSubDepartments.find({"departmentId":id}).fetch()||[];
+    return response;
+  }
+}

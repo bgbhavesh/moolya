@@ -31,6 +31,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) =>
         return response;
     }
     role.createdDateTime = new Date();
+    role.createdBy = Meteor.users.findOne({_id:context.userId}).username;
     let id = MlRoles.insert({...role});
     if(id){
         let code = 200;
@@ -143,13 +144,11 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
             _.remove(roles, {roleName:'subchapteradmin'})
         }
     }
-
-
     return roles;
 }
 
 MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
-  // TODO : Authorization
+    // TODO : Authorization
     if (args.id) {
         var id = args.id;
         let response = MlRoles.findOne({"_id": id});
@@ -161,7 +160,8 @@ MlResolver.MlQueryResolver['fetchActiveRoles'] = (obj, args, context, info) =>{
     return MlRoles.find({isActive:true}).fetch();
 }
 
-MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info) =>{
+MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info) =>
+{
     let roleNames = [];
     let roleIds = args.roleIds;
     roleIds.map(function(roleId){
@@ -170,4 +170,46 @@ MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info)
     })
     return roleNames;
 }
+
+MlResolver.MlQueryResolver['fetchRolesForRegistration'] = (obj, args, context, info) => {
+  let resp = [];
+  let clusterId = args.cluster || "";
+  let chapterId = args.chapter || "";
+  let subChapterId = args.subChapter || "";
+  let departmentId = args.department || "";
+  let subDepartmentId = args.subDepartment || "";
+  if(clusterId || chapterId || subChapterId || departmentId || subDepartmentId){
+   /* resp = MlRoles.find( {
+      $and : [{  },
+        {"assignRoles.cluster" : args.cluster},
+        { "depatmentAvailable":{
+          $elemMatch: {
+            chapter: args.chapter,
+            subChapter:args.subChapter,
+          }} },
+      ]
+    } ).fetch()*/
+    resp = MlRoles.find({"$or": [{"$and": [{"assignRoles.cluster": clusterId}, {"assignRoles.chapter": chapterId}, {"assignRoles.subChapter": subChapterId},
+                                    {"assignRoles.department": departmentId},{"assignRoles.subDepartment": subDepartmentId}]},
+                                    {"assignRoles.cluster": clusterId},
+                                    {"assignRoles.chapter": chapterId},
+                                    {"assignRoles.department": departmentId},
+                                    {"assignRoles.subDepartment": subDepartmentId}]}).fetch();
+  }/*else if(args.cluster){
+    resp = MlDepartments.find( {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}}).fetch()
+  }else if(args.cluster  && args.chapter ){
+    resp = MlDepartments.find( {
+      $and : [{  },
+        {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}},
+        { "depatmentAvailable":{
+          $elemMatch: {
+            chapter: args.chapter
+          }} },
+      ]
+    } ).fetch()
+  }*/
+
+  return resp;
+}
+
 

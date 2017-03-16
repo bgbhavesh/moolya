@@ -126,6 +126,8 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
   if (args._id) {
     var id= args._id;
     let response= MlSubChapters.findOne({"_id":id});
+    let stateName = MlStates.findOne({_id: response.stateId}).name;
+    response.stateName=stateName;
     return response;
   }
 }
@@ -220,6 +222,25 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
   }
 
   return subChapters;
+}
+
+MlResolver.MlQueryResolver['fetchSubChaptersForRegistration'] = (obj, args, context, info) => {
+  let id = args.id || "";
+  let result = [];
+  if(id){
+    if(id == "all" ){
+      result=MlSubChapters.find({chapterId:id}).fetch()||[];
+      result.push({"subChapterName" : "All","_id" : "all"});
+    }else{
+      result=MlSubChapters.find({chapterId:id}).fetch()||[];
+      if(result.length > 0){
+        result.push({"subChapterName" : "All","_id" : "all"});
+      }
+    }
+  }
+
+
+  return result
 }
 
 createSubChapter = (subChapter) =>{

@@ -17,6 +17,7 @@ let BackEndUser = `
         isInternaluser: Boolean,
         isExternaluser: Boolean,
         isActive: Boolean,
+        isChapterAdmin :Boolean,
         email: String,
         InternalUprofile: internalUserprofile
     }
@@ -41,8 +42,10 @@ let BackEndUser = `
         isDefault: Boolean,
         clusterId: String,
         clusterName:String,
-        userRoles:[UserRoles]
+        userRoles:[UserRoles],
+        isChapterAdmin :Boolean
     }
+    
     
     type UserRoles{
         roleId:String,
@@ -116,7 +119,6 @@ let BackEndUser = `
         roleType: String,
         assignedDepartment:[assignedDepartment],
         displayName: String,
-        isChapterAdmin :Boolean,
         email:String,
         contact:[contacts],
         globalAssignment:Boolean,
@@ -134,6 +136,7 @@ let BackEndUser = `
         isExternaluser: Boolean,
         email: String,
         isActive:Boolean,
+        isChapterAdmin :Boolean,
         InternalUprofile: InternalUprofile
     }
     
@@ -151,6 +154,27 @@ let BackEndUser = `
         isAvailiable:Boolean
     }
     
+    type userDetails{
+        alsoAssignedas: String,
+        displayName:String,
+        userName:String,
+        deActive: Boolean
+    }
+    
+    type contextRoles{
+        roleId:String,
+        roleName:String,
+        isChapterAdmin:Boolean,
+        validFrom:String, 
+        validTo:String, 
+        isActive:Boolean,
+        clusterId:String, 
+        chapterId:String, 
+        subChapterId:String, 
+        communityId:String
+    }
+   
+    
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
@@ -162,10 +186,12 @@ let BackEndUser = `
     
     type Query{
         fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
+        fetchChapterBasedRoles(userId:String, clusterId:String): UserProfiles
+        fetchUserDetails(userId:String): userDetails
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
-        fetchUserRoles(userId:String):[UserRoles]
+        fetchUserRoles(userId:String):[contextRoles]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
@@ -176,3 +202,11 @@ let BackEndUser = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
 // userObject changed
 
+// UserChapterProfile
+
+// type UserChapterProfile{
+//   isDefault: Boolean,
+//     clusterId: String,
+//     clusterName:String,
+//     userRoles:[UserRoles]
+// }

@@ -138,3 +138,35 @@ MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, contex
   let resp = MlDepartments.find({isMoolya: args.isMoolya,isActive : true},{ depatmentAvailable: { $elemMatch: { subChapter: args.subChapter } }} ).fetch();
   return resp;
 }
+
+MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, context, info) => {
+  //let resp = MlDepartments.find({},{ depatmentAvailable: { $elemMatch: { subChapter: args.clusterId } }} ).fetch();
+  let resp = [];
+  if(args.cluster && args.chapter && args.subChapter){
+    resp = MlDepartments.find( {
+      $and : [{  },
+        {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}},
+        { "depatmentAvailable":{
+          $elemMatch: {
+            chapter: args.chapter,
+            subChapter:args.subChapter,
+          }} },
+      ]
+    } ).fetch()
+  }else if(args.cluster){
+    resp = MlDepartments.find( {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}}).fetch()
+  }else if(args.cluster  && args.chapter ){
+    resp = MlDepartments.find( {
+      $and : [{  },
+        {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}},
+        { "depatmentAvailable":{
+          $elemMatch: {
+            chapter: args.chapter
+          }} },
+      ]
+    } ).fetch()
+  }
+
+  return resp;
+}
+

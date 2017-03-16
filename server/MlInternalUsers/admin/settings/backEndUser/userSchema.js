@@ -161,6 +161,20 @@ let BackEndUser = `
         deActive: Boolean
     }
     
+    type contextRoles{
+        roleId:String,
+        roleName:String,
+        isChapterAdmin:Boolean,
+        validFrom:String, 
+        validTo:String, 
+        isActive:Boolean,
+        clusterId:String, 
+        chapterId:String, 
+        subChapterId:String, 
+        communityId:String
+    }
+   
+    
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
@@ -177,7 +191,7 @@ let BackEndUser = `
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
-        fetchUserRoles(userId:String):[UserRoles]
+        fetchUserRoles(userId:String):[contextRoles]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  

@@ -37,7 +37,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         hierarchyCode: ""
       }],
       selectedRole: "",
-      chapterAdmin: ''
+      chapterAdmin: false
     }
     this.findUserDepartments.bind(this);
     this.isChapterAdmin.bind(this);
@@ -66,11 +66,12 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
   }
 
-  optionsBySelectRole(index, selectedValue) {
-    let roleDetails = this.state.roleDetails
-    roleDetails[index]['roleId'] = selectedValue
-    this.setState({roleDetails: roleDetails})
-    this.props.getAssignedRoles(this.state.roleDetails)
+  optionsBySelectRole(index, selectedValue)
+  {
+      let roleDetails = this.state.roleDetails
+      roleDetails[index]['roleId'] = selectedValue
+      this.setState({roleDetails: roleDetails})
+      this.props.getAssignedRoles(this.state.roleDetails)
   }
 
   addRoleComponent(id) {
@@ -198,7 +199,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                 </div>
 
                 <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
-                                                    onChange={that.isChapterAdmin.bind(that)}/><label
+                                                    onChange={that.isChapterAdmin.bind(that)} disabled={!chapterAdmin}/><label
                   htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div>
                 <br className="brclear"/>
                 <div className="">
@@ -210,11 +211,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                                                onClick={that.addRoleComponent.bind(that, idx)}/></div>
                           <div className="form-group">
                             {details.roleName?<input type="text" defaultValue={details.roleName} className="form-control float-label" disabled="true"/> :
-                            <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                          labelKey={'label'} queryType={"graphql"} query={query}
-                                          queryOptions={queryOptions} isDynamic={true}
-                                          onSelect={that.optionsBySelectRole.bind(that, idx)}
-                                          selectedValue={details.roleId}/>}
+                              <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                            labelKey={'label'} queryType={"graphql"} query={query}
+                                            queryOptions={queryOptions} isDynamic={true}
+                                            onSelect={that.optionsBySelectRole.bind(that, idx)}
+                                            selectedValue={details.roleId}/>}
                           </div>
                           <div className="form-group left_al">
                             <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}

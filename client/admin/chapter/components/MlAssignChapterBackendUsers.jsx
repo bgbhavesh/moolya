@@ -84,17 +84,17 @@ class MlAssignChapterBackendUsers extends React.Component{
 
     // async find_Cluster_Roles(userId, clusterId)
     async find_Chapter_Roles(userId, clusterId)
-  {
-    // const userProfile = await findCluster_Roles(userId, clusterId);
-    const userProfile = await findAllChapter_Roles(userId, clusterId);
-    if (userProfile){
+    {
+        // const userProfile = await findCluster_Roles(userId, clusterId);
+        const userProfile = await findAllChapter_Roles(userId, clusterId);
+        if (userProfile){
             var roles = userProfile.userRoles || [];
         }else {
            var roles = [];
         }
-        let chapterAdmin=userProfile&&userProfile.isChapterAdmin?userProfile.isChapterAdmin:''
+        let chapterAdmin = userProfile&&userProfile.isChapterAdmin?userProfile.isChapterAdmin:false
         this.setState({loading:false,user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles, chapterAdmin: chapterAdmin });
-        return roles
+        return roles;
     }
 
     getAssignedRoles(roles){

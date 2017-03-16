@@ -1,16 +1,18 @@
 if(Meteor.isServer){
-
-  MlprocessTypes.insert({
+  MlprocessTypes.update({processName:"funding"},{$set:{
+    "_id":"funding",
     "processName":"funding",
     "displayName":"funding",
     "processDesc":"funding",
     "isActive": true
-  });
- MlprocessTypes.insert({
+  }},{upsert:true});
+
+  MlprocessTypes.update({processName:"registration"},{$set:{
+    "_id":"registration",
     "processName":"registration",
     "displayName":"registration",
     "processDesc":"registration",
     "isActive": true
-  });
+  }},{upsert:true});
 
 }

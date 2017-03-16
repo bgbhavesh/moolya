@@ -10,31 +10,15 @@ export async function findProcessActionHandler(processId) {
          _id
          processId
         process
-        communities{
-          id
-        }
-        userTypes{
-          id
-        }    
+        communities
+        userTypes
         identity
-        industries{
-          id
-        }
-        professions{
-          id
-        }
-        clusters{
-          id
-        }
-        states{
-          id
-        }
-        chapters{
-          id
-        }
-        subChapters{
-          id
-        }
+        industries
+        professions
+        clusters
+        states
+        chapters
+        subChapters
         isActive
          documents{
           type

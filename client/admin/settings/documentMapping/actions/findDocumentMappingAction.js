@@ -16,24 +16,12 @@ export async function findDocumentMappingActionHandler(Id)
           remarks
           allowableMaxSize
           issuingAuthority
-        allowableFormat{
-          id
-        }
-        clusters{
-          id
-        }    
-        chapters{
-          id
-        }
-        subChapters{
-          id
-        }
-        kycCategory{
-          id
-        }
-        documentType{
-          id
-        }
+        allowableFormat
+        clusters
+        chapters
+        subChapters
+        kycCategory
+        documentType
         isActive
       }
       }

@@ -20,16 +20,23 @@ class ActiveCityFormatter extends React.Component {
       this.setState({"data": {"isActive": false}});
     }
 
-    let StateDetails = {
-      id: data.id,
-      name: data.name,
-      // countryId: data.countryId,
-      // stateId: data.stateId,
-      // countryCode: data.countryCode,
-      isActive: this.refs.status.checked
+    let ProcessDetails = {
+      processId   : data.processId,
+      process     : data.process,
+      communities : data.communities,
+      userTypes   : data.userTypes,
+      identity    : data.identity,
+      industries  : data.industries,
+      professions : data.professions,
+      clusters    : data.clusters,
+      states      : data.states,
+      chapters    : data.chapters,
+      subChapters : data.subChapters,
+      isActive    : this.refs.status.checked,
+      documents   : data.assignDocument
     }
-
-   let response = await updateProcessActionHandler(StateDetails);
+let id=data.id
+   let response = await updateProcessActionHandler(id,ProcessDetails);
     if (response){
       if(response.success)
         FlowRouter.go("/admin/documents/clusterList");

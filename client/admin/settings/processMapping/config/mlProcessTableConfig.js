@@ -6,15 +6,15 @@ const mlProcessTableConfig=new MlViewer.View({
   module:"roles",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["roleName","displayName","roleType","userType","about"],
-  searchFields:["roleTypeName","roleTypeDisplayName","isActive"],
+  fields:["processId","isActive","process"],
+  searchFields:["processId","process","isActive"],
   throttleRefresh:false,
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "processId", title: "processId",dataSort:true},
-    {dataField: "procecss", title: "procecss",dataSort:true},
+    {dataField: "process", title: "process",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',

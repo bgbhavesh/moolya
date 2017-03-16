@@ -1153,7 +1153,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/lookingForList",
-            "name" : "Looking For Types",
+            "name" : "Looking For",
             "uniqueId" : "settings_lookingForTypes",
             "isLink" : true,
             "isMenu" : true,

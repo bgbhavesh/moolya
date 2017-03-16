@@ -1,39 +1,59 @@
-import gql from 'graphql-tag'
-import {client} from '../../core/apolloConnection';
+import gql from "graphql-tag";
+import {client} from "../../core/apolloConnection";
 
-export async function findAllChapter_Roles(userId, clusterId) {
+export async function findAll_Roles(userId) {
   const result = await client.query({
     query: gql`
-    query ($userId: String, $clusterId: String) {
-        fetchChapterBasedRoles(userId: $userId, clusterId: $clusterId) {
-          isDefault
-          clusterId
+    query ($userId: String) {
+        fetchUserRoles(userId: $userId) {
+          roleId
+          roleName
           isChapterAdmin
-          userRoles {
-            roleId
-            clusterId
-            chapterId
-            validFrom
-            validTo
-            subChapterId
-            communityId
-            isActive
-            hierarchyLevel
-            hierarchyCode
-            roleName
-          }
+          validFrom
+          validTo
+          isActive
+          clusterId
+          chapterId
+          subChapterId
+          communityId
+          
+          departmentId
+          departmentName
+          subDepartmentId
+          subDepartmentName
         }
       }
     `,
     variables: {
-      userId:userId,
-      clusterId:clusterId
+      userId: userId
     },
-    forceFetch:true
+    forceFetch: true
   })
-  const did = result.data.fetchChapterBasedRoles;
+  const did = result.data.fetchUserRoles;
   return did
 }
+
+
+// query ($userId: String, $clusterId: String) {
+//   fetchChapterBasedRoles(userId: $userId, clusterId: $clusterId) {
+//     isDefault
+//     clusterId
+//     isChapterAdmin
+//     userRoles {
+//       roleId
+//       clusterId
+//       chapterId
+//       validFrom
+//       validTo
+//       subChapterId
+//       communityId
+//       isActive
+//       hierarchyLevel
+//       hierarchyCode
+//       roleName
+//     }
+//   }
+// }
 
 // export async function findRoles(roleIds) {
 //   // let ids=userId

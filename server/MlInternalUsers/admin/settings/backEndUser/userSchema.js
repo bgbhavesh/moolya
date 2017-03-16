@@ -171,7 +171,12 @@ let BackEndUser = `
         clusterId:String, 
         chapterId:String, 
         subChapterId:String, 
-        communityId:String
+        communityId:String,
+        
+        departmentId:String,
+        departmentName:String,
+        subDepartmentId:String,
+        subDepartmentName:String
     }
    
     
@@ -186,7 +191,6 @@ let BackEndUser = `
     
     type Query{
         fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
-        fetchChapterBasedRoles(userId:String, clusterId:String): UserProfiles
         fetchUserDetails(userId:String): userDetails
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
@@ -201,12 +205,4 @@ let BackEndUser = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
 // userObject changed
-
-// UserChapterProfile
-
-// type UserChapterProfile{
-//   isDefault: Boolean,
-//     clusterId: String,
-//     clusterName:String,
-//     userRoles:[UserRoles]
-// }
+// fetchChapterBasedRoles(userId:String, clusterId:String): UserProfiles

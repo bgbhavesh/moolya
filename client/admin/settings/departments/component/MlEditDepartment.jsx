@@ -8,7 +8,7 @@ import  {updateDepartmentActionHandler} from '../actions/updateDepartmentAction'
 import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import ScrollArea from 'react-scrollbar';
-import {OnToggleSwitch} from '../../../utils/formElemUtil';
+import {OnToggleSwitch, MoolyaToggleSwitch} from '../../../utils/formElemUtil';
 class MlEditDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -33,6 +33,7 @@ class MlEditDepartment extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     OnToggleSwitch(true,true);
+    MoolyaToggleSwitch(true,true);
   }
 
   async addEventHandler() {

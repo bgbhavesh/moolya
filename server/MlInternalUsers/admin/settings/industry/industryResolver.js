@@ -28,6 +28,9 @@ MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => 
 
   if (args._id) {
     var id= args._id;
+
+    MlProfessions.update({industryId:id},{$set:{industryName : args.industryName}},{multi:true});
+
     args=_.omit(args,'_id');
     let result= MlIndustries.update(id, {$set: args});
     let code = 200;

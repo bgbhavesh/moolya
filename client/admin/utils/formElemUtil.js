@@ -22,6 +22,32 @@ export function OnToggleSwitch(isExisting,isChanged){
 
 }
 
+export function MoolyaToggleSwitch(isExisting,isChanged){
+  setTimeout(function(){
+  if(isExisting) {
+    $('.nocolor-switch input[type=checkbox]').each(function () {
+      if ($(this).is(':checked')) {
+        $('.state_label:nth-of-type(1)').removeClass('acLabel');
+        $('.state_label:nth-of-type(2)').addClass('acLabel');
+      } else {
+        $('.state_label:nth-of-type(2)').removeClass('acLabel');
+        $('.state_label:nth-of-type(1)').addClass('acLabel');
+      }
+    });
+  }
+  if(isChanged) {
+    $('.nocolor-switch input[type=checkbox]').change(function () {
+      if ($(this).is(':checked')) {
+        $('.state_label:nth-of-type(1)').removeClass('acLabel');
+        $('.state_label:nth-of-type(2)').addClass('acLabel');
+      } else {
+        $('.state_label:nth-of-type(2)').removeClass('acLabel');
+        $('.state_label:nth-of-type(1)').addClass('acLabel');
+      }
+    });
+  }
+  },200);
+}
 export function initalizeFloatLabel(){
     $('.float-label').jvFloat();
 }

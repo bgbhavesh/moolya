@@ -137,6 +137,7 @@ export default class MlAssignBackednUserRoles extends React.Component{
           return(
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role</div>
+              {department.isAvailiable?(
               <div className="panel-body">
                 <div className="form-group">
                   <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.departmentName}/>
@@ -152,7 +153,13 @@ export default class MlAssignBackednUserRoles extends React.Component{
                         <div className="form_inner_block" key={idx}>
                           <div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, department)}/></div>
                           <div className="form-group">
-                            <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>
+                            {/*<MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions} isDynamic={true} onSelect={that.optionsBySelectRole.bind(that, idx)} selectedValue={details.roleId}/>*/}
+                            {details.roleName?<input type="text" defaultValue={details.roleName} className="form-control float-label" disabled="true"/> :
+                              <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                            labelKey={'label'} queryType={"graphql"} query={query}
+                                            queryOptions={queryOptions} isDynamic={true}
+                                            onSelect={that.optionsBySelectRole.bind(that, idx)}
+                                            selectedValue={details.roleId}/>}
                           </div>
                           <div className="form-group left_al">
                             <input type="text" placeholder="Valid from" id={'validFrom'+idx} onClick={that.onClickDate.bind(that,idx)} className="form-control float-label" name={'validFrom'} onBlur={that.onChange.bind(that,idx, event)} value={details.validFrom} />
@@ -175,6 +182,17 @@ export default class MlAssignBackednUserRoles extends React.Component{
                   <br className="brclear"/>
                 </div>
               </div>
+                ):
+                <div className="panel-body">
+                  <div className="form-group">
+                    <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.departmentName}/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
+                           value={department.subDepartmentName}/>
+                  </div>
+
+                </div>}
             </div>
           )
         })}

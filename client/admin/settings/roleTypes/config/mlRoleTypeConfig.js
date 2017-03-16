@@ -1,6 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
 
 //@for displaying  list of departments under assign roles
 function departmentsFormatter (data){
@@ -57,6 +58,14 @@ function subChapterFormatter(data){
   }
 
 }
+function dateFormatter(data){
+  let createdDateTime=data&&data.data&&data.data.createdDateTime;
+  if(createdDateTime){
+    return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+  } else {
+    return <div>System Generated</div>;
+  }
+}
 
 const mlRoleTypeTableConfig=new MlViewer.View({
   name:"roleTypeTable",
@@ -76,6 +85,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "departmentsList", title: "Departments",dataSort:true,customComponent:departmentsFormatter},
     {dataField: "subdepartmentsList", title: "SubDepartments",dataSort:true,customComponent:subdepartmentsFormatter},
     {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},
+    {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "clustersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
     {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
   ],
@@ -116,6 +127,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
                               roleName, 
                               displayName, 
                               roleType,
+                              createdDateTime,
+                              createdBy,
                               departmentsList,
                               subdepartmentsList,
                               clustersList,

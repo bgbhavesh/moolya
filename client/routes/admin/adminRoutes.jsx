@@ -17,6 +17,7 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
+import  RegisterForm from  '../../admin/transaction/requested/component/registerForm'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
@@ -94,5 +95,11 @@ adminSection.route('/transactions/requestedList', {
   name: 'transaction_RequestList',
   action(){
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
+  }
+});
+adminSection.route('/transactions/editRequests/:id', {
+  name: 'transaction_EditRequests',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
   }
 });

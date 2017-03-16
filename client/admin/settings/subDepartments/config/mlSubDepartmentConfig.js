@@ -51,7 +51,7 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
   module:"subDepartment",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["subDepartmentName","displayName","isActive"],
+  fields:["subDepartmentName","displayName","departmentAliasName","clustersList","subChapterList","isActive"],
   searchFields:["subDepartmentName","displayName","departmentAliasName","clustersList","subChapterList","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination

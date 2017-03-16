@@ -126,6 +126,8 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
   if (args._id) {
     var id= args._id;
     let response= MlSubChapters.findOne({"_id":id});
+    let stateName = MlStates.findOne({_id: response.stateId}).name;
+    response.stateName=stateName;
     return response;
   }
 }
@@ -181,7 +183,7 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         }
         let resp = MlSubChapters.update({_id:args.subChapterId}, {$set:subChapter})
         if(resp){
-          if((subChapter.subChapterName == "Moolya") && args.subChapterDetails.chapterId){
+          if(args.subChapterDetails && args.subChapterDetails.chapterId){
             MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive}}, context, info)
           }
             let code = 200;

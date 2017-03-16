@@ -11,13 +11,11 @@ export default class MlStatesList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>State List</h2>
+          <h2>State Details</h2>
 
           <MlTableViewContainer {...mlStatesTableConfig}/>
 
         </div>
-
-
       </div>
     )
   }

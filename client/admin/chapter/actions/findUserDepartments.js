@@ -15,6 +15,7 @@ export async function findUserDepartmentypeActionHandler(userId, subChapterId) {
             departmentName
             subDepartment
             subDepartmentName
+            isAvailiable
         }
       }
     `,

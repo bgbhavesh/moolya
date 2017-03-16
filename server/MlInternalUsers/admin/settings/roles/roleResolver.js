@@ -30,8 +30,9 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) =>
         let response = new MlRespPayload().errorPayload("Already Exist", code);
         return response;
     }
-
-    let id = MlRoles.insert({...args.role});
+    role.createdDateTime = new Date();
+    role.createdBy = Meteor.users.findOne({_id:context.userId}).username;
+    let id = MlRoles.insert({...role});
     if(id){
         let code = 200;
         let result = {roleId: id}
@@ -143,13 +144,11 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
             _.remove(roles, {roleName:'subchapteradmin'})
         }
     }
-
-
     return roles;
 }
 
 MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
-  // TODO : Authorization
+    // TODO : Authorization
     if (args.id) {
         var id = args.id;
         let response = MlRoles.findOne({"_id": id});
@@ -161,7 +160,8 @@ MlResolver.MlQueryResolver['fetchActiveRoles'] = (obj, args, context, info) =>{
     return MlRoles.find({isActive:true}).fetch();
 }
 
-MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info) =>{
+MlResolver.MlQueryResolver['fetchAllAssignedRoles'] = (obj, args, context, info) =>
+{
     let roleNames = [];
     let roleIds = args.roleIds;
     roleIds.map(function(roleId){

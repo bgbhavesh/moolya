@@ -10,7 +10,7 @@ const mlLanguageTableConfig=new MlViewer.View({
   fields:["languageInfo.languageName","languageInfo.languageDisplayName","isActive"],
   searchFields:["languageInfo.languageName","languageInfo.languageDisplayName","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},

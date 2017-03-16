@@ -100,6 +100,7 @@ class MlAddBackendUser extends React.Component {
   async  createBackendUser() {
     let firstName= this.refs.firstName.value;
     let lastName= this.refs.lastName.value;
+    let displayName= this.refs.displayName.value;
     let email = this.refs.email.value;
     let password = this.refs.password.value;
     let confirmPassword = this.refs.confirmPassword.value;
@@ -109,6 +110,9 @@ class MlAddBackendUser extends React.Component {
     }
     else if(!lastName){
       toastr.error("Last Name is required");
+    }
+    else if(!displayName){
+      toastr.error("Display Name is required");
     }
     else if (!email) {
       toastr.error("Need to set a username or email")

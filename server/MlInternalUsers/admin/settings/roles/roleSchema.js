@@ -32,6 +32,8 @@ let Role = `
         subChapter:String,
         userType:String,
         about:String,
+        createdDateTime:String,
+        createdBy:String,
         departmentsList : [String],
         subdepartmentsList : [String],
         clustersList   : [String],

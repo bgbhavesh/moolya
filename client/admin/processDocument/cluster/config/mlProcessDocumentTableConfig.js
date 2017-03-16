@@ -1,12 +1,13 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import ActiveProcessFormatter from "../actions/ActiveProcessFormatter"
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["processId","isActive","process"],
+  fields:["processId","displayNprocessame","isActive"],
   searchFields:["processId","process","isActive"],
   throttleRefresh:false,
   pagination:false,//To display pagination
@@ -15,7 +16,7 @@ const mlProcessTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "processId", title: "processId",dataSort:true},
     {dataField: "process", title: "process",dataSort:true},
-    {dataField: "isActive", title: "Status",dataSort:true}
+    {dataField: "isActive", title: "Status",dataSort:true,customComponent:ActiveProcessFormatter}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -53,7 +54,8 @@ const mlProcessTableConfig=new MlViewer.View({
                              id:_id,
                               processId, 
                               process,
-                              isActive
+                              isActive,
+                              
                             }
                         }
                 }

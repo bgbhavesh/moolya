@@ -8,7 +8,7 @@ export default class MlClusterListView extends Component {
   render() {
     const data = this.props.data || [];
     const list = data.map(function (prop) {
-      let StatusActive = '',fontName=''; let userRoleList=[]
+      let StatusActive = '',userStatus=''; let userRoleList=[]
       let username=''
       if( prop.profile.InternalUprofile){
         let status = prop.profile.isActive;
@@ -30,18 +30,18 @@ export default class MlClusterListView extends Component {
           }
         }*/
         if (status == true) {
-          StatusActive = 'active'
-          fontName='check'
+          StatusActive = 'active-User'
+          userStatus='active'
         }else{
-          StatusActive = 'inactive'
-          fontName='times'
+          StatusActive = 'inactive-user'
+          userStatus='inactive'
         }
       }
       return (
 
         <div className="col-md-2" key={prop._id}>
           <div className="list_block provider_block">
-            <div className={`cluster_status ${StatusActive}_cl`}><FontAwesome name={fontName}/></div>
+            <div className={`cluster_status ${userStatus}_cl`}><span className={`ml ml-${StatusActive}`}></span></div>
             <a href={backendUserRoute.backendUserDetailRoute(prop._id)}>
               <div className="provider_mask">
                 <img src="/images/funder_bg.png"/>

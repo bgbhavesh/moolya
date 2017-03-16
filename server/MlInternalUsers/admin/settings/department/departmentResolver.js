@@ -70,7 +70,7 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
     }
     if(args.departmentId){
       let department = MlDepartments.findOne({_id: args.departmentId});
-      let deactivate = args.department.isActive;
+      // let deactivate = args.department.isActive;
       if(department)
       {
         if(department.isSystemDefined){
@@ -80,14 +80,15 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
         }else{
           let resp = MlDepartments.update({_id:args.departmentId}, {$set:args.department}, {upsert:true})
           //de-activate department should de-activate all subDepartments
-          if(!deactivate){
-            let subDepartments = MlSubDepartments.find({"departmentId": args.departmentId}).fetch();
-            subDepartments.map(function (subDepartment) {
-              subDepartment.isActive=false
-              let deactivate = MlSubDepartments.update({_id:subDepartment._id}, {$set:subDepartment}, {upsert:true})
-            })
-          }
+          // if(!deactivate){
+          //   let subDepartments = MlSubDepartments.find({"departmentId": args.departmentId}).fetch();
+          //   subDepartments.map(function (subDepartment) {
+          //     subDepartment.isActive=false
+          //     let deactivate = MlSubDepartments.update({_id:subDepartment._id}, {$set:subDepartment}, {upsert:true})
+          //   })
+          // }
           if(resp){
+            MlResolver.MlMutationResolver['updateSubDepartment'](obj, {departmentId:args.departmentId, depatmentAvailable:args.department.depatmentAvailable, moduleName:"SUBDEPARTMENT", actionName:"UPDATE"}, context, info)
             let code = 200;
             let result = {cluster: resp}
             let response = new MlRespPayload().successPayload(result, code);
@@ -138,3 +139,35 @@ MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, contex
   let resp = MlDepartments.find({isMoolya: args.isMoolya,isActive : true},{ depatmentAvailable: { $elemMatch: { subChapter: args.subChapter } }} ).fetch();
   return resp;
 }
+
+MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, context, info) => {
+  //let resp = MlDepartments.find({},{ depatmentAvailable: { $elemMatch: { subChapter: args.clusterId } }} ).fetch();
+  let resp = [];
+  if(args.cluster && args.chapter && args.subChapter){
+    resp = MlDepartments.find( {
+      $and : [{  },
+        {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}},
+        { "depatmentAvailable":{
+          $elemMatch: {
+            chapter: args.chapter,
+            subChapter:args.subChapter,
+          }} },
+      ]
+    } ).fetch()
+  }else if(args.cluster){
+    resp = MlDepartments.find( {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}}).fetch()
+  }else if(args.cluster  && args.chapter ){
+    resp = MlDepartments.find( {
+      $and : [{  },
+        {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}},
+        { "depatmentAvailable":{
+          $elemMatch: {
+            chapter: args.chapter
+          }} },
+      ]
+    } ).fetch()
+  }
+
+  return resp;
+}
+

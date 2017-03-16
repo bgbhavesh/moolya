@@ -81,11 +81,11 @@ export default class MlAssignDocument extends React.Component {
     if(event.currentTarget.checked){
       assignDocumentsDetails[index]['isActive']=true
       this.setState({assignDocuments:assignDocumentsDetails})
-      this.props.getAssignedContacts(this.state.assignDocuments);
+      this.props.getAssignedDocuments(this.state.assignDocuments);
     }else {
       assignDocumentsDetails[index]['isActive'] =false
       this.setState({assignDocuments: assignDocumentsDetails})
-      this.props.getAssignedContacts(this.state.assignDocuments);
+      this.props.getAssignedDocuments(this.state.assignDocuments);
     }
   }
 

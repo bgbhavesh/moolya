@@ -13,7 +13,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else {
-      let geoCIty=chapter.cityName+", "+chapter.stateName?chapter.cityName+", "+chapter.stateName:"";
+      let geoCIty=chapter.cityName+", "+chapter.stateName+", "+chapter.clusterName ?chapter.cityName+", "+chapter.stateName+", "+chapter.clusterName:"";
       geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
         if (err) {
           return "Invalid Country Name";
@@ -103,10 +103,10 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
     let id= args.id;
     let response = [];
     if(id == "all"){
-      response= MlChapters.find({}).fetch()||[];
+      response= MlChapters.find({isActive:true}).fetch()||[];
       response.push({"chapterName" : "All","_id" : "all"});
     }else{
-      response= MlChapters.find({"clusterId":id}).fetch()||[];
+      response= MlChapters.find({"clusterId":id, "isActive":true}).fetch()||[];
       if(response.length > 0){
         response.push({"chapterName" : "All","_id" : "all"});
       }
@@ -160,7 +160,7 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({isActive: true,subChapterName:{$ne:"Moolya"}}).fetch()||[];
+  let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
   return result
 }
 
@@ -222,6 +222,25 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
   }
 
   return subChapters;
+}
+
+MlResolver.MlQueryResolver['fetchSubChaptersForRegistration'] = (obj, args, context, info) => {
+  let id = args.id || "";
+  let result = [];
+  if(id){
+    if(id == "all" ){
+      result=MlSubChapters.find({chapterId:id}).fetch()||[];
+      result.push({"subChapterName" : "All","_id" : "all"});
+    }else{
+      result=MlSubChapters.find({chapterId:id}).fetch()||[];
+      if(result.length > 0){
+        result.push({"subChapterName" : "All","_id" : "all"});
+      }
+    }
+  }
+
+
+  return result
 }
 
 createSubChapter = (subChapter) =>{

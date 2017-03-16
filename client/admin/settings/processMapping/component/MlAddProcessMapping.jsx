@@ -115,7 +115,10 @@ class MlAddProcessMapping extends React.Component{
   }
 
   optionsBySelectUserType(val){
-    this.setState({userTypes:val.value})
+    //this.setState({userTypes:val})
+    let userType=this.state.userTypes
+    userType[0]['id']=val;
+    this.setState({userTypes:userType})
   }
 
   optionsBySelectIdentity(val){
@@ -180,16 +183,26 @@ class MlAddProcessMapping extends React.Component{
       {value: 'Company', label: 'Company'},
       {value: 'Individual', label: 'Individual'}
     ];
-    let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya'},
-      {value: 'non-moolya', label: 'non-moolya'}
-    ]
     let query=gql` query{
     data:fetchCountriesSearch{label:country,value:countryCode}
     }
 `;
+    let processQuery=gql`query{
+ data: FetchProcessType {
+    label:processName
+		value:_id
+  }
+}
+`;
     let fetchcommunities = gql` query{
   data:fetchCommunityDefinition{label:name,value:code}
+}
+`;
+    let fetchUsers = gql`query{
+  data:FetchUserType {
+    label:userTypeName
+    value:_id
+  }
 }
 `;
     let industriesquery=gql` query{
@@ -235,15 +248,10 @@ class MlAddProcessMapping extends React.Component{
                     <div className="form-group">
                       <input type="text"  ref="processId" placeholder="Process Id" className="form-control float-label"/>
                     </div>
-
-                    <Moolyaselect multiSelect={false} placeholder={"Process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} />
+                   <Moolyaselect multiSelect={false} placeholder={"Process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={processQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} />
 
                     <Moolyaselect multiSelect={true}  placeholder={"Communities"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities[0].id} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} id={'fetchcommunities'} onSelect={this.optionsBySelectCommunities.bind(this)} />
-
-                    <div className="form-group">
-                      <Select name="form-field-name"  placeholder="User Types"  className="float-label"  options={UserTypeOptions}  value={this.state.userTypes}  onChange={this.optionsBySelectUserType.bind(this)}/>
-                    </div>
-
+                    <Moolyaselect multiSelect={true}  placeholder={"User Types"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes[0].id} queryType={"graphql"} query={fetchUsers}  isDynamic={true} id={'fetchuserTypes'} onSelect={this.optionsBySelectUserType.bind(this)} />
                     <div className="form-group">
                       <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
                     </div>

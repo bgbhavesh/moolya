@@ -30,5 +30,8 @@ MlResolver.MlQueryResolver['FindUserType'] = (obj, args, context, info) => {
   }
 
 }
-
+MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
+  let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  return result;
+}
 

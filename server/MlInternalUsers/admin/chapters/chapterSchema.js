@@ -117,7 +117,8 @@ let chapterSchema = `
         fetchActiveSubChapters(id: String):[SubChapter]
         fetchSubChaptersSelectNonMoolya(id: String):[SubChapter]
         fetchActiveClusterChapters(clusters:[String]):[Chapter]
-        fetchActiveChaptersSubChapters(chapters:[String]):[SubChapter]
+        fetchActiveChaptersSubChapters(chapters:[String]):[SubChapter],
+        fetchSubChaptersForRegistration(id: String):[SubChapter]
     }
     
      type Mutation {

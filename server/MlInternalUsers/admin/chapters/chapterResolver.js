@@ -224,6 +224,25 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
   return subChapters;
 }
 
+MlResolver.MlQueryResolver['fetchSubChaptersForRegistration'] = (obj, args, context, info) => {
+  let id = args.id || "";
+  let result = [];
+  if(id){
+    if(id == "all" ){
+      result=MlSubChapters.find({chapterId:id}).fetch()||[];
+      result.push({"subChapterName" : "All","_id" : "all"});
+    }else{
+      result=MlSubChapters.find({chapterId:id}).fetch()||[];
+      if(result.length > 0){
+        result.push({"subChapterName" : "All","_id" : "all"});
+      }
+    }
+  }
+
+
+  return result
+}
+
 createSubChapter = (subChapter) =>{
     if(MlSubChapters.find({$and:[{chapterId:subChapter.chapterId}, {subChapterName:subChapter.subChapterName}]}).count() > 0){
         let code = 409;

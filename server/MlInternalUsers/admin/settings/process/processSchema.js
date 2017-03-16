@@ -62,6 +62,7 @@ let Process = `
     input userType{
         id   :  String
     }    
+    
     input industry{
         id   :  String
     }    
@@ -91,7 +92,7 @@ let Process = `
         processId   : String,
         process     : String,
         communities : [community],
-        userTypes   : String,
+        userTypes   : [userType],
         identity    : String,
         industries  : [industry],
         professions : [profession],

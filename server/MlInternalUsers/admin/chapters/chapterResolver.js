@@ -160,7 +160,7 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({isActive: true,subChapterName:{$ne:"Moolya"}}).fetch()||[];
+  let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
   return result
 }
 

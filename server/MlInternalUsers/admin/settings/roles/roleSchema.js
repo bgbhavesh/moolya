@@ -95,6 +95,7 @@ let Role = `
       findRole(id:String):Roles
       fetchActiveRoles: [Roles]
       fetchAllAssignedRoles(roleIds:[String]):[String]
+      fetchRolesForRegistration(cluster:String,chapter:String,subChapter:String,department:String,subDepartment:String):[Roles]
   }
   
   type Mutation {

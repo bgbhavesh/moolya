@@ -1,6 +1,5 @@
 import React from 'react';
-/*import {updateCityActionHandler} from './updateCityAction'*/
-
+import {updateProcessActionHandler} from './updateProcessMappingAction'
 class ActiveCityFormatter extends React.Component {
   constructor(props) {
     super(props);
@@ -30,10 +29,10 @@ class ActiveCityFormatter extends React.Component {
       isActive: this.refs.status.checked
     }
 
-  // let response = await updateCityActionHandler(StateDetails);
+   let response = await updateProcessActionHandler(StateDetails);
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/citiesList");
+        FlowRouter.go("/admin/documents/clusterList");
       else
         toastr.error(response.result);
     }

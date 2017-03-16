@@ -85,6 +85,7 @@ class MlEditProcessMapping extends React.Component{
 
       this.setState({processId: this.state.data.processId});
       this.setState({id: this.state.data._id});
+      this.setState({isActive: this.state.data.isActive});
       if (this.state.data.process) {
         this.setState({process: this.state.data.process});
       }
@@ -95,6 +96,10 @@ class MlEditProcessMapping extends React.Component{
       if (this.state.data.userTypes) {
         let userTypesId = this.state.data.userTypes[0].id;
         this.setState({userTypes: [{id: userTypesId}]});
+      }
+      if (this.state.data.identity) {
+        let identity = this.state.data.identity;
+        this.setState({identity: identity});
       }
       if (this.state.data.industries) {
         let industriesId = this.state.data.industries[0].id;
@@ -136,7 +141,7 @@ class MlEditProcessMapping extends React.Component{
       states      : this.state.states,
       chapters    : this.state.chapters,
       subChapters : this.state.subChapters,
-      isActive    : this.refs.status.checked,
+      isActive    : this.state.isActive,
       documents   : this.state.assignDocument
     }
      let id       = this.state.id;
@@ -203,6 +208,13 @@ class MlEditProcessMapping extends React.Component{
     subChapters[0]['id']=val;
     this.setState({subChapters:subChapters})
   }
+  onStatusChange(event){
+    if(event.target.checked){
+      this.setState({"isActive":true})
+    }else{
+      this.setState({"isActive":false})
+    }
+  }
 
   render(){
     let MlActionConfig = [
@@ -230,6 +242,24 @@ class MlEditProcessMapping extends React.Component{
     data:fetchCountriesSearch{label:country,value:countryCode}
     }
     `;
+    let processQuery=gql`query{
+ data: FetchProcessType {
+    label:processName
+		value:_id
+  }
+}
+`;
+    let fetchcommunities = gql` query{
+  data:fetchCommunityDefinition{label:name,value:code}
+}
+`;
+    let fetchUsers = gql`query{
+  data:FetchUserType {
+    label:userTypeName
+    value:_id
+  }
+}
+`;
     let industriesquery=gql` query{
     data:fetchIndustries{label:industryName,value:_id}
     }
@@ -271,20 +301,20 @@ class MlEditProcessMapping extends React.Component{
                   <form>
 
                     <div className="form-group">
-                      <input type="text"   readOnly="true" defaultValue={this.state.data&&this.state.data.processId} placeholder="process Id" className="form-control float-label" id="" disabled="disabled"/>
+                      <input type="text"   readOnly="true" value={this.state.data&&this.state.data.processId} placeholder="process Id" className="form-control float-label" id="" disabled="disabled"/>
                     </div>
 
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder={"process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} />
+                      <Moolyaselect multiSelect={false} placeholder={"process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={processQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Community"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities[0].id} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectCommunities.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Community"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities[0].id} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectCommunities.bind(this)} />
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"UserType"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes[0].id} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectUserType.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"UserType"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes[0].id} queryType={"graphql"} query={fetchUsers}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectUserType.bind(this)} />
                     </div>
 
                     <div className="form-group">
@@ -318,7 +348,7 @@ class MlEditProcessMapping extends React.Component{
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>
                       <label className="switch">
-                        <input type="checkbox" ref="status"/>
+                        <input type="checkbox" checked={this.state.isActive} onChange={this.onStatusChange.bind(this)} ref="status"/>
                         <div className="slider"></div>
                       </label>
                     </div>
@@ -341,7 +371,7 @@ class MlEditProcessMapping extends React.Component{
                   default={true}
                 >
                   <form style={{marginTop:'0px'}}>
-                    {this.state.data?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents}/>):""}
+                    {this.state.data&&this.state.data.documents?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents}/>):""}
                   </form>
                 </ScrollArea>
               </div>

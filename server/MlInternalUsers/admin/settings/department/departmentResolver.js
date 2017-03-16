@@ -70,7 +70,7 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
     }
     if(args.departmentId){
       let department = MlDepartments.findOne({_id: args.departmentId});
-      let deactivate = args.department.isActive;
+      // let deactivate = args.department.isActive;
       if(department)
       {
         if(department.isSystemDefined){
@@ -80,14 +80,15 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
         }else{
           let resp = MlDepartments.update({_id:args.departmentId}, {$set:args.department}, {upsert:true})
           //de-activate department should de-activate all subDepartments
-          if(!deactivate){
-            let subDepartments = MlSubDepartments.find({"departmentId": args.departmentId}).fetch();
-            subDepartments.map(function (subDepartment) {
-              subDepartment.isActive=false
-              let deactivate = MlSubDepartments.update({_id:subDepartment._id}, {$set:subDepartment}, {upsert:true})
-            })
-          }
+          // if(!deactivate){
+          //   let subDepartments = MlSubDepartments.find({"departmentId": args.departmentId}).fetch();
+          //   subDepartments.map(function (subDepartment) {
+          //     subDepartment.isActive=false
+          //     let deactivate = MlSubDepartments.update({_id:subDepartment._id}, {$set:subDepartment}, {upsert:true})
+          //   })
+          // }
           if(resp){
+            MlResolver.MlMutationResolver['updateSubDepartment'](obj, {departmentId:args.departmentId, depatmentAvailable:args.department.depatmentAvailable, moduleName:"SUBDEPARTMENT", actionName:"UPDATE"}, context, info)
             let code = 200;
             let result = {cluster: resp}
             let response = new MlRespPayload().successPayload(result, code);

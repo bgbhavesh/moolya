@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import clusterRoutes from '../actions/clustersRoutes';
 var FontAwesome = require('react-fontawesome');
 
-export default class MlClusterCommunitiesList extends Component
+export default class MlClusterChapterCommunitiesList extends Component
 {
   constructor(props){
     super(props)
@@ -19,7 +19,7 @@ export default class MlClusterCommunitiesList extends Component
       <div className="col-md-2" key={prop.code}>
         <div className="list_block">
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.isActive?"check":"times"}/></div>
-          <a href={clusterRoutes.communityDetailsRoute(prop.clusters[0], prop.code)}> <div className={"hex_outer"}><span className={prop.communityImageLink}></span></div></a>
+          <a href={clusterRoutes.chapterCommunityDetailsRoute(prop.clusters[0],prop.chapters[0],prop.subchapters[0],prop.code)}> <div className={"hex_outer"}><span className={prop.communityImageLink}></span></div></a>
           <h3>{prop.name}</h3>
         </div>
       </div>

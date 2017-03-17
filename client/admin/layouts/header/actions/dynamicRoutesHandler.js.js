@@ -44,6 +44,18 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/subChapterDetails`;
       }
     },
+    "cluster_chapter_communities_communityDetails":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/communities/${dynamicParams.communityId}`;
+      }
+    },
+    "cluster_chapter_communities_assignusers":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/clusters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/communities/${dynamicParams.communityId}/assignusers`;
+      }
+    },
     "cluster_chapter_communities":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")){
@@ -61,6 +73,18 @@ export default function dynamicLinkHandler(path,params,queryParams){
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")){
         return `/admin/clusters/${dynamicParams.clusterId}/communities`;
+      }
+    },
+    "cluster_communities_communityDetails":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/clusters/${dynamicParams.clusterId}/communities/${dynamicParams.communityId}`;
+      }
+    },
+    "cluster_communities_assignusers":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/clusters/${dynamicParams.clusterId}/communities/${dynamicParams.communityId}/assignusers`;
       }
     },
     "cluster_assignusers":function (params,queryParams) {

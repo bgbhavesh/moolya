@@ -106,6 +106,9 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         community["showOnMap"] = communityAccess.showOnMap;
         community["isActive"] = communityAccess.isActive && ((platformCommunity.isActive == true)) ? communityAccess.isActive : platformCommunity.isActive;
         community["communityImageLink"] = communityAccess.communityImageLink;
+        community["clusters"] = [communityAccess.clusterId];
+        community["chapters"] = [communityAccess.chapterId];
+        community["subchapters"] = [communityAccess.subChapterId];
         communities.push(community);
     })
     return {data:communities, totalRecords:communities&&communities.length?communities.length:0};

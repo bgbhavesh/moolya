@@ -18,6 +18,12 @@ const clusterRoutes={
   },
   communityListRoute:(clusterId,chapterId,subChapterId,router)=>{
     return `/admin/clusters/${clusterId}/${chapterId}/${subChapterId}/communities`;
+  },
+  communityDetailsRoute:(clusterId,communityId,router)=>{
+    return `/admin/clusters/${clusterId}/communities/${communityId}`;
+  },
+  chapterCommunityDetailsRoute:(clusterId,chapterId,subChapterId,communityId,router)=>{
+    return `/admin/clusters/${clusterId}/${chapterId}/${subChapterId}/communities/${communityId}`;
   }
 }
 

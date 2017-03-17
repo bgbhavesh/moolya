@@ -213,7 +213,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                           {/*if (department.department == details.departmentId) {*/}
                             return (
                               <div className="form_inner_block" key={idx}>
-                                <span>yessssssssssssssss</span>
                                 <div className="add_form_block"><img src="/images/add.png"
                                                                      onClick={that.addRoleComponent.bind(that, idx)}/>
                                 </div>

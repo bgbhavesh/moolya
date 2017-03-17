@@ -436,10 +436,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let hierarchy = "";
   roles.map(function (role)
   {
-      if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
+      if( role.clusterId && role.chapterId && role.subChapterId && role.communityId ){
           levelCode = "COMMUNITY"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && !args.user.isChapterAdmin){
+      else if(role.clusterId && role.chapterId && role.subChapterId && !args.user.isChapterAdmin){
           // if(role.roleName == "chapteradmin"){
           //   let subChapterAdminRole = MlRoles.findOne({roleName:'subchapteradmin'})
           //   role.roleId = subChapterAdminRole._id
@@ -448,8 +448,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           levelCode = "SUBCHAPTER"
           role.communityId = "all"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && args.user.isChapterAdmin)
-      {
+      else if(role.clusterId && role.chapterId && role.subChapterId && args.user.isChapterAdmin){
           let chapterAdminRole = MlRoles.findOne({roleName:'chapteradmin'})
           levelCode = "CHAPTER"
           role.roleId = chapterAdminRole._id
@@ -457,7 +456,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           role.subChapterId = "all"
           role.communityId = "all"
       }
-      else if(role.clusterId != ""){
+      else if(role.clusterId){
           levelCode = "CLUSTER"
           role.chapterId = "all"
           role.subChapterId = "all"

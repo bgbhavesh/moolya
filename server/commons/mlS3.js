@@ -23,21 +23,21 @@ module.exports = class s3Client{
         })
     }
 
-    uploadFile(fileData, fileKey, fileContentType, s3Bucket, callback){
+    uploadFile(filePath, fileKey, fileContentType, s3Bucket, callback){
         check(fileData, String);
         check(fileKey, String);
         check(fileContentType, String);
         check(s3Bucket, String);
         var params = {
-            Body: fileData,
+            localFile: filePath,
             Bucket:s3Bucket,
             Key: bucketFolder+fileKey,
             ContentType:fileContentType
         }
-        this.client.s3.putObject(params, Meteor.bindEnvironment(function(err, response) {
-            console.log(response)
-            callback(err, response);
-        })) ;
+        // this.client.uploadFile(params, Meteor.bindEnvironment(function(err, response) {
+        //     console.log(response)
+        //     callback(err, response);
+        // }));
     }
 
     getS3SignedUrl(fileKey, s3Bucket){

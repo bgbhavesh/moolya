@@ -155,7 +155,9 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       const resp = this.findUserDepartments();
     }
   }
-
+  checkValue(value){
+    console.log(value);
+  }
   async findUserDepartments() {
     let userId = this.props.userId;
     let subChapterId = this.props.subChapterId;
@@ -164,7 +166,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.setState({loading: false, roleForm: data});
     if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
       this.setState({roleDetails: this.props.assignedRoles})
-      console.log("4")
       this.setState({chapterAdmin: this.props.chapterAdmin})
     }
   }
@@ -175,6 +176,50 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     let roleDetails = that.state.roleDetails;
     console.log("5")
     let chapterAdmin = that.state.chapterAdmin;
+
+    // const roles = roleDetails.map(function (details, idx)
+    // {
+    //   return (
+    //     <div className="form_inner_block" key={idx}>
+    //       <div className="add_form_block"><img src="/images/add.png"
+    //                                            onClick={that.addRoleComponent.bind(that, idx)}/>
+    //       </div>
+    //       <div className="form-group">
+    //         {details.roleName?<input type="text" defaultValue={details.roleName}
+    //                                  className="form-control float-label"
+    //                                  disabled="true"/>:
+    //           <MoolyaSelect multiSelect={false} className="form-control float-label"
+    //                         valueKey={'value'}
+    //                         labelKey={'label'} queryType={"graphql"} query={query}
+    //                         queryOptions={queryOptions} isDynamic={true}
+    //                         onSelect={that.optionsBySelectRole.bind(that, idx, id)}
+    //                         selectedValue={details.roleId}/>}
+    //       </div>
+    //       <div className="form-group left_al">
+    //         <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}
+    //                onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
+    //                onBlur={that.onValidFromChange.bind(that, idx)}
+    //                value={details.validFrom}/>
+    //       </div>
+    //       <div className="form-group left_al">
+    //         <input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}
+    //                onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
+    //                onBlur={that.onValidToChange.bind(that, idx)}
+    //                value={details.validTo}/>
+    //       </div>
+    //       <div className="form-group switch_wrap">
+    //         <label>Status</label>
+    //         <label className="switch">
+    //           <input type="checkbox" name={'status'} checked={details.isActive}
+    //                  onChange={that.onChange.bind(that, idx)}/>
+    //           <div className="slider"></div>
+    //         </label>
+    //       </div>
+    //       <br className="brclear"/>
+    //     </div>
+    //   )
+    // })
+
     return (
       <div>
         {userDepartments.map(function (department, id) {
@@ -210,91 +255,49 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                   <div className="">
                     <div className="">
                       {roleDetails.map(function (details, idx) {
-                          {/*if (department.department == details.departmentId) {*/}
-                            return (
-                              <div className="form_inner_block" key={idx}>
-                                <div className="add_form_block"><img src="/images/add.png"
-                                                                     onClick={that.addRoleComponent.bind(that, idx)}/>
-                                </div>
-                                <div className="form-group">
-                                    {/*<input type="text" defaultValue={details.roleName}*/}
-                                           {/*className="form-control float-label"*/}
-                                           {/*disabled="true"/>*/}
-                                  {details.roleName?<input type="text" defaultValue={details.roleName}
-                                                            className="form-control float-label"
-                                                            disabled="true"/>:
-                                  <MoolyaSelect multiSelect={false} className="form-control float-label"
-                                  valueKey={'value'}
-                                  labelKey={'label'} queryType={"graphql"} query={query}
-                                  queryOptions={queryOptions} isDynamic={true}
-                                  onSelect={that.optionsBySelectRole.bind(that, idx, id)}
-                                  selectedValue={details.roleId}/>}
-                                </div>
-                                <div className="form-group left_al">
-                                  <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}
-                                         onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                         onBlur={that.onValidFromChange.bind(that, idx)}
-                                         value={details.validFrom}/>
-                                </div>
-                                <div className="form-group left_al">
-                                  <input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}
-                                         onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                         onBlur={that.onValidToChange.bind(that, idx)}
-                                         value={details.validTo}/>
-                                </div>
-                                <div className="form-group switch_wrap">
-                                  <label>Status</label>
-                                  <label className="switch">
-                                    <input type="checkbox" name={'status'} checked={details.isActive}
-                                           onChange={that.onChange.bind(that, idx)}/>
-                                    <div className="slider"></div>
-                                  </label>
-                                </div>
-                                <br className="brclear"/>
+                        {/*if (department.department == details.departmentId && department.subDepartment == details.subDepartmentId) */}
+                        {
+                          return (
+                            <div className="form_inner_block" key={idx}>
+                              <div className="add_form_block"><img src="/images/add.png"
+                                                                   onClick={that.addRoleComponent.bind(that, idx)}/>
                               </div>
-                            )
-                          {/*} else {*/}
-                            {/*return (*/}
-                              {/*<div className="form_inner_block" key={idx}>*/}
-                                {/*<span>noooooooooooooooooooo</span>*/}
-                                {/*<div className="add_form_block"><img src="/images/add.png"*/}
-                                                                         {/*onClick={that.addRoleComponent.bind(that, idx)}/>*/}
-                                {/*</div>*/}
-                                {/*<div className="form-group">*/}
-                                    {/*<MoolyaSelect multiSelect={false} className="form-control float-label"*/}
-                                                  {/*valueKey={'value'}*/}
-                                                  {/*labelKey={'label'} queryType={"graphql"} query={query}*/}
-                                                  {/*queryOptions={queryOptions} isDynamic={true}*/}
-                                                  {/*onSelect={that.optionsBySelectRole.bind(that, idx, id)}*/}
-                                                  {/*selectedValue={details.roleId}*/}
-                                    {/*/>*/}
-                                {/*</div>*/}
-                                {/*<div className="form-group left_al">*/}
-                                  {/*<input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}*/}
-                                         {/*onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"*/}
-                                         {/*onBlur={that.onValidFromChange.bind(that, idx)}*/}
-                                         {/*value={details.validFrom}/>*/}
-                                {/*</div>*/}
-                                {/*<div className="form-group left_al">*/}
-                                  {/*<input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}*/}
-                                         {/*onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"*/}
-                                         {/*onBlur={that.onValidToChange.bind(that, idx)}*/}
-                                         {/*value={details.validTo}/>*/}
-                                {/*</div>*/}
-                                {/*<div className="form-group switch_wrap">*/}
-                                  {/*<label>Status</label>*/}
-                                  {/*<label className="switch">*/}
-                                    {/*<input type="checkbox" name={'status'} checked={details.isActive}*/}
-                                           {/*onChange={that.onChange.bind(that, idx)}/>*/}
-                                    {/*<div className="slider"></div>*/}
-                                  {/*</label>*/}
-                                {/*</div>*/}
-                                {/*<br className="brclear"/>*/}
-                              {/*</div>*/}
-                            {/*);*/}
-                          {/*}*/}
+                              <div className="form-group">
+                                {details.roleName ? <input type="text" defaultValue={details.roleName}
+                                                           className="form-control float-label"
+                                                           disabled="true"/> :
+                                  <MoolyaSelect multiSelect={false} className="form-control float-label"
+                                                valueKey={'value'}
+                                                labelKey={'label'} queryType={"graphql"} query={query}
+                                                queryOptions={queryOptions} isDynamic={true}
+                                                onSelect={that.optionsBySelectRole.bind(that, idx, id)}
+                                                selectedValue={details.roleId}/>}
+                              </div>
+                              <div className="form-group left_al">
+                                <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}
+                                       onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
+                                       onBlur={that.onValidFromChange.bind(that, idx)}
+                                       value={details.validFrom}/>
+                              </div>
+                              <div className="form-group left_al">
+                                <input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}
+                                       onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
+                                       onBlur={that.onValidToChange.bind(that, idx)}
+                                       value={details.validTo}/>
+                              </div>
+                              <div className="form-group switch_wrap">
+                                <label>Status</label>
+                                <label className="switch">
+                                  <input type="checkbox" name={'status'} checked={details.isActive}
+                                         onChange={that.onChange.bind(that, idx)}/>
+                                  <div className="slider"></div>
+                                </label>
+                              </div>
+                              <br className="brclear"/>
+                            </div>
+                          )
                         }
-                      )}
+                      })}
                     </div>
                     <br className="brclear"/>
 

@@ -98,6 +98,8 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;}
 .admin_main_wrap .cluster_status.active_cl{color: #fff;background: #4cae4c; font-size: 14px;}
 .admin_main_wrap .cluster_status.inactive_cl{color: #fff;background: #ff0000; font-size: 14px;}
 .admin_main_wrap .cluster_status.add_cl{color: #fff;background: #273545; font-size: 14px;}
+.admin_main_wrap .cluster_status.assign_cl{color: #FFF;background: #273545; font-size: 14px;}
+.admin_main_wrap .cluster_status .ml{font-size: 14px !important; color: #FFF !important; line-height: 26px !important;text-shadow: none !important;}
 .admin_main_wrap .list_block{height: 200px;background-color:#fff;box-shadow: 0px 0px 5px #888;border-radius: 4px;margin-top: 15px;text-align: center;position: relative;margin-bottom: 15px;}
 .admin_main_wrap .list_block img{width: 113px;z-index: 2;position: absolute;left: -7px;top: 34px;border: 1px solid #ddd;}
 .admin_main_wrap .communities_list .list_block img{width: auto;border: 0px;left: 2px;top: 10px;}

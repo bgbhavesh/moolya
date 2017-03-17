@@ -1,5 +1,5 @@
 import React from 'react';
-/*import {updateCityActionHandler} from './updateCityAction'*/
+import {updateCityActionHandler} from './updateCityAction'
 
 class ActiveCityFormatter extends React.Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class ActiveCityFormatter extends React.Component {
       isActive: this.refs.status.checked
     }
 
-  // let response = await updateCityActionHandler(StateDetails);
+  let response = await updateCityActionHandler(StateDetails);
     if (response){
       if(response.success)
         FlowRouter.go("/admin/settings/citiesList");

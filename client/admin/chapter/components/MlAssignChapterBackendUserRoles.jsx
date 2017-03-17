@@ -23,6 +23,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      loading: false,
       roleForm: [],
       roleDetails: [{
         roleId: null,
@@ -34,7 +35,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         subChapterId: this.props.subChapterId,
         communityId: "",
         hierarchyLevel: "",
-        hierarchyCode: ""
+        hierarchyCode: "",
+        departmentId: '',
+        departmentName: '',
+        subDepartmentId: '',
+        subDepartmentName: ''
       }],
       selectedRole: "",
       chapterAdmin: false
@@ -49,16 +54,16 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       $('.float-label').jvFloat();
     });
 
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-    setTimeout(function () {
-      // initSwiper();
-    }, 1000)
+    // $('.switch input').change(function () {
+    //   if ($(this).is(':checked')) {
+    //     $(this).parent('.switch').addClass('on');
+    //   } else {
+    //     $(this).parent('.switch').removeClass('on');
+    //   }
+    // });
+    // setTimeout(function () {
+    //   // initSwiper();
+    // }, 1000)
 
     if (this.props.userId) {
       const resp = this.findUserDepartments();
@@ -66,24 +71,25 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
   }
 
-  optionsBySelectRole(index, selectedValue)
-  {
-      let roleDetails = this.state.roleDetails
-      roleDetails[index]['roleId'] = selectedValue
-      this.setState({roleDetails: roleDetails})
-      this.props.getAssignedRoles(this.state.roleDetails)
+  optionsBySelectRole(index, did, selectedValue, callback, selObject) {
+    if (selObject.label == "subchapteradmin") {
+      $("#chapter_admin_check").removeAttr('disabled');
+    } else {
+      this.setState({chapterAdmin: false});
+      this.props.getChapterAdmin(false);
+      $("#chapter_admin_check").attr('disabled', 'disabled');
+    }
+    let roleDetails = this.state.roleDetails;
+    roleDetails[index]['roleId'] = selectedValue;
+    roleDetails[index]['departmentId'] = this.state.roleForm[did]['department'];
+    roleDetails[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
+    roleDetails[index]['subDepartmentId'] = this.state.roleForm[did]['subDepartment'];
+    roleDetails[index]['subDepartmentName'] = this.state.roleForm[did]['subDepartmentName'];
+    this.setState({roleDetails: roleDetails})
+    this.props.getAssignedRoles(this.state.roleDetails)
   }
 
   addRoleComponent(id) {
-    /* var mySwiper = new Swiper('.blocks_in_form', {
-     // speed: 400,
-     pagination: '.swiper-pagination',
-     spaceBetween: 0,
-     slidesPerView:'auto',
-     freeMode:true,
-     paginationClickable: false
-     });
-     mySwiper.updateContainerSize()*/
     this.setState({
       roleDetails: this.state.roleDetails.concat([{
         roleId: null,
@@ -95,32 +101,32 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         subChapterId: this.props.subChapterId,
         communityId: "",
         hierarchyLevel: "",
-        hierarchyCode: ""
+        hierarchyCode: "",
+        departmentId: '',
+        departmentName: '',
+        subDepartmentId: '',
+        subDepartmentName: ''
       }])
-
     });
   }
 
   isChapterAdmin(event) {
-      this.setState({chapterAdmin: event.target.checked})
-      this.props.getChapterAdmin(event.target.checked)
+    this.setState({chapterAdmin: event.target.checked})
+    this.props.getChapterAdmin(event.target.checked)
   }
 
   onChange(id, event) {
     let roleDetails = this.state.roleDetails
-    // let filedName = event.target.name
-    console.log('........................');
-    console.log(id)
-    // let fieldValue = event.target.value;
-    // if (filedName == 'status') {
-    let fieldValue = event.target.checked;
-    console.log(fieldValue);
-    roleDetails[id]['isActive'] = "fieldValue"
-    console.log(roleDetails[id]['isActive']);
-    // }
+    if (event.target.checked) {
+      roleDetails[id]['isActive'] = true;
+    } else {
+      roleDetails[id]['isActive'] = false;
+    }
+    console.log("1")
     this.setState({roleDetails: roleDetails})
-    // console.log(this.state.roleDetails);
+    console.log("2")
     this.props.getAssignedRoles(this.state.roleDetails)
+    console.log("6")
   }
 
   onClickDate(id, event) {
@@ -131,7 +137,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   onValidFromChange(index, event) {
-    console.log(event.target.value);
     let roleDetails = this.state.roleDetails
     roleDetails[index]['validFrom'] = event.target.value
     this.setState({roleDetails: roleDetails})
@@ -139,7 +144,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   onValidToChange(index, event) {
-    console.log(event.target.value);
     let roleDetails = this.state.roleDetails
     roleDetails[index]['validTo'] = event.target.value
     this.setState({roleDetails: roleDetails})
@@ -160,7 +164,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.setState({loading: false, roleForm: data});
     if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
       this.setState({roleDetails: this.props.assignedRoles})
-      this.setState({chapterAdmin: this.props.getChapterAdmin})
+      console.log("4")
+      this.setState({chapterAdmin: this.props.chapterAdmin})
     }
   }
 
@@ -168,8 +173,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     let that = this
     let userDepartments = that.state.roleForm || [];
     let roleDetails = that.state.roleDetails;
-    let chapterAdmin=that.state.chapterAdmin;
-
+    console.log("5")
+    let chapterAdmin = that.state.chapterAdmin;
     return (
       <div>
         {userDepartments.map(function (department, id) {
@@ -187,75 +192,125 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role</div>
-              {department.isAvailiable?(
-              <div className="panel-body">
-                <div className="form-group">
-                  <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
-                         value={department.departmentName}/>
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                         value={department.subDepartmentName}/>
-                </div>
-
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
-                                                    onChange={that.isChapterAdmin.bind(that)} disabled={!chapterAdmin}/><label
-                  htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div>
-                <br className="brclear"/>
-                <div className="">
-                  <div className="">
-                    {roleDetails.map(function (details, idx) {
-                      return (
-                        <div className="form_inner_block" key={idx}>
-                          <div className="add_form_block"><img src="/images/add.png"
-                                                               onClick={that.addRoleComponent.bind(that, idx)}/></div>
-                          <div className="form-group">
-                            {details.roleName?<input type="text" defaultValue={details.roleName} className="form-control float-label" disabled="true"/> :
-                              <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                            labelKey={'label'} queryType={"graphql"} query={query}
-                                            queryOptions={queryOptions} isDynamic={true}
-                                            onSelect={that.optionsBySelectRole.bind(that, idx)}
-                                            selectedValue={details.roleId}/>}
-                          </div>
-                          <div className="form-group left_al">
-                            <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}
-                                   onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                   onBlur={that.onValidFromChange.bind(that, idx)}
-                                   value={details.validFrom}/>
-                          </div>
-                          <div className="form-group left_al">
-                            <input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}
-                                   onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                   onBlur={that.onValidToChange.bind(that, idx)}
-                                   value={details.validTo}/>
-                          </div>
-                          <div className="form-group switch_wrap">
-                            <label>Status</label>
-                            <label className="switch">
-                              <input type="checkbox" name={'status'} value={details.isActive}
-                                     onChange={that.onChange.bind(that, idx)}/>
-                              <div className="slider"></div>
-                            </label>
-                          </div>
-                          <br className="brclear"/>
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <br className="brclear"/>
-
-                </div>
-              </div>
-              ):
+              {department.isAvailiable ? (
                 <div className="panel-body">
                   <div className="form-group">
-                    <input type="text" placeholder="Department" className="form-control float-label" id="Dept" value={department.departmentName}/>
+                    <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
+                           value={department.departmentName}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
                            value={department.subDepartmentName}/>
                   </div>
 
+                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
+                                                      onChange={that.isChapterAdmin.bind(that)} disabled/><label
+                    htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div>
+                  <br className="brclear"/>
+                  <div className="">
+                    <div className="">
+                      {roleDetails.map(function (details, idx) {
+                          {/*if (department.department == details.departmentId) {*/}
+                            return (
+                              <div className="form_inner_block" key={idx}>
+                                <span>yessssssssssssssss</span>
+                                <div className="add_form_block"><img src="/images/add.png"
+                                                                     onClick={that.addRoleComponent.bind(that, idx)}/>
+                                </div>
+                                <div className="form-group">
+                                    {/*<input type="text" defaultValue={details.roleName}*/}
+                                           {/*className="form-control float-label"*/}
+                                           {/*disabled="true"/>*/}
+                                  {details.roleName?<input type="text" defaultValue={details.roleName}
+                                                            className="form-control float-label"
+                                                            disabled="true"/>:
+                                  <MoolyaSelect multiSelect={false} className="form-control float-label"
+                                  valueKey={'value'}
+                                  labelKey={'label'} queryType={"graphql"} query={query}
+                                  queryOptions={queryOptions} isDynamic={true}
+                                  onSelect={that.optionsBySelectRole.bind(that, idx, id)}
+                                  selectedValue={details.roleId}/>}
+                                </div>
+                                <div className="form-group left_al">
+                                  <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}
+                                         onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
+                                         onBlur={that.onValidFromChange.bind(that, idx)}
+                                         value={details.validFrom}/>
+                                </div>
+                                <div className="form-group left_al">
+                                  <input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}
+                                         onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
+                                         onBlur={that.onValidToChange.bind(that, idx)}
+                                         value={details.validTo}/>
+                                </div>
+                                <div className="form-group switch_wrap">
+                                  <label>Status</label>
+                                  <label className="switch">
+                                    <input type="checkbox" name={'status'} checked={details.isActive}
+                                           onChange={that.onChange.bind(that, idx)}/>
+                                    <div className="slider"></div>
+                                  </label>
+                                </div>
+                                <br className="brclear"/>
+                              </div>
+                            )
+                          {/*} else {*/}
+                            {/*return (*/}
+                              {/*<div className="form_inner_block" key={idx}>*/}
+                                {/*<span>noooooooooooooooooooo</span>*/}
+                                {/*<div className="add_form_block"><img src="/images/add.png"*/}
+                                                                         {/*onClick={that.addRoleComponent.bind(that, idx)}/>*/}
+                                {/*</div>*/}
+                                {/*<div className="form-group">*/}
+                                    {/*<MoolyaSelect multiSelect={false} className="form-control float-label"*/}
+                                                  {/*valueKey={'value'}*/}
+                                                  {/*labelKey={'label'} queryType={"graphql"} query={query}*/}
+                                                  {/*queryOptions={queryOptions} isDynamic={true}*/}
+                                                  {/*onSelect={that.optionsBySelectRole.bind(that, idx, id)}*/}
+                                                  {/*selectedValue={details.roleId}*/}
+                                    {/*/>*/}
+                                {/*</div>*/}
+                                {/*<div className="form-group left_al">*/}
+                                  {/*<input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}*/}
+                                         {/*onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"*/}
+                                         {/*onBlur={that.onValidFromChange.bind(that, idx)}*/}
+                                         {/*value={details.validFrom}/>*/}
+                                {/*</div>*/}
+                                {/*<div className="form-group left_al">*/}
+                                  {/*<input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}*/}
+                                         {/*onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"*/}
+                                         {/*onBlur={that.onValidToChange.bind(that, idx)}*/}
+                                         {/*value={details.validTo}/>*/}
+                                {/*</div>*/}
+                                {/*<div className="form-group switch_wrap">*/}
+                                  {/*<label>Status</label>*/}
+                                  {/*<label className="switch">*/}
+                                    {/*<input type="checkbox" name={'status'} checked={details.isActive}*/}
+                                           {/*onChange={that.onChange.bind(that, idx)}/>*/}
+                                    {/*<div className="slider"></div>*/}
+                                  {/*</label>*/}
+                                {/*</div>*/}
+                                {/*<br className="brclear"/>*/}
+                              {/*</div>*/}
+                            {/*);*/}
+                          {/*}*/}
+                        }
+                      )}
+                    </div>
+                    <br className="brclear"/>
+
+                  </div>
+                </div>
+              ) :
+                <div className="panel-body">
+                  <div className="form-group">
+                    <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
+                           value={department.departmentName}/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
+                           value={department.subDepartmentName}/>
+                  </div>
                 </div>}
             </div>
           )

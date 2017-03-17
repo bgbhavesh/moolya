@@ -103,10 +103,10 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
     let id= args.id;
     let response = [];
     if(id == "all"){
-      response= MlChapters.find({}).fetch()||[];
+      response= MlChapters.find({isActive:true}).fetch()||[];
       response.push({"chapterName" : "All","_id" : "all"});
     }else{
-      response= MlChapters.find({"clusterId":id}).fetch()||[];
+      response= MlChapters.find({"clusterId":id, "isActive":true}).fetch()||[];
       if(response.length > 0){
         response.push({"chapterName" : "All","_id" : "all"});
       }
@@ -160,7 +160,7 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
-  let result=MlSubChapters.find({isActive: true,subChapterName:{$ne:"Moolya"}}).fetch()||[];
+  let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
   return result
 }
 

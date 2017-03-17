@@ -11,7 +11,7 @@ export default class MlProcessDocumentList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Process Mapping List</h2>
+          <h2>Process Document List</h2>
 
           <MlTableViewContainer {...mlProcessTableConfig}/>
 

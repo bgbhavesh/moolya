@@ -104,7 +104,7 @@ export default class MoolyaSelect extends Component {
     else{
       if(val!= null){
         let selectValue=val.value
-        this.props.onSelect(selectValue,this.onChangeCallBackHandler);
+        this.props.onSelect(selectValue,this.onChangeCallBackHandler, val);
       }
       else{
         this.props.onSelect('',this.onChangeCallBackHandler);

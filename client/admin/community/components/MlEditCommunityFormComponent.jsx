@@ -70,7 +70,7 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/dashboard");
+    FlowRouter.go("/admin/community");
   };
 
   async findComDef() {

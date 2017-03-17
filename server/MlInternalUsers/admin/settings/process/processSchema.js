@@ -3,17 +3,45 @@ import MlSchemaDef from '../../mlAdminSchemaDef'
 let Process = `
 
     type ProcessType{
-        _id         : String
-        processId   : String
-        process     : String  
-        isActive    : Boolean
+        _id         : String,
+        processId   : String,
+        process     : String,
+        communities : [String],
+        userTypes   : [String],
+        identity    : String,
+        industries  : [String],
+        professions : [String],
+        clusters    : [String],
+        states      : [String],
+        chapters    : [String],
+        subChapters : [String],
+        isActive    : Boolean,
+        documents   : [documentOutput]  
     }
+    type processOutput{
+        _id         : String,
+        processId   : String,
+        process     : String,
+        communities : [String],
+         userTypes   : [String],
+        identity    : String,
+        industries  : [String],
+        professions : [String],
+        clusters    : [String],
+        states      : [String],
+        chapters    : [String],
+        subChapters : [String],
+        isActive    : Boolean,
+        documents   : [documentOutput]  
+    }
+    
     
     type communityOutput{
         id   :  String
     }    
     type userTypeOutput{
-        id   :  String
+        id   :  String,
+        name : String,
     }    
     type industryOutput{
         id   :  String
@@ -39,30 +67,14 @@ let Process = `
         isActive  :  Boolean
         
     }
-    type processOutput{
-        _id         : String,
-        processId   : String,
-        process     : String,
-        communities : [communityOutput],
-        userTypes   : [userTypeOutput],
-        identity    : String,
-        industries  : [industryOutput],
-        professions : [professionOutput],
-        clusters    : [clusterOutput],
-        states      : [stateOutput],
-        chapters    : [chapterOutput],
-        subChapters : [subChapterOutput],
-        isActive    : Boolean,
-        documents   : [documentOutput]  
-    }
     
     input community{
         id   :  String
     }    
     input userType{
-        id   :  String
+        id   :  String,
+        name : String,
     }    
-    
     input industry{
         id   :  String
     }    
@@ -91,15 +103,15 @@ let Process = `
     input processInput{
         processId   : String,
         process     : String,
-        communities : [community],
-        userTypes   : [userType],
+        communities : [String],
+        userTypes   : [String],
         identity    : String,
-        industries  : [industry],
-        professions : [profession],
-        clusters    : [cluster],
-        states      : [state],
-        chapters    : [chapter],
-        subChapters : [subChapter],
+        industries  : [String],
+        professions : [String],
+        clusters    : [String],
+        states      : [String],
+        chapters    : [String],
+        subChapters : [String],
         isActive    : Boolean,
         documents   : [document]  
     }

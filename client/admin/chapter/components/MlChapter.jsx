@@ -16,7 +16,6 @@ export default class MlChapterView extends React.Component {
     this.setState({'viewMode':mode});
   }
 
-
   render() {
     let viewMode = this.state.viewMode;
     let showInfinity=true;

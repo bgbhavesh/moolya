@@ -146,7 +146,7 @@ componentDidMount()
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Choose registratipon type" value={this.state.registrationType} options={registrationOptions} className="float-label" onChange={this.optionBySelectRegistrationType.bind(this)}/>
+                  <Select name="form-field-name" placeholder="Choose registration type" value={this.state.registrationType} options={registrationOptions} className="float-label" onChange={this.optionBySelectRegistrationType.bind(this)}/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="User name" className="form-control float-label" id=""/>

@@ -34,6 +34,7 @@ const defaultServerConfig = {
   graphiql: Meteor.isDevelopment,
   graphiqlPath: '/graphiql',
   assignUsersPath: '/adminMultipartFormData',
+  registrationPath: '/registration',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -65,7 +66,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
   const graphQLServer = express();
   config.configServer(graphQLServer)
-  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) => {
+  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
+  {
     try {
       const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
       const options = {
@@ -121,6 +123,23 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       }
     }))
   }
+
+  if(config.registrationPath){
+    graphQLServer.use(config.registrationPath, bodyParser.json(), graphqlExpress(async (req) => {
+        var context = {};
+        context = getContext({req});
+        context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        if(req && req.body && req.body.data){
+            let data = JSON.parse(req.body.data)
+            let moduleName = data && data.moduleName
+            let response;
+            let file  = req.files.file;
+
+            //Your code
+        }
+    }));
+  }
+
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

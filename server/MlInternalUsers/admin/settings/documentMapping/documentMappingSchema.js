@@ -38,12 +38,12 @@ let DocumentMapping = `
         remarks     : String
         allowableMaxSize  : String
         issuingAuthority  : String
-        allowableFormat : [allowableFormatOutput]
-        clusters :[clustersOutput]
-        chapters    : [chaptersOutput]
-        subChapters : [subChaptersOutput]
-        kycCategory  : [kycCategoryOutput]
-        documentType   : [documentTypeOutput]
+        allowableFormat : [String]
+        clusters :[String]
+        chapters    : [String]
+        subChapters : [String]
+        kycCategory  : [String]
+        documentType   : [String]
         isActive : Boolean
       }
       input allowableFormat{
@@ -67,16 +67,16 @@ let DocumentMapping = `
       input documentInput{
         documentId : String,
         documentDisplayName  : String,
-        allowableFormat : [allowableFormat],
-        clusters    : [clusters],
-        chapters    : [chapters],
-        subChapters : [subChapters],
+        allowableFormat : [String],
+        clusters    : [String],
+        chapters    : [String],
+        subChapters : [String],
         validity    : String,
         inputLength : String,
         remarks     : String,
         documentName : String,
-        kycCategory  : [kycCategory],
-        documentType : [documentType],
+        kycCategory  : [String],
+        documentType : [String],
         allowableMaxSize  : String,
         issuingAuthority  : String,
         isActive    : Boolean

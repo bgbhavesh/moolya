@@ -79,7 +79,7 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
                     cityName:city.name,
                     email:"moolya@moolya.com",
                     showOnMap:false,
-                    isActive:city.isActive,
+                    isActive:false,
                     status:{
                       code:100,
                       description:"To Be Assigned"

@@ -13,11 +13,11 @@ import MlAssignChapterBackendUserRoles from './MlAssignChapterBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
-import {findCluster_Roles} from '../../cluster/actions/findCluster_Roles';
-// import {findRoles} from '../actions/fetchRoles'
-import {findAllChapter_Roles} from "../actions/fetchRoles";
+import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 
 import {OnToggleSwitch} from '../../utils/formElemUtil'
+var _ = require('lodash');
+
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -43,7 +43,6 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     componentWillMount() {
-      const resp=this.findSubChapter();
     }
 
     componentDidUpdate(){
@@ -58,20 +57,15 @@ class MlAssignChapterBackendUsers extends React.Component{
       this.setState({loading: false, data: response});
     }
 
-    enableAssignUser(){
-    }
-
     optionsBySelectUser(index, selectedIndex){
         this.setState({loading: true});
         this.setState({selectedBackendUser:index})
         const resp= this.findUserDetails(index);
     }
 
-
     async findUserDetails(userId){
         const userDetails = await findAdminUserDetails(userId);
         if(userDetails){
-
             this.setState({selectedBackendUser:userId})
             this.setState({username:userDetails.userName})
             this.setState({userDisplayName:userDetails.displayName})
@@ -82,23 +76,18 @@ class MlAssignChapterBackendUsers extends React.Component{
         }
     }
 
-    // async find_Cluster_Roles(userId, clusterId)
     async find_Chapter_Roles(userId, clusterId)
     {
-        // const userProfile = await findCluster_Roles(userId, clusterId);
-        const userProfile = await findAllChapter_Roles(userId, clusterId);
-        if (userProfile){
-            var roles = userProfile.userRoles || [];
-        }else {
-           var roles = [];
-        }
-        let chapterAdmin = userProfile&&userProfile.isChapterAdmin?userProfile.isChapterAdmin:false
-        this.setState({loading:false,user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles, chapterAdmin: chapterAdmin });
-        return roles;
+      const userProfile = await fetchAdminUserRoles(userId);
+      var roles = userProfile&&userProfile.length>0?userProfile:[];
+      let chapterAdmin = _.findIndex(userProfile, {"isChapterAdmin":true})>=0 ? true : false;
+      this.setState({loading:false, user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles, chapter_Admin:chapterAdmin, chapterAdmin: chapterAdmin });
+      return roles;
     }
 
     getAssignedRoles(roles){
-        this.setState({'mlroleDetails':roles});
+      console.log("parent")
+      this.setState({'mlroleDetails':roles});
     }
 
     isChapterAdmin(admin){
@@ -132,7 +121,7 @@ class MlAssignChapterBackendUsers extends React.Component{
       }
     }
 
-    handleError(error){
+    handleError(response){
       alert(response)
     }
 
@@ -196,7 +185,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                   <ScrollArea speed={0.8} className="left_wrap">
                                       <div className="col-md-4 col-sm-4" onClick={this.resetBackendUsers.bind(that)}>
                                           <div className="list_block provider_block">
-                                              <div className="cluster_status active_cl"><FontAwesome name='check'/></div>
+                                              <div className="cluster_status assign_cl"><span className="ml ml-assign"></span></div>
                                               <div className="provider_mask"> <img src="/images/funder_bg.png" />  <img className="user_pic" src="/images/def_profile.png"/> </div>
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
@@ -237,7 +226,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId}  getAssignedRoles={this.getAssignedRoles.bind(this)}  getChapterAdmin={this.isChapterAdmin.bind(this)} />):<div></div>}
+                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} chapterAdmin={this.state.chapter_Admin} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} getAssignedRoles={this.getAssignedRoles.bind(this)}  getChapterAdmin={this.isChapterAdmin.bind(this)} />):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

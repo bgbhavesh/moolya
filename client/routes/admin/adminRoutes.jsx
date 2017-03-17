@@ -18,6 +18,7 @@ import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import  RegisterForm from  '../../admin/transaction/requested/component/registerForm'
+import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 
 let userId = Meteor.userId();
@@ -88,6 +89,20 @@ adminSection.route('/community/:communityId/assignusers', {
   name: 'community_assignusers',
   action(){
     mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
+  }
+});
+
+adminSection.route('/documents/clusterList', {
+  name: 'documents_ClusterList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+  }
+});
+
+adminSection.route('/transactions/requestedList', {
+  name: 'transaction_RequestList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }
 });
 

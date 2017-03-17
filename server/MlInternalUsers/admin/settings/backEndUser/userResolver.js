@@ -200,26 +200,26 @@ MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info
     }
 }
 
-MlResolver.MlQueryResolver['fetchChapterBasedRoles'] = (obj, args, context, info) =>
-{
-  let user = Meteor.users.findOne({_id: args.userId});
-  if (user && user.profile && user.profile.isInternaluser == true)
-  {
-    let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-    let response =[];
-    _.each(user_profiles, function (s,v)
-    {
-      if(s.clusterId==args.clusterId){
-        _.each(s.userRoles,function (item,value) {
-          if(item.roleName == "chapteradmin"){
-            s.isChapterAdmin=true;
-          }
-        })
-      }
-    })
-      return user_profiles;
-  }
-}
+// MlResolver.MlQueryResolver['fetchChapterBasedRoles'] = (obj, args, context, info) =>
+// {
+//   let user = Meteor.users.findOne({_id: args.userId});
+//   if (user && user.profile && user.profile.isInternaluser == true)
+//   {
+//     let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+//     let response =[];
+//     _.each(user_profiles, function (s,v)
+//     {
+//       if(s.clusterId==args.clusterId){
+//         _.each(s.userRoles,function (item,value) {
+//           if(item.roleName == "chapteradmin"){
+//             s.isChapterAdmin=true;
+//           }
+//         })
+//       }
+//     })
+//       return user_profiles;
+//   }
+// }
 
 MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
     let roles = [];
@@ -240,7 +240,11 @@ MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
                     contextRole["clusterId"] = item.clusterId
                     contextRole["chapterId"] = item.chapterId
                     contextRole["subChapterId"] = item.subChapterId
-                    contextRole["communityId"] = item.communityId
+
+                    contextRole["departmentId"] = item.departmentId;
+                    contextRole["departmentName"] = item.departmentName;
+                    contextRole["subDepartmentId"] = item.subDepartmentId;
+                    contextRole["subDepartmentName"] = item.subDepartmentName;
                     if(item.roleName == "chapteradmin")
                         contextRole["isChapterAdmin"] = true;
                     else
@@ -432,10 +436,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let hierarchy = "";
   roles.map(function (role)
   {
-      if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
+      if( role.clusterId && role.chapterId && role.subChapterId && role.communityId ){
           levelCode = "COMMUNITY"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && !args.user.isChapterAdmin){
+      else if(role.clusterId && role.chapterId && role.subChapterId && !args.user.isChapterAdmin){
           // if(role.roleName == "chapteradmin"){
           //   let subChapterAdminRole = MlRoles.findOne({roleName:'subchapteradmin'})
           //   role.roleId = subChapterAdminRole._id
@@ -444,8 +448,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           levelCode = "SUBCHAPTER"
           role.communityId = "all"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && args.user.isChapterAdmin)
-      {
+      else if(role.clusterId && role.chapterId && role.subChapterId && args.user.isChapterAdmin){
           let chapterAdminRole = MlRoles.findOne({roleName:'chapteradmin'})
           levelCode = "CHAPTER"
           role.roleId = chapterAdminRole._id
@@ -453,7 +456,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           role.subChapterId = "all"
           role.communityId = "all"
       }
-      else if(role.clusterId != ""){
+      else if(role.clusterId){
           levelCode = "CLUSTER"
           role.chapterId = "all"
           role.subChapterId = "all"

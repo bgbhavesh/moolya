@@ -107,6 +107,19 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
     }
 
   }
+  if (args.departmentId) {
+    let subDepartment = MlSubDepartments.findOne({departmentId: args.departmentId});
+    subDepartment.subDepatmentAvailable = args.depatmentAvailable;
+    if(subDepartment) {
+      let resp = MlSubDepartments.update({departmentId: args.departmentId}, {$set: subDepartment}, {upsert: true})
+      if (resp) {
+        let code = 200;
+        let result = {cluster: resp}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }
+    }
+  }
 
 }
 

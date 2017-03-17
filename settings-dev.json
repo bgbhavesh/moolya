@@ -1,9 +1,4 @@
 {
-  "public": {
-      "graphqlUrl": "http://localhost:3000/graphql",
-      "graphqlPort":8090,
-      "assignUserMultiPartUrl":"http://localhost:3000/assignusers"
-  },
   "private": {
       "subChapterName":"Moolya",
       "HierarchyCount": 10,
@@ -20,9 +15,10 @@
           "s3RetryDelay":1000,
           "multipartUploadThreshold": 20971520,
           "multipartUploadSize": 15728640,
-          "urlExpirationTime":4000
+          "urlExpirationTime":4000,
+          "bucketName":"moolya-users",
+          "adminBucketKey":"moolya-admin-users"
         }
-      },
-      "graphql_proxy_url":"http://localhost:8090/graphql"
+      }
   }
 }

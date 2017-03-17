@@ -249,11 +249,34 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/documents_icon.png",
-        "link" : "/admin/documents",
+        "link" : "/admin/documents/clusterList",
         "uniqueId" : "documents",
         "name" : "documents",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "subMenu" : [
+          {
+            "link" : "/admin/documents/clusterList",
+            "name" : "Cluster",
+            "uniqueId" : "documents_Clusters",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/clusterList",
+                "name": "List Clusters",
+                "uniqueId": "documents_ClusterList",
+                "subMenuMappingId":"documents_Clusters",
+                "subMenusId":"documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          }
+      ]
+
       },
       {
         "image" : "/images/services_icon.png",
@@ -1153,7 +1176,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/lookingForList",
-            "name" : "Looking For Types",
+            "name" : "Looking For",
             "uniqueId" : "settings_lookingForTypes",
             "isLink" : true,
             "isMenu" : true,

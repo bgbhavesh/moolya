@@ -12,8 +12,7 @@ import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
 import {mlClusterConfig} from '../config/mlClusterConfig'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
-import {findRoles} from '../actions/fetchRoles'
-import {findCluster_Roles} from '../actions/findCluster_Roles'
+import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {findClusterTypeActionHandler} from '../actions/findCluster'
 import {OnToggleSwitch} from '../../utils/formElemUtil'
 
@@ -93,9 +92,9 @@ class MlAssignBackendUsers extends React.Component {
   async find_Cluster_Roles(userId, clusterId)
   {
       let roles = [];
-      const userProfile = await findCluster_Roles(userId, clusterId);
-      if (userProfile)
-          roles = userProfile.userRoles || [];
+      const userRoles = await fetchAdminUserRoles(userId, clusterId);
+      if (userRoles)
+          roles = userRoles || [];
       this.setState({user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
       return roles
   }
@@ -179,7 +178,7 @@ class MlAssignBackendUsers extends React.Component {
                   <ScrollArea speed={0.8} className="left_wrap">
                     <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
                       <div className="list_block provider_block">
-                        <div className="cluster_status"></div>
+                        <div className="cluster_status assign_cl"><span className="ml ml-assign"></span></div>
                         <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
                                                                                                src="/images/def_profile.png"/>
                         </div>

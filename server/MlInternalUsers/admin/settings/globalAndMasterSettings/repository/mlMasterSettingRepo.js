@@ -107,6 +107,22 @@ export default class MlMasterSettingRepo{
       }
       return result;
   }
+  dropDownMasterSettingsPlatformAdmin(requestParams){
+    check(requestParams.type,String);
+    check(requestParams.hierarchyRefId,String);
+    let result = null;
+    let  options=[]
+    switch (requestParams.type) {
+      case "CONTACTTYPE":
+        result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+        let resultResponse=_.each(result,function (option,id) {
+          options.push({"label":option.contactTypeInfo.contactName,"value":option._id})
+        })
+
+        break;
+    }
+    return options;
+  }
 
 
 }

@@ -95,3 +95,4 @@ let registrationSchema = `
         findRegistration(registrationId:String):Registration
     }
 `
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);

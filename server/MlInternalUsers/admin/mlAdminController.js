@@ -103,9 +103,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let data = JSON.parse(req.body.data)
         let moduleName = data && data.moduleName
         let response;
-        let file  = req.files;
+        let file  = req.files.file;
         if(file){
-
+            mlS3Client.uploadFile(file, "moolya-users", "moolya-admin-users/")
         }
         switch (moduleName){
             case "USERS":{

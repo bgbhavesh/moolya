@@ -12,8 +12,7 @@ import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
 import {mlClusterConfig} from '../config/mlClusterConfig'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
-import {findRoles} from '../actions/fetchRoles'
-import {findCluster_Roles} from '../actions/findCluster_Roles'
+import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {findClusterTypeActionHandler} from '../actions/findCluster'
 import {OnToggleSwitch} from '../../utils/formElemUtil'
 
@@ -93,9 +92,9 @@ class MlAssignBackendUsers extends React.Component {
   async find_Cluster_Roles(userId, clusterId)
   {
       let roles = [];
-      const userProfile = await findCluster_Roles(userId, clusterId);
-      if (userProfile)
-          roles = userProfile.userRoles || [];
+      const userRoles = await fetchAdminUserRoles(userId, clusterId);
+      if (userRoles)
+          roles = userRoles || [];
       this.setState({user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
       return roles
   }

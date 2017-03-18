@@ -80,6 +80,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     let cloneBackUp = _.cloneDeep(roleDetails);
     let specificRole = cloneBackUp[did];
     specificRole.roles[index]['roleId'] = selectedValue;
+    specificRole.roles[index]['roleName'] = selObject.label;
     specificRole.roles[index]['departmentId'] = this.state.roleForm[did]['department'];
     specificRole.roles[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
     specificRole.roles[index]['subDepartmentId'] = this.state.roleForm[did]['subDepartment'];
@@ -88,15 +89,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     roleDetails.splice(did, 0, specificRole);
     this.setState({loading:false, rolesData: roleDetails});
     this.sendRolesToParent();
-
-    // this.props.getAssignedRoles(this.state.rolesData)
-    // roleDetails[index]['roleId'] = selectedValue;
-    // roleDetails[index]['departmentId'] = this.state.roleForm[did]['department'];
-    // roleDetails[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
-    // roleDetails[index]['subDepartmentId'] = this.state.roleForm[did]['subDepartment'];
-    // roleDetails[index]['subDepartmentName'] = this.state.roleForm[did]['subDepartmentName'];
-    // this.setState({roleDetails: roleDetails})
-    // this.props.getAssignedRoles(this.state.roleDetails)
   }
 
   sendRolesToParent(){
@@ -163,12 +155,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       specificRole.roles[index]['validFrom'] = event.target.value;
       this.setState({loading:false, rolesData: roleDetails})
       this.sendRolesToParent();
-      // this.props.getAssignedRoles(this.state.rolesData)
     }
-    // let roleDetails = this.state.roleDetails
-    // roleDetails[index]['validFrom'] = event.target.value
-    // this.setState({roleDetails: roleDetails})
-    // this.props.getAssignedRoles(this.state.roleDetails)
   }
 
   onValidToChange(index, did , event) {
@@ -178,12 +165,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       specificRole.roles[index]['validTo'] = event.target.value;
       this.setState({loading:false, rolesData: roleDetails})
       this.sendRolesToParent();
-      // this.props.getAssignedRoles(this.state.rolesData)
     }
-    // let roleDetails = this.state.roleDetails
-    // roleDetails[index]['validTo'] = event.target.value
-    // this.setState({roleDetails: roleDetails})
-    // this.props.getAssignedRoles(this.state.roleDetails)
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -299,15 +281,15 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                                                      onClick={that.addRoleComponent.bind(that, idx)}/>
                                 </div>
                                 <div className="form-group">
-                                  {details.roleName?<input type="text" defaultValue={details.roleName}
-                                                            className="form-control float-label"
-                                                            disabled="true"/>:
+                                  {department.isAvailiable?
                                   <MoolyaSelect multiSelect={false} className="form-control float-label"
                                   valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"} query={query}
                                   queryOptions={queryOptions} isDynamic={true}
                                   onSelect={that.optionsBySelectRole.bind(that, idx, id)}
-                                  selectedValue={details.roleId}/>}
+                                  selectedValue={details.roleId}/>:<input type="text" defaultValue={details.roleName}
+                                                                          className="form-control float-label"
+                                                                          disabled="true"/>}
                                 </div>
                                 <div className="form-group left_al">
                                   <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}

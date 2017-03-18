@@ -26,7 +26,17 @@ export default class MlAssignBackednUserRoles extends React.Component{
       super(props)
       this.state={
           roleForm:[],
-          roleDetails:[{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"",  communityId:"", hierarchyLevel:"", hierarchyCode:""}],
+          roleDetails:[{
+            roleId: null,
+            validFrom:'', validTo:'',
+            isActive:false,
+            clusterId: this.props.clusterId?this.props.clusterId:"",
+            chapterId: this.props.chapterId?this.props.chapterId:"",
+            subChapterId: this.props.subChapterId?this.props.subChapterId:"",
+            communityId: this.props.communityId?this.props.communityId:"",
+            hierarchyLevel:"",
+            hierarchyCode:""
+          }],
           selectedRole:"",
           hierarchyLevel:''
       }
@@ -34,7 +44,6 @@ export default class MlAssignBackednUserRoles extends React.Component{
       return this;
       // this.getUserDepSubDep = this.getUserDepSubDep.bind(this);
   }
-
   componentDidMount() {
     // const resp=this.findUserDepartments();
     $(function () {
@@ -79,8 +88,20 @@ export default class MlAssignBackednUserRoles extends React.Component{
       // });
       // mySwiper.updateContainerSize()
       this.setState({
-          roleDetails: this.state.roleDetails.concat([{ roleId: null, validFrom:'', validTo:'', isActive:false, clusterId:this.props.clusterId, chapterId:"", subChapterId:"", communityId:"", hierarchyLevel:"", hierarchyCode:""}])
-      });
+        roleDetails: this.state.roleDetails.concat([{
+          roleId: null,
+          validFrom: '',
+          validTo: '',
+          isActive: false,
+          clusterId: this.props.clusterId?this.props.clusterId:"",
+          chapterId: this.props.chapterId?this.props.chapterId:"",
+          subChapterId: this.props.subChapterId?this.props.subChapterId:"",
+          communityId: this.props.communityId?this.props.communityId:"",
+          hierarchyLevel: "",
+          hierarchyCode: ""
+        }])
+      })
+
   }
 
   onChange(id,event){

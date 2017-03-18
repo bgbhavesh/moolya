@@ -51,7 +51,7 @@ class MlAssignBackendUsers extends React.Component {
   }
 
   async findCluster() {
-      let clusterId = this.props.params;
+      let clusterId = this.props.params.clusterId;
       const response = await findClusterTypeActionHandler(clusterId);
       this.setState({loading: false, cluster: response});
   }
@@ -84,7 +84,7 @@ class MlAssignBackendUsers extends React.Component {
           this.setState({username:userDetails.userName})
           this.setState({userDisplayName:userDetails.displayName})
           this.setState({alsoAssignedAs:userDetails.alsoAssignedas})
-          this.find_Cluster_Roles(userId, this.props.params);
+          this.find_Cluster_Roles(userId, this.props.params.clusterId);
           return userDetails;
       }
   }
@@ -101,7 +101,7 @@ class MlAssignBackendUsers extends React.Component {
 
   async assignBackendUsers() {
       let userProfile = {};
-      userProfile['clusterId'] = this.props.params;
+      userProfile['clusterId'] = this.props.params.clusterId;
       userProfile['userRoles'] = this.state.mlroleDetails;
       userProfile['displayName'] = this.refs.displayName.value;
       let user = {
@@ -151,7 +151,7 @@ class MlAssignBackendUsers extends React.Component {
           }
       ]
       let that = this;
-      let queryOptions = {options: {variables: {clusterId: that.props.params}}};
+      let queryOptions = {options: {variables: {clusterId: that.props.params.clusterId}}};
       let query = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
       let userid = this.state.selectedBackendUser || "";
       let userDisplayName = this.state.userDisplayName || "";
@@ -185,7 +185,7 @@ class MlAssignBackendUsers extends React.Component {
                         <h3>Assign <br/> Backend Users</h3>
                       </div>
                     </div>
-                    {that.state.cluster.isActive ? <MlAssignBackendUserList clusterId={that.props.params}
+                    {that.state.cluster.isActive ? <MlAssignBackendUserList clusterId={that.props.params.clusterId}
                                                                             updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/> :
                       <div></div>}
                   </ScrollArea>
@@ -228,7 +228,7 @@ class MlAssignBackendUsers extends React.Component {
                              id="userName" ref="userName" value={username}/>
                     </div>
 
-                    {userid ? (<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params}
+                    {userid ? (<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId}
                                                          assignedRoles={this.state.user_Roles}
                                                          getAssignedRoles={this.getAssignedRoles.bind(this)}/>) :
                       <div></div>}

@@ -34,7 +34,10 @@ const mlChapterCommunitiesConfig=new MlViewer.View({
               communityImageLink,
               showOnMap,
               aboutCommunity,
-              isActive
+              isActive,
+              clusters,
+              chapters,
+              subchapters
             }
           }
         }

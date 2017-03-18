@@ -3,6 +3,7 @@
  */
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlClusterCommunitiesList from "../components/MlClusterCommunitiesList"
+import MlClusterChapterCommunitiesList from '../components/MlClusterChapterCommunitiesList'
 import React from 'react';
 import gql from 'graphql-tag'
 
@@ -31,7 +32,10 @@ const mlClusterCommunityListConfig=new MlViewer.View({
                       communityImageLink,
                       showOnMap,
                       aboutCommunity,
-                      isActive
+                      isActive,
+                      clusters,
+                      chapters,
+                      subchapters
                     }
                   }
                 }
@@ -53,7 +57,7 @@ const mlClusterChapterCommunityListConfig=new MlViewer.View({
       chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
       subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
   },
-  viewComponent:<MlClusterCommunitiesList />,
+  viewComponent:<MlClusterChapterCommunitiesList />,
   graphQlQuery:gql`
     query($clusterId:String, $chapterId:String, $subChapterId:String){
       data:fetchCommunities(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
@@ -66,7 +70,10 @@ const mlClusterChapterCommunityListConfig=new MlViewer.View({
               communityImageLink,
               showOnMap,
               aboutCommunity,
-              isActive
+              isActive,
+              clusters,
+              chapters,
+              subchapters
             }
           }
         }

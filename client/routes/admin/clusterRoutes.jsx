@@ -15,6 +15,7 @@ import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterD
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignChapterBackendUsers'
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
+import MlClusterCommunityDetails from '../../admin/cluster/components/MlClusterCommunityDetails'
 
 adminSection.route('/clusters', {
   name: 'cluster',
@@ -44,6 +45,18 @@ adminSection.route('/clusters/:clusterId/communities', {
     mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
   }
 });
+adminSection.route('/clusters/:clusterId/communities/:communityId', {
+  name: 'cluster_communities_communityDetails',
+    action(params){
+      mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlClusterCommunityDetails params={params}/>})
+    }
+});
+adminSection.route('/clusters/:clusterId/communities/:communityId/assignusers', {
+  name: 'cluster_communities_assignusers',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
+  }
+});
 
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities', {
   name: 'cluster_communities',
@@ -63,22 +76,34 @@ adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterNam
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
+  name: 'cluster_chapter_assignusers',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
+  }
+});
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {
   name: 'cluster_chapter_communities',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterChapterCommunityListConfig}/>})
   }
 });
-adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
-  name: 'cluster_chapter_assignusers',
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities/:communityId', {
+  name: 'cluster_chapter_communities_communityDetails',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignChapterBackendUsers params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlClusterCommunityDetails params={params}/>})
+  }
+});
+adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities/:communityId/assignusers', {
+  name: 'cluster_chapter_communities_assignusers',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
   }
 });
 
 adminSection.route('/clusters/:clusterId/assignusers', {
   name: 'cluster_assignusers',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignBackendUsers params={params.clusterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
   }
 });

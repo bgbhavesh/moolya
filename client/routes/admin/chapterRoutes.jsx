@@ -7,7 +7,7 @@ import AdminLayout from '../../admin/layouts/AdminLayout'
 import MlChaptersView from '../../admin/chapter/components/MlChapters'
 import MlSubChapterView from '../../admin/chapter/components/MlSubChapterListView'
 import {mlChapterMapConfig,mlChapterListConfig} from '../../admin/chapter/config/mlChapterConfig'
-import {mlChapterCommunitiesConfig} from '../../admin/chapter/config/mChapterCommunitiesConfig'
+import {mlChapterCommunitiesConfig} from '../../admin/chapter/config/mlChapterCommunitiesConfig'
 import {mlSubChapterMapConfig,mlSubChapterListConfig} from '../../admin/chapter/config/mlSubChapterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignChapterBackendUsers'

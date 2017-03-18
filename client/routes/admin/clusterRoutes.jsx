@@ -91,13 +91,13 @@ adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterNam
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities/:communityId', {
   name: 'cluster_chapter_communities_communityDetails',
   action(params){
-    mount(AdminLayout,{adminContent:< MlClusterCommunityDetails params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlClusterCommunityDetails params={params}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/communities/:communityId/assignusers', {
   name: 'cluster_chapter_communities_assignusers',
   action(params){
-    mount(AdminLayout,{adminContent:< MlAssignBackendUsers params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
   }
 });
 

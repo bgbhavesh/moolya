@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {findDocumentMappingActionHandler} from '../actions/findDocumentMappingAction'
-import ActiveProcessFormatter from "../actions/ActiveProcessDocFormatter"
+import ActiveProcessFormatter from "./ActiveProcessDocFormatter"
+import DocumentActiveComponent from "./DocumentActiveComponent";
 export default class MlProcessDocMapping extends Component {
     constructor(props){
       super(props);
@@ -20,7 +21,7 @@ export default class MlProcessDocMapping extends Component {
     return resp;
   }
   async findDocument() {
-    let kycId = this.props.config
+    let kycId = this.props.kycConfig
     const response = await findDocumentMappingActionHandler(kycId);
     console.log(response);
     if(response){
@@ -31,13 +32,19 @@ export default class MlProcessDocMapping extends Component {
           Name:response[i].documentName,
           Formate:response[i].allowableFormat,
         MaxSize:response[i].allowableMaxSize,
-          Action:response[i]._id,
+          Action:response[i],
         }
         documentDetails.push(json);
       }
       this.setState({"documentInfo":documentDetails})
     }
   }
+
+  SwitchBtn(cell, row){
+   // console.log(this)
+    return <DocumentActiveComponent data={row} />;
+  }
+
 
   render() {
     const options = {
@@ -49,9 +56,10 @@ export default class MlProcessDocMapping extends Component {
       clickToSelect: true,  // click to select, default is false
       clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
     }
-    function SwitchBtn(cell, row){
-      return '<div class="form-group switch_wrap"><label class="switch"><input type="checkbox"  />cell<div class="slider"></div></label></div> ';
-    }
+  /*function SwitchBtn(cell, row){
+    this.onChange()
+    return '<div class="form-group switch_wrap"><label class="switch"><input type="checkbox" onChange={this.onChange.bind(row,cell)} />cell<div class="slider"></div></label></div> ';
+    }*/
 
     return (
 
@@ -66,7 +74,7 @@ export default class MlProcessDocMapping extends Component {
             <TableHeaderColumn  isKey={true} dataField="Name">Name</TableHeaderColumn>
             <TableHeaderColumn dataField="Formate">Formate</TableHeaderColumn>
             <TableHeaderColumn dataField="MaxSize">MaxSize</TableHeaderColumn>
-            <TableHeaderColumn dataField="Action" dataFormat={SwitchBtn}>Action</TableHeaderColumn>
+            <TableHeaderColumn dataField="Action" dataFormat={this.SwitchBtn.bind(this)}>Action</TableHeaderColumn>
           </BootstrapTable>
 
 

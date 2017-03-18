@@ -28,7 +28,7 @@ export default class MlAdminProcessDocHeader extends Component {
 
         for(let i=0;i<documents.length;i++){
           let json={
-            "link": "/admin/documents/"+pid+"/"+documents[i].category,
+            "link": "/admin/documents/"+pid+"/"+documents[i].category+"/"+documents[i].type,
             "name":documents[i].categoryName ,
             "uniqueId": "documents_ClusterList",
             "subMenuMappingId":"documents_Clusters",

@@ -99,10 +99,10 @@ adminSection.route('/documents/clusterList', {
     mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
   }
 });
-adminSection.route('/documents/:pid/:kycid', {
+adminSection.route('/documents/:pid/:kycid/:docid', {
   name: '',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping config={params.kycid}/>})
+    mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping kycConfig={params.kycid} docConfig={params.docid}/>})
   }
 });
 

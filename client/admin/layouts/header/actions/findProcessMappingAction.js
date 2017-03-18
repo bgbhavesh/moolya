@@ -8,6 +8,7 @@ export async function findProcessActionHandler(processId) {
      query  ($id: String){
          findProcess(id:$id)  {
          documents{
+             type,
           category,
           categoryName
         }

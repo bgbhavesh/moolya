@@ -48,15 +48,12 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
               // userProfiles[index].userroles.push(profile.userroles)
               let roles     = profile.userRoles;
               let userRoles = userProfiles[index].userRoles;
-              userRoles.map(function (role)
+              roles.map(function (role)
               {
                   let mlRole = MlRoles.findOne({"_id":role.roleId})
-                  let action =_.find(roles, {"chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId, "departmentId":role.departmentId, "subDepartmentId":role.subDepartmentId});
+                  let action =_.find(userRoles, {"roleId": role.roleId, roleName:role.roleName, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId, "departmentId":role.departmentId, "subDepartmentId":role.subDepartmentId});
                   if(!action){
                       userRoles.push(role)
-                  }
-                  else if(action){
-
                   }
               })
               userProfiles[index].userRoles = userRoles;

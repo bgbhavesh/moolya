@@ -36,3 +36,8 @@ MlResolver.MlQueryResolver['FindCompanyType'] = (obj, args, context, info) => {
 
 }
 
+MlResolver.MlQueryResolver['fetchCompanyTypes'] = (obj, args, context, info) => {
+  let result=MlGlobalSettings.find({isActive:true}).fetch()||[];
+  return result;
+}
+

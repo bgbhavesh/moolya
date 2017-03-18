@@ -7,6 +7,7 @@ var Select = require('react-select');
 import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
 import ScrollArea from 'react-scrollbar';
 
+var FontAwesome = require('react-fontawesome');
 var options3 = [
     {value: 'select', label: 'Do you want to associate to any institution'},
     {value: 'one', label: 'One'},
@@ -172,6 +173,17 @@ componentDidMount()
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
                 </div>
+                <div className="panel panel-default">
+                                  <div className="panel-heading">Process Status</div>
+                                  <div className="panel-body button-with-icon">
+                              <button type="button" className="btn btn-labeled btn-success" >
+                                  <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
+                                  <button type="button" className="btn btn-labeled btn-success" >
+                                  <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
+                                  <button type="button" className="btn btn-labeled btn-success" >
+                                  <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>
+                                                   </div>
+                 </div>
 
               </form>
             </div>

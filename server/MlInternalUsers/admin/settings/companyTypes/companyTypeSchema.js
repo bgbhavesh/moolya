@@ -17,6 +17,7 @@ let CompanyType = `
     }
     type Query{
       FindCompanyType(_id:String):CompanyType
+      fetchCompanyTypes:[CompanyType]
     }
 `
 

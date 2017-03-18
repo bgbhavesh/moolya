@@ -61,4 +61,8 @@ MlResolver.MlQueryResolver['FindBusinessType'] = (obj, args, context, info) => {
   }
 }
 
+MlResolver.MlQueryResolver['fetchBusinessTypes'] = (obj, args, context, info) => {
+  let result=MlBusinessType.find({isActive:true}).fetch()||[];
+  return result;
+}
 

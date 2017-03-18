@@ -15,6 +15,7 @@ let BusinessType = `
     }
     type Query{
       FindBusinessType(_id: String):BusinessType
+      fetchBusinessTypes:[BusinessType]
     }
 `
 

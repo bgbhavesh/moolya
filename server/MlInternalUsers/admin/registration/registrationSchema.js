@@ -87,12 +87,91 @@ let registrationSchema = `
         contactInfo:[ContactInfo]
     }
     
+    input registrationInfoInput{
+        userType        :   String,
+        firstName       :   String,
+        lastName        :   String,
+        countryId       :   String,
+        countryName     :   String,
+        contactNumber   :   String,
+        email           :   String,
+        cityId          :   String,
+        cityName        :   String,
+        registrationType:   String,
+        userName        :   String,
+        password        :   String,
+        accountType     :   String,
+        institutionAssociation    :   String,
+        companyName     :   String,
+        companyUrl      :   String,
+        remarks         :   String,
+        referralType    :   String,
+        clusterId       :   String,
+        clusterName     :   String,
+        chapterId       :   String,
+        chapterName     :   String,
+        subChapterId    :   String,
+        subChapterName  :   String,
+        communityId     :   String,
+        communityName   :   String,
+        source          :   String,
+        deviceName      :   String,
+        deviceNumber    :   String,
+        ipAddress       :   String,
+        ipLocation      :   String,  
+        registrationDate:   Date,
+        userId          :   String,
+        registrationStatus        :   String,
+        assignedUser    :   String
+    }
+    
+    type RegistrationInfo{
+        _id             :   String,
+        userType        :   String,
+        firstName       :   String,
+        lastName        :   String,
+        countryId       :   String,
+        countryName     :   String,
+        contactNumber   :   String,
+        email           :   String,
+        cityId          :   String,
+        cityName        :   String,
+        registrationType:   String,
+        userName        :   String,
+        password        :   String,
+        accountType     :   String,
+        institutionAssociation    :   String,
+        companyName     :   String,
+        companyUrl      :   String,
+        remarks         :   String,
+        referralType    :   String,
+        clusterId       :   String,
+        clusterName     :   String,
+        chapterId       :   String,
+        chapterName     :   String,
+        subChapterId    :   String,
+        subChapterName  :   String,
+        communityId     :   String,
+        communityName   :   String,
+        source          :   String,
+        deviceName      :   String,
+        deviceNumber    :   String,
+        ipAddress       :   String,
+        ipLocation      :   String,  
+        registrationDate:   Date,
+        userId          :   String,
+        registrationStatus        :   String,
+        assignedUser    :   String
+    }
+    
     type Mutation{
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
+         updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
+        findRegistrationInfo(registrationId:String):RegistrationInfo
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);

@@ -9,14 +9,30 @@ import Step4 from './step4';
 import Step5 from './step5';
 import Step6 from './step6';
 import Step7 from './step7';
+import {findRegistrationActionHandler} from '../actions/findRegistration'
 export default class RegisterForm extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state={
+      registrationId:null
+    }
+
+    return this;
+  }
+  componentWillMount() {
+    let registrationId = this.props.config;
+    this.setState({loading: false, registrationId: registrationId});
+  }
+
 componentDidMount()
   { }
   render(){
+   /* let registrationId = this.props.config;*/
     const steps =
     [
-      {name: 'Basic info', component: <Step1 />},
-      {name: 'Additional info', component: <Step2 />},
+      {name: 'Basic info', component: <Step1 registrationId={this.state.registrationId}/>},
+      {name: 'Additional info', component: <Step2 registrationId={this.state.registrationId}/>},
       {name: 'Contact details', component: <Step3 />},
       {name: 'Social links', component: <Step4 />},
       {name: 'KYC\'s Documents', component: <Step5 />},
@@ -31,13 +47,8 @@ componentDidMount()
                   <div id="root" >
                     <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true} />
                   </div>
-
                </div>
-
-
       </div>
-
-
       </div>
     )
   }

@@ -31,6 +31,6 @@ export async function findRegistrationActionHandler(registrationId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchRegistration;
+  const id = result.data.findRegistrationInfo;
   return id
 }

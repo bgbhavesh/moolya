@@ -164,6 +164,82 @@ let registrationSchema = `
         assignedUser    :   String
     }
     
+    type branchLocation{
+        id              :   String,
+        name            :   String
+    }
+    
+    type citizenship{
+        id              :   String,
+        name            :   String
+    }
+    
+    type RegistrationDetails{    
+          userType: String,
+          companyName: String,
+          groupName: String,
+          companyWebsite:  String,
+          companyEmail: String,
+          foundationDate:  Date,
+          headQuarterLocation: String,
+          branchLocations: [branchLocation]
+          companyType: String,
+          entityType:  String,
+          businessType: String,
+          industry: String,
+          subDomain:  String,
+          stageOfCompany:  String,
+          subsidaryCompany: String,
+          parentCompany: String,
+          registrationNumber: String,
+          isoAccrediationNumber:String,
+          companyTurnOver: String,
+          partnerCompanies: String,
+          investors: String,
+          lookingFor:  String,
+          companyCEOName: String,
+          companyManagement: String,
+          toatalEmployeeCount: String,
+          associatedCompanies:  String,
+              
+          userCategory: String,
+          institutionType:String,
+          instituteName:  String,
+          instituteGroupName: String,
+          foundationYear:  String,
+          website:String,
+          registrationNumber: String,
+          isoAccrediationNumber: String,
+          curriculamProvider: String,
+          associatedUniversity: String,
+          studentCount:  String,
+          staffCount:String,
+          chairman: String,
+          dean:  String,
+          headQuarterLocation: String,
+          branchLocations: [branchLocation],  
+          
+          identityType : String,
+          userType : String,
+          title :  String,
+          firstName : String,
+          middleName : String,
+          lastName :String,
+          displayName :  String,
+          dateOfBirth :  Date,
+          gender : String,
+          citizenships : [citizenship],   
+          qualification :String,
+          employmentStatus : String,
+          professionalTag : String,
+          industry :  String,
+          profession : String,
+          employerName :String,
+          employerWebsite :  String,
+          employmentDate :String,
+          experience : String
+    }
+    
     type Mutation{
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response

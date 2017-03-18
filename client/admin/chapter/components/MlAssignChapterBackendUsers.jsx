@@ -13,9 +13,7 @@ import MlAssignChapterBackendUserRoles from './MlAssignChapterBackendUserRoles'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
-import {findCluster_Roles} from '../../cluster/actions/findCluster_Roles';
-// import {findRoles} from '../actions/fetchRoles'
-import {findAll_Roles} from "../actions/fetchRoles";
+import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 
 import {OnToggleSwitch} from '../../utils/formElemUtil'
 var _ = require('lodash');
@@ -45,7 +43,6 @@ class MlAssignChapterBackendUsers extends React.Component{
     }
 
     componentWillMount() {
-      // const resp=this.findSubChapter();
     }
 
     componentDidUpdate(){
@@ -81,13 +78,7 @@ class MlAssignChapterBackendUsers extends React.Component{
 
     async find_Chapter_Roles(userId, clusterId)
     {
-        // const userProfile = await findCluster_Roles(userId, clusterId);
-        // if (userProfile){
-        //     var roles = userProfile.userRoles || [];
-        // }else {
-        //    var roles = [];
-        // }
-      const userProfile = await findAll_Roles(userId);
+      const userProfile = await fetchAdminUserRoles(userId);
       var roles = userProfile&&userProfile.length>0?userProfile:[];
       let chapterAdmin = _.findIndex(userProfile, {"isChapterAdmin":true})>=0 ? true : false;
       this.setState({loading:false, user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles, chapter_Admin:chapterAdmin, chapterAdmin: chapterAdmin });

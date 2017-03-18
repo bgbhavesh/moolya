@@ -177,6 +177,8 @@ let MasterSettingsSchema = `
         fetchMasterSettings(type:MASTER_SETTINGS_TYPE!):[MasterSettings]
         findMasterSetting(_id:String):MasterSettings
         fetchMasterSettingsForDropDown(type:MASTER_SETTINGS_TYPE!):[MasterSettingsDropData]
+        fetchMasterSettingsForPlatFormAdmin(type:String,hierarchyRefId:String):[MasterSettingsDropData]
+        
     }
     
     type Mutation{

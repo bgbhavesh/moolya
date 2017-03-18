@@ -1,20 +1,19 @@
-import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import {graphql} from 'react-apollo';
-import gql from 'graphql-tag'
-import MlActionComponent from '../../../commons/components/actions/ActionComponent'
-import formHandler from '../../../commons/containers/MlFormHandler'
-import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
-import MlAssignBackendUserList from './MlAssignBackendUserList'
-import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
-import {mlClusterConfig} from '../config/mlClusterConfig'
-import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
-import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
+import React from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+import formHandler from "../../../commons/containers/MlFormHandler";
+import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import MlAssignBackendUserList from "./MlAssignBackendUserList";
+import MlAssignBackednUserRoles from "./MlAssignBackendUserRoles";
+import {mlClusterConfig} from "../config/mlClusterConfig";
+import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
+import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
-import {findClusterTypeActionHandler} from '../actions/findCluster'
-import {OnToggleSwitch} from '../../utils/formElemUtil'
+import {findClusterTypeActionHandler} from "../actions/findCluster";
+import {OnToggleSwitch} from "../../utils/formElemUtil";
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -67,7 +66,8 @@ class MlAssignBackendUsers extends React.Component {
   }
 
   getAssignedRoles(roles) {
-      this.setState({'mlroleDetails': roles})
+    console.log("parent");
+    this.setState({'mlroleDetails': roles})
   }
 
   async addEventHandler() {

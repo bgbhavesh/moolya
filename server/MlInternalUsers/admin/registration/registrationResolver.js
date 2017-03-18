@@ -15,3 +15,13 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   }*/
 }
 
+MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    var id= args.registrationId;
+    let response= MlRegistration.findOne({"_id":id});
+    response = response.registrationInfo;
+    return response;
+  }
+}
+

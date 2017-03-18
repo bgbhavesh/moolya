@@ -123,7 +123,7 @@ export default class StepZilla extends Component {
 
     _next() {
         // if its a form component, it should have implemeted a public isValidated class. If not then continue
-
+        let registrationId = this.props.params;
         if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated()) {
             this._setNavState(this.state.compState + 1);
         }

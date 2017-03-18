@@ -5,6 +5,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 var Select = require('react-select');
 import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
+import {findRegistrationActionHandler} from '../actions/findRegistration'
 import ScrollArea from 'react-scrollbar';
 
 var FontAwesome = require('react-fontawesome');
@@ -22,7 +23,17 @@ export default class Step1 extends React.Component{
       cluster:'',
       chapter:'',
     }
+    this.findRegistration.bind(this);
     return this;
+  }
+  componentWillMount() {
+    const resp = this.findRegistration();
+    return resp;
+  }
+  async findRegistration() {
+    let registrationId = this.props.params;
+    const response = await findRegistrationActionHandler(registrationId);
+    this.setState({loading: false, data: response});
   }
 componentDidMount()
   {

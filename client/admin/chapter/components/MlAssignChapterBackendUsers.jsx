@@ -190,7 +190,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                               <h3>Assign <br/> Backend Users</h3>
                                           </div>
                                       </div>
-                                      <MlAssignChapterBackendUserList clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} subChapterName={that.props.params.subChapterName} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
+                                      <MlAssignChapterBackendUserList clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} subChapterName={that.props.params.subChapterName} communityId={that.props.params.communityId} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
                                   </ScrollArea>
                               </div>
                           </div>

@@ -107,6 +107,18 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/communities`;
       }
     },
+    "chapter_communities_communityDetails":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"subChapterId")){
+        return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/communities/${dynamicParams.communityId}`;
+      }
+    },
+    "chapter_communities_assignusers":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"subChapterId")){
+        return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/communities/${dynamicParams.communityId}/assignusers`;
+      }
+    },
 
     "chapter_assignusers":function (params,queryParams) {
       let dynamicParams=params||{};

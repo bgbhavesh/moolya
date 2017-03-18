@@ -226,7 +226,7 @@ class MlAssignChapterBackendUsers extends React.Component{
                                           <br className="brclear"/>
                                       </div>
 
-                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} chapterAdmin={this.state.chapter_Admin} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} getAssignedRoles={this.getAssignedRoles.bind(this)}  getChapterAdmin={this.isChapterAdmin.bind(this)} />):<div></div>}
+                                      {userid?(<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles} chapterAdmin={this.state.chapter_Admin} userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId} getAssignedRoles={this.getAssignedRoles.bind(this)}  getChapterAdmin={this.isChapterAdmin.bind(this)} />):<div></div>}
 
                                       <br className="brclear"/>
                                       <div className="form-group switch_wrap inline_switch">

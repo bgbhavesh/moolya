@@ -65,6 +65,7 @@ let Process = `
         type      :  String
         category  :  String
         isActive  :  Boolean
+        categoryName: String
         
     }
     

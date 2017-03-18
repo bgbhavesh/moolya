@@ -30,6 +30,7 @@ let DocumentMapping = `
           id   :  String
       } 
    type DocumentOutput{
+        _id:String
         documentId   : String
         documentName : String
         documentDisplayName : String
@@ -90,6 +91,7 @@ let DocumentMapping = `
       type Query{
         findDocument(documentId:String): DocumentOutput
         findDocuments: [DocumentOutput]
+        findProcessDocuments(kycId:String): [DocumentOutput]
       }
      
 `

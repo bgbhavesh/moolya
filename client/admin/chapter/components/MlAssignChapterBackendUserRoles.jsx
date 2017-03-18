@@ -5,8 +5,9 @@ import gql from "graphql-tag";
 import {findUserDepartmentypeActionHandler} from "../actions/findUserDepartments";
 import MoolyaSelect from "../../../commons/components/select/MoolyaSelect";
 import _ from 'lodash';
+import Datetime from 'react-datetime';
+import moment from 'moment'
 let FontAwesome = require('react-fontawesome');
-let Select = require('react-select');
 
 /*let initSwiper = () => {
  new Swiper('.blocks_in_form', {
@@ -30,10 +31,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         validFrom: '',
         validTo: '',
         isActive: '',
-        clusterId: this.props.clusterId,
-        chapterId: this.props.chapterId,
-        subChapterId: this.props.subChapterId,
-        communityId: "",
+        clusterId: this.props.clusterId?this.props.clusterId:"",
+        chapterId: this.props.chapterId?this.props.chapterId:"",
+        subChapterId: this.props.subChapterId?this.props.subChapterId:"",
+        communityId: this.props.communityId?this.props.communityId:"",
         hierarchyLevel: "",
         hierarchyCode: "",
         departmentId: '',
@@ -80,7 +81,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     let cloneBackUp = _.cloneDeep(roleDetails);
     let specificRole = cloneBackUp[did];
     specificRole.roles[index]['roleId'] = selectedValue;
-    specificRole.roles[index]['roleName'] = selObject.label;
+    // specificRole.roles[index]['roleName'] = selObject.label;
     specificRole.roles[index]['departmentId'] = this.state.roleForm[did]['department'];
     specificRole.roles[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
     specificRole.roles[index]['subDepartmentId'] = this.state.roleForm[did]['subDepartment'];
@@ -93,36 +94,40 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
   sendRolesToParent(){
     let value=this.state.rolesData;
-    let rolesArray=[];
+    let rolesArrayFinal=[];
     _.each(value, function (item,key) {
       _.each(item.roles, function (say,val) {
         if(say.roleId){
-          rolesArray.push(say)
+          rolesArrayFinal.push(say)
         }
       })
     })
-    this.props.getAssignedRoles(rolesArray);
+    this.props.getAssignedRoles(rolesArrayFinal);
   }
 
-  addRoleComponent(id) {
-    this.setState({
-      roleDetails: this.state.roleDetails.concat([{
-        roleId: '',
-        validFrom: '',
-        validTo: '',
-        isActive: '',
-        clusterId: this.props.clusterId,
-        chapterId: this.props.chapterId,
-        subChapterId: this.props.subChapterId,
-        communityId: "",
-        hierarchyLevel: "",
-        hierarchyCode: "",
-        departmentId: '',
-        departmentName: '',
-        subDepartmentId: '',
-        subDepartmentName: ''
-      }])
-    });
+  addRoleComponent(did) {
+    let emptyRoleBox = {
+      roleId: '',
+      validFrom: '',
+      validTo: '',
+      isActive: '',
+      clusterId: this.props.clusterId?this.props.clusterId:"",
+      chapterId: this.props.chapterId?this.props.chapterId:"",
+      subChapterId: this.props.subChapterId?this.props.subChapterId:"",
+      communityId: this.props.communityId?this.props.communityId:"",
+      hierarchyLevel: "",
+      hierarchyCode: "",
+      departmentId: '',
+      departmentName: '',
+      subDepartmentId: '',
+      subDepartmentName: ''
+    };
+
+    let allData = this.state.rolesData
+    let specificDepartment = allData[did];
+    let rolesArray=specificDepartment.roles;
+    rolesArray.push(emptyRoleBox);
+    this.setState({rolesData : allData});
   }
 
   isChapterAdmin(event) {
@@ -130,40 +135,49 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.props.getChapterAdmin(event.target.checked)
   }
 
-  onChange(id, event) {
-    let roleDetails = this.state.roleDetails
-    if (event.target.checked) {
-      roleDetails[id]['isActive'] = true;
-    } else {
-      roleDetails[id]['isActive'] = false;
-    }
-    this.setState({roleDetails: roleDetails})
-    this.props.getAssignedRoles(this.state.roleDetails)
+  onStatusChange(index, did, event) {
+    let value = event.target.checked
+    let roleDetails = this.state.rolesData;
+    let cloneBackUp = _.cloneDeep(roleDetails);
+    let specificRole = cloneBackUp[did];
+    specificRole.roles[index]['isActive'] = value;
+    roleDetails.splice(did, 1);
+    roleDetails.splice(did, 0, specificRole);
+    this.setState({loading:false, rolesData: roleDetails});
+    this.sendRolesToParent();
   }
 
-  onClickDate(id, event) {
-    let filedName = event.target.name
-    let fieldId = filedName + id
-    $("#" + fieldId).datepicker({format: 'dd-mm-yyyy', autoclose: true, stateDate: '+0d'});
-    $("#" + fieldId).focus();
-  }
+  // onClickDate(id, event) {
+  //   let filedName = event.target.name
+  //   let fieldId = filedName + id
+  //   $("#" + fieldId).datepicker({format: 'dd-mm-yyyy', autoclose: true, stateDate: '+0d'});
+  //   // $("#" + fieldId).focus();
+  // }
 
   onValidFromChange(index, did, event) {
-    if(event.target.value){
+    if(event._d){
+      let value = moment(event._d).format('DD-MM-YYYY');
       let roleDetails = this.state.rolesData;
-      let specificRole = roleDetails[did];
-      specificRole.roles[index]['validFrom'] = event.target.value;
-      this.setState({loading:false, rolesData: roleDetails})
+      let cloneBackUp = _.cloneDeep(roleDetails);
+      let specificRole = cloneBackUp[did];
+      specificRole.roles[index]['validFrom'] = value;
+      roleDetails.splice(did, 1);
+      roleDetails.splice(did, 0, specificRole);
+      this.setState({loading:false, rolesData: roleDetails});
       this.sendRolesToParent();
     }
   }
 
   onValidToChange(index, did , event) {
-    if (event.target.value){
+    if(event._d){
+      let value = moment(event._d).format('DD-MM-YYYY');
       let roleDetails = this.state.rolesData;
-      let specificRole = roleDetails[did];
-      specificRole.roles[index]['validTo'] = event.target.value;
-      this.setState({loading:false, rolesData: roleDetails})
+      let cloneBackUp = _.cloneDeep(roleDetails);
+      let specificRole = cloneBackUp[did];
+      specificRole.roles[index]['validTo'] = value;
+      roleDetails.splice(did, 1);
+      roleDetails.splice(did, 0, specificRole);
+      this.setState({loading:false, rolesData: roleDetails});
       this.sendRolesToParent();
     }
   }
@@ -174,16 +188,16 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     }
   }
 
-  rolesArray(departmentDetails, assignedRoles){
+  rolesArrayCreate(departmentDetails, assignedRoles){
     let emptyRoleBox= [{
       roleId: '',
       validFrom: '',
       validTo: '',
       isActive: '',
-      clusterId: this.props.clusterId,
-      chapterId: this.props.chapterId,
-      subChapterId: this.props.subChapterId,
-      communityId: "",
+      clusterId: this.props.clusterId?this.props.clusterId:"",
+      chapterId: this.props.chapterId?this.props.chapterId:"",
+      subChapterId: this.props.subChapterId?this.props.subChapterId:"",
+      communityId: this.props.communityId?this.props.communityId:"",
       hierarchyLevel: "",
       hierarchyCode: "",
       departmentId: '',
@@ -201,8 +215,9 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       json.departmentId=item.department;
       json.subDepartmentId=item.subDepartment;
       json.isAvailiable = item.isAvailiable;
+      let ary=[];
       _.each(assignedRoles, function (say, val) {
-        let ary=[];
+        // let ary=[];
         if(say.departmentId == item.department && say.subDepartmentId == item.subDepartment){
           ary.push(say);
           json.roles= ary;
@@ -225,7 +240,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     const response = await findUserDepartmentypeActionHandler(userId, subChapterId);
     let data = response ? response : []
     this.setState({roleForm: data});
-      this.rolesArray(data, this.props.assignedRoles)
+      this.rolesArrayCreate(data, this.props.assignedRoles)
       if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
       this.setState({chapterAdmin: this.props.chapterAdmin})
     }
@@ -235,10 +250,14 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     let that = this
     // let userDepartments = that.state.roleForm || [];
     // let roleDetails = that.state.roleDetails;
-    // departmentId: department.department,
-
+    var yesterday = Datetime.moment().subtract( 1, 'day' );
+    var validDate = function( current ){
+      return current.isAfter( yesterday );
+    }
     let userDepartments=that.state.rolesData || [];
     let chapterAdmin = that.state.chapterAdmin;
+    let validFrom = {placeholder:"Valid From"};
+    let validTo = {placeholder:"Valid To"}
     return (
       <div>
         {userDepartments.map(function (department, id) {
@@ -248,14 +267,16 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                 departmentId: department.departmentId,
                 clusterId: that.props.clusterId,
                 chapterId: that.props.chapterId,
-                subChapterId: that.props.subChapterId
+                subChapterId: that.props.subChapterId,
+                communityId: that.props.communityId
               }
             }
           };
           let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId) {value:_id, label:roleName}}`;
           return (
             <div className="panel panel-default" key={id}>
-              <div className="panel-heading">Assign Role</div>
+              <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right" onClick={that.addRoleComponent.bind(that, id)}/>
+              </div>
               {department.isAvailiable ? (
                 <div className="panel-body">
                   <div className="form-group">
@@ -266,7 +287,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                     <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
                            value={department.subDepartmentName}/>
                   </div>
-
                   <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
                                                       onChange={that.isChapterAdmin.bind(that)} disabled/><label
                     htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div>
@@ -277,37 +297,31 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                         {
                             return (
                               <div className="form_inner_block" key={idx}>
-                                <div className="add_form_block"><img src="/images/add.png"
-                                                                     onClick={that.addRoleComponent.bind(that, idx)}/>
-                                </div>
+                                {/*<div className="add_form_block"><img src="/images/add.png"*/}
+                                                                     {/*onClick={that.addRoleComponent.bind(that, idx, id)}/>*/}
+                                {/*</div>*/}
                                 <div className="form-group">
-                                  {department.isAvailiable?
-                                  <MoolyaSelect multiSelect={false} className="form-control float-label"
-                                  valueKey={'value'}
-                                  labelKey={'label'} queryType={"graphql"} query={query}
-                                  queryOptions={queryOptions} isDynamic={true}
-                                  onSelect={that.optionsBySelectRole.bind(that, idx, id)}
-                                  selectedValue={details.roleId}/>:<input type="text" defaultValue={details.roleName}
-                                                                          className="form-control float-label"
-                                                                          disabled="true"/>}
+                                  {details.roleName?<input type="text" defaultValue={details.roleName}
+                                                           className="form-control float-label"
+                                                           disabled="true"/>:
+                                    <MoolyaSelect multiSelect={false} className="form-control float-label"
+                                                  valueKey={'value'}
+                                                  labelKey={'label'} queryType={"graphql"} query={query}
+                                                  queryOptions={queryOptions} isDynamic={true}
+                                                  onSelect={that.optionsBySelectRole.bind(that, idx, id)}
+                                                  selectedValue={details.roleId}/>}
                                 </div>
                                 <div className="form-group left_al">
-                                  <input type="text" placeholder="Valid from" id={'validFrom' + idx} name={'validFrom'}
-                                         onFocus={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                         onBlur={that.onValidFromChange.bind(that, idx, id)}
-                                         value={details.validFrom}/>
+                                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={validFrom} isValidDate={validDate} closeOnSelect={true} value={details.validFrom} onChange={that.onValidFromChange.bind(that, idx, id)}/>
                                 </div>
                                 <div className="form-group left_al">
-                                  <input type="text" placeholder="Valid to" id={'validTo' + idx} name={'validTo'}
-                                         onClick={that.onClickDate.bind(that, idx)} className="form-control float-label"
-                                         onBlur={that.onValidToChange.bind(that, idx, id)}
-                                         value={details.validTo}/>
+                                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={validTo} isValidDate={validDate} closeOnSelect={true} value={details.validTo} onChange={that.onValidToChange.bind(that, idx, id)}/>
                                 </div>
                                 <div className="form-group switch_wrap">
                                   <label>Status</label>
                                   <label className="switch">
                                     <input type="checkbox" name={'status'} checked={details.isActive}
-                                           onChange={that.onChange.bind(that, idx)}/>
+                                           onChange={that.onStatusChange.bind(that, idx, id)}/>
                                     <div className="slider"></div>
                                   </label>
                                 </div>

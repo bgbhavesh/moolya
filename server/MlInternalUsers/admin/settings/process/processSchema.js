@@ -65,6 +65,7 @@ let Process = `
         type      :  String
         category  :  String
         isActive  :  Boolean
+        categoryName: String
         
     }
     
@@ -94,12 +95,35 @@ let Process = `
         id   :  String
     }
     input document{
-        type      :  String
-        category  :  String
+        type      :  String,
+        category  :  String,
         isActive  :  Boolean
         
     }
-    
+    input mappedDocuments{
+        mandatory:Boolean,
+        isActive:Boolean,
+        documentId:String,
+        documentDisplayName : String,
+        validity    : String,
+        inputLength : String,
+        remarks     : String,
+        allowableMaxSize  : String,
+        issuingAuthority  : String,
+        allowableFormat : [String],
+        clusters :[String],
+        chapters    : [String],
+        subChapters : [String],
+        kycCategory  : [String],
+        documentType   : [String],
+        isActive : Boolean
+    }
+    input processDocuments{
+        kycCategoryId:String,
+        docTypeId: String,
+        mappedDocuments:[mappedDocuments]
+        
+    }
     input processInput{
         processId   : String,
         process     : String,
@@ -113,7 +137,8 @@ let Process = `
         chapters    : [String],
         subChapters : [String],
         isActive    : Boolean,
-        documents   : [document]  
+        documents   : [document] ,
+   processDocuments : [processDocuments]
     }
     
     type Mutation {

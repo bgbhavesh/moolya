@@ -1,6 +1,6 @@
 import React from 'react';
-import {updateProcessActionHandler} from './updateProcessMappingAction'
-class ActiveCityFormatter extends React.Component {
+import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
+class DocumentActiveComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
@@ -20,32 +20,24 @@ class ActiveCityFormatter extends React.Component {
       this.setState({"data": {"isActive": false}});
     }
 
-    let ProcessDetails = {
-      processId   : data.processId,
-      process     : data.process,
-      communities : data.communities,
-      userTypes   : data.userTypes,
-      identity    : data.identity,
-      industries  : data.industries,
-      professions : data.professions,
-      clusters    : data.clusters,
-      states      : data.states,
-      chapters    : data.chapters,
-      subChapters : data.subChapters,
-      isActive    : this.refs.status.checked,
-      documents   : data.assignDocument
-    }
-let id=data.id
-   let response = await updateProcessActionHandler(id,ProcessDetails);
+    let StateDetails = {
+      id: data.id,
+      name: data.name,
+      countryId: data.countryId,
+      countryCode: data.countryCode,
+      isActive: this.refs.status.checked
+    };
+    const response= await updateProcessActionHandler(StateDetails);
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/documents/clusterList");
+        FlowRouter.go("/admin/settings/statesList");
       else
         toastr.error(response.result);
     }
   }
 
   render() {
+    //console.log(this.props.data);
     return (
       <div className="form-group switch_wrap"><label className="switch"><input type="checkbox" ref="status" id="status" checked={this.state.data && this.state.data.isActive} onChange={this.onChange.bind(this,this.props.data)}/><div className="slider"></div></label></div>
       // <input type='checkbox' checked={ this.props.data.isActive } onChange={this.onChange.bind(this,this.props.data)}/>
@@ -53,4 +45,4 @@ let id=data.id
   }
 };
 
-export default ActiveCityFormatter;
+export default DocumentActiveComponent;

@@ -19,8 +19,9 @@ import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import  RegisterForm from  '../../admin/transaction/requested/component/registerForm'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
+import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
-
+import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDocHeader';
 let userId = Meteor.userId();
 
 export const adminSection = FlowRouter.group({
@@ -98,6 +99,13 @@ adminSection.route('/documents/clusterList', {
     mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
   }
 });
+adminSection.route('/documents/:pid/:kycid/:docid', {
+  name: '',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping kycConfig={params.kycid} docConfig={params.docid}/>})
+  }
+});
+
 
 adminSection.route('/transactions/requestedList', {
   name: 'transaction_RequestList',

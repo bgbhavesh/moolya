@@ -288,11 +288,12 @@ export default class MlAssignBackednUserRoles extends React.Component {
             options: {
               variables: {
                 departmentId: department.departmentId,
-                clusterId: that.props.clusterId
+                clusterId: that.props.clusterId,
+                communityId: that.props.communityId
               }
             }
           };
-          let query = gql`query($departmentId:String, $clusterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId) {value:_id, label:roleName}}`;
+          let query = gql`query($departmentId:String, $clusterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, communityId:$communityId) {value:_id, label:roleName}}`;
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right"

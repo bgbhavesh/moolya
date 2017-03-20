@@ -39,8 +39,8 @@ export default class RegisterForm extends React.Component{
     let registrationId = this.props.config;
     const steps =
     [
-      {name: 'Basic info', component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
-      {name: 'Additional info', component: <Step2 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
+      {name: 'Basic info', component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails} registrationId={registrationId}/>},
+      {name: 'Additional info', component: <Step2 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails} registrationId={registrationId} community={'institution'}/>},
       {name: 'Contact details', component: <Step3 />},
       {name: 'Social links', component: <Step4 />},
       {name: 'KYC\'s Documents', component: <Step5 />},

@@ -25,3 +25,12 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   }
 }
 
+MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    var id= args.registrationId;
+    let updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo: args.registrationDetails}});
+    return updatedResponse
+  }
+}
+

@@ -76,9 +76,12 @@ class MlAuthorization
                 }
 
                 else {
-                    ret = self.validateRole(userRole.roleId, module, action)
-                    if(ret)
-                      return ret;
+                    user_roles.map(function (role) {
+                      ret = self.validateRole(role.roleId, module, action)
+                      if(ret)
+                        return ret;
+                    })
+
                 }
             }
             // if(isAuthorized){

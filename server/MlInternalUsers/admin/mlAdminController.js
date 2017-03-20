@@ -127,7 +127,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   if(config.registrationPath){
-    graphQLServer.use(config.registrationPath,multipartMiddleware, graphqlExpress(async (req,res) => {
+    graphQLServer.use(config.registrationPath,multipartMiddleware,Meteor.bindEnvironment((req,res) => {
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -135,7 +135,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let data = JSON.parse(req.body.data)
         let moduleName = data && data.moduleName;
         let documentId = data && data.documentId;
-        console.log(documentId);
         let response;
         let file  = req.files.file;
 
@@ -146,12 +145,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           switch (moduleName){
             case "REGISTRATION":{
               imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
-
-              imageUploadCallback=function(resp) {
-                let registrationDocumentUploadReq={documentId: data.documentId,moduleName: data.moduleName,actionName: data.actionName};
-                console.log(registrationDocumentUploadReq);
-                //response = MlResolver.MlMutationResolver['updateDocumentImage'](null, , context, null);
-              }
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                let registrationDocumentUploadReq={registrationId:data.registrationId,docUrl: resp,documentId:documentId,moduleName: data.moduleName,actionName: data.actionName};
+                MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null,registrationDocumentUploadReq, context, null);
+              });
               break;
             }
           }

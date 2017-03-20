@@ -249,6 +249,7 @@ let registrationSchema = `
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
+         updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

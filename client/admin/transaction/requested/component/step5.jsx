@@ -65,7 +65,8 @@ export default class Step5 extends React.Component{
   };
 
    onFileUpload(file,documentId){
-    let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId};
+    let id=this.props.registrationInfo&&this.props.registrationInfo._id?this.props.registrationInfo._id:'';
+    let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
 
@@ -76,6 +77,7 @@ export default class Step5 extends React.Component{
   }
 
   render(){
+    console.log(this.props.registrationInfo);
     let registrationDocuments=this.state.registrationDocuments||[];
     let registrationDocumentsGroup=_.groupBy(registrationDocuments,'docTypeName')||{};
     let that=this;

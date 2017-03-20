@@ -15,6 +15,8 @@ import getContext from './mlAuthContext'
 import MlResolver from './mlAdminResolverDef';
 import MlSchemaDef from './mlAdminSchemaDef';
 import _ from 'lodash';
+import ImageUploader from '../../commons/mlImageUploader';
+import MlRespPayload from '../../commons/mlPayload';
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -125,18 +127,52 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   if(config.registrationPath){
-    graphQLServer.use(config.registrationPath, bodyParser.json(), graphqlExpress(async (req) => {
-        var context = {};
-        context = getContext({req});
-        context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        if(req && req.body && req.body.data){
-            let data = JSON.parse(req.body.data)
-            let moduleName = data && data.moduleName
-            let response;
-            let file  = req.files.file;
+    graphQLServer.use(config.registrationPath,multipartMiddleware, graphqlExpress(async (req,res) => {
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req && req.body && req.body.data){
+        let data = JSON.parse(req.body.data)
+        let moduleName = data && data.moduleName;
+        let documentId = data && data.documentId;
+        console.log(documentId);
+        let response;
+        let file  = req.files.file;
 
-            //Your code
+        if(file){
+
+          let imageUploaderPromise=null;
+          let imageUploadCallback=null;
+          switch (moduleName){
+            case "REGISTRATION":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+
+              imageUploadCallback=function(resp) {
+                let registrationDocumentUploadReq={documentId: data.documentId,moduleName: data.moduleName,actionName: data.actionName};
+                console.log(registrationDocumentUploadReq);
+                //response = MlResolver.MlMutationResolver['updateDocumentImage'](null, , context, null);
+              }
+              break;
+            }
+          }
+
+          if(imageUploaderPromise) {
+            imageUploaderPromise.then(function (uploadResp) { //sucess
+              let response = null;
+              if (uploadResp) {
+                   imageUploadCallback(uploadResp);
+                let code = 200;
+                response = JSON.stringify(new MlRespPayload().successPayload(uploadResp, code));
+              }
+              res.send(response);
+            }, function (err) { //err
+              let response = new MlRespPayload().errorPayload("Failed to Upload the resource", 404);
+              res.send(response);
+            });
+
+          }
         }
+      }
     }));
   }
 

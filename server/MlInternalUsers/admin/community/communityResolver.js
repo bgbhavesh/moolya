@@ -108,7 +108,10 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
       communityAccess,
       clusters = [],
       chapters = [],
-      subChapters = [];
+      subChapters = [],
+      subChapterName = "",
+      clusterName = "",
+      chapterName = ""
 
     if(!args.communityId)
         return community
@@ -141,7 +144,11 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
       communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
       clusters = [clusterId];
       chapters = [chapterId];
-      subChapters= [subChapterId]
+      subChapters= [subChapterId];
+      let subChapter = MlSubChapters.findOne({_id: subChapterId});
+      subChapterName = subChapter.subChapterName;
+      clusterName = subChapter.clusterName;
+      chapterName = subChapter.chapterName;
     }
 
     else if(clusterId != "" && chapterId != "" ){
@@ -163,6 +170,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
         clusters = [clusterId];
         chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
         subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
+        clusterName = MlClusters.findOne({_id: clusterId}).clusterName;
 
     }
 
@@ -192,6 +200,9 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
         community["clusters"] = clusters;
         community["chapters"] = chapters;
         community["subchapters"] = subChapters;
+        community["clusterName"] = clusterName;
+        community["chapterName"] = chapterName;
+        community["subChapterName"] = subChapterName;
     }
     return community;
 }

@@ -142,7 +142,10 @@ let communitySchema = `
         isActive:Boolean,
         clusters:[String],
         chapters:[String],
-        subchapters:[String]
+        subchapters:[String],
+        clusterName:String,
+        chapterName:String,
+        subChapterName:String
     }
     
     input community{

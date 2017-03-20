@@ -6,7 +6,7 @@ export async function findRegistrationActionHandler(registrationId) {
   const result = await client.query({
     query: gql`
     query($id: String){
-        findRegistrationInfo(registrationId:$id){
+        findRegistrationInfo(registrationId:$id){          
           userType
           firstName
           lastName

@@ -70,7 +70,7 @@ class MlChapterCommunityDetails extends React.Component {
   }
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/cluster");
+    FlowRouter.go("/admin/chapters");
   };
 
   async findComDef() {
@@ -128,23 +128,23 @@ class MlChapterCommunityDetails extends React.Component {
     return response;
   }
 
-  optionsBySelectClusters(val) {
-    let clusters = this.state.clusters
-    clusters = val;
-    this.setState({clusters: clusters})
-  }
-
-  optionsBySelectChapters(val) {
-    let chapters = this.state.chapters
-    chapters = val;
-    this.setState({chapters: chapters})
-  }
-
-  optionsBySelectSubChapters(val) {
-    let subchapters = this.state.subchapters
-    subchapters = val;
-    this.setState({subchapters: subchapters})
-  }
+  // optionsBySelectClusters(val) {
+  //   let clusters = this.state.clusters
+  //   clusters = val;
+  //   this.setState({clusters: clusters})
+  // }
+  //
+  // optionsBySelectChapters(val) {
+  //   let chapters = this.state.chapters
+  //   chapters = val;
+  //   this.setState({chapters: chapters})
+  // }
+  //
+  // optionsBySelectSubChapters(val) {
+  //   let subchapters = this.state.subchapters
+  //   subchapters = val;
+  //   this.setState({subchapters: subchapters})
+  // }
 
   onStatusChange(e) {
     const data = this.state.data;
@@ -169,21 +169,21 @@ class MlChapterCommunityDetails extends React.Component {
       }
     ]
 
-    let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
-    let chapterquery = gql`query($clusters:[String]){  
-        data:fetchActiveClusterChapters(clusters:$clusters) {
-          value:_id
-          label:chapterName
-        }  
-    }`;
-    let subChapterquery = gql`query($chapters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
-          value:_id
-          label:subChapterName
-        }  
-    }`;
-    let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
-    let subChapterOption = {options: {variables: {chapters: this.state.chapters}}};
+    // let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    // let chapterquery = gql`query($clusters:[String]){
+    //     data:fetchActiveClusterChapters(clusters:$clusters) {
+    //       value:_id
+    //       label:chapterName
+    //     }
+    // }`;
+    // let subChapterquery = gql`query($chapters:[String]){
+    //     data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+    //       value:_id
+    //       label:subChapterName
+    //     }
+    // }`;
+    // let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
+    // let subChapterOption = {options: {variables: {chapters: this.state.chapters}}};
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -204,22 +204,13 @@ class MlChapterCommunityDetails extends React.Component {
                            placeholder="Display Name" className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
-                                  valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters}
-                                  queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
-                                  onSelect={this.optionsBySelectClusters.bind(this)} disabled="disabled"/>
+                      <input type="text" defaultValue={this.state.data && this.state.data.clusterName} placeholder="Cluster" className="form-control float-label" id="" disabled="disabled"/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
-                                  valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
-                                  queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} disabled="disabled"/>
+                      <input type="text" defaultValue={this.state.data && this.state.data.chapterName} placeholder="Chapter" className="form-control float-label" id="" disabled="disabled"/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"
-                                  valueKey={'value'} labelKey={'label'} selectedValue={this.state.subchapters}
-                                  queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} disabled="disabled"/>
+                      <input type="text" defaultValue={this.state.data && this.state.data.subChapterName} placeholder="Sub Chapter" className="form-control float-label" id="" disabled="disabled"/>
                   </div>
                 </form>
               </div>

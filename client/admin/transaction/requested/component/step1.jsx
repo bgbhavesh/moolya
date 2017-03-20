@@ -5,8 +5,9 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 var Select = require('react-select');
 import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
-import {findRegistrationActionHandler} from '../actions/findRegistration'
 import ScrollArea from 'react-scrollbar';
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [
@@ -35,9 +36,8 @@ export default class Step1 extends React.Component{
   }
   componentWillMount() {
     let details=this.props.registrationInfo;
-    this.setState({loading:false,registrationDetails:details})
+    this.setState({loading:false,registrationDetails:details,registrationId:this.props.registrationId})
   }
-  compo
 
   componentDidMount()
   {
@@ -68,12 +68,21 @@ export default class Step1 extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    this.props.getRegistrationDetails(this.state)
+    const resp=this.updateregistrationInfo();
+    return resp;
   }
+
+  async handleError(response) {
+    //alert(response)
+  };
+
+  async handleSuccess(response) {
+    FlowRouter.go("/admin/transactions/editRequests/");
+  };
 
   async  updateregistrationInfo() {
     let Details = {
-      id : this.props.config,
+      registrationId : this.state.registrationId,
       registrationDetail:{
       firstName       :  this.refs.firstName.value,
       lastName        :  this.refs.lastName.value,
@@ -94,11 +103,18 @@ export default class Step1 extends React.Component{
       chapterId       :  this.state.chapter
     }
     }
-    this.props.getRegistrationDetails(this.state.registrationDetails);
+    this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
   render(){
+    let MlActionConfig = [
+      {
+        actionName: 'edit',
+        showAction: true,
+        handler: async(event) => this.props.handler(this.updateregistrationInfo.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+      }
+    ]
 
   let countryQuery=gql`query{
  data:fetchCountries {
@@ -177,7 +193,7 @@ export default class Step1 extends React.Component{
                   <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="emailId" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.emailId}  placeholder="Email ID" className="form-control float-label" id=""/>
+                  <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.emailId}  placeholder="Email ID" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>
@@ -253,8 +269,11 @@ export default class Step1 extends React.Component{
             </div>
           </div>
         </ScrollArea>
-      </div>)}
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+      </div>
+        )}
       </div>
     )
   }
 };
+/*export default Step1 = formHandler()(Step1);*/

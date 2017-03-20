@@ -125,6 +125,7 @@ let registrationSchema = `
         assignedUser    :   String
     }
     
+    
     type RegistrationInfo{
         _id             :   String,
         userType        :   String,
@@ -183,7 +184,7 @@ let registrationSchema = `
           foundationDate:  Date,
           headQuarterLocation: String,
           branchLocations: [branchLocation]
-          companyType: String,
+          companytype: String,
           entityType:  String,
           businessType: String,
           industry: String,

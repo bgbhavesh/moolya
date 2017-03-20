@@ -40,7 +40,7 @@ export default class RegisterForm extends React.Component{
     const steps =
     [
       {name: 'Basic info', component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
-      {name: 'Additional info', component: <Step2 registrationId={this.state.registrationDetails}/>},
+      {name: 'Additional info', component: <Step2 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
       {name: 'Contact details', component: <Step3 />},
       {name: 'Social links', component: <Step4 />},
       {name: 'KYC\'s Documents', component: <Step5 />},

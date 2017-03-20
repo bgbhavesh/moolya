@@ -36,9 +36,8 @@ export default class Step1 extends React.Component{
   }
   componentWillMount() {
     let details=this.props.registrationInfo;
-    this.setState({loading:false,registrationDetails:details})
+    this.setState({loading:false,registrationDetails:details,registrationId:this.props.registrationId})
   }
-  compo
 
   componentDidMount()
   {
@@ -83,7 +82,7 @@ export default class Step1 extends React.Component{
 
   async  updateregistrationInfo() {
     let Details = {
-      id : this.props.config,
+      registrationId : this.state.registrationId,
       registrationDetail:{
       firstName       :  this.refs.firstName.value,
       lastName        :  this.refs.lastName.value,

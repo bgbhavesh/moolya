@@ -15,32 +15,42 @@ export default class RegisterForm extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      registrationId:null
+    loading:true,
+    registrationDetails:''
     }
-
+    this.findRegistration.bind(this);
     return this;
   }
+  getRegistrationDetails(details){
+    this.setState({'registrationDetails':details})
+  }
   componentWillMount() {
-    let registrationId = this.props.config;
-    this.setState({loading: false, registrationId: registrationId});
+    const resp=this.findRegistration();
+    return resp;
+  }
+  async findRegistration() {
+    const response = await findRegistrationActionHandler(this.props.config);
+    console.log(response)
+    this.setState({loading: false, registrationDetails: response});
+    return response;
   }
 
-componentDidMount()
-  { }
   render(){
-   /* let registrationId = this.props.config;*/
+    let registrationId = this.props.config;
     const steps =
     [
-      {name: 'Basic info', component: <Step1 registrationId={this.state.registrationId}/>},
-      {name: 'Additional info', component: <Step2 registrationId={this.state.registrationId}/>},
+      {name: 'Basic info', component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
+      {name: 'Additional info', component: <Step2 registrationId={this.state.registrationDetails}/>},
       {name: 'Contact details', component: <Step3 />},
       {name: 'Social links', component: <Step4 />},
       {name: 'KYC\'s Documents', component: <Step5 />},
       {name: 'Payment gateway', component: <Step6 />},
       {name: 'History', component: <Step7 />}
     ]
+    const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
         <div className="admin_padding_wrap">
       {/*<h2>Registration Process</h2>*/}
     <div className='step-progress' >
@@ -48,7 +58,7 @@ componentDidMount()
                     <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true} />
                   </div>
                </div>
-      </div>
+      </div>)}
       </div>
     )
   }

@@ -18,38 +18,32 @@ export default class Step1 extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      loading:true,
       country:'',
       cluster:'',
       chapter:'',
       selectedCity:'',
       registrationId:'',
       registrationDetails:'',
-      instituteAssociation:'',
       subscription:'',
       registrationType:'',
-      refered:''
-
+      refered:'',
+      institutionAssociation:''
     }
-    this.findRegistration.bind(this);
+
     return this;
   }
   componentWillMount() {
-    const resp=this.findRegistration();
-    return resp;
+    let details=this.props.registrationInfo;
+    this.setState({loading:false,registrationDetails:details})
   }
-  async findRegistration() {
-    const response = await findRegistrationActionHandler(this.state.registrationId);
-    console.log(response)
-    this.setState({loading: false, registrationDetails: response});
-    return response;
-  }
+  compo
 
-componentDidMount()
+  componentDidMount()
   {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-    this.setState({loading: false, registrationId:this.props.registrationId});
-
+    //this.props.getRegistrationDetails(this.state)
   }
   optionsBySelectCountry(val){
       this.setState({country:val})
@@ -72,6 +66,11 @@ componentDidMount()
   optionBySelectRefered(val){
     this.setState({refered:val.value})
   }
+  optionBySelectinstitutionAssociation(val){
+    this.setState({institutionAssociation:val.value})
+    this.props.getRegistrationDetails(this.state)
+  }
+
   async  updateregistrationInfo() {
     let Details = {
       id : this.props.config,
@@ -86,7 +85,7 @@ componentDidMount()
       userName        :  this.refs.userName.value,
       password        :  this.refs.password.value,
       accountType     :  this.state.subscription,
-      institutionAssociation    :   this.state.instituteAssociation,
+      institutionAssociation    :   this.state.institutionAssociation,
       companyName     :  this.refs.companyName.value,
       companyUrl      :  this.refs.companyUrl.value,
       remarks         :  this.refs.remarks.value,
@@ -95,6 +94,7 @@ componentDidMount()
       chapterId       :  this.state.chapter
     }
     }
+    this.props.getRegistrationDetails(this.state.registrationDetails);
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
@@ -150,7 +150,10 @@ componentDidMount()
     const showLoader=this.state.loading;
     let that=this;
     return (
+      <div className="admin_main_wrap">
+      {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="step_form_wrap step1">
+
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
@@ -162,7 +165,7 @@ componentDidMount()
                   <input type="text" placeholder="Request ID" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" id=""/>
+                  <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" />
                 </div>
                 <div className="form-group">
                   <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id=""/>
@@ -220,7 +223,7 @@ componentDidMount()
                   <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institiotion" value={this.state.subscription}  options={options3} className="float-label"/>
+                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institiotion" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName}  className="form-control float-label" id=""/>
@@ -250,6 +253,7 @@ componentDidMount()
             </div>
           </div>
         </ScrollArea>
+      </div>)}
       </div>
     )
   }

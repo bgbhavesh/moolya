@@ -38,22 +38,26 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => {
   let user = Meteor.users.findOne({_id: args.userId});
   if(user){
-      let profile = args.userProfile;
-      let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+      let profile = args.userProfile;  //cl
+      let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles; //db
 
       if(userProfiles && userProfiles.length > 0){
-          let index = _.findIndex(userProfiles, {clusterId:profile.clusterId})
+          let index = _.findIndex(userProfiles, {clusterId:profile.clusterId})     //db
           if(index >= 0)
           {
               // userProfiles[index].userroles.push(profile.userroles)
-              let roles     = profile.userRoles;
-              let userRoles = userProfiles[index].userRoles;
-              roles.map(function (role)
+              let roles     = profile.userRoles;                //cl
+              let userRoles = userProfiles[index].userRoles;    //db
+              roles.map(function (role, key)
               {
-                  let mlRole = MlRoles.findOne({"_id":role.roleId})
+                  // let mlRole = MlRoles.findOne({"_id":role.roleId})
                   let action =_.find(userRoles, {"roleId": role.roleId, roleName:role.roleName, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId, "departmentId":role.departmentId, "subDepartmentId":role.subDepartmentId});
                   if(!action){
                       userRoles.push(role)
+                  }else {
+                    userRoles[key].validTo = role.validTo;
+                    userRoles[key].validFrom = role.validFrom;
+                    userRoles[key].isActive = role.isActive;
                   }
               })
               userProfiles[index].userRoles = userRoles;
@@ -67,8 +71,11 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
       if(args.moolyaProfile && args.moolyaProfile.displayName){
         user.profile.InternalUprofile.moolyaProfile.displayName = args.moolyaProfile.displayName
       }
-      let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
-      if(resp){
+
+    // let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
+    let resp = Meteor.users.update({_id:args.userId}, {$set:{"profile":user.profile}})
+
+    if(resp){
         let code = 200;
         let result = {user: resp}
         let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
@@ -461,7 +468,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
         levelCode = "CLUSTER"
         role.chapterId = "all"
         role.subChapterId = "all"
-      }  
+      }
       else if(role.clusterId){
           levelCode = "CLUSTER"
           role.chapterId = "all"

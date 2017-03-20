@@ -184,6 +184,13 @@ class MlClusterCommunityDetails extends React.Component {
     }`;
     let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
     let subChapterOption = {options: {variables: {chapters: this.state.chapters}}};
+    let isEditable, isClusterEditable;
+    if(this.props.params.communityId && this.props.params.subChapterId) {
+      isEditable = "disabled";
+      isClusterEditable = "disabled";
+    } else if(this.props.params.clusterId && this.props.params.communityId && !this.props.params.subChapterId){
+      isClusterEditable = "disabled";
+    }
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -207,19 +214,19 @@ class MlClusterCommunityDetails extends React.Component {
                     <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters}
                                   queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
-                                  onSelect={this.optionsBySelectClusters.bind(this)} disabled="disabled"/>
+                                  onSelect={this.optionsBySelectClusters.bind(this)} disabled={isClusterEditable}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
                                   queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}/>
+                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} disabled={isEditable}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.subchapters}
                                   queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}/>
+                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} disabled={isEditable}/>
                   </div>
                 </form>
               </div>

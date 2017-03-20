@@ -151,13 +151,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.sendRolesToParent();
   }
 
-  // onClickDate(id, event) {
-  //   let filedName = event.target.name
-  //   let fieldId = filedName + id
-  //   $("#" + fieldId).datepicker({format: 'dd-mm-yyyy', autoclose: true, stateDate: '+0d'});
-  //   // $("#" + fieldId).focus();
-  // }
-
   onValidFromChange(index, did, event) {
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
@@ -220,7 +213,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       json.isAvailiable = item.isAvailiable;
       let ary = [];
       _.each(assignedRoles, function (say, val) {
-        // let ary=[];
         if (say.departmentId == item.department && say.subDepartmentId == item.subDepartment) {
           ary.push(say);
           json.roles = ary;
@@ -257,10 +249,14 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     var validDate = function (current) {
       return current.isAfter(yesterday);
     }
+    let clusterId = that.props.clusterId
+    let chapterId = that.props.chapterId
+    let subChapterId = that.props.subChapterId
+    let communityId = ''
+
     let userDepartments = that.state.rolesData || [];
     let chapterAdmin = that.state.chapterAdmin;
-    let validFrom = {placeholder: "Valid From"};
-    let validTo = {placeholder: "Valid To"}
+
     return (
       <div>
         {userDepartments.map(function (department, id) {
@@ -314,20 +310,34 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                                 selectedValue={details.roleId}/>}
                               </div>
                               <div className="form-group left_al">
-                                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={validFrom}
-                                          isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
-                                          onChange={that.onValidFromChange.bind(that, idx, id)}/>
+                                {(details.roleName === "chapteradmin")?(subChapterId = 'all'):(subChapterId = that.props.subChapterId)}
+                                {(details.clusterId == clusterId && details.chapterId == chapterId && details.subChapterId == subChapterId) ?
+                                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                            inputProps={{placeholder: "Valid From"}}
+                                            isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
+                                            onChange={that.onValidFromChange.bind(that, idx, id)}/> :
+                                  <input type="text" defaultValue={details.validTo}
+                                         className="form-control float-label"
+                                         disabled="true"/>}
                               </div>
                               <div className="form-group left_al">
-                                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={validTo}
-                                          isValidDate={validDate} closeOnSelect={true} value={details.validTo}
-                                          onChange={that.onValidToChange.bind(that, idx, id)}/>
+                                {(details.clusterId == clusterId && details.chapterId == chapterId && details.subChapterId == subChapterId) ?
+                                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                            inputProps={{placeholder: "Valid To"}}
+                                            isValidDate={validDate} closeOnSelect={true} value={details.validTo}
+                                            onChange={that.onValidToChange.bind(that, idx, id)}/> :
+                                  <input type="text" defaultValue={details.validTo}
+                                         className="form-control float-label"
+                                         disabled="true"/>}
                               </div>
                               <div className="form-group switch_wrap">
                                 <label>Status</label>
                                 <label className="switch">
-                                  <input type="checkbox" name={'status'} checked={details.isActive}
-                                         onChange={that.onStatusChange.bind(that, idx, id)}/>
+                                  {(details.clusterId == clusterId && details.chapterId == chapterId && details.subChapterId == subChapterId) ?
+                                    <input type="checkbox" name={'status'} checked={details.isActive}
+                                           onChange={that.onStatusChange.bind(that, idx, id)}/> :
+                                    <input type="checkbox" name={'status'} checked={details.isActive} disabled
+                                           onChange={that.onStatusChange.bind(that, idx, id)}/>}
                                   <div className="slider"></div>
                                 </label>
                               </div>
@@ -359,3 +369,5 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     )
   }
 }
+//
+

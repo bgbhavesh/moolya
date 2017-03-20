@@ -31,8 +31,8 @@ module.exports = class s3Client{
                 callback(err, response);
             }
             else{
-                let url = self.client.endpoint.href+s3Bucket+bucketFolder+filename;
-                callback(err, url);
+                let url = self.client.endpoint.href+s3Bucket+"/"+bucketFolder+filename;
+                callback(err,url);
             }
 
         }));

@@ -125,8 +125,12 @@ let registrationSchema = `
         assignedUser    :   String
     }
     
+    type RegistrationResponse{
+        _id             :   String,
+        registrationInfo :  RegistrationInfo
+    }
     
-    type RegistrationInfo{
+    type RegistrationInfo{        
         _id             :   String,
         userType        :   String,
         firstName       :   String,
@@ -248,7 +252,7 @@ let registrationSchema = `
     }
     type Query{
         findRegistration(registrationId:String):Registration
-        findRegistrationInfo(registrationId:String):RegistrationInfo
+        findRegistrationInfo(registrationId:String):RegistrationResponse
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);

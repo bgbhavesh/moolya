@@ -22,12 +22,30 @@ export default class RegisterForm extends React.Component{
     return this;
   }
   getRegistrationDetails(details){
-    this.setState({'registrationDetails':details})
+    let data = this.state.registrationDetails;
+    data.registrationInfo = details;
+    this.setState({'registrationDetails':data})
+  }
+  getRegistrationContactDetails(details){
+    let data = this.state.registrationDetails;
+    //refer proper object
+    this.setState({'registrationDetails':data})
+  }
+  getRegistrationSocialLinks(details){
+    let data = this.state.registrationDetails;
+    //refer proper object
+    this.setState({'registrationDetails':data})
+  }
+  getRegistrationKYCDetails(details){
+    let data = this.state.registrationDetails;
+    //refer proper object
+    this.setState({'registrationDetails':data})
   }
   componentWillMount() {
     const resp=this.findRegistration();
     return resp;
   }
+
   async findRegistration() {
     const response = await findRegistrationActionHandler(this.props.config);
     console.log(response)
@@ -39,11 +57,11 @@ export default class RegisterForm extends React.Component{
     let registrationId = this.props.config;
     const steps =
     [
-      {name: 'Basic info', component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails} registrationId={registrationId}/>},
+      {name: 'Basic info', component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails.registrationInfo} registrationId={registrationId}/>},
       {name: 'Additional info', component: <Step2 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails} registrationId={registrationId} community={'institution'}/>},
-      {name: 'Contact details', component: <Step3 />},
-      {name: 'Social links', component: <Step4 />},
-      {name: 'KYC\'s Documents', component: <Step5 />},
+      {name: 'Contact details', component: <Step3 getRegistrationContactDetails={this.getRegistrationContactDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
+      {name: 'Social links', component: <Step4 getRegistrationSocialLinks={this.getRegistrationSocialLinks.bind(this)} registrationInfo={this.state.registrationDetails}/>},
+      {name: 'KYC\'s Documents', component: <Step5 getRegistrationKYCDetails={this.getRegistrationKYCDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
       {name: 'Payment gateway', component: <Step6 />},
       {name: 'History', component: <Step7 />}
     ]

@@ -70,13 +70,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   optionsBySelectRole(index, did, selectedValue, callback, selObject) {
-    if (selObject.label == "subchapteradmin") {
-      $("#chapter_admin_check").removeAttr('disabled');
-    } else {
-      this.setState({chapterAdmin: false});
-      this.props.getChapterAdmin(false);
-      $("#chapter_admin_check").attr('disabled', 'disabled');
-    }
     let roleDetails = this.state.rolesData;
     let cloneBackUp = _.cloneDeep(roleDetails);
     let specificRole = cloneBackUp[did];
@@ -89,6 +82,17 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     roleDetails.splice(did, 1);
     roleDetails.splice(did, 0, specificRole);
     this.setState({loading: false, rolesData: roleDetails});
+
+    if (this.state.roleForm[did]['departmentName'] == "operations") {
+      if (selObject.label == "subchapteradmin") {
+        $("#chapter_admin_check").removeAttr('disabled');
+      } else {
+        this.setState({chapterAdmin: false});
+        this.props.getChapterAdmin(false);
+        $("#chapter_admin_check").attr('disabled', 'disabled');
+      }
+    }
+
     this.sendRolesToParent();
   }
 
@@ -130,7 +134,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.setState({rolesData: allData});
   }
 
-  isChapterAdmin(event) {
+  isChapterAdmin(did, event) {
     this.setState({chapterAdmin: event.target.checked})
     this.props.getChapterAdmin(event.target.checked)
   }
@@ -287,18 +291,17 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                     <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
                            value={department.subDepartmentName}/>
                   </div>
-                  <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
-                                                      onChange={that.isChapterAdmin.bind(that)} disabled/><label
-                    htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div>
+                  {(department.departmentName == "operations") ?
+                    <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
+                                                        onChange={that.isChapterAdmin.bind(that, id)} disabled/><label
+                      htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div> : <div></div>}
+
                   <br className="brclear"/>
                   <div className="">
                     <div className="">
                       {department.roles.map(function (details, idx) {
                           return (
                             <div className="form_inner_block" key={idx}>
-                              {/*<div className="add_form_block"><img src="/images/add.png"*/}
-                              {/*onClick={that.addRoleComponent.bind(that, idx, id)}/>*/}
-                              {/*</div>*/}
                               <div className="form-group">
                                 {details.roleName ? <input type="text" defaultValue={details.roleName}
                                                            className="form-control float-label"

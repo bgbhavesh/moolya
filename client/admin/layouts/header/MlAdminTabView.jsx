@@ -177,12 +177,13 @@ export default class MlTabView extends Component {
         }
 
         let isDynamicLink=option.dynamicLink||false;
+        let isDisabled = option.isDisabled || false;
         let menuLink=option.link;
         if(isDynamicLink){
           menuLink=dynamicLinkHandler(option.uniqueId,params,queryParams);
         }
         return (
-          <li key={option.name} className="swiper-slide">
+          <li key={option.name} className="swiper-slide" disabled={isDisabled}>
             <div className={`moolya_btn ${activeClass} `}
                  onClick={this.subMenuClick}><a href={menuLink}
                                                 className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>

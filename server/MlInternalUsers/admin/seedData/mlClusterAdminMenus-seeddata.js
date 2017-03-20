@@ -4,19 +4,20 @@ if(Meteor.isServer){
     "menu" : [
       {
         "image" : "/images/db_icon.png",
-        "link" : "/admin/dashboard/clusters",
+        "link" : "/admin/dashboard/chapters",
         "name" : "dashboard",
         "uniqueId" : "dashboard",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/dashboard/clusters",
+            "link" : "",
             "name" : "Clusters",
             "uniqueId" : "dashboard_clusters",
-            "subMenuMappingId":"dashboard_clusters",
+            "subMenuMappingId":"",
             "subMenusId":"dashboard",
-            "isLink" : true,
+            "isLink" : false,
+            "isDisabled":true,
             "isMenu" : true,
             "image" : ""
           },

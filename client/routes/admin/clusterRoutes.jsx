@@ -79,7 +79,7 @@ adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterNam
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
   name: 'cluster_chapter_assignusers',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignChapterBackendUsers params={params}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/communities', {

@@ -1,7 +1,7 @@
 /**
  * Created by venkatasrinag on 21/2/17.
  */
-export async function multipartFormHandler(data, file) {
+export async function multipartFormHandler(data, file,endPoint) {
     // if(!file)
     //     return  false;
 
@@ -23,8 +23,8 @@ export async function multipartFormHandler(data, file) {
 
         if(filexmlhttp){
             const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
-
-            filexmlhttp.open('POST', Meteor.absoluteUrl('adminMultipartFormData'), true);
+            let serverEndPoint=endPoint?endPoint:Meteor.absoluteUrl('adminMultipartFormData');
+            filexmlhttp.open('POST',serverEndPoint , true);
             filexmlhttp.setRequestHeader("enctype", "multipart/form-data");
             filexmlhttp.setRequestHeader('meteor-login-token',localStorageLoginToken);
             filexmlhttp.onreadystatechange = function() {
@@ -39,4 +39,57 @@ export async function multipartFormHandler(data, file) {
     console.log(result)
     const id = result;
     return id
+}
+
+export function multipartASyncFormHandler(data,file,endPoint,callback) {
+  let formdata = new FormData();
+    formdata.append('data', JSON.stringify(data));
+  if(file)
+    formdata.append('file', file);
+
+    // Make ajax call
+    let filexmlhttp;
+    if (window.XMLHttpRequest) {
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      filexmlhttp = new XMLHttpRequest();
+    } else {
+      // code for IE6, IE5
+      filexmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    if(filexmlhttp){
+      const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
+      let serverEndPoint=Meteor.absoluteUrl(endPoint)?Meteor.absoluteUrl(endPoint):Meteor.absoluteUrl('');
+      filexmlhttp.open('POST',serverEndPoint , true);
+      filexmlhttp.setRequestHeader("enctype", "multipart/form-data");
+      filexmlhttp.setRequestHeader('meteor-login-token',localStorageLoginToken);
+
+      filexmlhttp.addEventListener("load", function () {
+
+        if (filexmlhttp.status < 400) {
+            callback(filexmlhttp.response);
+        }
+        else {
+            callback({success:false,code:500,result:"error"});
+        }
+      });
+
+      filexmlhttp.addEventListener("error", function () {
+            callback({success:false,code:500,result:"error"});
+      });
+
+      filexmlhttp.addEventListener("abort", function () {
+        callback({success:false,code:500,result:"error"});
+      });
+
+      /*filexmlhttp.onreadystatechange = function() {
+        if (filexmlhttp.readyState === 4 && filexmlhttp.status === 200) {
+          console.log(filexmlhttp.response);
+          callback(filexmlhttp.response);
+        }
+      }*/
+
+      filexmlhttp.send(formdata);
+    }
+
 }

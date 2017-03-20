@@ -70,7 +70,7 @@ class MlClusterCommunityDetails extends React.Component {
   }
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/cluster");
+    FlowRouter.go("/admin/clusters");
   };
 
   async findComDef() {
@@ -211,22 +211,33 @@ class MlClusterCommunityDetails extends React.Component {
                            placeholder="Display Name" className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
-                                  valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters}
-                                  queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
-                                  onSelect={this.optionsBySelectClusters.bind(this)} disabled={isClusterEditable}/>
+                    {isClusterEditable === "disabled"? (
+                      <input type="text" defaultValue={this.state.data && this.state.data.clusterName} placeholder="Cluster" className="form-control float-label" id="" disabled={isClusterEditable}/>)
+                    : <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
+                                    valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters}
+                                    queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
+                                    onSelect={this.optionsBySelectClusters.bind(this)}/>
+                    }
+
+
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
-                                  valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
-                                  queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} disabled={isEditable}/>
+                    {isEditable === "disabled"? (
+                      <input type="text" defaultValue={this.state.data && this.state.data.chapterName} placeholder="Chapter" className="form-control float-label" id="" disabled={isEditable}/>)
+                      : <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
+                                      valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
+                                      queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
+                                      isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}/>
+                    }
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"
-                                  valueKey={'value'} labelKey={'label'} selectedValue={this.state.subchapters}
-                                  queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} disabled={isEditable}/>
+                    {isEditable === "disabled"? (
+                      <input type="text" defaultValue={this.state.data && this.state.data.subChapterName} placeholder="Sub Chapter" className="form-control float-label" id="" disabled={isEditable}/>)
+                      : <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"
+                                      valueKey={'value'} labelKey={'label'} selectedValue={this.state.subchapters}
+                                      queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption}
+                                      isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}/>
+                    }
                   </div>
                 </form>
               </div>

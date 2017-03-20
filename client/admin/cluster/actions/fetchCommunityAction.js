@@ -16,7 +16,10 @@ export async function findCommunityActionHandler(clusterId,chapterId,subChapterI
             isActive,
             clusters,
             chapters,
-            subchapters
+            subchapters,
+            clusterName,
+            chapterName,
+            subChapterName
         }
       }
     `,

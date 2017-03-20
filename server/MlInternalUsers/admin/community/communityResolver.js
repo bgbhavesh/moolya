@@ -100,11 +100,14 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
     communitiesAccess.map(function (communityAccess) {
         let platformCommunity = MlCommunityAccess.findOne({"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode});
         let community = {};
+        if(!platformCommunity.isActive)
+          communityAccess.isActive  = false
+
         community["name"] = communityAccess.communityDefName;
         community["displayName"] = communityAccess.displayName;
         community["code"] = communityAccess.communityDefCode;
         community["showOnMap"] = communityAccess.showOnMap;
-        community["isActive"] = communityAccess.isActive && ((platformCommunity.isActive == true)) ? communityAccess.isActive : platformCommunity.isActive;
+        community["isActive"] = communityAccess.isActive;
         community["communityImageLink"] = communityAccess.communityImageLink;
         community["clusters"] = [communityAccess.clusterId];
         community["chapters"] = [communityAccess.chapterId];
@@ -147,30 +150,36 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
     let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
 
-    if(clusterId != ""){
+    if(clusterId != "" && chapterId != "" && subChapterId != "")
+    {
+      subChapterQuery = {"$and":[{subChapterId:subChapterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
+      communityAccess = MlCommunityAccess.findOne(subChapterQuery);
+      communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+      clusters = [clusterId];
+      chapters = [chapterId];
+      subChapters= [subChapterId]
+    }
+
+    else if(clusterId != "" && chapterId != "" ){
+        chapterQuery = {"$and":[{chapterId:chapterId, hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
+        subChapterQuery = {"$and":[{chapterId:chapterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
+        communityAccess = MlCommunityAccess.findOne(chapterQuery);
+        communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+        clusters = [clusterId];
+        chapters = [chapterId];
+        subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
+    }
+
+    else if(clusterId != ""){
         clusterQuery = {"$and":[{clusterId:clusterId, hierarchyCode:"CLUSTER", communityDefCode:args.communityId, "isActive":true}]};
         chapterQuery = {"$and":[{clusterId:clusterId, hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
         subChapterQuery = {"$and":[{clusterId:clusterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
         communityAccess = MlCommunityAccess.findOne(clusterQuery);
         communitiesAccess = MlCommunityAccess.find(chapterQuery).fetch();
+        clusters = [clusterId];
         chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
         subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
 
-    }
-
-    if(chapterId != "" ){
-        chapterQuery = {"$and":[{chapterId:chapterId, hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-        subChapterQuery = {"$and":[{chapterId:chapterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-        communityAccess = MlCommunityAccess.findOne(chapterQuery);
-        communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
-        chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
-        subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
-    }
-    if(subChapterId != ""){
-      subChapterQuery = {"$and":[{subChapterId:subChapterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-      communityAccess = MlCommunityAccess.findOne(subChapterQuery);
-      communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
-      subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
     }
 
     else if(userhierarchy.isParent){
@@ -202,95 +211,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     }
     return community;
 }
-//
-// MlResolver.MlQueryResolver['fetchCommunitiesDef'] = (obj, args, context, info) => {
-//     let result = MlCommunityAccess.find({"isActive": true}).fetch();
-//     return {data:result, totalRecords:result&&result.length?result.length:0}
-// }
-//
-// MlResolver.MlQueryResolver['fecthCommunitiesAccess'] = (obj, args, context, info) => {
-//
-// }
-//
-// MlResolver.MlQueryResolver['fecthCommunityDef'] = (obj, args, context, info) =>
-// {
-//     let communityAccess = MlCommunityAccess.find({"$and":[{"hierarchyCode":{"$ne":"PLATFORM"}}, {"isActive":true}, {"communityDefId":args.communityId}]}).fetch();
-//     let clusters;
-//     if(communityAccess && communityAccess.length > 0){
-//         clusters = _.map(communityAccess, 'clusterId')
-//         let chapters = _.map(communityAccess, ['chapterId'])
-//     }
-//     let result = MlCommunityAccess.findOne({"_id": args.communityId});
-//     result["clusters"] = clusters;
-//     return result;
-// }
-//
-// MlResolver.MlQueryResolver['fecthCommunityAccess'] = (obj, args, context, info) => {
-//
-// }
-//
-// MlResolver.MlQueryResolver['fetchActiveCommunityAccess'] = (obj, args, context, info) => {
-//     let result = MlCommunityAccess.find({"isActive":true}).fetch();
-//     return result;
-// }
-//
-// MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) => {
-//     check(args.communityId, String)
-//     let community = MlCommunityAccess.findOne({"_id":args.communityId});
-//     if(community){
-//         let clean = MlCommunityAccess.clean(args.community)
-//         let isDiff = false;
-//         let resp;
-//         for( key in clean){
-//             if(community[key] != clean [key]){
-//                 isDiff = true;
-//                 community[key] = clean [key]
-//             }
-//         }
-//         if(isDiff){
-//             resp = MlCommunityAccess.update({_id:args.communityId}, {$set:community}, {upsert:true})
-//         }
-//
-//         if(args.clusters && args.clusters.length > 0)
-//         {
-//             let clusters = args.clusters;
-//             clusters.map(function (clusterId) {
-//                 let communityAccess = MlCommunityAccess.findOne({"$and":[{"clusterId":clusterId}, {"communityDefId":args.communityId}, {"hierarchyCode":"CLUSTER"}]})
-//                 if(communityAccess){
-//                     communityAccess.isActive = community.isActive;
-//                     resp = MlCommunityAccess.update({_id:communityAccess._id}, {$set:communityAccess}, {upsert:true})
-//                 }
-//             })
-//         }
-//
-//         // if(args.chapters && args.chapters.length > 0){
-//         //     let clusters = args.chapters;
-//         //     clusters.map(function (chapterId) {
-//         //         let communityAccess = MlCommunityAccess.findOne({"$and":[{"clusterId":clusterId}, {"communityDefId":args.communityId}, {"hierarchyCode":"CLUSTER"}]})
-//         //         if(communityAccess){
-//         //           communityAccess.isActive = community.isActive;
-//         //           resp = MlCommunityAccess.update({_id:communityAccess._id}, {$set:communityAccess}, {upsert:true})
-//         //         }
-//         //     })
-//         // }
-//
-//         if(resp) {
-//             let response = new MlRespPayload().successPayload("Community updated successfully", 200);
-//             return response;
-//         }
-//
-//         let response = new MlRespPayload().errorPayload("Some thing went wrong while updating your community", 400);
-//         return response;
-//     }
-//
-//     let response = new MlRespPayload().errorPayload("Community not found", 404);
-//     return response;
-// }
-//
-// MlResolver.MlMutationResolver['updateCommunityAccess'] = (obj, args, context, info) => {
-//
-// }
-//
+
 MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, info) => {
     let hierarchy;
     let levelCode;

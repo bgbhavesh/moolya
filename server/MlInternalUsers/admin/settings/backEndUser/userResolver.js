@@ -461,7 +461,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
         levelCode = "CLUSTER"
         role.chapterId = "all"
         role.subChapterId = "all"
-      }  
+      }
       else if(role.clusterId){
           levelCode = "CLUSTER"
           role.chapterId = "all"

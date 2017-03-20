@@ -20,7 +20,7 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   if (args.registrationId) {
     var id= args.registrationId;
     let response= MlRegistration.findOne({"_id":id});
-    response = response.registrationInfo;
+    //response = response.registrationInfo;
     return response;
   }
 }

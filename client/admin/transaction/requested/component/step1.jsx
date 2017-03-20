@@ -9,6 +9,7 @@ import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 
+
 var FontAwesome = require('react-fontawesome');
 var options3 = [
     {value: 'Yes', label: 'Yes'},
@@ -29,7 +30,8 @@ export default class Step1 extends React.Component{
       subscription:'',
       registrationType:'',
       refered:'',
-      institutionAssociation:''
+      institutionAssociation:'',
+      coummunityName:''
     }
 
     return this;
@@ -57,8 +59,9 @@ export default class Step1 extends React.Component{
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
   }
-  optionBySelectRegistrationType(val){
-    this.setState({registrationType:val.value})
+  optionBySelectRegistrationType(value,label){
+    this.setState({registrationType:value})
+    //this.setState({coummunityName:registrationOptions.})
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})
@@ -100,10 +103,11 @@ export default class Step1 extends React.Component{
       remarks         :  this.refs.remarks.value,
       referralType    :  this.state.refered,
       clusterId       :  this.state.cluster,
-      chapterId       :  this.state.chapter
+      chapterId       :  this.state.chapter,
+      communityName   :  'ideator'
     }
     }
-    this.props.getRegistrationDetails(Details);
+    this.props.getRegistrationDetails(Details.registrationDetail);
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
@@ -137,8 +141,12 @@ export default class Step1 extends React.Component{
   }
 }
 `;
+    let fetchcommunities = gql` query{
+  data:fetchCommunityDefinition{label:name,value:code}
+}
+`;
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-    let registrationOptions = [
+    /*let registrationOptions = [
       { value: '0', label: 'simplybrowsing' },
       { value: '1', label: 'ideator' },
       { value: '2', label: 'startup' },
@@ -147,7 +155,7 @@ export default class Step1 extends React.Component{
       { value: '5', label: 'institution' },
       { value: '6', label: 'service provider' },
       { value: '7', label: 'iam not sure' },
-    ];
+    ];*/
 
     let subscriptionOptions = [
       {value: 'Starter', label: 'Starter'},
@@ -227,7 +235,7 @@ export default class Step1 extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Choose registration type" value={this.state.registrationType} options={registrationOptions} className="float-label" onChange={this.optionBySelectRegistrationType.bind(this)}/>
+                  <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="User name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id=""/>
@@ -239,7 +247,7 @@ export default class Step1 extends React.Component{
                   <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institiotion" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
+                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName}  className="form-control float-label" id=""/>

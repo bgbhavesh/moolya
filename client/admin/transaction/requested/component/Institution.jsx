@@ -68,8 +68,8 @@ export default class institution extends React.Component{
   optionsBySelectSubsidaryComapny(value){
     this.setState({selectedSubsidaryComapny:value})
   }
-  optionsBySelectInstitutionType(value){
-    this.setState({selectedInstitutionType:value})
+  optionsBySelectInstitutionType(val){
+    this.setState({selectedInstitutionType:val.value})
   }
 
   async  updateregistrationInfo() {

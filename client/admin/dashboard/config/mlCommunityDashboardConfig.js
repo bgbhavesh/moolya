@@ -4,21 +4,30 @@ import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 import MlCommunityList from '../component/MlCommunityList'
 import React from 'react';
 
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+
 const mlCommunityDashboardListConfig=new MlViewer.View({
   name:"communityDashBoardList",
+  module:"community",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
   throttleRefresh:true,
   pagination:true,
   sort:true,
-  viewComponent:<MlCommunityList/>,
-  buildQueryOptions:(config)=>
-  {
-    debugger
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    if(!config.params){
+      let userDefaultObj = getAdminUserContext()
+      return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+        chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
+    }
+    else
       return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
         chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
         subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
   },
+  viewComponent:<MlCommunityList/>,
   graphQlQuery:gql`
     query($clusterId:String, $chapterId:String, $subChapterId:String){
       data:fetchCommunities(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
@@ -47,10 +56,16 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
   pagination:false,
   sort:false,
   viewComponent:<MlMapViewContainer />,
+  queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
-      chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-      subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
+    if(!config.params){
+      let userDefaultObj = getAdminUserContext()
+      return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
+    }
+    else
+      return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+        chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
   },
   graphQlQuery:gql`
     query($clusterId:String, $chapterId:String, $subChapterId:String){

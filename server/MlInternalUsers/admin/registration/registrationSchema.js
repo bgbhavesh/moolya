@@ -127,7 +127,12 @@ let registrationSchema = `
     
     type RegistrationResponse{
         _id             :   String,
-        registrationInfo :  RegistrationInfo
+        registrationInfo :  RegistrationInfo,
+          addressInfo     : [AddressInfoSchema]
+         emailInfo       : [EmailInfoSchema]
+         contactInfo     : [ContactInfoSchema]
+         socialLinksInfo : [SocialLinkInfoSchema]
+        
     }
     
     type RegistrationInfo{        
@@ -250,6 +255,7 @@ let registrationSchema = `
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
          updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
+         createStep3InRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

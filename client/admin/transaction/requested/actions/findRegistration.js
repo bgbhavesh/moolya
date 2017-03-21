@@ -44,7 +44,13 @@ export async function findRegistrationActionHandler(registrationId) {
             userId
             registrationStatus
             assignedUser
-          } 
+          },
+          socialLinksInfo {
+            socialLinkTypeName
+            socialLinkType
+            socialLinkUrl
+    		}
+          
         }
       }
     `,

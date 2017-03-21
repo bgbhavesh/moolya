@@ -78,7 +78,7 @@ if(Meteor.isServer){
         "subMenu":[
           {
             "link" : "/admin/clusters/clusterDetails",
-            "name" : "clusterDetails",
+            "name" : "Cluster Details",
             "uniqueId" : "cluster_clusterDetails",
             "isLink" : true,
             "isMenu" : true,
@@ -90,7 +90,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/clusters/chapters",
-            "name" : "chapters",
+            "name" : "Chapters",
             "uniqueId" : "cluster_chapters",
             "isLink" : true,
             "isMenu" : true,
@@ -98,7 +98,71 @@ if(Meteor.isServer){
             "dynamicLink" : true,
             "dynamicLinkHandler" : "",
             "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_chapters"
+            "subMenuMappingId":"cluster_chapters",
+            "subMenu":[
+              {
+                "link" : "/admin/clusters/subChapters/subChapterDetails",
+                "name" : "Sub Chapter Details",
+                "uniqueId" : "cluster_chapter_subChapterDetails",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"cluster_chapters",
+                "subMenuMappingId":"cluster_chapter_subChapterDetails"
+              },
+              {
+                "link" : "/admin/clusters/subChapters/communities",
+                "name" : "Communities",
+                "uniqueId" : "cluster_chapter_communities",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"cluster_chapters",
+                "subMenuMappingId":"cluster_chapter_communities",
+                "subMenu":[
+                  {
+                    "link" : "/admin/clusters/subChapters/communities/communityDetails",
+                    "name" : "Community Details",
+                    "uniqueId" : "cluster_chapter_communities_communityDetails",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"cluster_chapter_communities",
+                    "subMenuMappingId":"cluster_chapter_communities_communityDetails"
+                  },
+                  {
+                    "link" : "/admin/clusters/subChapters/communities/assignusers",
+                    "name" : "Backend Users",
+                    "uniqueId" : "cluster_chapter_communities_assignusers",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"cluster_chapter_communities",
+                    "subMenuMappingId":"cluster_chapter_communities_assignusers"
+                  }
+                ]
+              },
+              {
+                "link" : "/admin/clusters/subChapters/assignusers",
+                "name" : "Backend Users",
+                "uniqueId" : "cluster_chapter_assignusers",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"cluster_chapters",
+                "subMenuMappingId":"cluster_chapter_assignusers"
+              }
+            ]
           },
           {
             "link" : "/admin/clusters/communities",
@@ -110,7 +174,33 @@ if(Meteor.isServer){
             "dynamicLink" : true,
             "dynamicLinkHandler" : "",
             "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_communities"
+            "subMenuMappingId":"cluster_communities",
+            "subMenu":[
+              {
+                "link" : "/admin/clusters/communities/communityDetails",
+                "name" : "Community Details",
+                "uniqueId" : "cluster_communities_communityDetails",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"cluster_communities",
+                "subMenuMappingId":"cluster_communities_communityDetails"
+              },
+              {
+                "link" : "/admin/clusters/communities/assignusers",
+                "name" : "Backend Users",
+                "uniqueId" : "cluster_communities_assignusers",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"cluster_communities",
+                "subMenuMappingId":"cluster_communities_assignusers"
+              }
+            ]
           },
           {
             "link" : "/admin/clusters/assignusers",
@@ -183,7 +273,7 @@ if(Meteor.isServer){
         "subMenu" : [
           {
             "link" : "/admichapters/comminty/communities",
-            "name" : "communities",
+            "name" : "Communities",
             "uniqueId" : "community_communities",
             "isLink" : true,
             "isMenu" : true,

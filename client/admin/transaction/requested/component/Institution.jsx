@@ -15,7 +15,8 @@ export default class institution extends React.Component{
     this.state={
       selectedUserType:null,
       selectedHeadquarter:null,
-      selectedBranches:null
+      selectedBranches:null,
+      selectedInstitutionType:null
     };
     return this;
   }
@@ -33,6 +34,9 @@ export default class institution extends React.Component{
   }
   optionsBySelectBranch(value){
     this.setState({selectedBranches:value})
+  }
+  optionsBySelectInstitutionType(val){
+    this.setState({selectedInstitutionType:val.value})
   }
 
   async  updateregistrationInfo() {

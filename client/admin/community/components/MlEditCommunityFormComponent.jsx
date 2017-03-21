@@ -204,19 +204,19 @@ class MlEditCommunityFormComponent extends React.Component {
                     <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters}
                                   queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
-                                  onSelect={this.optionsBySelectClusters.bind(this)} disabled="disabled"/>
+                                  onSelect={this.optionsBySelectClusters.bind(this)}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
                                   queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} disabled="disabled"/>
+                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.subchapters}
                                   queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} disabled="disabled"/>
+                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}/>
                   </div>
                 </form>
               </div>

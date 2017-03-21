@@ -157,14 +157,22 @@ class MlAssignBackendUsers extends React.Component {
       let userDisplayName = this.state.userDisplayName || "";
       let username = this.state.username || "";
       let alsoAssignedAs = this.state.alsoAssignedAs || "";
-      let deActive = that.state.deActive
+      let deActive = that.state.deActive;
+      let contextHeader =  "";
+      if(that.props.params.communityId){
+        contextHeader = "Community"
+      } else if (that.props.params.chapterId && that.props.params.subChapterId){
+        contextHeader = "Chapter"
+      } else{
+        contextHeader = "Cluster"
+      }
       const showLoader = this.state.loading;
 
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_padding_wrap">
-            <h2>Assign Backend User to Cluster</h2>
+            <h2>Assign Backend User to {contextHeader}</h2>
             <div className="main_wrap_scroll">
               <ScrollArea
                 speed={0.8}

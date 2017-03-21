@@ -80,6 +80,7 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "hideSubMenu":true,
+        "isDisabled":true,
         "subMenu":[
           {
             "link" : "/admin/clusters/clusterDetails",

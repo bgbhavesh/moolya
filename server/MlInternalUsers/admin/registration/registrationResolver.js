@@ -20,7 +20,7 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   if (args.registrationId) {
     var id= args.registrationId;
     let response= MlRegistration.findOne({"_id":id});
-    response = response.registrationInfo;
+    //response = response.registrationInfo;
     return response;
   }
 }
@@ -34,3 +34,11 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
   }
 }
 
+MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.docUrl&&args.documentId) {
+    var id= args.registrationId;
+    //let updatedResponse= MlRegistration.update(id, {$set:  {"docUrl":args.docUrl}});
+    //return updatedResponse;
+  }
+}

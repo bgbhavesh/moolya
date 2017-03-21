@@ -56,6 +56,7 @@ const query = gql`fragment subMenu on Menu{
                   uniqueId
                   isLink
                   isMenu
+                  isDisabled
                   name
                   image
                   link

@@ -17,6 +17,7 @@ let Process = `
         subChapters : [String],
         isActive    : Boolean,
         documents   : [documentOutput]  
+        processDocuments : [processDocumentOutput]
     }
     type processOutput{
         _id         : String,
@@ -32,7 +33,8 @@ let Process = `
         chapters    : [String],
         subChapters : [String],
         isActive    : Boolean,
-        documents   : [documentOutput]  
+        documents   : [documentOutput] , 
+        processDocuments : [processDocumentOutput]
     }
     
     
@@ -68,6 +70,21 @@ let Process = `
         categoryName: String
         
     }
+    type processDocumentOutput{
+        kycCategoryId:String,
+        kycCategoryName: String,
+        docTypeId:String,
+        docTypeName:String,
+        documentId:String,
+        documentDisplayName:String,
+        documentName:String,
+        isMandatory:Boolean,
+        isActive:Boolean,
+        inputLength:String,
+        allowableMaxSize:String,
+        allowableFormat:String,
+        docMappingDef:String,
+    }
     
     input community{
         id   :  String
@@ -94,34 +111,26 @@ let Process = `
     input subChapter{
         id   :  String
     }
+    
+    input processDocument{
+        kycCategoryId:String,
+        kycCategoryName: String,
+        docTypeId:String,
+        docTypeName:String,
+        documentId:String,
+        documentDisplayName:String,
+        documentName:String,
+        isMandatory:Boolean,
+        isActive:Boolean,
+        inputLength:String,
+        allowableMaxSize:String,
+        allowableFormat:String,
+        docMappingDef:String,
+    }
     input document{
         type      :  String,
         category  :  String,
         isActive  :  Boolean
-        
-    }
-    input mappedDocuments{
-        mandatory:Boolean,
-        isActive:Boolean,
-        documentId:String,
-        documentDisplayName : String,
-        validity    : String,
-        inputLength : String,
-        remarks     : String,
-        allowableMaxSize  : String,
-        issuingAuthority  : String,
-        allowableFormat : [String],
-        clusters :[String],
-        chapters    : [String],
-        subChapters : [String],
-        kycCategory  : [String],
-        documentType   : [String],
-        isActive : Boolean
-    }
-    input processDocuments{
-        kycCategoryId:String,
-        docTypeId: String,
-        mappedDocuments:[mappedDocuments]
         
     }
     input processInput{
@@ -138,12 +147,13 @@ let Process = `
         subChapters : [String],
         isActive    : Boolean,
         documents   : [document] ,
-   processDocuments : [processDocuments]
+   processDocuments : [processDocument]
     }
     
     type Mutation {
        createProcess(process:processInput, moduleName:String, actionName:String):response
        updateProcess(id:String,process:processInput, moduleName:String, actionName:String):response
+       upsertProcessDocument(id:String,kycCategoryId: String, docTypeId:String,documentId:String,isMandatory:Boolean,isActive:Boolean,moduleName:String, actionName:String):response
     }
     
     type Query{

@@ -16,9 +16,22 @@ export default class institution extends React.Component{
       selectedUserType:null,
       selectedHeadquarter:null,
       selectedBranches:null,
-      selectedInstitutionType:null
+      selectedInstitutionType:null,
+      registrationDetails:null
     };
     return this;
+  }
+
+  componentWillMount() {
+    let details=this.props.registrationDetails;
+    this.setState({loading:false,
+      registrationDetails:details,
+      registrationId:this.props.registrationId,
+      selectedUserType :details.userCategory,
+      selectedHeadquarter : details.headQuarterLocation,
+      selectedBranches : details.branchLocations,
+      selectedInstitutionType: details.institutionType
+    })
   }
 
   componentDidMount()
@@ -39,48 +52,50 @@ export default class institution extends React.Component{
     this.setState({selectedInstitutionType:val.value})
   }
 
-  async  updateregistrationInfo() {
+  async  updateregistration() {
     let Details = {
-      registrationId      : this.state.registrationId,
-      userCategory        : this.state.selectedUserType,
-      institutionType     : this.refs.institutionType.value,
-      instituteName       : this.refs.instituteName.value,
-      instituteGroupName  : this.refs.instituteGroupName.value,
-      foundationYear      : this.refs.foundationYear.value,
-      website             : this.refs.website.value,
-      registrationNumber  : this.refs.registrationNumber.value,
-      isoAccrediationNumber: this.refs.isoAccrediationNumber.value,
-      curriculamProvider  : this.refs.curriculamProvider.value,
-      associatedUniversity: this.refs.associatedUniversity.value,
-      studentCount        : this.refs.studentCount.value,
-      staffCount          : this.refs.staffCount.value,
-      chairman            : this.refs.chairman.value,
-      dean                : this.refs.dean.value,
-      headQuarterLocation:  this.state.selectedHeadquarter,
-      branchLocations:  this.state.selectedBranches
+      registrationId      : this.props.registrationId,
+      details:{
+              userCategory        : this.state.selectedUserType,
+              institutionType     : this.state.selectedInstitutionType,
+              instituteName       : this.refs.instituteName.value,
+              instituteGroupName  : this.refs.instituteGroupName.value,
+              foundationYear      : this.refs.foundationYear.value,
+              website             : this.refs.website.value,
+              registrationNumber  : this.refs.registrationNumber.value,
+              isoAccrediationNumber: this.refs.isoAccrediationNumber.value,
+              curriculamProvider  : this.refs.curriculamProvider.value,
+              associatedUniversity: this.refs.associatedUniversity.value,
+              studentCount        : this.refs.studentCount.value,
+              staffCount          : this.refs.staffCount.value,
+              chairman            : this.refs.chairman.value,
+              dean                : this.refs.dean.value,
+              headQuarterLocation:  this.state.selectedHeadquarter,
+              branchLocations:  this.state.selectedBranches
+             }
     }
-    this.props.getRegistrationDetails(Details);
+    this.props.getRegistrationDetails();
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
+  updateRegistration(){
+    const resp=this.updateregistration();
+    return resp;
+  }
+
   render(){
     let MlActionConfig = [
       {
         actionName: 'edit',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateregistrationInfo.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: this.updateRegistration.bind(this)
       }
     ]
     let that=this;
 
-    let subsidary = [
-      {value: 'Yes', label: 'Yes' , clearableValue: true},
-      {value: 'No', label: 'No',clearableValue: true}
-    ];
-
     let institutionTypes = [
-      {value: 'SubChapter', label: 'SubChapter' , clearableValue: true},
-      {value: 'Institution', label: 'Institution',clearableValue: true}
+      {value: 'SubChapter', label: 'SubChapter'},
+      {value: 'Institution', label: 'Institution'}
     ];
 
     let businesstypesquery=gql` query{
@@ -131,26 +146,26 @@ export default class institution extends React.Component{
                   <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Select institution Type" options={institutionTypes} selectedValue={this.state.selectedInstitutionType} onSelect={that.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>
+                  <Select name="form-field-name" placeholder="Select institution Type" options={institutionTypes} selectedValue={this.state.selectedInstitutionType} onSelect={this.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="instituteName" placeholder="Institute Name " className="form-control float-label" id=""/>
+                  <input type="text" ref="instituteName" placeholder="Institute Name " defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" className="form-control float-label" id=""/>
+                  <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteGroupName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="foundationYear" placeholder="Foundation year" className="form-control float-label" id=""/>
+                  <input type="text" ref="foundationYear" placeholder="Foundation year"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.foundationYear} className="form-control float-label" id=""/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="website" placeholder="Website" className="form-control float-label" id=""/>
+                  <input type="text" ref="website" placeholder="Website" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.website} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="registrationNumber" placeholder="Registration Number" className="form-control float-label" id=""/>
+                  <input type="text" ref="registrationNumber" placeholder="Registration Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationNumber} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text"  ref="isoAccrediationNumber" placeholder="ISO Accrediation Number" className="form-control float-label" id=""/>
+                  <input type="text"  ref="isoAccrediationNumber" placeholder="ISO Accrediation Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} className="form-control float-label" id=""/>
                 </div>
 
           </form>
@@ -160,22 +175,22 @@ export default class institution extends React.Component{
     <div className="form_bg">
     <form>
             <div className="form-group">
-              <input type="text" ref="curriculamProvider" placeholder="Curriculam provider" className="form-control float-label" id=""/>
+              <input type="text" ref="curriculamProvider" placeholder="Curriculam provider" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.curriculamProvider} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" ref="associatedUniversity" placeholder="Associated university" className="form-control float-label" id=""/>
+              <input type="text" ref="associatedUniversity" placeholder="Associated university" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.associatedUniversity} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" ref="studentCount" placeholder="Toatal number of students" className="form-control float-label" id=""/>
+              <input type="text" ref="studentCount" placeholder="Toatal number of students" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.studentCount} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" ref="staffCount" placeholder="Total number of staff" className="form-control float-label" id=""/>
+              <input type="text" ref="staffCount" placeholder="Total number of staff" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.staffCount} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" ref="chairman" placeholder="Chairman name" className="form-control float-label" id=""/>
+              <input type="text" ref="chairman" placeholder="Chairman name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.chairman} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" ref="dean" placeholder="Dean name" className="form-control float-label" id=""/>
+              <input type="text" ref="dean" placeholder="Dean name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.dean} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
               <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>

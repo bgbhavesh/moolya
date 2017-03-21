@@ -114,11 +114,10 @@ export default class Step1 extends React.Component{
       remarks         :  this.refs.remarks.value,
       referralType    :  this.state.refered,
       clusterId       :  this.state.cluster,
-      chapterId       :  this.state.chapter,
-      communityName   :  'ideator'
+      chapterId       :  this.state.chapter
     }
     }
-    this.props.getRegistrationDetails(Details.registrationDetail);
+    this.props.getRegistrationDetails();
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }

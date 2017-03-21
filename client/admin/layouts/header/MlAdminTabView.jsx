@@ -168,8 +168,13 @@ export default class MlTabView extends Component {
 
       tabOptions = tabMenu.map(function (option,index) {
         let activeClass="";
+        let disabledClass = "";
         if(option.uniqueId===path){
           activeClass = 'active_btn'
+        }
+
+        if(option.isDisabled){
+          disabledClass = 'disabled_item'
         }
 
         if(subMenuMappingId&&subMenuMappingId===option.uniqueId){
@@ -183,7 +188,7 @@ export default class MlTabView extends Component {
           menuLink=dynamicLinkHandler(option.uniqueId,params,queryParams);
         }
         return (
-          <li key={option.name} className="swiper-slide" disabled={isDisabled}>
+          <li key={option.name} className={`swiper-slide ${disabledClass}`}>
             <div className={`moolya_btn ${activeClass} `}
                  onClick={this.subMenuClick}><a href={menuLink}
                                                 className={"moolya_btn moolya_btn_in"}>  {option.name} </a></div>

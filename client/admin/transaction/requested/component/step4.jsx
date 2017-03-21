@@ -95,7 +95,7 @@ export default class Step4 extends React.Component{
      }
      }
      `;
-    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:"vsraSG7GeWZRdXkF9"}}};
+    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:"SxnyXxBLrhhW29uGr"}}};
     return (
       <div className="step_form_wrap step2">
         {showLoader===true?( <div className="loader_wrap"></div>):(
@@ -143,9 +143,9 @@ export default class Step4 extends React.Component{
                   {that.state.socialLinkArray.map(function(options,key) {
                     console.log(options);
                     console.log(options.socialLinkType);
-                    return(<div className="tab-pane" href={'#socialLink'+key}  key={key} >
+                    return(<div className="tab-pane" id={'socialLink'+key}  key={key} >
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} ref={'socialLinkType'+key} key={key}
+                        <Moolyaselect multiSelect={false} ref={'socialLinkType'+key}
                                       placeholder="Select Social Link"
                                       className="form-control float-label" selectedValue={options.socialLinkType}
                                       valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={socialLinkTypeQuery}
@@ -153,7 +153,7 @@ export default class Step4 extends React.Component{
                                       isDynamic={true}/>
                       </div>
                       <div className="form-group">
-                        <input type="text" ref={'socialLinkTypeUrl'+key} key={key} placeholder="Enter URL" className="form-control float-label" defaultValue={options.socialLinkUrl}/>
+                        <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
                       <div className="ml_btn">
                         <a href="#" className="save_btn"  onClick={that.onUpdating.bind(that,key)}>Save</a>

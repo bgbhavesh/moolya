@@ -125,7 +125,17 @@ let registrationSchema = `
         assignedUser    :   String
     }
     
-    type RegistrationInfo{
+    type RegistrationResponse{
+        _id             :   String,
+        registrationInfo :  RegistrationInfo,
+          addressInfo     : [AddressInfoSchema]
+         emailInfo       : [EmailInfoSchema]
+         contactInfo     : [ContactInfoSchema]
+         socialLinksInfo : [SocialLinkInfoSchema]
+        
+    }
+    
+    type RegistrationInfo{        
         _id             :   String,
         userType        :   String,
         firstName       :   String,
@@ -141,7 +151,7 @@ let registrationSchema = `
         password        :   String,
         accountType     :   String,
         institutionAssociation    :   String,
-        companyName     :   String,
+        companyname     :   String,
         companyUrl      :   String,
         remarks         :   String,
         referralType    :   String,
@@ -183,7 +193,7 @@ let registrationSchema = `
           foundationDate:  Date,
           headQuarterLocation: String,
           branchLocations: [branchLocation]
-          companyType: String,
+          companytyp: String,
           entityType:  String,
           businessType: String,
           industry: String,
@@ -244,10 +254,12 @@ let registrationSchema = `
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
+         updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
+         createStep3InRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
-        findRegistrationInfo(registrationId:String):RegistrationInfo
+        findRegistrationInfo(registrationId:String):RegistrationResponse
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);

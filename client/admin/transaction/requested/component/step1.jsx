@@ -5,8 +5,10 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 var Select = require('react-select');
 import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
-import {findRegistrationActionHandler} from '../actions/findRegistration'
 import ScrollArea from 'react-scrollbar';
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import {updateRegistrationActionHandler} from '../actions/updateRegistration'
+
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [
@@ -28,16 +30,27 @@ export default class Step1 extends React.Component{
       subscription:'',
       registrationType:'',
       refered:'',
-      institutionAssociation:''
+      institutionAssociation:'',
+      coummunityName:''
     }
 
     return this;
   }
   componentWillMount() {
     let details=this.props.registrationInfo;
-    this.setState({loading:false,registrationDetails:details})
+    this.setState({loading:false,
+      registrationDetails:details,
+      registrationId:this.props.registrationId,
+      country :details.countryName,
+      selectedCity : details.cityId,
+      registrationType : details.registrationType,
+      subscription: details.accountType,
+      institutionAssociation :details.institutionAssociation,
+      refered: details.referralType,
+      cluster : details.clusterId,
+      chapter :details.chapterId
+      })
   }
-  compo
 
   componentDidMount()
   {
@@ -57,8 +70,9 @@ export default class Step1 extends React.Component{
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
   }
-  optionBySelectRegistrationType(val){
-    this.setState({registrationType:val.value})
+  optionBySelectRegistrationType(value,label){
+    this.setState({registrationType:value})
+    //this.setState({coummunityName:registrationOptions.})
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})
@@ -68,12 +82,21 @@ export default class Step1 extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    this.props.getRegistrationDetails(this.state)
+    const resp=this.updateregistrationInfo();
+    return resp;
   }
+
+  async handleError(response) {
+    //alert(response)
+  };
+
+  async handleSuccess(response) {
+    FlowRouter.go("/admin/transactions/editRequests/");
+  };
 
   async  updateregistrationInfo() {
     let Details = {
-      id : this.props.config,
+      registrationId : this.state.registrationId,
       registrationDetail:{
       firstName       :  this.refs.firstName.value,
       lastName        :  this.refs.lastName.value,
@@ -86,19 +109,33 @@ export default class Step1 extends React.Component{
       password        :  this.refs.password.value,
       accountType     :  this.state.subscription,
       institutionAssociation    :   this.state.institutionAssociation,
-      companyName     :  this.refs.companyName.value,
+      companyname     :  this.refs.companyName.value,
       companyUrl      :  this.refs.companyUrl.value,
       remarks         :  this.refs.remarks.value,
       referralType    :  this.state.refered,
       clusterId       :  this.state.cluster,
-      chapterId       :  this.state.chapter
+      chapterId       :  this.state.chapter,
+      communityName   :  'ideator'
     }
     }
-    this.props.getRegistrationDetails(this.state.registrationDetails);
+    this.props.getRegistrationDetails(Details.registrationDetail);
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
+
+  updateRegistration(){
+    const resp=this.updateregistrationInfo();
+    return resp;
+  }
+
   render(){
+    let MlActionConfig = [
+      {
+        actionName: 'edit',
+        showAction: true,
+        handler: this.updateRegistration.bind(this)
+      }
+    ]
 
   let countryQuery=gql`query{
  data:fetchCountries {
@@ -121,8 +158,12 @@ export default class Step1 extends React.Component{
   }
 }
 `;
+    let fetchcommunities = gql` query{
+  data:fetchCommunityDefinition{label:name,value:code}
+}
+`;
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-    let registrationOptions = [
+    /*let registrationOptions = [
       { value: '0', label: 'simplybrowsing' },
       { value: '1', label: 'ideator' },
       { value: '2', label: 'startup' },
@@ -131,7 +172,7 @@ export default class Step1 extends React.Component{
       { value: '5', label: 'institution' },
       { value: '6', label: 'service provider' },
       { value: '7', label: 'iam not sure' },
-    ];
+    ];*/
 
     let subscriptionOptions = [
       {value: 'Starter', label: 'Starter'},
@@ -177,7 +218,7 @@ export default class Step1 extends React.Component{
                   <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="emailId" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.emailId}  placeholder="Email ID" className="form-control float-label" id=""/>
+                  <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>
@@ -211,7 +252,7 @@ export default class Step1 extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Choose registration type" value={this.state.registrationType} options={registrationOptions} className="float-label" onChange={this.optionBySelectRegistrationType.bind(this)}/>
+                  <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="User name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id=""/>
@@ -223,10 +264,10 @@ export default class Step1 extends React.Component{
                   <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institiotion" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
+                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName}  className="form-control float-label" id=""/>
+                  <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyname}  className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="companyUrl" placeholder="Company URL"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyUrl}  className="form-control float-label" id=""/>
@@ -253,8 +294,11 @@ export default class Step1 extends React.Component{
             </div>
           </div>
         </ScrollArea>
-      </div>)}
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+      </div>
+        )}
       </div>
     )
   }
 };
+/*export default Step1 = formHandler()(Step1);*/

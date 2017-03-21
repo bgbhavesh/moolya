@@ -1,28 +1,9 @@
 import MlResolver from '../mlAdminResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash'
+import MlAdminContextQueryConstructor from '../core/repository/mlAdminContextQueryConstructor';
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext';
 
-// // MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info) =>{
-// //     // check(args.communityDef, Object)
-// //         //TODO : Duplicate Community Identification
-// //         // TODO : Authorization
-// //         // let communityDef = MlCommunityDefinition.findOne({_id:args.community.communityDefId});
-// //         // let community = {...args.community, communityDefCode: communityDef.code, communityDefName:communityDef.name};
-// //         // let id = MlCommunity.insert({...communityDef});
-// //         if (args._id) {
-// //           var id= args._id;
-// //           let updatedResponse= MlCommunityDefinition.update(id, {$set: args.communityDef});
-// //           return updatedResponse
-// //         }
-// //         // if(id){
-// //         //     let code = 200;
-// //         //     let result = {communityId: id}
-// //         //     var response= JSON.stringify(new MlRespPayload().successPayload(result, code));
-// //         //     return response;
-// //         // }
-// //
-// // }
 MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};
@@ -76,9 +57,11 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
       return {data:null}
     }
 
-    let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
-    let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
-    let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
+    let clusterId = (!args.clusterId && !userhierarchy.isParent ? args.clusterId = userProfile.defaultProfileHierarchyRefId: "") || (args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "");
+    // let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
+    let chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = ((_.find(userProfile.defaultChapters, args.chapterId))!="all"): "") || (args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "");
+    // let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
+    let subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = ((_.find(userProfile.defaultSubChapters, args.subChapterId))!="all"): "") || (args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: "");
 
     if(clusterId != "" && chapterId != "" && subChapterId != ""){
         query= {"$and":[{clusterId:clusterId, chapterId:chapterId, subChapterId:subChapterId, hierarchyCode:"SUBCHAPTER"}]};
@@ -92,8 +75,6 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
     else if(userhierarchy.isParent){
         query= {"hierarchyCode":"PLATFORM"};
     }
-
-
 
     let communitiesAccess = MlCommunityAccess.find(query).fetch();
 
@@ -127,7 +108,10 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
       communityAccess,
       clusters = [],
       chapters = [],
-      subChapters = [];
+      subChapters = [],
+      subChapterName = "",
+      clusterName = "",
+      chapterName = ""
 
     if(!args.communityId)
         return community
@@ -146,9 +130,12 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
       return community
     }
 
-    let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
-    let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
-    let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
+    // let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
+    // let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
+    // let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
+    let clusterId = (!args.clusterId && !userhierarchy.isParent ? args.clusterId = userProfile.defaultProfileHierarchyRefId: "") || (args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "");
+    let chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = ((_.find(userProfile.defaultChapters, args.chapterId))!="all"): "") || (args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "");
+    let subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = ((_.find(userProfile.defaultSubChapters, args.subChapterId))!="all"): "") || (args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: "");
 
     if(clusterId != "" && chapterId != "" && subChapterId != "")
     {
@@ -157,7 +144,11 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
       communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
       clusters = [clusterId];
       chapters = [chapterId];
-      subChapters= [subChapterId]
+      subChapters= [subChapterId];
+      let subChapter = MlSubChapters.findOne({_id: subChapterId});
+      subChapterName = subChapter.subChapterName;
+      clusterName = subChapter.clusterName;
+      chapterName = subChapter.chapterName;
     }
 
     else if(clusterId != "" && chapterId != "" ){
@@ -179,6 +170,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
         clusters = [clusterId];
         chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
         subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
+        clusterName = MlClusters.findOne({_id: clusterId}).clusterName;
 
     }
 
@@ -208,6 +200,9 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
         community["clusters"] = clusters;
         community["chapters"] = chapters;
         community["subchapters"] = subChapters;
+        community["clusterName"] = clusterName;
+        community["chapterName"] = chapterName;
+        community["subChapterName"] = subChapterName;
     }
     return community;
 }

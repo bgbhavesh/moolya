@@ -1,6 +1,9 @@
+/**
+ * Created by venkatasrinag on 20/3/17.
+ */
 if(Meteor.isServer){
-  MlMenus.upsert({name:"mlClusterAdminMenu"},{$set:{
-    "name" : "mlClusterAdminMenu",
+  MlMenus.upsert({name:"mlChapterAdminMenu"},{$set:{
+    "name" : "mlChapterAdminMenu",
     "menu" : [
       {
         "image" : "/images/db_icon.png",
@@ -14,11 +17,10 @@ if(Meteor.isServer){
             "link" : "",
             "name" : "Clusters",
             "uniqueId" : "dashboard_clusters",
-            "subMenuMappingId":"",
+            "subMenuMappingId":"dashboard_clusters",
             "subMenusId":"dashboard",
             "isLink" : false,
-            "isDisabled":true,
-            "isMenu" : true,
+            "isMenu" : false,
             "image" : ""
           },
           {
@@ -69,70 +71,19 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/cluster_icon.png",
-        "link" : "/admin/clusters",
+        "link" : "",
         "name" : "cluster",
         "uniqueId"   :"cluster",
-        "isLink" : true,
-        "isMenu" : true,
-        "hideSubMenu":true,
-        "subMenu":[
-          {
-            "link" : "/admin/clusters/clusterDetails",
-            "name" : "clusterDetails",
-            "uniqueId" : "cluster_clusterDetails",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_clusterDetails"
-          },
-          {
-            "link" : "/admin/clusters/chapters",
-            "name" : "chapters",
-            "uniqueId" : "cluster_chapters",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_chapters"
-          },
-          {
-            "link" : "/admin/clusters/communities",
-            "name" : "Communities",
-            "uniqueId" : "cluster_communities",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_communities"
-          },
-          {
-            "link" : "/admin/clusters/assignusers",
-            "name" : "Backend Users",
-            "uniqueId" : "cluster_assignusers",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_assignusers"
-          }
-        ]
-
+        "isLink" : false,
+        "isMenu" : false,
+        "isDisabled":true
       },
       {
         "image" : "/images/chapter_icon.png",
         "link" : "/admin/chapters",
         "uniqueId" : "chapter",
         "name" : "chapter",
-        "isLink" : "true",
+        "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {

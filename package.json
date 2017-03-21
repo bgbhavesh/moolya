@@ -89,6 +89,7 @@
     "loadash": "0.0.1",
     "lodash": "^4.17.4",
     "meteor-node-stubs": "^0.2.5",
+    "q": "^1.4.1",
     "react": "^15.4.2",
     "react-apollo": "^0.8.3",
     "react-bootstrap-table": "^2.11.2",

@@ -22,12 +22,33 @@ export default class RegisterForm extends React.Component{
     return this;
   }
   getRegistrationDetails(details){
-    this.setState({'registrationDetails':details})
+    let data = this.state.registrationDetails;
+    data.registrationInfo = details;
+    this.setState({'registrationDetails':data})
+  }
+  getRegistrationContactDetails(details){
+    let data = this.state.registrationDetails;
+    //refer proper object
+    this.setState({'registrationDetails':data})
+  }
+  async getRegistrationSocialLinks(details){
+    //let data = this.state.registrationDetails;
+    //refer proper object
+    const resp=await this.findRegistration();
+    console.log("yipppee");
+
+    this.setState({'registrationDetails':resp})
+  }
+  getRegistrationKYCDetails(details){
+    let data = this.state.registrationDetails;
+    //refer proper object
+    this.setState({'registrationDetails':data})
   }
   componentWillMount() {
     const resp=this.findRegistration();
     return resp;
   }
+
   async findRegistration() {
     const response = await findRegistrationActionHandler(this.props.config);
     console.log(response)
@@ -39,13 +60,13 @@ export default class RegisterForm extends React.Component{
     let registrationId = this.props.config;
     const steps =
     [
-      {name: 'Basic info', component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails}/>},
-      {name: 'Additional info', component: <Step2 registrationId={this.state.registrationDetails}/>},
-      {name: 'Contact details', component: <Step3 />},
-      {name: 'Social links', component: <Step4 />},
-      {name: 'KYC\'s Documents', component: <Step5 />},
-      {name: 'Payment gateway', component: <Step6 />},
-      {name: 'History', component: <Step7 />}
+      {name: 'Basic info','icon':<span className="ml ml-basic-Information"></span>, component: <Step1 getRegistrationDetails={this.getRegistrationDetails.bind(this)} registrationInfo={this.state.registrationDetails.registrationInfo} registrationId={registrationId}/>},
+      {name: 'Additional info','icon':<span className="ml ml-additional-Information"></span>,  component: <Step2 registrationId={registrationId} community={'institution'}/>},
+      {name: 'Contact details','icon':<span className="ml ml-moolya-symbol"></span>, component: <Step3 getRegistrationContactDetails={this.getRegistrationContactDetails.bind(this)} registrationInfo={this.state.registrationDetails} registrationId={registrationId}/>},
+      {name: 'Social links','icon':<span className="ml ml-social-Links"></span>,  component: <Step4 getRegistrationSocialLinks={this.getRegistrationSocialLinks.bind(this)} registrationInfo={this.state.registrationDetails} registrationId={registrationId}/>},
+      {name: 'KYC\'s Documents','icon':<span className="ml ml-kyc-document"></span>,  component: <Step5 getRegistrationKYCDetails={this.getRegistrationKYCDetails.bind(this)} registrationInfo={this.state.registrationDetails} registrationId={registrationId}/>},
+      {name: 'Payment gateway','icon':<span className="ml ml-payments"></span>, component: <Step6 />},
+      {name: 'History','icon':<span className="ml ml-moolya-symbol"></span>, component: <Step7 />}
     ]
     const showLoader=this.state.loading;
     return (
@@ -55,7 +76,7 @@ export default class RegisterForm extends React.Component{
       {/*<h2>Registration Process</h2>*/}
     <div className='step-progress' >
                   <div id="root" >
-                    <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true} />
+                    <StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true} />
                   </div>
                </div>
       </div>)}

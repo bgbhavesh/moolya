@@ -80,12 +80,6 @@ export default class MlAssignBackednUserRoles extends React.Component {
     roleDetails.splice(did, 0, specificRole);
     this.setState({loading: false, rolesData: roleDetails});
     this.sendRolesToParent();
-
-    // let roleDetails = this.state.roleDetails
-    // roleDetails[index]['roleId']=selectedValue
-    // this.setState({roleDetails:roleDetails})
-    // this.props.getAssignedRoles(this.state.roleDetails)
-
   }
 
   sendRolesToParent() {
@@ -124,37 +118,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     let rolesArray = specificDepartment.roles;
     rolesArray.push(emptyRoleBox);
     this.setState({rolesData: allData});
-
-    // this.setState({
-    //   roleDetails: this.state.roleDetails.concat([{
-    //     roleId: null,
-    //     validFrom: '',
-    //     validTo: '',
-    //     isActive: false,
-    //     clusterId: this.props.clusterId?this.props.clusterId:"",
-    //     chapterId: this.props.chapterId?this.props.chapterId:"",
-    //     subChapterId: this.props.subChapterId?this.props.subChapterId:"",
-    //     communityId: this.props.communityId?this.props.communityId:"",
-    //     hierarchyLevel: "",
-    //     hierarchyCode: ""
-    //   }])
-    // })
   }
-
-  // onChange(id,event){
-  //     let roleDetails=this.state.roleDetails
-  //     let filedName=event.target.name
-  //     let fieldValue=event.target.value;
-  //     if(filedName=='status'){
-  //       fieldValue=event.target.checked;
-  //       roleDetails[id]['isActive']=fieldValue
-  //     }
-  //     else {
-  //         roleDetails[id][[filedName]]=fieldValue
-  //     }
-  //     this.setState({roleDetails:roleDetails})
-  //     this.props.getAssignedRoles(this.state.roleDetails)
-  // }
 
   onStatusChange(index, did, event) {
     let value = event.target.checked
@@ -196,14 +160,6 @@ export default class MlAssignBackednUserRoles extends React.Component {
     }
   }
 
-  // onClickDate(id, event) {
-  //   let filedName = event.target.name
-  //   let fieldId = filedName + id
-  //   // $("#"+fieldId).datepicker({ format: this.state.dateformate });
-  //   $("#" + fieldId).datepicker({format: 'dd-mm-yyyy', startDate: '+0d', autoclose: true});
-  //   $("#" + fieldId).focus();
-  // }
-
   componentWillReceiveProps(nextProps) {
     if ((this.props.userId !== nextProps.userId)) {
       const resp = this.findUserDepartments();
@@ -238,7 +194,6 @@ export default class MlAssignBackednUserRoles extends React.Component {
       json.isAvailiable = item.isAvailiable;
       let ary = [];
       _.each(assignedRoles, function (say, val) {
-        // let ary=[];
         if (say.departmentId == item.department && say.subDepartmentId == item.subDepartment) {
           ary.push(say);
           json.roles = ary;
@@ -278,9 +233,9 @@ export default class MlAssignBackednUserRoles extends React.Component {
     var validDate = function (current) {
       return current.isAfter(yesterday);
     }
+    let clusterId = that.props.clusterId;
+
     let userDepartments = that.state.rolesData || [];
-    let validFrom = {placeholder: "Valid From"};
-    let validTo = {placeholder: "Valid To"}
     return (
       <div>
         {userDepartments.map(function (department, id) {
@@ -314,7 +269,6 @@ export default class MlAssignBackednUserRoles extends React.Component {
                       {department.roles.map(function (details, idx) {
                         return (
                           <div className="form_inner_block" key={idx}>
-                            {/*<div className="add_form_block"><img src="/images/add.png" onClick={that.addRoleComponent.bind(that, department)}/></div>*/}
                             <div className="form-group">
                               {details.roleName ?
                                 <input type="text" defaultValue={details.roleName} className="form-control float-label"
@@ -327,20 +281,33 @@ export default class MlAssignBackednUserRoles extends React.Component {
                                               selectedValue={details.roleId}/>}
                             </div>
                             <div className="form-group left_al">
-                              <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={validFrom}
-                                        isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
-                                        onChange={that.onValidFromChange.bind(that, idx, id)}/>
+                              {(details.clusterId == clusterId) ?
+                                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                          inputProps={{placeholder: "Valid From"}}
+                                          isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
+                                          onChange={that.onValidFromChange.bind(that, idx, id)}/> :
+                                <input type="text" defaultValue={details.validTo}
+                                       className="form-control float-label"
+                                       disabled="true"/>}
                             </div>
                             <div className="form-group left_al">
-                              <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} inputProps={validTo}
-                                        isValidDate={validDate} closeOnSelect={true} value={details.validTo}
-                                        onChange={that.onValidToChange.bind(that, idx, id)}/>
+                              {(details.clusterId == clusterId) ?
+                                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                          inputProps={{placeholder: "Valid To"}}
+                                          isValidDate={validDate} closeOnSelect={true} value={details.validTo}
+                                          onChange={that.onValidToChange.bind(that, idx, id)}/> :
+                                <input type="text" defaultValue={details.validTo}
+                                       className="form-control float-label"
+                                       disabled="true"/>}
                             </div>
                             <div className="form-group switch_wrap">
                               <label>Status</label>
                               <label className="switch">
-                                <input type="checkbox" name={'status'} checked={details.isActive}
-                                       onChange={that.onStatusChange.bind(that, idx, id)}/>
+                                {(details.clusterId == clusterId) ?
+                                  <input type="checkbox" name={'status'} checked={details.isActive}
+                                         onChange={that.onStatusChange.bind(that, idx, id)}/> :
+                                  <input type="checkbox" name={'status'} checked={details.isActive} disabled
+                                         onChange={that.onStatusChange.bind(that, idx, id)}/>}
                                 <div className="slider"></div>
                               </label>
                             </div>

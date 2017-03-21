@@ -68,14 +68,20 @@ class MlAuthorization
                   // isAuthorized= self.validateRole(userRole.roleId, module, action)
                 }
 
+                else if(moduleName == 'CLUSTER'){
+                    let userRole = _.find(user_roles, {clusterId:"all"})
+                    if(!userRole)
+                        userRole = _.find(user_roles, {clusterId:req.clusterId})
+                    return self.validateRole(userRole.roleId, module, action)
+                }
+
                 else {
-                    user_roles.map(function (userRole) {
-                      // isAuthorized = self.validateRole(userRole.roleId, module, action)
-                      //   if(isAuthorized)
-                      ret = self.validateRole(userRole.roleId, module, action)
+                    user_roles.map(function (role) {
+                      ret = self.validateRole(role.roleId, module, action)
                       if(ret)
-                            return;
+                        return ret;
                     })
+
                 }
             }
             // if(isAuthorized){
@@ -90,16 +96,16 @@ class MlAuthorization
         // return isAuthorized;
     }
 
-    validateRole(roleId, module, action){
+    validateRole(roleId, accessModule, accessAction){
         let ret = false;
         let role = MlRoles.findOne({_id:roleId})
         if(role)
         {
           role.modules.map(function (module) {
-            if(module.moduleId == "all" || module.moduleId == module._id){
+            if(module.moduleId == "all" || module.moduleId == accessModule._id){
               let actions = module.actions;
               actions.map(function (action) {
-                if(action.actionId == "all" || action.actionId == action._id){
+                if(action.actionId == "all" || action.actionId == accessAction._id){
                   ret = true;
                   return;
                 }

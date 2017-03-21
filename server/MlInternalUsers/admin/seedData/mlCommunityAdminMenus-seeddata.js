@@ -1,23 +1,28 @@
+/**
+ * Created by venkatasrinag on 20/3/17.
+ */
+/**
+ * Created by venkatasrinag on 20/3/17.
+ */
 if(Meteor.isServer){
-  MlMenus.upsert({name:"mlClusterAdminMenu"},{$set:{
-    "name" : "mlClusterAdminMenu",
+  MlMenus.upsert({name:"mlCommunityAdminMenu"},{$set:{
+    "name" : "mlCommunityAdminMenu",
     "menu" : [
       {
         "image" : "/images/db_icon.png",
-        "link" : "/admin/dashboard/chapters",
+        "link" : "/admin/dashboard/clusters",
         "name" : "dashboard",
         "uniqueId" : "dashboard",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "",
+            "link" : "/admin/dashboard/clusters",
             "name" : "Clusters",
             "uniqueId" : "dashboard_clusters",
-            "subMenuMappingId":"",
+            "subMenuMappingId":"dashboard_clusters",
             "subMenusId":"dashboard",
-            "isLink" : false,
-            "isDisabled":true,
+            "isLink" : true,
             "isMenu" : true,
             "image" : ""
           },
@@ -75,6 +80,7 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "hideSubMenu":true,
+        "isDisabled":true,
         "subMenu":[
           {
             "link" : "/admin/clusters/clusterDetails",

@@ -9,7 +9,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 
-export default class institution extends React.Component{
+export default class Company extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -25,33 +25,29 @@ export default class institution extends React.Component{
       selectedStageOfCompany:null,
       selectedSubsidaryComapny:null,
       registrationId:'',
-      registrationDetails:'',
-      identity:''
+      registrationDetails:''
 
     };
     return this;
   }
 
   componentWillMount() {
-    let details = this.props.registrationDetails;
-    if (details) {
-    this.setState({
-      loading: false,
-      registrationDetails: details,
-      registrationId: this.props.registrationId,
-      selectedUserType: details.userType,
-      selectedHeadquarter: details.headQuarterLocation,
-      selectedBranches: details.branchLocations,
-      selectedLookingFor: details.lookingFor,
-      selectedTypeOfCompany: details.companytyp,
-      selectedTypeOfEntity: details.entityType,
-      selectedTypeOfBusiness: details.businessType,
-      selectedTypeOfIndustry: details.industry,
-      selectedSubDomain: details.subDomain,
-      selectedStageOfCompany: details.stageOfCompany,
-      selectedSubsidaryComapny: details.subsidaryCompany
+    let details=this.props.registrationDetails;
+    this.setState({loading:false,
+      registrationDetails:details,
+      registrationId:this.props.registrationId,
+      selectedUserType:details.userType,
+      selectedHeadquarter:details.headQuarterLocation,
+      selectedBranches:details.branchLocations,
+      selectedLookingFor:details.lookingFor,
+      selectedTypeOfCompany:details.companytyp,
+      selectedTypeOfEntity:details.entityType,
+      selectedTypeOfBusiness:details.businessType,
+      selectedTypeOfIndustry:details.industry,
+      selectedSubDomain:details.subDomain,
+      selectedStageOfCompany:details.stageOfCompany,
+      selectedSubsidaryComapny:details.subsidaryCompany
     })
-  }
   }
 
   componentDidMount()
@@ -92,71 +88,40 @@ export default class institution extends React.Component{
   optionsBySelectSubsidaryComapny(val){
     this.setState({selectedSubsidaryComapny:val.value})
   }
-  checkIdentity(event){
-    console.log(event.target.name)
-    this.setState({identity:event.target.name})
-  }
 
   async  updateregistration() {
-    let Details=null;
-    if(this.state.identity=='Company'){
-       Details = {
-        registrationId      : this.props.registrationId,
-        details:{
-          userType              :   this.state.selectedUserType,
-          companyName           :   this.refs.companyName.value,
-          groupName             :   this.refs.groupName.value,
-          companyWebsite        :   this.refs.companyWebsite.value,
-          companyEmail          :   this.refs.companyEmail.value,
-          foundationDate        :   this.refs.foundationDate.value,
-          headQuarterLocation   :   this.state.selectedHeadquarter,
-          branchLocations       :   this.state.selectedBranches,
-          companytyp            :   this.state.selectedTypeOfCompany,
-          entityType            :   this.state.selectedTypeOfEntity,
-          businessType          :   this.state.selectedTypeOfBusiness,
-          industry              :   this.state.selectedTypeOfIndustry,
-          subDomain             :   this.state.selectedSubDomain,
-          stageOfCompany        :   this.state.selectedStageOfCompany,
-          subsidaryCompany      :   this.state.selectedSubsidaryComapny,
-          parentCompany         :   this.refs.parentCompany.value,
-          registrationNumber    :   this.refs.registrationNumber.value,
-          isoAccrediationNumber :   this.refs.isoAccrediationNumber.value,
-          companyTurnOver       :   this.refs.companyTurnOver.value,
-          partnerCompanies      :   this.refs.partnerCompanies.value,
-          investors             :   this.refs.investors.value,
-          lookingFor            :   this.state.selectedLookingFor,
-          companyCEOName        :   this.refs.companyCEOName.value,
-          companyManagement     :   this.refs.companyManagement.value,
-          toatalEmployeeCount   :   this.refs.toatalEmployeeCount.value,
-          associatedCompanies   :   this.refs.associatedCompanies.value
-        }
-      }
-    }else{
-       Details = {
-        registrationId      : this.props.registrationId,
-        details:{
-          identityType      : this.state.identity,
-          userType          : this.state.selectedUserType,
-          title             : '',
-          firstName         : this.refs.companyName.value,
-          middleName        : this.refs.companyName.value,
-          lastName          : this.refs.companyName.value,
-          displayName       : this.refs.companyName.value,
-          dateOfBirth       : this.refs.companyName.value,
-          gender            : '',
-          citizenships      : '',
-          qualification     : this.refs.companyName.value,
-          employmentStatus  : '',
-          professionalTag   : this.refs.companyName.value,
-          industry          : this.state.selectedTypeOfIndustry,
-          profession        : '',
-          employerName      : this.refs.companyName.value,
-          employerWebsite   : this.refs.companyName.value,
-          employmentDate    : this.refs.employmentDate.value
-        }
+    let Details = {
+      registrationId      : this.props.registrationId,
+      details:{
+        userType              :   this.state.selectedUserType,
+        companyName           :   this.refs.companyName.value,
+        groupName             :   this.refs.groupName.value,
+        companyWebsite        :   this.refs.companyWebsite.value,
+        companyEmail          :   this.refs.companyEmail.value,
+        foundationDate        :   this.refs.foundationDate.value,
+        headQuarterLocation   :   this.state.selectedHeadquarter,
+        branchLocations       :   this.state.selectedBranches,
+        companytyp            :   this.state.selectedTypeOfCompany,
+        entityType            :   this.state.selectedTypeOfEntity,
+        businessType          :   this.state.selectedTypeOfBusiness,
+        industry              :   this.state.selectedTypeOfIndustry,
+        subDomain             :   this.state.selectedSubDomain,
+        stageOfCompany        :   this.state.selectedStageOfCompany,
+        subsidaryCompany      :   this.state.selectedSubsidaryComapny,
+        parentCompany         :   this.refs.parentCompany.value,
+        registrationNumber    :   this.refs.registrationNumber.value,
+        isoAccrediationNumber :   this.refs.isoAccrediationNumber.value,
+        companyTurnOver       :   this.refs.companyTurnOver.value,
+        partnerCompanies      :   this.refs.partnerCompanies.value,
+        investors             :   this.refs.investors.value,
+        lookingFor            :   this.state.selectedLookingFor,
+        companyCEOName        :   this.refs.companyCEOName.value,
+        companyManagement     :   this.refs.companyManagement.value,
+        toatalEmployeeCount   :   this.refs.toatalEmployeeCount.value,
+        associatedCompanies   :   this.refs.associatedCompanies.value
       }
     }
-    this.props.getRegistrationDetails();
+    //this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
@@ -233,18 +198,16 @@ export default class institution extends React.Component{
               <div className="ml_tabs">
                 <ul  className="nav nav-pills">
                   <li className="active">
-                    <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
+                    <a  href="#3a" data-toggle="tab">Individual&nbsp;</a>
                   </li>
                   <li>
-                    <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
+                    <a href="#4a" data-toggle="tab">Company&nbsp;</a>
                   </li>
                 </ul>
               </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
               </div>
-              {(this.state.identity=='Company'||this.state.identity=='')?
-                <div>
               <div className="form-group">
                 <input type="text" ref="companyName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName} placeholder="Company name" className="form-control float-label" id=""/>
               </div>
@@ -282,41 +245,12 @@ export default class institution extends React.Component{
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Looking For" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedLookingFor} queryType={"graphql"} query={lookinforquery} onSelect={that.optionsBySelectLookingFor.bind(this)} isDynamic={true}/>
               </div>
-                </div>
-              :
-              <div>
-                <div className="form-group">
-                  <Select name="form-field-name" placeholder="Title" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
-                </div>
-                <div className="form-group">
-                  <input type="text" ref="firstName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} placeholder="FirstName" className="form-control float-label" id=""/>
-                </div>
-                <div className="form-group">
-                  <input type="text" ref="middleName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.middleName} placeholder="Middle Name" className="form-control float-label" id=""/>
-                </div>
-                <div className="form-group">
-                  <input type="text" ref="lastName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} placeholder="Last Name" className="form-control float-label" id=""/>
-                </div>
-                <div className="form-group">
-                  <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
-                </div>
-                <div className="form-group">
-                  <input type="text" ref="dateOfBirth" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.dateOfBirth} placeholder="Date Of Birth" className="form-control float-label" id=""/>
-                  <FontAwesome name="calendar" className="password_icon"/>
-                </div>
-                <div className="form-group">
-                  <Select name="form-field-name" placeholder="Gender" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
-                </div>
-              </div>
-              }
             </form>
           </div>
         </div>
         <div className="col-md-6 nopadding-right">
           <div className="form_bg">
             <form>
-              {(this.state.identity=='Company'||this.state.identity=='')?
-                <div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select Type of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} query={companytypesquery} onSelect={that.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
               </div>
@@ -357,35 +291,6 @@ export default class institution extends React.Component{
               <div className="form-group">
                 <input type="text" ref="associatedCompanies" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.associatedCompanies} placeholder="Associate company" className="form-control float-label" id=""/>
               </div>
-              </div> :<div>
-
-                  <div className="form-group">
-                    <input type="text" ref="qualification" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.qualification}  placeholder="Qualification" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group">
-                    <Select name="form-field-name" placeholder="Employment Status" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="professionalTag" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.professionalTag}  placeholder="Professional Tag" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
-                  </div>
-                  <div className="form-group">
-                    <Select name="form-field-name" placeholder="Profession" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="employerName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerName}  placeholder="Employer Name" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="employmentDate" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employmentDate} placeholder="Date Of Birth" className="form-control float-label" id=""/>
-                    <FontAwesome name="calendar" className="password_icon"/>
-                  </div>
-
-                </div>}
 
             </form>
           </div>

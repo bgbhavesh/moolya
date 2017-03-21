@@ -9,6 +9,7 @@ export async function findRegistrationActionHandler(registrationId) {
         findRegistrationInfo(registrationId:$id){          
           _id
           registrationInfo {
+            _id
             userType
             firstName
             lastName
@@ -44,7 +45,62 @@ export async function findRegistrationActionHandler(registrationId) {
             userId
             registrationStatus
             assignedUser
-          } 
+          }
+        registrationDetails {
+          userType
+          companyName
+          groupName
+          companyWebsite
+          companyEmail
+          foundationDate
+          headQuarterLocation
+          companytyp
+          entityType
+          businessType
+          industry
+          subDomain
+          stageOfCompany
+          subsidaryCompany
+          parentCompany
+          registrationNumber
+          isoAccrediationNumber
+          companyTurnOver
+          partnerCompanies
+          investors
+          lookingFor
+          companyCEOName
+          companyManagement
+          toatalEmployeeCount
+          associatedCompanies
+          userCategory
+          institutionType
+          instituteName
+          instituteGroupName
+          foundationYear
+          website
+          curriculamProvider
+          associatedUniversity
+          studentCount
+          staffCount
+          chairman
+          dean
+          identityType
+          title
+          firstName
+          middleName
+          lastName
+          displayName
+          dateOfBirth
+          gender
+          qualification
+          employmentStatus
+          professionalTag
+          profession
+          employerName
+          employerWebsite
+          employmentDate
+          experience
+        }    
         }
       }
     `,

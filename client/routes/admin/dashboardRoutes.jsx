@@ -10,10 +10,15 @@ import {mlCommunityDashboardListConfig, mlCommunityDashboardMapConfig} from '../
 import MlCommunityList from "../../admin/dashboard/component/MlCommunityList";
 import MlViews from '../../admin/core/components/MlViews'
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
+import {getUserContext} from '../../commons/getAdminUserContext'
 
 adminSection.route('/dashboard', {
-  triggersEnter: [function(context, redirect) {
-    redirect('/admin/dashboard/clusters');
+  triggersEnter: [function(context, redirect){
+      let hierarchyCode = getUserContext()
+      if(hierarchyCode == 'PLATFORM')
+          redirect('/admin/dashboard/clusters');
+      else
+          redirect('/admin/dashboard/chapters');
   }]
 
 });

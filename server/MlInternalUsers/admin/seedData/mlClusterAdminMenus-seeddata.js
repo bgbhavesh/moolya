@@ -247,7 +247,33 @@ if(Meteor.isServer){
             "dynamicLink" : true,
             "dynamicLinkHandler" : "",
             "subMenusId":"chapter",
-            "subMenuMappingId":"chapter_communities"
+            "subMenuMappingId":"chapter_communities",
+            "subMenu" : [
+              {
+                "link" : "/admin/chapters/subChapters/communities/communityDetails",
+                "name" : "Community Details",
+                "uniqueId" : "chapter_communities_communityDetails",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"chapter_communities",
+                "subMenuMappingId":"chapter_communities_communityDetails"
+              },
+              {
+                "link" : "/admin/chapters/subChapters/communities/assignusers",
+                "name" : "Backend Users",
+                "uniqueId" : "chapter_communities_assignusers",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"chapter_communities",
+                "subMenuMappingId":"chapter_communities_assignusers"
+              },
+            ]
           },
           {
             "link" : "/admin/chapters/assignusers",
@@ -272,12 +298,16 @@ if(Meteor.isServer){
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admichapters/comminty/communities",
-            "name" : "Communities",
-            "uniqueId" : "community_communities",
+            "link" : "/admin/community/communityDetails",
+            "name" : "Community Details",
+            "uniqueId" : "community_Community_Details",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "subMenuMappingId":"community_Community_Details"
           },
         ]
       },

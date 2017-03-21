@@ -22,7 +22,7 @@ MlResolver.MlQueryResolver['FetchBreadCrumHierarchyDetails'] = (obj, args, conte
     details.push({hierarchyLevel:1,hierarchyRefId:subChapter._id,hierarchyRefName:subChapter.subChapterName,'moduleFieldRef':'subChapterId'});
   }
   if(request.communityId&&request.communityId.trim()!==""){
-    let community=MlCommunity.findOne(request.communityId);
+    let community=MlCommunityAccess.findOne({communityDefCode:request.communityId});
     details.push({hierarchyLevel:0,hierarchyRefId:community._id,hierarchyRefName:community.communityName,'moduleFieldRef':'communityId'});
   }
   return details;

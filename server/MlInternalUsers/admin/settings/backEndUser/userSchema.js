@@ -43,7 +43,6 @@ let BackEndUser = `
         clusterId: String,
         clusterName:String,
         userRoles:[UserRoles],
-        isChapterAdmin :Boolean
     }
     
     
@@ -190,7 +189,6 @@ let BackEndUser = `
     }
     
     type Query{
-        fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
         fetchUserDetails(userId:String): userDetails
         fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String): [BackendUsers]
@@ -206,3 +204,5 @@ let BackEndUser = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
 // userObject changed
 // fetchChapterBasedRoles(userId:String, clusterId:String): UserProfiles
+// fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
+

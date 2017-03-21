@@ -83,7 +83,7 @@ if(Meteor.isServer){
         "link" : "/admin/chapters",
         "uniqueId" : "chapter",
         "name" : "chapter",
-        "isLink" : "true",
+        "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {

@@ -38,7 +38,18 @@ export default class Step1 extends React.Component{
   }
   componentWillMount() {
     let details=this.props.registrationInfo;
-    this.setState({loading:false,registrationDetails:details,registrationId:this.props.registrationId})
+    this.setState({loading:false,
+      registrationDetails:details,
+      registrationId:this.props.registrationId,
+      country :details.countryName,
+      selectedCity : details.cityId,
+      registrationType : details.registrationType,
+      subscription: details.accountType,
+      institutionAssociation :details.institutionAssociation,
+      refered: details.referralType,
+      cluster : details.clusterId,
+      chapter :details.chapterId
+      })
   }
 
   componentDidMount()
@@ -98,7 +109,7 @@ export default class Step1 extends React.Component{
       password        :  this.refs.password.value,
       accountType     :  this.state.subscription,
       institutionAssociation    :   this.state.institutionAssociation,
-      companyName     :  this.refs.companyName.value,
+      companyname     :  this.refs.companyName.value,
       companyUrl      :  this.refs.companyUrl.value,
       remarks         :  this.refs.remarks.value,
       referralType    :  this.state.refered,
@@ -256,7 +267,7 @@ export default class Step1 extends React.Component{
                   <Select name="form-field-name"  placeholder="Do you want to associate to any of the institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName}  className="form-control float-label" id=""/>
+                  <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyname}  className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="companyUrl" placeholder="Company URL"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyUrl}  className="form-control float-label" id=""/>

@@ -23,7 +23,7 @@ export async function findRegistrationActionHandler(registrationId) {
             password
             accountType
             institutionAssociation
-            companyName
+            companyname
             companyUrl
             remarks
             referralType

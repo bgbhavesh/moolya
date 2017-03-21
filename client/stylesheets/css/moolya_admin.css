@@ -499,7 +499,8 @@ ol.progtrckr li{background-color: #273545;margin: 0px 52px;position: relative;wi
 ol.progtrckr li:before{}*/
 ol.progtrckr li span.step_name{position: absolute; top: 48px; white-space: nowrap; width: 129px; left: -40px; text-align: center;}
 ol.progtrckr li span.step_name b{font-size: 13px; background: #fff; padding: 0px 8px 2px 8px; border: 1px solid #ccc; border-radius: 3px;font-weight: normal;}
-ol.progtrckr li b.step_icon{display: inline-block;width: 35px;height: 35px;background: url(/images/step_icon.png);margin-top: 11px;position: relative;}
+ol.progtrckr li b.step_icon{display: inline-block;width: 35px;height: 35px;margin-top: 11px;position: relative;}
+.step_icon .ml{font-size: 37px; color: #FFF; font-weight: normal; text-shadow: 0px 1px 1px #333; }
 .progtrckr li em{position: absolute; width: 153px; left: -54px; border-bottom: 4px solid #273545; height: 2px; overflow: hidden; top: 27px; z-index: -1;}
 .progtrckr li:first-of-type em{width: 112px; left: -13px;}
 .progtrckr li:last-of-type em{width: 91px;}

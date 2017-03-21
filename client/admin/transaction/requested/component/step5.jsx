@@ -2,162 +2,100 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
+import _ from 'lodash';
+import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
+import DocumentViewer from './DocumentViewer';
 
 export default class Step5 extends React.Component{
+  constructor(props){
+    super(props);
+    this.onDocumentSelect.bind(this);
+    this.onFileUpload.bind(this);
+    this.state={'selectedDocuments':[],'registrationDocuments':[{
+      docTypeName:"Self",
+      docTypeId:"1",
+      kycCategoryId:"1",
+      kycCategoryName:"Address",
+      documentId:"1",
+      documentDisplayName:"Driving License",
+      documentName:"Driving License",
+      isMandatory:true,
+      isActive:true,
+      docDefinition:{allowableFormat:[{name:"pdf",id:"1"},{name:"jpg",id:"1"}],allowableSize:5120},
+      docFiles:[{fileId:'1',fileUrl:'https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/Doctor(1).jpg',fileName:'doctor.jpg',fileSize:1365}],
+      status:"Approved/Rejected"
+    },
+      {
+        docTypeName:"Self",
+        docTypeId:"3",
+        kycCategoryId:"3",
+        kycCategoryName:"Pan Address",
+        documentId:"3",
+        documentDisplayName:"UAN",
+        documentName:"UAN",
+        isMandatory:true,
+        isActive:true,
+        docDefinition:{allowableFormat:[{name:"pdf",id:"3"},{name:"jpg",id:"3"}],allowableSize:5120},
+        docFiles:[{fileId:'3',fileUrl:'https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/Doctor(1).jpg',fileName:'doctor.jpg',fileSize:1365}],
+        status:"Approved/Rejected"
+      }, {docTypeName:"Process",
+      docTypeId:"2",
+      kycCategoryId:"2",
+      kycCategoryName:"ID",
+      documentId:"2",
+      documentDisplayName:"ID Proof",
+      documentName:"ID Proof",
+      isMandatory:true,
+      docDefinition:{allowableFormat:[{name:"pdf",id:"2"},{name:"jpg",id:"2"}],allowableSize:5120},
+      docFiles:[{fileId:'2',fileUrl:'https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/next_btn.png',fileName:'next_btn.img',fileSize:1365}],
+      status:"Approved/Rejected"
+      }
+    ]};
+       return this;
+  }
+
   componentDidMount()
   {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-
-    $('.uploaded_files .upload_file').change(function(){
-      var FileName = $(this).val().replace(/C:\\fakepath\\/i, '');
-      $(this).parents('.uploaded_files').find(".panel-body ul").prepend('<li class="doc_card" data-toggle="tooltip" data-placement="bottom" title="'+FileName+'"><span class="ml ml-minus"></span><img id="preview_file" /></li>');
-      $(this).parents('.uploaded_files').find("#preview_file").attr("src", URL.createObjectURL(this.files[0]));
-      $('[data-toggle="tooltip"]').tooltip({container:'body'});
-    });
   }
+
+  onDocumentSelect(){
+
+  };
+
+   onFileUpload(file,documentId){
+    let id=this.props.registrationInfo&&this.props.registrationInfo._id?this.props.registrationInfo._id:'';
+    let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+  }
+
+  onFileUploadCallBack(resp){
+        if(resp){
+           //refresh the registration data in the parent
+        }
+  }
+
   render(){
+    console.log(this.props.registrationInfo);
+    let registrationDocuments=this.state.registrationDocuments||[];
+    let registrationDocumentsGroup=_.groupBy(registrationDocuments,'docTypeName')||{};
+    let that=this;
     return (
       <div className="step_form_wrap step5">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
-          <h3>Self KYC</h3>
+          {Object.keys(registrationDocumentsGroup).map(function(key) {
+            return (<div key={key}>
+                     <h3>{key}</h3>
+                    {registrationDocumentsGroup[key].map(function (regDoc,id) {
 
-          <div className="col-lg-4 nopadding-left">
-            <div className="panel panel-default uploaded_files">
-              <div className="panel-heading">
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Passport</label></div>
-                <div className="pull-right block_action">
-                  <div className="fileUpload upload_file_mask">
-                    <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                      <input type="file" className="upload_file upload" name="file_source" /></a>
-                  </div>
-                </div>
-                <div className="pull-right block_action">
-                  <span className="single_icon ml ml-information"></span>
-                </div>
-              </div>
-              <div className="panel-body uploaded_files_swiper">
-                <ul className="swiper-wrapper">
-                  <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                </ul>
-              </div>
-              <div className="panel-body">
-                asdffdf
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-4">
-            <div className="panel panel-default uploaded_files">
-              <div className="panel-heading">
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Passport</label></div>
-                <div className="pull-right block_action">
-                  <div className="fileUpload upload_file_mask">
-                    <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                      <input type="file" className="upload_file upload" name="file_source" /></a>
-                  </div>
-                </div>
-                <div className="pull-right block_action">
-                  <span className="single_icon ml ml-information"></span>
-                </div>
-              </div>
-              <div className="panel-body uploaded_files_swiper">
-
-                <ul className="swiper-wrapper">
-                  <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-4 nopadding-right">
-            <div className="panel panel-default uploaded_files">
-              <div className="panel-heading">
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Passport</label></div>
-                <div className="pull-right block_action">
-                  <div className="fileUpload upload_file_mask">
-                    <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                      <input type="file" className="upload_file upload" name="file_source" /></a>
-                  </div>
-                </div>
-                <div className="pull-right block_action">
-                  <span className="single_icon ml ml-information"></span>
-                </div>
-              </div>
-              <div className="panel-body uploaded_files_swiper">
-
-                <ul className="swiper-wrapper">
-                  <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <h3>Self KYC</h3>
-          <div className="col-lg-4 nopadding-left">
-            <div className="panel panel-default uploaded_files">
-              <div className="panel-heading">
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Passport</label></div>
-                <div className="pull-right block_action">
-                  <div className="fileUpload upload_file_mask">
-                    <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                      <input type="file" className="upload_file upload" name="file_source" /></a>
-                  </div>
-                </div>
-                <div className="pull-right block_action">
-                  <span className="single_icon ml ml-information"></span>
-                </div>
-              </div>
-              <div className="panel-body uploaded_files_swiper">
-
-                <ul className="swiper-wrapper">
-                  <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-4 nopadding">
-            <div className="panel panel-default uploaded_files">
-              <div className="panel-heading">
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Passport</label></div>
-                <div className="pull-right block_action">
-                  <div className="fileUpload upload_file_mask">
-                    <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                      <input type="file" className="upload_file upload" name="file_source" /></a>
-                  </div>
-                </div>
-                <div className="pull-right block_action">
-                  <span className="single_icon ml ml-information"></span>
-                </div>
-              </div>
-              <div className="panel-body uploaded_files_swiper">
-
-                <ul className="swiper-wrapper">
-                  <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-4 nopadding-right">
-            <div className="panel panel-default uploaded_files">
-              <div className="panel-heading">
-                <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Passport</label></div>
-                <div className="pull-right block_action">
-                  <div className="fileUpload upload_file_mask">
-                    <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                      <input type="file" className="upload_file upload" name="file_source" /></a>
-                  </div>
-                </div>
-                <div className="pull-right block_action">
-                  <span className="single_icon ml ml-information"></span>
-                </div>
-              </div>
-              <div className="panel-body uploaded_files_swiper">
-
-                <ul className="swiper-wrapper">
-                  <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </ScrollArea>
+                      return(
+                       <DocumentViewer key={regDoc.documentId} doc={regDoc} onFileUpload={that.onFileUpload.bind(that)}/>);
+                    })
+                    }<br className="brclear"/></div>
+                    )
+          })}
+         </ScrollArea>
       </div>
     )
   }

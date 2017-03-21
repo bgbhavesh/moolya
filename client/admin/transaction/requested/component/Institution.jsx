@@ -16,16 +16,7 @@ export default class institution extends React.Component{
       selectedUserType:null,
       selectedHeadquarter:null,
       selectedBranches:null,
-      selectedLookingFor:null,
-      selectedTypeOfCompany:null,
-      selectedTypeOfEntity:null,
-      selectedTypeOfBusiness:null,
-      selectedTypeOfIndustry:null,
-      selectedSubDomain:null,
-      selectedStageOfCompany:null,
-      selectedSubsidaryComapny:null,
       selectedInstitutionType:null
-
     };
     return this;
   }
@@ -44,37 +35,29 @@ export default class institution extends React.Component{
   optionsBySelectBranch(value){
     this.setState({selectedBranches:value})
   }
-  optionsBySelectLookingFor(value){
-    this.setState({selectedLookingFor:value})
-  }
-  optionsBySelectTypeOfCompany(value){
-    this.setState({selectedTypeOfCompany:value})
-  }
-  optionsBySelectTypeOfEntity(value){
-    this.setState({selectedTypeOfEntity:value})
-  }
-  optionsBySelectTypeOfBusiness(value){
-    this.setState({selectedTypeOfBusiness:value})
-  }
-  optionsBySelectTypeOfIndustry(value){
-    this.setState({selectedTypeOfIndustry:value})
-  }
-  optionsBySelectSubDomain(value){
-    this.setState({selectedSubDomain:value})
-  }
-  optionsBySelectStageOfCompany(value){
-    this.setState({selectedStageOfCompany:value})
-  }
-  optionsBySelectSubsidaryComapny(value){
-    this.setState({selectedSubsidaryComapny:value})
-  }
   optionsBySelectInstitutionType(val){
     this.setState({selectedInstitutionType:val.value})
   }
 
   async  updateregistrationInfo() {
     let Details = {
-      registrationId : this.state.registrationId,
+      registrationId      : this.state.registrationId,
+      userCategory        : this.state.selectedUserType,
+      institutionType     : this.refs.institutionType.value,
+      instituteName       : this.refs.instituteName.value,
+      instituteGroupName  : this.refs.instituteGroupName.value,
+      foundationYear      : this.refs.foundationYear.value,
+      website             : this.refs.website.value,
+      registrationNumber  : this.refs.registrationNumber.value,
+      isoAccrediationNumber: this.refs.isoAccrediationNumber.value,
+      curriculamProvider  : this.refs.curriculamProvider.value,
+      associatedUniversity: this.refs.associatedUniversity.value,
+      studentCount        : this.refs.studentCount.value,
+      staffCount          : this.refs.staffCount.value,
+      chairman            : this.refs.chairman.value,
+      dean                : this.refs.dean.value,
+      headQuarterLocation:  this.state.selectedHeadquarter,
+      branchLocations:  this.state.selectedBranches
     }
     this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
@@ -151,23 +134,23 @@ export default class institution extends React.Component{
                   <Select name="form-field-name" placeholder="Select institution Type" options={institutionTypes} selectedValue={this.state.selectedInstitutionType} onSelect={that.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Institute Name " className="form-control float-label" id=""/>
+                  <input type="text" ref="instituteName" placeholder="Institute Name " className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Institute Group Name" className="form-control float-label" id=""/>
+                  <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Foundation year" className="form-control float-label" id=""/>
+                  <input type="text" ref="foundationYear" placeholder="Foundation year" className="form-control float-label" id=""/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Website" className="form-control float-label" id=""/>
+                  <input type="text" ref="website" placeholder="Website" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Registration Number" className="form-control float-label" id=""/>
+                  <input type="text" ref="registrationNumber" placeholder="Registration Number" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="ISO Accrediation Number" className="form-control float-label" id=""/>
+                  <input type="text"  ref="isoAccrediationNumber" placeholder="ISO Accrediation Number" className="form-control float-label" id=""/>
                 </div>
 
           </form>
@@ -176,24 +159,23 @@ export default class institution extends React.Component{
     <div className="col-md-6 nopadding-right">
     <div className="form_bg">
     <form>
-
             <div className="form-group">
-              <input type="text" placeholder="Curriculam provider" className="form-control float-label" id=""/>
+              <input type="text" ref="curriculamProvider" placeholder="Curriculam provider" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" placeholder="Associated university" className="form-control float-label" id=""/>
+              <input type="text" ref="associatedUniversity" placeholder="Associated university" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" placeholder="Toatal number of students" className="form-control float-label" id=""/>
+              <input type="text" ref="studentCount" placeholder="Toatal number of students" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" placeholder="Total number of staff" className="form-control float-label" id=""/>
+              <input type="text" ref="staffCount" placeholder="Total number of staff" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" placeholder="Chairman name" className="form-control float-label" id=""/>
+              <input type="text" ref="chairman" placeholder="Chairman name" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" placeholder="Dean name" className="form-control float-label" id=""/>
+              <input type="text" ref="dean" placeholder="Dean name" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
               <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>

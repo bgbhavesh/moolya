@@ -146,7 +146,7 @@ let registrationSchema = `
         password        :   String,
         accountType     :   String,
         institutionAssociation    :   String,
-        companyName     :   String,
+        companyname     :   String,
         companyUrl      :   String,
         remarks         :   String,
         referralType    :   String,
@@ -188,7 +188,7 @@ let registrationSchema = `
           foundationDate:  Date,
           headQuarterLocation: String,
           branchLocations: [branchLocation]
-          companytype: String,
+          companytyp: String,
           entityType:  String,
           businessType: String,
           industry: String,
@@ -249,6 +249,7 @@ let registrationSchema = `
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
+         updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

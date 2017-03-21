@@ -4,9 +4,9 @@
 
 import _ from 'lodash'
 
-export function getUserContext() {
-    let hierarchyLevel=null;
+export function getAdminUserContext() {
     let user = Meteor.user();
+    let hierarchyLevel = null, hierarchyCode = null;
     if(user && user.profile && user.profile.isInternaluser == true)
     {
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
@@ -41,6 +41,5 @@ export function getUserContext() {
       }
     }
 
-    return hierarchyCode;
-
+  return {hierarchyCode:hierarchyCode,clusterId:defaultCluster}
 }

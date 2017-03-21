@@ -1,5 +1,6 @@
 import React from 'react';
-import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
+import {updateProcessActionHandler} from '../actions/upsertProcessDocAction'
+import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 class ActiveProcessFormatter extends React.Component {
   constructor(props) {
     super(props);
@@ -10,6 +11,10 @@ class ActiveProcessFormatter extends React.Component {
     if(this.props.data.isActive){
       this.refs.status.checked = true
     }
+    OnToggleSwitch(true,true);
+  }
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
   }
   async onChange(data) {
     if (this.refs.status.checked == true) {

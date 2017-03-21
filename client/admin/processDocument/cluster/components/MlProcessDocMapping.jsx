@@ -2,49 +2,63 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {findDocumentMappingActionHandler} from '../actions/findDocumentMappingAction'
-import ActiveProcessFormatter from "./ActiveProcessDocFormatter"
 import DocumentActiveComponent from "./DocumentActiveComponent";
+import MandatoryProcessDocFormatter from "./MandatoryProcessDocFormatter"
+import _ from 'underscore'
 export default class MlProcessDocMapping extends Component {
     constructor(props){
       super(props);
+
       this.state={
-        documentInfo:[]
+        documentInfo:[],
+        processDocumentsList:[]
       }
+      this.findDocument=this.findDocument.bind(this);
       return this;
     }
+
   componentDidMount() {
 
   }
   componentWillMount(){
   //  console.log(this.props.config);
-    const resp=this.findDocument();
-    return resp;
+    const processResp=this.findDocument();
+
+
+    return processResp;
   }
+
   async findDocument() {
+   /* const respProcessDoc=findProcessDocument();
+    console.log(respProcessDoc)*/
     let kycId = this.props.kycConfig
     const response = await findDocumentMappingActionHandler(kycId);
     console.log(response);
     if(response){
       let documentDetails=[]
+      //let processDocumentsList=this.state.processDocumentsList
       for(let i=0;i<response.length;i++){
-        let json={
-
-          Name:response[i].documentName,
-          Formate:response[i].allowableFormat,
-        MaxSize:response[i].allowableMaxSize,
-          Action:response[i],
+        let json = {
+          Id:response[i]._id,
+          Name: response[i].documentName,
+          Formate: response[i].allowableFormat,
+          MaxSize: response[i].allowableMaxSize
         }
         documentDetails.push(json);
       }
+
       this.setState({"documentInfo":documentDetails})
     }
   }
 
-  SwitchBtn(cell, row){
-   // console.log(this)
-    return <DocumentActiveComponent data={row} />;
-  }
 
+  SwitchBtn(cell, row){
+    return <DocumentActiveComponent data={row} processConfig={this.props.processConfig} kycConfig={this.props.kycConfig} docTypeConfig={this.props.docConfig}/>;
+  }
+  SwitchMandatoryBtn(cell, row){
+
+    return <MandatoryProcessDocFormatter data={row} processConfig={this.props.processConfig} kycConfig={this.props.kycConfig} docTypeConfig={this.props.docConfig}/>;
+  }
 
   render() {
     const options = {
@@ -56,10 +70,7 @@ export default class MlProcessDocMapping extends Component {
       clickToSelect: true,  // click to select, default is false
       clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
     }
-  /*function SwitchBtn(cell, row){
-    this.onChange()
-    return '<div class="form-group switch_wrap"><label class="switch"><input type="checkbox" onChange={this.onChange.bind(row,cell)} />cell<div class="slider"></div></label></div> ';
-    }*/
+
 
     return (
 
@@ -71,10 +82,12 @@ export default class MlProcessDocMapping extends Component {
                            pagination
           >
             {/*<TableHeaderColumn dataField="docId" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>*/}
+            <TableHeaderColumn  dataField="Id" hidden={true}>Id</TableHeaderColumn>
             <TableHeaderColumn  isKey={true} dataField="Name">Name</TableHeaderColumn>
             <TableHeaderColumn dataField="Formate">Formate</TableHeaderColumn>
             <TableHeaderColumn dataField="MaxSize">MaxSize</TableHeaderColumn>
-            <TableHeaderColumn dataField="Action" dataFormat={this.SwitchBtn.bind(this)}>Action</TableHeaderColumn>
+            <TableHeaderColumn dataField="Mandatory" dataFormat={this.SwitchMandatoryBtn.bind(this)}>Mandatory</TableHeaderColumn>
+            <TableHeaderColumn dataField="Active" dataFormat={this.SwitchBtn.bind(this)}>Action</TableHeaderColumn>
           </BootstrapTable>
 
 

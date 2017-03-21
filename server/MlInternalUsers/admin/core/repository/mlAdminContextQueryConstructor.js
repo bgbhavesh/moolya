@@ -18,7 +18,7 @@ class MlAdminContextQueryConstructor
     let hierarchy=null;
     let userProfile=new MlAdminUserContext().userProfileDetails(this.userId);
 
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile || (!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
         throw new Error("Invalid User,Default Profile is not available");
     }
 

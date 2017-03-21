@@ -6,7 +6,7 @@ import _ from 'lodash'
 
 export function getAdminUserContext() {
     let user = Meteor.user();
-    let hierarchyLevel = null, hierarchyCode = null;
+    let hierarchyLevel = null, hierarchyCode = null, defaultCluster = null;
     if(user && user.profile && user.profile.isInternaluser == true)
     {
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;

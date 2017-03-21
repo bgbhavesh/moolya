@@ -99,8 +99,7 @@ export async function findRegistrationActionHandler(registrationId) {
           employerWebsite
           employmentDate
           experience
-        }    
-          },
+        }
           socialLinksInfo {
             socialLinkTypeName
             socialLinkType

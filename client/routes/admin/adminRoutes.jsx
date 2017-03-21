@@ -102,7 +102,7 @@ adminSection.route('/documents/clusterList', {
 adminSection.route('/documents/:pid/:kycid/:docid', {
   name: '',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping kycConfig={params.kycid} docConfig={params.docid}/>})
+    mount(AdminLayout,{headerContent:<MlAdminProcessDocHeader processMapConfig={params.pid} />,adminContent:<MlProcessDocMapping processConfig={params.pid} kycConfig={params.kycid} docConfig={params.docid}/>})
   }
 });
 

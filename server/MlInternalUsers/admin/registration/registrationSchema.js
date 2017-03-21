@@ -129,6 +129,12 @@ let registrationSchema = `
         _id             :   String,
         registrationInfo :  RegistrationInfo,
         registrationDetails : RegistrationDetails
+        registrationInfo :  RegistrationInfo,
+          addressInfo     : [AddressInfoSchema]
+         emailInfo       : [EmailInfoSchema]
+         contactInfo     : [ContactInfoSchema]
+         socialLinksInfo : [SocialLinkInfoSchema]
+        
     }
     
     type RegistrationInfo{        
@@ -325,6 +331,9 @@ let registrationSchema = `
     type Mutation{
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
+         updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
+         updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
+         createStep3InRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput,details:RegistrationDetailsInput):response
          updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response         
     }

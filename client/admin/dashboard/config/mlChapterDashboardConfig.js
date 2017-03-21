@@ -5,7 +5,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
-
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 const mlChapterDashboardListConfig=new MlViewer.View({
   name:"chapterDashBoardList",
@@ -16,8 +16,14 @@ const mlChapterDashboardListConfig=new MlViewer.View({
   pagination:true,
   sort:true,
   queryOptions:true,
-  buildQueryOptions:(config)=>{
-    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+  buildQueryOptions:(config)=>
+  {
+    if(!config.params){
+        let userDefaultObj = getAdminUserContext()
+        return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
+    }
+    else
+      return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   viewComponent:<MlChapterList />,
   graphQlQuery:gql`
@@ -58,8 +64,14 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
   pagination:false,
   sort:false,
   queryOptions:true,
-  buildQueryOptions:(config)=>{
-    return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+  buildQueryOptions:(config)=>
+  {
+      if(!config.params){
+        let userDefaultObj = getAdminUserContext()
+        return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
+      }
+      else
+        return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   viewComponent:<MlMapViewContainer />,
   actionConfiguration:[

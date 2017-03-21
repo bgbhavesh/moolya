@@ -1,7 +1,7 @@
 import React from 'react';
 import {upsertProcessDocActionHandler} from '../actions/upsertProcessDocAction'
 import {findProcessDocActionHandler} from '../actions/findProcessDocAction'
-class DocumentActiveComponent extends React.Component {
+class MandatoryProcessDocFormatter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{},isActive:false,isMandatory:false};
@@ -29,34 +29,34 @@ class DocumentActiveComponent extends React.Component {
         let fileterProcessDocuments = _.filter(processDocuments, function (docs) {
           return docs.kycCategoryId == kycid && docs.docTypeId == doctypeId&&docs.documentId== documentId
         });
-        if(fileterProcessDocuments[0].isMandatory){
-          this.setState({"isMandatory": fileterProcessDocuments[0].isMandatory})
+        if(fileterProcessDocuments[0].isActive){
+          this.setState({"isActive": fileterProcessDocuments[0].isActive})
         }else{
-          this.setState({"isMandatory": false})
+          this.setState({"isActive": false})
         }
-        this.setState({"isActive": fileterProcessDocuments[0].isActive})
+        this.setState({"isMandatory": fileterProcessDocuments[0].isMandatory})
       }
       return response;
     }
 
   }
   componentDidMount() {
-    if(this.props.data.Active==true){
+    if(this.props.data.Mandatory){
       this.refs.status.checked = true
-      this.setState({"isActive":true})
+      this.setState({"isMandatory":true})
 
     }else{
       this.refs.status.checked = false
-      this.setState({"isActive":false})
+      this.setState({"isMandatory":false})
     }
   }
   async onChange(data) {
-   if (this.refs.status.checked == true) {
+    if (this.refs.status.checked == true) {
       this.refs.status.checked = true;
-      this.setState({isActive:true});
+      this.setState({isMandatory:true});
     } else {
       this.refs.status.checked = false;
-      this.setState({isActive:false});
+      this.setState({isMandatory:false});
     }
 
     let processDocDetails = {
@@ -64,16 +64,15 @@ class DocumentActiveComponent extends React.Component {
       kycCategoryId:this.props.kycConfig,
       docTypeId:this.props.docTypeConfig,
       documentId:this.props.data.Id,
-      isMandatory:this.state.isMandatory,
-      isActive:this.refs.status.checked
-
+      isMandatory:this.refs.status.checked,
+      isActive:this.state.isActve,
     };
     const response= await upsertProcessDocActionHandler(processDocDetails);
     if (response){
       if(response.success) {
         FlowRouter.go("/admin/documents/" + this.props.processConfig + "/" + this.props.kycConfig + "/" + this.props.docTypeConfig);
       }
-        else {
+      else {
         toastr.error(response.result);
       }
     }
@@ -82,9 +81,9 @@ class DocumentActiveComponent extends React.Component {
   render() {
     //console.log(this.props.data);
     return (
-      <div className="form-group switch_wrap"><label className="switch"><input type="checkbox" ref="status" id="status" checked={this.state.isActive} onChange={this.onChange.bind(this,this.props.data)}/><div className="slider"></div></label></div>
+      <div className="input_types"><input  ref="status" checked={this.state.isMandatory} onChange={this.onChange.bind(this,this.props.data)}  id="checkbox1" type="checkbox" name="isMandatory" value="1" /><label htmlFor="checkbox1"><span></span></label></div>
     );
   }
 };
 
-export default DocumentActiveComponent;
+export default MandatoryProcessDocFormatter;

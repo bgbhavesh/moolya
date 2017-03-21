@@ -14,6 +14,7 @@ import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssign
 import MlChapterCommunityDetails from '../../admin/chapter/components/MlChapterCommunityDetails'
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
+import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 
 adminSection.route('/chapters/', {
   name: 'chapter_chapters',
@@ -59,6 +60,6 @@ adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/communities/:c
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/communities/:communityId/assignusers', {
   name: 'chapter_communities_assignusers',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlAssignChapterBackendUsers params={params}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
   }
 });

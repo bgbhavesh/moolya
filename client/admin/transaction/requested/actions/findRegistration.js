@@ -9,7 +9,6 @@ export async function findRegistrationActionHandler(registrationId) {
         findRegistrationInfo(registrationId:$id){          
           _id
           registrationInfo {
-            _id
             userType
             firstName
             lastName
@@ -101,6 +100,13 @@ export async function findRegistrationActionHandler(registrationId) {
           employmentDate
           experience
         }    
+          },
+          socialLinksInfo {
+            socialLinkTypeName
+            socialLinkType
+            socialLinkUrl
+    		}
+          
         }
       }
     `,

@@ -83,16 +83,15 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     roleDetails.splice(did, 0, specificRole);
     this.setState({loading: false, rolesData: roleDetails});
 
-    if (this.state.roleForm[did]['departmentName'] == "operations") {
+    if (this.state.roleForm[did]['departmentName'] === "operations") {
       if (selObject.label == "subchapteradmin") {
-        $("#chapter_admin_check").removeAttr('disabled');
+        // $("#chapter_admin_check").removeAttr('disabled');
       } else {
         this.setState({chapterAdmin: false});
         this.props.getChapterAdmin(false);
-        $("#chapter_admin_check").attr('disabled', 'disabled');
+        // $("#chapter_admin_check").attr('disabled', 'disabled');
       }
     }
-
     this.sendRolesToParent();
   }
 
@@ -135,8 +134,16 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   isChapterAdmin(did, event) {
-    this.setState({chapterAdmin: event.target.checked})
+    let roleDetails = this.state.rolesData;
+    let cloneBackUp = _.cloneDeep(roleDetails);
+    let specificRole = cloneBackUp[did];
+    specificRole.roles[0]['roleName'] = '';
+    roleDetails.splice(did, 1);
+    roleDetails.splice(did, 0, specificRole);
+    this.setState({loading: false, rolesData: roleDetails, chapterAdmin: event.target.checked});
+
     this.props.getChapterAdmin(event.target.checked)
+    this.sendRolesToParent();
   }
 
   onStatusChange(index, did, event) {
@@ -287,9 +294,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                     <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
                            value={department.subDepartmentName}/>
                   </div>
+                  {/*disabled*/}
                   {(department.departmentName == "operations") ?
                     <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
-                                                        onChange={that.isChapterAdmin.bind(that, id)} disabled/><label
+                                                        onChange={that.isChapterAdmin.bind(that, id)} /><label
                       htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div> : <div></div>}
 
                   <br className="brclear"/>

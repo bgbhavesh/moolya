@@ -1,6 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 import MlChapterList from "../../chapter/components/MlChapterList"
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 import React from 'react';
 import gql from 'graphql-tag'
@@ -74,6 +75,16 @@ const mlChapterListConfig=new MlViewer.View({
     }
   ],
   viewComponent:<MlChapterList />,
+  queryOptions:true,
+  buildQueryOptions:(config)=>
+  {
+    if(!config.params){
+      let userDefaultObj = getAdminUserContext()
+      return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
+    }
+    else
+      return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+  },
   graphQlQuery:gql`
               query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
               data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){

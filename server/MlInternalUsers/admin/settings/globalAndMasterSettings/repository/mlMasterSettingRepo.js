@@ -114,15 +114,43 @@ export default class MlMasterSettingRepo{
     let  options=[]
     switch (requestParams.type) {
       case "CONTACTTYPE":
+        /*     if(requestParams && requestParams.numberType.length > 0){
+         result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId,_id:{$nin : requestParams.numberType}}).fetch();
+         }else{*/
         result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+        //}
+
         let resultResponse=_.each(result,function (option,id) {
           options.push({"label":option.contactTypeInfo.contactName,"value":option._id})
         })
 
         break;
+      case "ADDRESSTYPE":
+        /*   if(requestParams && requestParams.addressType.length > 0){
+         result= MlMasterSettings.find({"type": "ADDRESSTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId,_id:{$nin : requestParams.addressType}}).fetch();
+         }else{*/
+        result= MlMasterSettings.find({"type": "ADDRESSTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+        //}
+
+        let addressResponse=_.each(result,function (option,id) {
+          options.push({"label":option.addressTypeInfo.addressName,"value":option._id,"type" : option.addressTypeInfo.addressName})})
+
+        break;
+      case "SOCIALLINKS":
+
+        result= MlMasterSettings.find({"type": "SOCIALLINKS"}).fetch();
+
+        let socialLinkResponse=_.each(result,function (option,id) {
+          options.push({"label":option.socialLinksInfo.socialName,"value":option._id,"type" : option.socialLinksInfo.socialName})})
+
+        break;
     }
+
     return options;
   }
+
+
+
 
 
 }

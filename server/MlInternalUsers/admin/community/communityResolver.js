@@ -48,7 +48,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         return {data:null}
     }
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile|| (!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
         return {data:null}
     }
 

@@ -321,10 +321,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                                 labelKey={'label'} queryType={"graphql"} query={query}
                                                 queryOptions={queryOptions} isDynamic={true}
                                                 onSelect={that.optionsBySelectRole.bind(that, idx, id)}
+                                                placeholder="Select Role"
                                                 selectedValue={details.roleId}/>}
                               </div>
                               <div className="form-group left_al">
-                                {(details.roleName === "chapteradmin")?(subChapterId = 'all'):(subChapterId = that.props.subChapterId)}
+                                {/*{(details.roleName === "chapteradmin")?(subChapterId = 'all'):(subChapterId = that.props.subChapterId)}*/}
                                 {(details.clusterId == clusterId && details.chapterId == chapterId && details.subChapterId == subChapterId) ?
                                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                             inputProps={{placeholder: "Valid From"}}

@@ -10,14 +10,14 @@ if(Meteor.isServer){
     "menu" : [
       {
         "image" : "/images/db_icon.png",
-        "link" : "/admin/dashboard/clusters",
+        "link" : "/admin/dashboard/chapters",
         "name" : "dashboard",
         "uniqueId" : "dashboard",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/dashboard/clusters",
+            // "link" : "/admin/dashboard/clusters",
             "name" : "Clusters",
             "uniqueId" : "dashboard_clusters",
             "subMenuMappingId":"dashboard_clusters",
@@ -74,127 +74,101 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/cluster_icon.png",
-        "link" : "/admin/clusters",
+        "link" : "",
         "name" : "cluster",
         "uniqueId"   :"cluster",
-        "isLink" : true,
+        "isLink" : false,
         "isMenu" : true,
         "hideSubMenu":true,
-        "isDisabled":true,
-        "subMenu":[
-          {
-            "link" : "/admin/clusters/clusterDetails",
-            "name" : "clusterDetails",
-            "uniqueId" : "cluster_clusterDetails",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_clusterDetails"
-          },
-          {
-            "link" : "/admin/clusters/chapters",
-            "name" : "chapters",
-            "uniqueId" : "cluster_chapters",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_chapters"
-          },
-          {
-            "link" : "/admin/clusters/communities",
-            "name" : "Communities",
-            "uniqueId" : "cluster_communities",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_communities"
-          },
-          {
-            "link" : "/admin/clusters/assignusers",
-            "name" : "Backend Users",
-            "uniqueId" : "cluster_assignusers",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"cluster",
-            "subMenuMappingId":"cluster_assignusers"
-          }
-        ]
-
+        "isDisabled":true
       },
       {
         "image" : "/images/chapter_icon.png",
-        "link" : "/admin/chapters",
+        // "link" : "/admin/chapters",
         "uniqueId" : "chapter",
         "name" : "chapter",
-        "isLink" : "true",
-        "isMenu" : true,
-        "subMenu" : [
-          {
-            "link" : "/admin/chapters/subChapters/subChapterDetails",
-            "name" : "SubChapterDetails",
-            "uniqueId" : "chapter_subChapterDetails",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"chapter",
-            "subMenuMappingId":"chapter_subChapterDetails"
-          },
-          {
-            "link" : "/admin/chapters/subChapters/communities",
-            "name" : "Communities",
-            "uniqueId" : "chapter_communities",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"chapter",
-            "subMenuMappingId":"chapter_communities"
-          },
-          {
-            "link" : "/admin/chapters/assignusers",
-            "name" : "Backend Users",
-            "uniqueId" : "chapter_assignusers",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"chapter",
-            "subMenuMappingId":"chapter_assignusers"
-          }
-        ]
+        "isLink" : false,
+        "isMenu" : false,
+        "isDisabled":true,
       },
       {
         "image" : "/images/community_icon.png",
-        "link" : "/admin/community",
+        "link" : "/admin/communities",
         "uniqueId" : "community",
         "name" : "community",
         "isLink" : true,
         "isMenu" : true,
-        "subMenu" : [
+        "hideSubMenu":true,
+        "subMenu":[
           {
-            "link" : "/admichapters/comminty/communities",
-            "name" : "communities",
-            "uniqueId" : "community_communities",
+            "link" : "/admin/community/chapter",
+            "name" : "Chapter",
+            "uniqueId" : "communities_chapters",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
-          },
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "hideSubMenu":true,
+            "subMenuMappingId":"communities_chapters",
+            "subMenu":[
+              {
+                "link" : "/admin/community/chapter/subChapter",
+                "name" : "Sub Chapter",
+                "uniqueId" : "communities_subChapters",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"communities_chapters",
+                "hideSubMenu":true,
+                "subMenuMappingId":"communities_subChapters",
+                // "subMenu":[
+                //   {
+                //     "link" : "/admin/community/chapter/subChapter/community",
+                //     "name" : "Community",
+                //     "uniqueId" : "communities_communities",
+                //     "isLink" : true,
+                //     "isMenu" : true,
+                //     "image" : "",
+                //     "dynamicLink" : true,
+                //     "dynamicLinkHandler" : "",
+                //     "hideSubMenu":true,
+                //     "subMenusId":"communities_subChapters",
+                //     "subMenuMappingId":"communities_communities",
+                    "subMenu" : [
+                      {
+                        "link" : "/admin/community/subChapter/community/communityDetails",
+                        "name" : "Community Details",
+                        "uniqueId" : "communities_subChapters_communityDetails",
+                        "isLink" : true,
+                        "isMenu" : true,
+                        "image" : "",
+                        "dynamicLink" : true,
+                        "dynamicLinkHandler" : "",
+                        "subMenusId":"communities_subChapters",
+                        "subMenuMappingId":"communities_subChapters_communityDetails",
+                      },
+                      {
+                        "link" : "/admin/community/subChapter/community/assignuser",
+                        "name" : "Backend User",
+                        "uniqueId" : "communities_subChapters_assignUsers",
+                        "isLink" : true,
+                        "isMenu" : true,
+                        "image" : "",
+                        "dynamicLink" : true,
+                        "dynamicLinkHandler" : "",
+                        "subMenusId":"communities_subChapters",
+                        "subMenuMappingId":"communities_subChapters_assignUsers",
+                      }
+                    ]
+                //   }
+                // ]
+              }
+            ]
+          }
         ]
       },
       {

@@ -140,7 +140,7 @@ export default class Step4 extends React.Component{
      }
      }
      `;
-    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:"vsraSG7GeWZRdXkF9"}}};
+    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:"SxnyXxBLrhhW29uGr"}}};
     return (
       <div className="step_form_wrap step2">
         {showLoader===true?( <div className="loader_wrap"></div>):(
@@ -188,7 +188,7 @@ export default class Step4 extends React.Component{
                   {that.state.socialLinkArray.map(function(options,key) {
                     console.log(options);
                     console.log(options.socialLinkType);
-                    return(<div className="tab-pane" id={'socialLink'+key} >
+                    return(<div className="tab-pane" id={'socialLink'+key}  key={key} >
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} ref={'socialLinkType'+key}
                                       placeholder="Select Social Link"

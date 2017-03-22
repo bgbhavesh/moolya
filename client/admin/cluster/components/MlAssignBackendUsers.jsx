@@ -35,13 +35,13 @@ class MlAssignBackendUsers extends React.Component {
       this.addEventHandler.bind(this);
       this.assignBackendUsers.bind(this);
       this.updateSelectedBackEndUser.bind(this);
-      this.findCluster.bind(this);
+      // this.findCluster.bind(this);
       return this;
   }
 
   componentWillMount() {
-      const resp = this.findCluster();
-      return resp;
+      // const resp = this.findCluster();
+      // return resp;
   }
   componentDidUpdate(){
       var WinHeight = $(window).height();
@@ -49,11 +49,11 @@ class MlAssignBackendUsers extends React.Component {
       OnToggleSwitch(true,true);
   }
 
-  async findCluster() {
-      let clusterId = this.props.params.clusterId;
-      const response = await findClusterTypeActionHandler(clusterId);
-      this.setState({loading: false, cluster: response});
-  }
+  // async findCluster() {
+  //     let clusterId = this.props.params.clusterId;
+  //     const response = await findClusterTypeActionHandler(clusterId);
+  //     this.setState({loading: false, cluster: response});
+  // }
 
   enableAssignUser() {
   }
@@ -193,9 +193,10 @@ class MlAssignBackendUsers extends React.Component {
                         <h3>Assign <br/> Backend Users</h3>
                       </div>
                     </div>
-                    {that.state.cluster.isActive ? <MlAssignBackendUserList clusterId={that.props.params.clusterId}
-                                                                            updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/> :
-                      <div></div>}
+                    {/*{that.state.cluster.isActive ? */}
+                      <MlAssignBackendUserList clusterId={that.props.params.clusterId} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
+                      {/*:*/}
+                      {/*<div></div>}*/}
                   </ScrollArea>
                 </div>
               </div>
@@ -215,13 +216,14 @@ class MlAssignBackendUsers extends React.Component {
                       </div>
                     </div>
                     <br className="brclear"/>
-                    {that.state.cluster.isActive ?
+                    {/*{that.state.cluster.isActive ?*/}
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                     labelKey={'label'} queryType={"graphql"} query={query} queryOptions={queryOptions}
                                     isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)}
-                                    selectedValue={this.state.selectedBackendUser}/> :
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"}/>}
+                                    selectedValue={this.state.selectedBackendUser}/>
+                      {/*:*/}
+                      {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}*/}
+                                    {/*labelKey={'label'} queryType={"graphql"}/>}*/}
                     {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query}  queryOptions={queryOptions}  isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>*/}
                     <div className="form-group">
                       <input type="text" id="AssignedAs" placeholder="Also Assigned As"

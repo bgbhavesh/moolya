@@ -18,7 +18,7 @@ class MlAdminContextQueryConstructor
     let hierarchy=null;
     let userProfile=new MlAdminUserContext().userProfileDetails(this.userId);
 
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile || (!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
         throw new Error("Invalid User,Default Profile is not available");
     }
 
@@ -41,14 +41,14 @@ class MlAdminContextQueryConstructor
           return query;
       }
 
-      else if(userProfile&&userProfile.hierarchyCode===hierarchy.code){
-        if(_.toLower(this.module)===_.toLower(hierarchy.module)){
-          query["_id"]=userProfile.defaultChapters;
-        }else{
-          query[hierarchy.moduleFieldRef]=userProfile.defaultChapters;
-        }
-
-        return query;
+      else if(userProfile&&userProfile.hierarchyCode===hierarchy.code)
+      {
+          if(_.toLower(this.module)===_.toLower(hierarchy.module)){
+            query["_id"]=userProfile.defaultProfileHierarchyRefId;
+          }else{
+            query[hierarchy.moduleFieldRef]=userProfile.defaultProfileHierarchyRefId;
+          }
+          return query;
       }
 
   }

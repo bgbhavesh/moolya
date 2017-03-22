@@ -7,6 +7,7 @@ import MoolyaSelect from "../../../commons/components/select/MoolyaSelect";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import moment from "moment";
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 let FontAwesome = require('react-fontawesome');
 
 /*let initSwiper = () => {
@@ -243,6 +244,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     let data = response ? response : []
     this.setState({roleForm: data});
     this.rolesArrayCreate(data, this.props.assignedRoles)
+    const userDefaultObj = getAdminUserContext();
+      if(userDefaultObj.hierarchyCode == 'PLATFORM')
+        this.setState({hideIsChapterAdmin : true})
+      else
+        this.setState({hideIsChapterAdmin: false});
     if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
       this.setState({chapterAdmin: this.props.chapterAdmin})
     }
@@ -295,7 +301,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                            value={department.subDepartmentName}/>
                   </div>
                   {/*disabled*/}
-                  {(department.departmentName == "operations") ?
+                  {(department.departmentName == "operations" && (that.state.hideIsChapterAdmin)) ?
                     <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
                                                         onChange={that.isChapterAdmin.bind(that, id)} /><label
                       htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div> : <div></div>}
@@ -315,10 +321,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                                 labelKey={'label'} queryType={"graphql"} query={query}
                                                 queryOptions={queryOptions} isDynamic={true}
                                                 onSelect={that.optionsBySelectRole.bind(that, idx, id)}
+                                                placeholder="Select Role"
                                                 selectedValue={details.roleId}/>}
                               </div>
                               <div className="form-group left_al">
-                                {(details.roleName === "chapteradmin")?(subChapterId = 'all'):(subChapterId = that.props.subChapterId)}
+                                {/*{(details.roleName === "chapteradmin")?(subChapterId = 'all'):(subChapterId = that.props.subChapterId)}*/}
                                 {(details.clusterId == clusterId && details.chapterId == chapterId && details.subChapterId == subChapterId) ?
                                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                             inputProps={{placeholder: "Valid From"}}

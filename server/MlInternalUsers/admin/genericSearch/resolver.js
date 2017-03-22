@@ -252,8 +252,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlTransactions.find(query,findOptions).count();
   }
   if(args.module=="template"){
-    data= MlTemplates.find(query,findOptions).fetch();
-    totalRecords=MlTemplates.find(query,findOptions).count();
+    data= MlTemplateTypes.find(query,findOptions).fetch();
+    totalRecords=MlTemplateTypes.find(query,findOptions).count();
   }
 
   if(args.module == 'BackendUsers'){

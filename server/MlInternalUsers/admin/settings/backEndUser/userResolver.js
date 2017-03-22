@@ -196,18 +196,18 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
     return userDetails;
 };
 
-MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) =>{
-    let user = Meteor.users.findOne({_id: args.userId});
-    if (user && user.profile && user.profile.isInternaluser == true) {
-        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-        for (var i = 0; i < user_profiles.length; i++) {
-            let clusterId = user_profiles[i].clusterId;
-            if (clusterId == args.clusterId) {
-                return user_profiles[i];
-            }
-        }
-    }
-}
+// MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) =>{
+//     let user = Meteor.users.findOne({_id: args.userId});
+//     if (user && user.profile && user.profile.isInternaluser == true) {
+//         let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+//         for (var i = 0; i < user_profiles.length; i++) {
+//             let clusterId = user_profiles[i].clusterId;
+//             if (clusterId == args.clusterId) {
+//                 return user_profiles[i];
+//             }
+//         }
+//     }
+// }
 
 // MlResolver.MlQueryResolver['fetchChapterBasedRoles'] = (obj, args, context, info) =>
 // {

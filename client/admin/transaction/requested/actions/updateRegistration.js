@@ -6,10 +6,11 @@ export async function updateRegistrationActionHandler(registrationDetails) {
 
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($registrationId:String,$registrationDetails:registrationInfoInput){
+    mutation  ($registrationId:String,$registrationDetails:registrationInfoInput,$details:RegistrationDetailsInput){
         updateRegistrationInfo(
           registrationId:$registrationId,
-          registrationDetails:$registrationDetails
+          registrationDetails:$registrationDetails,
+          details:$details
         ) {
           success
           code
@@ -19,7 +20,8 @@ export async function updateRegistrationActionHandler(registrationDetails) {
     `,
     variables: {
       registrationId:registrationId,
-      registrationDetails:registrationDetails.registrationDetail
+      registrationDetails:registrationDetails.registrationDetail,
+      details:registrationDetails.details
     }
   })
   const id = result.data.updateRegistrationInfo;

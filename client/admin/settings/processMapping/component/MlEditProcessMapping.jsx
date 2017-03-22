@@ -6,13 +6,12 @@ import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
-import MlAssignDocument from './MlAssignDocument'
 import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {findProcessActionHandler} from '../actions/findProcessAction'
 
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-
+import MlAssignDocument from './MlAssignDocument'
 let Select = require('react-select');
 
 class MlEditProcessMapping extends React.Component{
@@ -370,7 +369,7 @@ class MlEditProcessMapping extends React.Component{
                   default={true}
                 >
                   <form style={{marginTop:'0px'}}>
-                    {this.state.data&&this.state.data.documents?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents}/>):""}
+                    {this.state.data&&this.state.data.documents?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents}/>):''}
                   </form>
                 </ScrollArea>
               </div>

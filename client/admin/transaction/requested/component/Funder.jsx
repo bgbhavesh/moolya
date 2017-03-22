@@ -11,7 +11,7 @@ import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
 
-export default class Ideator extends React.Component{
+export default class Funder extends React.Component{
   constructor(props){
     super(props);
     this.state={

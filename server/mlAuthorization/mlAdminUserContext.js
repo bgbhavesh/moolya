@@ -69,7 +69,7 @@ class MlAdminUserContext
        check(userId,String);
         let userProfile=this.userProfileDetails(userId)||{};
         let hierarchy=null;
-    if(userProfile&&userProfile.hierarchyLevel&&userProfile.hierarchyLevel){
+    if(userProfile&& (userProfile.hierarchyLevel || userProfile.hierarchyLevel ==0)){
       hierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
       return hierarchy&&hierarchy.menuName?hierarchy.menuName:null;
     }

@@ -102,7 +102,7 @@ let registrationSchema = `
         password        :   String,
         accountType     :   String,
         institutionAssociation    :   String,
-        companyName     :   String,
+        companyname     :   String,
         companyUrl      :   String,
         remarks         :   String,
         referralType    :   String,
@@ -127,6 +127,8 @@ let registrationSchema = `
     
     type RegistrationResponse{
         _id             :   String,
+        registrationInfo :  RegistrationInfo,
+        registrationDetails : RegistrationDetails
         registrationInfo :  RegistrationInfo,
           addressInfo     : [AddressInfoSchema]
          emailInfo       : [EmailInfoSchema]
@@ -190,9 +192,9 @@ let registrationSchema = `
           groupName: String,
           companyWebsite:  String,
           companyEmail: String,
-          foundationDate:  Date,
+          foundationDate:  String,
           headQuarterLocation: String,
-          branchLocations: [branchLocation]
+          branchLocations: String,  
           companytyp: String,
           entityType:  String,
           businessType: String,
@@ -227,7 +229,7 @@ let registrationSchema = `
           chairman: String,
           dean:  String,
           headQuarterLocation: String,
-          branchLocations: [branchLocation],  
+          branchLocations: String,  
           
           identityType : String,
           userType : String,
@@ -236,9 +238,85 @@ let registrationSchema = `
           middleName : String,
           lastName :String,
           displayName :  String,
-          dateOfBirth :  Date,
+          dateOfBirth :  String,
           gender : String,
-          citizenships : [citizenship],   
+          citizenships : String,  
+          qualification :String,
+          employmentStatus : String,
+          professionalTag : String,
+          industry :  String,
+          profession : String,
+          employerName :String,
+          employerWebsite :  String,
+          employmentDate :String,
+          experience : String
+    }
+    
+    input branchLocationInput{
+        id              :   String,
+        name            :   String
+    }
+    
+    input citizenshipInput{
+        id              :   String,
+        name            :   String
+    }
+    
+    input RegistrationDetailsInput{    
+          userType: String,
+          companyName: String,
+          groupName: String,
+          companyWebsite:  String,
+          companyEmail: String,
+          foundationDate:  String,
+          headQuarterLocation: String,
+          branchLocations: String
+          companytyp: String,
+          entityType:  String,
+          businessType: String,
+          industry: String,
+          subDomain:  String,
+          stageOfCompany:  String,
+          subsidaryCompany: String,
+          parentCompany: String,
+          registrationNumber: String,
+          isoAccrediationNumber:String,
+          companyTurnOver: String,
+          partnerCompanies: String,
+          investors: String,
+          lookingFor:  String,
+          companyCEOName: String,
+          companyManagement: String,
+          toatalEmployeeCount: String,
+          associatedCompanies:  String,
+              
+          userCategory: String,
+          institutionType:String,
+          instituteName:  String,
+          instituteGroupName: String,
+          foundationYear:  String,
+          website:String,
+          registrationNumber: String,
+          isoAccrediationNumber: String,
+          curriculamProvider: String,
+          associatedUniversity: String,
+          studentCount:  String,
+          staffCount:String,
+          chairman: String,
+          dean:  String,
+          headQuarterLocation: String,
+          branchLocations: String,  
+          
+          identityType : String,
+          userType : String,
+          title :  String,
+          firstName : String,
+          middleName : String,
+          lastName :String,
+          displayName :  String,
+          dateOfBirth :  String,
+          gender : String,
+          citizenships : String,   
           qualification :String,
           employmentStatus : String,
           professionalTag : String,
@@ -252,9 +330,9 @@ let registrationSchema = `
     
     type Mutation{
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
-         updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
-         updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
-         updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
+         updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response       
+         updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput,details:RegistrationDetailsInput):response
+         updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response         
          createGeneralInfoInRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          updateRegistrationGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
     }

@@ -49,7 +49,32 @@ export async function findRegistrationActionHandler(registrationId) {
             socialLinkTypeName
             socialLinkType
             socialLinkUrl
-    		}
+    		},
+    		addressInfo {
+          addressType
+          addressTypeName
+          name
+          phoneNumber
+          addressFlat
+          addressLocality
+          addressLandmark
+          addressArea
+          addressCity
+          addressState
+          addressCountry
+          addressPinCode
+        },
+        emailInfo {
+          emailIdType
+          emailIdTypeName
+          emailId
+        },
+        contactInfo {
+          numberType
+          numberTypeName
+          countryCode
+          contactNumber
+        }
           
         }
       }

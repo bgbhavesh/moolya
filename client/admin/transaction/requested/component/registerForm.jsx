@@ -26,17 +26,15 @@ export default class RegisterForm extends React.Component{
     data.registrationInfo = details;
     this.setState({'registrationDetails':data})
   }
-  getRegistrationContactDetails(details){
-    let data = this.state.registrationDetails;
-    //refer proper object
-    this.setState({'registrationDetails':data})
+  async getRegistrationContactDetails(details){
+    const resp=await this.findRegistration();
+    this.setState({'registrationDetails':resp})
   }
+
   async getRegistrationSocialLinks(details){
     //let data = this.state.registrationDetails;
     //refer proper object
     const resp=await this.findRegistration();
-    console.log("yipppee");
-
     this.setState({'registrationDetails':resp})
   }
   getRegistrationKYCDetails(details){
@@ -51,7 +49,6 @@ export default class RegisterForm extends React.Component{
 
   async findRegistration() {
     const response = await findRegistrationActionHandler(this.props.config);
-    console.log(response)
     this.setState({loading: false, registrationDetails: response});
     return response;
   }

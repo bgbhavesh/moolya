@@ -53,7 +53,7 @@ export default CoreModulesRepo={
     let query=contextQuery;
 
     //User selection filter.
-    let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
+    let clusterId=requestParams&&requestParams.clusterId&&requestParams.clusterId!='all'?requestParams.clusterId:null;
     if(clusterId){
         query={"clusterId":clusterId};
     }

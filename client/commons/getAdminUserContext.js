@@ -12,9 +12,7 @@ export function getAdminUserContext()
     {
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
       let user_roles;
-      // Selecting Default Profile
       let default_User_Profiles=_.find(user_profiles, {'isDefault': true });
-      //if default Profile is available then,
       if(default_User_Profiles){
         for(var i = 0; i < user_profiles.length; i++){
           if(user_profiles[i].isDefault == true){

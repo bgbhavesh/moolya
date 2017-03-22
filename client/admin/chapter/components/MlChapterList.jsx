@@ -14,7 +14,6 @@ export default class MlChapterList extends Component {
           <div className={`cluster_status ${prop.statusField || ""}_cl `}></div>
           <a href={chapterRoutes.subChapterListRoute(prop.clusterId, prop._id)}>
             <div className={"hex_outer"}>
-              {/*<img src={prop.subChapterImageLink}/>*/}
               {image}
             </div>
           </a>

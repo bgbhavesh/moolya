@@ -78,8 +78,8 @@ const mlChapterListConfig=new MlViewer.View({
   queryOptions:true,
   buildQueryOptions:(config)=>
   {
-    if(!config.params){
-      let userDefaultObj = getAdminUserContext()
+    let userDefaultObj = getAdminUserContext()
+    if(!config.params && !userDefaultObj.isParent){
       return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
     }
     else

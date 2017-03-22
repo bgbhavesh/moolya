@@ -93,7 +93,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
       levelCode = "",
       doRead = false;
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile|| (!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
        return roles;
     }
 
@@ -103,9 +103,9 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     }
 
     clusterId     = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
-    chapterId     = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
-    subChapterId  = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
-    communityId   = args.communityId && ((_.find(userProfile.defaultCommunities, args.communityId)) || userhierarchy.isParent) ? args.communityId: ""
+    chapterId     = args.chapterId && ((userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId: "";
+    subChapterId  = args.subChapterId && ((userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId: ""
+    communityId   = args.communityId && ((userProfile.defaultCommunities.indexOf(args.communityId) > -1) || userhierarchy.isParent) ? args.communityId: ""
 
     if(clusterId != "" && chapterId != "" && subChapterId != "" && communityId != ""){
       levelCode = "COMMUNITY"

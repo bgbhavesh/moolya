@@ -8,7 +8,10 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect';
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
-import {findUserRegistartionActionHandler} from '../actions/findUserRegistrationDocument'
+import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
+import _ from "lodash";
+import update from 'immutability-helper';
+
 
 export default class Step4 extends React.Component{
   constructor(props) {
@@ -45,6 +48,23 @@ export default class Step4 extends React.Component{
 
     this.setState({selectedValue : selectedIndex,selectedSocialLinkLabel:selectedObj.label});
   }
+  updateOptions(index, did, selectedValue, selObject,callback){
+   /* let selectedSocialLinkArray =  this.state.socialLinkArray || []
+    let selectedArrayObject = selectedSocialLinkArray[index] || {};
+    selectedArrayObject =  JSON.parse(JSON.stringify(selectedArrayObject));*/
+    if (index !== -1) {
+      // do your stuff here
+      let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: selObject.label},socialLinkType : {$set: did},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
+      console.log(updatedComment);
+      let newData = update(this.state.socialLinkArray, {
+        $splice: [[index, 1, updatedComment]]
+      });
+      console.log(newData);
+      this.setState({socialLinkArray : newData,selectedValue : did,selectedSocialLinkLabel : selObject.label});
+
+    }
+
+  }
 
   compareQueryOptions(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
@@ -56,32 +76,57 @@ export default class Step4 extends React.Component{
       this.setState({loading:false,socialLinkArray:nextProps.registrationInfo.socialLinksInfo||[]});
     }
   }
-  async onSavingSocialLink(){
+  async onSavingSocialLink(index,value){
+    let detailsType = "SOCIALLINKS";
+    let registerid = this.props.registrationId;
+    if(this.state.selectedTab){
+      console.log(index);
+      console.log(value);
+      /*let socialSitesArray = this.state.socialLinkArray || [];
+      socialSitesArray["socialLinksInfo"][index]["socialLinkType"] = this.state.selectedValue,
+        socialSitesArray["socialLinksInfo"][index]["socialLinkTypeName"] = this.state.selectedSocialLinkLabel,
+        socialSitesArray["socialLinksInfo"][index]["socialLinkUrl"] = this.refs["socialLinkTypeUrl"+index].value;
+      let detailsType = "SOCIALLINKS";
+      let registerid = this.props.registrationId;*/
+      if (index !== -1) {
+        // do your stuff here
+        let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: this.state.selectedSocialLinkLabel},socialLinkType : {$set: this.state.selectedValue},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
 
-    let socialLinkList = this.state.socialLinkObject;
-    socialLinkList.socialLinkType = this.refs["socialLinkType"].props.selectedValue,
+        let newData = update(this.state.socialLinkArray, {
+          $splice: [[index, 1, updatedComment]]
+        });
+
+
+        const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
+        if(response){
+          this.props.getRegistrationSocialLinks();
+
+        }
+      }
+
+
+    }else{
+      let socialLinkList = this.state.socialLinkObject;
+      socialLinkList.socialLinkType = this.refs["socialLinkType"].props.selectedValue,
       socialLinkList.socialLinkTypeName = this.state.selectedSocialLinkLabel,
       socialLinkList.socialLinkUrl = this.refs["socialLinkTypeUrl"].value;
+      const response = await addRegistrationStep3Details(socialLinkList,detailsType,registerid);
+      if(response){
+        this.props.getRegistrationSocialLinks();
 
-    const detailsType = "SOCIALLINKS";
-    const registerid = this.props.registrationId;
-    const response = await addRegistrationStep3Details(socialLinkList,detailsType,registerid);
-    if(response){
-      this.props.getRegistrationSocialLinks();
-
+      }
     }
+
     //this.findRegistration.bind(this);
   }
 
-  async onUpdating(index,value) {
-    let socialSitesArray = this.state.socialLinkArray || [];
-    socialSitesArray[index].socialLinkType = this.refs["socialLinkType"+index].props.selectedValue,
-      socialSitesArray[index].socialLinkTypeName = this.state.selectedSocialLinkLabel,
-      socialSitesArray[index].socialLinkUrl = this.refs["socialLinkTypeUrl"+index].value;
-    const detailsType = "SOCIALLINKS";
-    //this.setState({"socialLinkArray" : socialSitesArray});
-    const response = await addRegistrationStep3Details(socialSitesArray,detailsType);
+   onUpdating(index,value) {
 
+    this.setState({"selectedTab" : true});
+
+  }
+  onDeleteSocialLink(){
+    console.log("Deleteeeeeeeeee");
   }
 
   render(){
@@ -115,7 +160,7 @@ export default class Step4 extends React.Component{
                   </li>
                   {that.state.socialLinkArray.map(function(options,key) {
                     return(
-                      <li key={key} >
+                      <li key={key} onClick={() => that.onUpdating(key)}>
                         <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square'/></b></a>
                       </li>
                     )
@@ -149,15 +194,15 @@ export default class Step4 extends React.Component{
                                       placeholder="Select Social Link"
                                       className="form-control float-label" selectedValue={options.socialLinkType}
                                       valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={socialLinkTypeQuery}
-                                      queryOptions={socialLinkTypeOption} onSelect={that.optionsBySelectSocialLinkType.bind(that,key)}
+                                      queryOptions={socialLinkTypeOption} onSelect={that.updateOptions.bind(that,key)}
                                       isDynamic={true}/>
                       </div>
                       <div className="form-group">
-                        <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" className="form-control float-label" defaultValue={options.socialLinkUrl}/>
+                        <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
                       <div className="ml_btn">
-                        <a href="#" className="save_btn"  onClick={that.onUpdating.bind(that,key)}>Save</a>
-                        <a href="#" className="cancel_btn">Cancel</a>
+                        <a href="#" className="edit_btn"  onClick = {that.onSavingSocialLink.bind(that,key)}>Save</a>
+                        <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}>Cancel</a>
                       </div>
                     </div>)
                   })}

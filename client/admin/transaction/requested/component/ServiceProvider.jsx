@@ -8,6 +8,8 @@ import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
+import Datetime from "react-datetime";
+import moment from "moment";
 
 export default class ServiceProvider extends React.Component{
   constructor(props){
@@ -26,6 +28,9 @@ export default class ServiceProvider extends React.Component{
       selectedSubsidaryComapny:null,
       registrationId:'',
       registrationDetails:'',
+      foundationDate:'',
+      dateOfBirth:'',
+      employmentDate:'',
       identity:''
 
     };
@@ -34,21 +39,32 @@ export default class ServiceProvider extends React.Component{
 
   componentWillMount() {
     let details=this.props.registrationDetails;
-    this.setState({loading:false,
-      registrationDetails:details,
-      registrationId:this.props.registrationId,
-      selectedUserType:details.userType,
-      selectedHeadquarter:details.headQuarterLocation,
-      selectedBranches:details.branchLocations,
-      selectedLookingFor:details.lookingFor,
-      selectedTypeOfCompany:details.companytyp,
-      selectedTypeOfEntity:details.entityType,
-      selectedTypeOfBusiness:details.businessType,
-      selectedTypeOfIndustry:details.industry,
-      selectedSubDomain:details.subDomain,
-      selectedStageOfCompany:details.stageOfCompany,
-      selectedSubsidaryComapny:details.subsidaryCompany
+    if (details) {
+      this.setState({
+        loading: false,
+        registrationDetails: details,
+        registrationId: this.props.registrationId,
+        selectedUserType: details.userType,
+        selectedHeadquarter: details.headQuarterLocation,
+        selectedBranches: details.branchLocations,
+        selectedLookingFor: details.lookingFor,
+        selectedTypeOfCompany: details.companytyp,
+        selectedTypeOfEntity: details.entityType,
+        selectedTypeOfBusiness: details.businessType,
+        selectedTypeOfIndustry: details.industry,
+        selectedSubDomain: details.subDomain,
+        selectedStageOfCompany: details.stageOfCompany,
+        selectedSubsidaryComapny: details.subsidaryCompany,
+        foundationDate:details.foundationDate,
+        dateOfBirth:details.dateOfBirth,
+        employmentDate:details.employmentDate
+      })
+    }else{
+      this.setState({
+          loading: false,
+          identity : 'Company'
     })
+    }
   }
 
   componentDidMount()
@@ -100,12 +116,13 @@ export default class ServiceProvider extends React.Component{
        Details = {
         registrationId      : this.props.registrationId,
         details:{
+          identityType          :   this.state.identity,
           userType              :   this.state.selectedUserType,
           companyName           :   this.refs.companyName.value,
           groupName             :   this.refs.groupName.value,
           companyWebsite        :   this.refs.companyWebsite.value,
           companyEmail          :   this.refs.companyEmail.value,
-          foundationDate        :   this.refs.foundationDate.value,
+          foundationDate        :   this.state.foundationDate,
           headQuarterLocation   :   this.state.selectedHeadquarter,
           branchLocations       :   this.state.selectedBranches,
           companytyp            :   this.state.selectedTypeOfCompany,
@@ -115,7 +132,6 @@ export default class ServiceProvider extends React.Component{
           subDomain             :   this.state.selectedSubDomain,
           stageOfCompany        :   this.state.selectedStageOfCompany,
           subsidaryCompany      :   this.state.selectedSubsidaryComapny,
-          parentCompany         :   this.refs.parentCompany.value,
           registrationNumber    :   this.refs.registrationNumber.value,
           isoAccrediationNumber :   this.refs.isoAccrediationNumber.value,
           companyTurnOver       :   this.refs.companyTurnOver.value,
@@ -135,31 +151,50 @@ export default class ServiceProvider extends React.Component{
           identityType      : this.state.identity,
           userType          : this.state.selectedUserType,
           title             : '',
-          firstName         : this.refs.companyName.value,
-          middleName        : this.refs.companyName.value,
-          lastName          : this.refs.companyName.value,
-          displayName       : this.refs.companyName.value,
-          dateOfBirth       : this.refs.companyName.value,
+          firstName         : this.refs.firstName.value,
+          middleName        : this.refs.middleName.value,
+          lastName          : this.refs.lastName.value,
+          displayName       : this.refs.displayName.value,
+          dateOfBirth       : this.state.dateOfBirth,
           gender            : '',
           citizenships      : '',
-          qualification     : this.refs.companyName.value,
+          qualification     : this.refs.qualification.value,
           employmentStatus  : '',
-          professionalTag   : this.refs.companyName.value,
+          professionalTag   : this.refs.professionalTag.value,
           industry          : this.state.selectedTypeOfIndustry,
           profession        : '',
-          employerName      : this.refs.companyName.value,
-          employerWebsite   : this.refs.companyName.value,
-          employmentDate    : this.refs.employmentDate.value
+          employerName      : this.refs.employerName.value,
+          employerWebsite   : this.refs.employerWebsite.value,
+          employmentDate    : this.state.employmentDate
         }
       }
     }
-    this.props.getRegistrationDetails();
+    //this.props.getRegistrationDetails();
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
   updateRegistration(){
     const resp=this.updateregistration();
     return resp;
+  }
+
+  onfoundationDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, foundationDate: value});
+    }
+  }
+  ondateOfBirthSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, dateOfBirth: value});
+    }
+  }
+  onemploymentDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, employmentDate: value});
+    }
   }
 
   render(){
@@ -255,7 +290,7 @@ export default class ServiceProvider extends React.Component{
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Comapany email" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <input type="text" ref="foundationDate" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.foundationDate} placeholder="Foundation date" className="form-control float-label" id=""/>
+                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "foundation Date"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onfoundationDateSelection.bind(that)}/>
                 <FontAwesome name="calendar" className="password_icon"/>
               </div>
               <div className="form-group">
@@ -298,7 +333,7 @@ export default class ServiceProvider extends React.Component{
                   <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="dateOfBirth" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.dateOfBirth} placeholder="Date Of Birth" className="form-control float-label" id=""/>
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>
                 <div className="form-group">
@@ -378,7 +413,7 @@ export default class ServiceProvider extends React.Component{
                     <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <input type="text" ref="employmentDate" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employmentDate} placeholder="Date Of Birth" className="form-control float-label" id=""/>
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)}/>
                     <FontAwesome name="calendar" className="password_icon"/>
                   </div>
 

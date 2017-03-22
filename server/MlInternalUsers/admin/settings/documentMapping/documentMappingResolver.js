@@ -51,5 +51,13 @@ MlResolver.MlQueryResolver['findDocuments'] = (obj, args, context, info) => {
   return response;
 
 }
+MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.kycId) {
+    var id = args.kycId;
+    let response = MlDocumentMapping.find({ kycCategory : { $in: [id] },isActive:true}).fetch();
+    return response;
+  }
+}
 
 

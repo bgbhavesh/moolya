@@ -1,21 +1,19 @@
-import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import {graphql} from 'react-apollo';
-import gql from 'graphql-tag'
-import MlActionComponent from '../../../commons/components/actions/ActionComponent'
-import formHandler from '../../../commons/containers/MlFormHandler'
-import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
-import MlAssignBackendUserList from './MlAssignBackendUserList'
-import MlAssignBackednUserRoles from './MlAssignBackendUserRoles'
-import {mlClusterConfig} from '../config/mlClusterConfig'
-import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
-import {findAdminUserDetails} from '../../../commons/findAdminUserDetails'
-import {findRoles} from '../actions/fetchRoles'
-import {findCluster_Roles} from '../actions/findCluster_Roles'
-import {findClusterTypeActionHandler} from '../actions/findCluster'
-import {OnToggleSwitch} from '../../utils/formElemUtil'
+import React from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+import formHandler from "../../../commons/containers/MlFormHandler";
+import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import MlAssignBackendUserList from "./MlAssignBackendUserList";
+import MlAssignBackednUserRoles from "./MlAssignBackendUserRoles";
+import {mlClusterConfig} from "../config/mlClusterConfig";
+import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
+import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
+import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
+import {findClusterTypeActionHandler} from "../actions/findCluster";
+import {OnToggleSwitch} from "../../utils/formElemUtil";
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -52,7 +50,7 @@ class MlAssignBackendUsers extends React.Component {
   }
 
   async findCluster() {
-      let clusterId = this.props.params;
+      let clusterId = this.props.params.clusterId;
       const response = await findClusterTypeActionHandler(clusterId);
       this.setState({loading: false, cluster: response});
   }
@@ -68,7 +66,8 @@ class MlAssignBackendUsers extends React.Component {
   }
 
   getAssignedRoles(roles) {
-      this.setState({'mlroleDetails': roles})
+    console.log("parent");
+    this.setState({'mlroleDetails': roles})
   }
 
   async addEventHandler() {
@@ -85,7 +84,7 @@ class MlAssignBackendUsers extends React.Component {
           this.setState({username:userDetails.userName})
           this.setState({userDisplayName:userDetails.displayName})
           this.setState({alsoAssignedAs:userDetails.alsoAssignedas})
-          this.find_Cluster_Roles(userId, this.props.params);
+          this.find_Cluster_Roles(userId, this.props.params.clusterId);
           return userDetails;
       }
   }
@@ -93,16 +92,16 @@ class MlAssignBackendUsers extends React.Component {
   async find_Cluster_Roles(userId, clusterId)
   {
       let roles = [];
-      const userProfile = await findCluster_Roles(userId, clusterId);
-      if (userProfile)
-          roles = userProfile.userRoles || [];
+      const userRoles = await fetchAdminUserRoles(userId, clusterId);
+      if (userRoles)
+          roles = userRoles || [];
       this.setState({user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
       return roles
   }
 
   async assignBackendUsers() {
       let userProfile = {};
-      userProfile['clusterId'] = this.props.params;
+      userProfile['clusterId'] = this.props.params.clusterId;
       userProfile['userRoles'] = this.state.mlroleDetails;
       userProfile['displayName'] = this.refs.displayName.value;
       let user = {
@@ -152,20 +151,28 @@ class MlAssignBackendUsers extends React.Component {
           }
       ]
       let that = this;
-      let queryOptions = {options: {variables: {clusterId: that.props.params}}};
+      let queryOptions = {options: {variables: {clusterId: that.props.params.clusterId}}};
       let query = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
       let userid = this.state.selectedBackendUser || "";
       let userDisplayName = this.state.userDisplayName || "";
       let username = this.state.username || "";
       let alsoAssignedAs = this.state.alsoAssignedAs || "";
-      let deActive = that.state.deActive
+      let deActive = that.state.deActive;
+      let contextHeader =  "";
+      if(that.props.params.communityId){
+        contextHeader = "Community"
+      } else if (that.props.params.chapterId && that.props.params.subChapterId){
+        contextHeader = "Chapter"
+      } else{
+        contextHeader = "Cluster"
+      }
       const showLoader = this.state.loading;
 
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_padding_wrap">
-            <h2>Assign Backend User to Cluster</h2>
+            <h2>Assign Backend User to {contextHeader}</h2>
             <div className="main_wrap_scroll">
               <ScrollArea
                 speed={0.8}
@@ -186,7 +193,7 @@ class MlAssignBackendUsers extends React.Component {
                         <h3>Assign <br/> Backend Users</h3>
                       </div>
                     </div>
-                    {that.state.cluster.isActive ? <MlAssignBackendUserList clusterId={that.props.params}
+                    {that.state.cluster.isActive ? <MlAssignBackendUserList clusterId={that.props.params.clusterId}
                                                                             updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/> :
                       <div></div>}
                   </ScrollArea>
@@ -229,7 +236,7 @@ class MlAssignBackendUsers extends React.Component {
                              id="userName" ref="userName" value={username}/>
                     </div>
 
-                    {userid ? (<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params}
+                    {userid ? (<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId}
                                                          assignedRoles={this.state.user_Roles}
                                                          getAssignedRoles={this.getAssignedRoles.bind(this)}/>) :
                       <div></div>}

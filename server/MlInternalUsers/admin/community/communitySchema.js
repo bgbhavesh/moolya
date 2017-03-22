@@ -142,7 +142,10 @@ let communitySchema = `
         isActive:Boolean,
         clusters:[String],
         chapters:[String],
-        subchapters:[String]
+        subchapters:[String],
+        clusterName:String,
+        chapterName:String,
+        subChapterName:String
     }
     
     input community{
@@ -170,7 +173,7 @@ let communitySchema = `
     type Query{
         FetchMapData(moduleName:String,id:String):[MapData]
         fetchCommunities(clusterId:String, chapterId:String, subChapterId:String):SearchResp
-        fetchCommunityDef(communityId:String):Community
+        fetchCommunityDef(clusterId:String, chapterId:String, subChapterId:String, communityId:String):Community
     }
     
     type Mutation{

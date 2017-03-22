@@ -96,7 +96,7 @@ export default class StepZilla extends Component {
 
     // this utility method lets Child components invoke a direct jump to another step
     _jumpToStep(evt) {
-        if (evt.target == undefined) {
+        if (evt.currentTarget == undefined) {
             // a child step wants to invoke a jump between steps
             this._setNavState(evt);
         }
@@ -110,28 +110,28 @@ export default class StepZilla extends Component {
             }
 
             if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated() ) {
-                if (evt.target.value === (this.props.steps.length - 1) &&
+                if (evt.currentTarget.value === (this.props.steps.length - 1) &&
                     this.state.compState === (this.props.steps.length - 1)) {
                     this._setNavState(this.props.steps.length);
                 }
                 else {
-                    this._setNavState(evt.target.value);
+                    this._setNavState(evt.currentTarget.value);
                 }
             }
         }
     }
 
-    _next() {
-        // if its a form component, it should have implemeted a public isValidated class. If not then continue
+  _next() {
+    // if its a form component, it should have implemeted a public isValidated class. If not then continue
 
-        if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated()) {
-            this._setNavState(this.state.compState + 1);
-        }
+    if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated()) {
+      this._setNavState(this.state.compState + 1);
     }
-    _finish(){
-        if ((typeof this.refs.activeComponent.isFinished())||this.refs.activeComponent.isValidated()){
-           // alert("thank you")
-            //this._setNavState(this.props.steps.length -this.props.steps.length);
+  }
+  _finish(){
+    if ((typeof this.refs.activeComponent.isFinished())||this.refs.activeComponent.isValidated()){
+      // alert("thank you")
+      //this._setNavState(this.props.steps.length -this.props.steps.length);
 
         }
 
@@ -158,7 +158,7 @@ export default class StepZilla extends Component {
             <li className={this._getClassName("progtrckr", i)} onClick={this.jumpToStep} key={i} value={i}>
                 <em>{i+1}</em>
                 <span className="step_name"><b>{this.props.steps[i].name}</b></span>
-                <b className="step_icon"></b>
+              {this.props.steps[i].icon?<b className="step_icon">{this.props.steps[i].icon}</b>:<b className="step_icon"></b>}
             </li>
         ));
     }

@@ -8,6 +8,7 @@ let Menu = `
       uniqueId:String
       isLink:Boolean
       isMenu:Boolean
+      isDisabled:Boolean
       subMenu:[Menu]
       dynamicLink:Boolean
       subMenuMappingId:String

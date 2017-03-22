@@ -15,6 +15,8 @@ import getContext from './mlAuthContext'
 import MlResolver from './mlAdminResolverDef';
 import MlSchemaDef from './mlAdminSchemaDef';
 import _ from 'lodash';
+import ImageUploader from '../../commons/mlImageUploader';
+import MlRespPayload from '../../commons/mlPayload';
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -34,6 +36,7 @@ const defaultServerConfig = {
   graphiql: Meteor.isDevelopment,
   graphiqlPath: '/graphiql',
   assignUsersPath: '/adminMultipartFormData',
+  registrationPath: '/registration',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -65,7 +68,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
   const graphQLServer = express();
   config.configServer(graphQLServer)
-  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) => {
+  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
+  {
     try {
       const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
       const options = {
@@ -103,9 +107,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let data = JSON.parse(req.body.data)
         let moduleName = data && data.moduleName
         let response;
-        let file  = req.files;
+        let file  = req.files.file;
         if(file){
-
+            mlS3Client.uploadFile(file, "moolya-users", "moolya-admin-users/")
         }
         switch (moduleName){
             case "USERS":{
@@ -121,6 +125,54 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       }
     }))
   }
+
+  if(config.registrationPath){
+    graphQLServer.use(config.registrationPath,multipartMiddleware,Meteor.bindEnvironment((req,res) => {
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req && req.body && req.body.data){
+        let data = JSON.parse(req.body.data)
+        let moduleName = data && data.moduleName;
+        let documentId = data && data.documentId;
+        let response;
+        let file  = req.files.file;
+
+        if(file){
+
+          let imageUploaderPromise=null;
+          let imageUploadCallback=null;
+          switch (moduleName){
+            case "REGISTRATION":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                let registrationDocumentUploadReq={registrationId:data.registrationId,docUrl: resp,documentId:documentId,moduleName: data.moduleName,actionName: data.actionName};
+                MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null,registrationDocumentUploadReq, context, null);
+              });
+              break;
+            }
+          }
+
+          if(imageUploaderPromise) {
+            imageUploaderPromise.then(function (uploadResp) { //sucess
+              let response = null;
+              if (uploadResp) {
+                   imageUploadCallback(uploadResp);
+                let code = 200;
+                response = JSON.stringify(new MlRespPayload().successPayload(uploadResp, code));
+              }
+              res.send(response);
+            }, function (err) { //err
+              let response = new MlRespPayload().errorPayload("Failed to Upload the resource", 404);
+              res.send(response);
+            });
+
+          }
+        }
+      }
+    }));
+  }
+
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

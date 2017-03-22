@@ -105,13 +105,13 @@ export default class MlAssignDocument extends React.Component {
 
       <div>
 
-        <div className="form-group"> <a onClick={that.assignDocumentsState.bind(this)} className="mlUpload_btn">Add</a></div>
+        {/*<div className="form-group"> <a onClick={that.assignDocumentsState.bind(this)} className="mlUpload_btn">Add</a></div>*/}
         {that.state.assignDocuments.map(function(options,id){
 
           return(
 
                     <div className="panel panel-default" key={id}>
-                      <div className="panel-heading">Type of Document<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/remove.png"/></div></div>
+                      <div className="panel-heading">Type of Document{id==0?(<div className="pull-right block_action" onClick={that.assignDocumentsState.bind(that,id)}><img src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that,id)}><img src="/images/remove.png"/></div>)}</div>
                       <div className="panel-body">
 
                         <div className="form-group">

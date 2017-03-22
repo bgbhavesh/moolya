@@ -14,6 +14,7 @@ let Entity = `
     }
     type Query{
       FindEntity(_id: String):Entity
+      fetchEntities:[Entity]
     }
 `
 

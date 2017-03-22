@@ -14,6 +14,7 @@ let StageOfCompany = `
     }
     type Query{
       FindStageOfCompany(_id: String):StageOfCompany
+      fetchStageOfCompany:[StageOfCompany]
     }
 `
 

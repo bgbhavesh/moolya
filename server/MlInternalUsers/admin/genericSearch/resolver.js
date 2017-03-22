@@ -252,8 +252,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlTransactions.find(query,findOptions).count();
   }
   if(args.module=="template"){
-    data= MlTemplates.find(query,findOptions).fetch();
-    totalRecords=MlTemplates.find(query,findOptions).count();
+    data= MlTemplateTypes.find(query,findOptions).fetch();
+    totalRecords=MlTemplateTypes.find(query,findOptions).count();
   }
 
   if(args.module == 'BackendUsers'){
@@ -444,6 +444,19 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find(query,findOptions).fetch();
     totalRecords=MlGlobalSettings.find(query,findOptions).count();
   }
+  if(args.module=="registrationInfo"){
+    data= MlRegistration.find(query,findOptions).fetch();
+    let result=[];
+    data.map(function (doc,index) {
+      let object ;
+      object = doc.registrationInfo;
+      object._id = doc._id;
+      result.push(object);
+    });
+    data = result;
+    totalRecords=MlRegistration.find(query,findOptions).count();
+  }
+
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -456,28 +469,21 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.name && data.countryId&&!data.stateId){
       return 'States';
     }
-
     if(data.name && data.stateId){
       return 'Cities';
     }
-
     if (data.countryId) {
       return 'Cluster';
     }
-
     if (data.chapterName) {
       return 'Chapter';
     }
-
     if (data.subChapterName) {
       return 'SubChapter';
     }
-
-
     if (data.departmentName) {
       return 'Department';
     }
-
     if (data.subDepartmentName) {
       return 'SubDepartment';
     }
@@ -487,7 +493,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if (data.permissionName) {
       return 'Permissions';
     }
-
     if(data.userTypeName){
       return 'UserTypes'
     }
@@ -512,18 +517,15 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.templateName){
       return 'Template'
     }
-
     if(data.username){
       return 'BackendUsers'
     }
     if(data.roleName){
       return 'Roles'
     }
-
     if(data.professionName){
       return 'Profession'
     }
-
     if(data.industryName){
       return 'Industry'
     }
@@ -560,7 +562,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.titleName){
       return 'Title'
     }
-
     if(data.regionalCurrencyName){
       return 'Regional'
     }
@@ -591,9 +592,11 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.contactName){
       return 'ContactType'
     }
-
     if(data.code){
       return 'Community'
+    }
+    if(data.firstName){
+      return 'RegistrationInfo'
     }
     return null;
   }

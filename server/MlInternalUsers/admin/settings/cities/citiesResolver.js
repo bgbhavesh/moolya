@@ -95,3 +95,7 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
         }
     }
 }
+MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) => {
+  let result=MlCities.find().fetch()||[];
+  return result;
+}

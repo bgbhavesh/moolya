@@ -2,7 +2,9 @@
  * Created by venkatasrinag on 6/1/17.
  */
 'use strict';
-let s3 = Meteor.npmRequire('s3');
+let AWS = Meteor.npmRequire('aws-sdk');
+let awsConfig = require('aws-config');
+let fs = Meteor.npmRequire('fs')
 
 Meteor.startup(function () {
 
@@ -10,43 +12,39 @@ Meteor.startup(function () {
 
 module.exports = class s3Client{
     constructor(){
-        this.client = s3.createClient({
-            s3RetryCount: 3,    // this is the default
-            s3RetryDelay: 1000, // this is the default
-            maxAsyncS3: 20,     // this is the default
-            multipartUploadThreshold: 20971520, // this is the default (20 MB)
-            multipartUploadSize: 15728640, // this is the default (15 MB)
-            s3Options: {
-                accessKeyId: Meteor.settings.private.aws.s3Config.accessKeyId,
-                secretAccessKey: Meteor.settings.private.aws.s3Config.secretAccessKey
-            }
-        })
+        this.client = new AWS.S3(awsConfig({region:"ap-south-1", accessKeyId: 'AKIAIOLVK4M2SMABND3Q', secretAccessKey: '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', timeout: 15000}));
     }
 
-    uploadFile(fileData, fileKey, fileContentType, s3Bucket, callback){
-        check(fileData, String);
-        check(fileKey, String);
-        check(fileContentType, String);
-        check(s3Bucket, String);
+    uploadFile(file, s3Bucket, bucketFolder, callback){
+        let fileData = fs.createReadStream(file.path);
+        let filename = file.name.replace(/ /g,'')
         var params = {
-            Body: fileData,
             Bucket:s3Bucket,
-            Key: bucketFolder+fileKey,
-            ContentType:fileContentType
+            Key: bucketFolder+filename,
+            ContentType:file.type,
+            Body: fileData
         }
-        this.client.s3.putObject(params, Meteor.bindEnvironment(function(err, response) {
+        let self = this
+        this.client.putObject(params, Meteor.bindEnvironment(function(err, response) {
             console.log(response)
-            callback(err, response);
-        })) ;
+            if(err){
+                callback(err, response);
+            }
+            else{
+                let url = self.client.endpoint.href+s3Bucket+"/"+bucketFolder+filename;
+                callback(err,url);
+            }
+
+        }));
     }
 
     getS3SignedUrl(fileKey, s3Bucket){
         let params = {Key:fileKey, Bucket:s3Bucket, Expires:Meteor.settings.private.aws.urlExpirationTime}
-        return this.client.s3.getSignedUrl('getObject', params);
+        return this.client.getSignedUrl('getObject', params);
     }
 
     getS3PublicUrl(fileKey, s3Bucket){
-        return s3.getPublicUrlHttp(s3Bucket, fileKey);
+        return this.client.getPublicUrlHttp(s3Bucket, fileKey);
     }
 
 }

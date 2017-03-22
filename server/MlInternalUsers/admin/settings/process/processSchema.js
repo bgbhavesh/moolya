@@ -17,6 +17,7 @@ let Process = `
         subChapters : [String],
         isActive    : Boolean,
         documents   : [documentOutput]  
+        processDocuments : [processDocumentOutput]
     }
     type processOutput{
         _id         : String,
@@ -32,7 +33,8 @@ let Process = `
         chapters    : [String],
         subChapters : [String],
         isActive    : Boolean,
-        documents   : [documentOutput]  
+        documents   : [documentOutput] , 
+        processDocuments : [processDocumentOutput]
     }
     
     
@@ -65,7 +67,23 @@ let Process = `
         type      :  String
         category  :  String
         isActive  :  Boolean
+        categoryName: String
         
+    }
+    type processDocumentOutput{
+        kycCategoryId:String,
+        kycCategoryName: String,
+        docTypeId:String,
+        docTypeName:String,
+        documentId:String,
+        documentDisplayName:String,
+        documentName:String,
+        isMandatory:Boolean,
+        isActive:Boolean,
+        inputLength:String,
+        allowableMaxSize:String,
+        allowableFormat:String,
+        docMappingDef:String,
     }
     
     input community{
@@ -93,13 +111,28 @@ let Process = `
     input subChapter{
         id   :  String
     }
+    
+    input processDocument{
+        kycCategoryId:String,
+        kycCategoryName: String,
+        docTypeId:String,
+        docTypeName:String,
+        documentId:String,
+        documentDisplayName:String,
+        documentName:String,
+        isMandatory:Boolean,
+        isActive:Boolean,
+        inputLength:String,
+        allowableMaxSize:String,
+        allowableFormat:String,
+        docMappingDef:String,
+    }
     input document{
-        type      :  String
-        category  :  String
+        type      :  String,
+        category  :  String,
         isActive  :  Boolean
         
     }
-    
     input processInput{
         processId   : String,
         process     : String,
@@ -113,12 +146,14 @@ let Process = `
         chapters    : [String],
         subChapters : [String],
         isActive    : Boolean,
-        documents   : [document]  
+        documents   : [document] ,
+   processDocuments : [processDocument]
     }
     
     type Mutation {
        createProcess(process:processInput, moduleName:String, actionName:String):response
        updateProcess(id:String,process:processInput, moduleName:String, actionName:String):response
+       upsertProcessDocument(id:String,kycCategoryId: String, docTypeId:String,documentId:String,isMandatory:Boolean,isActive:Boolean,moduleName:String, actionName:String):response
     }
     
     type Query{

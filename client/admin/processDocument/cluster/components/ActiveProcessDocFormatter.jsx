@@ -1,6 +1,7 @@
 import React from 'react';
-import {updateProcessActionHandler} from './updateProcessMappingAction'
-class ActiveCityFormatter extends React.Component {
+import {updateProcessActionHandler} from '../actions/upsertProcessDocAction'
+import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
+class ActiveProcessFormatter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
@@ -10,6 +11,10 @@ class ActiveCityFormatter extends React.Component {
     if(this.props.data.isActive){
       this.refs.status.checked = true
     }
+    OnToggleSwitch(true,true);
+  }
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
   }
   async onChange(data) {
     if (this.refs.status.checked == true) {
@@ -53,4 +58,4 @@ let id=data.id
   }
 };
 
-export default ActiveCityFormatter;
+export default ActiveProcessFormatter;

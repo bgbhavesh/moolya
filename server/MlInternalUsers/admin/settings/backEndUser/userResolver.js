@@ -38,21 +38,27 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => {
   let user = Meteor.users.findOne({_id: args.userId});
   if(user){
-      let profile = args.userProfile;
-      let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+      let profile = args.userProfile;  //cl
+      let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles; //db
 
       if(userProfiles && userProfiles.length > 0){
-          let index = _.findIndex(userProfiles, {clusterId:profile.clusterId})
+          let index = _.findIndex(userProfiles, {clusterId:profile.clusterId})     //db
           if(index >= 0)
           {
               // userProfiles[index].userroles.push(profile.userroles)
-              let roles     = profile.userRoles;
-              let userRoles = userProfiles[index].userRoles;
-              // _.merge(userRoles, roles)
-              roles.map(function (role) {
-                  let action =_.find(userRoles, {"roleId": role.roleId, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId});
+              let roles     = profile.userRoles;                //cl
+              let userRoles = userProfiles[index].userRoles;    //db
+              roles.map(function (role, key)
+              {
+                  // let mlRole = MlRoles.findOne({"_id":role.roleId})
+                // let action =_.find(userRoles, {"roleId": role.roleId, roleName:role.roleName, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId, "departmentId":role.departmentId, "subDepartmentId":role.subDepartmentId});
+                let action =_.find(userRoles, {"roleId": role.roleId, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId, "departmentId":role.departmentId, "subDepartmentId":role.subDepartmentId});
                   if(!action){
                       userRoles.push(role)
+                  }else {
+                    userRoles[key].validTo = role.validTo;
+                    userRoles[key].validFrom = role.validFrom;
+                    userRoles[key].isActive = role.isActive;
                   }
               })
               userProfiles[index].userRoles = userRoles;
@@ -66,8 +72,11 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
       if(args.moolyaProfile && args.moolyaProfile.displayName){
         user.profile.InternalUprofile.moolyaProfile.displayName = args.moolyaProfile.displayName
       }
-      let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
-      if(resp){
+
+    // let resp = Meteor.users.update({_id:args.userId}, {$set:user}, {upsert:true})
+    let resp = Meteor.users.update({_id:args.userId}, {$set:{"profile":user.profile}})
+
+    if(resp){
         let code = 200;
         let result = {user: resp}
         let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
@@ -187,18 +196,18 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
     return userDetails;
 };
 
-MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) =>{
-    let user = Meteor.users.findOne({_id: args.userId});
-    if (user && user.profile && user.profile.isInternaluser == true) {
-        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-        for (var i = 0; i < user_profiles.length; i++) {
-            let clusterId = user_profiles[i].clusterId;
-            if (clusterId == args.clusterId) {
-                return user_profiles[i];
-            }
-        }
-    }
-}
+// MlResolver.MlQueryResolver['fetchClusterBasedRoles'] = (obj, args, context, info) =>{
+//     let user = Meteor.users.findOne({_id: args.userId});
+//     if (user && user.profile && user.profile.isInternaluser == true) {
+//         let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+//         for (var i = 0; i < user_profiles.length; i++) {
+//             let clusterId = user_profiles[i].clusterId;
+//             if (clusterId == args.clusterId) {
+//                 return user_profiles[i];
+//             }
+//         }
+//     }
+// }
 
 // MlResolver.MlQueryResolver['fetchChapterBasedRoles'] = (obj, args, context, info) =>
 // {
@@ -436,10 +445,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let hierarchy = "";
   roles.map(function (role)
   {
-      if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && role.communityId != ""){
+      if( role.clusterId && role.chapterId && role.subChapterId && role.communityId ){
           levelCode = "COMMUNITY"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && !args.user.isChapterAdmin){
+      else if(role.clusterId && role.chapterId && role.subChapterId && !args.user.isChapterAdmin){
           // if(role.roleName == "chapteradmin"){
           //   let subChapterAdminRole = MlRoles.findOne({roleName:'subchapteradmin'})
           //   role.roleId = subChapterAdminRole._id
@@ -448,16 +457,24 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           levelCode = "SUBCHAPTER"
           role.communityId = "all"
       }
-      else if(role.clusterId != "" && role.chapterId != "" && role.subChapterId != "" && args.user.isChapterAdmin)
-      {
-          let chapterAdminRole = MlRoles.findOne({roleName:'chapteradmin'})
+      else if(role.clusterId && role.chapterId && role.subChapterId && args.user.isChapterAdmin){
+        if (role.departmentName == "operations") {
+          let chapterAdminRole = MlRoles.findOne({roleName: 'chapteradmin'})
           levelCode = "CHAPTER"
           role.roleId = chapterAdminRole._id
-          role.roleName = chapterAdminRole.roleName
           role.subChapterId = "all"
           role.communityId = "all"
+        } else {
+          levelCode = "SUBCHAPTER"
+          role.communityId = "all"
+        }
       }
-      else if(role.clusterId != ""){
+      else if(role.clusterId && role.communityId){
+        levelCode = "CLUSTER"
+        role.chapterId = "all"
+        role.subChapterId = "all"
+      }
+      else if(role.clusterId){
           levelCode = "CLUSTER"
           role.chapterId = "all"
           role.subChapterId = "all"

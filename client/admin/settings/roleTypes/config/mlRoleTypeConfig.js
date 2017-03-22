@@ -66,6 +66,14 @@ function dateFormatter(data){
     return <div>System Generated</div>;
   }
 }
+function createdByFormatter(data){
+  let createdBy=data&&data.data&&data.data.createdBy;
+  if(createdBy){
+    return <div>{createdBy}</div>;
+  } else {
+    return <div>System Generated</div>;
+  }
+}
 
 const mlRoleTypeTableConfig=new MlViewer.View({
   name:"roleTypeTable",
@@ -86,7 +94,7 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "subdepartmentsList", title: "SubDepartments",dataSort:true,customComponent:subdepartmentsFormatter},
     {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},
     {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter},
-    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true,customComponent:createdByFormatter},
     {dataField: "clustersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
     {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
   ],

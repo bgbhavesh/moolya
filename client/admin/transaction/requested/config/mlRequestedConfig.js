@@ -2,21 +2,19 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 const mlUserTypeTableConfig=new MlViewer.View({
-  name:"userTypeTable",
-  module:"userType",//Module name for filter.
+  name:"registrationInfoTable",
+  module:"registrationInfo",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["userTypeName","displayName","isActive"],
-  searchFields:["userTypeName","displayName","isActive"],
+  fields:["firstName","lastName"],
+  searchFields:["firstName","firstName"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "userTypeName", title: "User Type Name",dataSort:true},
-    {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "isActive", title: "Active",dataSort:true},
-    //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
+    {dataField: "firstName", title: "First Name",dataSort:true},
+    {dataField: "lastName", title: "last Name",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -52,14 +50,12 @@ const mlUserTypeTableConfig=new MlViewer.View({
   ],
   graphQlQuery:gql`
               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"userType", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+              data:SearchQuery(module:"registrationInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on UserTypes{
-                             userTypeName
-                              displayName
-                              userTypeDesc
-                              isActive
+                     ...on RegistrationInfo{
+                              firstName 
+                              lastName
                               id:_id
                           }
                       }

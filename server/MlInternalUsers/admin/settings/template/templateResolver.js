@@ -15,7 +15,7 @@ MlResolver.MlMutationResolver['CreateTemplate'] = (obj, args, context, info) => 
     let response = new MlRespPayload().errorPayload("Template Name is Required", code);
     return response;
   }else {
-    let id = MlTemplates.insert({...args});
+    let id = MlTemplateTypes.insert({...args});
     if (id) {
       let code = 200;
       let result = {templateId: id}
@@ -41,7 +41,7 @@ MlResolver.MlMutationResolver['UpdateTemplate'] = (obj, args, context, info) => 
     if (args._id) {
       var id= args._id;
       args=_.omit(args,'_id');
-      let result= MlTemplates.update({_id:id}, {$set: args});
+      let result= MlTemplateTypes.update({_id:id}, {$set: args});
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
       return response
@@ -54,7 +54,7 @@ MlResolver.MlQueryResolver['FindTemplate'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlTemplates.findOne({"_id":id});
+    let response= MlTemplateTypes.findOne({"_id":id});
     return response;
   }
 

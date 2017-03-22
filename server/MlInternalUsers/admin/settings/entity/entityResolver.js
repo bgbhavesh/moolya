@@ -47,5 +47,9 @@ MlResolver.MlQueryResolver['FindEntity'] = (obj, args, context, info) => {
     return response;
   }
 }
+MlResolver.MlQueryResolver['fetchEntities'] = (obj, args, context, info) => {
+  let result=MlEntity.find({isActive:true}).fetch()||[];
+  return result;
+}
 
 

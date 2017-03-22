@@ -1,7 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-import ActiveProcessFormatter from "../actions/ActiveProcessFormatter"
+import ActiveProcessFormatter from "../components/ActiveProcessDocFormatter"
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
@@ -26,9 +26,11 @@ const mlProcessTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editProcess/"+data.id);
+          console.log(data)
+          FlowRouter.go("/admin/documents/"+data.id+"/"+data.documents[0].category+"/"+data.documents[0].type);
+
         } else{
-          alert("Please select a Process Type");
+          alert("Please select a Process Document Type");
         }
       }
     },
@@ -55,7 +57,11 @@ const mlProcessTableConfig=new MlViewer.View({
                               processId, 
                               process,
                               isActive,
-                              
+                              documents {
+                                  type
+                                  category
+                                  isActive
+                                }
                             }
                         }
                 }

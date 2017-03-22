@@ -93,7 +93,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
       levelCode = "",
       doRead = false;
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile|| (!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
        return roles;
     }
 

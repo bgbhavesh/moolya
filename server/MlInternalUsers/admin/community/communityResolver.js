@@ -122,7 +122,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     }
 
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile||(!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
       return community
     }
 
@@ -299,7 +299,7 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
     }
 
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile||(!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
       return new MlRespPayload().errorPayload("Failed to update community", 400);
     }
 

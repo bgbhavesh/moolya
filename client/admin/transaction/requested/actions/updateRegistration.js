@@ -37,6 +37,7 @@ export async function updateRegistrationInfoDetails(registrationDetails,type,reg
     delete item.__typename;
     return item;
   });*/
+ let registrationArray = []
    registrationArray  = _.map(registrationDetails, function (row) {
     return _.omit(row, ['__typename']);
   });

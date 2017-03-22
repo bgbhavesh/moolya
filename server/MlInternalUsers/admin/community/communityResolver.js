@@ -59,7 +59,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
 
     let clusterId = (!args.clusterId && !userhierarchy.isParent ? args.clusterId = userProfile.defaultProfileHierarchyRefId: "") || (args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "");
     let chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = ((_.find(userProfile.defaultChapters, args.chapterId))!="all"): "") || (args.chapterId && ((userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId: "");
-    let subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = ((_.find(userProfile.defaultSubChapters, args.subChapterId))!="all"): "") || (args.subChapterId && ((userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId: "");
+    let subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = ((_.find(userProfile.defaultSubChapters, args.subChapterId))!="all"): "") || (args.subChapterId && ((userProfile.defaultSubChapters == "all" || userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId: "");
 
     if(clusterId != "" && chapterId != "" && subChapterId != ""){
         query= {"$and":[{clusterId:clusterId, chapterId:chapterId, subChapterId:subChapterId, hierarchyCode:"SUBCHAPTER"}]};
@@ -122,7 +122,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     }
 
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    if(!userProfile||!userProfile.hierarchyLevel){
+    if(!userProfile||(!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
       return community
     }
 

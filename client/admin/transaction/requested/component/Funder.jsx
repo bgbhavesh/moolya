@@ -9,7 +9,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 
-export default class institution extends React.Component{
+export default class Funder extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -33,25 +33,22 @@ export default class institution extends React.Component{
   }
 
   componentWillMount() {
-    let details = this.props.registrationDetails;
-    if (details) {
-    this.setState({
-      loading: false,
-      registrationDetails: details,
-      registrationId: this.props.registrationId,
-      selectedUserType: details.userType,
-      selectedHeadquarter: details.headQuarterLocation,
-      selectedBranches: details.branchLocations,
-      selectedLookingFor: details.lookingFor,
-      selectedTypeOfCompany: details.companytyp,
-      selectedTypeOfEntity: details.entityType,
-      selectedTypeOfBusiness: details.businessType,
-      selectedTypeOfIndustry: details.industry,
-      selectedSubDomain: details.subDomain,
-      selectedStageOfCompany: details.stageOfCompany,
-      selectedSubsidaryComapny: details.subsidaryCompany
+    let details=this.props.registrationDetails;
+    this.setState({loading:false,
+      registrationDetails:details,
+      registrationId:this.props.registrationId,
+      selectedUserType:details.userType,
+      selectedHeadquarter:details.headQuarterLocation,
+      selectedBranches:details.branchLocations,
+      selectedLookingFor:details.lookingFor,
+      selectedTypeOfCompany:details.companytyp,
+      selectedTypeOfEntity:details.entityType,
+      selectedTypeOfBusiness:details.businessType,
+      selectedTypeOfIndustry:details.industry,
+      selectedSubDomain:details.subDomain,
+      selectedStageOfCompany:details.stageOfCompany,
+      selectedSubsidaryComapny:details.subsidaryCompany
     })
-  }
   }
 
   componentDidMount()

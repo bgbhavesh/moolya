@@ -1,5 +1,5 @@
-import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import gql from "graphql-tag";
+import {client} from "../../../core/apolloConnection";
 
 export async function updateBackendUserActionHandler(updateUserObject) {
   let userId=updateUserObject.userId;

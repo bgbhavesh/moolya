@@ -129,14 +129,41 @@ let BackEndUser = `
     input InternalUprofile{
         moolyaProfile: moolyaProfile
     }
+    
+    input externalProfile{
+        registrationId    : String,
+        countryName       : String,
+        countryId         : String,
+        cityName          : String,
+        cityId            : String,
+        mobileNumber      : String,
+        clusterId         : String,
+        clusterName       : String,
+        chapterId         : String,
+        chapterName       : String,
+        subChapterId      : String,
+        subChapterName    : String,
+        communityId       : String,
+        communityName     : String,
+        communityType     : String,
+        isDefault         : Boolean,
+        isProfileActive   : Boolean,
+        accountType       : String,
+        optional          : Boolean
+    }
+    
+    input up{
+        userProfiles      : [externalProfile]        
+    }
   
     input profile{
-        isInternaluser: Boolean,
-        isExternaluser: Boolean,
-        email: String,
-        isActive:Boolean,
-        isChapterAdmin :Boolean,
-        InternalUprofile: InternalUprofile
+        isInternaluser    : Boolean,
+        isExternaluser    : Boolean,
+        email             : String,
+        isActive          : Boolean,
+        isChapterAdmin    : Boolean,
+        InternalUprofile  : InternalUprofile,
+        externalUserProfile:up
     }
     
     input userObject{

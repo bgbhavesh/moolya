@@ -8,7 +8,7 @@ export async function updateRegistrationActionHandler(registrationDetails) {
     mutation  ($registrationId:String,$registrationDetails:registrationInfoInput,$details:RegistrationDetailsInput){
         updateRegistrationInfo(
           registrationId:$registrationId,
-          registrationDetails:$registrationDetails
+          registrationDetails:$registrationDetails,
           details:$details
         ) {
           success

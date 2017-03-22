@@ -8,6 +8,8 @@ import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
+import Datetime from "react-datetime";
+import moment from "moment";
 
 export default class Company extends React.Component{
   constructor(props){
@@ -25,7 +27,8 @@ export default class Company extends React.Component{
       selectedStageOfCompany:null,
       selectedSubsidaryComapny:null,
       registrationId:'',
-      registrationDetails:''
+      registrationDetails:'',
+      foundationDate:null
 
     };
     return this;
@@ -33,21 +36,25 @@ export default class Company extends React.Component{
 
   componentWillMount() {
     let details=this.props.registrationDetails;
-    this.setState({loading:false,
-      registrationDetails:details,
-      registrationId:this.props.registrationId,
-      selectedUserType:details.userType,
-      selectedHeadquarter:details.headQuarterLocation,
-      selectedBranches:details.branchLocations,
-      selectedLookingFor:details.lookingFor,
-      selectedTypeOfCompany:details.companytyp,
-      selectedTypeOfEntity:details.entityType,
-      selectedTypeOfBusiness:details.businessType,
-      selectedTypeOfIndustry:details.industry,
-      selectedSubDomain:details.subDomain,
-      selectedStageOfCompany:details.stageOfCompany,
-      selectedSubsidaryComapny:details.subsidaryCompany
-    })
+    if (details) {
+      this.setState({
+        loading: false,
+        registrationDetails: details,
+        registrationId: this.props.registrationId,
+        selectedUserType: details.userType,
+        selectedHeadquarter: details.headQuarterLocation,
+        selectedBranches: details.branchLocations,
+        selectedLookingFor: details.lookingFor,
+        selectedTypeOfCompany: details.companytyp,
+        selectedTypeOfEntity: details.entityType,
+        selectedTypeOfBusiness: details.businessType,
+        selectedTypeOfIndustry: details.industry,
+        selectedSubDomain: details.subDomain,
+        selectedStageOfCompany: details.stageOfCompany,
+        selectedSubsidaryComapny: details.subsidaryCompany,
+        foundationDate:details.foundationDate
+      })
+    }
   }
 
   componentDidMount()
@@ -88,6 +95,13 @@ export default class Company extends React.Component{
   optionsBySelectSubsidaryComapny(val){
     this.setState({selectedSubsidaryComapny:val.value})
   }
+  onFoundationDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, foundationDate: value});
+    }
+  }
+
 
   async  updateregistration() {
     let Details = {
@@ -98,7 +112,7 @@ export default class Company extends React.Component{
         groupName             :   this.refs.groupName.value,
         companyWebsite        :   this.refs.companyWebsite.value,
         companyEmail          :   this.refs.companyEmail.value,
-        foundationDate        :   this.refs.foundationDate.value,
+        foundationDate        :   this.state.foundationDate,
         headQuarterLocation   :   this.state.selectedHeadquarter,
         branchLocations       :   this.state.selectedBranches,
         companytyp            :   this.state.selectedTypeOfCompany,
@@ -108,7 +122,6 @@ export default class Company extends React.Component{
         subDomain             :   this.state.selectedSubDomain,
         stageOfCompany        :   this.state.selectedStageOfCompany,
         subsidaryCompany      :   this.state.selectedSubsidaryComapny,
-        parentCompany         :   this.refs.parentCompany.value,
         registrationNumber    :   this.refs.registrationNumber.value,
         isoAccrediationNumber :   this.refs.isoAccrediationNumber.value,
         companyTurnOver       :   this.refs.companyTurnOver.value,
@@ -195,16 +208,6 @@ export default class Company extends React.Component{
               <div className="form-group">
                 <input type="text" placeholder="Request id" className="form-control float-label" id=""/>
               </div>
-              <div className="ml_tabs">
-                <ul  className="nav nav-pills">
-                  <li className="active">
-                    <a  href="#3a" data-toggle="tab">Individual&nbsp;</a>
-                  </li>
-                  <li>
-                    <a href="#4a" data-toggle="tab">Company&nbsp;</a>
-                  </li>
-                </ul>
-              </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
               </div>
@@ -221,7 +224,7 @@ export default class Company extends React.Component{
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Comapany email" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <input type="text" ref="foundationDate" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.foundationDate} placeholder="Foundation date" className="form-control float-label" id=""/>
+                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)}/>
                 <FontAwesome name="calendar" className="password_icon"/>
               </div>
               <div className="form-group">

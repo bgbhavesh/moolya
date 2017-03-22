@@ -194,7 +194,7 @@ let registrationSchema = `
           companyEmail: String,
           foundationDate:  String,
           headQuarterLocation: String,
-          branchLocations: [branchLocation]
+          branchLocations: String,  
           companytyp: String,
           entityType:  String,
           businessType: String,
@@ -229,7 +229,7 @@ let registrationSchema = `
           chairman: String,
           dean:  String,
           headQuarterLocation: String,
-          branchLocations: [branchLocation],  
+          branchLocations: String,  
           
           identityType : String,
           userType : String,
@@ -240,7 +240,7 @@ let registrationSchema = `
           displayName :  String,
           dateOfBirth :  String,
           gender : String,
-          citizenships : [citizenship],   
+          citizenships : String,  
           qualification :String,
           employmentStatus : String,
           professionalTag : String,
@@ -270,7 +270,7 @@ let registrationSchema = `
           companyEmail: String,
           foundationDate:  String,
           headQuarterLocation: String,
-          branchLocations: [branchLocationInput]
+          branchLocations: String
           companytyp: String,
           entityType:  String,
           businessType: String,
@@ -305,7 +305,7 @@ let registrationSchema = `
           chairman: String,
           dean:  String,
           headQuarterLocation: String,
-          branchLocations: [branchLocationInput],  
+          branchLocations: String,  
           
           identityType : String,
           userType : String,
@@ -316,7 +316,7 @@ let registrationSchema = `
           displayName :  String,
           dateOfBirth :  String,
           gender : String,
-          citizenships : [citizenshipInput],   
+          citizenships : String,   
           qualification :String,
           employmentStatus : String,
           professionalTag : String,
@@ -330,8 +330,7 @@ let registrationSchema = `
     
     type Mutation{
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
-         updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response
-         updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput):response
+         updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response       
          updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
          createStep3InRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput,details:RegistrationDetailsInput):response

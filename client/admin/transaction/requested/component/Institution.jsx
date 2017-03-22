@@ -8,6 +8,8 @@ import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
+import Datetime from "react-datetime";
+import moment from "moment";
 
 export default class institution extends React.Component{
   constructor(props){
@@ -17,21 +19,26 @@ export default class institution extends React.Component{
       selectedHeadquarter:null,
       selectedBranches:null,
       selectedInstitutionType:null,
-      registrationDetails:null
+      registrationDetails:null,
+      foundationDate:null
     };
     return this;
   }
 
   componentWillMount() {
     let details=this.props.registrationDetails;
-    this.setState({loading:false,
-      registrationDetails:details,
-      registrationId:this.props.registrationId,
-      selectedUserType :details.userCategory,
-      selectedHeadquarter : details.headQuarterLocation,
-      selectedBranches : details.branchLocations,
-      selectedInstitutionType: details.institutionType
-    })
+    if (details) {
+      this.setState({
+        loading: false,
+        registrationDetails: details,
+        registrationId: this.props.registrationId,
+        selectedUserType: details.userCategory,
+        selectedHeadquarter: details.headQuarterLocation,
+        selectedBranches: details.branchLocations,
+        selectedInstitutionType: details.institutionType,
+        foundationDate:details.foundationYear
+      })
+    }
   }
 
   componentDidMount()
@@ -60,7 +67,7 @@ export default class institution extends React.Component{
               institutionType     : this.state.selectedInstitutionType,
               instituteName       : this.refs.instituteName.value,
               instituteGroupName  : this.refs.instituteGroupName.value,
-              foundationYear      : this.refs.foundationYear.value,
+              foundationYear      : this.state.foundationDate,
               website             : this.refs.website.value,
               registrationNumber  : this.refs.registrationNumber.value,
               isoAccrediationNumber: this.refs.isoAccrediationNumber.value,
@@ -74,7 +81,7 @@ export default class institution extends React.Component{
               branchLocations:  this.state.selectedBranches
              }
     }
-    this.props.getRegistrationDetails();
+    //this.props.getRegistrationDetails();
     const response = await updateRegistrationActionHandler(Details);
     return response;
   }
@@ -82,6 +89,13 @@ export default class institution extends React.Component{
     const resp=this.updateregistration();
     return resp;
   }
+  onFoundationDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, foundationDate: value});
+    }
+  }
+
 
   render(){
     let MlActionConfig = [
@@ -141,7 +155,6 @@ export default class institution extends React.Component{
       <div className="col-md-6 nopadding-left">
           <div className="form_bg">
               <form>
-
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                 </div>
@@ -155,7 +168,7 @@ export default class institution extends React.Component{
                   <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteGroupName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="foundationYear" placeholder="Foundation year"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.foundationYear} className="form-control float-label" id=""/>
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)}/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>
                 <div className="form-group">
@@ -167,7 +180,6 @@ export default class institution extends React.Component{
                 <div className="form-group">
                   <input type="text"  ref="isoAccrediationNumber" placeholder="ISO Accrediation Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} className="form-control float-label" id=""/>
                 </div>
-
           </form>
           </div>
     </div>

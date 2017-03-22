@@ -35,6 +35,42 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let details=args.registrationDetails;
       details.communityName=community.communityName;
       updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details }});
+
+      let userProfile = {
+        registrationId    : id,
+        countryName       : details.countryName,
+        countryId         : '',
+        cityName          : '',
+        cityId            : details.cityId,
+        mobileNumber      : details.contactNumber,
+        clusterId         : '',
+        clusterName       : '',
+        chapterId         : '',
+        chapterName       : '',
+        subChapterId      : '',
+        subChapterName    : '',
+        communityId       : '',
+        communityName     : '',
+        communityType     : '',
+        isDefault         : false,
+        isProfileActive   : false,
+        accountType       : details.accountType,
+        optional          : false
+      }
+      let profile = {
+        isInternaluser  : false,
+        isExternaluser  : true,
+        email           : details.email,
+        isActive        : false,
+        externalUserProfile: userProfile
+      }
+      let userObject = {
+        username        : details.email,
+        password        : details.password,
+        profile         : profile
+      }
+
+      MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
     }else{
       updatedResponse= MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
     }

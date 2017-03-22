@@ -125,22 +125,22 @@ if(Meteor.isServer){
                 "subMenusId":"communities_chapters",
                 "hideSubMenu":true,
                 "subMenuMappingId":"communities_subChapters",
-                "subMenu":[
-                  {
-                    "link" : "/admin/community/chapter/subChapter/community",
-                    "name" : "Community",
-                    "uniqueId" : "communities_communities",
-                    "isLink" : true,
-                    "isMenu" : true,
-                    "image" : "",
-                    "dynamicLink" : true,
-                    "dynamicLinkHandler" : "",
-                    "subMenusId":"communities_subChapters",
-                    "hideSubMenu":true,
-                    "subMenuMappingId":"communities_communities",
+                // "subMenu":[
+                //   {
+                //     "link" : "/admin/community/chapter/subChapter/community",
+                //     "name" : "Community",
+                //     "uniqueId" : "communities_communities",
+                //     "isLink" : true,
+                //     "isMenu" : true,
+                //     "image" : "",
+                //     "dynamicLink" : true,
+                //     "dynamicLinkHandler" : "",
+                //     "hideSubMenu":true,
+                //     "subMenusId":"communities_subChapters",
+                //     "subMenuMappingId":"communities_communities",
                     "subMenu" : [
                       {
-                        "link" : "/admin/community/chapter/subChapter/communityDetails",
+                        "link" : "/admin/community/subChapter/community/communityDetails",
                         "name" : "Community Details",
                         "uniqueId" : "communities_subChapters_communityDetails",
                         "isLink" : true,
@@ -148,24 +148,24 @@ if(Meteor.isServer){
                         "image" : "",
                         "dynamicLink" : true,
                         "dynamicLinkHandler" : "",
-                        "subMenusId":"communities_communities",
+                        "subMenusId":"communities_subChapters",
                         "subMenuMappingId":"communities_subChapters_communityDetails",
                       },
                       {
-                        "link" : "/admin/community/chapter/subChapter/assignuser",
+                        "link" : "/admin/community/subChapter/community/assignuser",
                         "name" : "Community",
-                        "uniqueId" : "communities_subChapters_assignuser",
+                        "uniqueId" : "communities_subChapters_assignUsers",
                         "isLink" : true,
                         "isMenu" : true,
                         "image" : "",
                         "dynamicLink" : true,
                         "dynamicLinkHandler" : "",
-                        "subMenusId":"communities_communities",
-                        "subMenuMappingId":"communities_subChapters_assignuser",
+                        "subMenusId":"communities_subChapters",
+                        "subMenuMappingId":"communities_subChapters_assignUsers",
                       }
                     ]
-                  }
-                ]
+                //   }
+                // ]
               }
             ]
           }

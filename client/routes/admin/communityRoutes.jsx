@@ -23,7 +23,7 @@ adminSection.route('/communities/chapters/:clusterId/:chapterId/subChapters', {
 });
 
 adminSection.route('/communities/chapters/:clusterId/:chapterId/subChapters/:subChapterId/communities', {
-  name: 'communities_subChapters',
+  name: 'communities_communities',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} listConfig={mlSubChapterCommunitiesListConfig} params={params}/>})
   }

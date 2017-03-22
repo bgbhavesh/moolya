@@ -153,7 +153,7 @@ if(Meteor.isServer){
                       },
                       {
                         "link" : "/admin/community/subChapter/community/assignuser",
-                        "name" : "Community",
+                        "name" : "Backend User",
                         "uniqueId" : "communities_subChapters_assignUsers",
                         "isLink" : true,
                         "isMenu" : true,

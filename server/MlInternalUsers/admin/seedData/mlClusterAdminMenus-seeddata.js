@@ -296,6 +296,7 @@ if(Meteor.isServer){
         "name" : "community",
         "isLink" : true,
         "isMenu" : true,
+        "hideSubMenu":true,
         "subMenu" : [
           {
             "link" : "/admin/community/communityDetails",

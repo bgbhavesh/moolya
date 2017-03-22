@@ -29,7 +29,7 @@ export async function updateRegistrationActionHandler(registrationDetails) {
 }
 
 export async function updateRegistrationInfoDetails(registrationDetails,type,registrationId) {
-  let registrationArray = [];
+  let registration = {};
   /*let detailsList = details.splice(-1,1)*/
   //registrationDetails= registrationDetails.forEach(function(v){ delete v.__typename });
   /*registrationDetails = registrationDetails.filter(function( obj ) {*/
@@ -51,16 +51,12 @@ export async function updateRegistrationInfoDetails(registrationDetails,type,reg
     }
   }else if(type == "SOCIALLINKS")
   {
-    console.log("_______________________________");
     registration = {
       socialLinksInfo : registrationArray
     }
   }
   ;
-  console.log(registrationDetails);
-  console.log(registrationArray);
-  console.log(registrationId);
-  console.log(type);
+
   const result = await client.mutate({
     mutation: gql`
     mutation  ($registration: registrationObject!, $moduleName:String!, $actionName:String!,$registrationId:String!,$type:String!){

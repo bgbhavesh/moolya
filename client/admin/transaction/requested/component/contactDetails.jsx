@@ -235,8 +235,6 @@ export default class ContactDetails extends React.Component{
               </div>
             </div>
             {that.state.contactNumberArray.map(function(options,key) {
-              console.log(options);
-
               return(<div className="tab-pane" id={'numberType'+key} >
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"

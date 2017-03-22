@@ -47,7 +47,6 @@ export default class AddressDetails extends React.Component{
   }*/
 
   optionsBySelectAddressType(selectedIndex,handler,selectedObj){
-    console.log("Address=="+selectedIndex);
     this.setState({selectedValue : selectedIndex,selectedAddressLabel:selectedObj.label});
   }
   updateOptions(index, did, selectedValue, selObject,callback){
@@ -71,11 +70,11 @@ export default class AddressDetails extends React.Component{
         addressCountry : {$set: this.refs["addressCountry"+index].value},
         addressPinCode : {$set: this.refs["addressPinCode"+index].value}
       });
-      console.log(updatedComment);
+
       let newData = update(this.state.addressDetails, {
         $splice: [[index, 1, updatedComment]]
       });
-      console.log(newData);
+
       this.setState({addressDetails : newData,selectedValue : did,selectedAddressLabel : selObject.label});
 
     }
@@ -94,7 +93,7 @@ export default class AddressDetails extends React.Component{
   async onSavingAddress(index,value){
     const detailsType = "ADDRESSTYPE";
     const registerid = this.props.registerId;
-    console.log("RegisterId===="+registerid);
+
      if(this.state.selectedTab){
 
        if (index !== -1) {
@@ -114,15 +113,15 @@ export default class AddressDetails extends React.Component{
            addressCountry : {$set: this.refs["addressCountry"+index].value},
            addressPinCode : {$set: this.refs["addressPinCode"+index].value}
          });
-         console.log(updatedComment);
+
          let newData = update(this.state.addressDetails, {
            $splice: [[index, 1, updatedComment]]
          });
-         console.log(newData);
+
 
          const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
          if(response){
-           this.props.findRegistration();
+           this.findRegistration();
 
          }
        }
@@ -189,7 +188,7 @@ export default class AddressDetails extends React.Component{
                 <a  href="#1a" data-toggle="tab">New Tab&nbsp;<b><FontAwesome name='minus-square'/></b></a>
              </li>
             {that.state.addressDetails.map(function(options,key){
-              console.log(options);
+
               return(
                 <li key={key} onClick={that.addressTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#adressType'+key} className="add-contact">
@@ -253,7 +252,7 @@ export default class AddressDetails extends React.Component{
 
 
             {that.state.addressDetails.map(function(options,key) {
-              console.log(options);
+
               return(
                 <div className="tab-pane" id={'adressType' + key}>
                   <div className="form-group">

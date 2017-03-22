@@ -10,6 +10,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect';
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
 import {findUserRegistartionActionHandler} from '../actions/findUserRegistrationDocument'
 import {findRegistrationActionHandler} from '../actions/findRegistration';
+import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
 
 export default class EmailDetails extends React.Component{
@@ -163,8 +164,6 @@ export default class EmailDetails extends React.Component{
               </div>
             </div>
             {that.state.emailDetails.map(function(options,key) {
-              console.log(options);
-
               return(<div className="tab-pane" id={'emailIdType'+key} >
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={'emailIdType'+key}

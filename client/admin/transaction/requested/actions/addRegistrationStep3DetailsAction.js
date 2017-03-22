@@ -9,14 +9,12 @@ export async function addRegistrationStep3Details(details,type,registrationId) {
       contactInfo : details
     }
   }else if(type == "ADDRESSTYPE"){
-    console.log("-------------------------------");
 
     registration = {
       addressInfo : details
     }
   }else if(type == "SOCIALLINKS")
   {
-
     registration = {
       socialLinksInfo : details
     }
@@ -26,7 +24,7 @@ export async function addRegistrationStep3Details(details,type,registrationId) {
     }
   }
   ;
-  console.log(details);
+
   const result = await client.mutate({
     mutation: gql`
     mutation  ($registration: registrationObject!, $moduleName:String!, $actionName:String!,$registrationId:String!,$type:String!){

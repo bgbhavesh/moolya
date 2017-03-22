@@ -4,7 +4,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 
 
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
-  console.log(args);
+
 
 /*  let id = MlSubDepartments.insert({...args.subDepartment});
   if(id){
@@ -152,7 +152,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
   }
   if(id){
     let code = 200;
-    console.log(MlRegistration.findOne(id));
+
     let insertedData =  MlRegistration.findOne(id) || {};
     /*  let tabName = insertedData.contactInfo[0].numberTypeName;*/
     let result = {registrationId : id}
@@ -224,8 +224,7 @@ MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, con
   }
   if(id){
     let code = 200;
-    console.log(MlRegistration.findOne(id));
-    let insertedData =  MlRegistration.findOne(id) || {};
+   let insertedData =  MlRegistration.findOne(id) || {};
     /*  let tabName = insertedData.contactInfo[0].numberTypeName;*/
     let result = {registrationId : id}
     let response = new MlRespPayload().successPayload(result, code);

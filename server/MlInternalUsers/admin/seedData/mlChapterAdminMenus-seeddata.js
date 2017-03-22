@@ -183,20 +183,45 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/community_icon.png",
-        "link" : "/admin/community",
+        "link" : "/admin/communities",
+        // "link" : "/admin/community",
         "uniqueId" : "community",
         "name" : "community",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
+          // {
+          //   "link" : "/admichapters/comminty/communities",
+          //   "name" : "communities",
+          //   "uniqueId" : "community_communities",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "image" : "",
+          // },
           {
-            "link" : "/admichapters/comminty/communities",
-            "name" : "communities",
-            "uniqueId" : "community_communities",
+            "link" : "/admin/community/communityDetails",
+            "name" : "Community Details",
+            "uniqueId" : "community_Community_Details",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "subMenuMappingId":"community_Community_Details"
           },
+          {
+            "link" : "/admin/community/assignusers",
+            "name" : "Backend Users",
+            "uniqueId" : "community_assignusers",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "subMenuMappingId":"community_assignusers"
+          }
         ]
       },
       {

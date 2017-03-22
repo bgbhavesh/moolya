@@ -7,6 +7,7 @@ import {mlCommunityMapConfig, mlCommunityListConfig, mlCommunityChaptersConfig, 
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlChapterCommunityDetails from '../../admin/chapter/components/MlChapterCommunityDetails'
+import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
 
 adminSection.route('/communities/', {
   name: 'communities_chapters',
@@ -22,16 +23,23 @@ adminSection.route('/communities/chapters/:clusterId/:chapterId/subChapters', {
   }
 });
 
-adminSection.route('/communities/chapters/:clusterId/:chapterId/subChapters/:subChapterId/communities', {
+adminSection.route('/communities/:clusterId/:chapterId/subChapters/:subChapterId/communities', {
   name: 'communities_subChapters',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:<MlViews viewMode={false} showInfinity={false} listConfig={mlSubChapterCommunitiesListConfig} params={params}/>})
   }
 });
 
-adminSection.route('/communities/chapters/:clusterId/:chapterId/subChapters/:subChapterId/:communityId/communityDetails', {
+adminSection.route('/communities/:clusterId/:chapterId/subChapters/:subChapterId/:communityId/communityDetails', {
   name: 'communities_subChapters_communityDetails',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:<MlChapterCommunityDetails params={params} />})
+  }
+});
+
+adminSection.route('/communities/:clusterId/:chapterId/subChapters/:subChapterId/:communityId/assignusers', {
+  name: 'communities_subChapters_assignUsers',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:<MlAssignBackendUsers params={params} />})
   }
 });

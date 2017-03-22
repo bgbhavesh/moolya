@@ -127,19 +127,19 @@ export default function dynamicLinkHandler(path,params,queryParams){
       }
     },
 
-    "community_Community_Details":function (params,queryParams) {
+    "communities_subChapters_communityDetails":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"communityId")){
-        return `/admin/community/${dynamicParams.communityId}/communityDetails`;
+        return `/admin/communities/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters/${dynamicParams.subChapterId}/${dynamicParams.communityId}/communityDetails`;
       }
     },
 
-    // "community_assignusers":function (params,queryParams) {
-    //   let dynamicParams=params||{};
-    //   if(_.has(dynamicParams,"communityId")){
-    //     return `/admin/community/${dynamicParams.communityId}/assignusers`;
-    //   }
-    // }
+    "communities_subChapters_assignUsers":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"communityId")){
+        return `/admin/communities/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters/${dynamicParams.subChapterId}/${dynamicParams.communityId}/assignusers`;
+      }
+    }
   }
   let menuLinkHandler=menuLinkHandlerConfig[path];
   if(menuLinkHandler){

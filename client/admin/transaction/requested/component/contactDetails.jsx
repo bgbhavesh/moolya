@@ -42,8 +42,6 @@ export default class ContactDetails extends React.Component{
     this.setState({contactNumber:nextState.contactNumber})*/
   }
   updateContactOptions(index, did, selectedValue, selObject,callback){
-    console.log(selObject);
-    console.log(selectedValue);
     if (index !== -1) {
       // do your stuff here
       let updatedComment = update(this.state.contactNumberArray[index], {
@@ -55,7 +53,6 @@ export default class ContactDetails extends React.Component{
       let newData = update(this.state.contactNumberArray, {
         $splice: [[index, 1, updatedComment]]
       });
-      console.log(newData);
       this.setState({contactNumberArray : newData,selectedNumberTypeValue : did,selectedNumberTypeLabel : selObject.label});
 
     }
@@ -118,8 +115,11 @@ export default class ContactDetails extends React.Component{
     this.setState({selectedNumberTypeValue : selectedIndex,selectedNumberTypeLabel:selectedObj.label});
   }
   async onDeleteContact(index,value){
-    let listArray = this.state.contactNumberArray;
-    delete listArray[index];
+
+    let listArray = update(this.state.contactNumberArray, {
+      $splice: [[index, 1]]
+    });
+
     let detailsType = "CONTACTTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
@@ -238,7 +238,7 @@ export default class ContactDetails extends React.Component{
               <div className="ml_icon_btn">
                 <a href="#"  onClick={this.onSavingContact.bind(this)}  className="save_btn" ><span
                   className="ml ml-save"></span></a>
-                <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
+                {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
               </div>
             </div>
             {that.state.contactNumberArray.map(function(options,key) {

@@ -111,8 +111,10 @@ export default class EmailDetails extends React.Component{
   }
 
   async onDeleteEmail(index,value){
-    let listArray = this.state.emailDetails;
-    delete listArray[index];
+
+    let listArray = update(this.state.emailDetails, {
+      $splice: [[index, 1]]
+    });
     let detailsType = "EMAILTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);

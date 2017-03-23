@@ -67,9 +67,10 @@ export default class Step4 extends React.Component{
   }
 
   async onDeleteSocialLink(index,value){
-    let listArray = this.state.socialLinkArray;
-    delete listArray[index];
-    let detailsType = "ADDRESSTYPE";
+    let listArray = update(this.state.socialLinkArray, {
+      $splice: [[index, 1]]
+    });
+    let detailsType = "SOCIALLINKS";
     let registerid = this.props.registrationId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
     this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
@@ -189,8 +190,7 @@ export default class Step4 extends React.Component{
                     </div>
                     <div className="ml_btn">
                       <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}>Save</a>
-                      <a href="#" className="cancel_btn">Cancel</a>
-                    </div>
+                     </div>
                   </div>
                   {that.state.socialLinkArray.map(function(options,key) {
                     console.log(options);
@@ -208,7 +208,7 @@ export default class Step4 extends React.Component{
                         <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
                       <div className="ml_btn">
-                        <a href="#" className="edit_btn"  onClick = {that.onSavingSocialLink.bind(that,key)}>Save</a>
+                        <a href="#" className="save_btn"  onClick = {that.onSavingSocialLink.bind(that,key)}>Save</a>
                         <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}>Cancel</a>
                       </div>
                     </div>)

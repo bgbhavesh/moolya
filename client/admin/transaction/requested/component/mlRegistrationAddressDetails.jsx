@@ -87,12 +87,15 @@ export default class AddressDetails extends React.Component{
 
 
   async onDeleteAddress(index,value){
-    let listArray = this.state.addressDetails;
-    delete listArray[index];
+
+    let listArray = update(this.state.addressDetails, {
+      $splice: [[index, 1]]
+    });
     let detailsType = "ADDRESSTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
     this.setState({loading:false,addressDetails:response.addressInfo});
+
   }
 
 
@@ -250,7 +253,6 @@ export default class AddressDetails extends React.Component{
                 </div>
                 <div className="ml_btn">
                   <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}>Save</a>
-                  <a href="#" className="cancel_btn">Cancel</a>
                 </div>
               </div>
 

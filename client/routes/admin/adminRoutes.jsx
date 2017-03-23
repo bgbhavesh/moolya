@@ -123,12 +123,61 @@ adminSection.route('/transactions/requestedList', {
   }
 });
 
-adminSection.route('/transactions/requestedList', {
-  name: 'transaction_RequestList',
+adminSection.route('/transactions/approvedList', {
+  name: 'transaction_ApprovedList',
   action(){
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }
 });
+
+adminSection.route('/transactions/registrationApprovedList', {
+  name: 'transaction_registration_approved',
+  action(){
+    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+  }
+});
+
+
+adminSection.route('/transactions/registrationRequested/edit', {
+  name: 'transaction_registration_requested_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+  }
+});
+
+adminSection.route('/transactions/registrationRequested', {
+  name: 'transaction_registration_requested_list',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+  }
+});
+/*
+
+adminSection.route('/transactions/editRequests/:id', {
+  name: 'transaction_EditRequests',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+  }
+});
+
+
+adminSection.route('transactions/registrationRequested', {
+  name: 'transaction_registration_requested_list',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm/>})
+  }
+});
+
+adminSection.route('transactions/registrationRequested/edit', {
+  name: 'transaction_registration_requested_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+  }
+});
+*/
+
+
+
 adminSection.route('/transactions/editRequests/:id', {
   name: 'transaction_EditRequests',
   action(params){

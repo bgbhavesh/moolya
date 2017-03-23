@@ -104,7 +104,7 @@ export async function findRegistrationActionHandler(registrationId) {
             socialLinkTypeName
             socialLinkType
             socialLinkUrl
-    		},
+    		}
     		addressInfo {
           addressType
           addressTypeName
@@ -118,39 +118,38 @@ export async function findRegistrationActionHandler(registrationId) {
           addressState
           addressCountry
           addressPinCode
-        },
+        }
         emailInfo {
           emailIdType
           emailIdTypeName
           emailId
-        },
+        }
         contactInfo {
           numberType
           numberTypeName
           countryCode
           contactNumber
-        }
-    		}
+        }    		
     		kycDocuments {
-      docTypeName
-      docTypeId
-      kycCategoryId
-      kycCategoryName
-      documentId
-      documentDisplayName
-      documentName
-      isMandatory
-      isActive
-      allowableFormat
-      allowableMaxSize
-      status
-      docFiles {
-        fileId
-        fileUrl
-        fileName
-        fileSize
-      }
-    }
+          docTypeName
+          docTypeId
+          kycCategoryId
+          kycCategoryName
+          documentId
+          documentDisplayName
+          documentName
+          isMandatory
+          isActive
+          allowableFormat
+          allowableMaxSize
+          status
+          docFiles {
+            fileId
+            fileUrl
+            fileName
+            fileSize
+          }
+        }
           
         }
       }

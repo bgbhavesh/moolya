@@ -99,9 +99,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   sendRolesToParent() {
     let value = this.state.rolesData;
     let rolesArrayFinal = [];
+    let clusterId = this.props.clusterId
     _.each(value, function (item, key) {
       _.each(item.roles, function (say, val) {
-        if (say.roleId) {
+        if (say.roleId && say.clusterId == clusterId) {
           rolesArrayFinal.push(say)
         }
       })

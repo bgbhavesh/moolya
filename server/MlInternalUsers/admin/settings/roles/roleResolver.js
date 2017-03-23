@@ -128,7 +128,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
 
     let department = MlDepartments.findOne({"_id":args.departmentId})
     if(department && department.isActive){
-        roles = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}]}).fetch()
+        roles = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}, {"isActive":true}]}).fetch()
     }
 
     _.remove(roles, {roleName:'platformadmin'})

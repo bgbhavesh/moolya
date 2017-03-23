@@ -89,7 +89,6 @@ class MlEditBackendUser extends React.Component{
 
   async findBackendUser(){
     let userTypeId=this.props.config;
-    //console.log(userTypeId)
     const response = await findBackendUserActionHandler(userTypeId);
     this.setState({loading:false,data:response});
    if(response){
@@ -120,7 +119,11 @@ class MlEditBackendUser extends React.Component{
                communityId:userRole[j].communityId,
                isActive:userRole[j].isActive,
                hierarchyLevel:userRole[j].hierarchyLevel,
-               hierarchyCode:userRole[j].hierarchyCode
+               hierarchyCode:userRole[j].hierarchyCode,
+               departmentId:userRole[j].departmentId,
+               departmentName:userRole[j].departmentName,
+               subDepartmentId:userRole[j].subDepartmentId,
+               subDepartmentName:userRole[j].subDepartmentName
              }
              userRolesDetails.push(json)
            }
@@ -204,7 +207,12 @@ class MlEditBackendUser extends React.Component{
             communityId:userRole[j].communityId,
             isActive:userRole[j].isActive,
             hierarchyLevel:userRole[j].hierarchyLevel,
-            hierarchyCode:userRole[j].hierarchyCode
+            hierarchyCode:userRole[j].hierarchyCode,
+            roleName:userRole[j].roleName,
+            departmentId:userRole[j].departmentId,
+            departmentName:userRole[j].departmentName,
+            subDepartmentId:userRole[j].subDepartmentId,
+            subDepartmentName:userRole[j].subDepartmentName
           }
           userRolesDetails.push(json)
         }
@@ -222,7 +230,7 @@ class MlEditBackendUser extends React.Component{
       firstName: this.refs.firstName.value,
       middleName: this.refs.middleName.value,
       lastName: this.refs.lastName.value,
-      userType:this.state.selectedBackendUserType,
+      userType: this.state.selectedBackendUserType,
       subChapter:this.state.selectedSubChapter,
       roleType:this.state.selectedBackendUser,
       assignedDepartment:this.state.mlAssignDepartmentDetails,

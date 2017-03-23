@@ -52,7 +52,10 @@ export async function findBackendUserActionHandler(userTypeId) {
                       isActive,
                       hierarchyLevel,
                       hierarchyCode
-                      
+                      departmentId
+                      departmentName
+                      subDepartmentId
+                      subDepartmentName
                     }
                   }
                     

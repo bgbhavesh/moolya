@@ -57,7 +57,11 @@ let BackEndUser = `
         communityId:String,
         isActive:Boolean,
         hierarchyLevel:String,
-        hierarchyCode:String
+        hierarchyCode:String,
+        departmentId: String,
+        departmentName : String,
+        subDepartmentId : String,
+        subDepartmentName : String
     }
     
     type MoolyaProfile{
@@ -99,8 +103,12 @@ let BackEndUser = `
         communityId:String,
         isActive:Boolean,
         hierarchyLevel:Int,
-        hierarchyCode:String
-        
+        hierarchyCode:String,
+        roleName:String,
+        departmentId: String,
+        departmentName : String,
+        subDepartmentId : String,
+        subDepartmentName : String
     }
     
     input userprofiles{

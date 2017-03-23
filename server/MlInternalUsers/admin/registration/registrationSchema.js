@@ -331,10 +331,10 @@ let registrationSchema = `
     type Mutation{
          createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response       
-         updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response
-         createStep3InRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput,details:RegistrationDetailsInput):response
          updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,documentId:String):response         
+         createGeneralInfoInRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
+         updateRegistrationGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

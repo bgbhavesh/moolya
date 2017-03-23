@@ -8,6 +8,8 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import  ContactDetails from './contactDetails';
+import AddressDetails from '../component/mlRegistrationAddressDetails'
+import EmailDetails from '../component/mlRegistrationEmailDetails'
 
 export default class Step3 extends React.Component{
 
@@ -15,8 +17,13 @@ export default class Step3 extends React.Component{
     super(props);
     this.state={
       selectedValue : null,
-      contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}]
+      contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}],
+      registerId : this.props.registrationId,
+      registrationDetails:this.props.registrationInfo,
+
+
     }
+
     return this;
   }
   componentWillMount(){
@@ -27,15 +34,19 @@ export default class Step3 extends React.Component{
   {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    this.props.getRegistrationContactDetails();
+
 
   }
-/*  optionsBySelectNumberType(value){
-    console.log("-----------------------------");
-    console.log(this);
-    console.log(this.refs);
-    console.log(this.refs.numberType.label)
-    this.setState({numberTypeName: value,countryCode:'',contactNumber:''})
+ /* componentWillReceiveProps(nextProps){
+    this.getRegistrationContactInfo();
   }*/
+  async getRegistrationContactInfo(){
+
+    const resp=this.props.getRegistrationContactDetails();
+    this.setState({'registrationDetails':this.props.registrationInfo});
+  }
+
   render(){
     /*let that=this;
     let numberTypeQuery=gql`query($type:String,$hierarchyRefId:String){
@@ -60,7 +71,7 @@ export default class Step3 extends React.Component{
                 Contact Number
               </div>
 
-              <ContactDetails/>
+              <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}/>
 
 
             </div>
@@ -71,7 +82,7 @@ export default class Step3 extends React.Component{
               <div className="panel-heading">
                 Email ID
               </div>
-              <div className="panel-body">
+              {/*<div className="panel-body">
 
 
                 <div className="ml_tabs">
@@ -123,7 +134,8 @@ export default class Step3 extends React.Component{
                   </div>
 
                 </div>
-              </div>
+              </div>*/}
+              <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}/>
             </div>
           </div>
 
@@ -133,7 +145,7 @@ export default class Step3 extends React.Component{
               <div className="panel-heading">
                 Address
               </div>
-              <div className="panel-body">
+           {/*   <div className="panel-body">
 
 
                 <div className="ml_tabs">
@@ -227,7 +239,8 @@ export default class Step3 extends React.Component{
                   </div>
 
                 </div>
-              </div>
+              </div>*/}
+              <AddressDetails registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails}/>
             </div>
           </div>
 

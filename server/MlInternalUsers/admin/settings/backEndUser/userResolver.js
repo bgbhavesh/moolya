@@ -445,10 +445,12 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let hierarchy = "";
   roles.map(function (role)
   {
-      if( role.clusterId && role.chapterId && role.subChapterId && role.communityId ){
+      if( (role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
+        (role.communityId && role.communityId != "all")){
           levelCode = "COMMUNITY"
       }
-      else if(role.clusterId && role.chapterId && role.subChapterId && !args.user.isChapterAdmin){
+      else if((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
+        !args.user.isChapterAdmin){
           // if(role.roleName == "chapteradmin"){
           //   let subChapterAdminRole = MlRoles.findOne({roleName:'subchapteradmin'})
           //   role.roleId = subChapterAdminRole._id
@@ -457,7 +459,8 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           levelCode = "SUBCHAPTER"
           role.communityId = "all"
       }
-      else if(role.clusterId && role.chapterId && role.subChapterId && args.user.isChapterAdmin){
+      else if((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
+        args.user.isChapterAdmin){
         if (role.departmentName == "operations") {
           let chapterAdminRole = MlRoles.findOne({roleName: 'chapteradmin'})
           levelCode = "CHAPTER"
@@ -469,12 +472,12 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           role.communityId = "all"
         }
       }
-      else if(role.clusterId && role.communityId){
+      else if((role.clusterId && role.clusterId != "all") && (role.communityId && role.communityId != "all")){
         levelCode = "CLUSTER"
         role.chapterId = "all"
         role.subChapterId = "all"
       }
-      else if(role.clusterId){
+      else if(role.clusterId && role.clusterId != "all"){
           levelCode = "CLUSTER"
           role.chapterId = "all"
           role.subChapterId = "all"

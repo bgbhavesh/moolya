@@ -171,7 +171,6 @@ class MlAssignChapterBackendUsers extends React.Component {
         }
       }
     };
-    //let query   = gql`query($subChapterId:String){data:fetchUsersBysubChapterDepSubDep(subChapterId: $subChapterId){label:username,value:_id}}`;
     let query = gql`query ($clusterId:String, $chapterId:String, $subChapterId:String) {
         data: fetchUsersBysubChapterDepSubDep(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId)
         {label:username,value:_id}

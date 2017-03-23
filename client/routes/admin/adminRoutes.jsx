@@ -108,6 +108,18 @@ adminSection.route('/documents/clusterList', {
     mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
   }
 });
+adminSection.route('/documents/chapterList', {
+  name: 'documents_ChapterList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+  }
+});
+adminSection.route('/documents/communityList', {
+  name: 'documents_CommunityList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+  }
+});
 adminSection.route('/documents/:pid/:kycid/:docid', {
   name: '',
   action(params){
@@ -123,12 +135,61 @@ adminSection.route('/transactions/requestedList', {
   }
 });
 
-adminSection.route('/transactions/requestedList', {
-  name: 'transaction_RequestList',
+adminSection.route('/transactions/approvedList', {
+  name: 'transaction_ApprovedList',
   action(){
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }
 });
+
+adminSection.route('/transactions/registrationApprovedList', {
+  name: 'transaction_registration_approved',
+  action(){
+    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+  }
+});
+
+
+adminSection.route('/transactions/registrationRequested/edit', {
+  name: 'transaction_registration_requested_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+  }
+});
+
+adminSection.route('/transactions/registrationRequested', {
+  name: 'transaction_registration_requested_list',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+  }
+});
+/*
+
+adminSection.route('/transactions/editRequests/:id', {
+  name: 'transaction_EditRequests',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+  }
+});
+
+
+adminSection.route('transactions/registrationRequested', {
+  name: 'transaction_registration_requested_list',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm/>})
+  }
+});
+
+adminSection.route('transactions/registrationRequested/edit', {
+  name: 'transaction_registration_requested_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+  }
+});
+*/
+
+
+
 adminSection.route('/transactions/editRequests/:id', {
   name: 'transaction_EditRequests',
   action(params){

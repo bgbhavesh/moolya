@@ -69,7 +69,14 @@ MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
         for(key in args.chapter){
           chapter[key] = args.chapter[key]
         }
-        if(chapter.isActive){
+        if(chapter.isActive && chapter.showOnMap){
+          if(chapter.status && chapter.status.code != 111){
+            chapter.status= {
+              code: 111,
+              description :"Active"
+            }
+          }
+        }else if(chapter.isActive){
           if(chapter.status && chapter.status.code != 101){
             chapter.status= {
               code: 101,
@@ -184,7 +191,7 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         let resp = MlSubChapters.update({_id:args.subChapterId}, {$set:subChapter})
         if(resp){
           if(args.subChapterDetails && args.subChapterDetails.chapterId){
-            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive}}, context, info)
+            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
           }
             let code = 200;
             let result = {subChapter: resp}

@@ -8,6 +8,7 @@ import MoolyaSelect from "../../../commons/components/select/MoolyaSelect";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import moment from "moment";
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 let FontAwesome = require('react-fontawesome');
 
 // let initSwiper = () => {
@@ -82,17 +83,19 @@ export default class MlAssignBackednUserRoles extends React.Component {
     this.sendRolesToParent();
   }
 
-  sendRolesToParent() {
-    let value = this.state.rolesData;
-    let rolesArrayFinal = [];
-    _.each(value, function (item, key) {
-      _.each(item.roles, function (say, val) {
-        if (say.roleId) {
-          rolesArrayFinal.push(say)
-        }
+  sendRolesToParent()
+  {
+      let value = this.state.rolesData;
+      let rolesArrayFinal = [];
+      let clusterId = this.props.clusterId
+      _.each(value, function (item, key) {
+        _.each(item.roles, function (say, val) {
+          if (say.roleId && say.clusterId == clusterId) {
+            rolesArrayFinal.push(say)
+          }
+        })
       })
-    })
-    this.props.getAssignedRoles(rolesArrayFinal);
+      this.props.getAssignedRoles(rolesArrayFinal);
   }
 
   addRoleComponent(did) {
@@ -230,10 +233,14 @@ export default class MlAssignBackednUserRoles extends React.Component {
     // let roleDetails = that.state.roleDetails;
 
     var yesterday = Datetime.moment().subtract(1, 'day');
+    let loggedInUser = getAdminUserContext()
     var validDate = function (current) {
       return current.isAfter(yesterday);
     }
     let clusterId = that.props.clusterId;
+    let chapterId = that.props.chapterId
+    let subChapterId = that.props.subChapterId
+    let communityId = that.props.communityId
 
     let userDepartments = that.state.rolesData || [];
     return (
@@ -244,11 +251,13 @@ export default class MlAssignBackednUserRoles extends React.Component {
               variables: {
                 departmentId: department.departmentId,
                 clusterId: that.props.clusterId,
-                communityId: that.props.communityId
+                chapterId : that.props.chapterId || "",
+                subChapterId : that.props.subChapterId || "",
+                communityId: that.props.communityId || ""
               }
             }
           };
-          let query = gql`query($departmentId:String, $clusterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, communityId:$communityId) {value:_id, label:roleName}}`;
+          let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:roleName}}`;
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right"
@@ -281,7 +290,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                                               selectedValue={details.roleId}/>}
                             </div>
                             <div className="form-group left_al">
-                              {(details.clusterId == clusterId) ?
+                              {(details.clusterId == clusterId && loggedInUser.hierarchyCode != details.hierarchyCode) ?
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                           inputProps={{placeholder: "Valid From"}}
                                           isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
@@ -291,7 +300,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                                        disabled="true"/>}
                             </div>
                             <div className="form-group left_al">
-                              {(details.clusterId == clusterId) ?
+                              {(details.clusterId == clusterId && loggedInUser.hierarchyCode != details.hierarchyCode) ?
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                           inputProps={{placeholder: "Valid To"}}
                                           isValidDate={validDate} closeOnSelect={true} value={details.validTo}
@@ -303,7 +312,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                             <div className="form-group switch_wrap">
                               <label>Status</label>
                               <label className="switch">
-                                {(details.clusterId == clusterId) ?
+                                {(details.clusterId == clusterId && loggedInUser.hierarchyCode != details.hierarchyCode) ?
                                   <input type="checkbox" name={'status'} checked={details.isActive}
                                          onChange={that.onStatusChange.bind(that, idx, id)}/> :
                                   <input type="checkbox" name={'status'} checked={details.isActive} disabled

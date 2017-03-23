@@ -109,7 +109,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
 MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.clusterId) {
-    let response= MlProcessMapping.findOne({"clusters":args.clusterId});
+    let response= MlProcessMapping.findOne({"clusters":args.clusterId},{});
     console.log(response)
     return response;
   }

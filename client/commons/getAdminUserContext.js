@@ -4,16 +4,15 @@
 
 import _ from 'lodash'
 
-export function getAdminUserContext() {
+export function getAdminUserContext()
+{
     let user = Meteor.user();
     let hierarchyLevel = null, hierarchyCode = null, defaultCluster = null;
     if(user && user.profile && user.profile.isInternaluser == true)
     {
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
       let user_roles;
-      // Selecting Default Profile
       let default_User_Profiles=_.find(user_profiles, {'isDefault': true });
-      //if default Profile is available then,
       if(default_User_Profiles){
         for(var i = 0; i < user_profiles.length; i++){
           if(user_profiles[i].isDefault == true){

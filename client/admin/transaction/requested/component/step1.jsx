@@ -117,9 +117,9 @@ export default class Step1 extends React.Component{
       chapterId       :  this.state.chapter
     }
     }
-    this.props.getRegistrationDetails();
     const response = await updateRegistrationActionHandler(Details);
-    return response;
+    //return response;
+    this.props.getRegistrationDetails();
   }
 
   updateRegistration(){

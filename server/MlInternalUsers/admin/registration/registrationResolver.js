@@ -4,7 +4,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 
 
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
-  console.log(args);
+
 
 /*  let id = MlSubDepartments.insert({...args.subDepartment});
   if(id){
@@ -35,6 +35,42 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let details=args.registrationDetails;
       details.communityName=community.communityName;
       updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details }});
+
+      let userProfile = {
+        registrationId    : id,
+        countryName       : details.countryName,
+        countryId         : '',
+        cityName          : '',
+        cityId            : details.cityId,
+        mobileNumber      : details.contactNumber,
+        clusterId         : '',
+        clusterName       : '',
+        chapterId         : '',
+        chapterName       : '',
+        subChapterId      : '',
+        subChapterName    : '',
+        communityId       : '',
+        communityName     : '',
+        communityType     : '',
+        isDefault         : false,
+        isProfileActive   : false,
+        accountType       : details.accountType,
+        optional          : false
+      }
+      let profile = {
+        isInternaluser  : false,
+        isExternaluser  : true,
+        email           : details.email,
+        isActive        : false,
+        externalUserProfile: userProfile
+      }
+      let userObject = {
+        username        : details.email,
+        password        : details.password,
+        profile         : profile
+      }
+
+      MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
     }else{
       updatedResponse= MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
     }
@@ -51,10 +87,93 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
   }
 }
 
-MlResolver.MlMutationResolver['createStep3InRegistration'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, context, info) => {
 
   let id = " "
  let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};
+  if(args && args.registration){
+    if(args.type == "CONTACTTYPE"){
+     if(registrationDetails.contactInfo){
+        id = MlRegistration.update(
+          { _id : args.registrationId },
+          { $push: { 'contactInfo': args.registration.contactInfo[0] } }
+        )
+      }else{
+        id = MlRegistration.update(
+          { _id : args.registrationId },
+          { $set: { 'contactInfo': args.registration.contactInfo } }
+        )
+      }
+    }else if(args.type == "ADDRESSTYPE"){
+      if(registrationDetails.addressInfo){
+        id = MlRegistration.update(
+          { _id : args.registrationId },
+          { $push: { 'addressInfo': args.registration.addressInfo[0] } }
+        )
+      }else{
+        id = MlRegistration.update(
+          { _id : args.registrationId },
+          { $set: { 'addressInfo': args.registration.addressInfo } }
+        )
+      }
+    }else if(args.type == "SOCIALLINKS") {
+      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
+      if (registrationDetails.socialLinksInfo) {
+        id = MlRegistration.update(
+          {_id: args.registrationId},
+          {$push: {'socialLinksInfo': args.registration.socialLinksInfo[0]}}
+        )
+      } else {
+        id = MlRegistration.update(
+          {_id: args.registrationId},
+          {$set: {'socialLinksInfo': args.registration.socialLinksInfo}}
+        )
+      }
+    }else if(args.type == "EMAILTYPE"){
+        /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
+        if(registrationDetails.emailInfo){
+          id = MlRegistration.update(
+            { _id : args.registrationId },
+            { $push: { 'emailInfo': args.registration.emailInfo[0] } }
+          )
+        }else{
+          id = MlRegistration.update(
+            { _id : args.registrationId },
+            { $set: { 'emailInfo': args.registration.emailInfo } }
+          )
+        }
+
+      /*}else{
+       id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
+       }*/
+    }
+
+
+  }
+  if(id){
+    let code = 200;
+
+    let insertedData =  MlRegistration.findOne(id) || {};
+    /*  let tabName = insertedData.contactInfo[0].numberTypeName;*/
+    let result = {registrationId : id}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+}
+MlResolver.MlQueryResolver['findRegistration'] = (obj, args, context, info) => {
+  let resp = MlRegistration.findOne({_id: args.registrationId});
+  return resp;
+  // if(resp){
+  //     let code = 200;
+  //     let result = {department: resp}
+  //     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  //     return response
+  // }
+}
+MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, context, info) => {
+
+  let id = " "
+  let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};
   if(args && args.registration){
     if(args.type == "CONTACTTYPE"){
       //if(args.registration.contactInfo && args.registration.contactInfo[0]){
@@ -67,27 +186,34 @@ MlResolver.MlMutationResolver['createStep3InRegistration'] = (obj, args, context
        }*/
     }else if(args.type == "ADDRESSTYPE"){
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      let addressInformation = args.registration.addressInfo.pop();
+
       id = MlRegistration.update(
         { _id : args.registrationId },
-        { $push: { 'addressInfo': args.registration.addressInfo } }
+        { $set: { 'addressInfo': args.registration.addressInfo } }
       )
       /*}else{
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
        }*/
     }else if(args.type == "SOCIALLINKS"){
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      if(registrationDetails.socialLinksInfo){
-        id = MlRegistration.update(
-          { _id : args.registrationId },
-          { $push: { 'socialLinksInfo': args.registration.socialLinksInfo[0] } }
-        )
-      }else{
+
         id = MlRegistration.update(
           { _id : args.registrationId },
           { $set: { 'socialLinksInfo': args.registration.socialLinksInfo } }
         )
-      }
+
+
+      /*}else{
+       id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
+       }*/
+    }else if(args.type == "EMAILTYPE"){
+      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
+
+      id = MlRegistration.update(
+        { _id : args.registrationId },
+        { $set: { 'emailInfo': args.registration.emailInfo } }
+      )
+
 
       /*}else{
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
@@ -116,21 +242,10 @@ MlResolver.MlMutationResolver['createStep3InRegistration'] = (obj, args, context
   }
   if(id){
     let code = 200;
-    console.log(MlRegistration.findOne(id));
-    let insertedData =  MlRegistration.findOne(id) || {};
+   let insertedData =  MlRegistration.findOne(id) || {};
     /*  let tabName = insertedData.contactInfo[0].numberTypeName;*/
     let result = {registrationId : id}
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-}
-MlResolver.MlQueryResolver['findRegistration'] = (obj, args, context, info) => {
-  let resp = MlRegistration.findOne({_id: args.registrationId});
-  return resp;
-  // if(resp){
-  //     let code = 200;
-  //     let result = {department: resp}
-  //     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-  //     return response
-  // }
 }

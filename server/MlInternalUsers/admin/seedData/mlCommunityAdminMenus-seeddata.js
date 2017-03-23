@@ -10,14 +10,14 @@ if(Meteor.isServer){
     "menu" : [
       {
         "image" : "/images/db_icon.png",
-        "link" : "/admin/dashboard/clusters",
+        "link" : "/admin/dashboard/chapters",
         "name" : "dashboard",
         "uniqueId" : "dashboard",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
           {
-            "link" : "/admin/dashboard/clusters",
+            // "link" : "/admin/dashboard/clusters",
             "name" : "Clusters",
             "uniqueId" : "dashboard_clusters",
             "subMenuMappingId":"dashboard_clusters",
@@ -74,13 +74,13 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/cluster_icon.png",
-        // "link" : "/admin/clusters",
+        "link" : "",
         "name" : "cluster",
         "uniqueId"   :"cluster",
         "isLink" : false,
-        "isMenu" : false,
+        "isMenu" : true,
         "hideSubMenu":true,
-        "isDisabled":true,
+        "isDisabled":true
       },
       {
         "image" : "/images/chapter_icon.png",
@@ -93,20 +93,82 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/community_icon.png",
-        "link" : "/admin/community",
+        "link" : "/admin/communities",
         "uniqueId" : "community",
         "name" : "community",
         "isLink" : true,
         "isMenu" : true,
-        "subMenu" : [
+        "hideSubMenu":true,
+        "subMenu":[
           {
-            "link" : "/admichapters/comminty/communities",
-            "name" : "communities",
-            "uniqueId" : "community_communities",
+            "link" : "/admin/community/chapter",
+            "name" : "Chapter",
+            "uniqueId" : "communities_chapters",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
-          },
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "hideSubMenu":true,
+            "subMenuMappingId":"communities_chapters",
+            "subMenu":[
+              {
+                "link" : "/admin/community/chapter/subChapter",
+                "name" : "Sub Chapter",
+                "uniqueId" : "communities_subChapters",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "dynamicLink" : true,
+                "dynamicLinkHandler" : "",
+                "subMenusId":"communities_chapters",
+                "hideSubMenu":true,
+                "subMenuMappingId":"communities_subChapters",
+                // "subMenu":[
+                //   {
+                //     "link" : "/admin/community/chapter/subChapter/community",
+                //     "name" : "Community",
+                //     "uniqueId" : "communities_communities",
+                //     "isLink" : true,
+                //     "isMenu" : true,
+                //     "image" : "",
+                //     "dynamicLink" : true,
+                //     "dynamicLinkHandler" : "",
+                //     "hideSubMenu":true,
+                //     "subMenusId":"communities_subChapters",
+                //     "subMenuMappingId":"communities_communities",
+                    "subMenu" : [
+                      {
+                        "link" : "/admin/community/subChapter/community/communityDetails",
+                        "name" : "Community Details",
+                        "uniqueId" : "communities_subChapters_communityDetails",
+                        "isLink" : true,
+                        "isMenu" : true,
+                        "image" : "",
+                        "dynamicLink" : true,
+                        "dynamicLinkHandler" : "",
+                        "subMenusId":"communities_subChapters",
+                        "subMenuMappingId":"communities_subChapters_communityDetails",
+                      },
+                      {
+                        "link" : "/admin/community/subChapter/community/assignuser",
+                        "name" : "Backend User",
+                        "uniqueId" : "communities_subChapters_assignUsers",
+                        "isLink" : true,
+                        "isMenu" : true,
+                        "image" : "",
+                        "dynamicLink" : true,
+                        "dynamicLinkHandler" : "",
+                        "subMenusId":"communities_subChapters",
+                        "subMenuMappingId":"communities_subChapters_assignUsers",
+                      }
+                    ]
+                //   }
+                // ]
+              }
+            ]
+          }
         ]
       },
       {

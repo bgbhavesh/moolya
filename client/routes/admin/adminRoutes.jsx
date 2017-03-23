@@ -22,12 +22,21 @@ import MlProcessDocumentList from '../../admin/processDocument/cluster/component
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDocHeader';
-let userId = Meteor.userId();
+
+const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
+if(localStorageLoginToken){
+  FlowRouter._askedToWait = true;
+  FlowRouter.wait();
+  Meteor.setTimeout(function (){
+    FlowRouter.initialize();
+  }, 500);
+}
 
 export const adminSection = FlowRouter.group({
   prefix: "/admin",
   name: 'admin',
-  triggersEnter: [function(context, redirect) {
+  triggersEnter: [function(context, redirect)
+  {
     console.log('running /adminPrefix trigger');
      userId = Meteor.userId();
     if (!userId) {

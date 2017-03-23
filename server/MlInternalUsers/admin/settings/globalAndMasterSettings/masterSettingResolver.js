@@ -45,7 +45,6 @@ MlResolver.MlMutationResolver['updateMasterSetting'] = (obj, args, context, info
 
 MlResolver.MlQueryResolver['fetchMasterSettingsForPlatFormAdmin'] = (obj, args, context, info) => {
   // TODO : Authorization
-  console.log(args);
   let masterRecord=new MlMasterSettingRepo().dropDownMasterSettingsPlatformAdmin(args);
   return masterRecord;
 }

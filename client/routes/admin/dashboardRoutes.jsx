@@ -14,7 +14,7 @@ import {getAdminUserContext} from '../../commons/getAdminUserContext'
 
 adminSection.route('/dashboard', {
   triggersEnter: [function(context, redirect){
-      let userDefaultObj = getAdminUserContext()
+      const userDefaultObj = getAdminUserContext();
       if(userDefaultObj.hierarchyCode == 'PLATFORM')
           redirect('/admin/dashboard/clusters');
       else

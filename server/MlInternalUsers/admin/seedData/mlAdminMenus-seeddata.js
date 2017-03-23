@@ -523,6 +523,15 @@ if(Meteor.isServer){
               }]
           },
           {
+            "link" : "/admin/settings/templatesList",
+            "name" : "Templates",
+            "uniqueId" : "settings_templatesList",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[]
+          },
+          {
             "link" : "/admin/settings/rolesList",
             "name" : "Roles & Permissions",
             "uniqueId" : "settings_roles",

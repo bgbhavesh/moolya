@@ -472,6 +472,102 @@ if(Meteor.isServer){
                 "image": ""
               }
             ]
+          },
+          {
+            "link" : "/admin/transactions/approvedList",
+            "name" : "Approve",
+            "uniqueId" : "transaction_Approved",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/transactions/approvedList",
+                "name": "List Requests",
+                "uniqueId": "transaction_ApprovedList",
+                "subMenuMappingId":"transaction_Approved",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/transactions/editRequests",
+                "name": "Edit Requests",
+                "uniqueId": "transaction_EditApproved",
+                "subMenuMappingId":"transaction_Approved",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/transactions/registrationApprovedList",
+            "name" : "Registration",
+            "uniqueId" : "transaction_Registration",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenusId":"transaction",
+            "subMenuMappingId":"transaction_Registration",
+            "subMenu":[
+              {
+                "link" : "/admin/transactions/registrationApprovedList",
+                "name" : "Approved",
+                "uniqueId" : "transaction_registration_approved",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                "subMenuMappingId":"transaction_registration_approved"
+              },
+              {
+                "link" : "/admin/transactions/registrationRequested",
+                "name" : "Requested",
+                "uniqueId" : "transaction_registration_requested",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                "subMenuMappingId":"transaction_registration_requested",
+                "subMenu":[
+                  {
+                    "link" : "/admin/transactions/registrationRequested",
+                    "name" : "Request List",
+                    "uniqueId" : "transaction_registration_requested_list",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "subMenusId":"transaction_Registration",
+                    "subMenuMappingId":"transaction_registration_requested_list"
+                  },
+                  {
+                    "link" : "/admin/transactions/registrationRequested/edit",
+                    "name" : "Backend Users",
+                    "uniqueId" : "transaction_registration_requested_edit",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"transaction_Registration",
+                    //"subMenuMappingId":"transaction_registration_requested_edit"
+                  }
+                ]
+              },
+              {
+                "link" : "/admin/transactions/createRegistration",
+                "name" : "Create",
+                "uniqueId" : "transaction_registration_create",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                //"subMenuMappingId":"transaction_registration_create"
+              }
+            ]
           }
       ]
       },

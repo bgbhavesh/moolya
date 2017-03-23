@@ -66,6 +66,16 @@ export default class Step4 extends React.Component{
 
   }
 
+  async onDeleteSocialLink(index,value){
+    let listArray = update(this.state.socialLinkArray, {
+      $splice: [[index, 1]]
+    });
+    let detailsType = "SOCIALLINKS";
+    let registerid = this.props.registrationId;
+    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
+    this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
+  }
+
   compareQueryOptions(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
   };
@@ -125,9 +135,7 @@ export default class Step4 extends React.Component{
     this.setState({"selectedTab" : true});
 
   }
-  onDeleteSocialLink(){
-    console.log("Deleteeeeeeeeee");
-  }
+
 
   render(){
 
@@ -140,7 +148,7 @@ export default class Step4 extends React.Component{
      }
      }
      `;
-    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:"SxnyXxBLrhhW29uGr"}}};
+    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:this.props.clusterId}}};
     return (
       <div className="step_form_wrap step2">
         {showLoader===true?( <div className="loader_wrap"></div>):(
@@ -182,8 +190,7 @@ export default class Step4 extends React.Component{
                     </div>
                     <div className="ml_btn">
                       <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}>Save</a>
-                      <a href="#" className="cancel_btn">Cancel</a>
-                    </div>
+                     </div>
                   </div>
                   {that.state.socialLinkArray.map(function(options,key) {
                     console.log(options);
@@ -201,7 +208,7 @@ export default class Step4 extends React.Component{
                         <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
                       <div className="ml_btn">
-                        <a href="#" className="edit_btn"  onClick = {that.onSavingSocialLink.bind(that,key)}>Save</a>
+                        <a href="#" className="save_btn"  onClick = {that.onSavingSocialLink.bind(that,key)}>Save</a>
                         <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}>Cancel</a>
                       </div>
                     </div>)

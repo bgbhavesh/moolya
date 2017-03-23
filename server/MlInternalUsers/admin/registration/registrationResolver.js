@@ -147,6 +147,19 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
        }*/
     }
+    else if(args.type == "KYCDOCUMENT"){
+      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
+      if(registrationDetails.kycDocuments){
+        id = MlRegistration.update(
+          { _id : args.registrationId,kycDocuments:{ $exists:false } },
+          { $push: { 'kycDocuments': args.registration.kycDocuments } }
+        )
+      }else{
+        id = MlRegistration.update(
+          { _id : args.registrationId,kycDocuments:{ $exists:false }},
+          { $set: { 'kycDocuments': args.registration.kycDocuments } }
+        )
+      }
 
 
   }
@@ -219,19 +232,7 @@ MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, con
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
        }*/
     }
-    else if(args.type == "KYCDOCUMENT"){
-      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      if(registrationDetails.kycDocuments){
-        id = MlRegistration.update(
-          { _id : args.registrationId,kycDocuments:{ $exists:false } },
-          { $push: { 'kycDocuments': args.registration.kycDocuments } }
-        )
-      }else{
-        id = MlRegistration.update(
-          { _id : args.registrationId,kycDocuments:{ $exists:false }},
-          { $set: { 'kycDocuments': args.registration.kycDocuments } }
-        )
-      }
+
 
       /*}else{
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});

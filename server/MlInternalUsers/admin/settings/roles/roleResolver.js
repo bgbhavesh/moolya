@@ -149,7 +149,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
         }
     }
 
-    else if(levelCode == 'CLUSTER_COMMUNITY'){
+    else if(levelCode == 'CLUSTER_COMMUNITY' || levelCode == 'COMMUNITY'){
       _.remove(roles, {roleName: 'clusteradmin'})
       _.remove(roles, {roleName:'chapteradmin'})
       _.remove(roles, {roleName:'subchapteradmin'})

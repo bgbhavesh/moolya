@@ -266,7 +266,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     let clusterId = that.props.clusterId
     let chapterId = that.props.chapterId
     let subChapterId = that.props.subChapterId
-    let communityId = ''
+    let communityId = that.props.communityId
 
     let userDepartments = that.state.rolesData || [];
     let chapterAdmin = that.state.chapterAdmin;
@@ -279,13 +279,13 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
               variables: {
                 departmentId: department.departmentId,
                 clusterId: that.props.clusterId,
-                chapterId: that.props.chapterId,
-                subChapterId: that.props.subChapterId,
-                communityId: that.props.communityId
+                chapterId: that.props.chapterId || "",
+                subChapterId: that.props.subChapterId || "",
+                communityId: that.props.communityId || ""
               }
             }
           };
-          let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId) {value:_id, label:roleName}}`;
+          let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:roleName}}`;
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right"

@@ -82,7 +82,8 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
   // TODO : Authorization
   if (args.docUrl&&args.documentId) {
     var id= args.registrationId;
-    let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{$push: {"kycDocuments.$.docFiles":{fileUrl:args.docUrl}}});
+    var randomId= Math.floor(Math.random()*90000) + 10000;
+    let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
     return updatedResponse;
   }
 }
@@ -147,6 +148,19 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
        }*/
     }
+    else if(args.type == "KYCDOCUMENT"){
+      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
+      if(registrationDetails.kycDocuments){
+        id = MlRegistration.update(
+          { _id : args.registrationId,kycDocuments:{ $exists:false } },
+          { $push: { 'kycDocuments': args.registration.kycDocuments } }
+        )
+      }else{
+        id = MlRegistration.update(
+          { _id : args.registrationId,kycDocuments:{ $exists:false }},
+          { $set: { 'kycDocuments': args.registration.kycDocuments } }
+        )
+      }
 
 
   }
@@ -219,19 +233,7 @@ MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, con
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
        }*/
     }
-    else if(args.type == "KYCDOCUMENT"){
-      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      if(registrationDetails.kycDocuments){
-        id = MlRegistration.update(
-          { _id : args.registrationId,kycDocuments:{ $exists:false } },
-          { $push: { 'kycDocuments': args.registration.kycDocuments } }
-        )
-      }else{
-        id = MlRegistration.update(
-          { _id : args.registrationId,kycDocuments:{ $exists:false }},
-          { $set: { 'kycDocuments': args.registration.kycDocuments } }
-        )
-      }
+
 
       /*}else{
        id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});

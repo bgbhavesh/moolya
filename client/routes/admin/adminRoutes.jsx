@@ -108,6 +108,18 @@ adminSection.route('/documents/clusterList', {
     mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
   }
 });
+adminSection.route('/documents/chapterList', {
+  name: 'documents_ChapterList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+  }
+});
+adminSection.route('/documents/communityList', {
+  name: 'documents_CommunityList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+  }
+});
 adminSection.route('/documents/:pid/:kycid/:docid', {
   name: '',
   action(params){

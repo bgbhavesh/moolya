@@ -36,10 +36,12 @@ export default class RegisterForm extends React.Component{
     const resp=await this.findRegistration();
     this.setState({'registrationDetails':resp})
   }
-  getRegistrationKYCDetails(details){
-    let data = this.state.registrationDetails;
+  async getRegistrationKYCDetails(details){
+   /* let data = this.state.registrationDetails;
     //refer proper object
-    this.setState({'registrationDetails':data})
+    this.setState({'registrationDetails':data})*/
+    const resp=await this.findRegistration();
+    this.setState({'registrationDetails':resp})
 
   }
   componentWillMount() {

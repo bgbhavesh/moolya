@@ -64,13 +64,6 @@ export default class MlProcessDocMapping extends Component {
     const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
     };
-    const selectRow = {
-      mode: 'checkbox',
-      bgColor: '#feeebf',
-      clickToSelect: true,  // click to select, default is false
-      clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
-    }
-
 
     return (
 
@@ -78,7 +71,7 @@ export default class MlProcessDocMapping extends Component {
         <div className="admin_padding_wrap">
           <BootstrapTable  data={ this.state.documentInfo }
                            options={ options }
-                           selectRow={ selectRow }
+
                            pagination
           >
             {/*<TableHeaderColumn dataField="docId" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>*/}

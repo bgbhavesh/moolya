@@ -36,13 +36,6 @@ const mlProcessTableConfig=new MlViewer.View({
     },
     {
       showAction: true,
-      actionName: 'add',
-      handler: (data)=>{
-        FlowRouter.go("/admin/settings/addProcess")
-      }
-    },
-    {
-      showAction: true,
       actionName: 'logout',
       handler: (data)=>{console.log(data);}
     }

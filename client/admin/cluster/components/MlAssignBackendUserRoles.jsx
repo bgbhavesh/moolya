@@ -82,17 +82,19 @@ export default class MlAssignBackednUserRoles extends React.Component {
     this.sendRolesToParent();
   }
 
-  sendRolesToParent() {
-    let value = this.state.rolesData;
-    let rolesArrayFinal = [];
-    _.each(value, function (item, key) {
-      _.each(item.roles, function (say, val) {
-        if (say.roleId) {
-          rolesArrayFinal.push(say)
-        }
+  sendRolesToParent()
+  {
+      let value = this.state.rolesData;
+      let rolesArrayFinal = [];
+      let clusterId = this.props.clusterId
+      _.each(value, function (item, key) {
+        _.each(item.roles, function (say, val) {
+          if (say.roleId && say.clusterId == clusterId) {
+            rolesArrayFinal.push(say)
+          }
+        })
       })
-    })
-    this.props.getAssignedRoles(rolesArrayFinal);
+      this.props.getAssignedRoles(rolesArrayFinal);
   }
 
   addRoleComponent(did) {

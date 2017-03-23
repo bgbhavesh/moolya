@@ -294,11 +294,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                 <div className="panel-body">
                   <div className="form-group">
                     <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
-                           value={department.departmentName}/>
+                           value={department.departmentName} disabled/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                           value={department.subDepartmentName}/>
+                           value={department.subDepartmentName} disabled/>
                   </div>
                   {/*disabled*/}
                   {(department.departmentName == "operations" && (that.state.hideIsChapterAdmin)) ?

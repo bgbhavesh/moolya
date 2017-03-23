@@ -187,7 +187,7 @@ class MlAssignChapterBackendUsers extends React.Component {
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Assign Backend Users to Chapter</h2>
+              <h2>Assign Backend Users to Sub Chapter</h2>
               <div className="main_wrap_scroll">
                 <ScrollArea
                   speed={0.8}

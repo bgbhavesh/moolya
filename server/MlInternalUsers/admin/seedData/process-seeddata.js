@@ -1,3 +1,4 @@
+/*
 if(Meteor.isServer){
   MlprocessTypes.update({processName:"funding"},{$set:{
     "_id":"funding",
@@ -16,3 +17,4 @@ if(Meteor.isServer){
   }},{upsert:true});
 
 }
+*/

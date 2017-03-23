@@ -121,6 +121,9 @@ import MlEditEmployeeType from '../../admin/settings/employeeTypes/components/Ml
 import MlCompanyTypesList from '../../admin/settings/companyTypes/components/MlCompanyTypesList'
 import MlAddCompanyType from '../../admin/settings/companyTypes/components/MlAddCompanyType'
 import MlEditCompanyType from '../../admin/settings/companyTypes/components/MlEditCompanyType'
+import MlTemplatesList from '../../admin/settings/templates/component/MlTemplatesList'
+import MlStepDetails from '../../admin/settings/templates/component/MlStepDetails'
+import MlAdminTemplatesHeader from '../../admin/layouts/header/MlAdminTemplatesHeader'
 
 // @End
 
@@ -174,10 +177,22 @@ adminSection.route('/settings/subDepartmentsList', {
     mount(AdminLayout,{adminContent:< MlSubDepartmentsList/>})
   }
 });
+adminSection.route('/settings/templatesList', {
+  name: 'settings_templatesList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlTemplatesList/>})
+  }
+});
 adminSection.route('/settings/addSubDepartment', {
   name: 'settings_AddSubDepartments',
   action(){
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
+  }
+});
+adminSection.route('/settings/stepDetails/:subProcessId', {
+  name: '',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} />,adminContent:<MlStepDetails subProcessId={params.subProcessId} />})
   }
 });
 adminSection.route('/settings/editSubDepartment/:id', {

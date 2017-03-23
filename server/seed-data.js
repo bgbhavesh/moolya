@@ -285,3 +285,41 @@ Accounts.validateLoginAttempt(function (user)
 })
 
 /******************************************* User Login <End> *********************************************************/
+/******************************************* Teplates <Start> *******************************************************/
+let process = MlprocessTypes.findOne({processName:"Registration"})
+if(!process) {
+process = {
+    processName   : "Registration",
+    displayName   : "Registration",
+    processDesc   : "Registration Details",
+    isActive      : true
+}
+MlprocessTypes.insert(process);
+}
+let subProces = MlSubProcess.findOne({subProcessName:"Registration"})
+if(!subProces) {
+  let process = MlprocessTypes.findOne({processName:"Registration"})
+  let stepDetails = [{stepId: "1", stepCode: "SOFT", stepName: "Soft",isActive:true},{stepId: "2", stepCode: "HARD", stepName: "Hard",isActive:true},{stepId: "3", stepCode: "PORTFOLIO", stepName: "Portfolio",isActive:true}]
+   subProces = {
+    processName           : "Registration",
+    procesId              : process._id,
+    subProcessName        : "Registration",
+    subProcessDescription : "Registration Details",
+    isActive              : true,
+    steps                 : stepDetails,
+    createdBy             : "System",
+    createdDate           : "01-02-2017"
+  };
+  MlSubProcess.insert(subProces);
+}
+let subProc = MlSubProcess.findOne({processName:"Registration"})
+let templates = [{stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-1",isActive: true,createdDate: "01-02-2017"},{stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-2",isActive: true,createdDate: "01-02-2017"}]
+  let templateAssignment = {
+    process           : process._id,
+    subProcess        : subProc._id,
+    assignedTemplates : templates
+  }
+MlTemplateAssignment.insert(templateAssignment);
+
+
+/******************************************* Templates <Start> *******************************************************/

@@ -56,6 +56,7 @@ export default class ContactDetails extends React.Component{
       this.setState({contactNumberArray : newData,selectedNumberTypeValue : did,selectedNumberTypeLabel : selObject.label});
 
     }
+
   }
    async onSavingContact(index,value){
      let detailsType = "CONTACTTYPE";
@@ -113,10 +114,16 @@ export default class ContactDetails extends React.Component{
   optionsBySelectNumberType(selectedIndex,handler,selectedObj){
     this.setState({selectedNumberTypeValue : selectedIndex,selectedNumberTypeLabel:selectedObj.label});
   }
-  async onDeleteEmail(index,value){
-    let listArray = this.state.contactNumberArray;
-    delete listArray[index];
-    this.setState({loading:false,contactNumberArray:listArray});
+  async onDeleteContact(index,value){
+
+    let listArray = update(this.state.contactNumberArray, {
+      $splice: [[index, 1]]
+    });
+
+    let detailsType = "CONTACTTYPE";
+    let registerid = this.props.registerId;
+    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
+    this.setState({loading:false,contactNumberArray:response.contactInfo});
   }
 
   render(){
@@ -129,7 +136,7 @@ export default class ContactDetails extends React.Component{
      }
      `;
 
-     let numberTypeOption={options: { variables: {type : "CONTACTTYPE",hierarchyRefId:"vsraSG7GeWZRdXkF9"}}};
+     let numberTypeOption={options: { variables: {type : "CONTACTTYPE",hierarchyRefId:this.props.clusterId}}};
 
 
     return (
@@ -231,7 +238,7 @@ export default class ContactDetails extends React.Component{
               <div className="ml_icon_btn">
                 <a href="#"  onClick={this.onSavingContact.bind(this)}  className="save_btn" ><span
                   className="ml ml-save"></span></a>
-                <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
+                {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
               </div>
             </div>
             {that.state.contactNumberArray.map(function(options,key) {
@@ -254,7 +261,7 @@ export default class ContactDetails extends React.Component{
                 <div className="ml_icon_btn">
                   <a href="#" onClick={that.onEditingContact.bind(that,key)} className="save_btn"><span
                     className="ml ml-save"></span></a>
-                  <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onDeleteEmail.bind(that,key)} ><span className="ml ml-delete"></span></a>
+                  <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onDeleteContact.bind(that,key)} ><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
             })}

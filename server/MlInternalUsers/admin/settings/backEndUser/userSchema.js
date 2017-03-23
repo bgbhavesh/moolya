@@ -206,7 +206,8 @@ let BackEndUser = `
         chapterId:String, 
         subChapterId:String, 
         communityId:String,
-        
+        hierarchyLevel:Int,
+        hierarchyCode:String,
         departmentId:String,
         departmentName:String,
         subDepartmentId:String,

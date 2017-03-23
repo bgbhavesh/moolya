@@ -254,6 +254,8 @@ MlResolver.MlQueryResolver['fetchUserRoles'] = (obj, args, context, info) => {
                     contextRole["departmentName"] = item.departmentName;
                     contextRole["subDepartmentId"] = item.subDepartmentId;
                     contextRole["subDepartmentName"] = item.subDepartmentName;
+                    contextRole["hierarchyLevel"] = item.hierarchyLevel;
+                    contextRole["hierarchyCode"] = item.hierarchyCode;
                     if(item.roleName == "chapteradmin")
                         contextRole["isChapterAdmin"] = true;
                     else

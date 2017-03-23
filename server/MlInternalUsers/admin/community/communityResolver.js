@@ -170,6 +170,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
         communitiesAccess = MlCommunityAccess.find(chapterQuery).fetch();
         clusters = [clusterId];
         chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
+        communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
         subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
         clusterName = MlClusters.findOne({_id: clusterId}).clusterName;
 

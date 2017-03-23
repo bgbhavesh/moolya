@@ -82,17 +82,19 @@ export default class MlAssignBackednUserRoles extends React.Component {
     this.sendRolesToParent();
   }
 
-  sendRolesToParent() {
-    let value = this.state.rolesData;
-    let rolesArrayFinal = [];
-    _.each(value, function (item, key) {
-      _.each(item.roles, function (say, val) {
-        if (say.roleId) {
-          rolesArrayFinal.push(say)
-        }
+  sendRolesToParent()
+  {
+      let value = this.state.rolesData;
+      let rolesArrayFinal = [];
+      let clusterId = this.props.clusterId
+      _.each(value, function (item, key) {
+        _.each(item.roles, function (say, val) {
+          if (say.roleId && say.clusterId == clusterId) {
+            rolesArrayFinal.push(say)
+          }
+        })
       })
-    })
-    this.props.getAssignedRoles(rolesArrayFinal);
+      this.props.getAssignedRoles(rolesArrayFinal);
   }
 
   addRoleComponent(did) {
@@ -234,6 +236,9 @@ export default class MlAssignBackednUserRoles extends React.Component {
       return current.isAfter(yesterday);
     }
     let clusterId = that.props.clusterId;
+    let chapterId = that.props.chapterId
+    let subChapterId = that.props.subChapterId
+    let communityId = that.props.communityId
 
     let userDepartments = that.state.rolesData || [];
     return (
@@ -244,11 +249,13 @@ export default class MlAssignBackednUserRoles extends React.Component {
               variables: {
                 departmentId: department.departmentId,
                 clusterId: that.props.clusterId,
-                communityId: that.props.communityId
+                chapterId : that.props.chapterId || "",
+                subChapterId : that.props.subChapterId || "",
+                communityId: that.props.communityId || ""
               }
             }
           };
-          let query = gql`query($departmentId:String, $clusterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, communityId:$communityId) {value:_id, label:roleName}}`;
+          let query = gql`query($departmentId:String, $clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchRolesByDepSubDep(departmentId: $departmentId, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId:$communityId) {value:_id, label:roleName}}`;
           return (
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Role <img src="/images/add.png" className="pull-right"

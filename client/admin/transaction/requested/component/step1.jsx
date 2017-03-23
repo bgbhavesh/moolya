@@ -58,14 +58,14 @@ export default class Step1 extends React.Component{
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
     //this.props.getRegistrationDetails(this.state)
   }
-  optionsBySelectCountry(val){
-      this.setState({country:val})
+  optionsBySelectCountry(value){
+      this.setState({country:value})
   }
-  optionsBySelectCluster(val){
-    this.setState({cluster:val})
+  optionsBySelectCluster(value){
+    this.setState({cluster:value})
   }
-  optionsBySelectChapter(val){
-    this.setState({chapter:val})
+  optionsBySelectChapter(value){
+    this.setState({chapter:value})
   }
   optionsBySelectCity(value){
     this.setState({selectedCity:value})

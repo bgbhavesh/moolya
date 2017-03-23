@@ -158,6 +158,7 @@ let Process = `
     
     type Query{
       findProcess(id:String):processOutput
+      findProcessDocumentForRegistration(clusterId:String):processOutput
     }
     
 `

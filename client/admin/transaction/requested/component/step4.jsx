@@ -66,6 +66,15 @@ export default class Step4 extends React.Component{
 
   }
 
+  async onDeleteSocialLink(index,value){
+    let listArray = this.state.socialLinkArray;
+    delete listArray[index];
+    let detailsType = "ADDRESSTYPE";
+    let registerid = this.props.registrationId;
+    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
+    this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
+  }
+
   compareQueryOptions(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
   };
@@ -125,9 +134,7 @@ export default class Step4 extends React.Component{
     this.setState({"selectedTab" : true});
 
   }
-  onDeleteSocialLink(){
-    console.log("Deleteeeeeeeeee");
-  }
+
 
   render(){
 
@@ -140,7 +147,7 @@ export default class Step4 extends React.Component{
      }
      }
      `;
-    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:"SxnyXxBLrhhW29uGr"}}};
+    let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:this.props.clusterId}}};
     return (
       <div className="step_form_wrap step2">
         {showLoader===true?( <div className="loader_wrap"></div>):(

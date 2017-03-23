@@ -84,11 +84,17 @@ export default class AddressDetails extends React.Component{
     this.setState({selectedTab : true});
   }
 
-  async onDeleteEmail(index,value){
+
+
+  async onDeleteAddress(index,value){
     let listArray = this.state.addressDetails;
     delete listArray[index];
-    this.setState({loading:false,addressDetails:listArray});
+    let detailsType = "ADDRESSTYPE";
+    let registerid = this.props.registerId;
+    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
+    this.setState({loading:false,addressDetails:response.addressInfo});
   }
+
 
   async onSavingAddress(index,value){
     const detailsType = "ADDRESSTYPE";
@@ -176,7 +182,7 @@ export default class AddressDetails extends React.Component{
      }
      }
      `;
-    let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:"vsraSG7GeWZRdXkF9"}}};
+    let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
 
     return (
       <div className="panel-body">
@@ -311,7 +317,7 @@ export default class AddressDetails extends React.Component{
                     <a href="#" onClick={that.onSavingAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>
-                    <a href="#" className="cancel_btn" onClick={that.onDeleteEmail.bind(that,key)}>Cancel</a>
+                    <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}>Cancel</a>
                   </div>
                 </div>)
             })}

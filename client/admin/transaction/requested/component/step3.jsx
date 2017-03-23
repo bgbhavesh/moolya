@@ -71,7 +71,7 @@ export default class Step3 extends React.Component{
                 Contact Number
               </div>
 
-              <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}/>
+              <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} clusterId={this.props.clusterId}/>
 
 
             </div>
@@ -135,7 +135,7 @@ export default class Step3 extends React.Component{
 
                 </div>
               </div>*/}
-              <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}/>
+              <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} clusterId={this.props.clusterId}/>
             </div>
           </div>
 
@@ -240,7 +240,7 @@ export default class Step3 extends React.Component{
 
                 </div>
               </div>*/}
-              <AddressDetails registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails}/>
+              <AddressDetails registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails} clusterId={this.props.clusterId}/>
             </div>
           </div>
 

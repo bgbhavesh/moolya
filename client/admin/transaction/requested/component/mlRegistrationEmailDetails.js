@@ -109,11 +109,16 @@ export default class EmailDetails extends React.Component{
     }
 
   }
+
   async onDeleteEmail(index,value){
-    let emailListArray = this.state.emailDetails;
-    delete emailListArray[index];
-    this.setState({loading:false,emailDetails:emailListArray});
+    let listArray = this.state.emailDetails;
+    delete listArray[index];
+    let detailsType = "EMAILTYPE";
+    let registerid = this.props.registerId;
+    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
+    this.setState({loading:false,emailDetails:response.emailInfo});
   }
+
   render(){
 
     let that=this;
@@ -124,7 +129,7 @@ export default class EmailDetails extends React.Component{
      }
      }
      `;
-    let emailTypeOption={options: { variables: {type : "EMAILTYPE",hierarchyRefId:"vsraSG7GeWZRdXkF9"}}};
+    let emailTypeOption={options: { variables: {type : "EMAILTYPE",hierarchyRefId:this.props.clusterId}}};
 
     return (<div className="panel-body">
 

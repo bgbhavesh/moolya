@@ -154,7 +154,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           }
 
           if(imageUploaderPromise) {
-            imageUploaderPromise.then(function (uploadResp) { //sucess
+              imageUploaderPromise.then(function (uploadResp) { //sucess
               let response = null;
               if (uploadResp) {
                    imageUploadCallback(uploadResp);

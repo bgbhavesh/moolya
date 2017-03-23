@@ -23,6 +23,11 @@ export async function addRegistrationStep3Details(details,type,registrationId) {
       emailInfo : details
     }
   }
+  else if(type=="KYCDOCUMENT"){
+    registration = {
+      kycDocuments : details
+    }
+  }
   ;
 
   const result = await client.mutate({

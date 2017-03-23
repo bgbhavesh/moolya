@@ -56,6 +56,12 @@ export async function updateRegistrationInfoDetails(registrationDetails,type,reg
       socialLinksInfo : registrationArray
     }
   }
+  else if(type == "EMAILTYPE")
+  {
+    registration = {
+      emailInfo : registrationArray
+    }
+  }
   ;
 
   const result = await client.mutate({
@@ -89,3 +95,4 @@ export async function updateRegistrationInfoDetails(registrationDetails,type,reg
 
   return id
 }
+

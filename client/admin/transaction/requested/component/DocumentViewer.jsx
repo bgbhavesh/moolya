@@ -22,14 +22,26 @@ export default class DocumentViewer extends React.Component{
     let file=document.getElementById(documentId).files[0];
     this.props.onFileUpload(file,documentId);
   }
+  onDocSelect(documentId,event){
+    if(event.target.checked){
+      this.props.onDocumentSelect(documentId);
+    }else{
+      this.props.onDocumentSelect(documentId);
+    }
+  }
   render(){
     let doc=this.props.doc||{};
     let docFiles=doc.docFiles||[];
+    let mandatory='';
+    let isMandatory=doc.isMandatory||''
+    if(isMandatory){
+      mandatory='*'
+    }
     return (
       <div className="col-lg-4">
            <div className="panel panel-default uploaded_files">
            <div className="panel-heading">
-           <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}</label></div>
+           <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}{mandatory}</label></div>
            <div className="pull-right block_action">
            <div className="fileUpload upload_file_mask">
            <a href="javascript:void(0);"><span className="ml ml-upload"></span>

@@ -144,7 +144,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
         _.remove(roles, {roleName: 'clusteradmin'})
         _.remove(roles, {roleName:'chapteradmin'})
         _.remove(roles, {roleName:'communityadmin'})
-        if(!userhierarchy.isParent && (userhierarchy.code == "CLUSTER" || userhierarchy.code == "CHAPTER")){
+        if(!userhierarchy.isParent && userhierarchy.code != "CLUSTER" && userhierarchy.code != "CHAPTER"){
             _.remove(roles, {roleName:'subchapteradmin'})
         }
     }

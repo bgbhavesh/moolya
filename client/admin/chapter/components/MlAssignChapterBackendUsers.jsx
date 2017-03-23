@@ -101,6 +101,9 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   async assignBackendUsers() {
     let userProfile = {};
+    if(this.state.mlroleDetails.length == 0)
+        return;
+
     userProfile['userId'] = this.state.selectedBackendUser
     userProfile['clusterId'] = this.props.params.clusterId;
     userProfile['userRoles'] = this.state.mlroleDetails;

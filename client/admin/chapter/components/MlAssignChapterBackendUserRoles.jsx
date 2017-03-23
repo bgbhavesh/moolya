@@ -44,7 +44,8 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         subDepartmentName: ''
       }],
       selectedRole: "",
-      chapterAdmin: false
+      chapterAdmin: false,
+      isChapterAdminCheck:"true"
     }
     this.findUserDepartments.bind(this);
     this.isChapterAdmin.bind(this);
@@ -76,16 +77,19 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       if (this.state.roleForm[did]['departmentName'] === "operations") {
           if (selObject.label == "subchapteradmin") {
               $("#chapter_admin_check").removeAttr('disabled');
+              // this.setState({isChapterAdminCheck:"false"})
           } else {
               this.setState({chapterAdmin: false});
               this.props.getChapterAdmin(false);
               $("#chapter_admin_check").attr('disabled', 'disabled');
+              // this.setState({isChapterAdminCheck:"true"})
           }
       }
       this.sendRolesToParent();
   }
 
-  sendRolesToParent() {
+  sendRolesToParent()
+  {
       let value = this.state.rolesData;
       let rolesArrayFinal = [];
       let clusterId = this.props.clusterId
@@ -96,6 +100,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
               }
           })
       })
+
       this.props.getAssignedRoles(rolesArrayFinal);
   }
 
@@ -124,21 +129,6 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       rolesArray.push(emptyRoleBox);
       this.setState({rolesData: allData});
   }
-
-  // isChapterAdmin(did, event) {
-  //     let roleDetails = this.state.rolesData;
-  //     let cloneBackUp = _.cloneDeep(roleDetails);
-  //     let specificRole = cloneBackUp[did];
-  //     if(specificRole.roles[0]['roleName'] == 'chapteradmin'){
-  //         specificRole.roles[0]['roleName'] = '';
-  //         roleDetails.splice(did, 1);
-  //         roleDetails.splice(did, 0, specificRole);
-  //         this.setState({loading: false, rolesData: roleDetails});
-  //     }
-  //     this.setState({chapterAdmin: event.target.checked});
-  //     this.props.getChapterAdmin(event.target.checked)
-  //     this.sendRolesToParent();
-  // }
 
   isChapterAdmin(did, event){
       let roleDetails = this.state.rolesData;
@@ -259,9 +249,11 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         operationsIndex = say
     })
     let specificRoles = roleDetails[operationsIndex].roles
-    let index = _.find(specificRoles, {roleName : 'chapteradmin', clusterId : this.props.clusterId, chapterId : this.props.chapterId})
+    let index = _.find(specificRoles, {roleName : 'chapteradmin' || 'subChapteradmin', clusterId : this.props.clusterId, chapterId : this.props.chapterId})
+    // let index1 = _.find(specificRoles, {roleName : , clusterId : this.props.clusterId, chapterId : this.props.chapterId})
     if(index){
-      $("#chapter_admin_check").removeAttr('disabled');
+        // this.setState({isChapterAdminCheck:"false"})
+        $("#chapter_admin_check").removeAttr('disabled');
     }
   }
 
@@ -295,6 +287,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       let communityId = that.props.communityId
       let userDepartments = that.state.rolesData || [];
       let chapterAdmin = that.state.chapterAdmin;
+      let isChapterAdminCheck = that.state.isChapterAdminCheck;
 
       return (
           <div>

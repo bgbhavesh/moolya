@@ -3,10 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from 'lodash';
+import _underscore from 'underscore'
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 import DocumentViewer from './DocumentViewer';
 import {findProcessDocumentForRegistrationActionHandler} from '../actions/findProcessDocumentForRegistration'
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction'
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 export default class Step5 extends React.Component{
   constructor(props){
     super(props);
@@ -58,11 +60,16 @@ export default class Step5 extends React.Component{
     ]}*/;
        return this;
   }
-
+  componentWillUpdate(nextProps) {
+    let registrtionInfo = nextProps.registrationInfo
+    let kycInfo = registrtionInfo && registrtionInfo.kycDocuments ? registrtionInfo.kycDocuments : []
+    this.setState({"registrationDocuments": kycInfo})
+  }
   componentDidMount()
   {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    this.props.getRegistrationKYCDetails()
   }
   componentWillMount(){
     const resp=this.findProcessDocuments();
@@ -73,12 +80,12 @@ export default class Step5 extends React.Component{
     if(kycDocuments.length<1) {
       let clusterId = this.props.registrationInfo && this.props.registrationInfo.registrationInfo.clusterId ? this.props.registrationInfo.registrationInfo.clusterId : '';
       const response = await  findProcessDocumentForRegistrationActionHandler(clusterId);
-      console.log(response)
       if (response) {
         let processDoc=response
         if (processDoc.processDocuments) {
           let processDocuments = processDoc.processDocuments
-          var result = _.map(processDocuments, function (currentObject) {
+          var ActiveResults = _underscore.where(processDocuments, {isActive: true});
+          var result = _.map(ActiveResults, function (currentObject) {
             return _.pick(currentObject, "docTypeName", "docTypeId", "kycCategoryId", "kycCategoryName", "documentId", "documentDisplayName", "documentName", "isMandatory", "isActive","allowableFormat","allowableMaxSize");
           });
           var KYCDocResp = result.map(function (el) {
@@ -88,11 +95,12 @@ export default class Step5 extends React.Component{
             return o;
           })
           let  registrationId=this.props.registrationInfo._id
-          const response = await  addRegistrationStep3Details(KYCDocResp,"KYCDOCUMENT",registrationId);
-          if(response){
-            this.props.getRegistrationKYCDetails();
+          const regResponse = await  addRegistrationStep3Details(KYCDocResp,"KYCDOCUMENT",registrationId);
+          if(regResponse){
+          this.props.getRegistrationKYCDetails();
+
           }
-          return response;
+          return regResponse;
         }
       }
     }
@@ -100,8 +108,8 @@ export default class Step5 extends React.Component{
       this.setState({registrationDocuments:kycDocuments})
     }
   }
-  onDocumentSelect(){
-
+  onDocumentSelect(doucmentId){
+    console.log(doucmentId)
   };
 
    onFileUpload(file,documentId){
@@ -114,14 +122,39 @@ export default class Step5 extends React.Component{
   onFileUploadCallBack(resp){
         if(resp){
          // this.setState({registrationDocuments:resp})
-           //refresh the registration data in the paren
-          if(resp.result){
-            this.props.getRegistrationKYCDetails();
-          }
+           //refresh the registration data in the pare
+          this.props.getRegistrationKYCDetails();
         }
-  }
+   }
 
   render(){
+    let MlActionConfig = [
+      {
+       actionName: 'download',
+       showAction: true,
+       handler: null
+       },
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => this.props.handler(this.createDepartment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'comment',
+        handler: null
+      },
+      {
+        showAction: true,
+        actionName: 'approveUser',
+        handler: null
+      },
+      {
+        showAction: true,
+        actionName: 'rejectUser',
+        handler: null
+      }
+    ]
     console.log(this.props.registrationInfo);
     let registrationDocuments=this.state.registrationDocuments||[];
     let registrationDocumentsGroup=_.groupBy(registrationDocuments,'docTypeName')||{};
@@ -135,12 +168,13 @@ export default class Step5 extends React.Component{
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
 
                       return(
-                       <DocumentViewer key={regDoc.documentId} doc={regDoc} onFileUpload={that.onFileUpload.bind(that)}/>);
+                       <DocumentViewer key={regDoc.documentId} doc={regDoc} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)}/>);
                     })
                     }<br className="brclear"/></div>
                     )
           })}
          </ScrollArea>
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )
   }

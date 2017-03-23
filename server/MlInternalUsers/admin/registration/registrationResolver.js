@@ -82,7 +82,8 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
   // TODO : Authorization
   if (args.docUrl&&args.documentId) {
     var id= args.registrationId;
-    let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{$push: {"kycDocuments.$.docFiles":{fileUrl:args.docUrl}}});
+    var randomId= Math.floor(Math.random()*90000) + 10000;
+    let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
     return updatedResponse;
   }
 }

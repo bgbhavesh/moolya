@@ -66,7 +66,27 @@ export default class MlActionComponent extends Component {
         imagefield:'/images/act_select_icon.png',
         actionName:'assign',
         iconClass:'ml ml-assign'
-      }
+      },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'download',
+        iconClass:'ml ml-download'
+      },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'approveUser',
+        iconClass:'ml ml-approve-User'
+      },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'rejectUser',
+        iconClass:'ml ml-inactive-user'
+      },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'comment',
+        iconClass:'ml ml-annotate'
+      },
     ]
 
 

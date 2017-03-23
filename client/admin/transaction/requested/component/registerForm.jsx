@@ -42,6 +42,7 @@ export default class RegisterForm extends React.Component{
     let data = this.state.registrationDetails;
     //refer proper object
     this.setState({'registrationDetails':data})
+
   }
   componentWillMount() {
     const resp=this.findRegistration();

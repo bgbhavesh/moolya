@@ -20,6 +20,11 @@ export async function addRegistrationStep3Details(details,type,registrationId) {
     socialLinksInfo : details
   }
   }
+  else if(type=="KYCDOCUMENT"){
+    registration = {
+      kycDocuments : details
+    }
+  }
   ;
   console.log(details);
   const result = await client.mutate({

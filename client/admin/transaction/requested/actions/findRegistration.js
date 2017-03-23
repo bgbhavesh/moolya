@@ -105,6 +105,26 @@ export async function findRegistrationActionHandler(registrationId) {
             socialLinkType
             socialLinkUrl
     		}
+    		kycDocuments {
+      docTypeName
+      docTypeId
+      kycCategoryId
+      kycCategoryName
+      documentId
+      documentDisplayName
+      documentName
+      isMandatory
+      isActive
+      allowableFormat
+      allowableMaxSize
+      status
+      docFiles {
+        fileId
+        fileUrl
+        fileName
+        fileSize
+      }
+    }
           
         }
       }

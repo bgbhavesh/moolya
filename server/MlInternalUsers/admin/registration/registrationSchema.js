@@ -37,13 +37,34 @@ let registrationSchema = `
         socialLinkType        : String
         socialLinkUrl         : String
      }
-    
+     type docFilesInputSchema{
+       fileId:String,
+       fileUrl: String,
+       fileName:String,
+       fileSize: String
+     }
+      type kycDocumentInfoSchema{
+        docTypeName: String,
+        docTypeId: String,
+        kycCategoryId:String,
+        kycCategoryName: String,
+        documentId:String,
+        documentDisplayName:String,
+        documentName:String,
+        isMandatory:Boolean,
+         isActive:Boolean,
+        allowableFormat:[String],
+        allowableMaxSize:String,
+        docFiles:[docFilesInputSchema],
+        status: String
+      }
     type Registration{
          _id            : String
          addressInfo     : [AddressInfoSchema]
          emailInfo       : [EmailInfoSchema]
          contactInfo     : [ContactInfoSchema]
          socialLinkInfo : [SocialLinkInfoSchema]
+         kycDocuments    :[kycDocumentInfoSchema]
     }
    
     input ContactInfo{
@@ -79,12 +100,36 @@ let registrationSchema = `
        socialLinkType        : String
        socialLinkUrl         : String
      }
+     
+     input docFilesInput{
+       fileId:String,
+       fileUrl: String,
+       fileName:String,
+       fileSize: String
+     
+     }
     
+    input KycDocumentInfo{
+      docTypeName: String,
+      docTypeId: String,
+      kycCategoryId:String,
+      kycCategoryName: String,
+      documentId:String,
+      documentDisplayName:String,
+      documentName:String,
+      isMandatory:Boolean,
+      isActive:Boolean,
+      allowableFormat:[String],
+      allowableMaxSize:String,
+      docFiles:[docFilesInput],
+      status: String
+    }
     input registrationObject{
         socialLinksInfo:[SocialLinkInfo],
         addressInfo:[AddressInfo],
         emailInfo : [EmailInfo],
         contactInfo:[ContactInfo]
+        kycDocuments:[KycDocumentInfo]
     }
     
     input registrationInfoInput{
@@ -134,6 +179,7 @@ let registrationSchema = `
          emailInfo       : [EmailInfoSchema]
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
+         kycDocuments: [kycDocumentInfoSchema]
         
     }
     

@@ -285,7 +285,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                                 <MoolyaSelect multiSelect={false} className="form-control float-label"
                                               valueKey={'value'}
                                               labelKey={'label'} queryType={"graphql"} query={query}
-                                              queryOptions={queryOptions} isDynamic={true}
+                                              queryOptions={queryOptions} isDynamic={true} placeholder="Select Role"
                                               onSelect={that.optionsBySelectRole.bind(that, idx, id)}
                                               selectedValue={details.roleId}/>}
                             </div>

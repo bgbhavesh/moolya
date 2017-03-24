@@ -279,7 +279,7 @@ class MlAddProcessMapping extends React.Component{
 
 
                     <div className="form-group switch_wrap inline_switch">
-                      <label className="">Overall Role Status</label>
+                      <label className="">Over All Status</label>
                       <label className="switch">
                         <input type="checkbox" ref="status"/>
                         <div className="slider"></div>

@@ -102,6 +102,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   async assignBackendUsers() {
     let userProfile = {};
     if(this.state.mlroleDetails.length == 0)
+        toastr.error('Please Select Role');
         return;
 
     userProfile['userId'] = this.state.selectedBackendUser

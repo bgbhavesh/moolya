@@ -66,10 +66,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       let roleDetails = this.state.rolesData;
       let cloneBackUp = _.cloneDeep(roleDetails);
       let specificRole = cloneBackUp[did];
-      let isExist = _.find(specificRole.roles, {roleName:selObject.label})
-      if(isExist){
-        return;
-      }
+      // let isExist = _.find(specificRole.roles, {roleName:selObject.label})
+      // if(isExist){
+      //   return;
+      // }
       specificRole.roles[index]['roleId'] = selectedValue;
       specificRole.roles[index]['departmentId'] = this.state.roleForm[did]['department'];
       specificRole.roles[index]['departmentName'] = this.state.roleForm[did]['departmentName'];

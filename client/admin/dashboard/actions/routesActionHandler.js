@@ -1,16 +1,16 @@
 
-const dashboardRoutes={
-  clusterDetailsRoute:(clusterId, route)=> {
+const dashboardRoutes = {
+  clusterDetailsRoute: (clusterId, route)=> {
     return `/admin/cluster/clusterDetails/${clusterId}`;
   },
-  chapterListRoute:(clusterId)=>{
-    return `/admin/dashboard/${clusterId}/chapters`;
+  chapterListRoute: (clusterId, v, route)=> {
+    return `/admin/dashboard/${clusterId}/chapters?viewMode=${v}`;
   },
-  subChapterListRoute:(clusterId,chapterId,router) =>{
-    return `/admin/dashboard/${clusterId}/${chapterId}/subChapters`;
+  subChapterListRoute: (clusterId, chapterId, v, router) => {
+    return `/admin/dashboard/${clusterId}/${chapterId}/subChapters?viewMode=${v}`;
   },
-  communityListRoute:(clusterId,chapterId,subChapterId,router)=>{
-      return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/communities`;
+  communityListRoute: (clusterId, chapterId, subChapterId, v, router)=> {
+    return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/communities?viewMode=${v}`;
   }
 }
 

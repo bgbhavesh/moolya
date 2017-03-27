@@ -40,5 +40,5 @@ export function getAdminUserContext()
       }
     }
 
-  return {hierarchyCode:hierarchyCode,clusterId:defaultCluster}
+  return {hierarchyCode:hierarchyCode, hierarchyLevel:hierarchyLevel, clusterId:defaultCluster}
 }

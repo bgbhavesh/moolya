@@ -17,6 +17,7 @@ export async function fetchAdminUserRoles(userId) {
           subChapterId
           communityId
           departmentId
+          hierarchyLevel
           hierarchyCode
           departmentName
           subDepartmentId

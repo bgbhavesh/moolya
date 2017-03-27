@@ -29,9 +29,11 @@ MlLoginContent = React.createClass({
     }
     else {
       if (this.validationMessage.userName == true)
-        this.setState(Object.assign({userNameErr: this.validationMessage.errMsg}))
+        toastr.error(this.validationMessage.errMsg);
+        // this.setState(Object.assign({userNameErr: this.validationMessage.errMsg}))
       else if (this.validationMessage.Password == true)
-        this.setState(Object.assign({passwordErr: this.validationMessage.errMsg}))
+        toastr.error(this.validationMessage.errMsg);
+        // this.setState(Object.assign({passwordErr: this.validationMessage.errMsg}))
     }
   },
 

@@ -79,7 +79,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     specificRole.roles[index]['subDepartmentName'] = this.state.roleForm[did]['subDepartmentName'];
     roleDetails.splice(did, 1);
     roleDetails.splice(did, 0, specificRole);
-    this.setState({loading: false, rolesData: roleDetails});
+    this.setState({rolesData: roleDetails});
     this.sendRolesToParent();
   }
 
@@ -131,7 +131,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     specificRole.roles[index]['isActive'] = value;
     roleDetails.splice(did, 1);
     roleDetails.splice(did, 0, specificRole);
-    this.setState({loading: false, rolesData: roleDetails});
+    this.setState({rolesData: roleDetails});
     this.sendRolesToParent();
   }
 
@@ -144,7 +144,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
       specificRole.roles[index]['validFrom'] = value;
       roleDetails.splice(did, 1);
       roleDetails.splice(did, 0, specificRole);
-      this.setState({loading: false, rolesData: roleDetails});
+      this.setState({rolesData: roleDetails});
       this.sendRolesToParent();
     }
   }
@@ -158,7 +158,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
       specificRole.roles[index]['validTo'] = value;
       roleDetails.splice(did, 1);
       roleDetails.splice(did, 0, specificRole);
-      this.setState({loading: false, rolesData: roleDetails});
+      this.setState({rolesData: roleDetails});
       this.sendRolesToParent();
     }
   }
@@ -210,7 +210,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
         item.roles = emptyRoleBox
       }
     })
-    this.setState({loading: false, rolesData: mainAry});
+    this.setState({rolesData: mainAry});
   }
 
   async findUserDepartments() {
@@ -220,7 +220,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     let clusterId = this.props.clusterId;
     const response = await findUserDepartmentypeActionHandler(userId, clusterId);
     let data = response ? response : []
-    this.setState({loading: false, roleForm: data});
+    this.setState({roleForm: data});
     this.rolesArrayCreate(data, this.props.assignedRoles)
     if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
       // this.setState({roleDetails: this.props.assignedRoles})

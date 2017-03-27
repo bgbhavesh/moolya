@@ -26,13 +26,12 @@ const mltemplatesConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/stepDetails/"+data.id)
+          FlowRouter.go("/admin/settings/stepDetails/"+data.id+"/SOFT")
         }
         else{
           alert("Please select a Template Type")
         }
       }
-
     },
     {
       showAction: true,

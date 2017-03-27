@@ -313,7 +313,12 @@ if(!subProces) {
   MlSubProcess.insert(subProces);
 }
 let subProc = MlSubProcess.findOne({processName:"Registration"})
-let templates = [{stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-1",isActive: true,createdDate: "01-02-2017"},{stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-2",isActive: true,createdDate: "01-02-2017"}]
+let templates = [{stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-1",isActive: true,createdDate: "01-02-2017"},
+                 {stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"Soft-Template-2",isActive: true,createdDate: "01-02-2017"},
+                 {stepName:"Hard",stepCode:"HARD",templateCode:"",templateName:"Hard-Template-2",isActive: true,createdDate: "02-02-2017"},
+                 {stepName:"Hard",stepCode:"HARD",templateCode:"",templateName:"Hard-Template-2",isActive: true,createdDate: "02-02-2017"},
+                 {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"",templateName:"Portfolio-Template-2",isActive: true,createdDate: "03-03-2017"},
+                 {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"",templateName:"Portfolio-Template-2",isActive: true,createdDate: "03-03-2017"}]
   let templateAssignment = {
     process           : process._id,
     subProcess        : subProc._id,

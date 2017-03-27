@@ -31,11 +31,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     let updatedResponse
     var id= args.registrationId;
     if(args.registrationDetails){
-      let community = MlCommunity.findOne({"communityDefCode":args.registrationDetails.registrationType})
       let details=args.registrationDetails;
-      details.communityName=community.communityName;
       updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details }});
-
       let userProfile = {
         registrationId    : id,
         countryName       : details.countryName,
@@ -50,7 +47,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         subChapterId      : '',
         subChapterName    : '',
         communityId       : '',
-        communityName     : '',
+        communityName     : details.communityName,
         communityType     : '',
         isDefault         : false,
         isProfileActive   : false,

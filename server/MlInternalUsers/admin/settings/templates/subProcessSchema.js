@@ -30,7 +30,7 @@ let Template = `
     }
     type Query{
             findTemplateSteps(id: String):SubProcess
-            findStepAssignedTemplates(id: String):templateAssignment
+            findStepAssignedTemplates(id: String,stepCode:String):templateAssignment
     }
 `
 

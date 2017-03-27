@@ -22,6 +22,7 @@ import MlProcessDocumentList from '../../admin/processDocument/cluster/component
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDocHeader';
+import MlCreateRegistration from '../../admin/transaction/requested/component/createRegistration'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -194,5 +195,12 @@ adminSection.route('/transactions/editRequests/:id', {
   name: 'transaction_EditRequests',
   action(params){
     mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+  }
+});
+
+adminSection.route('/transactions/createRegistration', {
+  name: 'transaction_registration_create',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlCreateRegistration/>})
   }
 });

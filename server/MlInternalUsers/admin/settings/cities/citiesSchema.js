@@ -28,6 +28,7 @@ let citiesSchema = `
         fetchCities: SearchResp
         fetchCity(cityId: String): Cities
         fetchCities:[Cities]
+        fetchCitiesPerState(stateId: String):[Cities]
     }
     
     type Mutation {

@@ -375,7 +375,7 @@ let registrationSchema = `
     }
     
     type Mutation{
-         createRegistration(registration: registrationObject!, moduleName:String!, actionName:String!):response
+         createRegistration(registration: registrationInfoInput!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response       
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput,details:RegistrationDetailsInput):response
          updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,document:String,documentId:String):response         

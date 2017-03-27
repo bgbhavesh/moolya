@@ -8,6 +8,7 @@ import MoolyaSelect from "../../../commons/components/select/MoolyaSelect";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import moment from "moment";
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 let FontAwesome = require('react-fontawesome');
 
 // let initSwiper = () => {
@@ -232,6 +233,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     // let roleDetails = that.state.roleDetails;
 
     var yesterday = Datetime.moment().subtract(1, 'day');
+    let loggedInUser = getAdminUserContext()
     var validDate = function (current) {
       return current.isAfter(yesterday);
     }
@@ -283,12 +285,12 @@ export default class MlAssignBackednUserRoles extends React.Component {
                                 <MoolyaSelect multiSelect={false} className="form-control float-label"
                                               valueKey={'value'}
                                               labelKey={'label'} queryType={"graphql"} query={query}
-                                              queryOptions={queryOptions} isDynamic={true}
+                                              queryOptions={queryOptions} isDynamic={true} placeholder="Select Role"
                                               onSelect={that.optionsBySelectRole.bind(that, idx, id)}
                                               selectedValue={details.roleId}/>}
                             </div>
                             <div className="form-group left_al">
-                              {(details.clusterId == clusterId) ?
+                              {(details.clusterId == clusterId && loggedInUser.hierarchyCode != details.hierarchyCode) ?
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                           inputProps={{placeholder: "Valid From"}}
                                           isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
@@ -298,7 +300,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                                        disabled="true"/>}
                             </div>
                             <div className="form-group left_al">
-                              {(details.clusterId == clusterId) ?
+                              {(details.clusterId == clusterId && loggedInUser.hierarchyCode != details.hierarchyCode) ?
                                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                           inputProps={{placeholder: "Valid To"}}
                                           isValidDate={validDate} closeOnSelect={true} value={details.validTo}
@@ -310,7 +312,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
                             <div className="form-group switch_wrap">
                               <label>Status</label>
                               <label className="switch">
-                                {(details.clusterId == clusterId) ?
+                                {(details.clusterId == clusterId && loggedInUser.hierarchyCode != details.hierarchyCode) ?
                                   <input type="checkbox" name={'status'} checked={details.isActive}
                                          onChange={that.onStatusChange.bind(that, idx, id)}/> :
                                   <input type="checkbox" name={'status'} checked={details.isActive} disabled

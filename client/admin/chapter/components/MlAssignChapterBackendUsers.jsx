@@ -74,18 +74,15 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   async find_Chapter_Roles(userId, clusterId) {
-    const userProfile = await fetchAdminUserRoles(userId);
-    var roles = userProfile && userProfile.length > 0 ? userProfile : [];
-    let chapterAdmin = _.findIndex(userProfile, {"isChapterAdmin": true}) >= 0 ? true : false;
-    this.setState({
-      loading: false,
-      user_Roles: roles,
-      selectedBackendUser: userId,
-      mlroleDetails: roles,
-      chapter_Admin: chapterAdmin,
-      chapterAdmin: chapterAdmin
-    });
-    return roles;
+      const userRoles = await fetchAdminUserRoles(userId);
+      var roles = userRoles && userRoles.length > 0 ? userRoles : [];
+      this.setState({
+          loading: false,
+          user_Roles: roles,
+          selectedBackendUser: userId,
+          mlroleDetails: roles
+      });
+      return roles;
   }
 
   getAssignedRoles(roles) {
@@ -104,6 +101,10 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   async assignBackendUsers() {
     let userProfile = {};
+    if(this.state.mlroleDetails.length == 0)
+        toastr.error('Please Select Role');
+        return;
+
     userProfile['userId'] = this.state.selectedBackendUser
     userProfile['clusterId'] = this.props.params.clusterId;
     userProfile['userRoles'] = this.state.mlroleDetails;
@@ -118,13 +119,9 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   handleSuccess(response) {
-    if (response) {
-      this.resetBackendUsers();
-      // if(response.success)
-      //   this.resetBackendUsers();
-      // else
-      //   toastr.error(response.result);
-    }
+      if (response) {
+         this.resetBackendUsers();
+      }
   }
 
   handleError(response) {
@@ -187,7 +184,7 @@ class MlAssignChapterBackendUsers extends React.Component {
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
-              <h2>Assign Backend Users to Chapter</h2>
+              <h2>Assign Backend Users to Sub Chapter</h2>
               <div className="main_wrap_scroll">
                 <ScrollArea
                   speed={0.8}
@@ -257,7 +254,6 @@ class MlAssignChapterBackendUsers extends React.Component {
                           </div>
 
                           {userid ? (<MlAssignChapterBackendUserRoles assignedRoles={this.state.user_Roles}
-                                                                      chapterAdmin={this.state.chapter_Admin}
                                                                       userId={userid}
                                                                       clusterId={that.props.params.clusterId}
                                                                       chapterId={that.props.params.chapterId}

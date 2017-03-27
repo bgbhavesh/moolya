@@ -14,7 +14,7 @@ import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {findClusterTypeActionHandler} from "../actions/findCluster";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
-
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
@@ -101,6 +101,10 @@ class MlAssignBackendUsers extends React.Component {
 
   async assignBackendUsers() {
       let userProfile = {};
+    if(this.state.mlroleDetails.length == 0)
+      toastr.error('Please Select Role');
+      return;
+
       userProfile['clusterId'] = this.props.params.clusterId;
       userProfile['userRoles'] = this.state.mlroleDetails;
       userProfile['displayName'] = this.refs.displayName.value;
@@ -132,6 +136,7 @@ class MlAssignBackendUsers extends React.Component {
       this.setState({selectedBackendUser:'', userDisplayName:'', username:'', alsoAssignedAs:"", loading: false});
   }
 
+
   render() {
       let MlActionConfig = [
           // {
@@ -150,6 +155,7 @@ class MlAssignBackendUsers extends React.Component {
             handler: null
           }
       ]
+      let loggedInUser = getAdminUserContext();
       let that = this;
       let queryOptions = {options: {variables: {clusterId: that.props.params.clusterId}}};
       let query = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
@@ -162,7 +168,7 @@ class MlAssignBackendUsers extends React.Component {
       if(that.props.params.communityId){
         contextHeader = "Community"
       } else if (that.props.params.chapterId && that.props.params.subChapterId){
-        contextHeader = "Chapter"
+        contextHeader = "Sub Chapter"
       } else{
         contextHeader = "Cluster"
       }
@@ -245,7 +251,7 @@ class MlAssignBackendUsers extends React.Component {
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">De-Activate User</label>
                       <label className="switch">
-                        <input type="checkbox" ref="deActive" checked={deActive}/>
+                        {(loggedInUser.hierarchyCode=="PLATFORM")?<input type="checkbox" ref="deActive" checked={deActive}/>:<input type="checkbox" ref="deActive" checked={deActive} disabled="disabled"/>}
                         <div className="slider"></div>
                       </label>
                     </div>

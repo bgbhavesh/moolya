@@ -59,8 +59,15 @@ export default class MapMarkers extends Component {
     this.setState({isHover: false});
   }
 
-  markerClickHandler(data) {
-    //alert(data.text);
+  markerClickHandler(data)
+  {
+    console.log(data);
+    if(data.module == 'cluster')
+      FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
+    if(data.module == 'chapter')
+      FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+    if(data.module == 'subChapter')
+      FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+this.props.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
   }
 
   /*async findModuleDetails() {

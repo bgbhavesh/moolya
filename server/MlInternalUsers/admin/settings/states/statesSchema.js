@@ -27,6 +27,7 @@ let States = `
     type Query {
         fetchState(stateId: String): States
         FetchActiveStates:[States]
+        fetchStatesPerCountry(countryId: String):[States]
     }
     
     type Mutation{

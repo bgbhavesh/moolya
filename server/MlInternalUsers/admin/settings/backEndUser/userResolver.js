@@ -408,46 +408,47 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let hierarchy = "";
   roles.map(function (role)
   {
-      if( (role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
-        (role.communityId && role.communityId != "all")){
-          levelCode = "COMMUNITY"
-      }
-      else if((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
-        !args.user.isChapterAdmin){
-          levelCode = "SUBCHAPTER"
-          role.communityId = "all"
-      }
-      else if((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
-        args.user.isChapterAdmin){
-        if (role.departmentName == "operations") {
-          let chapterAdminRole = MlRoles.findOne({roleName: 'chapteradmin'})
-          levelCode = "CHAPTER"
-          role.roleId = chapterAdminRole._id
-          role.subChapterId = "all"
-          role.communityId = "all"
-        } else {
-          levelCode = "SUBCHAPTER"
-          role.communityId = "all"
-        }
-      }
-      else if((role.clusterId && role.clusterId != "all") && (role.communityId && role.communityId != "all")){
-        levelCode = "CLUSTER"
-        role.chapterId = "all"
-        role.subChapterId = "all"
-      }
-      else if(role.clusterId && role.clusterId != "all" && role.hierarchyCode == "CLUSTER"){
-          levelCode = "CLUSTER"
-          role.chapterId = "all"
-          role.subChapterId = "all"
-          role.communityId = "all"
-      }
+      if(!role.hierarchyCode) {
+          if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
+            (role.communityId && role.communityId != "all")) {
+            levelCode = "COMMUNITY"
+          }
+          else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") && !args.user.isChapterAdmin) {
+            levelCode = "SUBCHAPTER"
+            role.communityId = "all"
+          }
+          else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
+            args.user.isChapterAdmin) {
+            if (role.departmentName == "operations") {
+              let chapterAdminRole = MlRoles.findOne({roleName: 'chapteradmin'})
+              levelCode = "CHAPTER"
+              role.roleId = chapterAdminRole._id
+              role.subChapterId = "all"
+              role.communityId = "all"
+            } else {
+              levelCode = "SUBCHAPTER"
+              role.communityId = "all"
+            }
+          }
+          else if ((role.clusterId && role.clusterId != "all") && (role.communityId && role.communityId != "all")) {
+            levelCode = "CLUSTER"
+            role.chapterId = "all"
+            role.subChapterId = "all"
+          }
+          else if (role.clusterId && role.clusterId != "all") {
+            levelCode = "CLUSTER"
+            role.chapterId = "all"
+            role.subChapterId = "all"
+            role.communityId = "all"
+          }
 
-      if(levelCode){
-          let roleName = MlRoles.findOne({_id: role.roleId});
-          role.roleName = roleName.roleName;
-          hierarchy = MlHierarchy.findOne({code:levelCode})
-          role.hierarchyLevel = hierarchy.level;
-          role.hierarchyCode  = hierarchy.code;
+          if (levelCode) {
+            let roleName = MlRoles.findOne({_id: role.roleId});
+            role.roleName = roleName.roleName;
+            hierarchy = MlHierarchy.findOne({code: levelCode})
+            role.hierarchyLevel = hierarchy.level;
+            role.hierarchyCode = hierarchy.code;
+          }
       }
 
   })

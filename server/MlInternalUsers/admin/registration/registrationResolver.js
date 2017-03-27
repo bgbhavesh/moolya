@@ -13,6 +13,13 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }*/
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+  let id = MlRegistration.insert({registrationInfo : args.registration});
 }
 
 MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) => {

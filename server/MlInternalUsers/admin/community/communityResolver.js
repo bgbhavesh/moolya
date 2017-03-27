@@ -58,7 +58,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
     }
 
     let clusterId = (!args.clusterId && !userhierarchy.isParent ? args.clusterId = userProfile.defaultProfileHierarchyRefId: "") || (args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "");
-    let chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = ((_.find(userProfile.defaultChapters, args.chapterId))!="all"): "") || (args.chapterId && ((userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId: "");
+    let chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = ((_.find(userProfile.defaultChapters, args.chapterId))!="all"): "") || (args.chapterId && ((userProfile.defaultChapters == 'all' || userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId: "");
     let subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = ((_.find(userProfile.defaultSubChapters, args.subChapterId))!="all"): "") || (args.subChapterId && ((userProfile.defaultSubChapters == "all" || userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId: "");
 
     if(clusterId != "" && chapterId != "" && subChapterId != ""){
@@ -79,7 +79,12 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
     communitiesAccess.map(function (communityAccess) {
         let platformCommunity = MlCommunityAccess.findOne({"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode});
         let community = {};
-        if(!platformCommunity.isActive)
+        // let iscommunityActive = userProfile.defaultCommunities.indexOf('all') || userProfile.defaultCommunities.indexOf(communityAccess.communityDefCode);
+        let iscommunityActive = _.indexOf(userProfile.defaultCommunities, 'all')
+        if(iscommunityActive)
+            iscommunityActive = _.indexOf(userProfile.defaultCommunities, communityAccess.communityDefCode)
+
+        if(!platformCommunity.isActive || iscommunityActive < 0)
           communityAccess.isActive  = false
 
         community["name"] = communityAccess.communityDefName;

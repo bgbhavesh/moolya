@@ -2,6 +2,7 @@
 /**
  * Created by mohammed.mohasin on 03/02/17.
  */
+import mlRegistrationTemplates from './mlRegistrationTemplate';
 class MlTemplateEngine{
 
   constructor(){
@@ -16,14 +17,13 @@ class MlTemplateEngine{
   }
 
 
-  fetchTemplate(process,templateName){
-    switch(process){
-      case 'Registration':
-        //let template=this.portfolioTemplates.getTemplateDetails(templateName);
-        //return template;
+  fetchTemplate(subProcess,templateName,userType){
+    switch(subProcess){
+      case 'registration':
+         let template=mlRegistrationTemplates.getTemplate(templateName,userType);
+         return template;
         break;
-      case 'Portfolio':
-
+      case 'portfolio':
         break;
 
 

@@ -92,7 +92,7 @@ class MlEditProfessionType extends React.Component{
 
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateProfessionType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
@@ -103,7 +103,7 @@ class MlEditProfessionType extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ];

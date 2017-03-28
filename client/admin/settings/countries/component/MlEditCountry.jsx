@@ -82,7 +82,7 @@ class MlEditCountry extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.editCountry.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
@@ -93,7 +93,7 @@ class MlEditCountry extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]

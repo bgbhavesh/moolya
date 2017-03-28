@@ -187,7 +187,7 @@ class MlEditDocumentMapping extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateDocument.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
@@ -198,7 +198,7 @@ class MlEditDocumentMapping extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]

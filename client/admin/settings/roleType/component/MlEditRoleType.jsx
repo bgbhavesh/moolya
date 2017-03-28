@@ -70,7 +70,7 @@ class MlEditRoleType extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateRoleType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
@@ -81,7 +81,7 @@ class MlEditRoleType extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ];

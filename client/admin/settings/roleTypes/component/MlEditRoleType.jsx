@@ -138,7 +138,7 @@ class MlEditRole extends React.Component {
   render() {
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
@@ -149,7 +149,7 @@ class MlEditRole extends React.Component {
       // },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]

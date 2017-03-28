@@ -13,6 +13,7 @@ import {findSubChapterActionHandler} from "../actions/findSubChapter";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 var _ = require('lodash');
 
 
@@ -36,6 +37,7 @@ class MlAssignChapterBackendUsers extends React.Component {
     this.assignBackendUsers.bind(this);
     this.findSubChapter.bind(this);
     this.updateSelectedBackEndUser.bind(this);
+    this.filterClusterBasedRoles.bind(this);
     return this;
   }
 
@@ -107,9 +109,11 @@ class MlAssignChapterBackendUsers extends React.Component {
       return;
     }
 
+    let roles = this.filterClusterBasedRoles();
+
     userProfile['userId'] = this.state.selectedBackendUser
     userProfile['clusterId'] = this.props.params.clusterId;
-    userProfile['userRoles'] = this.state.mlroleDetails;
+    userProfile['userRoles'] = roles;
     userProfile['displayName'] = this.refs.displayName.value;
     let user = {
       profile: {InternalUprofile: {moolyaProfile: {userProfiles: userProfile}}},
@@ -133,6 +137,18 @@ class MlAssignChapterBackendUsers extends React.Component {
   updateSelectedBackEndUser(userId) {
     this.setState({loading: true});
     const resp = this.findUserDetails(userId);
+  }
+
+  filterClusterBasedRoles(){
+    let roles = [];
+    let clusterId = this.props.params.clusterId;
+    let allRoles = this.state.mlroleDetails;
+    _.each(allRoles, function (item, key) {
+      if (item.roleId && item.clusterId == clusterId) {
+        roles.push(item)
+      }
+    })
+    return roles;
   }
 
   resetBackendUsers() {
@@ -181,6 +197,7 @@ class MlAssignChapterBackendUsers extends React.Component {
     let userid = this.state.selectedBackendUser || "";
     let clusterId = this.state.data && this.state.data.clusterId || "";
     let chapterId = this.state.data && this.state.data.chapterId || "";
+    let loggedInUser = getAdminUserContext();
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -270,6 +287,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                             <label className="">De-Activate User</label>
                             <label className="switch">
                               <input type="checkbox"/>
+                              {(loggedInUser.hierarchyCode=="PLATFORM")?<input type="checkbox"/>:<input type="checkbox" disabled="disabled"/>}
                               <div className="slider"></div>
                             </label>
                           </div>

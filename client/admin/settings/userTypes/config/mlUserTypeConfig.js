@@ -32,11 +32,13 @@ const mlUserTypeTableConfig=new MlViewer.View({
         }
       }
     },
-    // {
-    //   showAction: true,
-    //   actionName: 'add',
-    //   handler: null
-    // },
+    {
+      showAction: true,
+      actionName: 'add',
+      handler: (data)=>{
+        FlowRouter.go("/admin/settings/addUserType")
+      }
+    },
     {
       showAction: true,
       actionName: 'logout',

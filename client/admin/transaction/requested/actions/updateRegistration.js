@@ -63,7 +63,8 @@ export async function updateRegistrationInfoDetails(registrationDetails,type,reg
     }
   }
   ;
-
+  console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+  console.log(registrationArray);
   const result = await client.mutate({
     mutation: gql`
     mutation  ($registration: registrationObject!, $moduleName:String!, $actionName:String!,$registrationId:String!,$type:String!){
@@ -83,7 +84,7 @@ export async function updateRegistrationInfoDetails(registrationDetails,type,reg
     variables: {
       registration,
       moduleName:"REGISTRATION",
-      actionName:"CREATE",
+      actionName:"UPDATE",
       registrationId:registrationId,
       type:type
     }

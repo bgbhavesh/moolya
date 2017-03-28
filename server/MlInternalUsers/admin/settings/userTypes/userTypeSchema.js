@@ -9,10 +9,17 @@ let UserTypesSchema = `
       _id :String
       isActive :Boolean
     }
+     input userTypeObject{
+        userTypeName :String,
+        displayName :String,
+        userTypeDesc :String,
+        isActive :Boolean
+    }
     
    type Mutation 
     {
         UpdateUserType(_id:String, displayName:String, userTypeDesc:String, isActive:Boolean , moduleName:String, actionName:String):response
+        createUserType(userType:userTypeObject, moduleName:String, actionName:String):response
     }
     type Query{
         FindUserType(_id:String): UserTypes

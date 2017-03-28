@@ -89,6 +89,14 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
     var randomId= Math.floor(Math.random()*90000) + 10000;
     let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
     return updatedResponse;
+  }else if(args.registrationId){
+
+    MlRegistration.update({_id:args.registrationId},{ $set:
+    {
+    'registrationInfo.profileImage': args.docUrl,
+
+    }
+    })
   }
 }
 
@@ -121,9 +129,22 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
   let id = " "
  let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};
+
   if(args && args.registration){
     if(args.type == "CONTACTTYPE"){
-     if(registrationDetails.contactInfo){
+      let dbData = _.pluck(registrationDetails.contactInfo, 'numberType') || [];
+      let contactExist = null;
+      if(args.registration.contactInfo[0]){
+         contactExist = _.contains(dbData, args.registration.contactInfo[0].numberType);
+      }
+
+      if(contactExist){
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Contact type already exist!!!!", code);
+        return response;
+      }
+
+      if(registrationDetails.contactInfo){
         id = MlRegistration.update(
           { _id : args.registrationId },
           { $push: { 'contactInfo': args.registration.contactInfo[0] } }
@@ -135,6 +156,17 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         )
       }
     }else if(args.type == "ADDRESSTYPE"){
+      let dbData = _.pluck(registrationDetails.addressInfo, 'addressType') || [];
+      let addressExist = null;
+      if(args.registration.addressInfo[0]){
+        addressExist = _.contains(dbData, args.registration.addressInfo[0].addressType);
+      }
+
+      if(addressExist){
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Address type already exist!!!!", code);
+        return response;
+      }
       if(registrationDetails.addressInfo){
         id = MlRegistration.update(
           { _id : args.registrationId },
@@ -147,6 +179,17 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         )
       }
     }else if(args.type == "SOCIALLINKS") {
+      let dbData = _.pluck(registrationDetails.socialLinksInfo, 'socialLinkType') || [];
+      let addressExist = null;
+      if(args.registration.socialLinksInfo[0]){
+        addressExist = _.contains(dbData, args.registration.socialLinksInfo[0].socialLinkType);
+      }
+
+      if(addressExist){
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Social Link type already exist!!!!", code);
+        return response;
+      }
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
       if (registrationDetails.socialLinksInfo) {
         id = MlRegistration.update(
@@ -161,6 +204,17 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
       }
     }else if(args.type == "EMAILTYPE"){
         /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
+      let dbData = _.pluck(registrationDetails.emailInfo, 'emailIdType') || [];
+      let emailTypeExist = null;
+      if(args.registration.emailInfo[0]){
+        emailTypeExist = _.contains(dbData, args.registration.emailInfo[0].emailIdType);
+      }
+
+      if(emailTypeExist){
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Email   type already exist!!!!", code);
+        return response;
+      }
         if(registrationDetails.emailInfo){
           id = MlRegistration.update(
             { _id : args.registrationId },
@@ -214,7 +268,7 @@ MlResolver.MlQueryResolver['findRegistration'] = (obj, args, context, info) => {
   // }
 }
 MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, context, info) => {
-
+  console.log("--------------------------------------------------------------------");
   let id = " "
   let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};
   if(args && args.registration){
@@ -224,9 +278,7 @@ MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, con
         { _id : args.registrationId },
         { $set: { 'contactInfo': args.registration.contactInfo } }
       )
-      /*}else{
-       id = MlRegistration.insert({'contactInfo':args.registration.contactInfo});
-       }*/
+
     }else if(args.type == "ADDRESSTYPE"){
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
 

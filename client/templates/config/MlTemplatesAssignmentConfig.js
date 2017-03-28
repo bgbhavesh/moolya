@@ -1,9 +1,9 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import {MlViewer,MlViewerTypes} from "/lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-const mltemplatesConfig=new MlViewer.View({
+const mltemplatesassignmetConfig=new MlViewer.View({
   name:"templatesTable",
-  module:"templates",//Module name for filter.
+  module:"templateAssignment",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["processName","subProcessName","createdBy","createdDate"],
@@ -14,8 +14,8 @@ const mltemplatesConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "createdDate", title: "created Date",dataSort:true},
-    {dataField: "processName", title: "Process",dataSort:true},
-    {dataField: "subProcessName", title: "Sub Process",dataSort:true},
+    {dataField: "templateProcessName", title: "Process",dataSort:true},
+    {dataField: "templateSubProcessName", title: "Sub Process",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -26,37 +26,25 @@ const mltemplatesConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/stepDetails/"+data.id+"/SOFT")
+          FlowRouter.go("/admin/templates/assignTemplate/"+data.id)
         }
         else{
           alert("Please select a Template Type")
         }
       }
-    },
-    {
-      showAction: true,
-      actionName: 'add',
-      handler: (data)=>{
-        FlowRouter.go("/admin/settings/addTemplateType")
-      }
-    },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
     }
   ],
   sizePerPage:5,
   graphQlQuery:gql`
-                query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"templates",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+ query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+              data:SearchQuery(module:"templateAssignment",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on SubProcess{
-                              processName
-                              createdDate
+                     ...on TemplateAssignment{
+                              templateProcessName
+                              templateSubProcessName
                               createdBy
-                              subProcessName
+                              createdDate
                               id:_id
                           }
                       }
@@ -66,4 +54,4 @@ const mltemplatesConfig=new MlViewer.View({
               `
 });
 
-export {mltemplatesConfig};
+export {mltemplatesassignmetConfig};

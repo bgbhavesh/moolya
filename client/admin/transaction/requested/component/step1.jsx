@@ -70,9 +70,9 @@ export default class Step1 extends React.Component{
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
   }
-  optionBySelectRegistrationType(value,label){
+  optionBySelectRegistrationType(value, calback, selObject){
     this.setState({registrationType:value})
-    //this.setState({coummunityName:registrationOptions.})
+    this.setState({coummunityName:selObject.label})
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})
@@ -114,7 +114,8 @@ export default class Step1 extends React.Component{
       remarks         :  this.refs.remarks.value,
       referralType    :  this.state.refered,
       clusterId       :  this.state.cluster,
-      chapterId       :  this.state.chapter
+      chapterId       :  this.state.chapter,
+      communityName  :  this.state.coummunityName
     }
     }
     const response = await updateRegistrationActionHandler(Details);

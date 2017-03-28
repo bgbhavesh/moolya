@@ -22,17 +22,17 @@ let Template = `
             templateName: String
             isActive          : Boolean
             createdDate       : String
-            userType:String
     }
-    type templateAssignment{
+    type TemplateAssignment{
             process           : String
             subProcess        : String
             assignedTemplates : [template]            
     }
     type Query{
             findTemplateSteps(id: String):SubProcess
-            findStepAssignedTemplates(id: String):templateAssignment
+            findStepAssignedTemplates(id: String,stepCode:String):TemplateAssignment
             fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String):template
+
     }
 `
 

@@ -460,6 +460,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlSubProcess.find(query,findOptions).fetch();
     totalRecords=MlSubProcess.find(query,findOptions).count();
   }
+  if(args.module=="templateAssignment"){
+    data= MlTemplateAssignment.find(query,findOptions).fetch();
+    totalRecords=MlTemplateAssignment.find(query,findOptions).count();
+  }
 
 
   return {'totalRecords':totalRecords,'data':data};
@@ -605,6 +609,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.processName){
       return 'SubProcess'
+    }
+    if(data.templateProcessName){
+      return 'TemplateAssignment'
     }
     return null;
   }

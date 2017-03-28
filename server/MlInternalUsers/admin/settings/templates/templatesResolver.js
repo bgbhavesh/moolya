@@ -12,11 +12,11 @@ MlResolver.MlQueryResolver['findTemplateSteps'] = (obj, args, context, info) => 
   }
 }
 
-MlResolver.MlQueryResolver['findStepAssignedTemplates'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['findStepAssignedTemplates'] = (obj, args, context, info) => {9
   // TODO : Authorization
   if (args.id) {
     var id= args.id;
-    let response= MlTemplateAssignment.findOne({"subProcess":id});
+    let response= MlTemplateAssignment.findOne({"subProcess":id},{assignedTemplates:{$elemMatch:{stepCode:args.stepCode}}});
     return response;
   }
 }

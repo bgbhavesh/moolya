@@ -429,8 +429,8 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/services_icon.png",
-        "link" : "/admin/services",
-        "name" : "services",
+        "link" : "/admin/templates/templateList",
+        "name" : "templates",
         "isLink" : true,
         "isMenu" : true,
         "uniqueId" : "services"
@@ -504,7 +504,7 @@ if(Meteor.isServer){
             ]
           },
           {
-            "link" : "/admin/transactions/registrationApprovedList",
+            "link" : "/admin/transactions/registrationRequested",
             "name" : "Registration",
             "uniqueId" : "transaction_Registration",
             "isLink" : true,
@@ -513,16 +513,6 @@ if(Meteor.isServer){
             "subMenusId":"transaction",
             "subMenuMappingId":"transaction_Registration",
             "subMenu":[
-              {
-                "link" : "/admin/transactions/registrationApprovedList",
-                "name" : "Approved",
-                "uniqueId" : "transaction_registration_approved",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"transaction_Registration",
-                "subMenuMappingId":"transaction_registration_approved"
-              },
               {
                 "link" : "/admin/transactions/registrationRequested",
                 "name" : "Requested",
@@ -557,6 +547,17 @@ if(Meteor.isServer){
                   }
                 ]
               },
+              {
+                "link" : "/admin/transactions/registrationApprovedList",
+                "name" : "Approved",
+                "uniqueId" : "transaction_registration_approved",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                "subMenuMappingId":"transaction_registration_approved"
+              },
+
               {
                 "link" : "/admin/transactions/createRegistration",
                 "name" : "Create",

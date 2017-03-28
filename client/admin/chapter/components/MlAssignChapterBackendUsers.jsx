@@ -109,7 +109,7 @@ class MlAssignChapterBackendUsers extends React.Component {
       return;
     }
 
-    let roles = this.filterClusterBasedRoles;
+    let roles = this.filterClusterBasedRoles();
 
     userProfile['userId'] = this.state.selectedBackendUser
     userProfile['clusterId'] = this.props.params.clusterId;

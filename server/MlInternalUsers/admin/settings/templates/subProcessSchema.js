@@ -24,15 +24,49 @@ let Template = `
             createdDate       : String
     }
     type TemplateAssignment{
+            _id               : String
             process           : String
             subProcess        : String
-            assignedTemplates : [template]            
+            templateProcessName       : String
+            templateSubProcessName    : String
+            assignedTemplates : [template]    
+            createdBy         : String      
+            createdDate       : String         
+    }
+    input stepInput{
+            stepCode    : String
+            stepName    : String
+            templateCode: String
+            templateName: String
+            isActive          : Boolean
+            createdDate       : String
+    }
+    input templateInput{
+            id                : String
+            process           : String
+            subProcess        : String
+            templateProcessName       : String
+            templateSubProcessName    : String
+            assignedTemplates : [stepInput]    
+            createdBy         : String      
+            createdDate       : String  
+            clusterId         : String
+            clusterName       : String
+            chapterId         : String
+            chapterName       : String
+            subChapterId      : String
+            subChapterName    : String
+            communityId       : String
+            communityName     : String
+            userType          : String     
+            identity          : String                               
     }
     type Query{
             findTemplateSteps(id: String):SubProcess
             findStepAssignedTemplates(id: String,stepCode:String):TemplateAssignment
             fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String):template
-
+            fetchSubProcess(id:String):[SubProcess]
+            updateTemplate(id:String,template:templateInput):response
     }
 `
 

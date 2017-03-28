@@ -79,7 +79,7 @@ class MlAssignBackendUsers extends React.Component {
   {
       const userDetails = await findAdminUserDetails(userId);
       if (userDetails != ""){
-          this.setState({loading:false})
+          // this.setState({loading:false})
           this.setState({selectedBackendUser:userId})
           this.setState({username:userDetails.userName})
           this.setState({userDisplayName:userDetails.displayName})
@@ -95,15 +95,17 @@ class MlAssignBackendUsers extends React.Component {
       const userRoles = await fetchAdminUserRoles(userId, clusterId);
       if (userRoles)
           roles = userRoles || [];
-      this.setState({user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
+      this.setState({loading:false, user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
       return roles
   }
 
   async assignBackendUsers() {
       let userProfile = {};
     if(this.state.mlroleDetails.length == 0)
+    {
       toastr.error('Please Select Role');
       return;
+    }
 
       userProfile['clusterId'] = this.props.params.clusterId;
       userProfile['userRoles'] = this.state.mlroleDetails;

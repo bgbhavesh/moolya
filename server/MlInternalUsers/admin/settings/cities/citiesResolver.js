@@ -99,3 +99,12 @@ MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) => {
   let result=MlCities.find().fetch()||[];
   return result;
 }
+
+MlResolver.MlQueryResolver['fetchCitiesPerState'] = (obj, args, context, info) => {
+
+  if(args.stateId){
+    let resp = MlCities.find({"stateId":args.stateId,"isActive":true}).fetch()
+    return resp;
+  }
+};
+

@@ -282,7 +282,7 @@ class MlEditBackendUser extends React.Component{
         this.refs.confirmPassword.value = '';
         this.refs.password.value = '';
         this.setState({"pwdErrorMsg":'Password reset complete'})
-        toastr.error(response.result);
+        toastr.success(response.result);
       }
     } else {
       this.setState({
@@ -400,7 +400,7 @@ class MlEditBackendUser extends React.Component{
                   </div> : <div></div>}
                 {that.state.showPasswordFields ?
                   <div className="form-group">
-                    <text style={{float:'right',color:'#ef1012',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{that.state.pwdErrorMsg}</text>
+                    <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{that.state.pwdErrorMsg}</text>
                     <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
                     <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                   </div> : <div></div>}

@@ -66,6 +66,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       let roleDetails = this.state.rolesData;
       let cloneBackUp = _.cloneDeep(roleDetails);
       let specificRole = cloneBackUp[did];
+      // let isExist = _.find(specificRole.roles, {roleName:selObject.label})
+      // if(isExist){
+      //   return;
+      // }
       specificRole.roles[index]['roleId'] = selectedValue;
       specificRole.roles[index]['departmentId'] = this.state.roleForm[did]['department'];
       specificRole.roles[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
@@ -347,7 +351,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                   <div className="form-group left_al">
                                     {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all")) ?
                                       <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                                inputProps={{placeholder: "Valid From"}}
+                                                  inputProps={{placeholder: "Valid From"}}
                                                 isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
                                                 onChange={that.onValidFromChange.bind(that, idx, id)}/> :
                                       <input type="text" defaultValue={details.validTo}

@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+
 import _ from 'lodash';
 
 import {render} from 'react-dom';
@@ -59,8 +61,27 @@ export default class MapMarkers extends Component {
     this.setState({isHover: false});
   }
 
-  markerClickHandler(data) {
-    //alert(data.text);
+  markerClickHandler(data)
+  {
+    console.log(data);
+    if(data.module == 'cluster')
+      FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
+    if(data.module == 'chapter')
+    {
+      if(this.props.params)
+      {
+        if(this.props.params.clusterId)
+          FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+      }
+      else
+      {
+        let loggedInUser = getAdminUserContext();
+        FlowRouter.go('/admin/dashboard/'+loggedInUser.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+      }
+    }
+
+    if(data.module == 'subChapter')
+      FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+this.props.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
   }
 
   /*async findModuleDetails() {

@@ -884,6 +884,16 @@ if(Meteor.isServer){
             "image" : "",
             subMenu:[
               {
+                "link": "/admin/settings/addUserType",
+                "name": "Add UserType",
+                "uniqueId": "settings_AddUserType",
+                "subMenuMappingId":"settings_userTypes",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+              {
                 "link": "/admin/settings/userTypeList",
                 "name": "List UserType",
                 "uniqueId": "settings_UserTypeList",

@@ -1,0 +1,377 @@
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
+import { graphql } from 'react-apollo';
+import Select from 'react-select';
+import Datetime from "react-datetime";
+import moment from "moment";
+var FontAwesome = require('react-fontawesome');
+import gql from 'graphql-tag';
+import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import {createRegistrationInfo} from '../actions/createRegistrationInfo'
+
+export default class MlCreateRegistration extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state={
+      loading:true,
+      country:'',
+      cluster:'',
+      chapter:'',
+      selectedCity:'',
+      registrationId:'',
+      registrationDetails:'',
+      subscription:'',
+      registrationType:'',
+      refered:'',
+      institutionAssociation:'',
+      coummunityName:''
+    }
+    //this.addEventHandler.bind(this);
+    this.createRegistration.bind(this)
+    return this;
+  }
+
+  async  createRegistration() {
+    let Details = {
+
+        firstName       :  this.refs.firstName.value,
+        lastName        :  this.refs.lastName.value,
+        countryName     :  this.state.country,
+        contactNumber   :  this.refs.contactNumber.value,
+        email           :  this.refs.email.value,
+        cityId          :  this.state.selectedCity,
+        registrationType:  this.state.registrationType,
+        userName        :  this.refs.userName.value,
+        password        :  this.refs.password.value,
+        accountType     :  this.state.subscription,
+        institutionAssociation    :   this.state.institutionAssociation,
+        companyname     :  this.refs.companyName.value,
+        companyUrl      :  this.refs.companyUrl.value,
+        remarks         :  this.refs.remarks.value,
+        referralType    :  this.state.refered,
+        clusterId       :  this.state.cluster,
+        chapterId       :  this.state.chapter
+
+    }
+    const response = await createRegistrationInfo(Details);
+    //return response;
+    //this.props.getRegistrationDetails();
+  }
+
+/*  ondateOfBirthSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, dateOfBirth: value});
+    }
+  }*/
+
+  optionsBySelectCountry(value){
+    this.setState({country:value})
+  }
+
+/*
+  optionsBySelectState(value){
+    this.setState({state:value})
+  }
+*/
+
+  optionsBySelectCity(value){
+    this.setState({selectedCity:value})
+  }
+
+  optionsBySelectCluster(value){
+    this.setState({cluster:value})
+  }
+  optionsBySelectChapter(value){
+    this.setState({chapter:value})
+  }
+  optionBySelectRegistrationType(value,label){
+    this.setState({registrationType:value})
+    //this.setState({coummunityName:registrationOptions.})
+  }
+  optionBySelectSubscription(val){
+    this.setState({subscription:val.value})
+  }
+  optionBySelectRefered(val){
+    this.setState({refered:val.value})
+  }
+  optionBySelectinstitutionAssociation(val){
+    this.setState({institutionAssociation:val.value})
+    const resp=this.updateregistrationInfo();
+    return resp;
+  }
+/*
+  optionsBySelectGender(value){
+    this.setState({selectedGender:value})
+  }
+
+  optionBySelectRegistrationType(value,label){
+    this.setState({registrationType:value})
+    //this.setState({coummunityName:registrationOptions.})
+  }*/
+/*  async  createRegistration() {
+    let Details = {
+        firstName       :  this.refs.firstName.value,
+        lastName        :  this.refs.lastName.value,
+        displayName     :  this.refs.displayName.value,
+        registrationType:  this.state.registrationType,
+        gender          : this.state.selectedGender,
+        countryName     :  this.state.country,
+        contactNumber   :  this.refs.contactNumber.value,
+        email           :  this.refs.email.value,
+        cityId          :  this.state.selectedCity,
+
+    }
+    //const response = await updateRegistrationActionHandler(Details);
+    //return response;
+    this.props.getRegistrationDetails();
+  }*/
+/*  async addEventHandler() {
+    const resp=await this.createRegistration();
+    return resp;
+  }*/
+
+  async handleError(response) {
+    alert(response)
+  };
+
+  async handleSuccess(response) {
+
+    //FlowRouter.go("/admin/settings/departmentsList");
+    if (response){
+      if(response.success)
+        FlowRouter.go("/transactions/registrationApprovedList");
+      else
+        toastr.error(response.result);
+      FlowRouter.go("/transactions/registrationApprovedList");
+    }
+  };
+  render(){
+    let MlActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler :  this.createRegistration.bind(this)
+      },
+  /*    {
+        showAction: true,
+        actionName: 'cancel',
+        handler: null
+      }*/
+    ]
+
+    let countryQuery=gql`query{
+     data:fetchCountries {
+        value:_id
+        label:country
+      }
+    }`
+
+   /* let stateQuery=gql` query($countryId:String){
+      data:fetchStatesPerCountry(countryId:$countryId){label:name,value:_id}
+    }
+    `;
+*/
+    let citiesquery = gql`query{
+      data:fetchCities {label:name,value:_id
+      }
+    }
+    `;
+
+
+    let clusterQuery=gql` query{
+      data:fetchActiveClusters{label:countryName,value:_id}
+    }
+    `;
+    let chapterQuery=gql`query($id:String){  
+      data:fetchChapters(id:$id) {
+        value:_id
+        label:chapterName
+      }  
+    }`;
+
+
+    let fetchcommunities = gql` query{
+      data:fetchCommunityDefinition{label:name,value:code}
+    }
+    `;
+/*
+    let stateOption={options: { variables: {countryId:this.state.country}}};
+    let cityOption={options: { variables: {stateId:this.state.state}}};*/
+    let chapterOption={options: { variables: {id:this.state.cluster}}};
+
+    let subscriptionOptions = [
+      {value: 'Starter', label: 'Starter'},
+      {value: 'Premier', label: 'Premier'}
+    ];
+    let referedOption=[
+      { value: '0', label: 'friends/collegues reference' },
+      { value: '1', label: 'google/searching' },
+      { value: '2', label: 'newspaper' },
+      { value: '3', label: 'hoarding' },
+      { value: '4', label: 'event' },
+      { value: '5', label: 'radio' },
+      { value: '6', label: 'i over heard it' },
+    ]
+
+    let genderValues = [
+      {value: 'male', label: 'Male'},
+      {value: 'female', label: 'Female'},
+      {value: 'others', label: 'Others'}
+    ];
+
+    let options3 = [
+      {value: 'Yes', label: 'Yes'},
+      {value: 'No', label: 'No'}
+    ];
+
+    return (
+
+        <div className="admin_main_wrap">
+          <h2>Create Registration</h2>
+          <div className="col-md-6 nopadding-left">
+            <div className="form_bg">
+              <form>
+              {/*  <div>
+                  <div className="form-group">
+                    <input type="text" ref="firstName"  placeholder="FirstName" className="form-control float-label" id=""/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" ref="lastName"  placeholder="Last Name" className="form-control float-label" id=""/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" ref="displayName"  placeholder="Display Name" className="form-control float-label" id=""/>
+                  </div>
+                  <div className="form-group">
+                    <Moolyaselect multiSelect={false} placeholder="Ideator Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
+                  </div>
+                  <div className="form-group">
+                    <Select name="form-field-name" placeholder="Gender" options={genderValues}  className="float-label" value={this.state.selectedGender} onChange={this.optionsBySelectGender.bind(this)}/>
+                  </div>
+                  <div className="form-group">
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date of Birth"}} closeOnSelect={true}/>
+                    <FontAwesome name="calendar" className="password_icon"/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="contactNumber" className="form-control float-label"/>
+                  </div>
+                  <div className="form-group ">
+                    <input type="text" ref="email" placeholder="Enter Email" className="form-control float-label"/>
+                  </div>
+                </div>*/}
+                <div className="form-group">
+                  <input type="text" ref="firstName" placeholder="First Name"  className="form-control float-label" />
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} />
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="contactNumber"   placeholder="Contact number" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
+                </div>
+                <div className="panel panel-default">
+                  <div className="panel-heading">Operation Area</div>
+                  <div className="panel-body">
+                    <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
+                    <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} />
+                    <div className="form-group">
+                      <input type="text" placeholder="Source"  className="form-control float-label" id=""/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="Device name" className="form-control float-label" id=""/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="Device number"  className="form-control float-label" id=""/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="IP Address"  className="form-control float-label" id="" />
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="IP Location"  className="form-control float-label" id=""/>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="col-md-6 nopadding-right">
+            <div className="form_bg">
+             {/* <div className="form-group">
+                <input type="text" ref="addressLine1"  placeholder="Address Line 1" className="form-control float-label" id=""/>
+              </div>
+              <div className="form-group">
+                <input type="text" ref="addressLine2"  placeholder="Address Line 2" className="form-control float-label" id=""/>
+              </div>
+              <div className="form-group">
+                <input type="text" ref="locality"  placeholder="Locality" className="form-control float-label" id=""/>
+              </div>
+              <div className="form-group">
+                <input type="text" ref="area"  placeholder="Area" className="form-control float-label" id=""/>
+              </div>*/}
+             {/* <div className="form-group">
+                <Moolyaselect multiSelect={false} placeholder="Select City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} queryOptions={cityOption}  onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
+              </div>
+              <div className="form-group">
+                <Moolyaselect multiSelect={false} placeholder="Select State" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.state} queryType={"graphql"} query={stateQuery} reExecuteQuery={true} queryOptions={stateOption}  isDynamic={true}  onSelect={this.optionsBySelectState.bind(this)} />
+              </div>
+              <div className="form-group">
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} />
+              </div>*/}
+              <form>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
+                </div>
+                <div className="form-group">
+                  <input type="text" placeholder="User name" ref="userName"   className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <input type="Password" placeholder="Password" ref="password"  className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>
+                </div>
+                <div className="form-group">
+                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="companyName" placeholder="Company Name"    className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="companyUrl" placeholder="Company URL"   className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="remarks" placeholder="Remarks"    className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <Select name="form-field-name" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
+                </div>
+                <div className="panel panel-default">
+                  <div className="panel-heading">Process Status</div>
+                  <div className="panel-body button-with-icon">
+                    <button type="button" className="btn btn-labeled btn-success" >
+                      <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
+                    <button type="button" className="btn btn-labeled btn-success" >
+                      <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
+                    <button type="button" className="btn btn-labeled btn-success" >
+                      <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        </div>
+    )
+  }
+}

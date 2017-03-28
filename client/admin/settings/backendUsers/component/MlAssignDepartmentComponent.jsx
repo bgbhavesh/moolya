@@ -1,9 +1,8 @@
-import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import React from "react";
+import {render} from "react-dom";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
 
 export default class MlAssignDepartmentComponent extends React.Component {
   constructor(props){
@@ -68,11 +67,11 @@ export default class MlAssignDepartmentComponent extends React.Component {
             data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
           }
           `;
-    let selectedUserType=this.props.selectedBackendUserType
-    let selectedSubChapter=this.props.selectedSubChapter
-    if(selectedUserType=='moolya'){
-      departmentqueryOptions={options: { variables: {isMoolya:false}}};
-      departmentQuery=gql` query($isMoolya:Boolean){
+    let selectedUserType=that.props.selectedBackendUserType
+    let selectedSubChapter=that.props.selectedSubChapter
+    if (selectedUserType == 'moolya') {
+      departmentqueryOptions = {options: {variables: {isMoolya: false}}};
+      departmentQuery = gql` query($isMoolya:Boolean){
             data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
           }
           `;
@@ -93,11 +92,11 @@ export default class MlAssignDepartmentComponent extends React.Component {
       }
     }`
 
+    let userDepartments = that.state.assignDepartmentForm || [];
    return(
      <div>
-  {/* <div className="form-group"> <a onClick={that.AssignDepartment.bind(this)} className="mlUpload_btn">Assign  Departments</a></div>*/}
-       {that.state.assignDepartmentForm.map(function(assignDepartmentForm, idx){
-         let subDepartmentOptions = {options: { variables: {id:assignDepartmentForm.department}}};
+         {userDepartments.map(function(assignDepartmentForm, idx){
+           let subDepartmentOptions = {options: { variables: {id:assignDepartmentForm.department}}};
          return(
          <div className="panel panel-default" key={idx}>
            <div className="panel-heading"> Assign Departments{idx==0&&(<div className="pull-right block_action" onClick={that.AssignDepartment.bind(that)}><img src="/images/add.png"/></div>)}
@@ -105,12 +104,10 @@ export default class MlAssignDepartmentComponent extends React.Component {
            </div>
            <div className="panel-body">
              <div className="form-group">
-              {/* <Select name="form-field-name" value={assignDepartmentForm.department} options={options2} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />
 
              </div>
              <div className="form-group">
-              {/* <Select name="form-field-name" value={assignDepartmentForm.subdepartment} options={options3} className="float-label"  onSelect={that.optionsBySelect.bind(that,idx)}/>*/}
                 <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Sub-Department" selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subDepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
               </div>
            </div>

@@ -44,3 +44,10 @@ MlResolver.MlQueryResolver['FetchActiveStates'] = (obj, args, context, info) => 
   }
 };
 
+MlResolver.MlQueryResolver['fetchStatesPerCountry'] = (obj, args, context, info) => {
+
+  if(args.countryId){
+    let resp = MlStates.find({"countryId":args.countryId,"isActive":true}).fetch()
+    return resp;
+  }
+};

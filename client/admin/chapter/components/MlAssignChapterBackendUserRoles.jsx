@@ -45,7 +45,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       }],
       selectedRole: "",
       chapterAdmin: false,
-      isChapterAdminCheck:"true"
+      isChapterAdminCheck: "true"
     }
     this.findUserDepartments.bind(this);
     this.isChapterAdmin.bind(this);
@@ -61,105 +61,106 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     }
   }
 
-  optionsBySelectRole(index, did, selectedValue, callback, selObject)
-  {
-      let roleDetails = this.state.rolesData;
-      let cloneBackUp = _.cloneDeep(roleDetails);
-      let specificRole = cloneBackUp[did];
-      // let isExist = _.find(specificRole.roles, {roleName:selObject.label})
-      // if(isExist){
-      //   return;
-      // }
-      specificRole.roles[index]['roleId'] = selectedValue;
-      specificRole.roles[index]['departmentId'] = this.state.roleForm[did]['department'];
-      specificRole.roles[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
-      specificRole.roles[index]['subDepartmentId'] = this.state.roleForm[did]['subDepartment'];
-      specificRole.roles[index]['subDepartmentName'] = this.state.roleForm[did]['subDepartmentName'];
+  optionsBySelectRole(index, did, selectedValue, callback, selObject) {
+    let roleDetails = this.state.rolesData;
+    let cloneBackUp = _.cloneDeep(roleDetails);
+    let specificRole = cloneBackUp[did];
+    // let isExist = _.find(specificRole.roles, {roleName:selObject.label})
+    // if(isExist){
+    //   return;
+    // }
+    specificRole.roles[index]['roleId'] = selectedValue;
+    specificRole.roles[index]['departmentId'] = this.state.roleForm[did]['department'];
+    specificRole.roles[index]['departmentName'] = this.state.roleForm[did]['departmentName'];
+    specificRole.roles[index]['subDepartmentId'] = this.state.roleForm[did]['subDepartment'];
+    specificRole.roles[index]['subDepartmentName'] = this.state.roleForm[did]['subDepartmentName'];
+    roleDetails.splice(did, 1);
+    roleDetails.splice(did, 0, specificRole);
+    this.setState({loading: false, rolesData: roleDetails});
+    if (this.state.roleForm[did]['departmentName'] === "operations") {
+      if (selObject.label == "subchapteradmin") {
+        $("#chapter_admin_check").removeAttr('disabled');
+        // this.setState({isChapterAdminCheck:"false"})
+      } else {
+        this.setState({chapterAdmin: false});
+        this.props.getChapterAdmin(false);
+        $("#chapter_admin_check").attr('disabled', 'disabled');
+        // this.setState({isChapterAdminCheck:"true"})
+      }
+    }
+    this.sendRolesToParent();
+  }
+
+  sendRolesToParent() {
+    let value = this.state.rolesData;
+    let rolesArrayFinal = [];
+    let clusterId = this.props.clusterId
+    _.each(value, function (item, key) {
+      _.each(item.roles, function (say, val) {
+        if (say.roleId && say.clusterId == clusterId) {
+          rolesArrayFinal.push(say)
+        }
+      })
+    })
+
+    this.props.getAssignedRoles(rolesArrayFinal);
+  }
+
+  addRoleComponent(did) {
+    let emptyRoleBox = {
+      roleId: '',
+      validFrom: '',
+      validTo: '',
+      isActive: '',
+      clusterId: this.props.clusterId ? this.props.clusterId : "",
+      chapterId: this.props.chapterId ? this.props.chapterId : "",
+      subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
+      communityId: this.props.communityId ? this.props.communityId : "",
+      hierarchyLevel: "",
+      hierarchyCode: "",
+      departmentId: '',
+      departmentName: '',
+      subDepartmentId: '',
+      subDepartmentName: ''
+    };
+
+    let allData = this.state.rolesData
+    let specificDepartment = allData[did];
+    let rolesArray = specificDepartment.roles;
+    rolesArray.push(emptyRoleBox);
+    this.setState({rolesData: allData});
+  }
+
+  isChapterAdmin(did, event) {
+    let roleDetails = this.state.rolesData;
+    let cloneBackUp = _.cloneDeep(roleDetails);
+    let specificRole = cloneBackUp[did].roles;
+    let index = _.findIndex(specificRole, {
+      roleName: 'chapteradmin',
+      clusterId: this.props.clusterId,
+      chapterId: this.props.chapterId
+    })
+    if (index >= 0) {
+      specificRole.roles[index]['roleName'] = '';
       roleDetails.splice(did, 1);
       roleDetails.splice(did, 0, specificRole);
-      this.setState({loading: false, rolesData: roleDetails});
-      if (this.state.roleForm[did]['departmentName'] === "operations") {
-          if (selObject.label == "subchapteradmin") {
-              $("#chapter_admin_check").removeAttr('disabled');
-              // this.setState({isChapterAdminCheck:"false"})
-          } else {
-              this.setState({chapterAdmin: false});
-              this.props.getChapterAdmin(false);
-              $("#chapter_admin_check").attr('disabled', 'disabled');
-              // this.setState({isChapterAdminCheck:"true"})
-          }
-      }
-      this.sendRolesToParent();
-  }
-
-  sendRolesToParent()
-  {
-      let value = this.state.rolesData;
-      let rolesArrayFinal = [];
-      let clusterId = this.props.clusterId
-      _.each(value, function (item, key) {
-          _.each(item.roles, function (say, val) {
-              if (say.roleId && say.clusterId == clusterId) {
-                  rolesArrayFinal.push(say)
-              }
-          })
-      })
-
-      this.props.getAssignedRoles(rolesArrayFinal);
-  }
-
-  addRoleComponent(did)
-  {
-      let emptyRoleBox = {
-          roleId: '',
-          validFrom: '',
-          validTo: '',
-          isActive: '',
-          clusterId: this.props.clusterId ? this.props.clusterId : "",
-          chapterId: this.props.chapterId ? this.props.chapterId : "",
-          subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
-          communityId: this.props.communityId ? this.props.communityId : "",
-          hierarchyLevel: "",
-          hierarchyCode: "",
-          departmentId: '',
-          departmentName: '',
-          subDepartmentId: '',
-          subDepartmentName: ''
-      };
-
-      let allData = this.state.rolesData
-      let specificDepartment = allData[did];
-      let rolesArray = specificDepartment.roles;
-      rolesArray.push(emptyRoleBox);
-      this.setState({rolesData: allData});
-  }
-
-  isChapterAdmin(did, event){
-      let roleDetails = this.state.rolesData;
-      let cloneBackUp = _.cloneDeep(roleDetails);
-      let specificRole = cloneBackUp[did].roles;
-      let index = _.findIndex(specificRole, {roleName:'chapteradmin', clusterId:this.props.clusterId, chapterId:this.props.chapterId})
-      if(index >= 0){
-          specificRole.roles[index]['roleName'] = '';
-          roleDetails.splice(did, 1);
-          roleDetails.splice(did, 0, specificRole);
-      }
-      this.setState({loading: false, rolesData: roleDetails});
-      this.setState({chapterAdmin: event.target.checked});
-      this.props.getChapterAdmin(event.target.checked)
-      this.sendRolesToParent();
+    }
+    this.setState({loading: false, rolesData: roleDetails});
+    this.setState({chapterAdmin: event.target.checked});
+    this.props.getChapterAdmin(event.target.checked)
+    this.sendRolesToParent();
   }
 
   onStatusChange(index, did, event) {
-      let value = event.target.checked
-      let roleDetails = this.state.rolesData;
-      let cloneBackUp = _.cloneDeep(roleDetails);
-      let specificRole = cloneBackUp[did];
-      specificRole.roles[index]['isActive'] = value;
-      roleDetails.splice(did, 1);
-      roleDetails.splice(did, 0, specificRole);
-      this.setState({loading: false, rolesData: roleDetails});
-      this.sendRolesToParent();
+    let value = event.target.checked
+    let roleDetails = this.state.rolesData;
+    let cloneBackUp = _.cloneDeep(roleDetails);
+    let specificRole = cloneBackUp[did];
+    specificRole.roles[index]['isActive'] = value;
+    roleDetails.splice(did, 1);
+    roleDetails.splice(did, 0, specificRole);
+    this.setState({loading: false, rolesData: roleDetails});
+    this.sendRolesToParent();
   }
 
   onValidFromChange(index, did, event) {
@@ -177,17 +178,17 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   onValidToChange(index, did, event) {
-      if (event._d) {
-          let value = moment(event._d).format('DD-MM-YYYY');
-          let roleDetails = this.state.rolesData;
-          let cloneBackUp = _.cloneDeep(roleDetails);
-          let specificRole = cloneBackUp[did];
-          specificRole.roles[index]['validTo'] = value;
-          roleDetails.splice(did, 1);
-          roleDetails.splice(did, 0, specificRole);
-          this.setState({loading: false, rolesData: roleDetails});
-          this.sendRolesToParent();
-      }
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      let roleDetails = this.state.rolesData;
+      let cloneBackUp = _.cloneDeep(roleDetails);
+      let specificRole = cloneBackUp[did];
+      specificRole.roles[index]['validTo'] = value;
+      roleDetails.splice(did, 1);
+      roleDetails.splice(did, 0, specificRole);
+      this.setState({loading: false, rolesData: roleDetails});
+      this.sendRolesToParent();
+    }
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -197,105 +198,109 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   }
 
   rolesArrayCreate(departmentDetails, assignedRoles) {
-      let mainAry = [];
-      let self = this;
-      let emptyRoleBox = [{
-          roleId: '',
-          validFrom: '',
-          validTo: '',
-          isActive: '',
-          clusterId: this.props.clusterId ? this.props.clusterId : "",
-          chapterId: this.props.chapterId ? this.props.chapterId : "",
-          subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
-          communityId: this.props.communityId ? this.props.communityId : "",
-          hierarchyLevel: "",
-          hierarchyCode: "",
-          departmentId: '',
-          departmentName: '',
-          subDepartmentId: '',
-          subDepartmentName: ''
-      }];
-      _.each(departmentDetails, function (item, value) {
-          let json = {};
-          json.departmentName = item.departmentName;
-          json.subDepartmentName = item.subDepartmentName;
-          json.departmentId = item.department;
-          json.subDepartmentId = item.subDepartment;
-          json.isAvailiable = item.isAvailiable;
-          let ary = [];
-          _.each(assignedRoles, function (say, val){
-              if (say.departmentId == item.department && say.subDepartmentId == item.subDepartment){
-                  ary.push(say);
-                  json.roles = ary;
-              }
+    let mainAry = [];
+    let self = this;
+    let emptyRoleBox = [{
+      roleId: '',
+      validFrom: '',
+      validTo: '',
+      isActive: '',
+      clusterId: this.props.clusterId ? this.props.clusterId : "",
+      chapterId: this.props.chapterId ? this.props.chapterId : "",
+      subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
+      communityId: this.props.communityId ? this.props.communityId : "",
+      hierarchyLevel: "",
+      hierarchyCode: "",
+      departmentId: '',
+      departmentName: '',
+      subDepartmentId: '',
+      subDepartmentName: ''
+    }];
+    _.each(departmentDetails, function (item, value) {
+      let json = {};
+      json.departmentName = item.departmentName;
+      json.subDepartmentName = item.subDepartmentName;
+      json.departmentId = item.department;
+      json.subDepartmentId = item.subDepartment;
+      json.isAvailiable = item.isAvailiable;
+      let ary = [];
+      _.each(assignedRoles, function (say, val) {
+        if (say.departmentId == item.department && say.subDepartmentId == item.subDepartment) {
+          ary.push(say);
+          json.roles = ary;
+        }
 
-              if(say.clusterId == self.props.clusterId && say.chapterId == self.props.chapterId && say.subChapterId == "all"){
-                  self.setState({chapterAdmin: true});
-              }
-          });
-          mainAry.push(json)
-      })
+        if (say.clusterId == self.props.clusterId && say.chapterId == self.props.chapterId && say.subChapterId == "all") {
+          self.setState({chapterAdmin: true});
+        }
+      });
+      mainAry.push(json)
+    })
 
-      _.each(mainAry, function (item, value) {
-          if (!item.roles) {
-            item.roles = emptyRoleBox
-          }
-      })
+    _.each(mainAry, function (item, value) {
+      if (!item.roles) {
+        item.roles = emptyRoleBox
+      }
+    })
     this.setState({loading: false, rolesData: mainAry});
     this.initialDisabledClass();
   }
 
-  initialDisabledClass(){
+  initialDisabledClass() {
     let roleDetails = this.state.rolesData;
     let operationsIndex = ''
-    _.each(roleDetails, function (item,say) {
-      if(item.departmentName == 'operations')
+    _.each(roleDetails, function (item, say) {
+      if (item.departmentName == 'operations')
         operationsIndex = say
     })
     let specificRoles = roleDetails[operationsIndex].roles
-    let index = _.find(specificRoles, {roleName : 'chapteradmin' || 'subChapteradmin', clusterId : this.props.clusterId, chapterId : this.props.chapterId})
+    let index = _.find(specificRoles, {
+      roleName: 'chapteradmin' || 'subChapteradmin',
+      clusterId: this.props.clusterId,
+      chapterId: this.props.chapterId
+    })
     // let index1 = _.find(specificRoles, {roleName : , clusterId : this.props.clusterId, chapterId : this.props.chapterId})
-    if(index){
-        // this.setState({isChapterAdminCheck:"false"})
-        $("#chapter_admin_check").removeAttr('disabled');
+    if (index) {
+      // this.setState({isChapterAdminCheck:"false"})
+      $("#chapter_admin_check").removeAttr('disabled');
     }
   }
 
   async findUserDepartments() {
-      let userId = this.props.userId;
-      let subChapterId = this.props.subChapterId;
-      const response = await findUserDepartmentypeActionHandler(userId, subChapterId);
-      let data = response ? response : []
-      this.setState({roleForm: data});
-      this.rolesArrayCreate(data, this.props.assignedRoles)
-      const userDefaultObj = getAdminUserContext();
-      if(userDefaultObj.hierarchyCode == 'PLATFORM' || userDefaultObj.hierarchyCode == "CLUSTER")
-          this.setState({showIsChapterAdmin : true})
-      else
-          this.setState({showIsChapterAdmin: false});
-      if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
-          this.setState({chapterAdmin: this.props.chapterAdmin})
-      }
+    let userId = this.props.userId;
+    let subChapterId = this.props.subChapterId;
+    const response = await findUserDepartmentypeActionHandler(userId, subChapterId);
+    let data = response ? response : []
+    this.setState({roleForm: data});
+    this.rolesArrayCreate(data, this.props.assignedRoles)
+    const userDefaultObj = getAdminUserContext();
+    if (userDefaultObj.hierarchyCode == 'PLATFORM' || userDefaultObj.hierarchyCode == "CLUSTER")
+      this.setState({showIsChapterAdmin: true})
+    else
+      this.setState({showIsChapterAdmin: false});
+    if (this.props.assignedRoles && this.props.assignedRoles.length > 0) {
+      this.setState({chapterAdmin: this.props.chapterAdmin})
+    }
   }
 
   render() {
-      let that = this
-      const showLoader = this.state.loading;
-      let yesterday = Datetime.moment().subtract(1, 'day');
-      let validDate = function (current) {
-          return current.isAfter(yesterday);
-      }
-      let clusterId = that.props.clusterId
-      let chapterId = that.props.chapterId
-      let subChapterId = that.props.subChapterId
-      let communityId = that.props.communityId
-      let userDepartments = that.state.rolesData || [];
-      let chapterAdmin = that.state.chapterAdmin;
-      let isChapterAdminCheck = that.state.isChapterAdminCheck;
+    let that = this
+    const showLoader = this.state.loading;
+    let yesterday = Datetime.moment().subtract(1, 'day');
+    let validDate = function (current) {
+      return current.isAfter(yesterday);
+    }
+    let clusterId = that.props.clusterId
+    let chapterId = that.props.chapterId
+    let subChapterId = that.props.subChapterId
+    let communityId = that.props.communityId
+    let userDepartments = that.state.rolesData || [];
+    let chapterAdmin = that.state.chapterAdmin;
+    let isChapterAdminCheck = that.state.isChapterAdminCheck;
 
-      return (
-          <div>
-            {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+    return (
+      <div>
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div>
             {userDepartments.map(function (department, id) {
               let queryOptions = {
@@ -326,8 +331,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                value={department.subDepartmentName} disabled/>
                       </div>
                       {(department.departmentName == "operations" && (that.state.showIsChapterAdmin)) ?
-                        <div className="input_types"><input id="chapter_admin_check" type="checkbox" checked={chapterAdmin}
-                                                            onChange={that.isChapterAdmin.bind(that, id)} disabled/><label
+                        <div className="input_types"><input id="chapter_admin_check" type="checkbox"
+                                                            checked={chapterAdmin}
+                                                            onChange={that.isChapterAdmin.bind(that, id)}
+                                                            disabled/><label
                           htmlFor="chapter_admin_check"><span></span>Is ChapterAdmin</label></div> : <div></div>}
 
                       <br className="brclear"/>
@@ -351,7 +358,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                   <div className="form-group left_al">
                                     {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all")) ?
                                       <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                                  inputProps={{placeholder: "Valid From"}}
+                                                inputProps={{placeholder: "Valid From"}}
                                                 isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
                                                 onChange={that.onValidFromChange.bind(that, idx, id)}/> :
                                       <input type="text" defaultValue={details.validTo}
@@ -390,21 +397,54 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                       </div>
                     </div>
                   ) :
-                    <div className="panel-body">
-                      <div className="form-group">
-                        <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
-                               value={department.departmentName}/>
+                    <div>
+                      <div className="panel-body">
+                        <div className="form-group">
+                          <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
+                                 value={department.departmentName}/>
+                        </div>
+                        <div className="form-group">
+                          <input type="text" placeholder="Sub Department" className="form-control float-label"
+                                 id="sDept"
+                                 value={department.subDepartmentName}/>
+                        </div>
+                        {department.roles.map(function (details, idx) {
+                          return (
+                            <div className="form_inner_block" key={idx}>
+                              <div className="form-group">
+                                <input type="text" defaultValue={details.roleName} className="form-control float-label"
+                                       disabled="true"/>
+                              </div>
+                              <div className="form-group left_al">
+                                <input type="text" defaultValue={details.validTo}
+                                       className="form-control float-label"
+                                       disabled="true"/>
+                              </div>
+                              <div className="form-group left_al">
+                                <input type="text" defaultValue={details.validTo}
+                                       className="form-control float-label"
+                                       disabled="true"/>
+                              </div>
+                              <div className="form-group switch_wrap">
+                                <label>Status</label>
+                                <label className="switch">
+                                  <input type="checkbox" name={'status'} checked={details.isActive} disabled
+                                         onChange={that.onStatusChange.bind(that, idx, id)}/>
+                                  <div className="slider"></div>
+                                </label>
+                              </div>
+                              <br className="brclear"/>
+                            </div>
+                          )
+                        })}
                       </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                               value={department.subDepartmentName}/>
-                      </div>
-                    </div>}
+                    </div>
+                  }
                 </div>
               )
             })}
-            </div>)}
-          </div>
+          </div>)}
+      </div>
     )
   }
 }

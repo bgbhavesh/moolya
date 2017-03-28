@@ -167,7 +167,8 @@ let registrationSchema = `
         registrationDate:   Date,
         userId          :   String,
         registrationStatus        :   String,
-        assignedUser    :   String
+        assignedUser    :   String,
+        profileImage    :   String
     }
     
     type RegistrationResponse{

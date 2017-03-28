@@ -58,7 +58,9 @@ export default class EmailDetails extends React.Component{
       emailList.emailId = this.refs["emailId"].value;
       const response = await addRegistrationStep3Details(emailList,detailsType,registerid);
       if(response){
-        //this.props.getRegistrationSocialLinks();
+        if(!response.success){
+          toastr.error(response.result);
+        }
         this.findRegistration();
       }
 

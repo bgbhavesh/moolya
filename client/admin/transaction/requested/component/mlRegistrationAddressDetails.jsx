@@ -103,39 +103,6 @@ export default class AddressDetails extends React.Component{
     const detailsType = "ADDRESSTYPE";
     const registerid = this.props.registerId;
 
-     if(this.state.selectedTab){
-
-       if (index !== -1) {
-         // do your stuff here
-
-         let updatedComment = update(this.state.addressDetails[index], {
-           addressTypeName : {$set: this.state.selectedAddressLabel},
-           addressType : {$set: this.state.selectedValue},
-           name : {$set: this.refs["name"+index].value},
-           phoneNumber : {$set: this.refs["phoneNumber"+index].value},
-           addressFlat : {$set: this.refs["addressFlat"+index].value},
-           addressLocality : {$set: this.refs["addressLocality"+index].value},
-           addressLandmark : {$set: this.refs["addressLandmark"+index].value},
-           addressArea : {$set: this.refs["addressArea"+index].value},
-           addressCity : {$set: this.refs["addressCity"+index].value},
-           addressState : {$set: this.refs["addressState"+index].value},
-           addressCountry : {$set: this.refs["addressCountry"+index].value},
-           addressPinCode : {$set: this.refs["addressPinCode"+index].value}
-         });
-
-         let newData = update(this.state.addressDetails, {
-           $splice: [[index, 1, updatedComment]]
-         });
-
-
-         const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-         if(response){
-           this.findRegistration();
-
-         }
-       }
-    }
-
     let addressDetailsObject = this.state.addressInformation;
       addressDetailsObject.addressType = this.state.selectedValue,
       addressDetailsObject.addressTypeName = this.state.selectedAddressLabel,
@@ -161,7 +128,51 @@ export default class AddressDetails extends React.Component{
 
   }
 
+  async onEditAddress(index,value){
+    const detailsType = "ADDRESSTYPE";
+    const registerid = this.props.registerId;
+    if (index !== -1) {
+      // do your stuff here
+      let registrationDetails = this.props.registrationInfo.addressInfo
+      let dbData = _.pluck(registrationDetails, 'addressType') || [];
+      let contactExist = null;
+      if(this.state.selectedValue){
+        contactExist = _.contains(dbData,this.state.selectedValue );
+      }
+      if(contactExist){
+        toastr.error("Address Type Already Exists!!!!!");
+      }
 
+      let updatedComment = update(this.state.addressDetails[index], {
+        addressTypeName : {$set: this.state.selectedAddressLabel},
+        addressType : {$set: this.state.selectedValue},
+        name : {$set: this.refs["name"+index].value},
+        phoneNumber : {$set: this.refs["phoneNumber"+index].value},
+        addressFlat : {$set: this.refs["addressFlat"+index].value},
+        addressLocality : {$set: this.refs["addressLocality"+index].value},
+        addressLandmark : {$set: this.refs["addressLandmark"+index].value},
+        addressArea : {$set: this.refs["addressArea"+index].value},
+        addressCity : {$set: this.refs["addressCity"+index].value},
+        addressState : {$set: this.refs["addressState"+index].value},
+        addressCountry : {$set: this.refs["addressCountry"+index].value},
+        addressPinCode : {$set: this.refs["addressPinCode"+index].value}
+      });
+
+      let newData = update(this.state.addressDetails, {
+        $splice: [[index, 1, updatedComment]]
+      });
+
+
+      const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
+      if(response){
+        if(!response.success){
+          toastr.error(response.result);
+        }
+        this.findRegistration();
+
+      }
+    }
+  }
 
   async findRegistration(){
     let registrationId=this.props.registerId;
@@ -316,7 +327,7 @@ export default class AddressDetails extends React.Component{
 
                   <div className="ml_btn">
                     {/*<a href="#" className="save_btn">Save</a>*/}
-                    <a href="#" onClick={that.onSavingAddress.bind(that,key)}
+                    <a href="#" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>
                     <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}>Cancel</a>

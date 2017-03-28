@@ -27,11 +27,30 @@ MlResolver.MlQueryResolver['fetchAssignedTemplate']=(obj, args, context, info) =
                                              {fields: {'assignedTemplates.$': 1}});
 
     //todo: conditions based on record id for steps like registration,portfolio
-
     //resolve userType:internal/external and send with response
 
     let template=templateAssignment&&templateAssignment.assignedTemplates?templateAssignment.assignedTemplates[0]:null;
     return template;
   }
   return null;
+}
+
+
+MlResolver.MlQueryResolver['fetchSubProcess'] = (obj, args, context, info) => {
+  let result=MlSubProcess.find({"procesId":args.id, isActive:true}).fetch()||[];
+  return result;
+}
+MlResolver.MlQueryResolver['updateTemplate'] = (obj, args, context, info) => {
+  if (args.id) {
+    let template = MlTemplateAssignment.findOne({_id: args.id});
+    if (template) {
+        let resp = MlTemplateAssignment.update({_id: args.id}, {$set: args.template}, {upsert: true})
+        if (resp) {
+          let code = 200;
+          let result = {cluster: resp}
+          let response = new MlRespPayload().successPayload(result, code);
+          return response
+        }
+      }
+  }
 }

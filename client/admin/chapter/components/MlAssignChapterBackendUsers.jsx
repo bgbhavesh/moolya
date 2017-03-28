@@ -141,14 +141,14 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   filterClusterBasedRoles(){
     let roles = [];
-    let clusterId = this.props.params.clusterId
-    _.each(this.state.mlroleDetails, function (item, key) {
-      _.each(item.roles, function (say, val) {
-        if (say.roleId && say.clusterId == clusterId) {
-          roles.push(say)
-        }
-      })
+    let clusterId = this.props.params.clusterId;
+    let allRoles = this.state.mlroleDetails;
+    _.each(allRoles, function (item, key) {
+      if (item.roleId && item.clusterId == clusterId) {
+        roles.push(item)
+      }
     })
+    return roles;
   }
 
   resetBackendUsers() {

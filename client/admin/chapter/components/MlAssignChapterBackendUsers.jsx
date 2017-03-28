@@ -13,6 +13,7 @@ import {findSubChapterActionHandler} from "../actions/findSubChapter";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 var _ = require('lodash');
 
 
@@ -181,6 +182,7 @@ class MlAssignChapterBackendUsers extends React.Component {
     let userid = this.state.selectedBackendUser || "";
     let clusterId = this.state.data && this.state.data.clusterId || "";
     let chapterId = this.state.data && this.state.data.chapterId || "";
+    let loggedInUser = getAdminUserContext();
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -270,6 +272,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                             <label className="">De-Activate User</label>
                             <label className="switch">
                               <input type="checkbox"/>
+                              {(loggedInUser.hierarchyCode=="PLATFORM")?<input type="checkbox"/>:<input type="checkbox" disabled="disabled"/>}
                               <div className="slider"></div>
                             </label>
                           </div>

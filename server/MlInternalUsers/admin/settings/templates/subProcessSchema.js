@@ -22,6 +22,7 @@ let Template = `
             templateName: String
             isActive          : Boolean
             createdDate       : String
+            userType:String
     }
     type templateAssignment{
             process           : String
@@ -31,6 +32,7 @@ let Template = `
     type Query{
             findTemplateSteps(id: String):SubProcess
             findStepAssignedTemplates(id: String):templateAssignment
+            fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String):template
     }
 `
 

@@ -2,23 +2,23 @@ import React from 'react';
 import gql from 'graphql-tag'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 const mlHardRegistrationInternalUserTemplateConfig={
-  templateName:"softRegistrationAll",
-  templateCode:"softRegistrationAll",
+  templateName:"hardRegistrationAll",
+  templateCode:"hardRegistrationAll",
   userType:'internal',
   process:'registration',
   subProcess:'registration',
-  stepCode:'softRegistration',
-  stepName:'softRegistration'
+  stepCode:'hardRegistration',
+  stepName:'hardRegistration'
 };
 
 const mlHardRegistrationExternalUserTemplateConfig={
-  templateName:"softRegistrationAll",
-  templateCode:"softRegistrationAll",
+  templateName:"hardRegistrationAll",
+  templateCode:"hardRegistrationAll",
   userType:'external',
   process:'registration',
   subProcess:'registration',
-  stepCode:'softRegistration',
-  stepName:'softRegistration'
+  stepCode:'hardRegistration',
+  stepName:'hardRegistration'
 };
 
 mlRegistrationTemplates.setTemplate(mlHardRegistrationInternalUserTemplateConfig);

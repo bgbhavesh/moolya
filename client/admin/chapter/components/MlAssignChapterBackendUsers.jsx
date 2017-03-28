@@ -37,6 +37,7 @@ class MlAssignChapterBackendUsers extends React.Component {
     this.assignBackendUsers.bind(this);
     this.findSubChapter.bind(this);
     this.updateSelectedBackEndUser.bind(this);
+    this.filterClusterBasedRoles.bind(this);
     return this;
   }
 
@@ -108,9 +109,11 @@ class MlAssignChapterBackendUsers extends React.Component {
       return;
     }
 
+    let roles = this.filterClusterBasedRoles;
+
     userProfile['userId'] = this.state.selectedBackendUser
     userProfile['clusterId'] = this.props.params.clusterId;
-    userProfile['userRoles'] = this.state.mlroleDetails;
+    userProfile['userRoles'] = roles;
     userProfile['displayName'] = this.refs.displayName.value;
     let user = {
       profile: {InternalUprofile: {moolyaProfile: {userProfiles: userProfile}}},
@@ -134,6 +137,18 @@ class MlAssignChapterBackendUsers extends React.Component {
   updateSelectedBackEndUser(userId) {
     this.setState({loading: true});
     const resp = this.findUserDetails(userId);
+  }
+
+  filterClusterBasedRoles(){
+    let roles = [];
+    let clusterId = this.props.params.clusterId
+    _.each(this.state.mlroleDetails, function (item, key) {
+      _.each(item.roles, function (say, val) {
+        if (say.roleId && say.clusterId == clusterId) {
+          roles.push(say)
+        }
+      })
+    })
   }
 
   resetBackendUsers() {

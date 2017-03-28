@@ -1,3 +1,4 @@
+
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
@@ -18,4 +19,19 @@ MlResolver.MlQueryResolver['findStepAssignedTemplates'] = (obj, args, context, i
     let response= MlTemplateAssignment.findOne({"subProcess":id});
     return response;
   }
+}
+
+MlResolver.MlQueryResolver['fetchAssignedTemplate']=(obj, args, context, info) => {
+  if (args.process&&args.subProcess&&args.stepCode) {
+     let templateAssignment= MlTemplateAssignment.findOne({process:args.process,subProcess: args.subProcess,assignedTemplates: { $elemMatch: { "stepCode": args.stepCode } } },
+                                             {fields: {'assignedTemplates.$': 1}});
+
+    //todo: conditions based on record id for steps like registration,portfolio
+
+    //resolve userType:internal/external and send with response
+
+    let template=templateAssignment&&templateAssignment.assignedTemplates?templateAssignment.assignedTemplates[0]:null;
+    return template;
+  }
+  return null;
 }

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {logout} from "../header/actions/logoutAction";
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 export default class  MlAdminProfile extends Component {
   constructor(props) {
     super(props);
@@ -17,10 +18,23 @@ export default class  MlAdminProfile extends Component {
   logoutUser(){
     logout();
   }
+  handleClick(){
+    const userDefaultObj = getAdminUserContext();
+    if (userDefaultObj.hierarchyCode == 'PLATFORM')
+      FlowRouter.go('/admin/dashboard/clusters');
+    else
+      FlowRouter.go('/admin/dashboard/chapters');
+  }
 
   render() {
     return (
-      <div className="header_top"> <img className="pull-left home" src="/images/home_icon.png"/> <img className="logo" src="/images/logo.png" />
+      <div className="header_top">
+        <a onClick={this.handleClick} style={{cursor: 'pointer'}}>
+          <img className="pull-left home" src="/images/home_icon.png"/>
+        </a>
+        <a onClick={this.handleClick} style={{cursor: 'pointer'}}>
+          <img className="logo" src="/images/logo.png" />
+        </a>
         <div className="ml_profile" role="navigation">
           <h1 id="NavLbl" className=""></h1>
           <ol>

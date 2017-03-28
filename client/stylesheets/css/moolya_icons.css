@@ -121,262 +121,274 @@
 .ml-consulting:before {
   content: "\e923";
 }
-.ml-create-password:before {
+.ml-contact-details:before {
   content: "\e924";
 }
-.ml-cross:before {
+.ml-create-password:before {
   content: "\e925";
 }
-.ml-currency:before {
+.ml-cross:before {
   content: "\e926";
 }
-.ml-customer-care:before {
+.ml-currency:before {
   content: "\e927";
 }
-.ml-customer-support:before {
+.ml-customer-care:before {
   content: "\e928";
 }
-.ml-dashboard:before {
+.ml-customer-support:before {
   content: "\e929";
 }
-.ml-data:before {
+.ml-dashboard:before {
   content: "\e92a";
 }
-.ml-delete:before {
+.ml-data:before {
   content: "\e92b";
 }
-.ml-document:before {
+.ml-delete:before {
   content: "\e92c";
 }
-.ml-download:before {
+.ml-document:before {
   content: "\e92d";
 }
-.ml-edit:before {
+.ml-document-approve:before {
   content: "\e92e";
 }
-.ml-email:before {
+.ml-document-reject:before {
   content: "\e92f";
 }
-.ml-engagement-method:before {
+.ml-download:before {
   content: "\e930";
 }
-.ml-error:before {
+.ml-edit:before {
   content: "\e931";
 }
-.ml-events:before {
+.ml-email:before {
   content: "\e932";
 }
-.ml-export:before {
+.ml-engagement-method:before {
   content: "\e933";
 }
-.ml-favourite:before {
+.ml-error:before {
   content: "\e934";
 }
-.ml-filter:before {
+.ml-events:before {
   content: "\e935";
 }
-.ml-funder:before {
+.ml-export:before {
   content: "\e936";
 }
-.ml-funding:before {
+.ml-favourite:before {
   content: "\e937";
 }
-.ml-go-live:before {
+.ml-filter:before {
   content: "\e938";
 }
-.ml-hirerachy:before {
+.ml-funder:before {
   content: "\e939";
 }
-.ml-home:before {
+.ml-funding:before {
   content: "\e93a";
 }
-.ml-idea:before {
+.ml-go-live:before {
   content: "\e93b";
 }
-.ml-ideator:before {
+.ml-hirerachy:before {
   content: "\e93c";
 }
-.ml-import:before {
+.ml-history:before {
   content: "\e93d";
 }
-.ml-inactive-user:before {
+.ml-home:before {
   content: "\e93e";
 }
-.ml-info:before {
+.ml-idea:before {
   content: "\e93f";
 }
-.ml-information:before {
+.ml-ideator:before {
   content: "\e940";
 }
-.ml-inquiry:before {
+.ml-import:before {
   content: "\e941";
 }
-.ml-institutions:before {
+.ml-inactive-user:before {
   content: "\e942";
 }
-.ml-investment:before {
+.ml-info:before {
   content: "\e943";
 }
-.ml-kyc-document:before {
+.ml-information:before {
   content: "\e944";
 }
-.ml-language:before {
+.ml-inquiry:before {
   content: "\e945";
 }
-.ml-legal:before {
+.ml-institutions:before {
   content: "\e946";
 }
-.ml-library:before {
+.ml-investment:before {
   content: "\e947";
 }
-.ml-login-as:before {
+.ml-kyc-document:before {
   content: "\e948";
 }
-.ml-logout:before {
+.ml-language:before {
   content: "\e949";
 }
-.ml-looking-for:before {
+.ml-legal:before {
   content: "\e94a";
 }
-.ml-make-public:before {
+.ml-library:before {
   content: "\e94b";
 }
-.ml-management-promoters:before {
+.ml-login-as:before {
   content: "\e94c";
 }
-.ml-membership:before {
+.ml-logout:before {
   content: "\e94d";
 }
-.ml-messaging:before {
+.ml-looking-for:before {
   content: "\e94e";
 }
-.ml-minus:before {
+.ml-make-public:before {
   content: "\e94f";
 }
-.ml-moolya-symbol:before {
+.ml-management-promoters:before {
   content: "\e950";
 }
-.ml-my-profile:before {
+.ml-membership:before {
   content: "\e951";
 }
-.ml-new:before {
+.ml-messaging:before {
   content: "\e952";
 }
-.ml-news:before {
+.ml-minus:before {
   content: "\e953";
 }
-.ml-numeric:before {
+.ml-moolya-symbol:before {
   content: "\e954";
 }
-.ml-panel-member:before {
+.ml-my-profile:before {
   content: "\e955";
 }
-.ml-payments:before {
+.ml-new:before {
   content: "\e956";
 }
-.ml-photo:before {
+.ml-news:before {
   content: "\e957";
 }
-.ml-plus:before {
+.ml-numeric:before {
   content: "\e958";
 }
-.ml-portfolio:before {
+.ml-panel-member:before {
   content: "\e959";
 }
-.ml-principal:before {
+.ml-payments:before {
   content: "\e95a";
 }
-.ml-problem:before {
+.ml-photo:before {
   content: "\e95b";
 }
-.ml-provider:before {
+.ml-plus:before {
   content: "\e95c";
 }
-.ml-reviews:before {
+.ml-portfolio:before {
   content: "\e95d";
 }
-.ml-save:before {
+.ml-principal:before {
   content: "\e95e";
 }
-.ml-scrollbar-mobile:before {
+.ml-problem:before {
   content: "\e95f";
 }
-.ml-search:before {
+.ml-provider:before {
   content: "\e960";
 }
-.ml-select-all:before {
+.ml-reviews:before {
   content: "\e961";
 }
-.ml-services:before {
+.ml-save:before {
   content: "\e962";
 }
-.ml-settings:before {
+.ml-scrollbar-mobile:before {
   content: "\e963";
 }
-.ml-share:before {
+.ml-search:before {
   content: "\e964";
 }
-.ml-social-Links:before {
+.ml-select-all:before {
   content: "\e965";
 }
-.ml-sort:before {
+.ml-services:before {
   content: "\e966";
 }
-.ml-startup:before {
+.ml-settings:before {
   content: "\e967";
 }
-.ml-strategy-plans:before {
+.ml-share:before {
   content: "\e968";
 }
-.ml-subscribe:before {
+.ml-social-Links:before {
   content: "\e969";
 }
-.ml-success:before {
+.ml-sort:before {
   content: "\e96a";
 }
-.ml-teamwork:before {
+.ml-startup:before {
   content: "\e96b";
 }
-.ml-template:before {
+.ml-strategy-plans:before {
   content: "\e96c";
 }
-.ml-theme:before {
+.ml-subscribe:before {
   content: "\e96d";
 }
-.ml-time-zone:before {
+.ml-success:before {
   content: "\e96e";
 }
-.ml-timeline:before {
+.ml-teamwork:before {
   content: "\e96f";
 }
-.ml-trademark:before {
+.ml-template:before {
   content: "\e970";
 }
-.ml-transaction:before {
+.ml-theme:before {
   content: "\e971";
 }
-.ml-upload:before {
+.ml-time-zone:before {
   content: "\e972";
 }
-.ml-users:before {
+.ml-timeline:before {
   content: "\e973";
 }
-.ml-valuation:before {
+.ml-trademark:before {
   content: "\e974";
 }
-.ml-video:before {
+.ml-transaction:before {
   content: "\e975";
 }
-.ml-video-calls:before {
+.ml-upload:before {
   content: "\e976";
 }
-.ml-wishlist:before {
+.ml-users:before {
   content: "\e977";
 }
-.ml-work:before {
+.ml-valuation:before {
   content: "\e978";
 }
-.ml-workflow:before {
+.ml-video:before {
   content: "\e979";
+}
+.ml-video-calls:before {
+  content: "\e97a";
+}
+.ml-wishlist:before {
+  content: "\e97b";
+}
+.ml-work:before {
+  content: "\e97c";
+}
+.ml-workflow:before {
+  content: "\e97d";
 }
 

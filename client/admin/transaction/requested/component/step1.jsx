@@ -191,7 +191,7 @@ export default class Step1 extends React.Component{
     const showLoader=this.state.loading;
     let that=this;
     return (
-      <div className="admin_main_wrap">
+      <div>
       {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="step_form_wrap step1">
 

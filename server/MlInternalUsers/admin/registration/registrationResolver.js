@@ -92,6 +92,31 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
   }
 }
 
+MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+      let documentList=args.documentId;
+    let updatedResponse;
+      for(let i=0;i<documentList.length;i++){
+      updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
+        //return updatedResponse;
+      }
+    return updatedResponse;
+  }
+}
+MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    let documentList=args.documentId;
+    let updatedResponse;
+    for(let i=0;i<documentList.length;i++){
+      updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i]}}},{$set: {"kycDocuments.$.status":"Rejected"}});
+      //return updatedResponse;
+    }
+    return updatedResponse;
+  }
+}
+
 MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, context, info) => {
 
   let id = " "

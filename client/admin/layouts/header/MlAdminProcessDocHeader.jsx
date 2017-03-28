@@ -27,17 +27,20 @@ export default class MlAdminProcessDocHeader extends Component {
         let documents=response.documents
 
         for(let i=0;i<documents.length;i++){
-          let json={
-            "link": "/admin/documents/"+pid+"/"+documents[i].category+"/"+documents[i].type,
-            "name":documents[i].categoryName ,
-            "uniqueId": "documents_ClusterList",
-            "subMenuMappingId":"documents_Clusters",
-            "subMenusId":"documents",
-            "isLink": true,
-            "isMenu": false,
-            "image": ""
+          if(documents[i].isActive){
+            let json={
+              "link": "/admin/documents/"+pid+"/"+documents[i].category+"/"+documents[i].type,
+              "name":documents[i].categoryName ,
+              "uniqueId": "documents_ClusterList",
+              "subMenuMappingId":"documents_Clusters",
+              "subMenusId":"documents",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            }
+            documentsList.push(json)
           }
-          documentsList.push(json)
+
         }
         this.setState({"processMenus":documentsList})
       }

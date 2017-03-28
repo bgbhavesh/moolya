@@ -23,6 +23,8 @@ import MlProcessDocMapping from '../../admin/processDocument/cluster/components/
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDocHeader';
 import MlCreateRegistration from '../../admin/transaction/requested/component/createRegistration'
+import MlAssignedTemplatesList from '../../templates/component/MlAssignedTemplatesList'
+import MlAssignTemplate from '../../templates/component/MlAssignTemplate'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -159,7 +161,7 @@ adminSection.route('/transactions/registrationRequested/edit', {
 });
 
 adminSection.route('/transactions/registrationRequested', {
-  name: 'transaction_registration_requested_list',
+  name: 'transaction_registration_requested',
   action(params){
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }
@@ -202,5 +204,19 @@ adminSection.route('/transactions/createRegistration', {
   name: 'transaction_registration_create',
   action(params){
     mount(AdminLayout,{adminContent:<MlCreateRegistration/>})
+  }
+});
+
+adminSection.route('/templates/templateList', {
+  name: 'templates_List',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAssignedTemplatesList/>})
+  }
+});
+
+adminSection.route('/templates/assignTemplate/:id', {
+  name: 'templates_assignment',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAssignTemplate/>})
   }
 });

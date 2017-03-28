@@ -4,75 +4,86 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from 'lodash';
 import _underscore from 'underscore'
+//import formHandler from '../../../../commons/containers/MlFormHandler';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 import DocumentViewer from './DocumentViewer';
 import {findProcessDocumentForRegistrationActionHandler} from '../actions/findProcessDocumentForRegistration'
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import {approvedStausForDocuments} from '../actions/approvedStatusForDocuments'
+import {rejectedStausForDocuments} from '../actions/rejectedStatusForDocuments'
+
 export default class Step5 extends React.Component{
   constructor(props){
     super(props);
     this.onDocumentSelect.bind(this);
     this.onFileUpload.bind(this);
-    this.state={'selectedDocuments':[]}/*'registrationDocuments':[{
-      docTypeName:"Self",
-      docTypeId:"1",
-      kycCategoryId:"1",
-      kycCategoryName:"Address",
-      documentId:"1",
-      documentDisplayName:"Driving License",
-      documentName:"Driving License",
-      isMandatory:true,
-      isActive:true,
-      allowableFormat:[{name:"pdf",id:"1"},{name:"jpg",id:"1"}],
-      allowableSize:5120,
-      docFiles:[{fileId:'1',fileUrl:'https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/Doctor(1).jpg',fileName:'doctor.jpg',fileSize:1365}],
-      status:"Approved/Rejected"
-    },
-      {
-        docTypeName:"Self",
-        docTypeId:"3",
-        kycCategoryId:"3",
-        kycCategoryName:"Pan Address",
-        documentId:"3",
-        documentDisplayName:"UAN",
-        documentName:"UAN",
-        isMandatory:true,
-        isActive:true,
-        allowableFormat:[{name:"pdf",id:"3"},{name:"jpg",id:"3"}],
-        allowableSize:5120,
-        docFiles:[{fileId:'3',fileUrl:'https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/Doctor(1).jpg',fileName:'doctor.jpg',fileSize:1365}],
-        status:"Approved/Rejected"
-      },
-      {docTypeName:"Process",
-      docTypeId:"2",
-      kycCategoryId:"2",
-      kycCategoryName:"ID",
-      documentId:"2",
-      documentDisplayName:"ID Proof",
-      documentName:"ID Proof",
-      isMandatory:true,
-      allowableFormat:[{name:"pdf",id:"2"},{name:"jpg",id:"2"}],
-        allowableSize:5120,
-      docFiles:[{fileId:'2',fileUrl:'https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/next_btn.png',fileName:'next_btn.img',fileSize:1365}],
-      status:"Approved/Rejected"
-      }
-    ]}*/;
+    this.state={
+     loading:true,
+      selectedFiles:[]
+    }
        return this;
   }
+
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
   componentWillUpdate(nextProps) {
-    let registrtionInfo = nextProps.registrationInfo
+    /*let registrtionInfo = nextProps.registrationInfo
     let kycInfo = registrtionInfo && registrtionInfo.kycDocuments ? registrtionInfo.kycDocuments : []
-    this.setState({"registrationDocuments": kycInfo})
+    this.setState({"registrationDocuments": kycInfo})*/
+
+    let kycInfo = nextProps.registrationInfo && nextProps.registrationInfo.kycDocuments ? nextProps.registrationInfo.kycDocuments : []
+    if(!this.compareQueryOptions(this.props.registrationInfo.kycDocuments,nextProps.registrationInfo.kycDocuments)){
+      this.setState({loading:false,registrationDocuments:kycInfo||[]});
+    }
   }
+
   componentDidMount()
   {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-    this.props.getRegistrationKYCDetails()
+   // this.props.getRegistrationKYCDetails()
   }
   componentWillMount(){
     const resp=this.findProcessDocuments();
+    /*return resp;*/
+  }
+  async handleError(response) {
+    alert(response)
+  };
+
+  async handleSuccess(response) {
+
+    this.props.getRegistrationKYCDetails();
+  };
+  async updateapprovedDocuments(){
+    let  registrationId=this.props.registrationInfo._id
+    let selectedDocs=this.state.selectedFiles
+    const response = await approvedStausForDocuments(selectedDocs,registrationId);
+    if(response){
+      this.setState({selectedFiles:[]})
+      this.props.getRegistrationKYCDetails();
+    }
+  }
+
+  approvedDocuments() {
+    const resp=this.updateapprovedDocuments();
+    return resp;
+
+  }
+  async updateRejectedDocuments(){
+    let  registrationId=this.props.registrationInfo._id
+    let selectedDocs=this.state.selectedFiles
+    const response = await rejectedStausForDocuments(selectedDocs,registrationId);
+    if(response){
+      this.setState({selectedFiles:[]})
+      this.props.getRegistrationKYCDetails();
+    }
+  }
+  rejectedDocuments(){
+    const resp=this.updateRejectedDocuments();
     return resp;
   }
   async findProcessDocuments() {
@@ -100,16 +111,19 @@ export default class Step5 extends React.Component{
           this.props.getRegistrationKYCDetails();
 
           }
-          return regResponse;
         }
       }
     }
     else{
-      this.setState({registrationDocuments:kycDocuments})
+      this.setState({loading:false,registrationDocuments:kycDocuments})
     }
   }
-  onDocumentSelect(doucmentId){
-    console.log(doucmentId)
+
+  onDocumentSelect(selectedDocs){
+    let selectedValues=[];
+    selectedValues=selectedDocs
+    this.setState({selectedFiles:selectedValues})
+    console.log(this.state.selectedFiles)
   };
 
    onFileUpload(file,documentId){
@@ -121,14 +135,22 @@ export default class Step5 extends React.Component{
 
   onFileUploadCallBack(resp){
         if(resp){
-         // this.setState({registrationDocuments:resp})
-           //refresh the registration data in the pare
           this.props.getRegistrationKYCDetails();
         }
    }
 
   render(){
     let MlActionConfig = [
+      {
+        actionName: 'documentApprove',
+        showAction: true,
+        handler: this.approvedDocuments.bind(this)
+      },
+      {
+        actionName: 'documentReject',
+        showAction: true,
+        handler: this.rejectedDocuments.bind(this)
+      },
       {
        actionName: 'download',
        showAction: true,
@@ -137,7 +159,7 @@ export default class Step5 extends React.Component{
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createDepartment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: null
       },
       {
         showAction: true,
@@ -155,10 +177,10 @@ export default class Step5 extends React.Component{
         handler: null
       }
     ]
-    console.log(this.props.registrationInfo);
     let registrationDocuments=this.state.registrationDocuments||[];
     let registrationDocumentsGroup=_.groupBy(registrationDocuments,'docTypeName')||{};
     let that=this;
+  //  const showLoader=this.state.loading;
     return (
       <div className="step_form_wrap step5">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -168,7 +190,7 @@ export default class Step5 extends React.Component{
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
 
                       return(
-                       <DocumentViewer key={regDoc.documentId} doc={regDoc} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)}/>);
+                       <DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)}/>);
                     })
                     }<br className="brclear"/></div>
                     )
@@ -179,3 +201,4 @@ export default class Step5 extends React.Component{
     )
   }
 };
+//export default Step5 = formHandler()(Step5);

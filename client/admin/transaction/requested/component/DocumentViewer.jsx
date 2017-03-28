@@ -7,6 +7,10 @@ import _ from 'lodash';
 export default class DocumentViewer extends React.Component{
   constructor(props){
     super(props);
+   /* this.state={
+      selectedDocuments:[]
+    }*/
+    return this;
   }
 
   componentDidMount()
@@ -24,9 +28,15 @@ export default class DocumentViewer extends React.Component{
   }
   onDocSelect(documentId,event){
     if(event.target.checked){
-      this.props.onDocumentSelect(documentId);
+      let selectedDocs=this.props.selectedDocuments
+      selectedDocs.push(documentId);
+     // this.setState({selectedDocuments:selectedDocs})
+      this.props.onDocumentSelect(selectedDocs);
     }else{
-      this.props.onDocumentSelect(documentId);
+    let selectedDocs=this.state.selectedDocuments
+    selectedDocs.pop(documentId);
+    //  this.setState({selectedDocuments:selectedDocs})
+      this.props.onDocumentSelect(selectedDocs);
     }
   }
   render(){

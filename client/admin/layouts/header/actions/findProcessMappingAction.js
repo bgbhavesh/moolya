@@ -10,7 +10,8 @@ export async function findProcessActionHandler(processId) {
          documents{
              type,
           category,
-          categoryName
+          categoryName,
+          isActive
         }
   }
 }

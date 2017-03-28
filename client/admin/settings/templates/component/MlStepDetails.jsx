@@ -24,7 +24,7 @@ export default class MlStepDetails extends Component {
 
   async findDocument() {
     let subProcessId = this.props.subProcessId
-    const response = await findStepTemplatesActionHandler(subProcessId);
+    const response = await findStepTemplatesActionHandler(subProcessId,this.props.stepCode);
     console.log(response)
     if(response){
       let assignedTemplates = response.assignedTemplates

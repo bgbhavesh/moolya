@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import {client} from '../../admin/core/apolloConnection';
 
-export async function findStepTemplatesActionHandler(subProcessId,code) {
+export async function findStepTemplatesAssignmentActionHandler(subProcessId,code) {
   let sid       = subProcessId
   const result  = await client.query({
     query: gql`

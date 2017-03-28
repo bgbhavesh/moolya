@@ -12,6 +12,7 @@ export async function fetchAssignedTemplate(process,subProcess,stepCode,recordId
            stepName
            stepCode
            isActive
+           userType
         }
       }
     `,

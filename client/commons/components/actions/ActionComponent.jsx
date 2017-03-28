@@ -87,6 +87,16 @@ export default class MlActionComponent extends Component {
         actionName:'comment',
         iconClass:'ml ml-annotate'
       },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'documentApprove',
+        iconClass:'ml ml-document-approve'
+      },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'documentReject',
+        iconClass:'ml ml-document-reject'
+      }
     ]
 
 

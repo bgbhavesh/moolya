@@ -189,10 +189,10 @@ adminSection.route('/settings/addSubDepartment', {
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
   }
 });
-adminSection.route('/settings/stepDetails/:subProcessId', {
+adminSection.route('/settings/stepDetails/:subProcessId/:stepCode', {
   name: '',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} />,adminContent:<MlStepDetails subProcessId={params.subProcessId} />})
+    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} />,adminContent:<MlStepDetails subProcessId={params.subProcessId} stepCode={params.stepCode}/>})
   }
 });
 adminSection.route('/settings/editSubDepartment/:id', {

@@ -38,11 +38,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     let updatedResponse
     var id= args.registrationId;
     if(args.registrationDetails){
-      let community = MlCommunity.findOne({"communityDefCode":args.registrationDetails.registrationType})
       let details=args.registrationDetails;
-      details.communityName=community.communityName;
       updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details }});
-
       let userProfile = {
         registrationId    : id,
         countryName       : details.countryName,
@@ -57,7 +54,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         subChapterId      : '',
         subChapterName    : '',
         communityId       : '',
-        communityName     : '',
+        communityName     : details.communityName,
         communityType     : '',
         isDefault         : false,
         isProfileActive   : false,
@@ -91,6 +88,31 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
     var id= args.registrationId;
     var randomId= Math.floor(Math.random()*90000) + 10000;
     let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
+    return updatedResponse;
+  }
+}
+
+MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+      let documentList=args.documentId;
+    let updatedResponse;
+      for(let i=0;i<documentList.length;i++){
+      updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
+        //return updatedResponse;
+      }
+    return updatedResponse;
+  }
+}
+MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    let documentList=args.documentId;
+    let updatedResponse;
+    for(let i=0;i<documentList.length;i++){
+      updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i]}}},{$set: {"kycDocuments.$.status":"Rejected"}});
+      //return updatedResponse;
+    }
     return updatedResponse;
   }
 }

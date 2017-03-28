@@ -54,8 +54,11 @@ export default CoreModulesRepo={
         query={"clusterId":clusterId};
     }
 
-    if(contextQuery && contextQuery._id && contextQuery._id.length > 0)
-      query = { _id: {$in : contextQuery._id}}
+    if(contextQuery && contextQuery._id && contextQuery._id.length > 0){
+          if(_.indexOf(contextQuery._id, "all") < 0)
+              query = { _id: {$in : contextQuery._id}}
+    }
+
     let citiesId=[];
     let activeChapters = [];
     let activeCities = MlCities.find({isActive:true}).fetch();

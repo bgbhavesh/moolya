@@ -286,6 +286,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
   render() {
     let that = this
     const showLoader = this.state.loading;
+    let loggedInUser = getAdminUserContext()
     let yesterday = Datetime.moment().subtract(1, 'day');
     let validDate = function (current) {
       return current.isAfter(yesterday);
@@ -356,7 +357,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                                     selectedValue={details.roleId}/>}
                                   </div>
                                   <div className="form-group left_al">
-                                    {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all")) ?
+                                    {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all") && loggedInUser.hierarchyLevel > details.hierarchyLevel) ?
                                       <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                                 inputProps={{placeholder: "Valid From"}}
                                                 isValidDate={validDate} closeOnSelect={true} value={details.validFrom}
@@ -366,7 +367,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                              disabled="true"/>}
                                   </div>
                                   <div className="form-group left_al">
-                                    {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all")) ?
+                                    {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all") && loggedInUser.hierarchyLevel > details.hierarchyLevel) ?
                                       <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                                 inputProps={{placeholder: "Valid To"}}
                                                 isValidDate={validDate} closeOnSelect={true} value={details.validTo}
@@ -378,7 +379,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                                   <div className="form-group switch_wrap">
                                     <label>Status</label>
                                     <label className="switch">
-                                      {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all")) ?
+                                      {(details.clusterId == clusterId && details.chapterId == chapterId && (details.subChapterId == subChapterId || details.subChapterId == "all") && loggedInUser.hierarchyLevel > details.hierarchyLevel) ?
                                         <input type="checkbox" name={'status'} checked={details.isActive}
                                                onChange={that.onStatusChange.bind(that, idx, id)}/> :
                                         <input type="checkbox" name={'status'} checked={details.isActive} disabled

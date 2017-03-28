@@ -429,8 +429,8 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/services_icon.png",
-        "link" : "/admin/services",
-        "name" : "services",
+        "link" : "/admin/templates/templateList",
+        "name" : "templates",
         "isLink" : true,
         "isMenu" : true,
         "uniqueId" : "services"

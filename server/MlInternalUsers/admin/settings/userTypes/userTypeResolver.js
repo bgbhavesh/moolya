@@ -20,6 +20,23 @@ MlResolver.MlMutationResolver['UpdateUserType'] = (obj, args, context, info) => 
   }
 
 }
+MlResolver.MlMutationResolver['createUserType'] = (obj, args, context, info) => {
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+
+  let result= MlUserTypes.insert({...args.userType})
+  if (result) {
+    let code = 200;
+    let result = {userTypeId: result}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+
+}
 MlResolver.MlQueryResolver['FindUserType'] = (obj, args, context, info) => {
   // TODO : Authorization
 

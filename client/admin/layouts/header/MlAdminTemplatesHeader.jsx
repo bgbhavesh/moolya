@@ -27,7 +27,7 @@ export default class MlAdminTemplatesHeader extends Component {
         let documents=response.steps
         for(let i=0;i<documents.length;i++){
           let json={
-            "link": "/admin/settings/stepDetails/"+subProcessId,
+            "link": "/admin/settings/stepDetails/"+subProcessId+"/"+documents[i].stepCode,
             "name":documents[i].stepName ,
             "uniqueId": "subProcess_Steps",
             "subMenuMappingId":"subProcess_Steps_subMapping",
@@ -41,7 +41,6 @@ export default class MlAdminTemplatesHeader extends Component {
         this.setState({"processMenus":documentsList})
       }
     }
-
   }
   render(){
     let subMenu = this.context.menu.menu||[];

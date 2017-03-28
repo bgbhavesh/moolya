@@ -25,6 +25,7 @@ import MlCitiesList from "../../admin/settings/cities/component/MlCitiesList";
 import MlEditCity from "../../admin/settings/cities/component/MlEditCity";
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlUserTypeList from '../../admin/settings/userTypes/component/MlUserTypeList'
+import MlAddUserType from '../../admin/settings/userTypes/component/MlAddUserType'
 import MlEditUserType from '../../admin/settings/userTypes/component/MlEditUserType'
 import MlRoleList from '../../admin/settings/roleTypes/component/MlRoleTypeList'
 import MlDocumentTypesList from '../../admin/settings/documentTypes/component/MlDocumentTypesList'
@@ -189,10 +190,10 @@ adminSection.route('/settings/addSubDepartment', {
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
   }
 });
-adminSection.route('/settings/stepDetails/:subProcessId', {
+adminSection.route('/settings/stepDetails/:subProcessId/:stepCode', {
   name: '',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} />,adminContent:<MlStepDetails subProcessId={params.subProcessId} />})
+    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} />,adminContent:<MlStepDetails subProcessId={params.subProcessId} stepCode={params.stepCode}/>})
   }
 });
 adminSection.route('/settings/editSubDepartment/:id', {
@@ -325,6 +326,12 @@ adminSection.route('/settings/editUserType/:id', {
   name: 'settings_EditUserType',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditUserType  config={params.id}/>})
+  }
+});
+adminSection.route('/settings/addUserType', {
+  name: 'settings_AddUserType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddUserType/>})
   }
 });
 adminSection.route('/settings/rolesList', {

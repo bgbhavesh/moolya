@@ -275,12 +275,15 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                     else if(!user.profile.InternalUprofile.moolyaProfile.globalAssignment && userProfiles.length > 0 && user.profile.isActive){
                         userProfiles.map(function (profile) {
                             if(profile.clusterId == args.clusterId){
+                              let cluster = MlClusters.findOne({_id:profile.clusterId});
+                              if(cluster.isActive){
                                 let userRoles = profile.userRoles;
                                 let activeRoles = _.find(userRoles, {"isActive":true});
                                 user.username = user.profile.InternalUprofile.moolyaProfile.firstName+" "+user.profile.InternalUprofile.moolyaProfile.lastName;
                                 if(_.isEmpty(_.find(users, user))){
                                   users.push(user)
                                 }
+                              }
                             }
                         })
                     }

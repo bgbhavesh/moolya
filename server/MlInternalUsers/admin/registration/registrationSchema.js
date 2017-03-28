@@ -382,6 +382,8 @@ let registrationSchema = `
          updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,document:String,documentId:String):response         
          createGeneralInfoInRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          updateRegistrationGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
+         ApprovedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
+         RejectedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

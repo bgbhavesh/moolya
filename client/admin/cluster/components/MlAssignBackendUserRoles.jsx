@@ -329,16 +329,48 @@ export default class MlAssignBackednUserRoles extends React.Component {
                   </div>
                 </div>
               ) :
-                <div className="panel-body">
-                  <div className="form-group">
-                    <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
-                           value={department.departmentName}/>
+                <div>
+                  <div className="panel-body">
+                    <div className="form-group">
+                      <input type="text" placeholder="Department" className="form-control float-label" id="Dept"
+                             value={department.departmentName}/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
+                             value={department.subDepartmentName}/>
+                    </div>
+                    {department.roles.map(function (details, idx) {
+                      return (
+                      <div className="form_inner_block" key={idx}>
+                      <div className="form-group">
+                        <input type="text" defaultValue={details.roleName} className="form-control float-label"
+                               disabled="true"/>
+                      </div>
+                      <div className="form-group left_al">
+                        <input type="text" defaultValue={details.validTo}
+                               className="form-control float-label"
+                               disabled="true"/>
+                      </div>
+                      <div className="form-group left_al">
+                        <input type="text" defaultValue={details.validTo}
+                               className="form-control float-label"
+                               disabled="true"/>
+                      </div>
+                      <div className="form-group switch_wrap">
+                      <label>Status</label>
+                      <label className="switch">
+                        <input type="checkbox" name={'status'} checked={details.isActive} disabled
+                               onChange={that.onStatusChange.bind(that, idx, id)}/>
+                      <div className="slider"></div>
+                      </label>
+                      </div>
+                      <br className="brclear"/>
+                      </div>
+                      )
+                    })}
                   </div>
-                  <div className="form-group">
-                    <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
-                           value={department.subDepartmentName}/>
-                  </div>
-                </div>}
+                </div>
+              }
             </div>
           )
         })}

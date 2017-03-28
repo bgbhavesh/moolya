@@ -70,9 +70,9 @@ export default class Step1 extends React.Component{
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
   }
-  optionBySelectRegistrationType(value,label){
+  optionBySelectRegistrationType(value, calback, selObject){
     this.setState({registrationType:value})
-    //this.setState({coummunityName:registrationOptions.})
+    this.setState({coummunityName:selObject.label})
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})
@@ -114,7 +114,8 @@ export default class Step1 extends React.Component{
       remarks         :  this.refs.remarks.value,
       referralType    :  this.state.refered,
       clusterId       :  this.state.cluster,
-      chapterId       :  this.state.chapter
+      chapterId       :  this.state.chapter,
+      communityName  :  this.state.coummunityName
     }
     }
     const response = await updateRegistrationActionHandler(Details);
@@ -190,7 +191,7 @@ export default class Step1 extends React.Component{
     const showLoader=this.state.loading;
     let that=this;
     return (
-      <div className="admin_main_wrap">
+      <div>
       {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="step_form_wrap step1">
 

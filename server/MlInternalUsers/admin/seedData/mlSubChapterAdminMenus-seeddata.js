@@ -107,19 +107,19 @@ if(Meteor.isServer){
             "subMenuMappingId":"chapter_chapters",
             "subMenu":[
               {
-                "link" : "/admin/chapters/subChapters",
-                "name" : "Sub Chapters",
-                "uniqueId" : "chapter_subChapters",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "dynamicLink" : true,
-                "hideSubMenu":true,
-                "dynamicLinkHandler" : "",
-                "subMenusId":"chapter_chapters",
-                "subMenuMappingId":"chapter_subChapters",
-                "subMenu" : [
-                  {
+                // "link" : "/admin/chapters/subChapters",
+                // "name" : "Sub Chapters",
+                // "uniqueId" : "chapter_subChapters",
+                // "isLink" : true,
+                // "isMenu" : true,
+                // "image" : "",
+                // "dynamicLink" : true,
+                // "hideSubMenu":true,
+                // "dynamicLinkHandler" : "",
+                // "subMenusId":"chapter_chapters",
+                // "subMenuMappingId":"chapter_subChapters",
+                // "subMenu" : [
+                //   {
                     "link" : "/admin/chapters/subChapters/subChapterDetails",
                     "name" : "SubChapterDetails",
                     "uniqueId" : "chapter_subChapterDetails",
@@ -182,8 +182,8 @@ if(Meteor.isServer){
                     "subMenuMappingId":"chapter_assignusers"
                   }
                 ]
-              }
-            ]
+            //   }
+            // ]
           }
         ]
       },

@@ -11,6 +11,7 @@ import {addRegistrationStep3Details} from '../actions/addRegistrationStep3Detail
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
 import _ from "lodash";
 import update from 'immutability-helper';
+import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 
 
 export default class Step4 extends React.Component{
@@ -19,7 +20,7 @@ export default class Step4 extends React.Component{
 
     this.state = {
       loading:true,
-      selectedTab: null,
+      selectedTab: false,
       selectedAddressLabel: " ",
       selectedValue: null,
       /* selectedValuesList : [],*/
@@ -28,7 +29,8 @@ export default class Step4 extends React.Component{
        "socialLinkType": " ", "socialLinkTypeName": "Add New", 'socialLinkUrl': '',
        }]*/
       socialLinkObject : {"socialLinkType": " ", "socialLinkTypeName": " ", 'socialLinkUrl': ''},
-      socialLinkArray :[]
+      socialLinkArray :[],
+      uploadedProfilePic : "/images/ideator_01.png"
 
 
     }
@@ -89,43 +91,25 @@ export default class Step4 extends React.Component{
   async onSavingSocialLink(index,value){
     let detailsType = "SOCIALLINKS";
     let registerid = this.props.registrationId;
-    if(this.state.selectedTab){
-      console.log(index);
-      console.log(value);
-      /*let socialSitesArray = this.state.socialLinkArray || [];
-      socialSitesArray["socialLinksInfo"][index]["socialLinkType"] = this.state.selectedValue,
-        socialSitesArray["socialLinksInfo"][index]["socialLinkTypeName"] = this.state.selectedSocialLinkLabel,
-        socialSitesArray["socialLinksInfo"][index]["socialLinkUrl"] = this.refs["socialLinkTypeUrl"+index].value;
-      let detailsType = "SOCIALLINKS";
-      let registerid = this.props.registrationId;*/
-      if (index !== -1) {
-        // do your stuff here
-        let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: this.state.selectedSocialLinkLabel},socialLinkType : {$set: this.state.selectedValue},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
-
-        let newData = update(this.state.socialLinkArray, {
-          $splice: [[index, 1, updatedComment]]
-        });
+/*    if(this.state.selectedTab){
 
 
-        const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-        if(response){
-          this.props.getRegistrationSocialLinks();
-
-        }
-      }
 
 
-    }else{
+    }else{*/
       let socialLinkList = this.state.socialLinkObject;
       socialLinkList.socialLinkType = this.refs["socialLinkType"].props.selectedValue,
       socialLinkList.socialLinkTypeName = this.state.selectedSocialLinkLabel,
       socialLinkList.socialLinkUrl = this.refs["socialLinkTypeUrl"].value;
       const response = await addRegistrationStep3Details(socialLinkList,detailsType,registerid);
       if(response){
+        if(!response.success){
+          toastr.error(response.result);
+        }
         this.props.getRegistrationSocialLinks();
 
       }
-    }
+    //}
 
     //this.findRegistration.bind(this);
   }
@@ -134,6 +118,47 @@ export default class Step4 extends React.Component{
 
     this.setState({"selectedTab" : true});
 
+  }
+
+  async onUpdatingSocialLinkDetails(index,value){
+    let detailsType = "SOCIALLINKS";
+    let registerid = this.props.registrationId;
+    if (index !== -1) {
+      // do your stuff here
+      let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: this.state.selectedSocialLinkLabel},socialLinkType : {$set: this.state.selectedValue},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
+
+      let newData = update(this.state.socialLinkArray, {
+        $splice: [[index, 1, updatedComment]]
+      });
+
+
+      const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
+      if(response){
+        if(!response.success){
+          toastr.error(response.result);
+        }
+        this.props.getRegistrationSocialLinks();
+
+      }
+    }
+  }
+
+  onFileUpload(value){
+    let file=document.getElementById("profilePic").files[0];
+    let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    //this.props.onFileUpload(file,documentId);
+  }
+
+  onFileUploadCallBack(resp){
+    if(resp){
+      // this.setState({registrationDocuments:resp})
+      //refresh the registration data in the pare
+      //this.props.getRegistrationKYCDetails();
+      this.props.getRegistrationSocialLinks();
+
+
+    }
   }
 
 
@@ -193,8 +218,6 @@ export default class Step4 extends React.Component{
                      </div>
                   </div>
                   {that.state.socialLinkArray.map(function(options,key) {
-                    console.log(options);
-                    console.log(options.socialLinkType);
                     return(<div className="tab-pane" id={'socialLink'+key}  key={key} >
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} ref={'socialLinkType'+key}
@@ -208,7 +231,7 @@ export default class Step4 extends React.Component{
                         <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
                       <div className="ml_btn">
-                        <a href="#" className="save_btn"  onClick = {that.onSavingSocialLink.bind(that,key)}>Save</a>
+                        <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}>Save</a>
                         <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}>Cancel</a>
                       </div>
                     </div>)
@@ -225,11 +248,11 @@ export default class Step4 extends React.Component{
               <form>
                 <div className="form-group steps_pic_upload">
                   <div className="previewImg ProfileImg">
-                    <img src="/images/ideator_01.png"/>
+                    <img src={this.props.uploadedProfileImg}/>
                   </div>
                   <div className="fileUpload mlUpload_btn">
                     <span>Profile Pic</span>
-                    <input type="file" className="upload" />
+                    <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
                   </div>
 
                 </div>

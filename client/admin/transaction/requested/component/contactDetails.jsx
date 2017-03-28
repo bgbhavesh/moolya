@@ -69,6 +69,9 @@ export default class ContactDetails extends React.Component{
         contactList.contactNumber = this.refs["contactNumber"].value;
       const response = await addRegistrationStep3Details(contactList,detailsType,registerid);
       if(response){
+        if(!response.success){
+          toastr.error(response.result);
+        }
         //this.props.getRegistrationSocialLinks();
         this.findRegistration();
       }
@@ -78,6 +81,16 @@ export default class ContactDetails extends React.Component{
   async onEditingContact(index,value){
     let detailsType = "CONTACTTYPE";
     let registerid = this.props.registerId;
+
+    let registrationDetails = this.props.registrationInfo.contactInfo
+    let dbData = _.pluck(registrationDetails, 'numberType') || [];
+    let contactExist = null;
+    if(this.state.selectedNumberTypeValue){
+      contactExist = _.contains(dbData,this.state.selectedNumberTypeValue );
+    }
+    if(contactExist){
+      toastr.error("Contact TypeAlready Exists!!!!!");
+    }else{
       let updatedComment = update(this.state.contactNumberArray[index], {
         numberTypeName : {$set: this.state.selectedNumberTypeLabel},
         numberType :   {$set: this.state.selectedNumberTypeValue},
@@ -87,11 +100,15 @@ export default class ContactDetails extends React.Component{
       let newData = update(this.state.contactNumberArray, {
         $splice: [[index, 1, updatedComment]]
       });
+      console.log("-------------------------------------------------");
+      console.log(newData);
       const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
       if(response){
         this.findRegistration();
 
       }
+    }
+
 
 
   }
@@ -125,6 +142,8 @@ export default class ContactDetails extends React.Component{
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
     this.setState({loading:false,contactNumberArray:response.contactInfo});
   }
+
+
 
   render(){
     let that=this;

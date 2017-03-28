@@ -161,7 +161,7 @@ adminSection.route('/transactions/registrationRequested/edit', {
 });
 
 adminSection.route('/transactions/registrationRequested', {
-  name: 'transaction_registration_requested_list',
+  name: 'transaction_registration_requested',
   action(params){
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }

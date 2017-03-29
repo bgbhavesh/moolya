@@ -85,12 +85,12 @@ class MlEditKycCategory extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'edit',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.updateDocument.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]

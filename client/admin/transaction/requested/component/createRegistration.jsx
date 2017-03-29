@@ -5,11 +5,13 @@ import { graphql } from 'react-apollo';
 import Select from 'react-select';
 import Datetime from "react-datetime";
 import moment from "moment";
+import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag';
 import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {createRegistrationInfo} from '../actions/createRegistrationInfo'
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 export default class MlCreateRegistration extends React.Component{
 
@@ -34,12 +36,18 @@ export default class MlCreateRegistration extends React.Component{
     return this;
   }
 
+  componentDidMount(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    initalizeFloatLabel();
+  }
+
   async  createRegistration() {
     let Details = {
 
         firstName       :  this.refs.firstName.value,
         lastName        :  this.refs.lastName.value,
-        countryName     :  this.state.country,
+        countryId     :  this.state.country,
         contactNumber   :  this.refs.contactNumber.value,
         email           :  this.refs.email.value,
         cityId          :  this.state.selectedCity,
@@ -232,6 +240,13 @@ export default class MlCreateRegistration extends React.Component{
 
         <div className="admin_main_wrap">
           <h2>Create Registration</h2>
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
@@ -370,6 +385,8 @@ export default class MlCreateRegistration extends React.Component{
               </form>
             </div>
           </div>
+           </ScrollArea>
+            </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
         </div>
     )

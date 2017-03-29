@@ -472,6 +472,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
 
+    if(data.registrationType){
+      return 'RegistrationInfo';
+    }
     if (data.countryCode && data.country) {
       return 'Countries';
     }

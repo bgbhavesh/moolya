@@ -41,7 +41,7 @@ export default class Step1 extends React.Component{
     this.setState({loading:false,
       registrationDetails:details,
       registrationId:this.props.registrationId,
-      country :details.countryName,
+      country :details.countryId,
       selectedCity : details.cityId,
       registrationType : details.registrationType,
       subscription: details.accountType,
@@ -100,7 +100,7 @@ export default class Step1 extends React.Component{
       registrationDetail:{
       firstName       :  this.refs.firstName.value,
       lastName        :  this.refs.lastName.value,
-      countryName     :  this.state.country,
+      countryId     :  this.state.country,
       contactNumber   :  this.refs.contactNumber.value,
       email           :  this.refs.email.value,
       cityId          :  this.state.selectedCity,

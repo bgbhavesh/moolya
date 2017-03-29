@@ -128,7 +128,9 @@ class MlAssignBackendUsers extends React.Component {
       this.resetBackendUers();
   }
 
-  handleError() {
+  handleError(response) {
+    console.log('error handle');
+    console.log(response);
   }
 
   filterClusterBasedRoles(){
@@ -164,7 +166,7 @@ class MlAssignBackendUsers extends React.Component {
           {
             showAction: true,
             actionName: 'save',
-            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this),this.handleSuccess.bind(this))
+            handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this),this.handleSuccess.bind(this), this.handleError.bind(this))
           },
           {
             showAction: true,

@@ -1,5 +1,6 @@
+/*
 if(Meteor.isServer) {
-  /*MlRegistration.insert(
+  MlRegistration.insert(
     {registrationInfo:{
       /!*userType:"Individual",
       firstName:"Muralidhar",
@@ -42,5 +43,6 @@ if(Meteor.isServer) {
       ipLocation : "Hyderabad"
     },
       registrationDetails:{individualInfo:{firstName:"Muralidhar",middleName:"K",lastName:"Reddy"}}}
-  );*/
+  );
 }
+*/

@@ -131,7 +131,8 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   handleError(response) {
-    alert(response)
+    console.log('error handle');
+    console.log(response);
   }
 
   updateSelectedBackEndUser(userId) {

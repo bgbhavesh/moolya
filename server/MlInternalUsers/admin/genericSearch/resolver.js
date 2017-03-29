@@ -257,7 +257,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module == 'BackendUsers'){
-      data = Meteor.users.find().fetch();
+      data = Meteor.users.find({"profile.isInternaluser":true}).fetch();
 
     data.map(function (doc,index) {
       let roleIds=[]

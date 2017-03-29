@@ -71,7 +71,6 @@ class MlAddSubDepartment extends React.Component{
 
   }
   getDepartmentAvailability(details){
-    console.log("details->"+details);
     this.setState({'subdepartmentAvailability':details})
   }
   getMoolyaDepartmentAvailability(details){
@@ -80,11 +79,11 @@ class MlAddSubDepartment extends React.Component{
 
   render(){
       let MlActionConfig = [
-        {
-          actionName: 'edit',
-          showAction: true,
-          handler: null
-        },
+        // {
+        //   actionName: 'edit',
+        //   showAction: true,
+        //   handler: null
+        // },
         {
           showAction: true,
           actionName: 'add',

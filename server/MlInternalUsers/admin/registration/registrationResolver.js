@@ -38,23 +38,41 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     let updatedResponse
     var id= args.registrationId;
     if(args.registrationDetails){
-      let details=args.registrationDetails;
+      let details=args.registrationDetails||{};
+
+      let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
+
+      details.clusterName=subChapterDetails.clusterName;
+      details.chapterName=subChapterDetails.chapterName;
+      details.subChapterName=subChapterDetails.subChapterName;
+      details.subChapterId=subChapterDetails._id;
+
+      let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
+
+      details.communityId=communityDetails._id;
+      details.communityName=communityDetails.communityName;
+      details.communityDefName=communityDetails.communityDefName;
+      details.communityDefCode=communityDetails.communityDefCode;
+
+      //validate the registrationInfo for mandatory fields such as cluster chapter etc
       updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details }});
       let userProfile = {
         registrationId    : id,
-        countryName       : details.countryName,
-        countryId         : '',
+        countryName       : '',
+        countryId         : details.countryId,
         cityName          : '',
         cityId            : details.cityId,
         mobileNumber      : details.contactNumber,
-        clusterId         : '',
-        clusterName       : '',
-        chapterId         : '',
-        chapterName       : '',
-        subChapterId      : '',
-        subChapterName    : '',
-        communityId       : '',
+        clusterId         : details.clusterId,
+        clusterName       : details.clusterName,
+        chapterId         : details.chapterId,
+        chapterName       : details.chapterName,
+        subChapterId      : details.subChapterId,
+        subChapterName    : details.subChapterName,
+        communityId       : details.communityId,
         communityName     : details.communityName,
+        communityDefCode  : details.communityDefCode,
+        communityDefName  : details.communityDefName,
         communityType     : '',
         isDefault         : false,
         isProfileActive   : false,
@@ -66,7 +84,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         isExternaluser  : true,
         email           : details.email,
         isActive        : false,
-        externalUserProfile: userProfile
+        externalUserProfile: [userProfile]
       }
       let userObject = {
         username        : details.email,
@@ -74,7 +92,31 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         profile         : profile
       }
 
-      MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
+      let existingUser=Meteor.users.findOne({"username":userObject.username});
+      let updateCount=0;
+      let userId=null;
+      if(existingUser){
+
+        let result = Meteor.users.update({username:userObject.username,'profile.externalUserProfile' : {
+          $elemMatch: {'registrationId': id}}}, {$set: {"profile.externalUserProfile.$":userProfile}});
+
+        if(result!=1) {
+          updateCount= Meteor.users.update({username:userObject.username},{'$push':{'profile.externalUserProfile':userProfile}},{upsert:false});
+        }else{
+          updateCount==1;
+        }
+      }else{
+        userId = Accounts.createUser(userObject);
+      }
+
+      if(updateCount===1 ||userId){
+        let code = 200;
+        let result = {username: userObject.username}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }
+
+      // MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
     }else{
       updatedResponse= MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
     }

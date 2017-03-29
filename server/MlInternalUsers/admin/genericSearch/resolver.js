@@ -257,7 +257,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module == 'BackendUsers'){
-      data = Meteor.users.find().fetch();
+      data = Meteor.users.find({"profile.isInternaluser":true}).fetch();
 
     data.map(function (doc,index) {
       let roleIds=[]
@@ -472,6 +472,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
 
+    if(data.registrationType){
+      return 'RegistrationInfo';
+    }
     if (data.countryCode && data.country) {
       return 'Countries';
     }

@@ -20,6 +20,15 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     return response;
   }
   let id = MlRegistration.insert({registrationInfo : args.registration});
+  if(id){
+    let code = 200;
+
+    let insertedData =  MlRegistration.findOne(id) || {};
+    /*  let tabName = insertedData.contactInfo[0].numberTypeName;*/
+    let result = {registrationId : id}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
 }
 
 MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) => {

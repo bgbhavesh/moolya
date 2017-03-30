@@ -108,3 +108,11 @@ MlResolver.MlQueryResolver['fetchCitiesPerState'] = (obj, args, context, info) =
   }
 };
 
+MlResolver.MlQueryResolver['fetchCitiesPerCountry'] = (obj, args, context, info) => {
+
+  if(args.countryId){
+    let resp = MlCities.find({"countryId":args.countryId,"isActive":true}).fetch()
+    return resp;
+  }
+};
+

@@ -74,19 +74,32 @@ export default class EmailDetails extends React.Component{
 
       if (index !== -1) {
         // do your stuff here
-        let updatedComment = update(this.state.emailDetails[index], {emailIdTypeName : {$set: this.state.selectedEmailTypeLabel},emailIdType : {$set: this.state.selectedEmailTypeValue},emailId : {$set: this.refs["emailId"+index].value}});
-
-        let newData = update(this.state.emailDetails, {
-          $splice: [[index, 1, updatedComment]]
-        });
-
-
-        const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-        if(response){
+        let registrationDetails = this.props.registrationInfo.emailInfo
+        let dbData = _.pluck(registrationDetails, 'emailIdType') || [];
+        let contactExist = null;
+        if(this.state.selectedEmailTypeValue){
+          contactExist = _.contains(dbData,this.state.selectedEmailTypeValue );
+        }
+        if(contactExist){
+          toastr.error("Email Type Already Exists!!!!!");
           this.findRegistration();
+        }else{
+          let updatedComment = update(this.state.emailDetails[index], {emailIdTypeName : {$set: this.state.selectedEmailTypeLabel},emailIdType : {$set: this.state.selectedEmailTypeValue},emailId : {$set: this.refs["emailId"+index].value}});
 
+          let newData = update(this.state.emailDetails, {
+            $splice: [[index, 1, updatedComment]]
+          });
+
+
+          const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
+          if(response){
+            this.findRegistration();
+
+          }
         }
       }
+
+
 
 
 

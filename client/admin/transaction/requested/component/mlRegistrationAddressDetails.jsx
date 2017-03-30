@@ -33,18 +33,7 @@ export default class AddressDetails extends React.Component{
     this.findRegistration.bind(this)
     return this;
   }
-  /*compareQueryOptions(a, b) {
-    return JSON.stringify(a) === JSON.stringify(b);
-  };*/
 
-/*  componentWillReceiveProps(nextProps){
-   // var socialLinkProps = nextProps.registrationInfo.addressInfo || [];
-    //if(!this.compareQueryOptions(this.props.registrationInfo.addressInfo,nextProps.registrationInfo.addressInfo)){
-    console.log("*************************************************");
-      console.log(nextProps);
-      this.setState({loading:false,addressDetails:nextProps.registrationInfo.addressInfo||[]});
-    //}
-  }*/
 
   optionsBySelectAddressType(selectedIndex,handler,selectedObj){
     this.setState({selectedValue : selectedIndex,selectedAddressLabel:selectedObj.label});
@@ -119,6 +108,9 @@ export default class AddressDetails extends React.Component{
       const response = await addRegistrationStep3Details(addressDetailsObject,detailsType,registerid);
       if(response){
         //this.props.getRegistrationContactInfo();
+        if(!response.success){
+          toastr.error(response.result);
+        }
         this.findRegistration();
         this.setState({"addressInformation":{"addressType" : " ","addressTypeName": "Add New",'name' : '','phoneNumber' : '','addressFlat' : '',
           'addressLocality': '','addressLandmark':'','addressArea': '',
@@ -141,36 +133,39 @@ export default class AddressDetails extends React.Component{
       }
       if(contactExist){
         toastr.error("Address Type Already Exists!!!!!");
-      }
-
-      let updatedComment = update(this.state.addressDetails[index], {
-        addressTypeName : {$set: this.state.selectedAddressLabel},
-        addressType : {$set: this.state.selectedValue},
-        name : {$set: this.refs["name"+index].value},
-        phoneNumber : {$set: this.refs["phoneNumber"+index].value},
-        addressFlat : {$set: this.refs["addressFlat"+index].value},
-        addressLocality : {$set: this.refs["addressLocality"+index].value},
-        addressLandmark : {$set: this.refs["addressLandmark"+index].value},
-        addressArea : {$set: this.refs["addressArea"+index].value},
-        addressCity : {$set: this.refs["addressCity"+index].value},
-        addressState : {$set: this.refs["addressState"+index].value},
-        addressCountry : {$set: this.refs["addressCountry"+index].value},
-        addressPinCode : {$set: this.refs["addressPinCode"+index].value}
-      });
-
-      let newData = update(this.state.addressDetails, {
-        $splice: [[index, 1, updatedComment]]
-      });
-
-
-      const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-      if(response){
-        if(!response.success){
-          toastr.error(response.result);
-        }
         this.findRegistration();
+      }else{
+        let updatedComment = update(this.state.addressDetails[index], {
+          addressTypeName : {$set: this.state.selectedAddressLabel},
+          addressType : {$set: this.state.selectedValue},
+          name : {$set: this.refs["name"+index].value},
+          phoneNumber : {$set: this.refs["phoneNumber"+index].value},
+          addressFlat : {$set: this.refs["addressFlat"+index].value},
+          addressLocality : {$set: this.refs["addressLocality"+index].value},
+          addressLandmark : {$set: this.refs["addressLandmark"+index].value},
+          addressArea : {$set: this.refs["addressArea"+index].value},
+          addressCity : {$set: this.refs["addressCity"+index].value},
+          addressState : {$set: this.refs["addressState"+index].value},
+          addressCountry : {$set: this.refs["addressCountry"+index].value},
+          addressPinCode : {$set: this.refs["addressPinCode"+index].value}
+        });
 
+        let newData = update(this.state.addressDetails, {
+          $splice: [[index, 1, updatedComment]]
+        });
+
+
+        const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
+        if(response){
+          if(!response.success){
+            toastr.error(response.result);
+          }
+          this.findRegistration();
+
+        }
       }
+
+
     }
   }
 

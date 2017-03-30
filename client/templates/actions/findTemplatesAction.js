@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import {client} from '../../admin/core/apolloConnection';
 
-export async function findStepTemplatesActionHandler(templateId,code) {
+export async function findTemplatesActionHandler(templateId) {
   let tid       = templateId
   const result  = await client.query({
     query: gql`
-   query  ($id: String,$stepCode:String){
-        findStepAssignedTemplates(id:$id,stepCode:$stepCode){
+   query  ($id: String){
+        findTemplates(id:$id){
         procesId
         subProcessId
         templates {
@@ -21,11 +21,10 @@ export async function findStepTemplatesActionHandler(templateId,code) {
       }
     `,
     variables: {
-      id:tid,
-      stepCode:code
+      id:tid
     },
     forceFetch:true
   })
-  const id = result.data.findStepAssignedTemplates;
+  const id = result.data.findTemplates;
   return id
 }

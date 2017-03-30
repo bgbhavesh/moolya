@@ -13,6 +13,7 @@ const mltemplatesConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "subProcessId",title:"subProcessId",isHidden:true},
     {dataField: "createdDate", title: "created Date",dataSort:true},
     {dataField: "processName", title: "Process",dataSort:true},
     {dataField: "subProcessName", title: "Sub Process",dataSort:true},
@@ -26,7 +27,7 @@ const mltemplatesConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/stepDetails/"+data.id+"/SOFT")
+          FlowRouter.go("/admin/settings/stepDetails/"+data.subProcessId+"/"+data.id+"/SOFT")
         }
         else{
           alert("Please select a Template Type")
@@ -48,16 +49,17 @@ const mltemplatesConfig=new MlViewer.View({
   ],
   sizePerPage:5,
   graphQlQuery:gql`
-                query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+              query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
               data:SearchQuery(module:"templates",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on SubProcess{
+                     ...on TemplateDetails{
                               processName
                               createdDate
                               createdBy
                               subProcessName
                               id:_id
+                              subProcessId
                           }
                       }
               }

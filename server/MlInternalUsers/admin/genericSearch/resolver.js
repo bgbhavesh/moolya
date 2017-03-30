@@ -457,8 +457,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlRegistration.find(query,findOptions).count();
   }
   if(args.module=="templates"){
-    data= MlSubProcess.find(query,findOptions).fetch();
-    totalRecords=MlSubProcess.find(query,findOptions).count();
+    data= MlTemplates.find(query,findOptions).fetch();
+    totalRecords=MlTemplates.find(query,findOptions).count();
   }
   if(args.module=="templateAssignment"){
     data= MlTemplateAssignment.find(query,findOptions).fetch();
@@ -611,7 +611,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'RegistrationInfo'
     }
     if(data.processName){
-      return 'SubProcess'
+      return 'TemplateDetails'
     }
     if(data.templateProcessName){
       return 'TemplateAssignment'

@@ -256,42 +256,41 @@ MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) =>
   return users;
 }
 
-MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context, info) =>{
-    console.log(args);
-    let users = [];
-    if(args.clusterId){
-        let departments = MlDepartments.find({"$or":[{"depatmentAvailable.cluster":args.clusterId}, {"depatmentAvailable.cluster":"all"}]}).fetch();
-        if(departments && departments.length > 0){
-            departments.map(function (department) {
-                let depUsers = Meteor.users.find({"$and":[{"$or":[{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment":true}]},{"profile.InternalUprofile.moolyaProfile.userType":'moolya'}]}).fetch();
-                depUsers.map(function (user)
-                {
-                    let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-                    if((user.profile.InternalUprofile.moolyaProfile.globalAssignment || user.profile.InternalUprofile.moolyaProfile.userProfiles.length == 0) && (user.profile.isActive)){
-                        user.username = user.profile.InternalUprofile.moolyaProfile.firstName+" "+user.profile.InternalUprofile.moolyaProfile.lastName;
-                        if(_.isEmpty(_.find(users, user))){
-                          users.push(user)
-                        }
-                    }
-                    else if(!user.profile.InternalUprofile.moolyaProfile.globalAssignment && userProfiles.length > 0 && user.profile.isActive){
-                        userProfiles.map(function (profile) {
-                            if(profile.clusterId == args.clusterId){
-                              let cluster = MlClusters.findOne({_id:profile.clusterId});
-                              if(cluster.isActive){
-                                let userRoles = profile.userRoles;
-                                let activeRoles = _.find(userRoles, {"isActive":true});
-                                user.username = user.profile.InternalUprofile.moolyaProfile.firstName+" "+user.profile.InternalUprofile.moolyaProfile.lastName;
-                                if(_.isEmpty(_.find(users, user))){
-                                  users.push(user)
-                                }
-                              }
-                            }
-                        })
-                    }
-                })
-            })
-        }
+MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context, info) => {
+  console.log(args);
+  let users = [];
+  if (args.clusterId) {
+    let cluster = MlClusters.findOne({_id: args.clusterId});
+    if(cluster.isActive){
+      let departments = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
+      if (departments && departments.length > 0) {
+        departments.map(function (department) {
+          let depUsers = Meteor.users.find({"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {"profile.InternalUprofile.moolyaProfile.userType": 'moolya'}]}).fetch();
+          depUsers.map(function (user) {
+            let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+            if ((user.profile.InternalUprofile.moolyaProfile.globalAssignment || user.profile.InternalUprofile.moolyaProfile.userProfiles.length == 0) && (user.profile.isActive)) {
+              user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
+              if (_.isEmpty(_.find(users, user))) {
+                users.push(user)
+              }
+            }
+            else if (!user.profile.InternalUprofile.moolyaProfile.globalAssignment && userProfiles.length > 0 && user.profile.isActive) {
+              userProfiles.map(function (profile) {
+                if (profile.clusterId == args.clusterId) {
+                  let userRoles = profile.userRoles;
+                  let activeRoles = _.find(userRoles, {"isActive": true});
+                  user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
+                  if (_.isEmpty(_.find(users, user))) {
+                    users.push(user)
+                  }
+                }
+              })
+            }
+          })
+        })
+      }
     }
+  }
     return users;
 }
 

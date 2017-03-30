@@ -16,6 +16,10 @@ const mltemplatesassignmetConfig=new MlViewer.View({
     {dataField: "createdDate", title: "created Date",dataSort:true},
     {dataField: "templateProcessName", title: "Process",dataSort:true},
     {dataField: "templateSubProcessName", title: "Sub Process",dataSort:true},
+    {dataField: "templateclusterName", title: "Cluster",dataSort:true},
+    {dataField: "templatechapterName", title: "Chapter",dataSort:true},
+    {dataField: "templatesubChapterName", title: "Sub Chapter",dataSort:true},
+    {dataField: "templatecommunityName", title: "Community",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -32,7 +36,14 @@ const mltemplatesassignmetConfig=new MlViewer.View({
           alert("Please select a Template Type")
         }
       }
-    }
+    },
+    {
+      showAction: true,
+      actionName: 'add',
+      handler: (data)=>{
+        FlowRouter.go("/admin/templates/assignTemplate")
+      }
+    },
   ],
   sizePerPage:5,
   graphQlQuery:gql`
@@ -46,6 +57,10 @@ const mltemplatesassignmetConfig=new MlViewer.View({
                               createdBy
                               createdDate
                               id:_id
+                              templateclusterName     
+                              templatechapterName    
+                              templatesubChapterName  
+                              templatecommunityName  
                           }
                       }
               }

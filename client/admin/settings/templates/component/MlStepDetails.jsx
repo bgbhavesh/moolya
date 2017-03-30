@@ -23,11 +23,11 @@ export default class MlStepDetails extends Component {
   }
 
   async findDocument() {
-    let subProcessId = this.props.subProcessId
-    const response = await findStepTemplatesActionHandler(subProcessId,this.props.stepCode);
+    let templateId = this.props.templateId
+    const response = await findStepTemplatesActionHandler(templateId,this.props.stepCode);
     console.log(response)
     if(response){
-      let assignedTemplates = response.assignedTemplates
+      let assignedTemplates = response.templates
       let documentDetails=[]
       for(let i=0;i<assignedTemplates.length;i++){
         let json = {

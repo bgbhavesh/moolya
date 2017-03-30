@@ -25,6 +25,7 @@ import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDo
 import MlCreateRegistration from '../../admin/transaction/requested/component/createRegistration'
 import MlAssignedTemplatesList from '../../templates/component/MlAssignedTemplatesList'
 import MlAssignTemplate from '../../templates/component/MlAssignTemplate'
+import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -214,9 +215,16 @@ adminSection.route('/templates/templateList', {
   }
 });
 
-adminSection.route('/templates/assignTemplate/:id', {
+adminSection.route('/templates/assignTemplate/', {
   name: 'templates_assignment',
   action(){
-    mount(AdminLayout,{adminContent:<MlAssignTemplate/>})
+    mount(AdminLayout,{adminContent:<MlAssignTemplate />})
+  }
+});
+
+adminSection.route('/templates/assignTemplate/:id', {
+  name: 'templates_assignment_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAssignTemplate config={params.id} />})
   }
 });

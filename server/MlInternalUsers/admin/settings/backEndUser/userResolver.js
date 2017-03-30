@@ -175,10 +175,11 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
             const clusterData = MlClusters.findOne({ _id:profile.clusterId})||[];
             if(clusterData){
                 userRoles.map(function (role) {
-                    const rolesData =  MlRoles.findOne({ _id:role.roleId})||[];
-                    if(rolesData){
-                        assignedRoles += rolesData.roleName+","
-                    }
+                    // const rolesData =  MlRoles.findOne({ _id:role.roleId})||[];
+                    // if(rolesData){
+                    //     assignedRoles += rolesData.roleName+","
+                    // }
+                  assignedRoles += role.roleName+" ("+ clusterData.countryName +")"+","
                 });
             }
         });

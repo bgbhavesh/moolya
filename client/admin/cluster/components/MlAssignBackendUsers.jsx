@@ -79,21 +79,28 @@ class MlAssignBackendUsers extends React.Component {
   async findUserDetails(userId)
   {
       const userDetails = await findAdminUserDetails(userId);
-      if (userDetails != ""){
+      if (userDetails){
           // this.setState({loading:false})
           this.setState({selectedBackendUser:userId})
           this.setState({username:userDetails.userName})
           this.setState({userDisplayName:userDetails.displayName})
           this.setState({alsoAssignedAs:userDetails.alsoAssignedas})
-          this.find_Cluster_Roles(userId, this.props.params.clusterId);
+          let alsoAs = userDetails.alsoAssignedas;
+          if(alsoAs){
+            let alsoArray = _.compact(alsoAs.split(','));
+            this.setState({alsoUser:alsoArray});
+          }else
+            this.setState({alsoUser:[]});
+
+          this.find_Cluster_Roles(userId);
           return userDetails;
       }
   }
 
-  async find_Cluster_Roles(userId, clusterId)
+  async find_Cluster_Roles(userId)
   {
       let roles = [];
-      const userRoles = await fetchAdminUserRoles(userId, clusterId);
+      const userRoles = await fetchAdminUserRoles(userId);
       if (userRoles)
           roles = userRoles || [];
       this.setState({loading:false, user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
@@ -191,6 +198,16 @@ class MlAssignBackendUsers extends React.Component {
       } else{
         contextHeader = "Cluster"
       }
+
+      const alsoUser = this.state.alsoUser && this.state.alsoUser.length > 0 ? this.state.alsoUser : [" "];
+      const alsoAssignList = alsoUser.map(function (userAlso, id) {
+        return (
+          <li key={id}>
+            <span className="form-control float-label">{userAlso}</span>
+          </li>
+        )
+      });
+
       const showLoader = this.state.loading;
 
     return (
@@ -251,16 +268,19 @@ class MlAssignBackendUsers extends React.Component {
                                     {/*labelKey={'label'} queryType={"graphql"}/>}*/}
                     {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={query}  queryOptions={queryOptions}  isDynamic={true} onSelect={that.optionsBySelectUser.bind(that)} selectedValue={this.state.selectedBackendUser}/>*/}
                     <div className="form-group">
-                      <input type="text" id="AssignedAs" placeholder="Also Assigned As"
-                             className="form-control float-label" disabled="true" value={alsoAssignedAs}/>
+                      {/*<input type="text" id="AssignedAs" placeholder="Also Assigned As"*/}
+                      Also Assigned As
+                      <ul>
+                        {alsoAssignList}
+                      </ul>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Display Name" ref="displayName" value={userDisplayName}
+                      <input type="text" placeholder="Display Name" ref="displayName" defaultValue={userDisplayName}
                              className="form-control float-label" id="dName"/>
                     </div>
                     <div className="form-group">
                       <input type="text" readOnly="true" placeholder="User Name" className="form-control float-label"
-                             id="userName" ref="userName" value={username}/>
+                             id="userName" ref="userName" defaultValue={username}/>
                     </div>
 
                     {userid ? (<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId}

@@ -23,15 +23,19 @@ let TemplateAssignment = `
             isActive          : Boolean
             createdDate       : String
     }
+    type stepsTemplates{
+            step        : String
+            template    : String
+    }
     type TemplateAssignment{
-            _id               : String           
+            _id                       : String           
             templateprocess           : String
             templatesubProcess        : String
             templateProcessName       : String
             templateSubProcessName    : String
-            assignedTemplates : [template]    
-            createdBy         : String      
-            createdDate       : String  
+            assignedTemplates         : [template]    
+            createdBy                 : String      
+            createdDate               : String  
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String
@@ -41,7 +45,8 @@ let TemplateAssignment = `
             templatecommunityId       : String
             templatecommunityName     : String
             templateuserType          : String     
-            templateidentity          : String               
+            templateidentity          : String        
+            stepAvailability          : [stepsTemplates]       
     }
     input stepInput{
             stepCode    : String
@@ -51,15 +56,19 @@ let TemplateAssignment = `
             isActive          : Boolean
             createdDate       : String
     }
+    input stepsTemplatesInput{
+            step        : String
+            template    : String
+    }
     input templateInput{
-            id                : String
+            id                        : String
             templateprocess           : String
             templatesubProcess        : String
             templateProcessName       : String
             templateSubProcessName    : String
-            assignedTemplates : [stepInput]    
-            createdBy         : String      
-            createdDate       : String  
+            assignedTemplates         : [stepInput]    
+            createdBy                 : String      
+            createdDate               : String  
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String
@@ -69,17 +78,18 @@ let TemplateAssignment = `
             templatecommunityId       : String
             templatecommunityName     : String
             templateuserType          : String     
-            templateidentity          : String                               
+            templateidentity          : String 
+            stepAvailability          : [stepsTemplatesInput]
     }
     type Query{
             findTemplateSteps(id: String):SubProcess           
             fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String):template
-            fetchSubProcess(id:String):[SubProcess]            
-            updateTemplateAssignment(id:String,template:templateInput):response
+            fetchSubProcess(id:String):[SubProcess]      
             findAssignedTemplates(id:String):TemplateAssignment
     }
     type Mutation{
             createTemplateAssignment(template : templateInput):response
+            updateTemplateAssignment(id:String,template:templateInput):response
     }
 `
 

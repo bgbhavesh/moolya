@@ -24,6 +24,10 @@ export async function findStepTemplatesAssignmentActionHandler(templateId) {
           templatecommunityName
           templateuserType
           templateidentity
+          stepAvailability{
+             step
+             template
+          }
       }
     }
     `,

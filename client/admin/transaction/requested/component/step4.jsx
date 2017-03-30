@@ -155,6 +155,7 @@ export default class Step4 extends React.Component{
       // this.setState({registrationDocuments:resp})
       //refresh the registration data in the pare
       //this.props.getRegistrationKYCDetails();
+      this.setState({"uploadedProfilePic" : resp.result})
       this.props.getRegistrationSocialLinks();
 
 

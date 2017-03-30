@@ -10,6 +10,7 @@ import formHandler from '../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../commons/components/select/MoolyaSelect'
+import MlStepAvailability from './MlStepAvailabilityComponent'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -37,10 +38,10 @@ class MlEditAssignTemplate extends React.Component{
       subChapterName : '',
       communities : '',
       communitiesName : '',
-
       templateInfo: [],
       steps       : [],
-      data        : ''
+      data        : '',
+      stepAvailability:[]
     }
     this.findTemplate.bind(this);
     return this;
@@ -64,6 +65,10 @@ class MlEditAssignTemplate extends React.Component{
     return resp;
   }
 
+  getStepAvailability(details){
+    console.log(details);
+    this.setState({'stepAvailability':details})
+  }
   async addEventHandler() {
     const resp=await this.updateAddressType();
     return resp;
@@ -82,27 +87,34 @@ class MlEditAssignTemplate extends React.Component{
     const response = await findStepTemplatesAssignmentActionHandler(Id);
     if(response){
       this.setState({
-        loading       : false,
-        process       : response.templateprocess,
-        subProcess    : response.templatesubProcess,
-        communities   : response.templatecommunityId,
-        userTypes     : response.templateuserType,
-        identity      : response.templateidentity,
-        clusters      : response.templateclusterId,
-        chapters      : response.templatechapterId,
-        subChapters   : response.templatesubChapterId,
-        data          : response
+        loading           : false,
+        process           : response.templateprocess,
+        subProcess        : response.templatesubProcess,
+        processName       : response.processName,
+        subProcessName    : response.subProcessName,
+        communities       : response.templatecommunityId,
+        userTypes         : response.templateuserType,
+        identity          : response.templateidentity,
+        clusters          : response.templateclusterId,
+        chapters          : response.templatechapterId,
+        subChapters       : response.templatesubChapterId,
+        stepAvailability  : response.stepAvailability,
+        clusterName       : response.templateclusterName,
+        chapterName       : response.templatechapterName,
+        subChapterName    : response.templatesubChapterName,
+        communitiesName   : response.templatecommunityName,
+        data              : response
       })
     }
   }
 
   async  updateTemplateAssignment() {
+    let id                       = this.props.config;
     let Details = {
-      id                : this.props.config,
       templateprocess           : this.state.process,
       templatesubProcess        : this.state.subProcess,
-      templateProcessName       : this.state.process,
-      templateSubProcessName    : this.state.subProcess,
+      templateProcessName       : this.state.processName,
+      templateSubProcessName    : this.state.subProcessName,
       templateclusterId         : this.state.clusters,
       templateclusterName       : this.state.clusterName,
       templatechapterId         : this.state.chapters,
@@ -112,9 +124,10 @@ class MlEditAssignTemplate extends React.Component{
       templatecommunityId       : this.state.communities,
       templatecommunityName     : this.state.communitiesName,
       templateuserType          : this.state.userTypes,
-      templateidentity          : this.state.identity
+      templateidentity          : this.state.identity,
+      stepAvailability          : this.state.stepAvailability
     }
-    const response = await updateTemplateAssignmentActionHandler(Details);
+    const response = await updateTemplateAssignmentActionHandler(id,Details);
     return response;
   }
 
@@ -127,63 +140,27 @@ class MlEditAssignTemplate extends React.Component{
     }
   }
 
-  /*async findSteps() {
-    let subProcessId = this.state.subProcess
-    const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
-    console.log(response)
-    if(response){
-      let assignedTemplates = response.steps
-      let documentDetails=[]
-      for(let i=0;i<assignedTemplates.length;i++){
-        let json = {
-          Id:assignedTemplates[i].stepId,
-          stepName: assignedTemplates[i].stepName,
-          href : '#'+assignedTemplates[i].stepId
-        }
-        documentDetails.push(json);
-      }
-      this.setState({"steps":documentDetails})
-    }
-  }
-
-
-  async findTemplates() {
-    let subProcessId = this.state.subProcess
-    const response = await findStepTemplatesInfoActionHandler(subProcessId,this.props.stepCode);
-    console.log(response)
-    if(response){
-      let assignedTemplates = response.assignedTemplates
-      let documentDetails=[]
-      for(let i=0;i<assignedTemplates.length;i++){
-        let json = {
-          Id:assignedTemplates[i]._id,
-          templateName: assignedTemplates[i].templateName,
-          view: 'Yes'
-        }
-        documentDetails.push(json);
-      }
-      this.setState({"templateInfo":documentDetails})
-    }
-  }*/
   async findSteps() {
     let subProcessId = this.state.subProcess
     const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
     console.log(response)
     if(response){
-      let steps = response.steps
-      this.setState({"steps":steps})
+      let steps = response.steps||[];
+      return steps;
     }
+    return [];
   }
 
 
-  async findTemplates() {
-    let subProcessId = this.state.subProcess
+  async findTemplates(subProcessId) {
+    // let subProcessId = this.state.subProcess
     const response = await findTemplatesActionHandler(subProcessId,this.props.stepCode);
-    console.log(response)
+    console.log(response);
+    let templates=[];
     if(response){
-      let templates = response.templates
-      this.setState({"templateInfo":templates})
+      templates = response.templates||[];
     }
+    return templates;
   }
 
 
@@ -192,15 +169,15 @@ class MlEditAssignTemplate extends React.Component{
     this.setState({processName:selObject.label})
   }
 
-  optionsBySelectSubProcess(value, calback, selObject){
+  async optionsBySelectSubProcess(value, calback, selObject){
     this.setState({subProcess:value})
     this.setState({subProcessName:selObject.label})
-    /*  const templates=this.findTemplates();
-     this.setState({templateInfo:templates})
-     //console.log(this.state.templateInfo);
-     const steps=this.findSteps();
-     this.setState({steps:steps})*/
-    //console.log(this.state.steps);
+    const templates=await this.findTemplates(value);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
+    const steps=await this.findSteps();
+    this.setState({steps:steps||[]});
+    console.log(this.state.steps);
   }
 
   optionsBySelectUserType(val){
@@ -230,10 +207,8 @@ class MlEditAssignTemplate extends React.Component{
     this.setState({communities:value})
     this.setState({communitiesName:selObject.label})
   }
-
   switchTab(){
     console.log("switch tab")
-    //this.setState({subChapters:val})
   }
 
   render(){
@@ -273,7 +248,7 @@ class MlEditAssignTemplate extends React.Component{
     label:chapterName
       }  
     }`;
-        let subChapterquery=gql`query($id:String){  
+    let subChapterquery=gql`query($id:String){  
       data:fetchSubChaptersSelect(id:$id) {
         value:_id
         label:subChapterName
@@ -304,7 +279,7 @@ class MlEditAssignTemplate extends React.Component{
                           <Moolyaselect multiSelect={false} placeholder={"Process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={processQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} />
                         </div>
                         <div className="form-group">
-                           <Moolyaselect multiSelect={false}  placeholder={"Sub Process"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subProcess} queryType={"graphql"} query={subProcessQuery} queryOptions={subprocessOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubProcess.bind(this)} />
+                          <Moolyaselect multiSelect={false}  placeholder={"Sub Process"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subProcess} queryType={"graphql"} query={subProcessQuery} queryOptions={subprocessOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubProcess.bind(this)} />
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
@@ -334,48 +309,33 @@ class MlEditAssignTemplate extends React.Component{
                       speed={0.8}
                       className="left_wrap"
                       smoothScrolling={true}
-                      default={true}
-                    >
+                      default={true}>
+                      {this.state.data&&this.state.stepAvailability?(<MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)} stepDetails={this.state.data&&this.state.stepAvailability}/>):""}
                       <div className="panel panel-default">
-                        <div className="panel-heading">Test</div>
-                        <div className="panel-body">
-                          <div className="form-group">
-                            <Select name="form-field-name"value="select"  className="float-label"/>
-                          </div>
-                          <div className="form-group">
-                            <Select name="form-field-name"value="select" className="float-label"/>
-                          </div>
-                          <div className="form-group">
-                            <Select name="form-field-name"value="select"  className="float-label"/>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="panel panel-default">
-                        <div className="panel-heading">Templates View</div>
+                        <div className="panel-heading">Template Step Details</div>
                         <div className="panel-body">
                           <div className="ml_tabs">
                             <ul  className="nav nav-pills">
-                              {that.state.steps.map(function(options,id) {
+                              {that.state.steps.map(function(options,key) {
                                 return(
-                                  <li className="active">
-                                    <a  href={options.href} data-toggle="tab" >{options.stepName} </a>
+                                  <li className="active" key={key}>
+                                    <a  href={'#template'+key} data-toggle="tab" >{options.stepName} </a>
                                   </li>
                                 )})}
                             </ul>
 
                             <div className="tab-content clearfix">
+                              <div className="tab-pane active" >
+                                <div className="list-group nomargin-bottom">
+                                  {that.state.templateInfo.map(function(options,key) {
+                                    return(
+                                      <a className="list-group-item" key={key} id={"template"}>{options.templateName}
+                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
+                                      </a>
 
-                            {that.state.templateInfo.map(function(options,id) {
-                              return(
-                                    <div className="tab-pane active" id="#1">
-                                    <div className="list-group nomargin-bottom">
-                                    <a className="list-group-item">{options.templateName}
-                                      <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
-                                    </a>
-                                    </div>
-                                    </div>
-                              )})}
-
+                                    )})}
+                                </div>
+                              </div>
                             </div>
 
                           </div>
@@ -385,13 +345,13 @@ class MlEditAssignTemplate extends React.Component{
                   </div>
                 </div>
                 {/*<span className="actions_switch show_act"></span>
-                <div className="bottom_actions_block show_block">
-                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
-                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
-                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
-                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
-                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
-                </div>*/}
+                 <div className="bottom_actions_block show_block">
+                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
+                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
+                 </div>*/}
               </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </div>

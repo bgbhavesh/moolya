@@ -1,0 +1,27 @@
+{
+  "public": {
+    "graphqlUrl": "http://uat.moolya.in/graphql",
+    "graphqlPort":8090
+  },
+  "private": {
+    "subChapterName":"Moolya",
+    "HierarchyCount": 10,
+    "emailConfig":{
+      "username": "raksanconsulting",
+      "key": "IMRne62ShKE6Q8zU0NJBsQ"
+    },
+    "aws":{
+      "s3Config":{
+        "accessKeyId":"",
+        "secretAccessKey":"",
+        "maxAsyncS3":20,
+        "s3RetryCount":3,
+        "s3RetryDelay":1000,
+        "multipartUploadThreshold": 20971520,
+        "multipartUploadSize": 15728640,
+        "urlExpirationTime":4000
+      }
+    },
+    "graphql_proxy_url":"http://localhost:8090/graphql"
+  }
+}

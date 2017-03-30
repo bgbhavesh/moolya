@@ -74,7 +74,7 @@ MlResolver.MlMutationResolver['createTemplateAssignment'] = (obj, args, context,
 }
 
 
-MlResolver.MlQueryResolver['updateTemplateAssignment'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateTemplateAssignment'] = (obj, args, context, info) => {
   if (args.id) {
     let template = MlTemplateAssignment.findOne({_id: args.id});
     if (template) {

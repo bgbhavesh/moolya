@@ -37,6 +37,7 @@ const defaultServerConfig = {
   graphiqlPath: '/graphiql',
   assignUsersPath: '/adminMultipartFormData',
   registrationPath: '/registration',
+  registrationAPIPath:'/registrations',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -171,6 +172,24 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         }
       }
     }));
+  }
+
+  if(config.registrationAPIPath){
+    graphQLServer.post(config.registrationAPIPath, multipartMiddleware, Meteor.bindEnvironment(function (req, res)
+    {
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req && req.body && req.body.data)
+      {
+        let data = JSON.parse(req.body.data)
+        let response;
+        if(data) {
+          response = MlResolver.MlMutationResolver['createRegistrationAPI'](null, {registration: data}, context, null);
+        }
+        res.send("{registrationId : "+response+"}");
+      }
+    }))
   }
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));

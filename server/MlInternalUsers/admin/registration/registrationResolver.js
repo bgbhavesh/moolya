@@ -31,6 +31,14 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   }
 }
 
+MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
+  let response
+  if (args.registration) {
+    response = MlRegistration.insert({registrationInfo: args.registration});
+  }
+  return response
+}
+
 MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
@@ -355,4 +363,6 @@ MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, con
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
+
+
 }

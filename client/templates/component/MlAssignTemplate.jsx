@@ -59,9 +59,7 @@ class MlAssignTemplate extends React.Component{
       }
     });
   }
-  componentWillMount() {
 
-  }
 
   getStepAvailability(details){
     console.log(details);
@@ -87,7 +85,7 @@ class MlAssignTemplate extends React.Component{
       templateprocess           : this.state.process,
       templatesubProcess        : this.state.subProcess,
       templateProcessName       : this.state.processName,
-      templateSubProcessName    : this.state.subProcess,
+      templateSubProcessName    : this.state.subProcessName,
       templateclusterId         : this.state.clusters,
       templateclusterName       : this.state.clusterName,
       templatechapterId         : this.state.chapters,
@@ -97,7 +95,8 @@ class MlAssignTemplate extends React.Component{
       templatecommunityId       : this.state.communities,
       templatecommunityName     : this.state.communitiesName,
       templateuserType          : this.state.userTypes,
-      templateidentity          : this.state.identity
+      templateidentity          : this.state.identity,
+      stepAvailability          : this.state.stepAvailability
     }
     const response = await addTemplateAssignmentActionHandler(Details);
     return response;
@@ -182,7 +181,6 @@ class MlAssignTemplate extends React.Component{
 
   switchTab(){
     console.log("switch tab")
-    //this.setState({subChapters:val})
   }
 
   render(){
@@ -287,7 +285,7 @@ class MlAssignTemplate extends React.Component{
                     >
                       <MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)}/>
                       <div className="panel panel-default">
-                        <div className="panel-heading">Internal Subchapter Access</div>
+                        <div className="panel-heading">Template Step Details</div>
                         <div className="panel-body">
                           <div className="ml_tabs">
                             <ul  className="nav nav-pills">
@@ -300,18 +298,17 @@ class MlAssignTemplate extends React.Component{
                             </ul>
 
                             <div className="tab-content clearfix">
-
+                              <div className="tab-pane active" >
+                                <div className="list-group nomargin-bottom">
                             {that.state.templateInfo.map(function(options,key) {
                               return(
-                                    <div className="tab-pane active" key={key} id={"template"}>
-                                    <div className="list-group nomargin-bottom">
-                                    <a className="list-group-item">{options.templateName}
+                                    <a className="list-group-item" key={key} id={"template"}>{options.templateName}
                                       <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
                                     </a>
-                                    </div>
-                                    </div>
-                              )})}
 
+                              )})}
+                                </div>
+                              </div>
                             </div>
 
                           </div>

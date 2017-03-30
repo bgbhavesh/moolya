@@ -175,8 +175,7 @@ let registrationSchema = `
         _id             :   String,
         registrationInfo :  RegistrationInfo,
         registrationDetails : RegistrationDetails
-        registrationInfo :  RegistrationInfo,
-          addressInfo     : [AddressInfoSchema]
+        addressInfo     : [AddressInfoSchema]
          emailInfo       : [EmailInfoSchema]
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
@@ -220,7 +219,8 @@ let registrationSchema = `
         registrationDate:   Date,
         userId          :   String,
         registrationStatus        :   String,
-        assignedUser    :   String
+        assignedUser    :   String,
+        profileImage    : String
     }
     
     type branchLocation{

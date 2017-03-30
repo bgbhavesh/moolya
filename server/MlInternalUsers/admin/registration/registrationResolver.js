@@ -296,7 +296,10 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
       }
 
 
+    }
+
   }
+
   if(id){
     let code = 200;
 
@@ -318,65 +321,35 @@ MlResolver.MlQueryResolver['findRegistration'] = (obj, args, context, info) => {
   // }
 }
 MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, context, info) => {
-  console.log("--------------------------------------------------------------------");
-  let id = " "
+ let id = " "
   let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};
   if(args && args.registration){
     if(args.type == "CONTACTTYPE"){
-      //if(args.registration.contactInfo && args.registration.contactInfo[0]){
       id = MlRegistration.update(
         { _id : args.registrationId },
         { $set: { 'contactInfo': args.registration.contactInfo } }
       )
-
     }else if(args.type == "ADDRESSTYPE"){
-      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-
       id = MlRegistration.update(
         { _id : args.registrationId },
         { $set: { 'addressInfo': args.registration.addressInfo } }
       )
-      /*}else{
-       id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
-       }*/
     }else if(args.type == "SOCIALLINKS"){
-      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-
         id = MlRegistration.update(
           { _id : args.registrationId },
           { $set: { 'socialLinksInfo': args.registration.socialLinksInfo } }
         )
-
-
-      /*}else{
-       id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
-       }*/
     }else if(args.type == "EMAILTYPE"){
-      /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-
       id = MlRegistration.update(
         { _id : args.registrationId },
         { $set: { 'emailInfo': args.registration.emailInfo } }
       )
-
-
-      /*}else{
-       id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
-       }*/
     }
-
-
-      /*}else{
-       id = MlRegistrantion.insert({'addressInfo':args.registration.addressInfo});
-       }*/
-    }
-
-
   }
+
   if(id){
     let code = 200;
-   let insertedData =  MlRegistration.findOne(id) || {};
-    /*  let tabName = insertedData.contactInfo[0].numberTypeName;*/
+    let insertedData =  MlRegistration.findOne(id) || {};
     let result = {registrationId : id}
     let response = new MlRespPayload().successPayload(result, code);
     return response

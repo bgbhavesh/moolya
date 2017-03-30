@@ -44,6 +44,8 @@ export async function findRegistrationActionHandler(registrationId) {
             userId
             registrationStatus
             assignedUser
+            profileImage
+            
           }
         registrationDetails {
           userType

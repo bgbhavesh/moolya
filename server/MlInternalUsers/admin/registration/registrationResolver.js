@@ -288,7 +288,10 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
       }
 
 
+    }
+
   }
+
   if(id){
     let code = 200;
 
@@ -363,8 +366,6 @@ MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, con
        }*/
     }
 
-
-  }
   if(id){
     let code = 200;
    let insertedData =  MlRegistration.findOne(id) || {};

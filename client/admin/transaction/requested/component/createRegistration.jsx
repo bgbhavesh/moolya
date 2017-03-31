@@ -12,8 +12,9 @@ import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {createRegistrationInfo} from '../actions/createRegistrationInfo'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import formHandler from '../../../../commons/containers/MlFormHandler'
 
-export default class MlCreateRegistration extends React.Component{
+class MlCreateRegistration extends React.Component{
 
   constructor(props){
     super(props);
@@ -29,7 +30,8 @@ export default class MlCreateRegistration extends React.Component{
       registrationType:'',
       refered:'',
       institutionAssociation:'',
-      coummunityName:''
+      coummunityName:'',
+      userName : ''
     }
     //this.addEventHandler.bind(this);
     this.createRegistration.bind(this)
@@ -52,7 +54,7 @@ export default class MlCreateRegistration extends React.Component{
         email           :  this.refs.email.value,
         cityId          :  this.state.selectedCity,
         registrationType:  this.state.registrationType,
-        userName        :  this.refs.userName.value,
+        //userName        :  this.refs.userName.value,
         password        :  this.refs.password.value,
         accountType     :  this.state.subscription,
         institutionAssociation    :   this.state.institutionAssociation,
@@ -65,7 +67,15 @@ export default class MlCreateRegistration extends React.Component{
 
     }
     const response = await createRegistrationInfo(Details);
-    //return response;
+    /*console.log("------------------------------------------------------");
+    console.log(response);
+    if(response.success){
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }else{
+      toastr.error(response.result);
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }*/
+    return response;
     //this.props.getRegistrationDetails();
   }
 
@@ -108,7 +118,7 @@ export default class MlCreateRegistration extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    const resp=this.updateregistrationInfo();
+    const resp=this.createRegistration();
     return resp;
   }
 /*
@@ -145,16 +155,19 @@ export default class MlCreateRegistration extends React.Component{
   async handleError(response) {
     alert(response)
   };
+  enteredUserName(){
+     this.setState({"userName" : this.refs.email.value});
+  }
 
   async handleSuccess(response) {
 
     //FlowRouter.go("/admin/settings/departmentsList");
     if (response){
       if(response.success)
-        FlowRouter.go("/transactions/registrationApprovedList");
+        FlowRouter.go("/transactions/registrationRequested");
       else
         toastr.error(response.result);
-      FlowRouter.go("/transactions/registrationApprovedList");
+      FlowRouter.go("/transactions/registrationRequested");
     }
   };
   render(){
@@ -162,7 +175,7 @@ export default class MlCreateRegistration extends React.Component{
       {
         showAction: true,
         actionName: 'save',
-        handler :  this.createRegistration.bind(this)
+        handler: async(event) => this.props.handler(this.createRegistration.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
   /*    {
         showAction: true,
@@ -183,9 +196,8 @@ export default class MlCreateRegistration extends React.Component{
     }
     `;
 */
-    let citiesquery = gql`query{
-      data:fetchCities {label:name,value:_id
-      }
+    let citiesquery = gql`query($countryId:String){
+      data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
     }
     `;
 
@@ -210,6 +222,7 @@ export default class MlCreateRegistration extends React.Component{
     let stateOption={options: { variables: {countryId:this.state.country}}};
     let cityOption={options: { variables: {stateId:this.state.state}}};*/
     let chapterOption={options: { variables: {id:this.state.cluster}}};
+    let countryOption = {options: { variables: {countryId:this.state.country}}};
 
     let subscriptionOptions = [
       {value: 'Starter', label: 'Starter'},
@@ -290,10 +303,10 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="text" ref="contactNumber"   placeholder="Contact number" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id=""/>
+                  <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id="" onChange={this.enteredUserName.bind(this)}/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
+                  <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>
@@ -348,7 +361,7 @@ export default class MlCreateRegistration extends React.Component{
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User name" ref="userName"   className="form-control float-label" id=""/>
+                  <input type="text" placeholder="User name" ref="userName"  value={this.state.userName} className="form-control float-label" id="" disabled="disabled"/>
                 </div>
                 <div className="form-group">
                   <input type="Password" placeholder="Password" ref="password"  className="form-control float-label" id=""/>
@@ -392,3 +405,6 @@ export default class MlCreateRegistration extends React.Component{
     )
   }
 }
+
+export default MoolyaCreateRegistation = formHandler()(MlCreateRegistration);
+

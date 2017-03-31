@@ -90,6 +90,7 @@ export default class ContactDetails extends React.Component{
     }
     if(contactExist){
       toastr.error("Contact TypeAlready Exists!!!!!");
+      this.findRegistration();
     }else{
       let updatedComment = update(this.state.contactNumberArray[index], {
         numberTypeName : {$set: this.state.selectedNumberTypeLabel},
@@ -100,8 +101,6 @@ export default class ContactDetails extends React.Component{
       let newData = update(this.state.contactNumberArray, {
         $splice: [[index, 1, updatedComment]]
       });
-      console.log("-------------------------------------------------");
-      console.log(newData);
       const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
       if(response){
         this.findRegistration();

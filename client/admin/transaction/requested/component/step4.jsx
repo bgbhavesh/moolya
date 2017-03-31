@@ -125,6 +125,16 @@ export default class Step4 extends React.Component{
     let registerid = this.props.registrationId;
     if (index !== -1) {
       // do your stuff here
+      let registrationDetails = this.props.registrationInfo.socialLinksInfo
+      let dbData = _.pluck(registrationDetails, 'socialLinkType') || [];
+      let contactExist = null;
+      if(this.state.selectedValue){
+        contactExist = _.contains(dbData,this.state.selectedValue );
+      }
+      if(contactExist){
+        toastr.error("Social Link Type Already Exists!!!!!");
+        this.props.getRegistrationSocialLinks();
+      }
       let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: this.state.selectedSocialLinkLabel},socialLinkType : {$set: this.state.selectedValue},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
 
       let newData = update(this.state.socialLinkArray, {
@@ -155,6 +165,7 @@ export default class Step4 extends React.Component{
       // this.setState({registrationDocuments:resp})
       //refresh the registration data in the pare
       //this.props.getRegistrationKYCDetails();
+      this.setState({"uploadedProfilePic" : resp.result})
       this.props.getRegistrationSocialLinks();
 
 
@@ -181,7 +192,7 @@ export default class Step4 extends React.Component{
           <div className="col-md-6 nopadding-left">
 
             <div className="panel-heading">
-              SocialLink Type
+              Social Link Type
             </div>
             <div className="panel-body">
 

@@ -117,7 +117,7 @@ export default class MlMasterSettingRepo{
         /*     if(requestParams && requestParams.numberType.length > 0){
          result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId,_id:{$nin : requestParams.numberType}}).fetch();
          }else{*/
-        result= MlMasterSettings.find({"type": "CONTACTTYPE"}).fetch();
+        result= MlMasterSettings.find({"type": "CONTACTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
         //}
 
         let resultResponse=_.each(result,function (option,id) {
@@ -129,7 +129,7 @@ export default class MlMasterSettingRepo{
         /*   if(requestParams && requestParams.addressType.length > 0){
          result= MlMasterSettings.find({"type": "ADDRESSTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId,_id:{$nin : requestParams.addressType}}).fetch();
          }else{*/
-        result= MlMasterSettings.find({"type": "ADDRESSTYPE"}).fetch();
+        result= MlMasterSettings.find({"type": "ADDRESSTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
         //}
 
         let addressResponse=_.each(result,function (option,id) {
@@ -138,7 +138,7 @@ export default class MlMasterSettingRepo{
         break;
       case "SOCIALLINKS":
 
-        result= MlMasterSettings.find({"type": "SOCIALLINKS"}).fetch();
+        result= MlMasterSettings.find({"type": "SOCIALLINKS",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 
         let socialLinkResponse=_.each(result,function (option,id) {
           options.push({"label":option.socialLinksInfo.socialName,"value":option._id,"type" : option.socialLinksInfo.socialName})})
@@ -146,7 +146,7 @@ export default class MlMasterSettingRepo{
         break;
       case "EMAILTYPE":
 
-        result= MlMasterSettings.find({"type": "EMAILTYPE"}).fetch();
+        result= MlMasterSettings.find({"type": "EMAILTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 
         let emailResponse=_.each(result,function (option,id) {
           options.push({"label":option.emailTypeInfo.emailName,"value":option._id,"type" : option.emailTypeInfo.emailName})})

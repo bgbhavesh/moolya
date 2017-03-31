@@ -175,8 +175,7 @@ let registrationSchema = `
         _id             :   String,
         registrationInfo :  RegistrationInfo,
         registrationDetails : RegistrationDetails
-        registrationInfo :  RegistrationInfo,
-          addressInfo     : [AddressInfoSchema]
+        addressInfo     : [AddressInfoSchema]
          emailInfo       : [EmailInfoSchema]
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
@@ -220,7 +219,8 @@ let registrationSchema = `
         registrationDate:   Date,
         userId          :   String,
         registrationStatus        :   String,
-        assignedUser    :   String
+        assignedUser    :   String,
+        profileImage    : String
     }
     
     type branchLocation{
@@ -376,6 +376,7 @@ let registrationSchema = `
     }
     
     type Mutation{
+         createRegistrationAPI(registration: registrationInfoInput!):response
          createRegistration(registration: registrationInfoInput!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response       
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput,details:RegistrationDetailsInput):response

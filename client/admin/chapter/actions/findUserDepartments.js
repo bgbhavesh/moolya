@@ -23,7 +23,7 @@ export async function findUserDepartmentypeActionHandler(userId, subChapterId) {
       id:did,
       subChapterId:scid
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.data;
   return id

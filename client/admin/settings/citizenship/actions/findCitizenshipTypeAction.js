@@ -18,7 +18,7 @@ export async function findCitizenshipActionHandler(CitizenshipTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindCitizenship;
   return id

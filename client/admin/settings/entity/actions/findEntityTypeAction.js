@@ -18,7 +18,7 @@ export async function findEntityTypeActionHandler(EntityTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindEntity;
   return id

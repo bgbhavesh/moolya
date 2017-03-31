@@ -18,7 +18,7 @@ export async function findStageOfCompanyTypeActionHandler(StageOfCompanyTypeId) 
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindStageOfCompany;
   return id

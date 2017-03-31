@@ -17,7 +17,7 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
       id:did.id,
       moduleName:did.moduleName
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const totalResult = result.data.data;
   return totalResult

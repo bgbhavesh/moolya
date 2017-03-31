@@ -24,7 +24,7 @@ export async function findStepTemplatesActionHandler(templateId,code) {
       id:tid,
       stepCode:code
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findStepAssignedTemplates;
   return id

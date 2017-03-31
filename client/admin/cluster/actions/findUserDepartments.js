@@ -25,7 +25,7 @@ export async function findUserDepartmentypeActionHandler(userId, clusterId) {
       id:did,
       clusterId:clusterid
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.data;
   return id

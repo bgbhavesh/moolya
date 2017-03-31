@@ -32,7 +32,7 @@ export async function findTaxationActionHandler(TaxationId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchTaxation;
   return id

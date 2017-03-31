@@ -11,7 +11,7 @@ export default class  MlListViewComposer extends Component {
     let config=this.props;
     //note: params are mandatory,if not data will not be fetched
     let queryOptions={
-      forceFetch: true,
+      fetchPolicy: 'cache-first',
       variables: {
         offset: 0,
         limit: config.sizePerPage||100,

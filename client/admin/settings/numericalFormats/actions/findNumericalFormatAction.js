@@ -19,7 +19,7 @@ export async function findNumericalFormatActionHandler()
               
             }
     `,
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchGlobalSettings;
   return id

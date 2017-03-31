@@ -21,7 +21,7 @@ export async function findCityActionHandler(Id) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchCity;
   return id

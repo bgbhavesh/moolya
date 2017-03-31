@@ -16,7 +16,7 @@ export async function findTaxTypeDetailsActionHandler() {
   }
 }
     `,
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchMasterSettings;
   return id

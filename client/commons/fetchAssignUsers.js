@@ -27,7 +27,7 @@ export async function fetchAssignUsersActionHandler(clusterId, chapterId, subCha
       communityId:communityid,
       subChapterName:scName
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.data;
   return id

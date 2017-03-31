@@ -18,7 +18,7 @@ export async function findRequestTypeActionHandler(requestTypeId) {
     variables: {
       id:did
     },
-    forceFetch: true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindRequestType;
   return id

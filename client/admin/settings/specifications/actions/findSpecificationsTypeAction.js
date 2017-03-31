@@ -18,7 +18,7 @@ export async function findSpecificationActionHandler(SpecificationTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindSpecification;
   return id

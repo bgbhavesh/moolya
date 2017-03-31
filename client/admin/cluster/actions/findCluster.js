@@ -23,7 +23,7 @@ export async function findClusterTypeActionHandler(clusterId) {
       moduleName:"CLUSTER",
       actionName:"READ"
     },
-    forceFetch: true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchCluster;
   return id

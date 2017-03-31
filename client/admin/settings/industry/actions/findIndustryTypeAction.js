@@ -18,7 +18,7 @@ export async function findIndustryActionHandler(IndustryTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindIndustry;
   return id

@@ -159,7 +159,7 @@ export async function findRegistrationActionHandler(registrationId) {
     variables: {
       id: regId
     },
-    forceFetch: true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findRegistrationInfo;
   return id

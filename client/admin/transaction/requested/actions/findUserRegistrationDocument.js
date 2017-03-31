@@ -23,7 +23,7 @@ export async function findUserRegistartionActionHandler(registrationId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findRegistration;
   return id

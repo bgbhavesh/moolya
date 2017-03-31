@@ -19,7 +19,7 @@ export async function findAdminUserDetails(userId) {
     variables: {
       id
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const did = result.data.data;
   return did

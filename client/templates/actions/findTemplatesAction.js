@@ -23,7 +23,7 @@ export async function findTemplatesActionHandler(templateId) {
     variables: {
       id:tid
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findTemplates;
   return id

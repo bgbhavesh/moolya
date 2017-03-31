@@ -22,7 +22,7 @@ export async function fetchAssignedTemplate(process,subProcess,stepCode,recordId
       stepCode:stepCode,
       recordId:recordId
     },
-    forceFetch: true
+    fetchPolicy: 'cache-first'
   });
   const templateData = result.data.fetchAssignedTemplate;
   return templateData;

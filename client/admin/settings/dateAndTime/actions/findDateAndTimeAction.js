@@ -22,7 +22,7 @@ export async function findDateAndTimeActionHandler(Id)
           
         }
     `,
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchGlobalSettings;
   return id

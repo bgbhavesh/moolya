@@ -38,7 +38,7 @@ export async function findRoleActionHandler(roleId) {
     variables: {
       id
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const did = result.data.findRole;
   return did

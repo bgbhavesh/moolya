@@ -34,7 +34,7 @@ export async function findStepTemplatesAssignmentActionHandler(templateId) {
     variables: {
       id:tid
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findAssignedTemplates;
   return id

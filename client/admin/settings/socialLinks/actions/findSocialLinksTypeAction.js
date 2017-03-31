@@ -23,7 +23,7 @@ export async function findSocialLinksTypeActionHandler(Id)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   });
   const masterSetting= result.data.findMasterSetting||{};
   const {socialName,aboutSocial,socialDisplayName,socialUploadIcon}=masterSetting.socialLinksInfo||{};

@@ -33,7 +33,7 @@ export default class MlRequestedList extends Component {
         <div className="admin_padding_wrap">
           <h2>Requested List</h2>
 
-          <MlTableViewContainer {...mlUserTypeTableConfig} forceFetch={false}/>
+          <MlTableViewContainer {...mlUserTypeTableConfig} fetchPolicy='cache-first'/>
           {showAssignComponent&&<MlAssignComponent />}
         </div>
 

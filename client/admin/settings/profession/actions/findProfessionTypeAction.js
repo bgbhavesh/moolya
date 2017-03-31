@@ -20,7 +20,7 @@ export async function findProfessionActionHandler(ProfessionTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindProfession;
   return id

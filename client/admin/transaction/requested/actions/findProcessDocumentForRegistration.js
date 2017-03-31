@@ -29,7 +29,7 @@ export async function findProcessDocumentForRegistrationActionHandler(clusterIdI
     variables: {
       clusterId
     },
-    forceFetch: true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findProcessDocumentForRegistration;
   return id

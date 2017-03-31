@@ -66,12 +66,12 @@ export default class MoolyaSelect extends Component {
       queryOptions.options.variables.searchQuery=this.state.searchTerm;
     }
     if(props.queryOptions&&props.queryOptions.options&&props.queryOptions.options.variables){
-    //  queryOptions.options.forceFetch=true;
+    //  queryOptions.options.fetchPolicy=true;
     }
 
     const selectionOptionsPromise =  client.query({
       query: props.query,
-      forceFetch:true,
+      fetchPolicy: 'cache-first',
       variables:queryOptions.options.variables
     })
     selectionOptionsPromise.then(data =>{
@@ -128,10 +128,10 @@ export default class MoolyaSelect extends Component {
     const labelKey=this.props.labelKey||'label';
     const valueKey=this.props.valueKey||'value';
 
-    // let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{},forceFetch:true}};
+    // let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{},fetchPolicy:true}};
     //  queryOptions.options.variables.searchQuery=this.state.searchTerm;
     //  if(this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables){
-    //    queryOptions.options.forceFetch=true;
+    //    queryOptions.options.fetchPolicy=true;
     //  }
 
     // let QueryExecutor=null;

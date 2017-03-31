@@ -26,7 +26,7 @@ export async function findSubChapterActionHandler(subChapterId) {
     variables: {
       id: did
     },
-    forceFetch: true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchSubChapter;
   return id

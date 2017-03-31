@@ -18,7 +18,7 @@ export async function findTemplateTypeActionHandler(TemplateTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindTemplate;
   return id

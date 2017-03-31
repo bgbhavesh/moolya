@@ -19,7 +19,7 @@ export async function findDocumentTypeActionHandler(documentTypeId)
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findDocumentType;
   return id

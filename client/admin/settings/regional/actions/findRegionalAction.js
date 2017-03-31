@@ -24,7 +24,7 @@ export async function findRegionalActionHandler()
           
         }
     `,
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchGlobalSettings;
   return id

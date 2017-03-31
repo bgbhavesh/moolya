@@ -18,7 +18,7 @@ export async function findTransactionTypeActionHandler(TransactionTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindTransaction;
   return id

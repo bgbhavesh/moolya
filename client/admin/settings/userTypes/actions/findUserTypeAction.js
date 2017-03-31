@@ -18,7 +18,7 @@ export async function findUserTypeActionHandler(userTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindUserType;
   return id

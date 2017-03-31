@@ -31,7 +31,7 @@ export async function findProcessActionHandler(processId) {
     variables: {
       id:processId
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findProcess;
   return id

@@ -18,7 +18,7 @@ export async function findRoleTypeActionHandler(roleTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindRoleType;
   return id

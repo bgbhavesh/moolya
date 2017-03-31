@@ -20,7 +20,7 @@ export async function findLookingForActionHandler(LookingForTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.FindLookingFor;
   return id

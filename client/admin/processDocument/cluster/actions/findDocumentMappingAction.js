@@ -30,7 +30,7 @@ export async function findDocumentMappingActionHandler(Id)
     variables: {
       kycId
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findProcessDocuments;
   return id

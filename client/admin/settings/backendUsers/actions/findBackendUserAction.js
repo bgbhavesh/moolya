@@ -69,7 +69,7 @@ export async function findBackendUserActionHandler(userTypeId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.fetchUser;
   return id

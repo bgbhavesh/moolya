@@ -28,7 +28,7 @@ export async function findDepartmentActionHandler(DepartmentId) {
     variables: {
       id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   const id = result.data.findDepartment;
   return id

@@ -29,7 +29,7 @@ export async function findSubDepartmentActionHandler(SubDepartmentId) {
     variables: {
       _id:did
     },
-    forceFetch:true
+    fetchPolicy: 'cache-first'
   })
   console.log(result)
   const id = result.data.findSubDepartment;

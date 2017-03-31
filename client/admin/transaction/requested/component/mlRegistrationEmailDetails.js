@@ -24,7 +24,8 @@ export default class EmailDetails extends React.Component{
       selectedEmailTypeValue : null,
       /* selectedValuesList : [],*/
       emailDetailsObject : {"emailIdType": " ", "emailIdTypeName": " ", 'emailId': ''},
-      emailDetails: this.props.registrationInfo.emailInfo || []
+      emailDetails: this.props.registrationInfo.emailInfo || [],
+      activeTab: "active"
 
     }
     //this.optionsBySelectNumberType.bind(this)
@@ -44,6 +45,7 @@ export default class EmailDetails extends React.Component{
   emailTabSelected(){
     this.setState({selectedEmailTab:true});
     this.findRegistration();
+    this.setState({activeTab : ""});
   }
 
 
@@ -158,10 +160,10 @@ export default class EmailDetails extends React.Component{
 
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
-            <li className="active">
+            <li className={this.state.activeTab}>
               <a  href="#emailA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square' /></b></a>
             </li>
-            {that.state.emailDetails.map(function(options,key){
+            {that.state.emailDetails && (that.state.emailDetails.map(function(options,key){
 
               return(
                 <li key={key} onClick={that.emailTabSelected.bind(that,key)}>
@@ -170,11 +172,11 @@ export default class EmailDetails extends React.Component{
                 </li>)
 
 
-            })}
+            }))}
           </ul>
 
           <div className="tab-content clearfix">
-            <div className="tab-pane active" id="emailA">
+            <div className={"tab-pane"+this.state.activeTab} id="emailA">
               <div className="form-group">
                 <Moolyaselect multiSelect={false} ref={'emailType'}
                               placeholder="Select Email Type"
@@ -191,8 +193,8 @@ export default class EmailDetails extends React.Component{
                   className="ml ml-save"></span></a>
               </div>
             </div>
-            {that.state.emailDetails.map(function(options,key) {
-              return(<div className="tab-pane" id={'emailIdType'+key} >
+            {that.state.emailDetails && (that.state.emailDetails.map(function(options,key) {
+              return(<div className="tab-pane" id={'emailIdType'+key} key={key}>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={'emailIdType'+key}
                                 placeholder="Select Email Type"
@@ -210,7 +212,7 @@ export default class EmailDetails extends React.Component{
                   <a href="#" className="cancel_btn" onClick = {that.onDeleteEmail.bind(that,key)}><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
-            })}
+            }))}
 
 
           </div>

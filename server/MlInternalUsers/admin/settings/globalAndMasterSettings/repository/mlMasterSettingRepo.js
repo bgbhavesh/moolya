@@ -152,6 +152,29 @@ export default class MlMasterSettingRepo{
           options.push({"label":option.emailTypeInfo.emailName,"value":option._id,"type" : option.emailTypeInfo.emailName})})
 
         break;
+      case "TITLE":
+
+        result= MlMasterSettings.find({"type": "TITLE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+
+        let titleResponse=_.each(result,function (option,id) {
+          options.push({"label":option.titleInfo.titleName,"value":option._id,"type" : option.titleInfo.titleName})})
+
+        break;
+      case "GENDER":
+
+        result= MlMasterSettings.find({"type": "GENDER",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+
+        let genderlResponse=_.each(result,function (option,id) {
+          options.push({"label":option.genderInfo.genderName,"value":option._id,"type" : option.genderInfo.genderName})})
+
+        break;
+      case "COMPANYTYPE":
+        result= MlMasterSettings.find({"type": "COMPANYTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+
+        let companyTypeResponse=_.each(result,function (option,id) {
+          options.push({"label":option.companyTypeInfo.companyName,"value":option._id,"type" : option.companyTypeInfo.companyName})})
+
+        break;
 
     }
 

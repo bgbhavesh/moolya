@@ -31,7 +31,11 @@ export default class Ideator extends React.Component{
       foundationDate:'',
       dateOfBirth:'',
       employmentDate:'',
-      identity:''
+      identity:'',
+      title:'',
+      gender:'',
+      citizenships:'',
+      profession:''
 
     };
     return this;
@@ -57,7 +61,11 @@ export default class Ideator extends React.Component{
         selectedSubsidaryComapny: details.subsidaryCompany,
         foundationDate:details.foundationDate,
         dateOfBirth:details.dateOfBirth,
-        employmentDate:details.employmentDate
+        employmentDate:details.employmentDate,
+        title:details.title,
+        gender:details.gender,
+        citizenships:details.citizenships,
+        profession:details.profession
       })
     }else{
       this.setState({
@@ -109,6 +117,19 @@ export default class Ideator extends React.Component{
     console.log(event.target.name)
     this.setState({identity:event.target.name})
   }
+  optionsBySelectGender(val){
+    this.setState({gender:val.value})
+  }
+  optionsBySelectTitle(val){
+    this.setState({title:val.value})
+  }
+  optionsBySelectCitizenships(val){
+    this.setState({citizenships:val.value})
+  }
+  optionsBySelectProfession(val){
+    this.setState({profession:val.value})
+  }
+
 
   async  updateregistration() {
     let Details=null;
@@ -150,19 +171,19 @@ export default class Ideator extends React.Component{
         details:{
           identityType      : this.state.identity,
           userType          : this.state.selectedUserType,
-          title             : '',
+          title             : this.state.title,
           firstName         : this.refs.firstName.value,
           middleName        : this.refs.middleName.value,
           lastName          : this.refs.lastName.value,
           displayName       : this.refs.displayName.value,
           dateOfBirth       : this.state.dateOfBirth,
-          gender            : '',
-          citizenships      : '',
+          gender            : this.state.gender,
+          citizenships      : this.state.citizenships,
           qualification     : this.refs.qualification.value,
-          employmentStatus  : '',
+          employmentStatus  : this.state.employmentStatus,
           professionalTag   : this.refs.professionalTag.value,
           industry          : this.state.selectedTypeOfIndustry,
-          profession        : '',
+          profession        : this.state.profession,
           employerName      : this.refs.employerName.value,
           employerWebsite   : this.refs.employerWebsite.value,
           employmentDate    : this.state.employmentDate
@@ -216,11 +237,39 @@ export default class Ideator extends React.Component{
     data:fetchBusinessTypes{label:businessTypeName,value:_id}
     }
     `;
-    let companytypesquery=gql` query{
-    data:fetchCompanyTypes{label:companyName,value:_id}
-    }
-    `;
-
+    let companytypesquery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let companytypesOption={options: { variables: {type : "COMPANYTYPE",hierarchyRefId:this.props.clusterId}}};
+    let genderquery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let genderOption={options: { variables: {type : "GENDER",hierarchyRefId:this.props.clusterId}}};
+    let titlequery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.props.clusterId}}};
+    /*let citizenshipsquery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let citizenshipsOption={options: { variables: {type : "CITIZENSHIPS",hierarchyRefId:this.props.clusterId}}};
+*/
     let userTypequery = gql`query{
     data:FetchUserType {label:userTypeName,value:_id}
     }
@@ -318,7 +367,8 @@ export default class Ideator extends React.Component{
                         :
                         <div>
                           <div className="form-group">
-                            <Select name="form-field-name" placeholder="Title" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.ti} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+
                           </div>
                           <div className="form-group">
                             <input type="text" ref="firstName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} placeholder="First Name" className="form-control float-label" id=""/>
@@ -337,7 +387,7 @@ export default class Ideator extends React.Component{
                             <FontAwesome name="calendar" className="password_icon"/>
                           </div>
                           <div className="form-group">
-                            <Select name="form-field-name" placeholder="Gender" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
+                            <Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender().bind(this)} isDynamic={true}/>
                           </div>
                         </div>
                       }
@@ -350,7 +400,7 @@ export default class Ideator extends React.Component{
                       {(this.state.identity=='Company'||this.state.identity=='')?
                         <div>
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Select Type of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} query={companytypesquery} onSelect={that.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
+                            <Moolyaselect multiSelect={false} placeholder="Select Type of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} query={companytypesquery}  queryOptions={companytypesquery} onSelect={that.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
                           </div>
                           <div className="form-group">
                             <Moolyaselect multiSelect={false} placeholder="Select Type of Entity" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfEntity} queryType={"graphql"} query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this)} isDynamic={true}/>

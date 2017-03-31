@@ -30,7 +30,8 @@ export default class Step4 extends React.Component{
        }]*/
       socialLinkObject : {"socialLinkType": " ", "socialLinkTypeName": " ", 'socialLinkUrl': ''},
       socialLinkArray :[],
-      uploadedProfilePic : "/images/ideator_01.png"
+      uploadedProfilePic : "/images/ideator_01.png",
+      activeTab: "active"
 
 
     }
@@ -122,6 +123,7 @@ export default class Step4 extends React.Component{
    onUpdating(index,value) {
 
     this.setState({"selectedTab" : true});
+     this.setState({activeTab : ""});
 
   }
 
@@ -204,20 +206,20 @@ export default class Step4 extends React.Component{
 
               <div className="ml_tabs">
                 <ul  className="nav nav-pills">
-                  <li className="active">
-                    <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                  <li className={this.state.activeTab}>
+                    <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
                   </li>
-                  {that.state.socialLinkArray.map(function(options,key) {
+                  {that.state.socialLinkArray && (that.state.socialLinkArray.map(function(options,key) {
                     return(
                       <li key={key} onClick={() => that.onUpdating(key)}>
                         <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square' onClick = {that.onDeleteSocialLink.bind(that,key)}/></b></a>
                       </li>
                     )
-                  })}
+                  }))}
                 </ul>
 
                 <div className="tab-content clearfix">
-                  <div className="tab-pane active" id="1a">
+                  <div className={"tab-pane"+this.state.activeTab} id="1a">
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} ref={'socialLinkType'}
                                     placeholder="Select Social Link"
@@ -234,7 +236,7 @@ export default class Step4 extends React.Component{
                         className="ml ml-save"></span></a>
                      </div>
                   </div>
-                  {that.state.socialLinkArray.map(function(options,key) {
+                  {that.state.socialLinkArray && (that.state.socialLinkArray.map(function(options,key) {
                     return(<div className="tab-pane" id={'socialLink'+key}  key={key} >
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} ref={'socialLinkType'+key}
@@ -253,7 +255,7 @@ export default class Step4 extends React.Component{
                         <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}><span className="ml ml-delete"></span></a>
                       </div>
                     </div>)
-                  })}
+                  }))}
 
 
                 </div>

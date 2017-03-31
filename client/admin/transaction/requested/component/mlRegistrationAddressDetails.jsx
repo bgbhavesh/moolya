@@ -26,7 +26,8 @@ export default class AddressDetails extends React.Component{
       selectedValue : null,
       /* selectedValuesList : [],*/
       addressInformation : addressInfoObject,
-      addressDetails: this.props.registrationInfo.addressInfo || []
+      addressDetails: this.props.registrationInfo.addressInfo || [],
+      activeTab : "active"
 
     }
     //this.optionsBySelectNumberType.bind(this)
@@ -71,6 +72,7 @@ export default class AddressDetails extends React.Component{
   }
   addressTabSelected(index,value){
     this.setState({selectedTab : true});
+    this.setState({activeTab : ""});
   }
 
 
@@ -211,10 +213,10 @@ export default class AddressDetails extends React.Component{
 
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
-             <li className="active">
+             <li className={this.state.activeTab}>
                 <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square' /></b></a>
              </li>
-            {that.state.addressDetails.map(function(options,key){
+            {that.state.addressDetails && (that.state.addressDetails.map(function(options,key){
 
               return(
                 <li key={key} onClick={that.addressTabSelected.bind(that,key)}>
@@ -223,12 +225,12 @@ export default class AddressDetails extends React.Component{
                 </li>)
 
 
-            })}
+            }))}
           </ul>
 
           <div className="tab-content clearfix">
 
-              <div className="tab-pane active" id="1a">
+              <div className={"tab-pane"+this.state.activeTab} id="1a">
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={'address'}
                                 placeholder="Select Address Type"
@@ -278,10 +280,10 @@ export default class AddressDetails extends React.Component{
 
 
 
-            {that.state.addressDetails.map(function(options,key) {
+            {that.state.addressDetails && (that.state.addressDetails.map(function(options,key) {
 
               return(
-                <div className="tab-pane" id={'adressType' + key}>
+                <div className="tab-pane" id={'adressType' + key} key={key}>
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} ref={'address' + key}
                                   placeholder="Select NumberType"
@@ -341,7 +343,7 @@ export default class AddressDetails extends React.Component{
                     <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}><span className="ml ml-delete"></span></a>
                   </div>
                 </div>)
-            })}
+            }))}
           </div>
 
         </div>

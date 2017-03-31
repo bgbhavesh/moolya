@@ -1,8 +1,7 @@
-/*
 if(Meteor.isServer) {
   MlRegistration.insert(
     {registrationInfo:{
-      /!*userType:"Individual",
+      /*userType:"Individual",
       firstName:"Muralidhar",
       lastName:"Reddy",
       countryId:"c102",
@@ -28,7 +27,7 @@ if(Meteor.isServer) {
       subChapterName:"",
       communityId:"",
       communityName:"",
-      source:"",*!/
+      source:"",*/
       firstName : "Muralidhar",
       lastName : "Reddy",
       email : "muralidharreddy.kunduru@raksan.in",
@@ -45,4 +44,3 @@ if(Meteor.isServer) {
       registrationDetails:{individualInfo:{firstName:"Muralidhar",middleName:"K",lastName:"Reddy"}}}
   );
 }
-*/

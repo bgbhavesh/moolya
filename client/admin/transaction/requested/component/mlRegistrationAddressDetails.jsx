@@ -64,7 +64,7 @@ export default class AddressDetails extends React.Component{
         $splice: [[index, 1, updatedComment]]
       });
 
-      this.setState({addressDetails : newData,selectedValue : did,selectedAddressLabel : selObject.label});
+
 
     }
 
@@ -110,11 +110,23 @@ export default class AddressDetails extends React.Component{
         //this.props.getRegistrationContactInfo();
         if(!response.success){
           toastr.error(response.result);
+          this.findRegistration();
+        }else{
+          this.findRegistration();
+          this.refs["name"].value=""
+          this.refs["phoneNumber"].value = "";
+          this.refs["addressFlat"].value = "";
+          this.refs["addressLocality"].value="";
+          this.refs["addressLandmark"].value="";
+          this.refs["addressArea"].value = "";
+          this.refs["addressCity"].value = "";
+          this.refs["addressState"].value = "";
+          this.refs["addressCountry"].value = "";
+          this.refs["addressPinCode"].value = "";
+          this.setState({selectedValue : "",selectedAddressLabel : ""});
         }
-        this.findRegistration();
-        this.setState({"addressInformation":{"addressType" : " ","addressTypeName": "Add New",'name' : '','phoneNumber' : '','addressFlat' : '',
-          'addressLocality': '','addressLandmark':'','addressArea': '',
-          'addressCity': '','addressState':'','addressCountry':'','addressPinCode':''}})
+
+
       }
 
 
@@ -258,7 +270,8 @@ export default class AddressDetails extends React.Component{
                          className="form-control float-label" id="" />
                 </div>
                 <div className="ml_btn">
-                  <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}>Save</a>
+                  <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}><span
+                    className="ml ml-save"></span></a>
                 </div>
               </div>
 
@@ -325,7 +338,7 @@ export default class AddressDetails extends React.Component{
                     <a href="#" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>
-                    <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}>Cancel</a>
+                    <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}><span className="ml ml-delete"></span></a>
                   </div>
                 </div>)
             })}

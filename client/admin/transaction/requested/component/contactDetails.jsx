@@ -74,6 +74,10 @@ export default class ContactDetails extends React.Component{
         }
         //this.props.getRegistrationSocialLinks();
         this.findRegistration();
+        //this.setState({ contactNumberObject:{numberType : "",numberTypeName: "",countryCode: "",contactNumber: ""}})
+        this.refs.countryCode.value="";
+        this.refs["contactNumber"].value="";
+        this.setState({selectedNumberTypeValue : "",selectedNumberTypeLabel : ""});
       }
 
 
@@ -104,7 +108,6 @@ export default class ContactDetails extends React.Component{
       const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
       if(response){
         this.findRegistration();
-
       }
     }
 
@@ -248,7 +251,7 @@ export default class ContactDetails extends React.Component{
                               isDynamic={true}/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Enter Country Code" ref={'countryCode'} className="form-control float-label" id=""/>
+                <input type="text" placeholder="Enter Country Code" defaultValue={this.state.contactNumberObject.countryCode} ref={'countryCode'} className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
                 <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber" className="form-control float-label"/>

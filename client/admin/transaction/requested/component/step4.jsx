@@ -98,15 +98,20 @@ export default class Step4 extends React.Component{
 
     }else{*/
       let socialLinkList = this.state.socialLinkObject;
-      socialLinkList.socialLinkType = this.refs["socialLinkType"].props.selectedValue,
+      socialLinkList.socialLinkType = this.state.selectedValue,
       socialLinkList.socialLinkTypeName = this.state.selectedSocialLinkLabel,
       socialLinkList.socialLinkUrl = this.refs["socialLinkTypeUrl"].value;
       const response = await addRegistrationStep3Details(socialLinkList,detailsType,registerid);
       if(response){
         if(!response.success){
           toastr.error(response.result);
+          this.props.getRegistrationSocialLinks();
+        }else{
+          this.props.getRegistrationSocialLinks();
+          this.refs["socialLinkTypeUrl"].value = "";
+          this.setState({selectedValue : "",selectedSocialLinkLabel :""});
         }
-        this.props.getRegistrationSocialLinks();
+
 
       }
     //}
@@ -225,7 +230,8 @@ export default class Step4 extends React.Component{
                       <input type="text" placeholder="Enter URL" ref={'socialLinkTypeUrl'} className="form-control float-label" id=""/>
                     </div>
                     <div className="ml_btn">
-                      <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}>Save</a>
+                      <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
+                        className="ml ml-save"></span></a>
                      </div>
                   </div>
                   {that.state.socialLinkArray.map(function(options,key) {
@@ -242,8 +248,9 @@ export default class Step4 extends React.Component{
                         <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
                       <div className="ml_btn">
-                        <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}>Save</a>
-                        <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}>Cancel</a>
+                        <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}><span
+                          className="ml ml-save"></span></a>
+                        <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}><span className="ml ml-delete"></span></a>
                       </div>
                     </div>)
                   })}

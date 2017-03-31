@@ -60,8 +60,13 @@ export default class EmailDetails extends React.Component{
       if(response){
         if(!response.success){
           toastr.error(response.result);
+          this.findRegistration();
+        }else{
+          this.findRegistration();
+          this.refs["emailId"].value = "";
+          this.setState({selectedEmailTypeValue : "",selectedEmailTypeLabel : ""});
         }
-        this.findRegistration();
+
       }
 
 
@@ -182,7 +187,8 @@ export default class EmailDetails extends React.Component{
                 <input type="text" placeholder="Enter Email Id" ref={'emailId'} className="form-control float-label" id=""/>
               </div>
               <div className="ml_btn">
-                <a href="#" className="save_btn" onClick={this.onSavingEmailDetails.bind(this)}>Save</a>
+                <a href="#" className="save_btn" onClick={this.onSavingEmailDetails.bind(this)}><span
+                  className="ml ml-save"></span></a>
               </div>
             </div>
             {that.state.emailDetails.map(function(options,key) {
@@ -199,8 +205,9 @@ export default class EmailDetails extends React.Component{
                   <input type="text" ref={'emailId'+key} placeholder="Enter URL" valueKey={options.emailId} className="form-control float-label" defaultValue={options.emailId}/>
                 </div>
                 <div className="ml_btn">
-                  <a href="#" className="edit_btn"  onClick = {that.onUpdatingEmailDetails.bind(that,key)}>Save</a>
-                  <a href="#" className="cancel_btn" onClick = {that.onDeleteEmail.bind(that,key)}>Cancel</a>
+                  <a href="#" className="save_btn"  onClick = {that.onUpdatingEmailDetails.bind(that,key)}><span
+                    className="ml ml-save"></span></a>
+                  <a href="#" className="cancel_btn" onClick = {that.onDeleteEmail.bind(that,key)}><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
             })}

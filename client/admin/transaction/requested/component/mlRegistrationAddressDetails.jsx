@@ -64,7 +64,7 @@ export default class AddressDetails extends React.Component{
         $splice: [[index, 1, updatedComment]]
       });
 
-
+      this.setState({addressDetails : newData,selectedValue : did,selectedAddressLabel : selObject.label});
 
     }
 
@@ -212,7 +212,7 @@ export default class AddressDetails extends React.Component{
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
              <li className="active">
-                <a  href="#1a" data-toggle="tab">New Tab&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='minus-square'/></b></a>
              </li>
             {that.state.addressDetails.map(function(options,key){
 

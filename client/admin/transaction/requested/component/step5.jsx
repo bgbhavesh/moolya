@@ -12,7 +12,7 @@ import {addRegistrationStep3Details} from '../actions/addRegistrationStep3Detail
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {approvedStausForDocuments} from '../actions/approvedStatusForDocuments'
 import {rejectedStausForDocuments} from '../actions/rejectedStatusForDocuments'
-
+import {removeFileFromDocumentsActionHandler} from '../actions/removeFileFromDocuments'
 export default class Step5 extends React.Component{
   constructor(props){
     super(props);
@@ -127,9 +127,13 @@ export default class Step5 extends React.Component{
     this.setState({selectedFiles:selectedValues})
     console.log(this.state.selectedFiles)
   };
-  onDocumentRemove(removedDoc,removedDocFile){
-    console.log(removedDoc)
-    console.log(removedDocFile)
+  async onDocumentRemove(documentId,fileId){
+    let  registrationId=this.props.registrationInfo._id
+    const response = await removeFileFromDocumentsActionHandler(fileId,documentId,registrationId);
+    if(response){
+      this.props.getRegistrationKYCDetails();
+
+    }
   }
 
    onFileUpload(file,documentId){

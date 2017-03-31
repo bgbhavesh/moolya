@@ -183,6 +183,17 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
     return updatedResponse;
   }
 }
+MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    let documentList=args.documentId;
+    let updatedResponse;
+    //  updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}},'kycDocuments':{$elemMatch: {'documentId.$.docFiles':{$elemMatch:{'fileId':args.fileId}}}}},{$pull: {}});
+    //updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{ $pull:{"kycDocuments.documentId.docFiles": {"fileId" :args.fileId}}},false, true );
+    //return updatedResponse;
+    return updatedResponse;
+  }
+}
 
 MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, context, info) => {
 

@@ -39,6 +39,9 @@ export default class DocumentViewer extends React.Component{
       this.props.onDocumentSelect(selectedDocs);
     }
   }
+  OnFileRemove(documentId,fileId,event){
+    this.props.onDocumentRemove(documentId,fileId)
+  }
   render(){
     let doc=this.props.doc||{};
     let docFiles=doc.docFiles||[];
@@ -68,7 +71,7 @@ export default class DocumentViewer extends React.Component{
            <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
              {docFiles.map((file,fIndex)=>{
                      return (<li key={file.fileId} className="doc_card" data-toggle="tooltip" data-placement="bottom" title={file.fileName}>
-                                <span className="ml ml-minus"></span>
+                                <span className="ml ml-minus" onClick={this.OnFileRemove.bind(this,doc.documentId,file.fileId)}></span>
                                 <img id={file.fileId} src={file.fileUrl} />
                             </li>);
              })}

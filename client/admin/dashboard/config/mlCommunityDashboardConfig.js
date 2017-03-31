@@ -29,7 +29,7 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
         subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
         userType:"All"}
   },
-  viewComponent:<MlCommunityList/>,
+  viewComponent:<MlCommunityList params={this.params}/>,
   // graphQlQuery:gql`
   //   query($clusterId:String, $chapterId:String, $subChapterId:String){
   //     data:fetchCommunities(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){

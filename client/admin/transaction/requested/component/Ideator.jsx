@@ -237,8 +237,8 @@ export default class Ideator extends React.Component{
     data:fetchIndustries{label:industryName,value:_id}
     }
     `;
-    let lookinforquery=gql` query{
-    data:fetchStageOfCompany{label:lookingForName,value:_id}
+    let lookinforquery=gql`  query{
+    data:fetchLookingFor{label:lookingForName,value:_id}
     }
     `;
     let stageofcompquery=gql` query{

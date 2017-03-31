@@ -1,8 +1,7 @@
-/*
 if(Meteor.isServer) {
   MlRegistration.insert(
     {registrationInfo:{
-      /!*userType:"Individual",
+      /*userType:"Individual",
       firstName:"Muralidhar",
       lastName:"Reddy",
       countryId:"c102",
@@ -28,7 +27,7 @@ if(Meteor.isServer) {
       subChapterName:"",
       communityId:"",
       communityName:"",
-      source:"",*!/
+      source:"",*/
       firstName : "Muralidhar",
       lastName : "Reddy",
       email : "muralidharreddy.kunduru@raksan.in",
@@ -40,9 +39,10 @@ if(Meteor.isServer) {
       deviceName : "HP-QF-12234",
       deviceNumber : "1234",
       ipAddress : "10.20.30.156",
-      ipLocation : "Hyderabad"
+      ipLocation : "Hyderabad",
+      countryId : "c101"
+
     },
       registrationDetails:{individualInfo:{firstName:"Muralidhar",middleName:"K",lastName:"Reddy"}}}
   );
 }
-*/

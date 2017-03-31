@@ -67,7 +67,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
 
       details.communityId=communityDetails._id;
-      details.communityName=communityDetails.communityName;
+      //details.communityName=communityDetails.communityName;
       details.communityDefName=communityDetails.communityDefName;
       details.communityDefCode=communityDetails.communityDefCode;
 

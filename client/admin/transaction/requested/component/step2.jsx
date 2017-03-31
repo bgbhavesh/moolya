@@ -11,6 +11,7 @@ import ServiceProvider from './ServiceProvider'
 import Funder from './Funder'
 import Startup from './Startup'
 import Company from './Company'
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 export default class Step2 extends React.Component{
   constructor(props){
@@ -25,6 +26,7 @@ export default class Step2 extends React.Component{
   {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    initalizeFloatLabel();
   }
   //Service Providers
   //Companies

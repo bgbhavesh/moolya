@@ -1,12 +1,14 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findProcessDocumentForRegistrationActionHandler(clusterIdInfo) {
+export async function findProcessDocumentForRegistrationActionHandler(clusterIdInfo,communityTypeInfo,userTypeInfo) {
   let clusterId = clusterIdInfo
+  let userType =userTypeInfo
+  let communityType=communityTypeInfo
   const result = await client.query({
     query: gql`
-       query($clusterId: String){
-            findProcessDocumentForRegistration(clusterId:$clusterId) {
+       query($clusterId: String, $userType: String, $communityType: String ){
+            findProcessDocumentForRegistration(clusterId:$clusterId, userType:$userType, communityType:$communityType) {
               _id
               processDocuments {
                 kycCategoryId
@@ -27,7 +29,9 @@ export async function findProcessDocumentForRegistrationActionHandler(clusterIdI
         }
     `,
     variables: {
-      clusterId
+      clusterId,
+      userType,
+      communityType
     },
     forceFetch: true
   })

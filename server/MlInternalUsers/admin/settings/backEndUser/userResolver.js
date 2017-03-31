@@ -465,3 +465,41 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   let resp = MlResolver.MlMutationResolver['addUserProfile'](null, {userId:userId, userProfile:userProfile}, context, null)
   return resp;
 }
+
+MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info) => {
+  let userType = args.userType; // Backend, Funder, Ideator, Startup, etc.
+  let clusterId = args.clusterId?args.clusterId:"";
+  let chapterId = args.chapterId?args.chapterId:"";
+  let subChapterId = args.subChapterId?args.subChapterId:"";
+
+  let users = [];
+  if(clusterId != "" && chapterId != "" && subChapterId != ""){
+    if(userType == "All"){
+      users = Meteor.users.find({"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}).fetch();
+    }else if(userType == "BackendUsers"){
+    //   // UserType needed to be introduced
+    //   users = Meteor.users.find({"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}).fetch();
+      allUsers = MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'](obj, {subChapterId:subChapterId}, context, info)
+      _.each(allUsers, function (user){
+        if(userType == "All"){
+          if(user.profile.isActive){
+            users.push(user);
+          }
+        } else if(userType == "BackendUsers"){
+          if(user.profile.isActive && user.profile.isInternaluser && !user.profile.isExternaluser){
+            users.push(user);
+          }
+        }
+      })
+    }
+  } else{
+    if(userType == "All"){
+      users = Meteor.users.find({"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}).fetch();
+    }else if(userType == "BackendUsers"){
+      // UserType needed to be introduced
+      users = Meteor.users.find({"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}).fetch();
+    }
+  }
+
+  return {data:users, totalRecords:users&&users.length?users.length:0};
+}

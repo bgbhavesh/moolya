@@ -20,32 +20,60 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
       let userDefaultObj = getAdminUserContext()
       return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
         chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+        userType:"All"}
     }
     else
       return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
         chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+        userType:"All"}
   },
   viewComponent:<MlCommunityList/>,
+  // graphQlQuery:gql`
+  //   query($clusterId:String, $chapterId:String, $subChapterId:String){
+  //     data:fetchCommunities(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
+  //       totalRecords
+  //         data{
+  //           ...on Community{
+  //             name,
+  //             displayName,
+  //             code,
+  //             communityImageLink,
+  //             showOnMap,
+  //             aboutCommunity,
+  //             isActive
+  //           }
+  //         }
+  //       }
+  //     }
+  // `
   graphQlQuery:gql`
-    query($clusterId:String, $chapterId:String, $subChapterId:String){
-      data:fetchCommunities(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
-        totalRecords
-          data{
-            ...on Community{
-              name,
-              displayName,
-              code,
-              communityImageLink,
-              showOnMap,
-              aboutCommunity,
-              isActive
-            }
+      query($clusterId:String, $chapterId:String, $subChapterId:String, $userType:String){
+          data:fetchUsersForDashboard(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, userType:$userType){
+              totalRecords
+              data{
+                  ...on BackendUsers{
+                      _id,
+                      profile{
+                          isInternaluser,
+                          isExternaluser,
+                          isActive,
+                          email,
+                          InternalUprofile{
+                              moolyaProfile{
+                                userType,
+                                roleType,
+                                displayName,
+                                globalAssignment,
+                                isActive
+                              }
+                          }    
+                      }
+                  }
+              }      
           }
-        }
-      }
-  `
+      }`
 });
 
 const mlCommunityDashboardMapConfig=new MlViewer.View({

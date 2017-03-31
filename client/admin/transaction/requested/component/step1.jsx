@@ -8,6 +8,7 @@ import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
 import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 
 var FontAwesome = require('react-fontawesome');
@@ -56,6 +57,7 @@ export default class Step1 extends React.Component{
   {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    initalizeFloatLabel();
     //this.props.getRegistrationDetails(this.state)
   }
   optionsBySelectCountry(value){
@@ -91,7 +93,17 @@ export default class Step1 extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/transactions/editRequests/");
+    if (response) {
+      if (response.success) {
+        toastr.error("Update Successful");
+        //FlowRouter.go("/admin/transactions/editRequests/");
+      }
+      else {
+        toastr.error(response.result);
+      }
+    }else {
+      console.log(response)
+    }
   };
 
   async  updateregistrationInfo() {
@@ -125,6 +137,7 @@ export default class Step1 extends React.Component{
 
   updateRegistration(){
     const resp=this.updateregistrationInfo();
+    toastr.success("Update Successful");
     return resp;
   }
 
@@ -229,7 +242,7 @@ export default class Step1 extends React.Component{
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
                     <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} />
                     <div className="form-group">
-                      <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Device name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceName} className="form-control float-label" id="" disabled="true"/>
@@ -255,10 +268,10 @@ export default class Step1 extends React.Component{
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id=""/>
+                  <input type="text" placeholder="User name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id="" disabled="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id=""/>
+                  <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
                 </div>
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>

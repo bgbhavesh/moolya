@@ -192,7 +192,7 @@ export default class Step4 extends React.Component{
           <div className="col-md-6 nopadding-left">
 
             <div className="panel-heading">
-              SocialLink Type
+              Social Link Type
             </div>
             <div className="panel-body">
 

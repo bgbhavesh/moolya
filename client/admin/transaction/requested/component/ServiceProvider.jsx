@@ -321,7 +321,7 @@ export default class ServiceProvider extends React.Component{
                   <Select name="form-field-name" placeholder="Title" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="firstName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} placeholder="FirstName" className="form-control float-label" id=""/>
+                  <input type="text" ref="firstName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} placeholder="First Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="middleName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.middleName} placeholder="Middle Name" className="form-control float-label" id=""/>

@@ -3,8 +3,6 @@ import {client} from '../../../core/apolloConnection';
 
 export async function createRegistrationInfo(registrationDetails) {
   let registration = {}
-  console.log("----------------------------------------------------")
-  console.log(registrationDetails);
   registration = registrationDetails;
   const result = await client.mutate({
     mutation: gql`

@@ -212,14 +212,14 @@ export default class AddressDetails extends React.Component{
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
              <li className="active">
-                <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square' /></b></a>
              </li>
             {that.state.addressDetails.map(function(options,key){
 
               return(
                 <li key={key} onClick={that.addressTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#adressType'+key} className="add-contact">
-                    <FontAwesome name='plus-square' />{options.addressTypeName}</a>
+                    <FontAwesome name='minus-square' onClick={that.onDeleteAddress.bind(that,key)}/>{options.addressTypeName}</a>
                 </li>)
 
 
@@ -269,7 +269,7 @@ export default class AddressDetails extends React.Component{
                   <input type="text" ref={'addressPinCode'} placeholder="Pincode" name ={'addressPinCode'}
                          className="form-control float-label" id="" />
                 </div>
-                <div className="ml_btn">
+                <div className="ml_icon_btn">
                   <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}><span
                     className="ml ml-save"></span></a>
                 </div>
@@ -333,7 +333,7 @@ export default class AddressDetails extends React.Component{
                            className="form-control float-label" id="" valueKey={options.addressPinCode}/>
                   </div>
 
-                  <div className="ml_btn">
+                  <div className="ml_icon_btn">
                     {/*<a href="#" className="save_btn">Save</a>*/}
                     <a href="#" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span

@@ -210,7 +210,7 @@ export default class Step4 extends React.Component{
                   {that.state.socialLinkArray.map(function(options,key) {
                     return(
                       <li key={key} onClick={() => that.onUpdating(key)}>
-                        <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                        <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square' onClick = {that.onDeleteSocialLink.bind(that,key)}/></b></a>
                       </li>
                     )
                   })}
@@ -229,7 +229,7 @@ export default class Step4 extends React.Component{
                     <div className="form-group">
                       <input type="text" placeholder="Enter URL" ref={'socialLinkTypeUrl'} className="form-control float-label" id=""/>
                     </div>
-                    <div className="ml_btn">
+                    <div className="ml_icon_btn">
                       <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
                         className="ml ml-save"></span></a>
                      </div>
@@ -247,7 +247,7 @@ export default class Step4 extends React.Component{
                       <div className="form-group">
                         <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
-                      <div className="ml_btn">
+                      <div className="ml_icon_btn">
                         <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}><span
                           className="ml ml-save"></span></a>
                         <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}><span className="ml ml-delete"></span></a>

@@ -143,6 +143,7 @@ export default class ContactDetails extends React.Component{
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
     this.setState({loading:false,contactNumberArray:response.contactInfo});
+    this.findRegistration();
   }
 
 
@@ -227,18 +228,19 @@ export default class ContactDetails extends React.Component{
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
             <li className="active">
-              <a  href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+              <a  href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
             </li>
-            {that.state.contactNumberArray.map(function(options,key){
+
+            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key){
 
               return(
                 <li key={key} onClick={that.tabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#numberType'+key} className="add-contact">
-                    <FontAwesome name='plus-square' />{options.numberTypeName}</a>
+                    <FontAwesome name='minus-square' onClick={that.onDeleteContact.bind(that,key)}/>{options.numberTypeName}</a>
                 </li>)
 
 
-            })}
+            }))}
           </ul>
 
           <div className="tab-content clearfix">
@@ -262,7 +264,7 @@ export default class ContactDetails extends React.Component{
                 {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
               </div>
             </div>
-            {that.state.contactNumberArray.map(function(options,key) {
+            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key) {
               return(<div className="tab-pane" id={'numberType'+key} >
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"
@@ -285,7 +287,7 @@ export default class ContactDetails extends React.Component{
                   <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onDeleteContact.bind(that,key)} ><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
-            })}
+            }))}
 
           </div>
         </div>

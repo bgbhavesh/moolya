@@ -90,7 +90,9 @@ export default class Step5 extends React.Component{
     let kycDocuments=this.props.registrationInfo&&this.props.registrationInfo.kycDocuments?this.props.registrationInfo.kycDocuments:[];
     if(kycDocuments.length<1) {
       let clusterId = this.props.registrationInfo && this.props.registrationInfo.registrationInfo.clusterId ? this.props.registrationInfo.registrationInfo.clusterId : '';
-      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId);
+      let communityType =this.props.registrationInfo && this.props.registrationInfo.registrationInfo.registrationType ? this.props.registrationInfo.registrationInfo.registrationType : '';
+      let userType=this.props.registrationInfo && this.props.registrationInfo.registrationDetails.userType ? this.props.registrationInfo.registrationDetails.userType : '';
+      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,communityType,userType);
       if (response) {
         let processDoc=response
         if (processDoc.processDocuments) {
@@ -125,6 +127,10 @@ export default class Step5 extends React.Component{
     this.setState({selectedFiles:selectedValues})
     console.log(this.state.selectedFiles)
   };
+  onDocumentRemove(removedDoc,removedDocFile){
+    console.log(removedDoc)
+    console.log(removedDocFile)
+  }
 
    onFileUpload(file,documentId){
     let id=this.props.registrationInfo&&this.props.registrationInfo._id?this.props.registrationInfo._id:'';
@@ -190,7 +196,7 @@ export default class Step5 extends React.Component{
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
 
                       return(
-                       <DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)}/>);
+                       <DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)}/>);
                     })
                     }<br className="brclear"/></div>
                     )

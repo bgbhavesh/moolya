@@ -10,7 +10,7 @@ const mltemplatesConfig=new MlViewer.View({
   searchFields:["processName","subProcessName","createdBy","createdDate"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  selectRow:true,  //Enable checkbox/radio button to select the row.
+  selectRow:false,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "subProcessId",title:"subProcessId",isHidden:true},
@@ -18,6 +18,7 @@ const mltemplatesConfig=new MlViewer.View({
     {dataField: "processName", title: "Process",dataSort:true},
     {dataField: "subProcessName", title: "Sub Process",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true}
+
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -27,7 +28,7 @@ const mltemplatesConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/stepDetails/"+data.subProcessId+"/"+data.id+"/SOFT")
+          FlowRouter.go("/admin/settings/stepDetails/"+data.subProcessId+"/"+data.id+"/"+data.templates[0].stepCode)
         }
         else{
           alert("Please select a Template Type")
@@ -59,7 +60,16 @@ const mltemplatesConfig=new MlViewer.View({
                               createdBy
                               subProcessName
                               id:_id
-                              subProcessId
+                              subProcessId          
+                              templates {
+                                  stepCode
+                                  stepName
+                                  templateCode
+                                  templateName
+                                  isActive
+                                  createdDate
+                                  templateDescription
+                              }                   
                           }
                       }
               }

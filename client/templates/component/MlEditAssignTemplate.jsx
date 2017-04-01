@@ -85,7 +85,20 @@ class MlEditAssignTemplate extends React.Component{
   async findTemplate(){
     let Id=this.props.config;
     const response = await findStepTemplatesAssignmentActionHandler(Id);
+    let subProcessId = response.templatesubProcess;
     if(response){
+      const steps=await this.findSteps(subProcessId);
+      this.setState({steps:steps||[]});
+      console.log(this.state.steps);
+      let stepDetails=[];
+      stepDetails= steps;
+      let stepName=''
+      for(i=0;i<1;i++){
+        stepName = stepDetails[i].stepCode;
+      }
+      const templates=await this.findTemplates(subProcessId,stepName);
+      this.setState({templateInfo:templates||[]})
+      console.log(this.state.templateInfo);
       this.setState({
         loading           : false,
         process           : response.templateprocess,
@@ -139,9 +152,8 @@ class MlEditAssignTemplate extends React.Component{
       this.setState({"data":{"isActive":false}});
     }
   }
-
-  async findSteps() {
-    let subProcessId = this.state.subProcess
+  async findSteps(subProcessId) {
+    //let subProcessId = this.state.subProcess
     const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
     console.log(response)
     if(response){
@@ -152,9 +164,9 @@ class MlEditAssignTemplate extends React.Component{
   }
 
 
-  async findTemplates(subProcessId) {
-    // let subProcessId = this.state.subProcess
-    const response = await findTemplatesActionHandler(subProcessId,this.props.stepCode);
+  async findTemplates(subProcessId,stepName) {
+    console.log(subProcessId+"--"+stepName)
+    const response = await findTemplatesActionHandler(subProcessId,stepName);
     console.log(response);
     let templates=[];
     if(response){
@@ -162,7 +174,6 @@ class MlEditAssignTemplate extends React.Component{
     }
     return templates;
   }
-
 
   optionsBySelectProcess(value, calback, selObject){
     this.setState({process:value})
@@ -360,5 +371,4 @@ class MlEditAssignTemplate extends React.Component{
     )
   }
 };
-
 export default MlAssignTemplate = formHandler()(MlEditAssignTemplate);

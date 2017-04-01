@@ -193,7 +193,7 @@ adminSection.route('/settings/addSubDepartment', {
 adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
   name: '',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId}  />,adminContent:<MlStepDetails templateId={params.templateId} stepCode={params.stepCode}/>})
+    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} stepCode={params.stepCode}/>})
   }
 });
 adminSection.route('/settings/editSubDepartment/:id', {

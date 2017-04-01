@@ -10,7 +10,7 @@ const mltemplatesConfig=new MlViewer.View({
   searchFields:["processName","subProcessName","createdBy","createdDate"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  selectRow:false,  //Enable checkbox/radio button to select the row.
+  selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "subProcessId",title:"subProcessId",isHidden:true},
@@ -34,18 +34,6 @@ const mltemplatesConfig=new MlViewer.View({
           alert("Please select a Template Type")
         }
       }
-    },
-    {
-      showAction: true,
-      actionName: 'add',
-      handler: (data)=>{
-        FlowRouter.go("/admin/settings/addTemplateType")
-      }
-    },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
     }
   ],
   sizePerPage:5,

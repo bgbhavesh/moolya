@@ -111,8 +111,8 @@ class MlAssignTemplate extends React.Component{
     }
   }
 
-  async findSteps() {
-    let subProcessId = this.state.subProcess
+  async findSteps(subProcessId) {
+    //let subProcessId = this.state.subProcess
     const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
     console.log(response)
     if(response){
@@ -123,9 +123,9 @@ class MlAssignTemplate extends React.Component{
   }
 
 
-  async findTemplates(subProcessId) {
-   // let subProcessId = this.state.subProcess
-    const response = await findTemplatesActionHandler(subProcessId,this.props.stepCode);
+  async findTemplates(subProcessId,stepName) {
+    console.log(subProcessId+"--"+stepName)
+    const response = await findTemplatesActionHandler(subProcessId,stepName);
     console.log(response);
     let templates=[];
     if(response){
@@ -142,12 +142,18 @@ class MlAssignTemplate extends React.Component{
   async optionsBySelectSubProcess(value, calback, selObject){
     this.setState({subProcess:value})
     this.setState({subProcessName:selObject.label})
-    const templates=await this.findTemplates(value);
-    this.setState({templateInfo:templates||[]})
-    console.log(this.state.templateInfo);
-    const steps=await this.findSteps();
+    const steps=await this.findSteps(value);
     this.setState({steps:steps||[]});
     console.log(this.state.steps);
+    let stepDetails=[];
+    stepDetails= steps;
+    let stepName=''
+    for(i=0;i<1;i++){
+      stepName = stepDetails[i].stepCode;
+    }
+    const templates=await this.findTemplates(value,stepName);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
   }
 
   optionsBySelectUserType(val){

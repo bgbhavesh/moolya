@@ -22,6 +22,6 @@ export async function addCompanyTypeActionHandler(CompanyTypeDetails) {
       masterData:{"companyTypeInfo":companyTypeInfo,"isActive":isActive},
     }
   })
-  const id = result.data.CreateCompanyType;
+  const id = result.data.createMasterSetting;
   return id
 }

@@ -189,7 +189,7 @@ MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, 
     let documentList=args.documentId;
     let updatedResponse;
     //  updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}},'kycDocuments':{$elemMatch: {'documentId.$.docFiles':{$elemMatch:{'fileId':args.fileId}}}}},{$pull: {}});
-    //updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{ $pull:{"kycDocuments.documentId.docFiles": {"fileId" :args.fileId}}},false, true );
+    updatedResponse=MlRegistration.update({_id:args.registrationId,"kycDocuments.documentId":args.documentId},{ $pull: { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }} });
     //return updatedResponse;
     return updatedResponse;
   }

@@ -27,6 +27,14 @@ MlResolver.MlQueryResolver['findStepAssignedTemplates'] = (obj, args, context, i
   if (args.id) {
     var id= args.id;
     let response= MlTemplates.findOne({"_id":id},{templates:{$elemMatch:{stepCode:args.stepCode}}});
+    let steps = response.templates;
+    let filteredSteps = [];
+    steps.map(function (step, key){
+      if(step.stepCode==args.stepCode){
+        filteredSteps.push(step)
+      }
+    })
+    response.templates = filteredSteps;
     return response;
   }
 }
@@ -36,6 +44,14 @@ MlResolver.MlQueryResolver['findTemplates'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
     let response= MlTemplates.findOne({"subProcessId":id});
+    let steps = response.templates;
+    let filteredSteps = [];
+    steps.map(function (step, key){
+      if(step.stepCode==args.stepCode){
+        filteredSteps.push(step)
+      }
+    })
+    response.templates = filteredSteps;
     return response;
   }
 }

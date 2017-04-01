@@ -18,6 +18,7 @@ const mltemplatesConfig=new MlViewer.View({
     {dataField: "processName", title: "Process",dataSort:true},
     {dataField: "subProcessName", title: "Sub Process",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true}
+
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -27,24 +28,12 @@ const mltemplatesConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/stepDetails/"+data.subProcessId+"/"+data.id+"/SOFT")
+          FlowRouter.go("/admin/settings/stepDetails/"+data.subProcessId+"/"+data.id+"/"+data.templates[0].stepCode)
         }
         else{
           alert("Please select a Template Type")
         }
       }
-    },
-    {
-      showAction: true,
-      actionName: 'add',
-      handler: (data)=>{
-        FlowRouter.go("/admin/settings/addTemplateType")
-      }
-    },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
     }
   ],
   sizePerPage:5,
@@ -59,7 +48,16 @@ const mltemplatesConfig=new MlViewer.View({
                               createdBy
                               subProcessName
                               id:_id
-                              subProcessId
+                              subProcessId          
+                              templates {
+                                  stepCode
+                                  stepName
+                                  templateCode
+                                  templateName
+                                  isActive
+                                  createdDate
+                                  templateDescription
+                              }                   
                           }
                       }
               }

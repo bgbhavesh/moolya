@@ -24,7 +24,6 @@ class MlAddCompanyType extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/companyTypesList");
   };
 
@@ -35,7 +34,6 @@ class MlAddCompanyType extends React.Component{
       aboutCompany: this.refs.aboutCompany.value,
       isActive: this.refs.isActive.checked
     }
-    console.log(CompanyTypeDetails)
     const response = await addCompanyTypeActionHandler(CompanyTypeDetails)
     return response;
 

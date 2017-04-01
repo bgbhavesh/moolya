@@ -5,6 +5,7 @@ let Process = `
     type ProcessType{
         _id         : String,
         processId   : String,
+        processName : String,
         process     : String,
         communities : [String],
         userTypes   : [String],

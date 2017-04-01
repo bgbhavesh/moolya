@@ -16,6 +16,7 @@ let CommunityDefinition = `
     }
     type Query{
       fetchCommunityDefinition:[CommunityDefinition]
+       fetchCommunityDefinitionForSelect:[CommunityDefinition]
     }
 `
 

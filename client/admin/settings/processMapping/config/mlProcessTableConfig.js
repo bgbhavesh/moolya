@@ -14,7 +14,7 @@ const mlProcessTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "processId", title: "processId",dataSort:true},
-    {dataField: "process", title: "process",dataSort:true},
+    {dataField: "processName", title: "process",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -53,6 +53,7 @@ const mlProcessTableConfig=new MlViewer.View({
                              id:_id,
                               processId, 
                               process,
+                              processName,
                               isActive
                             }
                         }

@@ -109,9 +109,19 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
 MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.clusterId) {
-    let response= MlProcessMapping.findOne({"clusters":args.clusterId,"communities":args.communityType,"userTypes":args.userType
+    let document= MlProcessMapping.findOne({"clusters":args.clusterId,"communities":args.communityType,"userTypes":args.userType
     });
-    console.log(response)
-    return response;
-  }
+        data=document.processDocuments;
+      data.map(function (doc,index) {
+        const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
+        let allowableFormatNames = [];  //@array of strings
+        allowableFormatData.map(function (doc) {
+          allowableFormatNames.push(doc.docFormatName)
+        });
+        data[index].allowableFormat = allowableFormatNames || [];
+       });
+    return document
+    }
+
+    //return response;
 }

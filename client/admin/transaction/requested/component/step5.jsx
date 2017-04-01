@@ -12,7 +12,7 @@ import {addRegistrationStep3Details} from '../actions/addRegistrationStep3Detail
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {approvedStausForDocuments} from '../actions/approvedStatusForDocuments'
 import {rejectedStausForDocuments} from '../actions/rejectedStatusForDocuments'
-
+import {removeFileFromDocumentsActionHandler} from '../actions/removeFileFromDocuments'
 export default class Step5 extends React.Component{
   constructor(props){
     super(props);
@@ -127,15 +127,32 @@ export default class Step5 extends React.Component{
     this.setState({selectedFiles:selectedValues})
     console.log(this.state.selectedFiles)
   };
-  onDocumentRemove(removedDoc,removedDocFile){
-    console.log(removedDoc)
-    console.log(removedDocFile)
+  async onDocumentRemove(documentId,fileId){
+    let  registrationId=this.props.registrationInfo._id
+    const response = await removeFileFromDocumentsActionHandler(fileId,documentId,registrationId);
+    if(response){
+      this.props.getRegistrationKYCDetails();
+
+    }
   }
 
    onFileUpload(file,documentId){
     let id=this.props.registrationInfo&&this.props.registrationInfo._id?this.props.registrationInfo._id:'';
-    let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let processDocument=this.state.registrationDocuments
+     kycDoc=_.find(processDocument, function(item) {
+       return item.documentId == documentId;
+     });
+    let fileName=file.name
+     let fileFormate=fileName.split('.').pop()
+     let docFormate=kycDoc.allowableFormat[0]
+    let docResponse=_.includes(docFormate, fileFormate);
+    if(docResponse){
+      let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    }else{
+      toastr.error("please provide allowable formate documents")
+    }
+
 
    }
 

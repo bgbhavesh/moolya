@@ -138,8 +138,21 @@ export default class Step5 extends React.Component{
 
    onFileUpload(file,documentId){
     let id=this.props.registrationInfo&&this.props.registrationInfo._id?this.props.registrationInfo._id:'';
-    let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let processDocument=this.state.registrationDocuments
+     kycDoc=_.find(processDocument, function(item) {
+       return item.documentId == documentId;
+     });
+    let fileName=file.name
+     let fileFormate=fileName.split('.').pop()
+     let docFormate=kycDoc.allowableFormat[0]
+    let docResponse=_.includes(docFormate, fileFormate);
+    if(docResponse){
+      let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    }else{
+      toastr.error("please provide allowable formate documents")
+    }
+
 
    }
 

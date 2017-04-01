@@ -20,7 +20,7 @@ export default class EmailDetails extends React.Component{
     this.state={
       loading:true,
       selectedEmailTab : null,
-      selectedEmailTypeLabel : " ",
+      selectedEmailTypeLabel : null,
       selectedEmailTypeValue : null,
       /* selectedValuesList : [],*/
       emailDetailsObject : {"emailIdType": " ", "emailIdTypeName": " ", 'emailId': ''},
@@ -31,6 +31,10 @@ export default class EmailDetails extends React.Component{
     //this.optionsBySelectNumberType.bind(this)
     this.findRegistration.bind(this)
     return this;
+  }
+
+  componentDidMount(){
+    this.findRegistration.bind(this);
   }
 
   async findRegistration(){
@@ -63,8 +67,10 @@ export default class EmailDetails extends React.Component{
         if(!response.success){
           toastr.error(response.result);
           this.findRegistration();
+          this.props.registrationDetails();
         }else{
-          this.findRegistration();
+          this.findRegistration()
+          this.props.registrationDetails();
           this.refs["emailId"].value = "";
           this.setState({selectedEmailTypeValue : "",selectedEmailTypeLabel : ""});
         }
@@ -91,7 +97,13 @@ export default class EmailDetails extends React.Component{
           toastr.error("Email Type Already Exists!!!!!");
           this.findRegistration();
         }else{
-          let updatedComment = update(this.state.emailDetails[index], {emailIdTypeName : {$set: this.state.selectedEmailTypeLabel},emailIdType : {$set: this.state.selectedEmailTypeValue},emailId : {$set: this.refs["emailId"+index].value}});
+          let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.emailDetails[index].emailIdTypeName;
+          let valueSelected = this.state.selectedEmailTypeValue ? this.state.selectedEmailTypeValue : this.state.emailDetails[index].emailIdType;
+            let updatedComment = update(this.state.emailDetails[index],
+              {emailIdTypeName : {$set: labelValue},
+              emailIdType : {$set: valueSelected},
+              emailId : {$set: this.refs["emailId"+index].value}}
+              );
 
           let newData = update(this.state.emailDetails, {
             $splice: [[index, 1, updatedComment]]
@@ -101,6 +113,7 @@ export default class EmailDetails extends React.Component{
           const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
           if(response){
             this.findRegistration();
+            this.props.registrationDetails();
 
           }
         }
@@ -140,7 +153,13 @@ export default class EmailDetails extends React.Component{
     let detailsType = "EMAILTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    this.setState({loading:false,emailDetails:response.emailInfo});
+    if(response){
+      this.setState({loading:false,emailDetails:response.emailInfo});
+      this.setState({activeTab : "active"});
+      this.findRegistration();
+      this.props.registrationDetails();
+    }
+
   }
 
   render(){
@@ -168,7 +187,7 @@ export default class EmailDetails extends React.Component{
               return(
                 <li key={key} onClick={that.emailTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#emailIdType'+key} className="add-contact">
-                    <FontAwesome name='minus-square' onClick = {that.onDeleteEmail.bind(that,key)}/>{options.emailIdTypeName}</a>
+                    <FontAwesome name='minus-square'/>{options.emailIdTypeName}</a>
                 </li>)
 
 

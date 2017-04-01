@@ -30,17 +30,10 @@ export default class ContactDetails extends React.Component{
   }
 
   componentDidMount(){
-
-    $("#cancel_contact").click(function(e) {
-      e.preventDefault();
-      $(this).closest('.tab-pane').find("input").val("");
-      $(this).closest('.tab-pane').find("select").val("default");
-    });
+    this.findRegistration.bind(this);
   }
   componentWillUpdate(nextProps, nextState) {
-   /*  console.log("Component Will Update");
-    console.log(nextState);
-    this.setState({contactNumber:nextState.contactNumber})*/
+
   }
   updateContactOptions(index, did, selectedValue, selObject,callback){
     if (index !== -1) {
@@ -72,13 +65,16 @@ export default class ContactDetails extends React.Component{
       if(response){
         if(!response.success){
           toastr.error(response.result);
+          this.findRegistration();
+          this.props.registrationDetails();
+        }else{
+          this.findRegistration();
+          this.props.registrationDetails();
+          this.refs.countryCode.value="";
+          this.refs["contactNumber"].value="";
+          this.setState({selectedNumberTypeValue : "",selectedNumberTypeLabel : ""});
         }
-        //this.props.getRegistrationSocialLinks();
-        this.findRegistration();
-        //this.setState({ contactNumberObject:{numberType : "",numberTypeName: "",countryCode: "",contactNumber: ""}})
-        this.refs.countryCode.value="";
-        this.refs["contactNumber"].value="";
-        this.setState({selectedNumberTypeValue : "",selectedNumberTypeLabel : ""});
+
       }
 
 
@@ -96,10 +92,13 @@ export default class ContactDetails extends React.Component{
     if(contactExist){
       toastr.error("Contact TypeAlready Exists!!!!!");
       this.findRegistration();
+      this.props.registrationDetails();
     }else{
-      let updatedComment = update(this.state.contactNumberArray[index], {
-        numberTypeName : {$set: this.state.selectedNumberTypeLabel},
-        numberType :   {$set: this.state.selectedNumberTypeValue},
+      let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
+      let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;
+      let updatedComment = update(this.state.contactNumberArray[index],{
+        numberTypeName : {$set: labelValue},
+        numberType :   {$set: valueSelected},
         countryCode : {$set: this.refs["countryCode"+index].value},
         contactNumber : {$set: this.refs["contactNumber"+index].value}});
 
@@ -108,7 +107,11 @@ export default class ContactDetails extends React.Component{
       });
       const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
       if(response){
+        if(!response.success){
+          toastr.error(response.result);
+        }
         this.findRegistration();
+        this.props.registrationDetails();
       }
     }
 
@@ -144,9 +147,12 @@ export default class ContactDetails extends React.Component{
     let detailsType = "CONTACTTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    this.setState({loading:false,contactNumberArray:response.contactInfo});
-    this.findRegistration();
-    this.setState({activeTab : "active"});
+    if(response){
+      this.setState({loading:false,contactNumberArray:response.contactInfo});
+      this.findRegistration();
+      this.props.registrationDetails();
+      this.setState({activeTab : "active"});
+    }
   }
 
 
@@ -179,7 +185,7 @@ export default class ContactDetails extends React.Component{
               return(
                 <li key={key} onClick={that.tabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#numberType'+key} className="add-contact">
-                    <FontAwesome name='minus-square' onClick={that.onDeleteContact.bind(that,key)}/>{options.numberTypeName}</a>
+                    <FontAwesome name='minus-square'/>{options.numberTypeName}</a>
                 </li>)
 
 

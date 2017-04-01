@@ -9,7 +9,7 @@ import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect';
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
-import _ from "lodash";
+import _ from "underscore";
 import update from 'immutability-helper';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 
@@ -21,7 +21,7 @@ export default class Step4 extends React.Component{
     this.state = {
       loading:true,
       selectedTab: false,
-      selectedAddressLabel: " ",
+      selectedAddressLabel: null,
       selectedValue: null,
       /* selectedValuesList : [],*/
       //addressInformation: addressInfoArray,
@@ -62,7 +62,7 @@ export default class Step4 extends React.Component{
       let newData = update(this.state.socialLinkArray, {
         $splice: [[index, 1, updatedComment]]
       });
-      console.log(newData);
+
       this.setState({socialLinkArray : newData,selectedValue : did,selectedSocialLinkLabel : selObject.label});
 
     }
@@ -75,8 +75,13 @@ export default class Step4 extends React.Component{
     });
     let detailsType = "SOCIALLINKS";
     let registerid = this.props.registrationId;
-    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
+    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid)
+    if(response){
+      this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
+      this.props.getRegistrationSocialLinks();
+      this.setState({activeTab : "active"});
+    }
+
   }
 
   compareQueryOptions(a, b) {
@@ -141,22 +146,26 @@ export default class Step4 extends React.Component{
       if(contactExist){
         toastr.error("Social Link Type Already Exists!!!!!");
         this.props.getRegistrationSocialLinks();
-      }
-      let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: this.state.selectedSocialLinkLabel},socialLinkType : {$set: this.state.selectedValue},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
+      }else{
+        let labelValue = this.state.selectedSocialLinkLabel ? this.state.selectedSocialLinkLabel : this.state.socialLinkArray[index].socialLinkTypeName;
+        let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.socialLinkArray[index].socialLinkType;
+        let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: labelValue},socialLinkType : {$set: valueSelected},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
 
-      let newData = update(this.state.socialLinkArray, {
-        $splice: [[index, 1, updatedComment]]
-      });
+        let newData = update(this.state.socialLinkArray, {
+          $splice: [[index, 1, updatedComment]]
+        });
 
 
-      const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-      if(response){
-        if(!response.success){
-          toastr.error(response.result);
+        const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
+        if(response){
+          if(!response.success){
+            toastr.error(response.result);
+          }
+          this.props.getRegistrationSocialLinks();
+
         }
-        this.props.getRegistrationSocialLinks();
-
       }
+
     }
   }
 
@@ -212,7 +221,7 @@ export default class Step4 extends React.Component{
                   {that.state.socialLinkArray && (that.state.socialLinkArray.map(function(options,key) {
                     return(
                       <li key={key} onClick={() => that.onUpdating(key)}>
-                        <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square' onClick = {that.onDeleteSocialLink.bind(that,key)}/></b></a>
+                        <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square'/></b></a>
                       </li>
                     )
                   }))}

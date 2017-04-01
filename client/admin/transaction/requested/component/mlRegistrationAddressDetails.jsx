@@ -22,7 +22,7 @@ export default class AddressDetails extends React.Component{
     this.state={
       loading:true,
       selectedTab : null,
-      selectedAddressLabel : " ",
+      selectedAddressLabel : null,
       selectedValue : null,
       /* selectedValuesList : [],*/
       addressInformation : addressInfoObject,
@@ -85,8 +85,12 @@ export default class AddressDetails extends React.Component{
     let detailsType = "ADDRESSTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    this.setState({loading:false,addressDetails:response.addressInfo});
-
+    if(response){
+      this.setState({loading:false,addressDetails:response.addressInfo});
+      this.findRegistration();
+      this.props.registrationDetails();
+      this.setState({activeTab : "active"});
+    }
   }
 
 
@@ -113,8 +117,10 @@ export default class AddressDetails extends React.Component{
         if(!response.success){
           toastr.error(response.result);
           this.findRegistration();
+          this.props.registrationDetails();
         }else{
           this.findRegistration();
+          this.props.registrationDetails();
           this.refs["name"].value=""
           this.refs["phoneNumber"].value = "";
           this.refs["addressFlat"].value = "";
@@ -148,10 +154,13 @@ export default class AddressDetails extends React.Component{
       if(contactExist){
         toastr.error("Address Type Already Exists!!!!!");
         this.findRegistration();
+        this.props.registrationDetails();
       }else{
+        let labelValue = this.state.selectedAddressLabel ? this.state.selectedAddressLabel : this.state.addressDetails[index].addressTypeName;
+        let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.addressDetails[index].addressType;
         let updatedComment = update(this.state.addressDetails[index], {
-          addressTypeName : {$set: this.state.selectedAddressLabel},
-          addressType : {$set: this.state.selectedValue},
+          addressTypeName : {$set: labelValue},
+          addressType : {$set: valueSelected},
           name : {$set: this.refs["name"+index].value},
           phoneNumber : {$set: this.refs["phoneNumber"+index].value},
           addressFlat : {$set: this.refs["addressFlat"+index].value},
@@ -175,7 +184,7 @@ export default class AddressDetails extends React.Component{
             toastr.error(response.result);
           }
           this.findRegistration();
-
+          this.props.registrationDetails();
         }
       }
 
@@ -221,7 +230,7 @@ export default class AddressDetails extends React.Component{
               return(
                 <li key={key} onClick={that.addressTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#adressType'+key} className="add-contact">
-                    <FontAwesome name='minus-square' onClick={that.onDeleteAddress.bind(that,key)}/>{options.addressTypeName}</a>
+                    <FontAwesome name='minus-square'/>{options.addressTypeName}</a>
                 </li>)
 
 

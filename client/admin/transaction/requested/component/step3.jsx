@@ -66,13 +66,13 @@ export default class Step3 extends React.Component{
                       Contact Number
                     </div>
 
-                    <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} clusterId={this.props.clusterId}/>
+                    <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                   </div>
                   <div className="panel panel-default new_profile_tabs">
                     <div className="panel-heading">
                       Email ID
                     </div>
-                    <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} clusterId={this.props.clusterId}/>
+                    <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                   </div>
                 </form>
               </ScrollArea>
@@ -93,7 +93,7 @@ export default class Step3 extends React.Component{
                   <div className="panel-heading">
                     Address
                   </div>
-                  <AddressDetails registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails} clusterId={this.props.clusterId}/>
+                  <AddressDetails registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                 </div>
               </form>
               </ScrollArea>

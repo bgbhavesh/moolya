@@ -121,36 +121,6 @@ class MlCreateRegistration extends React.Component{
     const resp=this.createRegistration();
     return resp;
   }
-/*
-  optionsBySelectGender(value){
-    this.setState({selectedGender:value})
-  }
-
-  optionBySelectRegistrationType(value,label){
-    this.setState({registrationType:value})
-    //this.setState({coummunityName:registrationOptions.})
-  }*/
-/*  async  createRegistration() {
-    let Details = {
-        firstName       :  this.refs.firstName.value,
-        lastName        :  this.refs.lastName.value,
-        displayName     :  this.refs.displayName.value,
-        registrationType:  this.state.registrationType,
-        gender          : this.state.selectedGender,
-        countryName     :  this.state.country,
-        contactNumber   :  this.refs.contactNumber.value,
-        email           :  this.refs.email.value,
-        cityId          :  this.state.selectedCity,
-
-    }
-    //const response = await updateRegistrationActionHandler(Details);
-    //return response;
-    this.props.getRegistrationDetails();
-  }*/
-/*  async addEventHandler() {
-    const resp=await this.createRegistration();
-    return resp;
-  }*/
 
   async handleError(response) {
     alert(response)
@@ -164,10 +134,10 @@ class MlCreateRegistration extends React.Component{
     //FlowRouter.go("/admin/settings/departmentsList");
     if (response){
       if(response.success)
-        FlowRouter.go("/transactions/registrationRequested");
+        FlowRouter.go("/admin/transactions/registrationRequested");
       else
         toastr.error(response.result);
-      FlowRouter.go("/transactions/registrationRequested");
+      FlowRouter.go("/admin/transactions/registrationRequested");
     }
   };
   render(){

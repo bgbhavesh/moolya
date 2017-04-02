@@ -240,7 +240,7 @@ export default class Step1 extends React.Component{
     const showLoader=this.state.loading;
     let that=this;
 
-    let identityTypez=_.filter(that.state.identityTypesData, function(i) { return _.indexOf(i.communities,that.state.registrationType)>=0?true:false;});
+    let identityTypez=_.filter(that.state.identityTypesData, function(i) { return _.indexOf(i.communities,that.state.registrationType)>=0?true:false;})||[];
     console.log(identityTypez);
     let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
     return (
@@ -286,7 +286,7 @@ export default class Step1 extends React.Component{
                     <div className="ml_tabs">
                       <ul  className="nav nav-pills">
 
-                        {this.state.identityTypesData.map((i)=>{
+                        {identityTypez.map((i)=>{
 
                            return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
                                 <a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>

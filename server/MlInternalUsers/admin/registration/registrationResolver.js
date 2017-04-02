@@ -84,8 +84,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       details.communityDefName=communityDetails.communityDefName;
       details.communityDefCode=communityDetails.communityDefCode;
 
-      details.identityType=details.identityType;
-      details.userType=details.userType;
+      details.identityType=details.identityType||null;
+      details.userType=details.userType||null;
 
       let registrationDetails={identityType:details.identityType,userType:details.userType};
 
@@ -113,8 +113,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         isProfileActive   : false,
         accountType       : details.accountType,
         optional          : false,
-        userType          :details.userType,
-        identityType      :details.identityType
+        userType          :details.userType||null,
+        identityType      :details.identityType||null
       }
       let profile = {
         isInternaluser  : false,

@@ -9,6 +9,8 @@ import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {fetchIdentityTypes} from "../actions/findRegistration";
+import _ from 'lodash';
 
 
 var FontAwesome = require('react-fontawesome');
@@ -32,12 +34,26 @@ export default class Step1 extends React.Component{
       registrationType:'',
       refered:'',
       institutionAssociation:'',
-      coummunityName:''
+      coummunityName:'',
+      identityType:'',
+      userType:null,
+      identityTypesData:[]
     }
+
+    this.fetchIdentityTypesMaster.bind(this);
 
     return this;
   }
+
+  async fetchIdentityTypesMaster() {
+    const response = await fetchIdentityTypes(this.props.config);
+    this.setState({identityTypesData: response});
+    return response;
+  }
+
   componentWillMount() {
+    this.fetchIdentityTypesMaster();
+
     let details=this.props.registrationInfo;
     this.setState({loading:false,
       registrationDetails:details,
@@ -49,7 +65,9 @@ export default class Step1 extends React.Component{
       institutionAssociation :details.institutionAssociation,
       refered: details.referralType,
       cluster : details.clusterId,
-      chapter :details.chapterId
+      chapter :details.chapterId,
+      identityType:details.identityType,
+      userType:details.userType
       })
   }
 
@@ -73,7 +91,8 @@ export default class Step1 extends React.Component{
     this.setState({selectedCity:value})
   }
   optionBySelectRegistrationType(value, calback, selObject){
-    this.setState({registrationType:value})
+    this.setState({registrationType:value});
+    this.setState({identityType:null});
     this.setState({coummunityName:selObject.label})
   }
   optionBySelectSubscription(val){
@@ -86,6 +105,15 @@ export default class Step1 extends React.Component{
     this.setState({institutionAssociation:val.value})
     const resp=this.updateregistrationInfo();
     return resp;
+  }
+
+  checkIdentity(event){
+    console.log(event.target.name)
+    this.setState({identityType:event.target.name})
+  }
+
+  optionsBySelectUserType(value){
+    this.setState({userType:value})
   }
 
   async handleError(response) {
@@ -127,7 +155,9 @@ export default class Step1 extends React.Component{
       referralType    :  this.state.refered,
       clusterId       :  this.state.cluster,
       chapterId       :  this.state.chapter,
-      communityName  :  this.state.coummunityName
+      communityName  :  this.state.coummunityName,
+      identityType      : this.state.identityType,
+      userType          : this.state.userType
     }
     }
     const response = await updateRegistrationActionHandler(Details);
@@ -148,7 +178,8 @@ export default class Step1 extends React.Component{
         showAction: true,
         handler: this.updateRegistration.bind(this)
       }
-    ]
+    ];
+
 
   let countryQuery=gql`query{
  data:fetchCountries {
@@ -173,8 +204,13 @@ export default class Step1 extends React.Component{
 `;
     let fetchcommunities = gql` query{
   data:fetchCommunityDefinition{label:name,value:code}
-}
+} 
 `;
+    let userTypequery = gql`query{
+    data:FetchUserType {label:userTypeName,value:_id}
+    }
+    `;
+
     let chapterOption={options: { variables: {id:this.state.cluster}}};
     /*let registrationOptions = [
       { value: '0', label: 'simplybrowsing' },
@@ -203,6 +239,10 @@ export default class Step1 extends React.Component{
 
     const showLoader=this.state.loading;
     let that=this;
+
+    let identityTypez=_.filter(that.state.identityTypesData, function(i) { return _.indexOf(i.communities,that.state.registrationType)>=0?true:false;});
+    console.log(identityTypez);
+    let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
     return (
       <div>
       {showLoader===true?( <div className="loader_wrap"></div>):(
@@ -234,13 +274,39 @@ export default class Step1 extends React.Component{
                   <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>
+                  {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
                 </div>
                 <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>
                   <div className="panel-body">
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
                     <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} />
+
+                    {canSelectIdentity&&
+                    <div className="ml_tabs">
+                      <ul  className="nav nav-pills">
+
+                        {this.state.identityTypesData.map((i)=>{
+
+                           return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
+                                <a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>
+                           </li>);
+                        })}
+                       {/* <li className={this.state.identityType==="Individual"?"active":""}>
+                          <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
+                        </li>
+                        <li className={this.state.identityType==="Company"?"active":""}>
+                          <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
+                        </li>*/}
+                      </ul>
+                    </div>
+                    }
+
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                    </div>
+
+
                     <div className="form-group">
                       <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label" id="" disabled="true"/>
                     </div>
@@ -291,6 +357,7 @@ export default class Step1 extends React.Component{
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
                 </div>
+
                 <div className="panel panel-default">
                                   <div className="panel-heading">Process Status</div>
                                   <div className="panel-body button-with-icon">

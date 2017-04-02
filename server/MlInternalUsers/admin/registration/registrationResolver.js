@@ -33,8 +33,21 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
   let response
-  if (args.registration) {
+  let validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.countryId":args.registration.countryId},{"registrationInfo.registrationType":args.registration.registrationType}]})
+  if(validate){
+    let code = 400;
+    let result = {message: "Registration Exist"}
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response
+  }
+  else if (args.registration) {
     response = MlRegistration.insert({registrationInfo: args.registration});
+    if(response){
+      let code = 200;
+      let result = {message: "Registration Successful",registrationId: response}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
   return response
 }

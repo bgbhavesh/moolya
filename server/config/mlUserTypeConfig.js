@@ -3,8 +3,9 @@
  */
 
 let userType = [
-  {_id:'individual',userTypeName:"Individual",displayName:"Individual",userTypeDesc:"","isActive":true},
-  {_id:'company',userTypeName:"Company",displayName:"Company",userTypeDesc:"","isActive":true}
+  {_id:'angle',userTypeName:"angle",displayName:"Angle",userTypeDesc:"","isActive":true},
+  {_id:'ventureCapitalist',userTypeName:"venture capitalist",displayName:"venture Capitalist",userTypeDesc:"","isActive":true},
+  {_id:'privateEquity',userTypeName:"private equity",displayName:"private equity",userTypeDesc:"","isActive":true}
   ];
 
 Meteor.startup(function () {

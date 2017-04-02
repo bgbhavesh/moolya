@@ -4,7 +4,7 @@ import getQuery from "../genericSearch/queryConstructor";
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
   const findOptions = {
-              skip: args.offset
+              skip: args.offset,
   };
   // `limit` may be `null`
   if (args.limit > 0) {
@@ -374,7 +374,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   if(args.module=="process"){
     data= MlProcessMapping.find(query,findOptions).fetch();
+    data.map(function (doc,index) {
+      let processTypes=MlprocessTypes.findOne({_id:doc.process});
+      data[index].processName=processTypes.processName
+    });
     totalRecords=MlProcessMapping.find(query,findOptions).count();
+  }
+  if(args.module=="processdocument"){
+    data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
+   /* data=_.find(doc, function(item) {
+      return item.isActive == true;
+    });*/
+    totalRecords=MlProcessMapping.find({isActive:true},query,findOptions).count();
   }
   if(args.module=="businessType"){
     data= MlBusinessType.find(query,findOptions).fetch();

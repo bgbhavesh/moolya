@@ -6,4 +6,8 @@ MlResolver.MlQueryResolver['fetchCommunityDefinition'] = (obj, args, context, in
   return result;
 }
 
-
+MlResolver.MlQueryResolver['fetchCommunityDefinitionForSelect'] = (obj, args, context, info) => {
+  let result=MlCommunityDefinition.find({isActive:true}).fetch()||[];
+  result.push({"name" : "All","code" : "all"});
+  return result;
+}

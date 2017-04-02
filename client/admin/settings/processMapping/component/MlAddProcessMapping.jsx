@@ -195,7 +195,7 @@ class MlAddProcessMapping extends React.Component{
 }
 `;
     let fetchcommunities = gql` query{
-  data:fetchCommunityDefinition{label:name,value:code}
+  data:fetchCommunityDefinitionForSelect{label:name,value:code}
 }
 `;
     let fetchUsers = gql`query{
@@ -209,26 +209,37 @@ class MlAddProcessMapping extends React.Component{
     data:fetchIndustries{label:industryName,value:_id}
     }
 `;
-    let professionquery=gql` query{
-    data:fetchProfessions{label:professionName,value:_id}
+    let professionquery=gql` query($industry:[String]!){
+    data:FetchProfessionIndustry(industry:$industry){label:professionName,value:_id}
     }
 `;
-    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
-    let chapterquery=gql`query($id:String){  
-    data:fetchChapters(id:$id) {
-    value:_id
-    label:chapterName
-  }  
+    let clusterquery=gql`  query{
+  data:fetchActiveClusters{label:countryName,value:_id}
 }`;
-    let subChapterquery=gql`query($id:String){  
-  data:fetchSubChaptersSelect(id:$id) {
-    value:_id
-    label:subChapterName
-  }  
+    let statesQuery=gql`query
+{
+  data:FetchActiveStatesForSelect {
+   value: _id
+   label: name
+  
+  }
 }`;
+    let chapterquery=gql`query($clusters:[String]){  
+        data:fetchActiveClusterChapters(clusters:$clusters) {
+          value:_id
+          label:chapterName
+        }  
+    }`;
+    let subChapterquery=gql`query($chapters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+          value:_id
+          label:subChapterName
+        }  
+    }`;
 
-    let chapterOption={options: { variables: {id:this.state.clusters}}};
-    let subChapterOption={options: { variables: {id:this.state.chapters}}};
+    let chapterOption={options: { variables: {clusters:this.state.clusters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters}}};
+    let professionOption={options: { variables: {industry:this.state.industries}}};
    return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -261,7 +272,7 @@ class MlAddProcessMapping extends React.Component{
 
 
 
-                      <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={professionquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={professionquery} queryOptions={professionOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
 
 
 
@@ -269,7 +280,7 @@ class MlAddProcessMapping extends React.Component{
 
 
 
-                      <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={query}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={statesQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
 
 
 

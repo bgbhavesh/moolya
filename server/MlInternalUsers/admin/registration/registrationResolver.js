@@ -84,8 +84,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       details.communityDefName=communityDetails.communityDefName;
       details.communityDefCode=communityDetails.communityDefCode;
 
+      details.identityType=details.identityType;
+      details.userType=details.userType;
+
+      let registrationDetails={identityType:details.identityType,userType:details.userType};
+
       //validate the registrationInfo for mandatory fields such as cluster chapter etc
-      updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details }});
+      updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details,registrationDetails:registrationDetails }});
       let userProfile = {
         registrationId    : id,
         countryName       : '',
@@ -107,7 +112,9 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         isDefault         : false,
         isProfileActive   : false,
         accountType       : details.accountType,
-        optional          : false
+        optional          : false,
+        userType          :details.userType,
+        identityType      :details.identityType
       }
       let profile = {
         isInternaluser  : false,

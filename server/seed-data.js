@@ -312,7 +312,7 @@ if(!subProces) {
   };
   MlSubProcess.insert(subProces);
 }
-let proc = MlprocessTypes.findOne({processName:"Registration"})
+/*let proc = MlprocessTypes.findOne({processName:"Registration"})
 let subProc = MlSubProcess.findOne({processName:"Registration"})
 let template = MlTemplates.findOne({processName:"Registration"})
 if(!template){
@@ -333,7 +333,7 @@ let templates = [{stepName:"Soft",stepCode:"SOFT",templateCode:"",templateName:"
     isActive                    : true
   }
   MlTemplates.insert(templateObject);
-}
+}*/
 
 
 /******************************************* Templates <Start> *******************************************************/

@@ -72,7 +72,7 @@ export default class MlStepAvailabilityComponent extends React.Component {
     let stepQuery=gql`  
     query($id:String){  
       data:findTemplateStepsSelect(id:$id) {
-        value:stepId
+        value:stepCode
         label:stepName
       }  
     }

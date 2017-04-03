@@ -20,7 +20,7 @@ export async function findStepTemplatesAssignmentActionHandler(templateId) {
           templatechapterName
           templatesubChapterId
           templatesubChapterName
-          templatecommunityId
+          templatecommunityCode
           templatecommunityName
           templateuserType
           templateidentity

@@ -42,7 +42,7 @@ let TemplateAssignment = `
             templatechapterName       : String
             templatesubChapterId      : String
             templatesubChapterName    : String
-            templatecommunityId       : String
+            templatecommunityCode       : String
             templatecommunityName     : String
             templateuserType          : String     
             templateidentity          : String        
@@ -75,7 +75,7 @@ let TemplateAssignment = `
             templatechapterName       : String
             templatesubChapterId      : String
             templatesubChapterName    : String
-            templatecommunityId       : String
+            templatecommunityCode       : String
             templatecommunityName     : String
             templateuserType          : String     
             templateidentity          : String 

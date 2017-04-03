@@ -52,3 +52,10 @@ MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
   return result;
 }
 
+MlResolver.MlQueryResolver['FetchUserTypeSelect'] = (obj, args, context, info) => {
+  let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  if(result.length > 0){
+    result.push({"userTypeName" : "All","_id" : "all"});
+  }
+  return result;
+}

@@ -63,7 +63,7 @@ let templateObject = {
 MlTemplates.update({processName:"Registration","subProcessName":"Registration"},{$set:templateObject},{upsert:true});
 
 
-let mltemplateAssignment=MlTemplateAssignment.find({"templateProcessName" : "Registration","templateSubProcessName" : "Registration","isSystemDefined":true}).fetch();
+let mltemplateAssignment=MlTemplateAssignment.find({"templateProcessName" : "Registration","templateSubProcessName" : "Registration"}).fetch();
 
 if(mltemplateAssignment.length<=0){
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",

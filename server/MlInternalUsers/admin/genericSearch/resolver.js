@@ -375,16 +375,162 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if(args.module=="process"){
     data= MlProcessMapping.find(query,findOptions).fetch();
     data.map(function (doc,index) {
+      let industryIds=[];
+      let communityIds=[];
+      let clusterIds=[];
+      let stateIds=[];
+      let chapterIds=[];
+      let professionIds=[];
       let processTypes=MlprocessTypes.findOne({_id:doc.process});
-      data[index].processName=processTypes.processName
+      doc.communities.map(function (ids) {
+        communityIds.push(ids)
+      });
+      const communityData =  MlCommunityDefinition.find( { code: { $in: communityIds } } ).fetch() || [];
+      let communityNames = [];  //@array of strings
+      communityData.map(function (doc) {
+        communityNames.push(doc.name)
+      });
+      doc.industries.map(function (ids) {
+        industryIds.push(ids)
+      });
+      const industryData =  MlIndustries.find( { _id: { $in: industryIds } } ).fetch() || [];
+      let industryNames = [];  //@array of strings
+      industryData.map(function (doc) {
+        industryNames.push(doc.industryName)
+      });
+      doc.professions.map(function (ids) {
+        professionIds.push(ids)
+      });
+      const professionData =  MlProfessions.find( { _id: { $in: professionIds } } ).fetch() || [];
+      let professionNames = [];  //@array of strings
+      professionData.map(function (doc) {
+        professionNames.push(doc.professionName)
+      });
+      doc.clusters.map(function (ids) {
+        clusterIds.push(ids)
+      });
+      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
+      let clusterNames = [];  //@array of strings
+      clusterData.map(function (doc) {
+        clusterNames.push(doc.clusterName)
+      });
+      doc.states.map(function (ids) {
+        stateIds.push(ids)
+      });
+      const stateData =  MlStates.find( { _id: { $in: stateIds } } ).fetch() || [];
+      let stateNames = [];  //@array of strings
+      stateData.map(function (doc) {
+        stateNames.push(doc.name)
+      });
+      doc.chapters.map(function (ids) {
+        chapterIds.push(ids)
+      });
+      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
+      let chapterNames = [];  //@array of strings
+      chapterData.map(function (doc) {
+        chapterNames.push(doc.chapterName)
+      });
+      data[index].communities= communityNames || [];
+      data[index].professions= professionNames || [];
+      data[index].industries= industryNames || [];
+      data[index].clusters = clusterNames || [];
+      data[index].states = stateNames || [];
+      data[index].chapters = chapterNames || [];
+      data[index].processName=processTypes.processName;
+
     });
     totalRecords=MlProcessMapping.find(query,findOptions).count();
   }
   if(args.module=="processdocument"){
     data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
-   /* data=_.find(doc, function(item) {
-      return item.isActive == true;
-    });*/
+    data.map(function (doc,index) {
+      let industryIds=[];
+      let communityIds=[];
+      let clusterIds=[];
+      let stateIds=[];
+      let chapterIds=[];
+      let subChapterIds=[];
+      let professionIds=[];
+      let userTypeIds=[];
+      let processTypes=MlprocessTypes.findOne({_id:doc.process});
+      doc.communities.map(function (ids) {
+        communityIds.push(ids)
+      });
+      const communityData =  MlCommunityDefinition.find( { code: { $in: communityIds } } ).fetch() || [];
+      let communityNames = [];  //@array of strings
+      communityData.map(function (doc) {
+        communityNames.push(doc.name)
+      });
+      doc.industries.map(function (ids) {
+        industryIds.push(ids)
+      });
+      const industryData =  MlIndustries.find( { _id: { $in: industryIds } } ).fetch() || [];
+      let industryNames = [];  //@array of strings
+      industryData.map(function (doc) {
+        industryNames.push(doc.industryName)
+      });
+      doc.professions.map(function (ids) {
+        professionIds.push(ids)
+      });
+      const professionData =  MlProfessions.find( { _id: { $in: professionIds } } ).fetch() || [];
+      let professionNames = [];  //@array of strings
+      professionData.map(function (doc) {
+        professionNames.push(doc.professionName)
+      });
+      doc.clusters.map(function (ids) {
+        clusterIds.push(ids)
+      });
+      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
+      let clusterNames = [];  //@array of strings
+      clusterData.map(function (doc) {
+        clusterNames.push(doc.clusterName)
+      });
+      doc.states.map(function (ids) {
+        stateIds.push(ids)
+      });
+      const stateData =  MlStates.find( { _id: { $in: stateIds } } ).fetch() || [];
+      let stateNames = [];  //@array of strings
+      stateData.map(function (doc) {
+        stateNames.push(doc.name)
+      });
+      doc.chapters.map(function (ids) {
+        chapterIds.push(ids)
+      });
+      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
+      let chapterNames = [];  //@array of strings
+      chapterData.map(function (doc) {
+        chapterNames.push(doc.chapterName)
+      });
+
+      doc.subChapters.map(function (ids) {
+        subChapterIds.push(ids)
+      });
+      const subChapterData =  MlSubChapters.find( { _id: { $in: subChapterIds } } ).fetch() || [];
+      let subChapterNames = [];  //@array of strings
+      subChapterData.map(function (doc) {
+        subChapterNames.push(doc.subChapterName)
+      });
+      doc.userTypes.map(function (ids) {
+        userTypeIds.push(ids)
+      });
+      const userTypeData =  MlUserTypes.find( { _id: { $in: userTypeIds } } ).fetch() || [];
+      let userTypeNames = [];  //@array of strings
+      userTypeData.map(function (doc) {
+        userTypeNames.push(doc.userTypeName)
+      });
+
+      data[index].communities= communityNames || [];
+      data[index].professions= professionNames || [];
+      data[index].industries= industryNames || [];
+      data[index].clusters = clusterNames || [];
+      data[index].states = stateNames || [];
+      data[index].chapters = chapterNames || [];
+      data[index].subChapters = subChapterNames || [];
+      data[index].userTypes = userTypeNames || [];
+
+      data[index].processName=processTypes.processName;
+
+    });
     totalRecords=MlProcessMapping.find({isActive:true},query,findOptions).count();
   }
   if(args.module=="businessType"){

@@ -20,6 +20,32 @@ export async function findSubChapterActionHandler(subChapterId) {
         isEmailNotified
         showOnMap
         isActive
+        isBespokeRegistration
+        isBespokeWorkFlow
+        internalSubChapterAccess {
+          backendUser {
+            canView
+            canSearch
+            canDiscover
+          }
+          externalUser {
+            canView
+            canSearch
+            canDiscover
+          }
+        }
+        moolyaSubChapterAccess {
+          backendUser {
+            canView
+            canSearch
+            canDiscover
+          }
+          externalUser {
+            canView
+            canSearch
+            canDiscover
+          }
+    }
         }
       }
     `,

@@ -56,6 +56,7 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
   if (args.kycId) {
     var id = args.kycId;
     let response = MlDocumentMapping.find({ kycCategory : { $in: [id] },isActive:true}).fetch();
+
     return response;
   }
 }

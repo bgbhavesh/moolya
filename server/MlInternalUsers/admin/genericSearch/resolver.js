@@ -4,7 +4,7 @@ import getQuery from "../genericSearch/queryConstructor";
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
   const findOptions = {
-              skip: args.offset
+              skip: args.offset,
   };
   // `limit` may be `null`
   if (args.limit > 0) {
@@ -214,7 +214,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       let kycCategoryIds = [];
       let allowableFormatIds = [];
       doc.clusters.map(function (ids) {
-        clusterIds.push(ids.id)
+        clusterIds.push(ids)
       });
       const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
       let clusterNames = [];  //@array of strings
@@ -223,7 +223,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
       doc.kycCategory.map(function (ids) {
-        kycCategoryIds.push(ids.id)
+        kycCategoryIds.push(ids)
       });
       const kycCategoryData =  MlDocumentCategories.find( { _id: { $in: kycCategoryIds } } ).fetch() || [];
       let kycCategoryNames = [];  //@array of strings
@@ -232,7 +232,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
       doc.allowableFormat.map(function (ids) {
-        allowableFormatIds.push(ids.id)
+        allowableFormatIds.push(ids)
       });
       const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: allowableFormatIds } } ).fetch() || [];
       let allowableFormatNames = [];  //@array of strings
@@ -374,7 +374,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   if(args.module=="process"){
     data= MlProcessMapping.find(query,findOptions).fetch();
+    data.map(function (doc,index) {
+      let processTypes=MlprocessTypes.findOne({_id:doc.process});
+      data[index].processName=processTypes.processName
+    });
     totalRecords=MlProcessMapping.find(query,findOptions).count();
+  }
+  if(args.module=="processdocument"){
+    data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
+   /* data=_.find(doc, function(item) {
+      return item.isActive == true;
+    });*/
+    totalRecords=MlProcessMapping.find({isActive:true},query,findOptions).count();
   }
   if(args.module=="businessType"){
     data= MlBusinessType.find(query,findOptions).fetch();

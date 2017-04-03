@@ -22,11 +22,12 @@ export default class AddressDetails extends React.Component{
     this.state={
       loading:true,
       selectedTab : null,
-      selectedAddressLabel : " ",
+      selectedAddressLabel : null,
       selectedValue : null,
       /* selectedValuesList : [],*/
       addressInformation : addressInfoObject,
-      addressDetails: this.props.registrationInfo.addressInfo || []
+      addressDetails: this.props.registrationInfo.addressInfo || [],
+      activeTab : "active"
 
     }
     //this.optionsBySelectNumberType.bind(this)
@@ -71,6 +72,7 @@ export default class AddressDetails extends React.Component{
   }
   addressTabSelected(index,value){
     this.setState({selectedTab : true});
+    this.setState({activeTab : ""});
   }
 
 
@@ -83,8 +85,12 @@ export default class AddressDetails extends React.Component{
     let detailsType = "ADDRESSTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    this.setState({loading:false,addressDetails:response.addressInfo});
-
+    if(response){
+      this.setState({loading:false,addressDetails:response.addressInfo});
+      this.findRegistration();
+      this.props.registrationDetails();
+      this.setState({activeTab : "active"});
+    }
   }
 
 
@@ -110,11 +116,25 @@ export default class AddressDetails extends React.Component{
         //this.props.getRegistrationContactInfo();
         if(!response.success){
           toastr.error(response.result);
+          this.findRegistration();
+          this.props.registrationDetails();
+        }else{
+          this.findRegistration();
+          this.props.registrationDetails();
+          this.refs["name"].value=""
+          this.refs["phoneNumber"].value = "";
+          this.refs["addressFlat"].value = "";
+          this.refs["addressLocality"].value="";
+          this.refs["addressLandmark"].value="";
+          this.refs["addressArea"].value = "";
+          this.refs["addressCity"].value = "";
+          this.refs["addressState"].value = "";
+          this.refs["addressCountry"].value = "";
+          this.refs["addressPinCode"].value = "";
+          this.setState({selectedValue : "",selectedAddressLabel : ""});
         }
-        this.findRegistration();
-        this.setState({"addressInformation":{"addressType" : " ","addressTypeName": "Add New",'name' : '','phoneNumber' : '','addressFlat' : '',
-          'addressLocality': '','addressLandmark':'','addressArea': '',
-          'addressCity': '','addressState':'','addressCountry':'','addressPinCode':''}})
+
+
       }
 
 
@@ -134,10 +154,13 @@ export default class AddressDetails extends React.Component{
       if(contactExist){
         toastr.error("Address Type Already Exists!!!!!");
         this.findRegistration();
+        this.props.registrationDetails();
       }else{
+        let labelValue = this.state.selectedAddressLabel ? this.state.selectedAddressLabel : this.state.addressDetails[index].addressTypeName;
+        let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.addressDetails[index].addressType;
         let updatedComment = update(this.state.addressDetails[index], {
-          addressTypeName : {$set: this.state.selectedAddressLabel},
-          addressType : {$set: this.state.selectedValue},
+          addressTypeName : {$set: labelValue},
+          addressType : {$set: valueSelected},
           name : {$set: this.refs["name"+index].value},
           phoneNumber : {$set: this.refs["phoneNumber"+index].value},
           addressFlat : {$set: this.refs["addressFlat"+index].value},
@@ -161,7 +184,7 @@ export default class AddressDetails extends React.Component{
             toastr.error(response.result);
           }
           this.findRegistration();
-
+          this.props.registrationDetails();
         }
       }
 
@@ -199,24 +222,24 @@ export default class AddressDetails extends React.Component{
 
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
-             <li className="active">
-                <a  href="#1a" data-toggle="tab">New Tab&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+             <li className={this.state.activeTab}>
+                <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square' /></b></a>
              </li>
-            {that.state.addressDetails.map(function(options,key){
+            {that.state.addressDetails && (that.state.addressDetails.map(function(options,key){
 
               return(
                 <li key={key} onClick={that.addressTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#adressType'+key} className="add-contact">
-                    <FontAwesome name='plus-square' />{options.addressTypeName}</a>
+                    <FontAwesome name='minus-square'/>{options.addressTypeName}</a>
                 </li>)
 
 
-            })}
+            }))}
           </ul>
 
           <div className="tab-content clearfix">
 
-              <div className="tab-pane active" id="1a">
+              <div className={"tab-pane"+this.state.activeTab} id="1a">
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={'address'}
                                 placeholder="Select Address Type"
@@ -257,18 +280,19 @@ export default class AddressDetails extends React.Component{
                   <input type="text" ref={'addressPinCode'} placeholder="Pincode" name ={'addressPinCode'}
                          className="form-control float-label" id="" />
                 </div>
-                <div className="ml_btn">
-                  <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}>Save</a>
+                <div className="ml_icon_btn">
+                  <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}><span
+                    className="ml ml-save"></span></a>
                 </div>
               </div>
 
 
 
 
-            {that.state.addressDetails.map(function(options,key) {
+            {that.state.addressDetails && (that.state.addressDetails.map(function(options,key) {
 
               return(
-                <div className="tab-pane" id={'adressType' + key}>
+                <div className="tab-pane" id={'adressType' + key} key={key}>
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} ref={'address' + key}
                                   placeholder="Select NumberType"
@@ -320,15 +344,15 @@ export default class AddressDetails extends React.Component{
                            className="form-control float-label" id="" valueKey={options.addressPinCode}/>
                   </div>
 
-                  <div className="ml_btn">
+                  <div className="ml_icon_btn">
                     {/*<a href="#" className="save_btn">Save</a>*/}
                     <a href="#" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>
-                    <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}>Cancel</a>
+                    <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}><span className="ml ml-delete"></span></a>
                   </div>
                 </div>)
-            })}
+            }))}
           </div>
 
         </div>

@@ -33,8 +33,21 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
   let response
-  if (args.registration) {
+  let validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.countryId":args.registration.countryId},{"registrationInfo.registrationType":args.registration.registrationType}]})
+  if(validate){
+    let code = 400;
+    let result = {message: "Registration Exist"}
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response
+  }
+  else if (args.registration) {
     response = MlRegistration.insert({registrationInfo: args.registration});
+    if(response){
+      let code = 200;
+      let result = {message: "Registration Successful",registrationId: response}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
   return response
 }
@@ -67,12 +80,17 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
 
       details.communityId=communityDetails._id;
-      details.communityName=communityDetails.communityName;
+      //details.communityName=communityDetails.communityName;
       details.communityDefName=communityDetails.communityDefName;
       details.communityDefCode=communityDetails.communityDefCode;
 
+      details.identityType=details.identityType||null;
+      details.userType=details.userType||null;
+
+      let registrationDetails={identityType:details.identityType,userType:details.userType};
+
       //validate the registrationInfo for mandatory fields such as cluster chapter etc
-      updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details }});
+      updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details,"registrationDetails.identityType":details.identityType,"registrationDetails.userType":details.userType }});
       let userProfile = {
         registrationId    : id,
         countryName       : '',
@@ -94,7 +112,9 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         isDefault         : false,
         isProfileActive   : false,
         accountType       : details.accountType,
-        optional          : false
+        optional          : false,
+        userType          :details.userType||null,
+        identityType      :details.identityType||null
       }
       let profile = {
         isInternaluser  : false,
@@ -180,6 +200,17 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
       updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i]}}},{$set: {"kycDocuments.$.status":"Rejected"}});
       //return updatedResponse;
     }
+    return updatedResponse;
+  }
+}
+MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    let documentList=args.documentId;
+    let updatedResponse;
+    //  updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}},'kycDocuments':{$elemMatch: {'documentId.$.docFiles':{$elemMatch:{'fileId':args.fileId}}}}},{$pull: {}});
+    updatedResponse=MlRegistration.update({_id:args.registrationId,"kycDocuments.documentId":args.documentId},{ $pull: { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }} });
+    //return updatedResponse;
     return updatedResponse;
   }
 }

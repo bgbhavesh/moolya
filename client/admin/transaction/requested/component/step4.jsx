@@ -9,7 +9,7 @@ import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect';
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
-import _ from "lodash";
+import _ from "underscore";
 import update from 'immutability-helper';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 
@@ -21,7 +21,7 @@ export default class Step4 extends React.Component{
     this.state = {
       loading:true,
       selectedTab: false,
-      selectedAddressLabel: " ",
+      selectedAddressLabel: null,
       selectedValue: null,
       /* selectedValuesList : [],*/
       //addressInformation: addressInfoArray,
@@ -30,7 +30,8 @@ export default class Step4 extends React.Component{
        }]*/
       socialLinkObject : {"socialLinkType": " ", "socialLinkTypeName": " ", 'socialLinkUrl': ''},
       socialLinkArray :[],
-      uploadedProfilePic : "/images/ideator_01.png"
+      uploadedProfilePic : "/images/ideator_01.png",
+      activeTab: "active"
 
 
     }
@@ -61,7 +62,7 @@ export default class Step4 extends React.Component{
       let newData = update(this.state.socialLinkArray, {
         $splice: [[index, 1, updatedComment]]
       });
-      console.log(newData);
+
       this.setState({socialLinkArray : newData,selectedValue : did,selectedSocialLinkLabel : selObject.label});
 
     }
@@ -74,8 +75,13 @@ export default class Step4 extends React.Component{
     });
     let detailsType = "SOCIALLINKS";
     let registerid = this.props.registrationId;
-    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
+    const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid)
+    if(response){
+      this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
+      this.props.getRegistrationSocialLinks();
+      this.setState({activeTab : "active"});
+    }
+
   }
 
   compareQueryOptions(a, b) {
@@ -98,15 +104,20 @@ export default class Step4 extends React.Component{
 
     }else{*/
       let socialLinkList = this.state.socialLinkObject;
-      socialLinkList.socialLinkType = this.refs["socialLinkType"].props.selectedValue,
+      socialLinkList.socialLinkType = this.state.selectedValue,
       socialLinkList.socialLinkTypeName = this.state.selectedSocialLinkLabel,
       socialLinkList.socialLinkUrl = this.refs["socialLinkTypeUrl"].value;
       const response = await addRegistrationStep3Details(socialLinkList,detailsType,registerid);
       if(response){
         if(!response.success){
           toastr.error(response.result);
+          this.props.getRegistrationSocialLinks();
+        }else{
+          this.props.getRegistrationSocialLinks();
+          this.refs["socialLinkTypeUrl"].value = "";
+          this.setState({selectedValue : "",selectedSocialLinkLabel :""});
         }
-        this.props.getRegistrationSocialLinks();
+
 
       }
     //}
@@ -117,6 +128,7 @@ export default class Step4 extends React.Component{
    onUpdating(index,value) {
 
     this.setState({"selectedTab" : true});
+     this.setState({activeTab : ""});
 
   }
 
@@ -134,22 +146,26 @@ export default class Step4 extends React.Component{
       if(contactExist){
         toastr.error("Social Link Type Already Exists!!!!!");
         this.props.getRegistrationSocialLinks();
-      }
-      let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: this.state.selectedSocialLinkLabel},socialLinkType : {$set: this.state.selectedValue},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
+      }else{
+        let labelValue = this.state.selectedSocialLinkLabel ? this.state.selectedSocialLinkLabel : this.state.socialLinkArray[index].socialLinkTypeName;
+        let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.socialLinkArray[index].socialLinkType;
+        let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: labelValue},socialLinkType : {$set: valueSelected},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
 
-      let newData = update(this.state.socialLinkArray, {
-        $splice: [[index, 1, updatedComment]]
-      });
+        let newData = update(this.state.socialLinkArray, {
+          $splice: [[index, 1, updatedComment]]
+        });
 
 
-      const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-      if(response){
-        if(!response.success){
-          toastr.error(response.result);
+        const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
+        if(response){
+          if(!response.success){
+            toastr.error(response.result);
+          }
+          this.props.getRegistrationSocialLinks();
+
         }
-        this.props.getRegistrationSocialLinks();
-
       }
+
     }
   }
 
@@ -199,20 +215,20 @@ export default class Step4 extends React.Component{
 
               <div className="ml_tabs">
                 <ul  className="nav nav-pills">
-                  <li className="active">
-                    <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                  <li className={this.state.activeTab}>
+                    <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
                   </li>
-                  {that.state.socialLinkArray.map(function(options,key) {
+                  {that.state.socialLinkArray && (that.state.socialLinkArray.map(function(options,key) {
                     return(
                       <li key={key} onClick={() => that.onUpdating(key)}>
                         <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square'/></b></a>
                       </li>
                     )
-                  })}
+                  }))}
                 </ul>
 
                 <div className="tab-content clearfix">
-                  <div className="tab-pane active" id="1a">
+                  <div className={"tab-pane"+this.state.activeTab} id="1a">
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} ref={'socialLinkType'}
                                     placeholder="Select Social Link"
@@ -224,11 +240,12 @@ export default class Step4 extends React.Component{
                     <div className="form-group">
                       <input type="text" placeholder="Enter URL" ref={'socialLinkTypeUrl'} className="form-control float-label" id=""/>
                     </div>
-                    <div className="ml_btn">
-                      <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}>Save</a>
+                    <div className="ml_icon_btn">
+                      <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
+                        className="ml ml-save"></span></a>
                      </div>
                   </div>
-                  {that.state.socialLinkArray.map(function(options,key) {
+                  {that.state.socialLinkArray && (that.state.socialLinkArray.map(function(options,key) {
                     return(<div className="tab-pane" id={'socialLink'+key}  key={key} >
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} ref={'socialLinkType'+key}
@@ -241,12 +258,13 @@ export default class Step4 extends React.Component{
                       <div className="form-group">
                         <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
                       </div>
-                      <div className="ml_btn">
-                        <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}>Save</a>
-                        <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}>Cancel</a>
+                      <div className="ml_icon_btn">
+                        <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}><span
+                          className="ml ml-save"></span></a>
+                        <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}><span className="ml ml-delete"></span></a>
                       </div>
                     </div>)
-                  })}
+                  }))}
 
 
                 </div>

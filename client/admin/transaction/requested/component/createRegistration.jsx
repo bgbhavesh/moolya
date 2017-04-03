@@ -14,7 +14,7 @@ import {createRegistrationInfo} from '../actions/createRegistrationInfo'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import formHandler from '../../../../commons/containers/MlFormHandler'
 
-class MlCreateRegistration extends React.Component{
+export default class MlCreateRegistration extends React.Component{
 
   constructor(props){
     super(props);
@@ -67,15 +67,13 @@ class MlCreateRegistration extends React.Component{
 
     }
     const response = await createRegistrationInfo(Details);
-    /*console.log("------------------------------------------------------");
-    console.log(response);
     if(response.success){
       FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error(response.result);
       FlowRouter.go("/admin/transactions/registrationRequested");
-    }*/
-    return response;
+    }
+    //return response;
     //this.props.getRegistrationDetails();
   }
 
@@ -121,61 +119,31 @@ class MlCreateRegistration extends React.Component{
     const resp=this.createRegistration();
     return resp;
   }
-/*
-  optionsBySelectGender(value){
-    this.setState({selectedGender:value})
-  }
 
-  optionBySelectRegistrationType(value,label){
-    this.setState({registrationType:value})
-    //this.setState({coummunityName:registrationOptions.})
-  }*/
-/*  async  createRegistration() {
-    let Details = {
-        firstName       :  this.refs.firstName.value,
-        lastName        :  this.refs.lastName.value,
-        displayName     :  this.refs.displayName.value,
-        registrationType:  this.state.registrationType,
-        gender          : this.state.selectedGender,
-        countryName     :  this.state.country,
-        contactNumber   :  this.refs.contactNumber.value,
-        email           :  this.refs.email.value,
-        cityId          :  this.state.selectedCity,
-
-    }
-    //const response = await updateRegistrationActionHandler(Details);
-    //return response;
-    this.props.getRegistrationDetails();
-  }*/
-/*  async addEventHandler() {
-    const resp=await this.createRegistration();
-    return resp;
-  }*/
-
-  async handleError(response) {
+/*  async handleError(response) {
     alert(response)
-  };
+  };*/
   enteredUserName(){
      this.setState({"userName" : this.refs.email.value});
   }
 
-  async handleSuccess(response) {
+/*  async handleSuccess(response) {
 
     //FlowRouter.go("/admin/settings/departmentsList");
     if (response){
       if(response.success)
-        FlowRouter.go("/transactions/registrationRequested");
+        FlowRouter.go("/admin/transactions/registrationRequested");
       else
         toastr.error(response.result);
-      FlowRouter.go("/transactions/registrationRequested");
+      FlowRouter.go("/admin/transactions/registrationRequested");
     }
-  };
+  };*/
   render(){
     let MlActionConfig = [
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createRegistration.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: this.createRegistration.bind(this)
       },
   /*    {
         showAction: true,
@@ -253,43 +221,15 @@ class MlCreateRegistration extends React.Component{
 
         <div className="admin_main_wrap">
           <h2>Create Registration</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
           <div className="col-md-6 nopadding-left">
-            <div className="form_bg">
+            <div className="form_bg left_wrap">
+              <ScrollArea
+                speed={0.8}
+                className="left_wrap"
+                smoothScrolling={true}
+                default={true}
+              >
               <form>
-              {/*  <div>
-                  <div className="form-group">
-                    <input type="text" ref="firstName"  placeholder="FirstName" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="lastName"  placeholder="Last Name" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="displayName"  placeholder="Display Name" className="form-control float-label" id=""/>
-                  </div>
-                  <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Ideator Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
-                  </div>
-                  <div className="form-group">
-                    <Select name="form-field-name" placeholder="Gender" options={genderValues}  className="float-label" value={this.state.selectedGender} onChange={this.optionsBySelectGender.bind(this)}/>
-                  </div>
-                  <div className="form-group">
-                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date of Birth"}} closeOnSelect={true}/>
-                    <FontAwesome name="calendar" className="password_icon"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="contactNumber" className="form-control float-label"/>
-                  </div>
-                  <div className="form-group ">
-                    <input type="text" ref="email" placeholder="Enter Email" className="form-control float-label"/>
-                  </div>
-                </div>*/}
                 <div className="form-group">
                   <input type="text" ref="firstName" placeholder="First Name"  className="form-control float-label" />
                 </div>
@@ -331,31 +271,17 @@ class MlCreateRegistration extends React.Component{
                   </div>
                 </div>
               </form>
+              </ScrollArea>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
-            <div className="form_bg">
-             {/* <div className="form-group">
-                <input type="text" ref="addressLine1"  placeholder="Address Line 1" className="form-control float-label" id=""/>
-              </div>
-              <div className="form-group">
-                <input type="text" ref="addressLine2"  placeholder="Address Line 2" className="form-control float-label" id=""/>
-              </div>
-              <div className="form-group">
-                <input type="text" ref="locality"  placeholder="Locality" className="form-control float-label" id=""/>
-              </div>
-              <div className="form-group">
-                <input type="text" ref="area"  placeholder="Area" className="form-control float-label" id=""/>
-              </div>*/}
-             {/* <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} queryOptions={cityOption}  onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
-              </div>
-              <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select State" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.state} queryType={"graphql"} query={stateQuery} reExecuteQuery={true} queryOptions={stateOption}  isDynamic={true}  onSelect={this.optionsBySelectState.bind(this)} />
-              </div>
-              <div className="form-group">
-                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} />
-              </div>*/}
+            <div className="form_bg left_wrap">
+              <ScrollArea
+                speed={0.8}
+                className="left_wrap"
+                smoothScrolling={true}
+                default={true}
+              >
               <form>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
@@ -396,15 +322,14 @@ class MlCreateRegistration extends React.Component{
                   </div>
                 </div>
               </form>
+              </ScrollArea>
             </div>
           </div>
-           </ScrollArea>
-            </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
         </div>
     )
   }
 }
 
-export default MoolyaCreateRegistation = formHandler()(MlCreateRegistration);
+/*export default MoolyaCreateRegistation = formHandler()(MlCreateRegistration);*/
 

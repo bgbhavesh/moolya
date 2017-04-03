@@ -10,7 +10,7 @@ let Template = `
             templates                   : [template],
             createdBy                   : String,
             createdDate                 : String,
-            isActive                    : Boolean    
+            isActive                    : Boolean  
     }
     type template{
             stepCode                    : String
@@ -23,7 +23,7 @@ let Template = `
     }    
     type Query{
             findStepAssignedTemplates(id: String,stepCode:String):TemplateDetails
-            findTemplates(id:String):TemplateDetails
+            findTemplates(id:String,stepCode:String):TemplateDetails
     }
 `
 

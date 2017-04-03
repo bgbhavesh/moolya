@@ -5,6 +5,7 @@ let Process = `
     type ProcessType{
         _id         : String,
         processId   : String,
+        processName : String,
         process     : String,
         communities : [String],
         userTypes   : [String],
@@ -158,7 +159,7 @@ let Process = `
     
     type Query{
       findProcess(id:String):processOutput
-      findProcessDocumentForRegistration(clusterId:String):processOutput
+      findProcessDocumentForRegistration(clusterId:String,userType:String,communityType:String):processOutput
     }
     
 `

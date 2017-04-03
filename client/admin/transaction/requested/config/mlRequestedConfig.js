@@ -7,7 +7,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["firstName","lastName"],
-  searchFields:["firstName","firstName"],
+  searchFields:["registrationInfo.firstName","registrationInfo.lastName"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.

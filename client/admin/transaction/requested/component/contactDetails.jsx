@@ -21,7 +21,8 @@ export default class ContactDetails extends React.Component{
       selectedContactTab: null,
       selectedNumberTypeLabel: null,
       contactNumberObject:{numberType : "",numberTypeName: "",countryCode: "",contactNumber: ""},
-      contactNumberArray : this.props.registrationInfo.contactInfo || []
+      contactNumberArray : this.props.registrationInfo.contactInfo || [],
+      activeTab : "active"
 
     }
     this.findRegistration.bind(this);
@@ -29,17 +30,10 @@ export default class ContactDetails extends React.Component{
   }
 
   componentDidMount(){
-
-    $("#cancel_contact").click(function(e) {
-      e.preventDefault();
-      $(this).closest('.tab-pane').find("input").val("");
-      $(this).closest('.tab-pane').find("select").val("default");
-    });
+    this.findRegistration.bind(this);
   }
   componentWillUpdate(nextProps, nextState) {
-   /*  console.log("Component Will Update");
-    console.log(nextState);
-    this.setState({contactNumber:nextState.contactNumber})*/
+
   }
   updateContactOptions(index, did, selectedValue, selObject,callback){
     if (index !== -1) {
@@ -71,9 +65,16 @@ export default class ContactDetails extends React.Component{
       if(response){
         if(!response.success){
           toastr.error(response.result);
+          this.findRegistration();
+          this.props.registrationDetails();
+        }else{
+          this.findRegistration();
+          this.props.registrationDetails();
+          this.refs.countryCode.value="";
+          this.refs["contactNumber"].value="";
+          this.setState({selectedNumberTypeValue : "",selectedNumberTypeLabel : ""});
         }
-        //this.props.getRegistrationSocialLinks();
-        this.findRegistration();
+
       }
 
 
@@ -91,10 +92,13 @@ export default class ContactDetails extends React.Component{
     if(contactExist){
       toastr.error("Contact TypeAlready Exists!!!!!");
       this.findRegistration();
+      this.props.registrationDetails();
     }else{
-      let updatedComment = update(this.state.contactNumberArray[index], {
-        numberTypeName : {$set: this.state.selectedNumberTypeLabel},
-        numberType :   {$set: this.state.selectedNumberTypeValue},
+      let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
+      let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;
+      let updatedComment = update(this.state.contactNumberArray[index],{
+        numberTypeName : {$set: labelValue},
+        numberType :   {$set: valueSelected},
         countryCode : {$set: this.refs["countryCode"+index].value},
         contactNumber : {$set: this.refs["contactNumber"+index].value}});
 
@@ -103,8 +107,11 @@ export default class ContactDetails extends React.Component{
       });
       const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
       if(response){
+        if(!response.success){
+          toastr.error(response.result);
+        }
         this.findRegistration();
-
+        this.props.registrationDetails();
       }
     }
 
@@ -122,6 +129,7 @@ export default class ContactDetails extends React.Component{
   }
   tabSelected(index,value){
     this.setState({selectedContactTab : true});
+    this.setState({activeTab : ""});
     this.findRegistration();
   }
 
@@ -139,7 +147,12 @@ export default class ContactDetails extends React.Component{
     let detailsType = "CONTACTTYPE";
     let registerid = this.props.registerId;
     const response = await updateRegistrationInfoDetails(listArray,detailsType,registerid);
-    this.setState({loading:false,contactNumberArray:response.contactInfo});
+    if(response){
+      this.setState({loading:false,contactNumberArray:response.contactInfo});
+      this.findRegistration();
+      this.props.registrationDetails();
+      this.setState({activeTab : "active"});
+    }
   }
 
 
@@ -160,86 +173,27 @@ export default class ContactDetails extends React.Component{
     return (
 
       <div className="panel-body">
-        {/*div className="ml_tabs">
-          <ul className="nav nav-pills">
-            <li className="active"> <a href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='minus-square'/></b></a> </li>
 
-            {that.state.contactNumberArray.map(function(options,key){
-            return(
-            <li  onClick={that.tabSelected.bind(that,key)}>
-              <a data-toggle="pill" href={'numberType'+key} className="add-contact">
-                <FontAwesome name='plus-square' />{options.numberTypeName}</a>
-            </li>)
-            })}
-
-          </ul>
-          <div className="tab-content clearfix">
-
-            <div className="tab-pane active" id="1a">
-              <div className="form-group">
-
-                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType"
-                              className="form-control float-label" selectedValue = {selectedNumId}
-                              valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
-                              queryOptions={numberTypeOption} onSelect={this.optionsBySelectNumberType.bind(this)}
-                              isDynamic={true}/>
-              </div>
-              <div className="form-group">
-                <input type="text" placeholder="Enter Country Code" ref={'contryCode'} className="form-control float-label" id=""/>
-              </div>
-              <div className="form-group">
-                <input type="text" ref="{phoneNumber}" placeholder="Enter Number" id="phoneNumber" className="form-control float-label"/>
-              </div>
-              <div className="ml_icon_btn">
-                <a href="#"  onClick={this.onSavingContact.bind(this)}  className="save_btn" ><span
-                  className="ml ml-save"></span></a>
-                <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
-              </div>
-            </div>
-            {that.state.contactNumberArray.map(function(options,key) {
-              return (<div className="tab-pane active" id={"numberType"+key}>
-                <div className="form-group">
-
-                  <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"
-                                className="form-control float-label" selectedValue={selectedNumId}
-                                valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
-                                queryOptions={numberTypeOption} onSelect={that.updateContactOptions.bind(that,key)}
-                                isDynamic={true}/>
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Enter Country Code" ref={'contryCode'+key}
-                         className="form-control float-label" id=""/>
-                </div>
-                <div className="form-group">
-                  <input type="text" ref={'phoneNumber'+key} placeholder="Enter Number" id="phoneNumber"
-                         className="form-control float-label"/>
-                </div>
-                <div className="ml_icon_btn">
-                  <a href="#" onClick={that.onSavingContact.bind(that,key)} className="save_btn"><span
-                    className="ml ml-save"></span></a>
-                  <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
-                </div>
-              </div>)
-            })}*/}
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
-            <li className="active">
-              <a  href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+            <li className={this.state.activeTab}>
+              <a  href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
             </li>
-            {that.state.contactNumberArray.map(function(options,key){
+
+            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key){
 
               return(
                 <li key={key} onClick={that.tabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#numberType'+key} className="add-contact">
-                    <FontAwesome name='plus-square' />{options.numberTypeName}</a>
+                    <FontAwesome name='minus-square'/>{options.numberTypeName}</a>
                 </li>)
 
 
-            })}
+            }))}
           </ul>
 
           <div className="tab-content clearfix">
-            <div className="tab-pane active" id="contactA">
+            <div className={"tab-pane"+this.state.activeTab} id="contactA">
               <div className="form-group">
                 <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType"
                               className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}
@@ -248,7 +202,7 @@ export default class ContactDetails extends React.Component{
                               isDynamic={true}/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Enter Country Code" ref={'countryCode'} className="form-control float-label" id=""/>
+                <input type="text" placeholder="Enter Country Code" defaultValue={this.state.contactNumberObject.countryCode} ref={'countryCode'} className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
                 <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber" className="form-control float-label"/>
@@ -259,8 +213,8 @@ export default class ContactDetails extends React.Component{
                 {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
               </div>
             </div>
-            {that.state.contactNumberArray.map(function(options,key) {
-              return(<div className="tab-pane" id={'numberType'+key} >
+            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key) {
+              return(<div className="tab-pane" id={'numberType'+key} key={key} >
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"
                                 className="form-control float-label" selectedValue={options.numberType}
@@ -282,7 +236,7 @@ export default class ContactDetails extends React.Component{
                   <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onDeleteContact.bind(that,key)} ><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
-            })}
+            }))}
 
           </div>
         </div>

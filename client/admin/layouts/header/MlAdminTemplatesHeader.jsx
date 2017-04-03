@@ -21,13 +21,14 @@ export default class MlAdminTemplatesHeader extends Component {
   async findProcess() {
     let documentsList=[]
     let subProcessId = this.props.subProcessConfig
+    let templateId=this.props.templateId
     if(subProcessId){
       const response = await findTemplateStepsActionHandler(subProcessId);
       if(response){
         let documents=response.steps
         for(let i=0;i<documents.length;i++){
           let json={
-            "link": "/admin/settings/stepDetails/"+subProcessId+"/"+documents[i].stepCode,
+            "link": "/admin/settings/stepDetails/"+subProcessId+"/"+templateId+"/"+documents[i].stepCode,
             "name":documents[i].stepName ,
             "uniqueId": "subProcess_Steps",
             "subMenuMappingId":"subProcess_Steps_subMapping",

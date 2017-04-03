@@ -134,6 +134,7 @@ let registrationSchema = `
     
     input registrationInfoInput{
         userType        :   String,
+        identityType    :   String,
         firstName       :   String,
         lastName        :   String,
         countryId       :   String,
@@ -186,6 +187,7 @@ let registrationSchema = `
     type RegistrationInfo{        
         _id             :   String,
         userType        :   String,
+        identityType    :   String,
         firstName       :   String,
         lastName        :   String,
         countryId       :   String,
@@ -385,6 +387,7 @@ let registrationSchema = `
          updateRegistrationGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          ApprovedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
          RejectedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
+         RemoveFileFromDocuments(fileId:String,documentId:String,moduleName:String!,actionName:String!, registrationId:String!):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

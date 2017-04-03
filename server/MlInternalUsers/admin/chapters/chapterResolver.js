@@ -204,12 +204,18 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
     let clusters = args.clusters;
     let chapters = [];
     if(clusters && clusters.length > 0){
+      if(clusters.length==1&&clusters[0] == "all"){
+        chapters= MlChapters.find({isActive:true}).fetch()||[];
+        chapters.push({"chapterName" : "All","_id" : "all"});
+      }else {
         clusters.map(function (clusterId) {
-              activeChapters = MlChapters.find({"$and":[{clusterId:clusterId, isActive:true}]}).fetch();
-              if(activeChapters && activeChapters.length > 0){
-                  chapters = chapters.concat(activeChapters)
-              }
+          activeChapters = MlChapters.find({"$and": [{clusterId: clusterId, isActive: true}]}).fetch();
+          if (activeChapters && activeChapters.length > 0) {
+            chapters = chapters.concat(activeChapters)
+          }
         })
+        chapters.push({"chapterName" : "All","_id" : "all"});
+      }
     }
 
     return chapters;
@@ -219,12 +225,18 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
   let chapters = args.chapters;
   let subChapters = [];
   if(chapters && chapters.length > 0){
-    chapters.map(function (chapterId) {
-      activeSubChapters = MlSubChapters.find({"$and":[{chapterId:chapterId, isActive:true}]}).fetch();
-      if(activeSubChapters && activeSubChapters.length > 0){
-        subChapters = subChapters.concat(activeSubChapters)
-      }
-    })
+    if(chapters.length==1&&chapters[0] == "all"){
+      subChapters= MlSubChapters.find({isActive:true}).fetch()||[];
+      subChapters.push({"subChapterName" : "All","_id" : "all"});
+    }else {
+      chapters.map(function (chapterId) {
+        activeSubChapters = MlSubChapters.find({"$and": [{chapterId: chapterId, isActive: true}]}).fetch();
+        if (activeSubChapters && activeSubChapters.length > 0) {
+          subChapters = subChapters.concat(activeSubChapters)
+        }
+      })
+      subChapters.push({"subChapterName" : "All","_id" : "all"});
+    }
   }
 
   return subChapters;

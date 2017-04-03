@@ -147,18 +147,18 @@ class MlAddDocumentMapping extends React.Component{
     // let cluster=gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
 
     let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
-    let chapterquery=gql`query($id:String){  
-    data:fetchChapters(id:$id) {
-      value:_id
-      label:chapterName
-    }  
-  }`;
-    let subChapterquery=gql`query($id:String){  
-    data:fetchSubChaptersSelect(id:$id) {
-      value:_id
-      label:subChapterName
-    }  
-  }`;
+    let chapterquery=gql`query($clusters:[String]){  
+        data:fetchActiveClusterChapters(clusters:$clusters) {
+          value:_id
+          label:chapterName
+        }  
+    }`;
+    let subChapterquery=gql`query($chapters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+          value:_id
+          label:subChapterName
+        }  
+    }`;
     let kycCategoryquery=gql`query{  
   data:fetchKYCCategories{
     value:_id
@@ -178,8 +178,8 @@ class MlAddDocumentMapping extends React.Component{
   }  
 }`;
 
-    let chapterOption={options: { variables: this.state.clusters}};
-    let subChapterOption={options: { variables:this.state.chapters}};
+    let chapterOption={options: { variables: {clusters:this.state.clusters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters}}};
 
     return (
       <div className="admin_main_wrap">

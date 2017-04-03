@@ -14,7 +14,7 @@ import {createRegistrationInfo} from '../actions/createRegistrationInfo'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import formHandler from '../../../../commons/containers/MlFormHandler'
 
-class MlCreateRegistration extends React.Component{
+export default class MlCreateRegistration extends React.Component{
 
   constructor(props){
     super(props);
@@ -67,15 +67,13 @@ class MlCreateRegistration extends React.Component{
 
     }
     const response = await createRegistrationInfo(Details);
-    /*console.log("------------------------------------------------------");
-    console.log(response);
     if(response.success){
       FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error(response.result);
       FlowRouter.go("/admin/transactions/registrationRequested");
-    }*/
-    return response;
+    }
+    //return response;
     //this.props.getRegistrationDetails();
   }
 
@@ -122,14 +120,14 @@ class MlCreateRegistration extends React.Component{
     return resp;
   }
 
-  async handleError(response) {
+/*  async handleError(response) {
     alert(response)
-  };
+  };*/
   enteredUserName(){
      this.setState({"userName" : this.refs.email.value});
   }
 
-  async handleSuccess(response) {
+/*  async handleSuccess(response) {
 
     //FlowRouter.go("/admin/settings/departmentsList");
     if (response){
@@ -139,13 +137,13 @@ class MlCreateRegistration extends React.Component{
         toastr.error(response.result);
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
-  };
+  };*/
   render(){
     let MlActionConfig = [
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createRegistration.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: this.createRegistration.bind(this)
       },
   /*    {
         showAction: true,
@@ -333,5 +331,5 @@ class MlCreateRegistration extends React.Component{
   }
 }
 
-export default MoolyaCreateRegistation = formHandler()(MlCreateRegistration);
+/*export default MoolyaCreateRegistation = formHandler()(MlCreateRegistration);*/
 

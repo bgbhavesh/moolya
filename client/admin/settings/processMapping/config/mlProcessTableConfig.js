@@ -1,6 +1,61 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+function stateFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.states?data.data.states:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function chapterFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.chapters?data.data.chapters:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function clusterFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.clusters?data.data.clusters:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function professionFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.clusters?data.data.professions:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function  communityFormatter(data) {
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.clusters?data.data.communities:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+}
+
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.date;
+  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+}
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
@@ -13,9 +68,16 @@ const mlProcessTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "processId", title: "processId",dataSort:true},
-    {dataField: "processName", title: "process",dataSort:true},
-    {dataField: "isActive", title: "Status",dataSort:true}
+    {dataField: "processId", title: "Id",dataSort:true},
+    {dataField: "processName", title: "Process",dataSort:true},
+     {dataField: "communities", title: "Community",dataSort:true,customComponent:communityFormatter},
+    {dataField: "industries", title:"Industry",dataSort:true},
+    {dataField: "professions", title:"Profession",dataSort:true,customComponent:professionFormatter},
+    {dataField: "clusters", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
+    {dataField: "states", title: "State",dataSort:true,customComponent:stateFormatter},
+    {dataField:"chapters", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
+    {dataField: "date", title: "Created Date",dataSort:true,customComponent:dateFormatter}
+
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -54,7 +116,14 @@ const mlProcessTableConfig=new MlViewer.View({
                               processId, 
                               process,
                               processName,
-                              isActive
+                              isActive,
+                              communities,
+                              industries,
+                              professions,
+                              clusters,
+                              states,
+                              chapters,
+                              date
                             }
                         }
                 }

@@ -47,6 +47,19 @@ let chapterSchema = `
         chapterId:String
     }
     
+    type internalSubChapterAccess{
+      backendUser:UserObject
+      externalUser:UserObject
+    }
+    type moolyaSubChapterAccess{
+      backendUser:UserObject
+      externalUser:UserObject
+    }
+    type UserObject{
+      canSearch:Boolean,
+      canView:Boolean,
+      canDiscover:Boolean
+    }
     type SubChapter{
         _id:String
         clusterId:String
@@ -66,14 +79,24 @@ let chapterSchema = `
         isActive: Boolean
         latitude:String
         longitude:String
+        isBespokeRegistration:Boolean
+        isBespokeWorkFlow:Boolean
+        internalSubChapterAccess:internalSubChapterAccess
+        moolyaSubChapterAccess:moolyaSubChapterAccess
     }
     
-    input subChapterDataAcessMatrix{
-        roleType:String,
-        acessType:String,
-        canSearch:Boolean,
-        canView:Boolean,
-        canDiscover:Boolean
+    input internalSubChapterAccessObject{
+      backendUser:UserInputObject,
+      externalUser:UserInputObject,
+    }
+    input moolyaSubChapterAccessObject{
+      backendUser:UserInputObject,
+      externalUser:UserInputObject,
+    }
+    input UserInputObject{
+      canSearch:Boolean,
+      canView:Boolean,
+      canDiscover:Boolean
     }
     
     input subChapterObject{
@@ -100,7 +123,8 @@ let chapterSchema = `
         latitude:String,
         longitude:String,
         isBespokeWorkFlow:Boolean,
-        subChapterDataAcessMatrix:[subChapterDataAcessMatrix]
+        internalSubChapterAccess:internalSubChapterAccessObject,
+        moolyaSubChapterAccess:moolyaSubChapterAccessObject
     }
     
      type SubChapterResponse{

@@ -63,7 +63,8 @@ export default class MlCreateRegistration extends React.Component{
         remarks         :  this.refs.remarks.value,
         referralType    :  this.state.refered,
         clusterId       :  this.state.cluster,
-        chapterId       :  this.state.chapter
+        chapterId       :  this.state.chapter,
+        communityName  :  this.state.coummunityName,
 
     }
     const response = await createRegistrationInfo(Details);
@@ -104,9 +105,10 @@ export default class MlCreateRegistration extends React.Component{
   optionsBySelectChapter(value){
     this.setState({chapter:value})
   }
-  optionBySelectRegistrationType(value,label){
-    this.setState({registrationType:value})
-    //this.setState({coummunityName:registrationOptions.})
+  optionBySelectRegistrationType(value, calback, selObject){
+    this.setState({registrationType:value});
+    this.setState({identityType:null});
+    this.setState({coummunityName:selObject.label})
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})

@@ -45,8 +45,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             longitude:chapter.longitude,
             isBespokeRegistration: false,
             isBespokeWorkFlow: false,
-            isDefaultSubChapter:true,
-            subChapterDataAcessMatrix: []
+            isDefaultSubChapter:true
           }
           let subchapterid = createSubChapter(subChapter);
           if(subchapterid){

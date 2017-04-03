@@ -2,6 +2,67 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import ActiveProcessFormatter from "../components/ActiveProcessDocFormatter"
+function stateFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.states?data.data.states:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function chapterFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.chapters?data.data.chapters:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function subChapterFormatte(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.subChapters?data.data.subChapters:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+
+function clusterFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.clusters?data.data.clusters:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function professionFormatter(data){
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.clusters?data.data.professions:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
+}
+function  communityFormatter(data) {
+  let processmapping = [];
+  processmapping=data&&data.data&&data.data.clusters?data.data.communities:[];
+  if(processmapping.length>0){
+    return <div>{processmapping.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+}
+
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
@@ -14,8 +75,16 @@ const mlProcessTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "processId", title: "processId",dataSort:true},
-    {dataField: "process", title: "process",dataSort:true},
+    {dataField: "processName", title: "Process",dataSort:true},
+    {dataField: "industries", title:"Industry",dataSort:true},
+    {dataField: "professions", title:"Profession",dataSort:true,customComponent:professionFormatter},
+    {dataField: "clusters", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
+    {dataField: "states", title: "State",dataSort:true,customComponent:stateFormatter},
+    {dataField:"chapters", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
+    {dataField:"subChapters", title:"Sub Chapter",dataSort:true,customComponent:subChapterFormatte},
+    {dataField: "communities", title: "Community",dataSort:true,customComponent:communityFormatter},
+    {dataField: "userTypes", title: "User Type",dataSort:true},
+    {dataField: "identity", title: "Identity",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true,customComponent:ActiveProcessFormatter}
   ],
   tableHeaderClass:'react_table_head',
@@ -47,9 +116,20 @@ const mlProcessTableConfig=new MlViewer.View({
                       data{
                        ...on ProcessType{
                              id:_id,
-                              processId, 
+                             processId, 
                               process,
+                              processName,
                               isActive,
+                              communities,
+                              industries,
+                              professions,
+                              clusters,
+                              states,
+                              chapters,
+                              subChapters,
+                              userTypes,
+                              identity
+                              date
                               documents {
                                   type
                                   category

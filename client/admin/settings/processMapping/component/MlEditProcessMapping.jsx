@@ -168,7 +168,7 @@ class MlEditProcessMapping extends React.Component{
   }
 
   optionsBySelectIdentity(val){
-    this.setState({identity:val})
+    this.setState({identity:val.value})
   }
 
   optionsBySelectIndustries(val){

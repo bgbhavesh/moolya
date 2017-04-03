@@ -32,13 +32,13 @@ const mlDocumentTypesTableConfig=new MlViewer.View({
         }
       }
     },
-    {
+   /* {
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
         FlowRouter.go("/admin/settings/addDocumentType")
       }
-    },
+    },*/
     {
       showAction: true,
       actionName: 'logout',

@@ -220,7 +220,7 @@ class MlAssignTemplate extends React.Component{
     }
     `;
     let fetchUsers = gql`query{
-      data:FetchUserType {label:userTypeName,value:_id}
+      data:FetchUserTypeSelect {label:userTypeName,value:_id}
     }
     `;
     let clusterquery=gql` query{data:fetchActiveClusters{label:countryName,value:_id}}`;

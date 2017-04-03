@@ -215,6 +215,7 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
             chapters = chapters.concat(activeChapters)
           }
         })
+        chapters.push({"chapterName" : "All","_id" : "all"});
       }
     }
 
@@ -227,7 +228,7 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
   if(chapters && chapters.length > 0){
     if(chapters.length==1&&chapters[0] == "all"){
       subChapters= MlSubChapters.find({isActive:true}).fetch()||[];
-      subChapters.push({"chapterName" : "All","_id" : "all"});
+      subChapters.push({"subChapterName" : "All","_id" : "all"});
     }else {
       chapters.map(function (chapterId) {
         activeSubChapters = MlSubChapters.find({"$and": [{chapterId: chapterId, isActive: true}]}).fetch();
@@ -235,6 +236,7 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
           subChapters = subChapters.concat(activeSubChapters)
         }
       })
+      subChapters.push({"subChapterName" : "All","_id" : "all"});
     }
   }
 

@@ -40,7 +40,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    {dataField: "documentId",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "documentId",title:"Id",'isKey':true},
     {dataField: "documentName", title: "Name",dataSort:true},
     {dataField: "kycCategory", title: "Category",dataSort:true, customComponent:categoriesformatter},
     {dataField: "allowableFormat", title: "Allowable Format",dataSort:true, customComponent:allowableFormatformatter},

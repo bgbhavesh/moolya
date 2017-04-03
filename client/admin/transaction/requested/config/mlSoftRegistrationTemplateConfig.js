@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import step1 from '../component/step1';
-import SoftRegistration from "../component/SoftRegistration";
+//import SoftRegistration from "../component/SoftRegistration";
 const mlSoftRegistrationInternalUserTemplateConfig={
   templateName:"Soft-Reg-All",
   templateCode:"SRTALL",
@@ -11,7 +11,7 @@ const mlSoftRegistrationInternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'SOFT',
   stepName:'Soft',
-  component:SoftRegistration
+ // component:SoftRegistration
 };
 
 const mlSoftRegistrationExternalUserTemplateConfig={
@@ -22,7 +22,7 @@ const mlSoftRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'SOFT',
   stepName:'Soft',
-  component:SoftRegistration
+  //component:SoftRegistration
 };
 
 mlRegistrationTemplates.setTemplate(mlSoftRegistrationInternalUserTemplateConfig);

@@ -70,7 +70,7 @@ if(mltemplateAssignment.length<=0){
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
     "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "all", "templatecommunityName" : "All", "templateuserType" : "all",
     "templateidentity" : "all",
-    "assignedTemplates" : [{"stepName" : "Soft", "stepCode" : "SOFT","templateCode":"Soft-Reg-All","templateName":"SRTALL"}
+    "assignedTemplates" : [{"stepName" : "Soft", "stepCode" : "SOFT","templateName":"Soft-Reg-All","templateCode":"SRTALL"}
     ]
   });
 

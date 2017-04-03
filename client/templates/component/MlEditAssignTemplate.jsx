@@ -246,14 +246,14 @@ class MlEditAssignTemplate extends React.Component{
       }  
     }`;
     let fetchcommunities = gql` query{
-      data:fetchCommunityDefinition{label:name,value:code}
+      data:fetchCommunityDefinitionForSelect{label:name,value:code}
     }
     `;
     let fetchUsers = gql`query{
       data:FetchUserType {label:userTypeName,value:_id}
     }
     `;
-    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let clusterquery=gql` query{data:fetchActiveClusters{label:countryName,value:_id}}`;
     let chapterquery=gql`query($id:String){data:fetchChapters(id:$id) {
     value:_id
     label:chapterName

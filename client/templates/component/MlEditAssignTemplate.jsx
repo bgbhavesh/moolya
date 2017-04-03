@@ -79,7 +79,11 @@ class MlEditAssignTemplate extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/templates/templateList");
+    if(response.success) {
+      FlowRouter.go("/admin/templates/templateList");
+    }else{
+      toastr.error(response.result);
+    }
   };
 
   async findTemplate(){
@@ -111,7 +115,7 @@ class MlEditAssignTemplate extends React.Component{
         clusters          : response.templateclusterId,
         chapters          : response.templatechapterId,
         subChapters       : response.templatesubChapterId,
-        stepAvailability  : response.stepAvailability,
+        stepAvailability  : response.assignedTemplates,
         clusterName       : response.templateclusterName,
         chapterName       : response.templatechapterName,
         subChapterName    : response.templatesubChapterName,
@@ -138,7 +142,7 @@ class MlEditAssignTemplate extends React.Component{
       templatecommunityName     : this.state.communitiesName,
       templateuserType          : this.state.userTypes,
       templateidentity          : this.state.identity,
-      stepAvailability          : this.state.stepAvailability
+      assignedTemplates         : this.state.stepAvailability
     }
     const response = await updateTemplateAssignmentActionHandler(id,Details);
     return response;
@@ -218,8 +222,11 @@ class MlEditAssignTemplate extends React.Component{
     this.setState({communities:value})
     this.setState({communitiesName:selObject.label})
   }
-  switchTab(){
-    console.log("switch tab")
+  async switchTabEvent(stepName){
+    console.log("switch tab step"+stepName)
+    const templates=await this.findTemplates(this.state.subProcess,stepName);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
   }
 
   render(){
@@ -321,7 +328,7 @@ class MlEditAssignTemplate extends React.Component{
                       className="left_wrap"
                       smoothScrolling={true}
                       default={true}>
-                      {this.state.data&&this.state.stepAvailability?(<MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)} stepDetails={this.state.data&&this.state.stepAvailability}/>):""}
+                      {this.state.data&&this.state.stepAvailability?(<MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)} subProcessConfig={this.state.subProcess} stepDetails={this.state.data&&this.state.stepAvailability}/>):""}
                       <div className="panel panel-default">
                         <div className="panel-heading">Template Step Details</div>
                         <div className="panel-body">
@@ -329,26 +336,24 @@ class MlEditAssignTemplate extends React.Component{
                             <ul  className="nav nav-pills">
                               {that.state.steps.map(function(options,key) {
                                 return(
-                                  <li className="active" key={key}>
-                                    <a  href={'#template'+key} data-toggle="tab" >{options.stepName} </a>
+                                  <li className="active" key={key} onClick={that.switchTabEvent.bind(that,options.stepName)}>
+                                    <a  href={'#template'+key} data-toggle="tab"  >{options.stepName} </a>
                                   </li>
                                 )})}
                             </ul>
 
                             <div className="tab-content clearfix">
-                              <div className="tab-pane active" >
-                                <div className="list-group nomargin-bottom">
-                                  {that.state.templateInfo.map(function(options,key) {
-                                    return(
+                              {that.state.templateInfo.map(function(options,key) {
+                                return(
+                                  <div className="tab-pane active" id={'template'+key} >
+                                    <div className="list-group nomargin-bottom">
                                       <a className="list-group-item" key={key} id={"template"}>{options.templateName}
                                         <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
                                       </a>
-
-                                    )})}
-                                </div>
-                              </div>
+                                    </div>
+                                  </div>
+                                )})}
                             </div>
-
                           </div>
                         </div>
                       </div>

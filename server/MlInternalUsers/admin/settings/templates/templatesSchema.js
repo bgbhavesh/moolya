@@ -24,6 +24,7 @@ let Template = `
     type Query{
             findStepAssignedTemplates(id: String,stepCode:String):TemplateDetails
             findTemplates(id:String,stepCode:String):TemplateDetails
+            findTemplatesSelect(id:String,stepName:String):[template]
     }
 `
 

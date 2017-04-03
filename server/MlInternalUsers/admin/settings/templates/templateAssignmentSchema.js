@@ -86,6 +86,7 @@ let TemplateAssignment = `
             fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String):template
             fetchSubProcess(id:String):[SubProcess]      
             findAssignedTemplates(id:String):TemplateAssignment
+            findTemplateStepsSelect(id:String):[step]
     }
     type Mutation{
             createTemplateAssignment(template : templateInput):response

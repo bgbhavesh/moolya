@@ -16,7 +16,8 @@ var Select = require('react-select');
 
 let IdentityOptions = [
   {value: 'Company', label: 'Company'},
-  {value: 'Individual', label: 'Individual'}
+  {value: 'Individual', label: 'Individual'},
+  {value:'all',label:'All'}
 ];
 
 

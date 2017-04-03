@@ -57,4 +57,24 @@ MlResolver.MlQueryResolver['fetchProfessions'] = (obj, args, context, info) => {
   let result=MlProfessions.find({isActive:true}).fetch()||[];
   return result;
 }
+MlResolver.MlQueryResolver['FetchProfessionIndustry'] = (obj, args, context, info) => {
 
+  let industries = args.industry;
+  let professions = [];
+  if(industries && industries.length > 0){
+    if(industries.length==1){
+      professions= MlProfessions.find({"$and": [{industryId: industries[0], isActive: true}]}).fetch()||[];
+      professions.push({"professionName" : "All","_id" : "all"});
+    }else {
+      industries.map(function (industryId) {
+        activeProfession = MlProfessions.find({"$and": [{industryId: industryId, isActive: true}]}).fetch();
+        if (activeProfession && activeProfession.length > 0) {
+          professions = professions.concat(activeProfession)
+
+        }
+      })
+      professions.push({"professionName" : "All","_id" : "all"});
+    }
+  }
+  return professions;
+}

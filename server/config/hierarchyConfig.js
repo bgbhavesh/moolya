@@ -14,8 +14,6 @@ let hierarchies = [
 
   {"code":"COMMUNITY",level:0,"module":"community", "menuName":"mlCommunityAdminMenu", "moduleFieldRef":"communityId","isParent":false,immediateParentCode:"SUBCHAPTER",immediateParentLevel:1,parent:[{"code":"PLATFORM",level:4,"module":null,"moduleFieldRef":null,"isParent":true},{"code":"CLUSTER",level:3,"module":"cluster","moduleFieldRef":"clusterId","isParent":false},{"code":"CHAPTER",level:2,"module":"chapter","moduleFieldRef":"chapterId","isParent":false},{"code":"SUBCHAPTER",level:1,"module":"SubChapter","moduleFieldRef":"subChapterId","isParent":false}],child:[]}];
 
-//let mlHierarchyCount = Meteor.settings.private.HierarchyCount;
-
 Meteor.startup(function () {
     for(i = 0; i < hierarchies.length; i++){
         let hierarchy = MlHierarchy.findOne({code: hierarchies[i]["code"]});

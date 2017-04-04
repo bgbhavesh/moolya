@@ -216,16 +216,14 @@ class MlAddProcessMapping extends React.Component{
     let clusterquery=gql`  query{
   data:fetchActiveClusters{label:countryName,value:_id}
 }`;
-    let statesQuery=gql`query
-{
-  data:FetchActiveStatesForSelect {
-   value: _id
-   label: name
-  
-  }
-}`;
-    let chapterquery=gql`query($clusters:[String]){  
-        data:fetchActiveClusterChapters(clusters:$clusters) {
+    let statesQuery=gql`query($clusters:[String]){  
+        data:FetchActiveStatesForCluster(clusters:$clusters) {
+          value:_id
+          label:name
+        }  
+    }`;
+    let chapterquery=gql`query($states:[String]){  
+        data:fetchActiveStatesChapters(states:$states) {
           value:_id
           label:chapterName
         }  
@@ -236,8 +234,8 @@ class MlAddProcessMapping extends React.Component{
           label:subChapterName
         }  
     }`;
-
-    let chapterOption={options: { variables: {clusters:this.state.clusters}}};
+    let stateOption={options: { variables: {clusters:this.state.clusters}}};
+    let chapterOption={options: { variables: {states:this.state.states}}};
     let subChapterOption={options: { variables: {chapters:this.state.chapters}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
    return (
@@ -280,7 +278,7 @@ class MlAddProcessMapping extends React.Component{
 
 
 
-                      <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={statesQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={statesQuery}  queryOptions={stateOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
 
 
 
@@ -312,7 +310,7 @@ class MlAddProcessMapping extends React.Component{
                   default={true}
                 >
                   <form style={{marginTop:'5px'}}>
-                      <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)}/>
+                      <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters}/>
                   </form>
                 </ScrollArea>
               </div>

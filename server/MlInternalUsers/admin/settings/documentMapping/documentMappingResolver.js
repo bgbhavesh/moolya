@@ -69,3 +69,44 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
 }
 
 
+MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.documentTypeId&&args.clusterId) {
+    let id = args.documentTypeId;
+    let clusterId=args.clusterId;
+    let data=[];
+    if(clusterId.length==1&&clusterId[0]=="all"){
+       data = MlDocumentMapping.find({ documentType : { $in: [id] },isActive:true}).fetch();
+    }else {
+       data = MlDocumentMapping.find({
+        documentType: {$in: [id]},
+        clusters: {$in: clusterId},
+        isActive: true
+      }).fetch();
+    }
+    let kycId=[]
+    data.map(function (doc,index) {
+
+      let kycCategory=doc.kycCategory
+      kycCategory.map(function(kyc){
+        kycId.push(kyc)
+      });
+     /* const kycCategoryData = MlDocumentCategories.find( { _id: { $in: doc.kycCategory } } ).fetch() || [];
+      let allowableFormatNames = [];  //@array of strings
+      allowableFormatData.map(function (doc) {
+        allowableFormatNames.push(doc.docFormatName)
+      });
+      data[index].allowableFormat = allowableFormatNames || [];*/
+    });
+    if(kycId.length>1){
+    console.log(kycId)
+      let uniqueKyc = _.uniq(kycId, function(item, key, a) {
+        return item.a;
+      });
+    console.log(uniqueKyc)
+      data = MlDocumentCategories.find( { _id: { $in: uniqueKyc } } ).fetch() || [];
+    }
+    return data;
+  }
+}
+

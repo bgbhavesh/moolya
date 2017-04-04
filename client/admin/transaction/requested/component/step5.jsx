@@ -12,7 +12,7 @@ import {addRegistrationStep3Details} from '../actions/addRegistrationStep3Detail
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {approvedStausForDocuments} from '../actions/approvedStatusForDocuments'
 import {rejectedStausForDocuments} from '../actions/rejectedStatusForDocuments'
-
+import {removeFileFromDocumentsActionHandler} from '../actions/removeFileFromDocuments'
 export default class Step5 extends React.Component{
   constructor(props){
     super(props);
@@ -34,8 +34,8 @@ export default class Step5 extends React.Component{
     let kycInfo = registrtionInfo && registrtionInfo.kycDocuments ? registrtionInfo.kycDocuments : []
     this.setState({"registrationDocuments": kycInfo})*/
 
-    let kycInfo = nextProps.registrationInfo && nextProps.registrationInfo.kycDocuments ? nextProps.registrationInfo.kycDocuments : []
-    if(!this.compareQueryOptions(this.props.registrationInfo.kycDocuments,nextProps.registrationInfo.kycDocuments)){
+    let kycInfo = nextProps.registrationData && nextProps.registrationData.kycDocuments ? nextProps.registrationData.kycDocuments : []
+    if(!this.compareQueryOptions(this.props.registrationData.kycDocuments,nextProps.registrationData.kycDocuments)){
       this.setState({loading:false,registrationDocuments:kycInfo||[]});
     }
   }
@@ -59,7 +59,7 @@ export default class Step5 extends React.Component{
     this.props.getRegistrationKYCDetails();
   };
   async updateapprovedDocuments(){
-    let  registrationId=this.props.registrationInfo._id
+    let  registrationId=this.props.registrationData._id
     let selectedDocs=this.state.selectedFiles
     const response = await approvedStausForDocuments(selectedDocs,registrationId);
     if(response){
@@ -74,7 +74,7 @@ export default class Step5 extends React.Component{
 
   }
   async updateRejectedDocuments(){
-    let  registrationId=this.props.registrationInfo._id
+    let  registrationId=this.props.registrationData._id
     let selectedDocs=this.state.selectedFiles
     const response = await rejectedStausForDocuments(selectedDocs,registrationId);
     if(response){
@@ -87,10 +87,12 @@ export default class Step5 extends React.Component{
     return resp;
   }
   async findProcessDocuments() {
-    let kycDocuments=this.props.registrationInfo&&this.props.registrationInfo.kycDocuments?this.props.registrationInfo.kycDocuments:[];
+    let kycDocuments=this.props.registrationData&&this.props.registrationData.kycDocuments?this.props.registrationData.kycDocuments:[];
     if(kycDocuments.length<1) {
-      let clusterId = this.props.registrationInfo && this.props.registrationInfo.registrationInfo.clusterId ? this.props.registrationInfo.registrationInfo.clusterId : '';
-      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId);
+      let clusterId = this.props.registrationData && this.props.registrationData.registrationInfo.clusterId ? this.props.registrationData.registrationInfo.clusterId : '';
+      let communityType =this.props.registrationData && this.props.registrationData.registrationInfo.registrationType ? this.props.registrationData.registrationInfo.registrationType : '';
+      let userType=this.props.registrationData && this.props.registrationData.registrationDetails.userType ? this.props.registrationData.registrationDetails.userType : '';
+      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,communityType,userType);
       if (response) {
         let processDoc=response
         if (processDoc.processDocuments) {
@@ -105,7 +107,7 @@ export default class Step5 extends React.Component{
             o.docFiles = []
             return o;
           })
-          let  registrationId=this.props.registrationInfo._id
+          let  registrationId=this.props.registrationData._id
           const regResponse = await  addRegistrationStep3Details(KYCDocResp,"KYCDOCUMENT",registrationId);
           if(regResponse){
           this.props.getRegistrationKYCDetails();
@@ -125,11 +127,32 @@ export default class Step5 extends React.Component{
     this.setState({selectedFiles:selectedValues})
     console.log(this.state.selectedFiles)
   };
+  async onDocumentRemove(documentId,fileId){
+    let  registrationId=this.props.registrationData._id
+    const response = await removeFileFromDocumentsActionHandler(fileId,documentId,registrationId);
+    if(response){
+      this.props.getRegistrationKYCDetails();
+
+    }
+  }
 
    onFileUpload(file,documentId){
-    let id=this.props.registrationInfo&&this.props.registrationInfo._id?this.props.registrationInfo._id:'';
-    let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let id=this.props.registrationData&&this.props.registrationData._id?this.props.registrationData._id:'';
+    let processDocument=this.state.registrationDocuments
+     kycDoc=_.find(processDocument, function(item) {
+       return item.documentId == documentId;
+     });
+    let fileName=file.name
+     let fileFormate=fileName.split('.').pop()
+     let docFormate=kycDoc.allowableFormat[0]
+    let docResponse=_.includes(docFormate, fileFormate);
+    if(docResponse){
+      let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    }else{
+      toastr.error("please provide allowable formate documents")
+    }
+
 
    }
 
@@ -190,7 +213,7 @@ export default class Step5 extends React.Component{
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
 
                       return(
-                       <DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)}/>);
+                       <DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)}/>);
                     })
                     }<br className="brclear"/></div>
                     )

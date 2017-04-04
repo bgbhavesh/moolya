@@ -10,6 +10,7 @@ export async function findRegistrationActionHandler(registrationId) {
           _id
           registrationInfo {
             userType
+            identityType
             firstName
             lastName
             countryId
@@ -44,6 +45,8 @@ export async function findRegistrationActionHandler(registrationId) {
             userId
             registrationStatus
             assignedUser
+            profileImage
+            
           }
         registrationDetails {
           userType
@@ -162,3 +165,22 @@ export async function findRegistrationActionHandler(registrationId) {
   const id = result.data.findRegistrationInfo;
   return id
 }
+
+export async function fetchIdentityTypes() {
+  const result = await client.query({
+    query: gql`
+       query{
+        data:FetchIdentityTypes{
+         _id
+        identityTypeName
+        identityTypeDisplayName
+        isActive
+        communities
+        }
+    }`
+  });
+
+  return result&&result.data?result.data.data:[];
+
+};
+

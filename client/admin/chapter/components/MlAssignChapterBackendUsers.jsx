@@ -69,13 +69,19 @@ class MlAssignChapterBackendUsers extends React.Component {
       this.setState({username: userDetails.userName})
       this.setState({userDisplayName: userDetails.displayName})
       this.setState({alsoAssignedAs: userDetails.alsoAssignedas})
-      // this.find_Cluster_Roles(userId, this.props.params.clusterId);
-      this.find_Chapter_Roles(userId, this.props.params.clusterId);
+      let alsoAs = userDetails.alsoAssignedas;
+      if(alsoAs){
+        let alsoArray = _.compact(alsoAs.split(','));
+        this.setState({alsoUser:alsoArray});
+      }else
+        this.setState({alsoUser:[]});
+
+      this.find_Chapter_Roles(userId);
       return userDetails;
     }
   }
 
-  async find_Chapter_Roles(userId, clusterId) {
+  async find_Chapter_Roles(userId) {
       const userRoles = await fetchAdminUserRoles(userId);
       var roles = userRoles && userRoles.length > 0 ? userRoles : [];
       this.setState({
@@ -199,6 +205,16 @@ class MlAssignChapterBackendUsers extends React.Component {
     let clusterId = this.state.data && this.state.data.clusterId || "";
     let chapterId = this.state.data && this.state.data.chapterId || "";
     let loggedInUser = getAdminUserContext();
+
+    const alsoUser = this.state.alsoUser && this.state.alsoUser.length > 0 ? this.state.alsoUser : [" "];
+    const alsoAssignList = alsoUser.map(function (userAlso, id) {
+      return (
+        <li key={id}>
+          <span className="form-control float-label">{userAlso}</span>
+        </li>
+      )
+    });
+
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -258,17 +274,21 @@ class MlAssignChapterBackendUsers extends React.Component {
                           </div>
                           <div>
                             <div className="form-group">
-                              <input type="text" id="AssignedAs" placeholder="Also Assigned As"
-                                     className="form-control float-label" disabled="true" value={alsoAssignedAs}/>
+                              {/*<input type="text" id="AssignedAs" placeholder="Also Assigned As"*/}
+                                     {/*className="form-control float-label" disabled="true" value={alsoAssignedAs}/>*/}
+                               Also Assigned As
+                              <ul>
+                                {alsoAssignList}
+                              </ul>
                             </div>
                             <div className="form-group">
                               <input type="text" placeholder="Display Name" readOnly="true" ref="displayName"
-                                     value={userDisplayName} className="form-control float-label" id="dName"/>
+                                     defaultValue={userDisplayName} className="form-control float-label" id="dName"/>
                             </div>
                             <div className="form-group">
                               <input type="text" placeholder="User Name" readOnly="true"
                                      className="form-control float-label" id="userName" ref="userName"
-                                     value={username}/>
+                                     defaultValue={username}/>
                             </div>
                             <br className="brclear"/>
                           </div>

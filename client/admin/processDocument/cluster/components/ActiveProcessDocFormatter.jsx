@@ -1,5 +1,5 @@
 import React from 'react';
-import {updateProcessActionHandler} from '../actions/upsertProcessDocAction'
+import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 class ActiveProcessFormatter extends React.Component {
   constructor(props) {

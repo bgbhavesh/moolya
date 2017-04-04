@@ -134,6 +134,7 @@ let registrationSchema = `
     
     input registrationInfoInput{
         userType        :   String,
+        identityType    :   String,
         firstName       :   String,
         lastName        :   String,
         countryId       :   String,
@@ -175,8 +176,7 @@ let registrationSchema = `
         _id             :   String,
         registrationInfo :  RegistrationInfo,
         registrationDetails : RegistrationDetails
-        registrationInfo :  RegistrationInfo,
-          addressInfo     : [AddressInfoSchema]
+        addressInfo     : [AddressInfoSchema]
          emailInfo       : [EmailInfoSchema]
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
@@ -187,6 +187,7 @@ let registrationSchema = `
     type RegistrationInfo{        
         _id             :   String,
         userType        :   String,
+        identityType    :   String,
         firstName       :   String,
         lastName        :   String,
         countryId       :   String,
@@ -220,7 +221,8 @@ let registrationSchema = `
         registrationDate:   Date,
         userId          :   String,
         registrationStatus        :   String,
-        assignedUser    :   String
+        assignedUser    :   String,
+        profileImage    : String
     }
     
     type branchLocation{
@@ -375,6 +377,7 @@ let registrationSchema = `
     }
     
     type Mutation{
+         createRegistrationAPI(registration: registrationInfoInput!):response
          createRegistration(registration: registrationInfoInput!, moduleName:String!, actionName:String!):response
          updateRegistration(registrationId:String, registration: registrationObject, moduleName:String, actionName:String):response       
          updateRegistrationInfo(registrationId:String,registrationDetails:registrationInfoInput,details:RegistrationDetailsInput):response
@@ -383,6 +386,7 @@ let registrationSchema = `
          updateRegistrationGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          ApprovedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
          RejectedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
+         RemoveFileFromDocuments(fileId:String,documentId:String,moduleName:String!,actionName:String!, registrationId:String!):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

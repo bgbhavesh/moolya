@@ -1,31 +1,43 @@
 import gql from 'graphql-tag'
 import {client} from '../../admin/core/apolloConnection';
 
-export async function findStepTemplatesAssignmentActionHandler(subProcessId,code) {
-  let sid       = subProcessId
+export async function findStepTemplatesAssignmentActionHandler(templateId) {
+  let tid       = templateId
   const result  = await client.query({
     query: gql`
-   query  ($id: String,$stepCode:String){
-        findStepAssignedTemplates(id:$id,stepCode:$stepCode){
-        process
-        subProcess
-        assignedTemplates {
-          stepCode
-          stepName
-          templateCode
-          templateName
-          isActive
+   query  ($id: String){
+        findAssignedTemplates(id:$id) {
+          _id
+          templateprocess
+          templatesubProcess
+          templateProcessName
+          templateSubProcessName
+          createdBy
           createdDate
-        } 
+          templateclusterId
+          templateclusterName
+          templatechapterId
+          templatechapterName
+          templatesubChapterId
+          templatesubChapterName
+          templatecommunityCode
+          templatecommunityName
+          templateuserType
+          templateidentity
+          assignedTemplates{
+             stepCode
+             templateCode
+             stepName
+             templateName
+          }
       }
-      }
+    }
     `,
     variables: {
-      id:sid,
-      stepCode:code
+      id:tid
     },
     forceFetch:true
   })
-  const id = result.data.findStepAssignedTemplates;
+  const id = result.data.findAssignedTemplates;
   return id
 }

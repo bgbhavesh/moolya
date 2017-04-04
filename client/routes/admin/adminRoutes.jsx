@@ -17,6 +17,7 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
+import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import  RegisterForm from  '../../admin/transaction/requested/component/registerForm'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
@@ -25,6 +26,10 @@ import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDo
 import MlCreateRegistration from '../../admin/transaction/requested/component/createRegistration'
 import MlAssignedTemplatesList from '../../templates/component/MlAssignedTemplatesList'
 import MlAssignTemplate from '../../templates/component/MlAssignTemplate'
+import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate'
+import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
+import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
+import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -156,7 +161,7 @@ adminSection.route('/transactions/registrationApprovedList', {
 adminSection.route('/transactions/registrationRequested/edit', {
   name: 'transaction_registration_requested_edit',
   action(params){
-    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 
@@ -196,7 +201,7 @@ adminSection.route('transactions/registrationRequested/edit', {
 adminSection.route('/transactions/editRequests/:id', {
   name: 'transaction_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 
@@ -207,6 +212,26 @@ adminSection.route('/transactions/createRegistration', {
   }
 });
 
+adminSection.route('/transactions/requestedPortfolioList', {
+  name: 'portfolio_requested',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlRequestedPortfolioList/>})
+  }
+});
+adminSection.route('/transactions/approvedPortfolioList', {
+  name: 'portfolio_approved',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlApprovedPortfolioList/>})
+  }
+});
+adminSection.route('/transactions/createPortfolio', {
+  name: 'portfolio_create',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlCreatePortfolio/>})
+  }
+});
+
+
 adminSection.route('/templates/templateList', {
   name: 'templates_List',
   action(){
@@ -214,9 +239,16 @@ adminSection.route('/templates/templateList', {
   }
 });
 
-adminSection.route('/templates/assignTemplate/:id', {
+adminSection.route('/templates/assignTemplate/', {
   name: 'templates_assignment',
   action(){
-    mount(AdminLayout,{adminContent:<MlAssignTemplate/>})
+    mount(AdminLayout,{adminContent:<MlAssignTemplate />})
+  }
+});
+
+adminSection.route('/templates/assignTemplate/:id', {
+  name: 'templates_assignment_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAssignTemplate config={params.id} />})
   }
 });

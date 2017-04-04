@@ -1,11 +1,11 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {findStepTemplatesInfoActionHandler} from '../actions/findTemplatesInfoAction'
-import {findStepTemplatesAssignmentActionHandler} from '../actions/findTemplatesAssignmentAction'
+import {findTemplatesActionHandler} from '../actions/findTemplatesAction'
 import {findTemplateStepsActionHandler} from '../actions/findTemplateAssignmentStepsAction'
-import {updateTemplateAssignmentActionHandler} from '../actions/updateTemplateAssignmentAction'
+import {addTemplateAssignmentActionHandler} from '../actions/addTemplateAssignmentAction'
 import MlActionComponent from '../../commons/components/actions/ActionComponent'
+import MlStepAvailability from './MlStepAvailabilityComponent'
 import formHandler from '../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
@@ -16,26 +16,34 @@ var Select = require('react-select');
 
 let IdentityOptions = [
   {value: 'Company', label: 'Company'},
-  {value: 'Individual', label: 'Individual'}
+  {value: 'Individual', label: 'Individual'},
+  {value:'all',label:'All'}
 ];
+
 
 class MlAssignTemplate extends React.Component{
   constructor(props){
     super(props);
     this.state={
       process     : '',
+      processName : '',
       subProcess  : '',
-      communities : '',
+      subProcessName : '',
       userTypes   : '',
       identity    : '',
       clusters    : '',
+      clusterName : '',
       chapters    : '',
+      chapterName : '',
       subChapters : '',
+      subChapterName : '',
+      communities : '',
+      communitiesName : '',
       templateInfo: [],
       steps       : [],
-      data        : ''
+      data        : '',
+      stepAvailability:[]
     }
-    this.findTemplate.bind(this);
     return this;
   }
   componentDidMount()
@@ -52,9 +60,11 @@ class MlAssignTemplate extends React.Component{
       }
     });
   }
-  componentWillMount() {
-    const resp=this.findTemplate();
-    return resp;
+
+
+  getStepAvailability(details){
+    console.log(details);
+    this.setState({'stepAvailability':details})
   }
 
   async addEventHandler() {
@@ -70,43 +80,26 @@ class MlAssignTemplate extends React.Component{
     FlowRouter.go("/admin/templates/templateList");
   };
 
-  async findTemplate(){
-    let Id=this.props.config;
-    const response = await findStepTemplatesAssignmentActionHandler(Id);
-    if(response){
-      this.setState({
-        loading       : false,
-        process       : response.process,
-        subProcess    : response.subProcess,
-        communities   : response.communityId,
-        userTypes     : response.userType,
-        identity      : response.identity,
-        clusters      : response.clusterId,
-        chapters      : response.chapterId,
-        subChapters   : response.subChapterId,
-        data          : response
-      })
-    }
-  }
 
-  async  updateTemplateAssignment() {
+  async  addTemplateAssignment() {
     let Details = {
-      id                : this.props.config,
-      process           : this.state.process,
-      subProcess        : this.state.subProcess,
-      templateProcessName       : this.state.process,
-      templateSubProcessName    : this.state.subProcess,
-      assignedTemplates : '',
-      clusterId         : this.state.clusters,
-      clusterName       : '',
-      chapterId         : this.state.chapters,
-      chapterName       : '',
-      subChapterId      : this.state.subChapters,
-      subChapterName    : '',
-      communityId       : this.state.communities,
-      communityName     : ''
+      templateprocess           : this.state.process,
+      templatesubProcess        : this.state.subProcess,
+      templateProcessName       : this.state.processName,
+      templateSubProcessName    : this.state.subProcessName,
+      templateclusterId         : this.state.clusters,
+      templateclusterName       : this.state.clusterName,
+      templatechapterId         : this.state.chapters,
+      templatechapterName       : this.state.chapterName,
+      templatesubChapterId      : this.state.subChapters,
+      templatesubChapterName    : this.state.subChapterName,
+      templatecommunityCode       : this.state.communities,
+      templatecommunityName     : this.state.communitiesName,
+      templateuserType          : this.state.userTypes,
+      templateidentity          : this.state.identity,
+      assignedTemplates         : this.state.stepAvailability
     }
-    const response = await updateTemplateAssignmentActionHandler(Details);
+    const response = await addTemplateAssignmentActionHandler(Details);
     return response;
   }
 
@@ -119,61 +112,49 @@ class MlAssignTemplate extends React.Component{
     }
   }
 
-  async findSteps() {
-    let subProcessId = this.state.subProcess
+  async findSteps(subProcessId) {
+    //let subProcessId = this.state.subProcess
     const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
     console.log(response)
     if(response){
-      let assignedTemplates = response.steps
-      let documentDetails=[]
-      for(let i=0;i<assignedTemplates.length;i++){
-        let json = {
-          Id:assignedTemplates[i].stepId,
-          stepName: assignedTemplates[i].stepName,
-          href : '#'+assignedTemplates[i].stepId
-        }
-        documentDetails.push(json);
-      }
-      this.setState({"steps":documentDetails})
+      let steps = response.steps||[];
+      return steps;
     }
+    return [];
   }
 
 
-  async findTemplates() {
-    let subProcessId = this.state.subProcess
-    const response = await findStepTemplatesInfoActionHandler(subProcessId,this.props.stepCode);
-    console.log(response)
+  async findTemplates(subProcessId,stepName) {
+    console.log(subProcessId+"--"+stepName)
+    const response = await findTemplatesActionHandler(subProcessId,stepName);
+    console.log(response);
+    let templates=[];
     if(response){
-      let assignedTemplates = response.assignedTemplates
-      let documentDetails=[]
-      for(let i=0;i<assignedTemplates.length;i++){
-        let json = {
-          Id:assignedTemplates[i]._id,
-          templateName: assignedTemplates[i].templateName,
-          view: 'Yes'
-        }
-        documentDetails.push(json);
-      }
-      this.setState({"templateInfo":documentDetails})
+       templates = response.templates||[];
     }
+    return templates;
   }
 
-  optionsBySelectProcess(val){
-    this.setState({process:val})
+  optionsBySelectProcess(value, calback, selObject){
+    this.setState({process:value})
+    this.setState({processName:selObject.label})
   }
 
-  optionsBySelectSubProcess(val){
-    this.setState({subProcess:val})
-    const templates=this.findTemplates();
-    this.setState({templateInfo:templates})
-    //console.log(this.state.templateInfo);
-    const steps=this.findSteps();
-    this.setState({steps:steps})
-    //console.log(this.state.steps);
-  }
-
-  optionsBySelectCommunities(val){
-    this.setState({communities:val})
+  async optionsBySelectSubProcess(value, calback, selObject){
+    this.setState({subProcess:value})
+    this.setState({subProcessName:selObject.label})
+    const steps=await this.findSteps(value);
+    this.setState({steps:steps||[]});
+    console.log(this.state.steps);
+    let stepDetails=[];
+    stepDetails= steps;
+    let stepName=''
+    for(i=0;i<1;i++){
+      stepName = stepDetails[i].stepCode;
+    }
+    const templates=await this.findTemplates(value,stepName);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
   }
 
   optionsBySelectUserType(val){
@@ -184,22 +165,32 @@ class MlAssignTemplate extends React.Component{
     this.setState({identity:val.value})
   }
 
-  optionsBySelectClusters(val){
-    this.setState({clusters:val})
+  optionsBySelectClusters(value, calback, selObject){
+    this.setState({clusters:value})
+    this.setState({clusterName:selObject.label})
   }
 
-  optionsBySelectChapters(val){
-    this.setState({chapters:val})
+  optionsBySelectChapters(value, calback, selObject){
+    this.setState({chapters:value})
+    this.setState({chapterName:selObject.label})
   }
 
-  optionsBySelectSubChapters(val){
-    this.setState({subChapters:val})
+  optionsBySelectSubChapters(value, calback, selObject){
+    this.setState({subChapters:value})
+    this.setState({subChapterName:selObject.label})
+  }
+
+  optionsBySelectCommunities(value, calback, selObject){
+    this.setState({communities:value})
+    this.setState({communitiesName:selObject.label})
   }
 
 
-  switchTab(){
-    console.log("switch tab")
-    //this.setState({subChapters:val})
+  async switchTabEvent(stepName){
+    console.log("switch tab step"+stepName)
+    const templates=await this.findTemplates(this.state.subProcess,stepName);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
   }
 
   render(){
@@ -208,7 +199,7 @@ class MlAssignTemplate extends React.Component{
       {
         actionName: 'edit',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateTemplateAssignment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.addTemplateAssignment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       }
     ]
 
@@ -226,14 +217,14 @@ class MlAssignTemplate extends React.Component{
       }  
     }`;
     let fetchcommunities = gql` query{
-      data:fetchCommunityDefinition{label:name,value:code}
+      data:fetchCommunityDefinitionForSelect{label:name,value:code}
     }
     `;
     let fetchUsers = gql`query{
-      data:FetchUserType {label:userTypeName,value:_id}
+      data:FetchUserTypeSelect {label:userTypeName,value:_id}
     }
     `;
-    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let clusterquery=gql` query{data:fetchActiveClusters{label:countryName,value:_id}}`;
     let chapterquery=gql`query($id:String){data:fetchChapters(id:$id) {
     value:_id
     label:chapterName
@@ -302,48 +293,32 @@ class MlAssignTemplate extends React.Component{
                       smoothScrolling={true}
                       default={true}
                     >
+                      <MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)} subProcessConfig={this.state.subProcess}/>
                       <div className="panel panel-default">
-                        <div className="panel-heading">Test</div>
-                        <div className="panel-body">
-                          <div className="form-group">
-                            <Select name="form-field-name"value="select"  className="float-label"/>
-                          </div>
-                          <div className="form-group">
-                            <Select name="form-field-name"value="select" className="float-label"/>
-                          </div>
-                          <div className="form-group">
-                            <Select name="form-field-name"value="select"  className="float-label"/>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="panel panel-default">
-                        <div className="panel-heading">Internal Subchapter Access</div>
+                        <div className="panel-heading">Template Step Details</div>
                         <div className="panel-body">
                           <div className="ml_tabs">
                             <ul  className="nav nav-pills">
-                              {that.state.steps.map(function(options,id) {
+                              {that.state.steps.map(function(options,key) {
                                 return(
-                                  <li className="active">
-                                    <a  href={options.href} data-toggle="tab" >{options.stepName} </a>
+                                  <li className="active" key={key} onClick={that.switchTabEvent.bind(that,options.stepName)}>
+                                    <a  href={'#template'+key} data-toggle="tab"  >{options.stepName} </a>
                                   </li>
                                 )})}
                             </ul>
 
                             <div className="tab-content clearfix">
-
-                            {that.state.templateInfo.map(function(options,id) {
-                              return(
-                                    <div className="tab-pane active" id="#1">
-                                    <div className="list-group nomargin-bottom">
-                                    <a className="list-group-item">{options.templateName}
-                                      <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
-                                    </a>
-                                    </div>
-                                    </div>
-                              )})}
-
+                              {that.state.templateInfo.map(function(options,key) {
+                                return(
+                                <div className="tab-pane active" id={'template'+key} >
+                                  <div className="list-group nomargin-bottom">
+                                      <a className="list-group-item" key={key} id={"template"}>{options.templateName}
+                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
+                                      </a>
+                                  </div>
+                                </div>
+                                )})}
                             </div>
-
                           </div>
                         </div>
                       </div>

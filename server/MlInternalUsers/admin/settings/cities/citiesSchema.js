@@ -29,6 +29,8 @@ let citiesSchema = `
         fetchCity(cityId: String): Cities
         fetchCities:[Cities]
         fetchCitiesPerState(stateId: String):[Cities]
+        fetchCitiesPerCountry(countryId: String):[Cities]
+        
     }
     
     type Mutation {

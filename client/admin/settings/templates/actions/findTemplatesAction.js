@@ -1,15 +1,15 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findStepTemplatesActionHandler(subProcessId,code) {
-  let sid       = subProcessId
+export async function findStepTemplatesActionHandler(templateId,code) {
+  let tid       = templateId
   const result  = await client.query({
     query: gql`
    query  ($id: String,$stepCode:String){
         findStepAssignedTemplates(id:$id,stepCode:$stepCode){
-        process
-        subProcess
-        assignedTemplates {
+        procesId
+        subProcessId
+        templates {
           stepCode
           stepName
           templateCode
@@ -21,7 +21,7 @@ export async function findStepTemplatesActionHandler(subProcessId,code) {
       }
     `,
     variables: {
-      id:sid,
+      id:tid,
       stepCode:code
     },
     forceFetch:true

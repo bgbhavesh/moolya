@@ -37,6 +37,7 @@ const defaultServerConfig = {
   graphiqlPath: '/graphiql',
   assignUsersPath: '/adminMultipartFormData',
   registrationPath: '/registration',
+  registrationAPIPath:'/registrations',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -173,9 +174,39 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }));
   }
 
-  graphQLServer.post("/test", multipartMiddleware, Meteor.bindEnvironment(function (req, res){
-      res.send('test  ');
-  }))
+  if(config.registrationAPIPath){
+    graphQLServer.post(config.registrationAPIPath, multipartMiddleware, Meteor.bindEnvironment(function (req, res)
+    {
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req && req.body && req.body.data && req.headers.api_key)
+      {
+        let data = JSON.parse(req.body.data)
+        let apiKey = req.header("API_KEY")
+        if(apiKey=="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          if(data.email&&data.countryId&&data.registrationType){
+            let response;
+            if(data) {
+              response = MlResolver.MlMutationResolver['createRegistrationAPI'](null, {registration: data}, context, null);
+              res.send(response);
+            }
+          }else{
+            let code = 400;
+            let result = {message:"email,countyId,registrationType are mandatory fields"}
+            let response = new MlRespPayload().errorPayload(result,code );
+            res.send(response);
+          }
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          res.send(response);
+        }
+
+      }
+    }))
+  }
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }

@@ -7,7 +7,7 @@ var Select = require('react-select');
 
 
 
-export default class MlProblemsAndSolutions extends React.Component{
+export default class MlIdeatorProblemsAndSolutions extends React.Component{
   componentDidMount()
   {
     $(function() {

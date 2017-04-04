@@ -29,9 +29,13 @@ import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate
 import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
 import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
 import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
-import MlPortfolioIdeatorDetails from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorDetails'
-import MlPortfolioLookingFor from '../../admin/transaction/portfolio/component/Ideator/MlLookingFor'
-import MlProblemsAndSolutions from '../../admin/transaction/portfolio/component/Ideator/MlProblemsAndSolutions'
+import MlIdeatorDetails from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorDetails'
+import MlIdeatorLookingFor from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorLookingFor'
+import MlIdeatorProblemsAndSolutions from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorProblemsAndSolutions'
+import MlIdeatorAudience from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorAudience'
+import MlIdeatorLibrary from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorLibrary'
+import MlIdeatorStrategyAndPlanning from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorStrategyAndPlanning'
+import MlIdeatorIntellectualPlanningAndTrademark from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -232,23 +236,47 @@ adminSection.route('/transactions/portfolio/createPortfolio', {
     mount(AdminLayout,{adminContent:<MlCreatePortfolio/>})
   }
 });
-// ************* Ideator Routes **************
+// ************* Portfolio - Ideator Routes **************
 adminSection.route('/transactions/portfolio/ideator/requestedIdeator', {
   name: 'requested_ideator',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolioIdeatorDetails/>})
-  }
-});
-adminSection.route('/transactions/portfolio/ideator/requestedLookingFor', {
-  name: 'requested_lookingFor',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolioLookingFor/>})
+    mount(AdminLayout,{adminContent:<MlIdeatorDetails/>})
   }
 });
 adminSection.route('/transactions/portfolio/ideator/requestedProblemsAndSolutions', {
   name: 'requested_problemsAndSolutions',
   action(params){
-    mount(AdminLayout,{adminContent:<MlProblemsAndSolutions/>})
+    mount(AdminLayout,{adminContent:<MlIdeatorProblemsAndSolutions/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedAudience', {
+  name: 'requested_audience',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlIdeatorAudience/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedLibrary', {
+  name: 'requested_library',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlIdeatorLibrary/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedStrategyAndPlanning', {
+  name: 'requested_strategyAndPlanning',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlIdeatorStrategyAndPlanning/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedIntellectualTrainingAndTrademark', {
+  name: 'requested_IPAndT',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlIdeatorIntellectualPlanningAndTrademark/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedLookingFor', {
+  name: 'requested_lookingFor',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlIdeatorLookingFor/>})
   }
 });
 

@@ -17,7 +17,7 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
-import  RegisterForm from  '../../admin/transaction/requested/component/registerForm'
+import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
@@ -26,6 +26,12 @@ import MlCreateRegistration from '../../admin/transaction/requested/component/cr
 import MlAssignedTemplatesList from '../../templates/component/MlAssignedTemplatesList'
 import MlAssignTemplate from '../../templates/component/MlAssignTemplate'
 import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate'
+import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
+import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
+import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
+import MlPortfolioIdeatorDetails from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorDetails'
+import MlPortfolioLookingFor from '../../admin/transaction/portfolio/component/Ideator/MlLookingFor'
+import MlProblemsAndSolutions from '../../admin/transaction/portfolio/component/Ideator/MlProblemsAndSolutions'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -157,7 +163,7 @@ adminSection.route('/transactions/registrationApprovedList', {
 adminSection.route('/transactions/registrationRequested/edit', {
   name: 'transaction_registration_requested_edit',
   action(params){
-    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 
@@ -197,7 +203,7 @@ adminSection.route('transactions/registrationRequested/edit', {
 adminSection.route('/transactions/editRequests/:id', {
   name: 'transaction_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 
@@ -207,6 +213,45 @@ adminSection.route('/transactions/createRegistration', {
     mount(AdminLayout,{adminContent:<MlCreateRegistration/>})
   }
 });
+// ************* Portfolio Routes **************
+adminSection.route('/transactions/portfolio/requestedPortfolioList', {
+  name: 'portfolio_requested',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlRequestedPortfolioList/>})
+  }
+});
+adminSection.route('/transactions/portfolio/approvedPortfolioList', {
+  name: 'portfolio_approved',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlApprovedPortfolioList/>})
+  }
+});
+adminSection.route('/transactions/portfolio/createPortfolio', {
+  name: 'portfolio_create',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlCreatePortfolio/>})
+  }
+});
+// ************* Ideator Routes **************
+adminSection.route('/transactions/portfolio/ideator/requestedIdeator', {
+  name: 'requested_ideator',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlPortfolioIdeatorDetails/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedLookingFor', {
+  name: 'requested_lookingFor',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlPortfolioLookingFor/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedProblemsAndSolutions', {
+  name: 'requested_problemsAndSolutions',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlProblemsAndSolutions/>})
+  }
+});
+
 
 adminSection.route('/templates/templateList', {
   name: 'templates_List',

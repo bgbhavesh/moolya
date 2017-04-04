@@ -2,6 +2,7 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
+import mlTemplateAssignmentRepo from './mlTemplateAssignmentRepo';
 
 MlResolver.MlQueryResolver['findTemplateSteps'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -47,7 +48,7 @@ MlResolver.MlQueryResolver['findTemplates'] = (obj, args, context, info) => {
     let steps = response.templates;
     let filteredSteps = [];
     steps.map(function (step, key){
-      if(step.stepCode==args.stepCode){
+      if(step.stepCode==args.stepCode||step.stepName==args.stepCode){
         filteredSteps.push(step)
       }
     })
@@ -59,16 +60,16 @@ MlResolver.MlQueryResolver['findTemplates'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchAssignedTemplate']=(obj, args, context, info) => {
   if (args.process&&args.subProcess&&args.stepCode) {
-     let templateAssignment= MlTemplateAssignment.findOne({process:args.process,subProcess: args.subProcess,assignedTemplates: { $elemMatch: { "stepCode": args.stepCode } } },
-                                             {fields: {'assignedTemplates.$': 1}});
-
     //todo: conditions based on record id for steps like registration,portfolio
     //resolve userType:internal/external and send with response
-
-    let template=templateAssignment&&templateAssignment.assignedTemplates?templateAssignment.assignedTemplates[0]:null;
+    let process=args.process;
+    let subProcess=args.subProcess;
+    let recordId=args.recordId;
+    let stepCode=args.stepCode;
+    let template=mlTemplateAssignmentRepo.fetchTemplate(process,subProcess,stepCode,recordId);
     return template;
   }
-  return null;
+      return null;
 }
 
 
@@ -93,7 +94,12 @@ MlResolver.MlMutationResolver['createTemplateAssignment'] = (obj, args, context,
 MlResolver.MlMutationResolver['updateTemplateAssignment'] = (obj, args, context, info) => {
   if (args.id) {
     let template = MlTemplateAssignment.findOne({_id: args.id});
-    if (template) {
+    if (template.isSystemDefined) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Cannot edit system defined Template Assignment", code);
+      return response;
+    }
+    else if (template) {
         let resp = MlTemplateAssignment.update({_id: args.id}, {$set: args.template}, {upsert: true})
         if (resp) {
           let code = 200;
@@ -102,5 +108,31 @@ MlResolver.MlMutationResolver['updateTemplateAssignment'] = (obj, args, context,
           return response
         }
       }
+  }
+}
+
+MlResolver.MlQueryResolver['findTemplateStepsSelect'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.id) {
+    var id= args.id;
+    let response= MlSubProcess.findOne({"_id":id});
+    return response.steps;
+  }
+}
+
+MlResolver.MlQueryResolver['findTemplatesSelect'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.id) {
+    var id= args.id;
+    let response= MlTemplates.findOne({"subProcessId":id});
+    let steps = response.templates;
+    let filteredSteps = [];
+    steps.map(function (step, key){
+      if(step.stepName==args.stepName){
+        filteredSteps.push(step)
+      }
+    })
+ //   response.templates = filteredSteps;
+    return filteredSteps;
   }
 }

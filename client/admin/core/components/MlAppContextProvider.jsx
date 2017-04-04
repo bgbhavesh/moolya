@@ -13,7 +13,7 @@ export default class MlAppContextProvider extends Component {
   }
 
   getChildContext() {
-    return {theme: this.theme,language:'',menu:this.menu}
+    return {theme: this.theme,language:'',menu:this.menu,userType:this.props.userType}
   }
 
   componentWillReceiveProps(next) {
@@ -37,5 +37,6 @@ export default class MlAppContextProvider extends Component {
 MlAppContextProvider.childContextTypes = {
   theme: React.PropTypes.object,
   language: React.PropTypes.string,
-  menu: React.PropTypes.object
+  menu: React.PropTypes.object,
+  userType:React.PropTypes.string
 }

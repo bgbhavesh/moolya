@@ -286,7 +286,7 @@ Accounts.validateLoginAttempt(function (user)
 
 /******************************************* User Login <End> *********************************************************/
 /******************************************* Teplates <Start> *******************************************************/
-let process = MlprocessTypes.findOne({processName:"Registration"})
+/*let process = MlprocessTypes.findOne({processName:"Registration"})
 if(!process) {
 process = {
     processName   : "Registration",
@@ -311,7 +311,7 @@ if(!subProces) {
     createdDate           : "01-02-2017"
   };
   MlSubProcess.insert(subProces);
-}
+}*/
 /*let proc = MlprocessTypes.findOne({processName:"Registration"})
 let subProc = MlSubProcess.findOne({processName:"Registration"})
 let template = MlTemplates.findOne({processName:"Registration"})

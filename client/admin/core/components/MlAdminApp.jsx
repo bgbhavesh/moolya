@@ -16,7 +16,7 @@ class MlAdminAppComponent extends Component {
 
   constructor(p, c) {
     super(p, c)
-    this.state = { theme: null,language:null,menu:null,loading:true};
+    this.state = { theme: null,language:null,menu:null,loading:true,userType:null};
     this.fetchMenu.bind(this);
   }
 
@@ -28,8 +28,11 @@ class MlAdminAppComponent extends Component {
     const menuData=await client.query({forceFetch:true,query: query,
                   variables: { name:'mlAdminMenu' }
      });
-    this.setState({loading:false,menu:menuData&&menuData.data&&menuData.data.data?menuData.data.data.menu:[]});
+    const userType=await client.query({forceFetch:true,query:gql`query{data:fetchUserTypeFromProfile}`
+    });
+    this.setState({loading:false,userType:userType&&userType.data&&userType.data.data?userType.data.data:null,menu:menuData&&menuData.data&&menuData.data.data?menuData.data.data.menu:[]});
   }
+
 
   render(){
 
@@ -39,7 +42,7 @@ class MlAdminAppComponent extends Component {
         return <div className="loader_wrap"></div>;
       }
 
-      return (<MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language}>
+      return (<MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>
         {props.headerContent ? (props.headerContent) : (<MlAdminHeader/>)}
         {/*<MlAdminHeader/>*/}
         <MlAdminLeftNav/>
@@ -48,7 +51,7 @@ class MlAdminAppComponent extends Component {
 
     };
 
-    return <MlComponent {...this.props} showLoader={showLoader} theme={this.state.theme} menu={this.state.menu} language={this.state.language}/>;
+    return <MlComponent {...this.props} showLoader={showLoader} theme={this.state.theme} menu={this.state.menu} language={this.state.language} userType={this.state.userType}/>;
   }
 }
 

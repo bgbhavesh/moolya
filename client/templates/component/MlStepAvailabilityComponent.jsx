@@ -8,7 +8,7 @@ export default class MlStepAvailabilityComponent extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      stepAvailability:[{step: null,template:null}]
+      stepAvailability:[{stepCode: null,templateCode:null,stepName:null,templateName:null}]
     }
     return this;
   }
@@ -21,23 +21,23 @@ export default class MlStepAvailabilityComponent extends React.Component {
       let stepDetails=[]
       for(let i=0;i<stepAvailability.length;i++){
         let json={
-          step:stepAvailability[i].step,
-          template:stepAvailability[i].template
+          stepCode      : stepAvailability[i].stepCode,
+          templateCode  : stepAvailability[i].templateCode,
+          stepName      : stepAvailability[i].stepName,
+          templateName  : stepAvailability[i].templateName,
         }
         stepDetails.push(json)
       }
       this.setState({stepAvailability: stepDetails})
     }
-
   }
-  /*componentWillUpdate(){
-   this.props.getStepAvailability(this.state.stepAvailability);
-   }*/
+
   AssignStep(idx){
     this.setState({
-      stepAvailability: this.state.stepAvailability.concat([{ step:null,template:null}])
+      stepAvailability: this.state.stepAvailability.concat([{ stepCode:null,templateCode:null,stepName:null,templateName:null}])
     });
   }
+
   RemovestepAvailability(idx,event){
     let stepAvailability;
     stepAvailability= this.state.stepAvailability.filter(function(object,index){
@@ -48,31 +48,48 @@ export default class MlStepAvailabilityComponent extends React.Component {
     })
     this.props.getStepAvailability(stepAvailability);
   }
-  optionsBySelectStep(index, selectedValue){
+
+  optionsBySelectStep(index,value, calback,selObject){
     let stepAvailability=this.state.stepAvailability
-    stepAvailability[index]['step']=selectedValue
+    stepAvailability[index]['stepCode']=value
+    stepAvailability[index]['stepName']=selObject.label
     this.setState({stepAvailability:stepAvailability})
     this.props.getStepAvailability(this.state.stepAvailability);
   }
-  optionsBySelecttemplate(index, selectedValue){
+
+  optionsBySelecttemplate(index,value, calback,selObject){
     let stepAvailability=this.state.stepAvailability
-    stepAvailability[index]['template']=selectedValue
+    stepAvailability[index]['templateCode']=value
+    stepAvailability[index]['templateName']=selObject.label
     this.setState({stepAvailability:stepAvailability})
     this.props.getStepAvailability(this.state.stepAvailability);
   }
+
   render() {
     let that=this;
-    let processQuery=gql`query{
-     data: FetchProcessType {
-        label:processName
-        value:_id
-      }
+    let subProcessId = this.props.subProcessConfig;
+    let stepOptions ={options:{variables: {id:subProcessId}}};
+    let stepQuery=gql`  
+    query($id:String){  
+      data:findTemplateStepsSelect(id:$id) {
+        value:stepCode
+        label:stepName
+      }  
+    }
+    `;
+      let templateQuery=gql`  
+    query($id:String,$stepName:String){  
+      data:findTemplatesSelect(id:$id,stepName:$stepName) {
+        value:templateCode
+        label:templateName
+      }  
     }
     `;
     let stepData = that.state.stepAvailability || [];
     return(
       <div>
         {stepData.map(function(stepAvailability, idx){
+          let templateOptions = {options: { variables: {id:subProcessId,stepName:stepAvailability.stepName}}};
           return(
             <div className="panel panel-default" key={idx}>
               <div className="panel-heading"> Assign Step{idx==0&&(<div className="pull-right block_action" onClick={that.AssignStep.bind(that)}><img src="/images/add.png"/></div>)}
@@ -80,11 +97,11 @@ export default class MlStepAvailabilityComponent extends React.Component {
               </div>
               <div className="panel-body">
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Step"  selectedValue={stepAvailability.step} queryType={"graphql"} query={processQuery}  isDynamic={true}  onSelect={that.optionsBySelectStep.bind(that,idx)} />
+                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Step"  selectedValue={stepAvailability.stepCode} queryType={"graphql"} query={stepQuery} queryOptions={stepOptions}  isDynamic={true}  onSelect={that.optionsBySelectStep.bind(that,idx)} />
 
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Template" selectedValue={stepAvailability.template} queryType={"graphql"} query={processQuery} reExecuteQuery={true}  isDynamic={true}  onSelect={that.optionsBySelecttemplate.bind(that,idx)} />
+                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Template" selectedValue={stepAvailability.templateCode} queryType={"graphql"} query={templateQuery} queryOptions={templateOptions}  reExecuteQuery={true}  isDynamic={true}  onSelect={that.optionsBySelecttemplate.bind(that,idx)} />
                 </div>
               </div>
             </div>

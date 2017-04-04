@@ -42,7 +42,7 @@ let TemplateAssignment = `
             templatechapterName       : String
             templatesubChapterId      : String
             templatesubChapterName    : String
-            templatecommunityId       : String
+            templatecommunityCode       : String
             templatecommunityName     : String
             templateuserType          : String     
             templateidentity          : String        
@@ -75,7 +75,7 @@ let TemplateAssignment = `
             templatechapterName       : String
             templatesubChapterId      : String
             templatesubChapterName    : String
-            templatecommunityId       : String
+            templatecommunityCode       : String
             templatecommunityName     : String
             templateuserType          : String     
             templateidentity          : String 
@@ -86,6 +86,7 @@ let TemplateAssignment = `
             fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String):template
             fetchSubProcess(id:String):[SubProcess]      
             findAssignedTemplates(id:String):TemplateAssignment
+            findTemplateStepsSelect(id:String):[step]
     }
     type Mutation{
             createTemplateAssignment(template : templateInput):response

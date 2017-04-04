@@ -34,8 +34,8 @@ export default class Step5 extends React.Component{
     let kycInfo = registrtionInfo && registrtionInfo.kycDocuments ? registrtionInfo.kycDocuments : []
     this.setState({"registrationDocuments": kycInfo})*/
 
-    let kycInfo = nextProps.registrationInfo && nextProps.registrationInfo.kycDocuments ? nextProps.registrationInfo.kycDocuments : []
-    if(!this.compareQueryOptions(this.props.registrationInfo.kycDocuments,nextProps.registrationInfo.kycDocuments)){
+    let kycInfo = nextProps.registrationData && nextProps.registrationData.kycDocuments ? nextProps.registrationData.kycDocuments : []
+    if(!this.compareQueryOptions(this.props.registrationData.kycDocuments,nextProps.registrationData.kycDocuments)){
       this.setState({loading:false,registrationDocuments:kycInfo||[]});
     }
   }
@@ -59,7 +59,7 @@ export default class Step5 extends React.Component{
     this.props.getRegistrationKYCDetails();
   };
   async updateapprovedDocuments(){
-    let  registrationId=this.props.registrationInfo._id
+    let  registrationId=this.props.registrationData._id
     let selectedDocs=this.state.selectedFiles
     const response = await approvedStausForDocuments(selectedDocs,registrationId);
     if(response){
@@ -74,7 +74,7 @@ export default class Step5 extends React.Component{
 
   }
   async updateRejectedDocuments(){
-    let  registrationId=this.props.registrationInfo._id
+    let  registrationId=this.props.registrationData._id
     let selectedDocs=this.state.selectedFiles
     const response = await rejectedStausForDocuments(selectedDocs,registrationId);
     if(response){
@@ -87,11 +87,11 @@ export default class Step5 extends React.Component{
     return resp;
   }
   async findProcessDocuments() {
-    let kycDocuments=this.props.registrationInfo&&this.props.registrationInfo.kycDocuments?this.props.registrationInfo.kycDocuments:[];
+    let kycDocuments=this.props.registrationData&&this.props.registrationData.kycDocuments?this.props.registrationData.kycDocuments:[];
     if(kycDocuments.length<1) {
-      let clusterId = this.props.registrationInfo && this.props.registrationInfo.registrationInfo.clusterId ? this.props.registrationInfo.registrationInfo.clusterId : '';
-      let communityType =this.props.registrationInfo && this.props.registrationInfo.registrationInfo.registrationType ? this.props.registrationInfo.registrationInfo.registrationType : '';
-      let userType=this.props.registrationInfo && this.props.registrationInfo.registrationDetails.userType ? this.props.registrationInfo.registrationDetails.userType : '';
+      let clusterId = this.props.registrationData && this.props.registrationData.registrationInfo.clusterId ? this.props.registrationData.registrationInfo.clusterId : '';
+      let communityType =this.props.registrationData && this.props.registrationData.registrationInfo.registrationType ? this.props.registrationData.registrationInfo.registrationType : '';
+      let userType=this.props.registrationData && this.props.registrationData.registrationDetails.userType ? this.props.registrationData.registrationDetails.userType : '';
       const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,communityType,userType);
       if (response) {
         let processDoc=response
@@ -107,7 +107,7 @@ export default class Step5 extends React.Component{
             o.docFiles = []
             return o;
           })
-          let  registrationId=this.props.registrationInfo._id
+          let  registrationId=this.props.registrationData._id
           const regResponse = await  addRegistrationStep3Details(KYCDocResp,"KYCDOCUMENT",registrationId);
           if(regResponse){
           this.props.getRegistrationKYCDetails();
@@ -128,7 +128,7 @@ export default class Step5 extends React.Component{
     console.log(this.state.selectedFiles)
   };
   async onDocumentRemove(documentId,fileId){
-    let  registrationId=this.props.registrationInfo._id
+    let  registrationId=this.props.registrationData._id
     const response = await removeFileFromDocumentsActionHandler(fileId,documentId,registrationId);
     if(response){
       this.props.getRegistrationKYCDetails();
@@ -137,7 +137,7 @@ export default class Step5 extends React.Component{
   }
 
    onFileUpload(file,documentId){
-    let id=this.props.registrationInfo&&this.props.registrationInfo._id?this.props.registrationInfo._id:'';
+    let id=this.props.registrationData&&this.props.registrationData._id?this.props.registrationData._id:'';
     let processDocument=this.state.registrationDocuments
      kycDoc=_.find(processDocument, function(item) {
        return item.documentId == documentId;

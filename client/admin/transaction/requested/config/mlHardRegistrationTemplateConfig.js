@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 
-/*import IdeatorIndividualHardReg from '../component/IdeatorIndividualHardReg';
+import IdeatorIndividualHardReg from '../component/IdeatorIndividualHardReg';
 import IdeatorCompanyHardReg from '../component/IdeatorCompanyHardReg';
 
 import FunderCompanyHardReg from "../component/FunderCompanyHardReg";
@@ -12,7 +12,7 @@ import ServiceProviderIndividualHardReg from "../component/ServiceProviderIndivi
 
 import CompanyHardReg from "../component/CompanyHardReg";
 import StartupHardReg from "../component/StartupHardReg";
-import InstitutionHardReg from "../component/InstitutionHardReg";*/
+import InstitutionHardReg from "../component/InstitutionHardReg";
 
 const mlIdeatorCompanyHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Ideator-Company",
@@ -22,7 +22,7 @@ const mlIdeatorCompanyHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
-  //component:IdeatorCompanyHardReg
+  component:IdeatorCompanyHardReg
 };
 
 const mlIdeatorIndividualHardRegistrationExternalUserTemplateConfig={
@@ -33,7 +33,7 @@ const mlIdeatorIndividualHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
- // component:IdeatorIndividualHardReg
+ component:IdeatorIndividualHardReg
 };
 
 const mlFunderCompanyHardRegistrationExternalUserTemplateConfig={
@@ -44,7 +44,7 @@ const mlFunderCompanyHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
-  //component:FunderCompanyHardReg
+  component:FunderCompanyHardReg
 };
 
 const mlFunderIndividualHardRegistrationExternalUserTemplateConfig={
@@ -55,7 +55,7 @@ const mlFunderIndividualHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
- // component:FunderIndividualHardReg
+  component:FunderIndividualHardReg
 };
 
 const mlServiceProviderCompanyHardRegistrationExternalUserTemplateConfig={
@@ -66,7 +66,7 @@ const mlServiceProviderCompanyHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
-  //component:ServiceProviderCompanyHardReg
+  component:ServiceProviderCompanyHardReg
 };
 
 const mlServiceProviderIndividualHardRegistrationExternalUserTemplateConfig={
@@ -77,7 +77,7 @@ const mlServiceProviderIndividualHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
- // component:ServiceProviderIndividualHardReg
+  component:ServiceProviderIndividualHardReg
 };
 
 const mlCompanyHardRegistrationExternalUserTemplateConfig={
@@ -88,7 +88,7 @@ const mlCompanyHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
-  //component:CompanyHardReg
+  component:CompanyHardReg
 };
 
 const mlStartupHardRegistrationExternalUserTemplateConfig={
@@ -99,7 +99,7 @@ const mlStartupHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
- // component:StartupHardReg
+  component:StartupHardReg
 };
 
 
@@ -111,7 +111,7 @@ const mlInstitutionHardRegistrationExternalUserTemplateConfig={
   subProcess:'Registration',
   stepCode:'HARD',
   stepName:'Hard',
- // component:InstitutionHardReg
+  component:InstitutionHardReg
 };
 
 mlRegistrationTemplates.setTemplate(mlIdeatorCompanyHardRegistrationExternalUserTemplateConfig);
@@ -130,3 +130,6 @@ mlRegistrationTemplates.setTemplate(mlCompanyHardRegistrationExternalUserTemplat
 mlRegistrationTemplates.setTemplate(mlStartupHardRegistrationExternalUserTemplateConfig);
 
 mlRegistrationTemplates.setTemplate(mlInstitutionHardRegistrationExternalUserTemplateConfig);
+
+
+

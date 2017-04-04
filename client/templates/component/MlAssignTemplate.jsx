@@ -16,7 +16,8 @@ var Select = require('react-select');
 
 let IdentityOptions = [
   {value: 'Company', label: 'Company'},
-  {value: 'Individual', label: 'Individual'}
+  {value: 'Individual', label: 'Individual'},
+  {value:'all',label:'All'}
 ];
 
 
@@ -92,11 +93,11 @@ class MlAssignTemplate extends React.Component{
       templatechapterName       : this.state.chapterName,
       templatesubChapterId      : this.state.subChapters,
       templatesubChapterName    : this.state.subChapterName,
-      templatecommunityId       : this.state.communities,
+      templatecommunityCode       : this.state.communities,
       templatecommunityName     : this.state.communitiesName,
       templateuserType          : this.state.userTypes,
       templateidentity          : this.state.identity,
-      stepAvailability          : this.state.stepAvailability
+      assignedTemplates         : this.state.stepAvailability
     }
     const response = await addTemplateAssignmentActionHandler(Details);
     return response;
@@ -185,8 +186,11 @@ class MlAssignTemplate extends React.Component{
   }
 
 
-  switchTab(){
-    console.log("switch tab")
+  async switchTabEvent(stepName){
+    console.log("switch tab step"+stepName)
+    const templates=await this.findTemplates(this.state.subProcess,stepName);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
   }
 
   render(){
@@ -213,14 +217,14 @@ class MlAssignTemplate extends React.Component{
       }  
     }`;
     let fetchcommunities = gql` query{
-      data:fetchCommunityDefinition{label:name,value:code}
+      data:fetchCommunityDefinitionForSelect{label:name,value:code}
     }
     `;
     let fetchUsers = gql`query{
-      data:FetchUserType {label:userTypeName,value:_id}
+      data:FetchUserTypeSelect {label:userTypeName,value:_id}
     }
     `;
-    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let clusterquery=gql` query{data:fetchActiveClusters{label:countryName,value:_id}}`;
     let chapterquery=gql`query($id:String){data:fetchChapters(id:$id) {
     value:_id
     label:chapterName
@@ -289,7 +293,7 @@ class MlAssignTemplate extends React.Component{
                       smoothScrolling={true}
                       default={true}
                     >
-                      <MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)}/>
+                      <MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)} subProcessConfig={this.state.subProcess}/>
                       <div className="panel panel-default">
                         <div className="panel-heading">Template Step Details</div>
                         <div className="panel-body">
@@ -297,26 +301,24 @@ class MlAssignTemplate extends React.Component{
                             <ul  className="nav nav-pills">
                               {that.state.steps.map(function(options,key) {
                                 return(
-                                  <li className="active" key={key}>
-                                    <a  href={'#template'+key} data-toggle="tab" >{options.stepName} </a>
+                                  <li className="active" key={key} onClick={that.switchTabEvent.bind(that,options.stepName)}>
+                                    <a  href={'#template'+key} data-toggle="tab"  >{options.stepName} </a>
                                   </li>
                                 )})}
                             </ul>
 
                             <div className="tab-content clearfix">
-                              <div className="tab-pane active" >
-                                <div className="list-group nomargin-bottom">
-                            {that.state.templateInfo.map(function(options,key) {
-                              return(
-                                    <a className="list-group-item" key={key} id={"template"}>{options.templateName}
-                                      <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
-                                    </a>
-
-                              )})}
+                              {that.state.templateInfo.map(function(options,key) {
+                                return(
+                                <div className="tab-pane active" id={'template'+key} >
+                                  <div className="list-group nomargin-bottom">
+                                      <a className="list-group-item" key={key} id={"template"}>{options.templateName}
+                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
+                                      </a>
+                                  </div>
                                 </div>
-                              </div>
+                                )})}
                             </div>
-
                           </div>
                         </div>
                       </div>

@@ -24,6 +24,7 @@ let UserTypesSchema = `
     type Query{
         FindUserType(_id:String): UserTypes
         FetchUserType:[UserTypes]
+        FetchUserTypeSelect:[UserTypes]
     }
 `
 

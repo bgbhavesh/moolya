@@ -19,11 +19,11 @@ class MlTemplateEngine{
 
   fetchTemplate(subProcess,templateName,userType){
     switch(subProcess){
-      case 'registration':
+      case 'Registration':
          let template=mlRegistrationTemplates.getTemplate(templateName,userType);
          return template;
         break;
-      case 'portfolio':
+      case 'Portfolio':
         break;
 
 

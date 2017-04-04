@@ -19,7 +19,7 @@ export default class Step3 extends React.Component{
       selectedValue : null,
       contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}],
       registerId : this.props.registrationId,
-      registrationDetails:this.props.registrationInfo,
+      registrationDetails:this.props.registrationData,
 
 
     }
@@ -45,7 +45,7 @@ export default class Step3 extends React.Component{
   async getRegistrationContactInfo(){
 
     const resp=this.props.getRegistrationContactDetails();
-    this.setState({'registrationDetails':this.props.registrationInfo});
+    this.setState({'registrationDetails':this.props.registrationData});
   }
 
   render(){

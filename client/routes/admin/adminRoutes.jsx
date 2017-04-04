@@ -17,7 +17,7 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
-import  RegisterForm from  '../../admin/transaction/requested/component/registerForm'
+import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
@@ -163,7 +163,7 @@ adminSection.route('/transactions/registrationApprovedList', {
 adminSection.route('/transactions/registrationRequested/edit', {
   name: 'transaction_registration_requested_edit',
   action(params){
-    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 
@@ -203,7 +203,7 @@ adminSection.route('transactions/registrationRequested/edit', {
 adminSection.route('/transactions/editRequests/:id', {
   name: 'transaction_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<RegisterForm config={params.id}/>})
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
 

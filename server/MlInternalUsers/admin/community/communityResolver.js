@@ -401,6 +401,24 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
     return new MlRespPayload().errorPayload("Failed to update community", 400);
 }
 
+MlResolver.MlQueryResolver['fetchCommunitiesSelect'] = (obj, args, context, info) =>
+{
+  // TODO : Authorization
+  let query;
+  let communities = [];
+  if(args.clusterId != "" && args.chapterId != "" && args.subChapterId != ""){
+    query= {"$and":[{clusterId:args.clusterId, chapterId:args.chapterId, subChapterId:args.subChapterId, isActive:true}]};
+  }
+  let communitiesAccess = MlCommunityAccess.find(query).fetch();
+  communitiesAccess.map(function (communityAccess) {
+    let community = {};
+    community["name"] = communityAccess.communityDefName;
+    community["displayName"] = communityAccess.displayName;
+    community["code"] = communityAccess.communityDefCode;
+    communities.push(community);
+  })
+  return communities;
+}
 
 // MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {
 //

@@ -129,7 +129,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .admin_main_wrap .left_user_blocks .list_block{margin-bottom: 3px;}
 .admin_main_wrap .left_user_blocks .provider_mask{top: 2px;}
 .left_wrap{overflow-x: hidden;overflow-y: auto;}
-.admin_main_wrap .bottom_actions_block{ background: #273545;height: 0px;width: auto;border-radius: 6px 6px 0px 0px;position: absolute;bottom: 0px;left: 50%;transform: translateX(-50%);padding: 0px 14px 0px 0px;transition: .2s linear;z-index: 99;}
+.admin_main_wrap .bottom_actions_block{ background: #273545;height: 0px;width: auto;border-radius: 6px 6px 0px 0px;position: absolute;bottom: 0px;left: 50%;transform: translateX(-50%);padding: 0px 14px 0px 0px;transition: .2s linear;z-index: 99;overflow:hidden;}
 .admin_main_wrap .bottom_actions_block.show_block{height: 50px;}
 span.actions_switch{width: 42px;height: 18px;background:url(../images/actions_block_top.png);content: "";position: absolute;left: 50%;transform: translateX(-50%);bottom: 0px;transition: .2s linear;cursor: pointer;}
 span.actions_switch.show_act{bottom: 50px;}

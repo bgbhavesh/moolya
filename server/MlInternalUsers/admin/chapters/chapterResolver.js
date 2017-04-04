@@ -236,6 +236,28 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
 
     return chapters;
 }
+MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, info) => {
+  let states = args.states;
+  let chapters = [];
+  if(states && states.length > 0){
+    if(states.length==1&&states[0] == "all"){
+      chapters= MlChapters.find({isActive:true}).fetch()||[];
+      chapters.push({"chapterName" : "All","_id" : "all"});
+    }else {
+      states.map(function (stateId) {
+        activeChapters = MlChapters.find({"$and": [{stateId: stateId, isActive: true}]}).fetch();
+        if (activeChapters && activeChapters.length > 0) {
+          chapters = chapters.concat(activeChapters)
+        }
+      })
+      chapters.push({"chapterName" : "All","_id" : "all"});
+    }
+  }
+
+  return chapters;
+}
+
+
 
 MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, context, info) => {
   let chapters = args.chapters;

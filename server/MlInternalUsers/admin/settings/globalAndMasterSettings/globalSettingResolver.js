@@ -7,13 +7,14 @@ import MlGlobalSettingRepo from './repository/mlGlobalSettingRepo';
 MlResolver.MlQueryResolver['fetchGlobalSettings'] = (obj, args, context, info) => {
   // TODO : Authorization
 
-     return MlGlobalSettings.find({}).fetch();
+     // return MlGlobalSettings.find({}).fetch();
+     return mlDBController.find('MlGlobalSettings', {}, context).fetch();
 }
 
 
 MlResolver.MlMutationResolver['updateGlobalSetting'] = (obj, args, context, info) => {
   // TODO : Authorization
-     let globalSettingRecord=new MlGlobalSettingRepo(context.userId).updateGlobalSetting(args);
+     let globalSettingRecord=new MlGlobalSettingRepo(context.userId).updateGlobalSetting(args, context);
      return globalSettingRecord;
 }
 

@@ -17,7 +17,6 @@ export async function updateCommunityActionHandler(communityId, communityDetails
       communityDef : communityDetails
     }
   })
-  console.log(result)
   const id = result.data.updateCommunityDef;
   return id
 }

@@ -1,31 +1,17 @@
-
-
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 let _ = require('lodash');
 
-MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) =>
-{
-    // let allCities = [];
-    // let states = MlStates.find({"isActive": true}).fetch()
-    // if(states && states.length > 0){
-    //     for(var i = 0; i < states.length; i++){
-    //         let cities = MlCities.find({"stateId":states[i]._id}).fetch();
-    //         if(cities && cities.length > 0){
-    //             allCities = allCities.concat(cities)
-    //         }
-    //     }
-    // }
-    // return {data:allCities,totalRecords:allCities&&allCities.length?allCities.length:0};
-}
-
 MlResolver.MlQueryResolver['fetchCity'] = (obj, args, context, info) =>{
   let city=null;
   if(args.cityId){
-    city =  MlCities.findOne({"_id":args.cityId});
-    city.countryCode=MlCountries.findOne({_id : city.countryId}).country;
-    city.stateId=MlStates.findOne({_id : city.stateId}).name;
+    // city =  MlCities.findOne({"_id":args.cityId});
+    city = mlDBController.findOne('MlCities', {"_id":args.cityId}, context)
+    // city.countryCode=MlCountries.findOne({_id : city.countryId}).country;
+    city.countryCode = mlDBController.findOne('MlCountries', {_id: city.countryId}, context).country;
+    // city.stateId=MlStates.findOne({_id : city.stateId}).name;
+    city.stateId= mlDBController.findOne('MlStates', {_id: city.stateId}, context).name;
   }
   return city?city:null;
 }
@@ -38,16 +24,20 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
       return response;
     }
 
-  let city = MlCities.findOne({_id: args.cityId});
+  // let city = MlCities.findOne({_id: args.cityId});
+  let city = mlDBController.findOne('MlCities', {_id: args.cityId}, context)
     if(city){
-        let state = MlStates.findOne({_id:city.stateId})
+        // let state = MlStates.findOne({_id:city.stateId})
+      let state = mlDBController.findOne('MlStates', {_id: city.stateId}, context)
         for(key in args.city){
             city[key] = args.city[key]
         }
-        let resp = MlCities.update({_id:args.cityId}, {$set:city}, {upsert:true})
-        if(resp)
+        // let resp = MlCities.update({_id:args.cityId}, {$set:city}, {upsert:true})
+      let resp = mlDBController.update('MlCities', args.cityId, city, {$set:true}, context)
+      if(resp)
         {
-            let chapter = MlChapters.findOne({"cityId":args.cityId});
+            // let chapter = MlChapters.findOne({"cityId":args.cityId});
+          let chapter = mlDBController.findOne('MlChapters', {"cityId":args.cityId}, context)
             if(chapter){
                 let status = {};
                 if(city.isActive){
@@ -64,7 +54,8 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
                 MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:chapter._id, chapter:{isActive:city.isActive,status}}, context, info)
             }
             else {
-                let cluster = MlClusters.findOne({"countryId":city.countryId});
+                // let cluster = MlClusters.findOne({"countryId":city.countryId});
+              let cluster = mlDBController.findOne('MlClusters', {"countryId":city.countryId}, context)
                 chapter = {
                     clusterId:cluster._id,
                     clusterName:cluster.clusterName,
@@ -96,14 +87,16 @@ MlResolver.MlMutationResolver['updateCity'] = (obj, args, context, info) => {
     }
 }
 MlResolver.MlQueryResolver['fetchCities'] = (obj, args, context, info) => {
-  let result=MlCities.find().fetch()||[];
+  // let result=MlCities.find().fetch()||[];
+  let result = mlDBController.find('MlCities', {}, context).fetch()||[];
   return result;
 }
 
 MlResolver.MlQueryResolver['fetchCitiesPerState'] = (obj, args, context, info) => {
 
   if(args.stateId){
-    let resp = MlCities.find({"stateId":args.stateId,"isActive":true}).fetch()
+    // let resp = MlCities.find({"stateId":args.stateId,"isActive":true}).fetch()
+    let resp = mlDBController.find('MlCities', {"stateId":args.stateId,"isActive":true}, context).fetch()
     return resp;
   }
 };
@@ -111,7 +104,8 @@ MlResolver.MlQueryResolver['fetchCitiesPerState'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['fetchCitiesPerCountry'] = (obj, args, context, info) => {
 
   if(args.countryId){
-    let resp = MlCities.find({"countryId":args.countryId,"isActive":true},{sort: {name:1}}).fetch()
+    // let resp = MlCities.find({"countryId":args.countryId,"isActive":true},{sort: {name:1}}).fetch()
+    let resp = mlDBController.find('MlCities', {"countryId":args.countryId,"isActive":true}, context, {sort: {name:1}}).fetch()
     return resp;
   }
 };

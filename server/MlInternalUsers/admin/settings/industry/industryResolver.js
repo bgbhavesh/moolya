@@ -10,7 +10,8 @@ MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => 
     return response;
   }
 
-  let id = MlIndustries.insert({...args});
+  // let id = MlIndustries.insert({...args});
+  let id = mlDBController.insert('MlIndustries', args, context)
   if (id) {
     let code = 200;
     let result = {industryId: id}
@@ -28,11 +29,12 @@ MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => 
 
   if (args._id) {
     var id= args._id;
-
-    MlProfessions.update({industryId:id},{$set:{industryName : args.industryName}},{multi:true});
+    // MlProfessions.update({industryId:id},{$set:{industryName : args.industryName}},{multi:true});
+    mlDBController.update('MlProfessions', {industryId:id}, {industryName : args.industryName}, {$set:true, multi:true}, context)
 
     args=_.omit(args,'_id');
-    let result= MlIndustries.update(id, {$set: args});
+    // let result= MlIndustries.update(id, {$set: args});
+    let result = mlDBController.update('MlIndustries', id, args, {$set:true}, context)
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -44,13 +46,15 @@ MlResolver.MlQueryResolver['FindIndustry'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlIndustries.findOne({"_id":id});
+    // MlIndustries.findOne({"_id":id});
+    let response= mlDBController.findOne("MlIndustries", {"_id":id}, context);
     return response;
   }
 }
 
 MlResolver.MlQueryResolver['fetchIndustries'] = (obj, args, context, info) => {
-  let result=MlIndustries.find({isActive:true}).fetch()||[];
+  // let result=MlIndustries.find({isActive:true}).fetch()||[];
+  let result = mlDBController.find('MlIndustries', {isActive:true}, context).fetch()||[];
   return result;
 }
 

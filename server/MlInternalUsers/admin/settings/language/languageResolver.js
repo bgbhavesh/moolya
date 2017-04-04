@@ -7,7 +7,8 @@ MlResolver.MlMutationResolver['updateLanguage'] = (obj, args, context, info) => 
 
   if (args._id) {
     var id= args._id;
-    let updatedResponse= MlGlobalSettings.update(id, {$set: args.language});
+    // let updatedResponse= MlGlobalSettings.update(id, {$set: args.language});
+    let updatedResponse= mlDBController.update('MlGlobalSettings', id, args.language, {$set:true}, context)
     return updatedResponse
   }
 
@@ -17,17 +18,20 @@ MlResolver.MlQueryResolver['findLanguage'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlGlobalSettings.findOne({"_id":id});
+    // let response= MlGlobalSettings.findOne({"_id":id});
+    let response= mlDBController.findOne('MlGlobalSettings', {_id: id}, context)
     return response;
   }
 
 }
 MlResolver.MlMutationResolver['createLanguage'] = (obj, args, context, info) =>{
-  if(MlGlobalSettings.find({languageName:args.language.languageName}).count() > 0){
+  // if(MlGlobalSettings.find({languageName:args.language.languageName}).count() > 0){
+  if(mlDBController.find('MlGlobalSettings', {languageName:args.language.languageName}, context).count() > 0){
     let code = 409;
     return new MlRespPayload().errorPayload("Already Exist", code);
   }
-  let id = MlGlobalSettings.insert({...args.language});
+  // let id = MlGlobalSettings.insert({...args.language});
+  let id = mlDBController.insert('MlGlobalSettings', args.language, context)
   if(id){
     let code = 200;
     let result = {languageId: id}
@@ -36,7 +40,8 @@ MlResolver.MlMutationResolver['createLanguage'] = (obj, args, context, info) =>{
   }
 }
 MlResolver.MlQueryResolver['fetchDocumentsType'] = (obj, args, context, info) => {
-  let result=MlDocumentTypes.find({isActive:true}).fetch()||[];
+  // let result=MlDocumentTypes.find({isActive:true}).fetch()||[];
+  let result= mlDBController.find('MlDocumentTypes', {isActive:true}, context).fetch()||[];
   return result;
 }
 

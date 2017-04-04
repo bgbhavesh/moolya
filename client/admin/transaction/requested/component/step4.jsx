@@ -83,16 +83,16 @@ export default class Step4 extends React.Component{
     }
 
   }
-
+/*
   compareQueryOptions(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
-  };
+  };*/
 
-  componentWillUpdate(nextProps){
-    var socialLinkProps = nextProps.registrationInfo.socialLinksInfo;
-    if(!this.compareQueryOptions(this.props.registrationData.socialLinksInfo,nextProps.registrationInfo.socialLinksInfo)){
-      this.setState({loading:false,socialLinkArray:nextProps.registrationInfo.socialLinksInfo||[]});
-    }
+  componentWillReceiveProps(nextProps){
+    var socialLinkProps = nextProps.registrationData.socialLinksInfo;
+    /*if(!this.compareQueryOptions(this.props.registrationData.socialLinksInfo,nextProps.registrationInfo.socialLinksInfo)){*/
+      this.setState({loading:false,socialLinkArray:nextProps.registrationData.socialLinksInfo||[]});
+    //}
   }
   async onSavingSocialLink(index,value){
     let detailsType = "SOCIALLINKS";
@@ -188,7 +188,6 @@ export default class Step4 extends React.Component{
     }
   }
 
-
   render(){
 
     let that=this;
@@ -272,7 +271,7 @@ export default class Step4 extends React.Component{
               </div>
             </div>
           </div>
-          <div className="col-md-6 nopadding-right">
+         <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
                 <div className="form-group steps_pic_upload">

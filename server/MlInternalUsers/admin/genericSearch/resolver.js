@@ -613,6 +613,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data = result;
     totalRecords=MlRegistration.find(query,findOptions).count();
   }
+
+  if(args.module == "PortfolioRquest"){
+      data = MlPortfolioDetails.find(query,findOptions).fetch();
+      totalRecords = data.count();
+  }
+
   if(args.module=="templates"){
     data= MlTemplates.find(query,findOptions).fetch();
     totalRecords=MlTemplates.find(query,findOptions).count();
@@ -632,6 +638,11 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.registrationType){
       return 'RegistrationInfo';
     }
+
+    if(data.transcationType){
+      return 'PortfolioRquest';
+    }
+
     if (data.countryCode && data.country) {
       return 'Countries';
     }

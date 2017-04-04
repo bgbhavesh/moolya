@@ -29,6 +29,9 @@ import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate
 import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
 import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
 import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
+import MlPortfolioIdeatorDetails from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorDetails'
+import MlPortfolioLookingFor from '../../admin/transaction/portfolio/component/Ideator/MlLookingFor'
+import MlProblemsAndSolutions from '../../admin/transaction/portfolio/component/Ideator/MlProblemsAndSolutions'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -210,23 +213,42 @@ adminSection.route('/transactions/createRegistration', {
     mount(AdminLayout,{adminContent:<MlCreateRegistration/>})
   }
 });
-
-adminSection.route('/transactions/requestedPortfolioList', {
+// ************* Portfolio Routes **************
+adminSection.route('/transactions/portfolio/requestedPortfolioList', {
   name: 'portfolio_requested',
   action(params){
     mount(AdminLayout,{adminContent:<MlRequestedPortfolioList/>})
   }
 });
-adminSection.route('/transactions/approvedPortfolioList', {
+adminSection.route('/transactions/portfolio/approvedPortfolioList', {
   name: 'portfolio_approved',
   action(params){
     mount(AdminLayout,{adminContent:<MlApprovedPortfolioList/>})
   }
 });
-adminSection.route('/transactions/createPortfolio', {
+adminSection.route('/transactions/portfolio/createPortfolio', {
   name: 'portfolio_create',
   action(params){
     mount(AdminLayout,{adminContent:<MlCreatePortfolio/>})
+  }
+});
+// ************* Ideator Routes **************
+adminSection.route('/transactions/portfolio/ideator/requestedIdeator', {
+  name: 'requested_ideator',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlPortfolioIdeatorDetails/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedLookingFor', {
+  name: 'requested_lookingFor',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlPortfolioLookingFor/>})
+  }
+});
+adminSection.route('/transactions/portfolio/ideator/requestedProblemsAndSolutions', {
+  name: 'requested_problemsAndSolutions',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlProblemsAndSolutions/>})
   }
 });
 

@@ -571,7 +571,7 @@ if(Meteor.isServer){
             ]
           },
           {
-            "link" : "/admin/transactions/requestedPortfolioList",
+            "link" : "/admin/transactions/portfolio/requestedPortfolioList",
             "name" : "Portfolio",
             "uniqueId" : "portfolio",
             "isLink" : true,
@@ -581,7 +581,7 @@ if(Meteor.isServer){
             "subMenuMappingId":"portfolio",
             "subMenu":[
               {
-                "link" : "/admin/transactions/requestedPortfolioList",
+                "link" : "/admin/transactions/portfolio/requestedPortfolioList",
                 "name" : "Requested",
                 "uniqueId" : "portfolio_requested",
                 "isLink" : true,
@@ -591,31 +591,103 @@ if(Meteor.isServer){
                 "subMenuMappingId":"portfolio_requested",
                 "subMenu":[
                   {
-                    "link" : "/admin/transactions/registrationRequested",
-                    "name" : "Request List",
-                    "uniqueId" : "transaction_registration_requested_list",
+                    "link" : "/admin/transactions/portfolio/ideator/requestedIdeator",
+                    "name" : "Ideator",
+                    "uniqueId" : "requested_ideator",
                     "isLink" : true,
                     "isMenu" : true,
                     "image" : "",
-                    "subMenusId":"transaction_Registration",
-                    "subMenuMappingId":"transaction_registration_requested_list"
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_ideator",
                   },
                   {
-                    "link" : "/admin/transactions/registrationRequested/edit",
-                    "name" : "Backend Users",
-                    "uniqueId" : "transaction_registration_requested_edit",
+                    "link" : "/admin/transactions/portfolio/ideator/requestedIdeas",
+                    "name" : "Ideas",
+                    "uniqueId" : "requested_ideas",
                     "isLink" : true,
                     "isMenu" : true,
                     "image" : "",
                     "dynamicLink" : true,
                     "dynamicLinkHandler" : "",
-                    "subMenusId":"transaction_Registration",
-                    //"subMenuMappingId":"transaction_registration_requested_edit"
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_ideas"
+                  },
+                  {
+                    "link" : "/admin/transactions/portfolio/ideator/requestedProblemsAndSolutions",
+                    "name" : "Problems & Solutions",
+                    "uniqueId" : "requested_problemsAndSolutions",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_problemsAndSolutions"
+                  },
+                  {
+                    "link" : "/admin/transactions/portfolio/ideator/requestedIdeas",
+                    "name" : "Audience",
+                    "uniqueId" : "requested_ideas",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_ideas"
+                  },
+                  {
+                    "link" : "/admin/transactions/portfolio/ideator/requestedIdeas",
+                    "name" : "Library",
+                    "uniqueId" : "requested_ideas",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_ideas"
+                  },
+                  {
+                    "link" : "/admin/transactions/portfolio/ideator/requestedIdeas",
+                    "name" : "Strategy & Planning",
+                    "uniqueId" : "requested_ideas",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_ideas"
+                  },
+                  {
+                    "link" : "/admin/transactions/portfolio/ideator/requestedIdeas",
+                    "name" : "Intellectual Planning & Trademaek",
+                    "uniqueId" : "requested_ideas",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_ideas"
+                  },
+                  {
+                    "link" : "/admin/transactions/portfolio/ideator/requestedLookingFor",
+                    "name" : "Looking For",
+                    "uniqueId" : "requested_lookingFor",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"portfolio_requested",
+                    "subMenuMappingId":"requested_lookingFor"
                   }
                 ]
               },
               {
-                "link" : "/admin/transactions/approvedPortfolioList",
+                "link" : "/admin/transactions/portfolio/approvedPortfolioList",
                 "name" : "Approved",
                 "uniqueId" : "portfolio_approved",
                 "isLink" : true,
@@ -626,7 +698,7 @@ if(Meteor.isServer){
               },
 
               {
-                "link" : "/admin/transactions/createPortfolio",
+                "link" : "/admin/transactions/portfolio/createPortfolio",
                 "name" : "Create",
                 "uniqueId" : "portfolio_create",
                 "isLink" : true,
@@ -636,7 +708,7 @@ if(Meteor.isServer){
                 //"subMenuMappingId":"transaction_registration_create"
               },
               {
-                "link" : "/admin/transactions/history",
+                "link" : "/admin/transactions/portfolio/history",
                 "name" : "History",
                 "uniqueId" : "portfolio_history",
                 "isLink" : true,

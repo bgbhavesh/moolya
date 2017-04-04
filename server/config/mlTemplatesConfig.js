@@ -114,7 +114,7 @@ if(mltemplateAssignment.length<=0){
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
     "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
     "templateidentity" : "Company",
-    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTSPSCMP","templateName":"Hard-Reg-Service ServiceProvider-Company"}
+    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTSPSCMP","templateName":"Hard-Reg-ServiceProvider-Company"}
     ]
   });
 

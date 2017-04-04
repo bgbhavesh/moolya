@@ -353,7 +353,6 @@ let registrationSchema = `
           dean:  String,
           headQuarterLocation: String,
           branchLocations: String,  
-          
           identityType : String,
           userType : String,
           title :  String,

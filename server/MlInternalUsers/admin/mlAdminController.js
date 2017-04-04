@@ -173,6 +173,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }));
   }
 
+  graphQLServer.post("/test", multipartMiddleware, Meteor.bindEnvironment(function (req, res){
+      res.send('test  ');
+  }))
+
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

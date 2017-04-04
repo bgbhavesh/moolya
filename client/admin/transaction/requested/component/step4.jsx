@@ -43,7 +43,7 @@ export default class Step4 extends React.Component{
    }*/
   componentDidMount()
   {
-    this.setState({loading:false,socialLinkArray:this.props.registrationInfo.socialLinksInfo||[]});
+    this.setState({loading:false,socialLinkArray:this.props.registrationData.socialLinksInfo||[]});
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
   }
@@ -90,7 +90,7 @@ export default class Step4 extends React.Component{
 
   componentWillUpdate(nextProps){
     var socialLinkProps = nextProps.registrationInfo.socialLinksInfo;
-    if(!this.compareQueryOptions(this.props.registrationInfo.socialLinksInfo,nextProps.registrationInfo.socialLinksInfo)){
+    if(!this.compareQueryOptions(this.props.registrationData.socialLinksInfo,nextProps.registrationInfo.socialLinksInfo)){
       this.setState({loading:false,socialLinkArray:nextProps.registrationInfo.socialLinksInfo||[]});
     }
   }
@@ -137,7 +137,7 @@ export default class Step4 extends React.Component{
     let registerid = this.props.registrationId;
     if (index !== -1) {
       // do your stuff here
-      let registrationDetails = this.props.registrationInfo.socialLinksInfo
+      let registrationDetails = this.props.registrationData.socialLinksInfo
       let dbData = _.pluck(registrationDetails, 'socialLinkType') || [];
       let contactExist = null;
       if(this.state.selectedValue){

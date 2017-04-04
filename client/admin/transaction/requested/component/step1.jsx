@@ -162,7 +162,7 @@ export default class Step1 extends React.Component{
     }
     const response = await updateRegistrationActionHandler(Details);
     //return response;
-    this.props.getRegistrationDetails();
+    this.props.refetchRegistrationAndTemplates();
   }
 
   updateRegistration(){

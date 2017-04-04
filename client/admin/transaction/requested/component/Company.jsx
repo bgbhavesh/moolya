@@ -157,15 +157,20 @@ export default class Company extends React.Component{
       {value: 'No', label: 'No'}
     ];
 
+    let companytypesquery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let companytypesOption={options: { variables: {type : "COMPANYTYPE",hierarchyRefId:this.props.clusterId}}};
 
     let businesstypesquery=gql` query{
     data:fetchBusinessTypes{label:businessTypeName,value:_id}
     }
     `;
-    let companytypesquery=gql` query{
-    data:fetchCompanyTypes{label:companyName,value:_id}
-    }
-    `;
+
 
     let userTypequery = gql`query{
     data:FetchUserType {label:userTypeName,value:_id}
@@ -184,7 +189,7 @@ export default class Company extends React.Component{
     }
     `;
     let lookinforquery=gql` query{
-    data:fetchStageOfCompany{label:lookingForName,value:_id}
+    data:fetchLookingFor{label:lookingForName,value:_id}
     }
     `;
     let stageofcompquery=gql` query{

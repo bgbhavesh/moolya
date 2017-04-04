@@ -173,6 +173,7 @@ let communitySchema = `
     type Query{
         FetchMapData(moduleName:String,id:String):[MapData]
         fetchCommunities(clusterId:String, chapterId:String, subChapterId:String):SearchResp
+        fetchCommunitiesSelect(clusterId:String, chapterId:String, subChapterId:String):[Community]
         fetchCommunityDef(clusterId:String, chapterId:String, subChapterId:String, communityId:String):Community
     }
     

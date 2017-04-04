@@ -26,6 +26,9 @@ import MlCreateRegistration from '../../admin/transaction/requested/component/cr
 import MlAssignedTemplatesList from '../../templates/component/MlAssignedTemplatesList'
 import MlAssignTemplate from '../../templates/component/MlAssignTemplate'
 import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate'
+import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
+import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
+import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -207,6 +210,26 @@ adminSection.route('/transactions/createRegistration', {
     mount(AdminLayout,{adminContent:<MlCreateRegistration/>})
   }
 });
+
+adminSection.route('/transactions/requestedPortfolioList', {
+  name: 'portfolio_requested',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlRequestedPortfolioList/>})
+  }
+});
+adminSection.route('/transactions/approvedPortfolioList', {
+  name: 'portfolio_approved',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlApprovedPortfolioList/>})
+  }
+});
+adminSection.route('/transactions/createPortfolio', {
+  name: 'portfolio_create',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlCreatePortfolio/>})
+  }
+});
+
 
 adminSection.route('/templates/templateList', {
   name: 'templates_List',

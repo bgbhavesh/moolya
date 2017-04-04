@@ -17,7 +17,8 @@ var Select = require('react-select');
 
 let IdentityOptions = [
   {value: 'Company', label: 'Company'},
-  {value: 'Individual', label: 'Individual'}
+  {value: 'Individual', label: 'Individual'},
+  {value:'all',label:'All'}
 ];
 
 class MlEditAssignTemplate extends React.Component{
@@ -109,7 +110,7 @@ class MlEditAssignTemplate extends React.Component{
         subProcess        : response.templatesubProcess,
         processName       : response.processName,
         subProcessName    : response.subProcessName,
-        communities       : response.templatecommunityId,
+        communities       : response.templatecommunityCode,
         userTypes         : response.templateuserType,
         identity          : response.templateidentity,
         clusters          : response.templateclusterId,
@@ -138,7 +139,7 @@ class MlEditAssignTemplate extends React.Component{
       templatechapterName       : this.state.chapterName,
       templatesubChapterId      : this.state.subChapters,
       templatesubChapterName    : this.state.subChapterName,
-      templatecommunityId       : this.state.communities,
+      templatecommunityCode       : this.state.communities,
       templatecommunityName     : this.state.communitiesName,
       templateuserType          : this.state.userTypes,
       templateidentity          : this.state.identity,
@@ -257,7 +258,7 @@ class MlEditAssignTemplate extends React.Component{
     }
     `;
     let fetchUsers = gql`query{
-      data:FetchUserType {label:userTypeName,value:_id}
+      data:FetchUserTypeSelect {label:userTypeName,value:_id}
     }
     `;
     let clusterquery=gql` query{data:fetchActiveClusters{label:countryName,value:_id}}`;

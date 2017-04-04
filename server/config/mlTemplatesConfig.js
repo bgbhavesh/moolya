@@ -63,20 +63,20 @@ let templateObject = {
 MlTemplates.update({processName:"Registration","subProcessName":"Registration"},{$set:templateObject},{upsert:true});
 
 
-let mltemplateAssignment=MlTemplateAssignment.find({"templateProcessName" : "Registration","templateSubProcessName" : "Registration","isSystemDefined":true}).fetch();
+let mltemplateAssignment=MlTemplateAssignment.find({"templateProcessName" : "Registration","templateSubProcessName" : "Registration"}).fetch();
 
 if(mltemplateAssignment.length<=0){
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "all", "templatecommunityName" : "All", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "all", "templatecommunityName" : "All", "templateuserType" : "all",
     "templateidentity" : "all",
-    "assignedTemplates" : [{"stepName" : "Soft", "stepCode" : "SOFT","templateCode":"Soft-Reg-All","templateName":"SRTALL"}
+    "assignedTemplates" : [{"stepName" : "Soft", "stepCode" : "SOFT","templateName":"Soft-Reg-All","templateCode":"SRTALL"}
     ]
   });
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "IDE", "templatecommunityName" : "Ideators", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "IDE", "templatecommunityName" : "Ideators", "templateuserType" : "all",
     "templateidentity" : "Company",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTIDECMP","templateName":"Hard-Reg-Ideator-Company"}
     ]
@@ -84,7 +84,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "IDE", "templatecommunityName" : "Ideators", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "IDE", "templatecommunityName" : "Ideators", "templateuserType" : "all",
     "templateidentity" : "Individual",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTIDEINV","templateName":"Hard-Reg-Ideator-Individual"}
     ]
@@ -93,7 +93,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
     "templateidentity" : "Company",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTFUNCMP","templateName":"Hard-Reg-Funder-Company"}
     ]
@@ -103,7 +103,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
     "templateidentity" : "Individual",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTFUNINV","templateName":"Hard-Reg-Funder-Individual"}
     ]
@@ -112,9 +112,9 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
     "templateidentity" : "Company",
-    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTSPSCMP","templateName":"Hard-Reg-Service ServiceProvider-Company"}
+    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTSPSCMP","templateName":"Hard-Reg-ServiceProvider-Company"}
     ]
   });
 
@@ -122,7 +122,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
     "templateidentity" : "Individual",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTSPSINV","templateName":"Hard-Reg-ServiceProvider-Individual"}
     ]
@@ -131,7 +131,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "CMP", "templatecommunityName" : "Companies", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "CMP", "templatecommunityName" : "Companies", "templateuserType" : "all",
     "templateidentity" : "Company",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTCMP","templateName":"Hard-Reg-Company"}
     ]
@@ -140,7 +140,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "STU", "templatecommunityName" : "Startups", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "STU", "templatecommunityName" : "Startups", "templateuserType" : "all",
     "templateidentity" : "Company",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTSTU","templateName":"Hard-Reg-Startup-Company"}
     ]
@@ -148,7 +148,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityId" : "INS", "templatecommunityName" : "Institutions", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "INS", "templatecommunityName" : "Institutions", "templateuserType" : "all",
     "templateidentity" : "all",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTINS","templateName":"Hard-Reg-Institution"}]
   });

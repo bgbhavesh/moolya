@@ -6,6 +6,12 @@ import MlRespPayload from '../../../../commons/mlPayload'
 import passwordUtil from '../../../../commons/passwordUtil'
 
 var _ = require('lodash');
+
+MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
+   let user=Meteor.users.findOne(context.userId);
+    return user&&user.profile&&user.profile.isInternaluser?"external":"internal";
+}
+
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
     let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
     if (!isValidAuth) {

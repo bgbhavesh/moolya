@@ -118,8 +118,8 @@ export default class MlCreateRegistration extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    const resp=this.createRegistration();
-    return resp;
+   /* const resp=this.createRegistration();
+    return resp;*/
   }
 
 /*  async handleError(response) {

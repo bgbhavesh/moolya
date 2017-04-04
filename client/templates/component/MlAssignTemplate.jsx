@@ -16,7 +16,8 @@ var Select = require('react-select');
 
 let IdentityOptions = [
   {value: 'Company', label: 'Company'},
-  {value: 'Individual', label: 'Individual'}
+  {value: 'Individual', label: 'Individual'},
+  {value:'all',label:'All'}
 ];
 
 
@@ -92,7 +93,7 @@ class MlAssignTemplate extends React.Component{
       templatechapterName       : this.state.chapterName,
       templatesubChapterId      : this.state.subChapters,
       templatesubChapterName    : this.state.subChapterName,
-      templatecommunityId       : this.state.communities,
+      templatecommunityCode       : this.state.communities,
       templatecommunityName     : this.state.communitiesName,
       templateuserType          : this.state.userTypes,
       templateidentity          : this.state.identity,
@@ -220,7 +221,7 @@ class MlAssignTemplate extends React.Component{
     }
     `;
     let fetchUsers = gql`query{
-      data:FetchUserType {label:userTypeName,value:_id}
+      data:FetchUserTypeSelect {label:userTypeName,value:_id}
     }
     `;
     let clusterquery=gql` query{data:fetchActiveClusters{label:countryName,value:_id}}`;

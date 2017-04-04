@@ -2,7 +2,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import Step1 from './step1';
-import Step2 from './step2';
 import Step3 from './step3';
 import Step4 from './step4';
 import Step5 from './step5';
@@ -77,18 +76,17 @@ export default class RegistrationWizard extends React.Component{
   }
 
   async fetchSoftRegistrationTemplate(regDetails) {
-    //const reg = await fetchHardRegistrationTemplate(this.props.registrationConfig);
     let userType = this.context.userType;
     const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration",stepCode:"SOFT",userType:userType,recordId:regDetails._id});
-    //console.log(reg);
     this.setState({softRegComponent:reg&&reg.component?reg.component:null});
+    if(!reg||!reg.component){this.setState({"softRegSteps":[]})};
   }
 
   async fetchHardRegistrationTemplate(regDetails) {
-    //const reg = await fetchHardRegistrationTemplate(this.props.registrationConfig);
     let userType = this.context.userType;
     const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration",stepCode:"HARD",userType:userType,recordId:regDetails._id});
     this.setState({hardRegComponent:reg&&reg.component?reg.component:null});
+    if(!reg||!reg.component){this.setState({"hardRegSteps":[]})};
   }
 
   setHardRegistrationSteps(steps){

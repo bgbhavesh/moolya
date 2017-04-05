@@ -139,6 +139,27 @@ export default function dynamicLinkHandler(path,params,queryParams){
       if(_.has(dynamicParams,"communityId")){
         return `/admin/communities/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters/${dynamicParams.subChapterId}/${dynamicParams.communityId}/assignusers`;
       }
+    },
+
+    "hierarchy_chapters":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/settings/hierarchy/${dynamicParams.clusterId}/chapters`;
+      }
+    },
+
+    "hierarchy_details":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/settings/hierarchy/${dynamicParams.clusterId}/hierarchydetails`;
+      }
+    },
+
+    "hierarchy_cluster":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/settings/hierarchy/${dynamicParams.clusterId}/clusterhierarchy`;
+      }
     }
   }
   let menuLinkHandler=menuLinkHandlerConfig[path];

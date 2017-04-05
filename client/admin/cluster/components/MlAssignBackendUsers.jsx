@@ -80,18 +80,16 @@ class MlAssignBackendUsers extends React.Component {
   {
       const userDetails = await findAdminUserDetails(userId);
       if (userDetails){
-          // this.setState({loading:false})
           this.setState({selectedBackendUser:userId})
           this.setState({username:userDetails.userName})
           this.setState({userDisplayName:userDetails.displayName})
-          this.setState({alsoAssignedAs:userDetails.alsoAssignedas})
           let alsoAs = userDetails.alsoAssignedas;
           if(alsoAs){
             let alsoArray = _.compact(alsoAs.split(','));
-            this.setState({alsoUser:alsoArray});
-          }else
-            this.setState({alsoUser:[]});
-
+            this.setState({alsoAssignedAs: alsoArray})
+          }else{
+            this.setState({alsoAssignedAs: []})
+          }
           this.find_Cluster_Roles(userId);
           return userDetails;
       }
@@ -188,7 +186,6 @@ class MlAssignBackendUsers extends React.Component {
       let userid = this.state.selectedBackendUser || "";
       let userDisplayName = this.state.userDisplayName || "";
       let username = this.state.username || "";
-      let alsoAssignedAs = this.state.alsoAssignedAs || "";
       let deActive = that.state.deActive;
       let contextHeader =  "";
       if(that.props.params.communityId){
@@ -199,7 +196,7 @@ class MlAssignBackendUsers extends React.Component {
         contextHeader = "Cluster"
       }
 
-      const alsoUser = this.state.alsoUser && this.state.alsoUser.length > 0 ? this.state.alsoUser : [" "];
+      const alsoUser = this.state.alsoAssignedAs && this.state.alsoAssignedAs.length > 0 ? this.state.alsoAssignedAs : [" "];
       const alsoAssignList = alsoUser.map(function (userAlso, id) {
         return (
           <li key={id}>

@@ -169,8 +169,17 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
       userRoles.map(function (Rdoc,key) {
         let roleName=Rdoc.roleId
         // const rolesData =  MlRoles.findOne({ _id:roleName} )||[];
-        const rolesData = mlDBController.findOne('MlRoles', {_id: roleName}, context)||[];
-        Rdoc.roleName=rolesData.roleName||[]
+        // const rolesData = mlDBController.findOne('MlRoles', {_id: roleName}, context)||[];
+        // Rdoc.roleName=rolesData.roleName||[]
+        if(Rdoc.subChapterId != 'all') {
+          const subChapterData = mlDBController.findOne('MlSubChapters', {_id: Rdoc.subChapterId}, context) || [];
+          Rdoc.chapterName = subChapterData.chapterName;
+          Rdoc.subChapterName = subChapterData.subChapterName;
+        }
+        if(Rdoc.communityId != 'all'){
+          const communityData= mlDBController.findOne('MlCommunityDefinition', {code: Rdoc.communityId}, context)||[];
+          Rdoc.communityName = communityData.name;
+        }
       });
     });
     return user;

@@ -169,8 +169,17 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
       userRoles.map(function (Rdoc,key) {
         let roleName=Rdoc.roleId
         // const rolesData =  MlRoles.findOne({ _id:roleName} )||[];
-        const rolesData = mlDBController.findOne('MlRoles', {_id: roleName}, context)||[];
-        Rdoc.roleName=rolesData.roleName||[]
+        // const rolesData = mlDBController.findOne('MlRoles', {_id: roleName}, context)||[];
+        // Rdoc.roleName=rolesData.roleName||[]
+        if(Rdoc.subChapterId != 'all') {
+          const subChapterData = mlDBController.findOne('MlSubChapters', {_id: Rdoc.subChapterId}, context) || [];
+          Rdoc.chapterName = subChapterData.chapterName;
+          Rdoc.subChapterName = subChapterData.subChapterName;
+        }
+        if(Rdoc.communityId != 'all'){
+          const communityData= mlDBController.findOne('MlCommunityDefinition', {code: Rdoc.communityId}, context)||[];
+          Rdoc.communityName = communityData.name;
+        }
       });
     });
     return user;
@@ -192,11 +201,19 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
             const clusterData = mlDBController.findOne('MlClusters', {_id: profile.clusterId}, context)||[];
             if(clusterData){
                 userRoles.map(function (role) {
-                    // const rolesData =  MlRoles.findOne({ _id:role.roleId})||[];
-                    // if(rolesData){
-                    //     assignedRoles += rolesData.roleName+","
-                    // }
-                  assignedRoles += role.roleName+" ("+ clusterData.countryName +")"+","
+                  let roleCombination;
+                  if(role.subChapterId != 'all'){
+                    const subChapterData = mlDBController.findOne('MlSubChapters', {_id: role.subChapterId}, context) || [];
+                    roleCombination = subChapterData.clusterName +' - '+ subChapterData.chapterName + ' - ' + subChapterData.subChapterName
+                  } else if(role.chapterId !='all'){
+                    const chapterData = mlDBController.findOne('MlChapters', {_id: role.chapterId}, context) || [];
+                    roleCombination = chapterData.clusterName +' - '+ chapterData.chapterName
+                  } else if (role.clusterId !='all') {
+                    const clusterData = mlDBController.findOne('MlClusters', {_id: role.clusterId}, context) || [];
+                    roleCombination = clusterData.clusterName
+                  }
+
+                  assignedRoles += role.roleName+" ("+ roleCombination + ")"+","
                 });
             }
         });
@@ -265,7 +282,7 @@ MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) =>
       users = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subChapterId":args.subChapterId},{"profile.InternalUprofile.moolyaProfile.userType":'non-moolya'},{"profile.isActive":true}]}, context).fetch();
   }
   else if(args.clusterId != "" && args.chapterId != "" && args.subChapterName.startsWith("Moolya-")){
-      users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userType":'moolya'},{"profile.isActive":true}]}).fetch();
+      // users = Meteor.users.find({"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userType":'moolya'},{"profile.isActive":true}]}).fetch();
       users = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId}, {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.chapterId":args.chapterId}, {"profile.InternalUprofile.moolyaProfile.userType":'moolya'},{"profile.isActive":true}]}, context).fetch();
   }
   else if(args.clusterId != "" ){
@@ -512,25 +529,54 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
 
   let users = [];
   if(clusterId != "" && chapterId != "" && subChapterId != ""){
-    if(userType == "All"){
-      // users = Meteor.users.find({"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}).fetch();
-      users = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}, context).fetch();
-    }else if(userType == "BackendUsers"){
-    //   // UserType needed to be introduced
-    //   users = Meteor.users.find({"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}).fetch();
-      allUsers = MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'](obj, {subChapterId:subChapterId}, context, info)
-      _.each(allUsers, function (user){
         if(userType == "All"){
-          if(user.profile.isActive){
-            users.push(user);
+          // users = Meteor.users.find({"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}).fetch();
+
+          // FOR ALL USERS
+          let communityUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isInternaluser":false}]}, context).fetch();
+          if(communityUsers && communityUsers.length>0){
+            users.push(communityUsers);
           }
-        } else if(userType == "BackendUsers"){
-          if(user.profile.isActive && user.profile.isInternaluser && !user.profile.isExternaluser){
-            users.push(user);
+
+          // FOR BACKEND USERS
+          let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
+          clusterId = subChapter.clusterId;
+          if(subChapter.isActive){
+              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}, context).fetch();
+              _.each(allUsers, function (user){
+                  if(user.profile.isActive){
+                      let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+                      let profile = _.find(userProfiles, {clusterId:clusterId});
+                      if(profile){
+                          let roles = _.find(profile.userRoles, {subChapterId:subChapterId});
+                          if(roles){
+                            users.push(user);
+                          }
+                      }
+                  }
+              })
           }
+        }else if(userType == "BackendUsers"){
+            //   // UserType needed to be introduced
+            //   users = Meteor.users.find({"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}).fetch();
+            let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
+            clusterId = subChapter.clusterId;
+            if(subChapter.isActive){
+              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}, context).fetch();
+              _.each(allUsers, function (user){
+                if(user.profile.isActive){
+                  let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+                  let profile = _.find(userProfiles, {clusterId:clusterId});
+                  if(profile){
+                    let roles = _.find(profile.userRoles, {subChapterId:subChapterId});
+                    if(roles){
+                      users.push(user);
+                    }
+                  }
+                }
+              })
+            }
         }
-      })
-    }
   } else{
     if(userType == "All"){
       // users = Meteor.users.find({"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}).fetch();

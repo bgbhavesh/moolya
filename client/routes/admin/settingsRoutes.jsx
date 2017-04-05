@@ -147,12 +147,14 @@ import MlEditEmailType from '../../admin/settings/emailType/components/MlEditEma
 import MlContactTypesList from '../../admin/settings/contactType/components/MlContactTypeList'
 import MlAddContactType from '../../admin/settings/contactType/components/MlAddContactType'
 import MlEditContactType from '../../admin/settings/contactType/components/MlEditContactType'
+import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/settings/hierarchy/config/mlClusterConfigHierarchy'
+import {mlClusterSubChaptersListConfig} from '../../admin/settings/hierarchy/config/mlClusterSubChaptersConfigHierarchy'
+import MlViews from '../../admin/core/components/MlViews';
+import MlHierarchyList from '../../admin/settings/hierarchy/component/MlHierarchyList'
+import MlAdminHierarchyHeader from '../../admin/layouts/header/MlAdminHierarchyHeader'
+import MlAssignHierarchy from '../../admin/settings/hierarchy/component/MlAssignHierarchy'
 
 // @End
-
-
-
-
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -196,6 +198,31 @@ adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', 
     mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} stepCode={params.stepCode}/>})
   }
 });
+adminSection.route('/settings/hierarchy', {
+  name: 'hierarchy',
+  action(){
+    mount(AdminLayout,{adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
+  }
+});
+adminSection.route('/settings/hierarchy/:clusterId/chapters', {
+  name: 'hierarchy_chapters',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
+  }
+});
+adminSection.route('/settings/hierarchy/:clusterId/platformhierarchy', {
+  name: 'hierarchy_details',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyList/>})
+  }
+});
+adminSection.route('/settings/hierarchy/:clusterId/clusterhierarchy', {
+  name: 'hierarchy_cluster',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlAssignHierarchy/>})
+  }
+});
+
 adminSection.route('/settings/editSubDepartment/:id', {
   name: 'settings_EditSubDepartments',
   action(params){

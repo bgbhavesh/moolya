@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import MlAdminTemplatesTabView from  './MlAdminTemplatesTabView'
-import MlAdminSearch from  './MlAdminSearch'
+import MlAdminHierarchyTabView from  './MlAdminHierarchyTabView'
 import  MlAdminProfile from './MlAdminProfile'
 import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
-import {findTemplateStepsActionHandler} from './actions/findTemplateStepsAction'
-export default class MlAdminTemplatesHeader extends Component {
+export default class MlAdminHierarchyHeader extends Component {
   constructor(props,context){
     super(props,context);
     this.state={
@@ -20,19 +18,17 @@ export default class MlAdminTemplatesHeader extends Component {
   }
   async findProcess() {
     let documentsList=[]
-    let subProcessId = this.props.subProcessConfig
-    let templateId=this.props.templateId
-    if(subProcessId){
-      const response = await findTemplateStepsActionHandler(subProcessId);
+    let clusterId = this.props.clusterId
+    if(clusterId){
+     // const response = await findTemplateStepsActionHandler(subProcessId);
+      let response = [{"tabName":"platformhierarchy","tabCode":"platform hierarchy"},{"tabName":"clusterhierarchy","tabCode":"cluster hierarchy"},{"tabName":"history","tabCode":"history"}]
       if(response){
-        let documents=response.steps
+        let documents=response
         for(let i=0;i<documents.length;i++){
           let json={
-            "link": "/admin/settings/hierarchy/"+subProcessId+"/"+templateId+"/"+documents[i].stepCode,
-            "name":documents[i].stepName ,
-            "uniqueId": "subProcess_Steps",
-            "subMenuMappingId":"subProcess_Steps_subMapping",
-            "subMenusId":"subProcess",
+            "link": "/admin/settings/hierarchy/"+clusterId+"/"+documents[i].tabName,
+            "name":documents[i].tabCode ,
+            "uniqueId": "hierrarchy_Steps",
             "isLink": true,
             "isMenu": false,
             "image": ""
@@ -56,7 +52,7 @@ export default class MlAdminTemplatesHeader extends Component {
 
         <VerticalBreadCrum {...this.props}/>
         <div className="header_bottom">
-          <MlAdminTemplatesTabView  subProcessOPtion={this.state.processMenus} linkField="link" nameField="name"/>
+          <MlAdminHierarchyTabView  hierarchyOption={this.state.processMenus} linkField="link" nameField="name"/>
         </div>
       </div>
 
@@ -64,6 +60,6 @@ export default class MlAdminTemplatesHeader extends Component {
   }
 }
 
-MlAdminTemplatesHeader.contextTypes = {
+MlAdminHierarchyHeader.contextTypes = {
   menu: React.PropTypes.object
 };

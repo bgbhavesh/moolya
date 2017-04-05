@@ -61,7 +61,10 @@ let BackEndUser = `
         departmentId: String,
         departmentName : String,
         subDepartmentId : String,
-        subDepartmentName : String
+        subDepartmentName : String,
+        chapterName:String,
+        subChapterName:String,
+        communityName:String
     }
     
     type MoolyaProfile{

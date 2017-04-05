@@ -67,12 +67,44 @@ export default class Step5 extends React.Component{
       this.props.getRegistrationKYCDetails();
     }
   }
+  async downloadSelectedDocuments(){
+    let  registrationId=this.props.registrationData._id
+    let selectedDocs=this.state.selectedFiles
+    console.log(selectedDocs);
+
+    let registrationDocuments=this.state.registrationDocuments
+    console.log(registrationDocuments)
+    let kycDocFile=[]
+    for(let i=0;i<selectedDocs.length;i++){
+      kycDoc=_.find(registrationDocuments, function(item) {
+      return item.documentId == selectedDocs[i];
+    });
+      if(kycDoc){
+        if(kycDoc.docFiles){
+          let DocFiles=kycDoc.docFiles
+          for(let j=0;j<DocFiles.length;j++){
+            kycDocFile.push(DocFiles[j].fileUrl)
+          }
+        }
+
+      }
+
+    }
+    console.log(kycDocFile)
+
+
+  }
 
   approvedDocuments() {
     const resp=this.updateapprovedDocuments();
     return resp;
 
   }
+  downloadDocuments(){
+    const resp=this.downloadSelectedDocuments();
+    return resp;
+  }
+
   async updateRejectedDocuments(){
     let  registrationId=this.props.registrationData._id
     let selectedDocs=this.state.selectedFiles
@@ -103,7 +135,7 @@ export default class Step5 extends React.Component{
           });
           var KYCDocResp = result.map(function (el) {
             var o = Object.assign({}, el);
-            o.status = "";
+            o.status = "Pending";
             o.docFiles = []
             return o;
           })
@@ -125,29 +157,29 @@ export default class Step5 extends React.Component{
     let selectedValues=[];
     selectedValues=selectedDocs
     this.setState({selectedFiles:selectedValues})
-    console.log(this.state.selectedFiles)
   };
-  async onDocumentRemove(documentId,fileId){
+  async onDocumentRemove(docTypeId,documentId,fileId){
+    console.log(docTypeId)
     let  registrationId=this.props.registrationData._id
-    const response = await removeFileFromDocumentsActionHandler(fileId,documentId,registrationId);
+    const response = await removeFileFromDocumentsActionHandler(fileId,docTypeId,documentId,registrationId);
     if(response){
       this.props.getRegistrationKYCDetails();
 
     }
   }
 
-   onFileUpload(file,documentId){
+   onFileUpload(file,documentId,docTypeId){
     let id=this.props.registrationData&&this.props.registrationData._id?this.props.registrationData._id:'';
     let processDocument=this.state.registrationDocuments
      kycDoc=_.find(processDocument, function(item) {
-       return item.documentId == documentId;
+       return item.docTypeId==docTypeId&&item.documentId == documentId;
      });
     let fileName=file.name
      let fileFormate=fileName.split('.').pop()
      let docFormate=kycDoc.allowableFormat[0]
     let docResponse=_.includes(docFormate, fileFormate);
     if(docResponse){
-      let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,registrationId:id};
+      let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,docTypeId:docTypeId,registrationId:id};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
     }else{
       toastr.error("please provide allowable formate documents")
@@ -177,7 +209,7 @@ export default class Step5 extends React.Component{
       {
        actionName: 'download',
        showAction: true,
-       handler: null
+       handler: this.downloadDocuments.bind(this)
        },
       {
         showAction: true,

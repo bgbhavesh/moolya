@@ -249,6 +249,10 @@ export default class EditTaxation extends React.Component {
     super(props);
   }
 
+  componentWillMount(){
+    let clusterId = this.props.clusterId;
+  }
+
   isExpandableRow(row) {
     if (row.id <= 1) {
       return true;
@@ -264,7 +268,7 @@ export default class EditTaxation extends React.Component {
   }
   render() {
     const options = {
-      expandRowBgColor: 'rgb(239, 70, 71)'
+      expandRowBgColor: 'rgb(242, 255, 163)'
     };
     return (
       <div className="admin_main_wrap">

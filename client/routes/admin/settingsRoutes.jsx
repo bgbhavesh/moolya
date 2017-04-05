@@ -219,7 +219,7 @@ adminSection.route('/settings/hierarchy/:clusterId/hierarchydetails', {
 adminSection.route('/settings/hierarchy/:clusterId/clusterhierarchy', {
   name: 'hierarchy_cluster',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlAssignHierarchy/>})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlAssignHierarchy clusterId={params.clusterId}/>})
   }
 });
 

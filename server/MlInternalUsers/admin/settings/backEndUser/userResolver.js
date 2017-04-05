@@ -192,11 +192,19 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
             const clusterData = mlDBController.findOne('MlClusters', {_id: profile.clusterId}, context)||[];
             if(clusterData){
                 userRoles.map(function (role) {
-                    // const rolesData =  MlRoles.findOne({ _id:role.roleId})||[];
-                    // if(rolesData){
-                    //     assignedRoles += rolesData.roleName+","
-                    // }
-                  assignedRoles += role.roleName+" ("+ clusterData.countryName +")"+","
+                  let roleCombination;
+                  if(role.subChapterId != 'all'){
+                    const subChapterData = mlDBController.findOne('MlSubChapters', {_id: role.subChapterId}, context) || [];
+                    roleCombination = subChapterData.clusterName +' - '+ subChapterData.chapterName + ' - ' + subChapterData.subChapterName
+                  } else if(role.chapterId !='all'){
+                    const chapterData = mlDBController.findOne('MlChapters', {_id: role.chapterId}, context) || [];
+                    roleCombination = chapterData.clusterName +' - '+ chapterData.chapterName
+                  } else if (role.clusterId !='all') {
+                    const clusterData = mlDBController.findOne('MlClusters', {_id: role.clusterId}, context) || [];
+                    roleCombination = clusterData.clusterName
+                  }
+
+                  assignedRoles += role.roleName+" ("+ roleCombination + ")"+","
                 });
             }
         });

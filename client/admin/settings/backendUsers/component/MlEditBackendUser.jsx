@@ -123,7 +123,10 @@ class MlEditBackendUser extends React.Component{
                departmentId:userRole[j].departmentId,
                departmentName:userRole[j].departmentName,
                subDepartmentId:userRole[j].subDepartmentId,
-               subDepartmentName:userRole[j].subDepartmentName
+               subDepartmentName:userRole[j].subDepartmentName,
+               chapterName:userRole[j].chapterName,
+               subChapterName:userRole[j].subChapterName,
+               communityName:userRole[j].communityName
              }
              userRolesDetails.push(json)
            }
@@ -461,14 +464,14 @@ class MlEditBackendUser extends React.Component{
                         return (
                           <div key={RId}>
                             <div className="form-group">
-                              <input type="text" ref="chapter" value={userRoles.chapterId} placeholder="Chapter"
+                              <input type="text" ref="chapter" value={(userRoles.chapterId=='all')?userRoles.chapterId:userRoles.chapterName} placeholder="Chapter"
                                      className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="Department" value={userRoles.subChapterId}  placeholder="Sub Chapter" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="Department" value={(userRoles.subChapterId=='all')?userRoles.subChapterId:userRoles.subChapterName}  placeholder="Sub Chapter" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="subDepartment" value={userRoles.communityId}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="subDepartment" value={(userRoles.communityId=='all')?userRoles.communityId:userRoles.communityName}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
                               <input type="text" ref="role" value={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>

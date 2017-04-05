@@ -10,10 +10,12 @@ MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) =
     return response;
   }
 
-  if (MlIndustries.findOne({_id:args.industryId})){
-    args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
+  if (mlDBController.findOne('MlIndustries', {_id:args.industryId}, context)){
+    // args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
+    args.industryName = mlDBController.findOne('MlIndustries', {_id:args.industryId}, context).industryName;
   }
-  let id = MlProfessions.insert({...args});
+  // let id = MlProfessions.insert({...args});
+  let id = mlDBController.insert('MlProfessions',args, context);
   if (id) {
     let code = 200;
     let result = {professionId: id}
@@ -29,13 +31,17 @@ MlResolver.MlMutationResolver['UpdateProfession'] = (obj, args, context, info) =
     return response;
   }
 
-  if (MlIndustries.findOne({_id:args.industryId})){
-    args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
+  // if (MlIndustries.findOne({_id:args.industryId})){
+  //   args.industryName = MlIndustries.findOne({_id:args.industryId}).industryName;
+  // }
+  if (mlDBController.findOne('MlIndustries',{_id:args.industryId},context)){
+    args.industryName = mlDBController.findOne('MlIndustries',{_id:args.industryId},context).industryName;
   }
   if (args._id) {
     var id= args._id;
     args=_.omit(args,'_id');
-    let result= MlProfessions.update(id, {$set: args});
+    // let result= MlProfessions.update(id, {$set: args});
+    let result= mlDBController.update('MlProfessions',id , args, {$set:true}, context);
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -47,14 +53,16 @@ MlResolver.MlQueryResolver['FindProfession'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlProfessions.findOne({"_id":id});
+    // let response= MlProfessions.findOne({"_id":id});
+    let response= mlDBController.findOne("MlProfessions", {_id:id}, context);
     return response;
   }
 
 }
 
 MlResolver.MlQueryResolver['fetchProfessions'] = (obj, args, context, info) => {
-  let result=MlProfessions.find({isActive:true}).fetch()||[];
+  // let result=MlProfessions.find({isActive:true}).fetch()||[];
+  let result = mlDBController.find('MlProfessions', {isActive:true}, context).fetch()||[];
   return result;
 }
 MlResolver.MlQueryResolver['FetchProfessionIndustry'] = (obj, args, context, info) => {

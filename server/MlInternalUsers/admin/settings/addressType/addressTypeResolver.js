@@ -7,7 +7,8 @@ MlResolver.MlMutationResolver['updateAddressType'] = (obj, args, context, info) 
 
   if (args._id) {
     var id= args._id;
-    let updatedResponse= MlGlobalSettings.update(id, {$set: args.addressType});
+    // let updatedResponse= MlGlobalSettings.update(id, {$set: args.addressType});
+    let updatedResponse= mlDBController.update('MlGlobalSettings', id, args.addressType, {$set:true}, context)
     return updatedResponse
   }
 
@@ -17,17 +18,20 @@ MlResolver.MlQueryResolver['findAddressType'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlGlobalSettings.findOne({"_id":id});
+    // let response= MlGlobalSettings.findOne({"_id":id});
+    let response= mlDBController.findOne('MlGlobalSettings', {_id: id}, context)
     return response;
   }
 
 }
 MlResolver.MlMutationResolver['createAddressType'] = (obj, args, context, info) =>{
-  if(MlGlobalSettings.find({_id:args.addressType._id}).count() > 0){
+  // if(MlGlobalSettings.find({_id:args.addressType._id}).count() > 0){
+  if(mlDBController.find('MlGlobalSettings', {_id:args.addressType._id}, context).count() > 0){
     let code = 409;
     return new MlRespPayload().errorPayload("Already Exist", code);
   }
-  let id = MlGlobalSettings.insert({...args.addressType});
+  // let id = MlGlobalSettings.insert({...args.addressType});
+  let id = mlDBController.insert('MlGlobalSettings', args.addressType, context)
   if(id){
     let code = 200;
     let result = {addressTypeId: id}

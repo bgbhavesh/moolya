@@ -7,7 +7,7 @@ var Select = require('react-select');
 
 
 
-export default class MlPortfolioLookingFor extends React.Component{
+export default class MlIdeatorStrategyAndPlanning extends React.Component{
   componentDidMount()
   {
     $(function() {
@@ -40,7 +40,7 @@ export default class MlPortfolioLookingFor extends React.Component{
 
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
-                      Looking For
+                      Startergy and Planning
                     </div>
                     <div className="panel-body">
 
@@ -51,7 +51,6 @@ export default class MlPortfolioLookingFor extends React.Component{
 
                     </div>
                   </div>
-
 
                 </div>
               </div>

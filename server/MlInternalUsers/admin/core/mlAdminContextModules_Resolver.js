@@ -37,21 +37,21 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   let result=null;
   switch(moduleName){
     case "cluster":
-      result=CoreModulesRepo.MlClusterRepo(args.context,contextQuery,findOptions);
+      result=CoreModulesRepo.MlClusterRepo(args.context,contextQuery,findOptions, context);
       break;
     case "chapter":
-      result=CoreModulesRepo.MlChapterRepo(args.context,contextQuery,findOptions);
+      result=CoreModulesRepo.MlChapterRepo(args.context,contextQuery,findOptions, context);
       break;
     case "subChapter":
-      result=CoreModulesRepo.MlSubChapterRepo(args.context,contextQuery,findOptions);
+      result=CoreModulesRepo.MlSubChapterRepo(args.context,contextQuery,findOptions, context);
       break;
     case "community":
-      result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions);
+      result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions, context);
       break;
     case "MASTER_SETTINGS":
       let requestParams=args.context;
       requestParams.userId=context.userId;
-      result=CoreModulesRepo.MlMasterSettingsRepo(requestParams,userFilterQuery,contextQuery,findOptions);
+      result=CoreModulesRepo.MlMasterSettingsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
 
   }
 

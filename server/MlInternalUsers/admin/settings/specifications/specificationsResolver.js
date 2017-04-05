@@ -11,7 +11,8 @@ MlResolver.MlMutationResolver['CreateSpecification'] = (obj, args, context, info
     return response;
   }
 
-  let id = MlSpecifications.insert({...args});
+  // let id = MlSpecifications.insert({...args});
+  let id = mlDBController.insert('MlSpecifications', args, context)
   if (id) {
     let code = 200;
     let result = {specificationId: id}
@@ -32,7 +33,8 @@ MlResolver.MlMutationResolver['UpdateSpecification'] = (obj, args, context, info
   if (args._id) {
     var id= args._id;
     args=_.omit(args,'_id');
-    let result= MlSpecifications.update(id, {$set: args});
+    // let result= MlSpecifications.update(id, {$set: args});
+    let result = mlDBController.update('MlSpecifications', id, args, {$set:true}, context)
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -44,7 +46,8 @@ MlResolver.MlQueryResolver['FindSpecification'] = (obj, args, context, info) => 
 
   if (args._id) {
     var id= args._id;
-    let response= MlSpecifications.findOne({"_id":id});
+    // let response= MlSpecifications.findOne({"_id":id});
+    let response = mlDBController.findOne('MlSpecifications', {_id: id}, context)
     return response;
   }
 

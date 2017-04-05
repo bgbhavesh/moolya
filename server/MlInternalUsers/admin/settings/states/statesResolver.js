@@ -43,10 +43,29 @@ MlResolver.MlQueryResolver['FetchActiveStates'] = (obj, args, context, info) => 
     return resp;
   }
 };
-MlResolver.MlQueryResolver['FetchActiveStatesForSelect'] = (obj, args, context, info) => {
-    let states = MlStates.find({"isActive":true}).fetch()
+MlResolver.MlQueryResolver['FetchActiveStatesForCluster'] = (obj, args, context, info) => {
+  /*  let states = MlStates.find({"isActive":true}).fetch()
     states.push({"name" : "All","_id" : "all"});
-    return states;
+    return states;*/
+  let clusters = args.clusters;
+  let states = [];
+  if(clusters && clusters.length > 0){
+    if(clusters.length==1&&clusters[0] == "all"){
+      states= MlStates.find({isActive:true}).fetch()||[];
+      states.push({"name" : "All","_id" : "all"});
+    }else {
+      clusters.map(function (clusterId) {
+        clusterDetails=MlClusters.findOne({ _id: clusterId } )
+        activeStates = MlStates.find({"$and": [{countryId: clusterDetails.countryId, isActive: true}]}).fetch();
+        if (activeStates && activeStates.length > 0) {
+          states = states.concat(activeStates)
+        }
+      })
+      states.push({"name" : "All","_id" : "all"});
+    }
+  }
+
+  return states;
 };
 
 

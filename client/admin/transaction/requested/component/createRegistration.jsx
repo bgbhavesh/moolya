@@ -54,7 +54,7 @@ export default class MlCreateRegistration extends React.Component{
         email           :  this.refs.email.value,
         cityId          :  this.state.selectedCity,
         registrationType:  this.state.registrationType,
-        //userName        :  this.refs.userName.value,
+        userName        :  this.refs.userName.value,
         password        :  this.refs.password.value,
         accountType     :  this.state.subscription,
         institutionAssociation    :   this.state.institutionAssociation,
@@ -74,26 +74,13 @@ export default class MlCreateRegistration extends React.Component{
       toastr.error(response.result);
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
-    //return response;
-    //this.props.getRegistrationDetails();
-  }
+   }
 
-/*  ondateOfBirthSelection(event) {
-    if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
-      this.setState({loading: false, dateOfBirth: value});
-    }
-  }*/
+
 
   optionsBySelectCountry(value){
     this.setState({country:value})
   }
-
-/*
-  optionsBySelectState(value){
-    this.setState({state:value})
-  }
-*/
 
   optionsBySelectCity(value){
     this.setState({selectedCity:value})

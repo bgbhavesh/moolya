@@ -10,7 +10,6 @@ export default class MlCommunityList extends Component {
     this.state={
       userType : "All",
     }
-    this.fetchCommunityUsers.bind(this)
     return this;
   }
 
@@ -31,20 +30,20 @@ export default class MlCommunityList extends Component {
   onStatusChange(userType,e) {
     // const data = this.state.data;
     if (userType) {
-      this.setState({userType: userType});
-    }
-    const resp = this.fetchCommunityUsers(userType);
-  }
-  async  fetchCommunityUsers(userType) {
-    // let userType = this.state.userType;
-    let that = this;
-    let clusterId = this.props.params&&this.props.params.clusterId?this.props.params.clusterId:"";
-    let chapterId = this.props.params&&this.props.params.chapterId?this.props.params.chapterId:"";
-    let subChapterId = this.props.params&&this.props.params.subChapterId?this.props.params.subChapterId:"";
+      //this.setState({userType: userType});
+      console.log(this.props);
+      let variables={};
+      let hasQueryOptions = this.props.config&&this.props.config.queryOptions ? true : false;
+      if (hasQueryOptions) {
+        let config = this.props.config
+        config.params.userType = userType;
+        let dynamicQueryOptions = this.props.config&&this.props.config.buildQueryOptions ? this.props.config.buildQueryOptions(config) : {};
+        variables = _.extend(variables,dynamicQueryOptions);
 
-    let response = await fetchCommunityUsersHandler(clusterId,chapterId,subChapterId,userType);
-    this.setState({data: response});
-    // return response;
+      }
+      this.props.config.fetchMore(variables);
+
+    }
   }
 
   render(){

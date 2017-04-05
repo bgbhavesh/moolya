@@ -1,14 +1,14 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function removeFileFromDocumentsActionHandler(fileId,documentId,registrationId) {
+export async function removeFileFromDocumentsActionHandler(fileId,docTypeId,documentId,registrationId) {
  /* let clusterId = clusterIdInfo
   let userType =userTypeInfo
   let communityType=communityTypeInfo*/
   const result = await client.mutate({
     mutation: gql`
-     mutation($fileId: String, $documentId: String, $registrationId: String!, $actionName: String!, $moduleName: String! ){
-           RemoveFileFromDocuments(fileId:$fileId,documentId:$documentId,registrationId:$registrationId,actionName:$actionName,moduleName:$moduleName) {
+     mutation($fileId: String,$docTypeId: String, $documentId: String, $registrationId: String!, $actionName: String!, $moduleName: String! ){
+           RemoveFileFromDocuments(fileId:$fileId,docTypeId:$docTypeId,documentId:$documentId,registrationId:$registrationId,actionName:$actionName,moduleName:$moduleName) {
             success
             code
             result
@@ -17,6 +17,7 @@ export async function removeFileFromDocumentsActionHandler(fileId,documentId,reg
     `,
     variables: {
       fileId,
+      docTypeId,
       documentId,
       registrationId,
       moduleName:"REGISTRATION",

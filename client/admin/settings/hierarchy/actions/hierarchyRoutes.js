@@ -5,7 +5,7 @@ const hierarchyRoutes={
     return `/admin/settings/hierarchy/${clusterId}/chapters`;
   },
   hierarchyDetails:(clusterId)=>{
-    return `/admin/settings/hierarchy/${clusterId}/hierarchyDetails`;
+    return `/admin/settings/hierarchy/${clusterId}/platformhierarchy`;
   },
 }
 

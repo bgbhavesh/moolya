@@ -44,6 +44,7 @@ let DocumentMapping = `
         chapters    : [String]
         subChapters : [String]
         kycCategory  : [String]
+        docCategoryName: String
         documentType   : [String]
         isActive : Boolean
       }
@@ -92,6 +93,7 @@ let DocumentMapping = `
         findDocument(documentId:String): DocumentOutput
         findDocuments: [DocumentOutput]
         findProcessDocuments(kycId:String): [DocumentOutput]
+        fetchKycDocProcessMapping(documentTypeId:String,clusterId:[String]):[DocumentOutput]
       }
      
 `

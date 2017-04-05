@@ -23,18 +23,21 @@ class MlAuthorization
         let isAuthorized=false;
 
 
-        let action = MlActions.findOne({code:actionName})
-        if(!action){
+        // let action = MlActions.findOne({code:actionName})
+      let action = mlDBController.findOne('MlActions', {code:actionName})
+      if(!action){
             return false;
         }
 
-        let module = MlModules.findOne({code:moduleName})
+        // let module = MlModules.findOne({code:moduleName})
+      let module = mlDBController.findOne('MlModules', {code:moduleName})
         if(!module){
           return false;
         }
 
-        var user = Meteor.users.findOne({_id:userId});
-        if(user && user.profile && user.profile.isInternaluser == true)
+        // var user = Meteor.users.findOne({_id:userId})
+      var user = mlDBController.findOne('users', {_id: userId}, context)
+      if(user && user.profile && user.profile.isInternaluser == true)
         {
             let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
             let user_roles;
@@ -98,8 +101,9 @@ class MlAuthorization
 
     validateRole(roleId, accessModule, accessAction){
         let ret = false;
-        let role = MlRoles.findOne({_id:roleId})
-        if(role)
+        // let role = MlRoles.findOne({_id:roleId})
+      let role = mlDBController.findOne('MlRoles', {_id: roleId})
+      if(role)
         {
           role.modules.map(function (module) {
             if(module.moduleId == "all" || module.moduleId == accessModule._id){

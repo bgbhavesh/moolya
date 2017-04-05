@@ -24,16 +24,18 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
       query={"noSuchQuery":args.id};
   }
   query.isActive=true;
-  let communityData=MlCommunityDefinition.find({isActive:true}).fetch();
+  // let communityData=MlCommunityDefinition.find({isActive:true}).fetch();
+  let communityData= mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch();
   let response=[];
   _.each(communityData,function (item,value) {
     query.communityDefId=item._id;
     response.push({
       key: item._id,
-      count: MlCommunity.find(query).count(),
+      count: mlDBController.find('MlCommunity', query, context).count(),
       icon: item.communityImageLink
     })
   });
+  // count: MlCommunity.find(query).count(),
     return response;
 };
 
@@ -52,7 +54,8 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         return {data:null}
     }
 
-    let userhierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    // let userhierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    let userhierarchy = mlDBController.findOne('MlHierarchy', {level:Number(userProfile.hierarchyLevel)}, context)
     if(!userhierarchy){
       return {data:null}
     }
@@ -74,10 +77,11 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         query= {"hierarchyCode":"PLATFORM"};
     }
 
-    let communitiesAccess = MlCommunityAccess.find(query).fetch();
-
+    // let communitiesAccess = MlCommunityAccess.find(query).fetch();
+    let communitiesAccess = mlDBController.find('MlCommunityAccess', query, context).fetch();
     communitiesAccess.map(function (communityAccess) {
-        let platformCommunity = MlCommunityAccess.findOne({"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode});
+        // let platformCommunity = MlCommunityAccess.findOne({"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode});
+        let platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode}, context)
         let community = {};
         // let iscommunityActive = userProfile.defaultCommunities.indexOf('all') || userProfile.defaultCommunities.indexOf(communityAccess.communityDefCode);
         let iscommunityActive = _.indexOf(userProfile.defaultCommunities, 'all')
@@ -131,7 +135,8 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
       return community
     }
 
-    let userhierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    // let userhierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    let userhierarchy = mlDBController.findOne('MlHierarchy', {level:Number(userProfile.hierarchyLevel)}, context)
     if(!userhierarchy){
       return community
     }
@@ -146,12 +151,15 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     if(clusterId != "" && chapterId != "" && subChapterId != "")
     {
       subChapterQuery = {"$and":[{subChapterId:subChapterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-      communityAccess = MlCommunityAccess.findOne(subChapterQuery);
-      communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+      // communityAccess = MlCommunityAccess.findOne(subChapterQuery);
+      communityAccess = mlDBController.findOne('MlCommunityAccess', subChapterQuery, context);
+      // communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+      communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
       clusters = [clusterId];
       chapters = [chapterId];
       subChapters= [subChapterId];
-      let subChapter = MlSubChapters.findOne({_id: subChapterId});
+      // let subChapter = MlSubChapters.findOne({_id: subChapterId});
+      let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context);
       subChapterName = subChapter.subChapterName;
       clusterName = subChapter.clusterName;
       chapterName = subChapter.chapterName;
@@ -160,8 +168,10 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     else if(clusterId != "" && chapterId != "" ){
         chapterQuery = {"$and":[{chapterId:chapterId, hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
         subChapterQuery = {"$and":[{chapterId:chapterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-        communityAccess = MlCommunityAccess.findOne(chapterQuery);
-        communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+        // communityAccess = MlCommunityAccess.findOne(chapterQuery);
+        communityAccess = mlDBController.findOne('MlCommunityAccess', chapterQuery, context);
+        // communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+        communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
         clusters = [clusterId];
         chapters = [chapterId];
         subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
@@ -171,26 +181,33 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
         clusterQuery = {"$and":[{clusterId:clusterId, hierarchyCode:"CLUSTER", communityDefCode:args.communityId, "isActive":true}]};
         chapterQuery = {"$and":[{clusterId:clusterId, hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
         subChapterQuery = {"$and":[{clusterId:clusterId, hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-        communityAccess = MlCommunityAccess.findOne(clusterQuery);
-        communitiesAccess = MlCommunityAccess.find(chapterQuery).fetch();
+        // communityAccess = MlCommunityAccess.findOne(clusterQuery);
+        communityAccess = mlDBController.findOne('MlCommunityAccess', clusterQuery, context);
+        // communitiesAccess = MlCommunityAccess.find(chapterQuery).fetch();
+        communitiesAccess = mlDBController.find('MlCommunityAccess', chapterQuery, context).fetch();
         clusters = [clusterId];
         chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
-        communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+        // communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+        communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
         subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
-        clusterName = MlClusters.findOne({_id: clusterId}).clusterName;
-
+        // clusterName = MlClusters.findOne({_id: clusterId}).clusterName;
+        clusterName = mlDBController.findOne('MlClusters', {_id: clusterId}, context).clusterName;
     }
 
     else if(userhierarchy.isParent){
       clusterQuery = {"$and":[{hierarchyCode:"CLUSTER", communityDefCode:args.communityId, "isActive":true}]};
       chapterQuery = {"$and":[{hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
       subChapterQuery = {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-      communityAccess = MlCommunityAccess.findOne({"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId}]});
-      communitiesAccess = MlCommunityAccess.find(clusterQuery).fetch();
+      // communityAccess = MlCommunityAccess.findOne({"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId}]});
+      communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId}]}, context);
+      // communitiesAccess = MlCommunityAccess.find(clusterQuery).fetch();
+      communitiesAccess = mlDBController.find('MlCommunityAccess', clusterQuery, context).fetch();
       clusters = communitiesAccess && _.map(communitiesAccess, 'clusterId');
-      communitiesAccess = MlCommunityAccess.find(chapterQuery).fetch();
+      // communitiesAccess = MlCommunityAccess.find(chapterQuery).fetch();
+      communitiesAccess = mlDBController.find('MlCommunityAccess', chapterQuery, context).fetch();
       chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
-      communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+      // communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
+      communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
       subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
 
     }
@@ -227,9 +244,11 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
     else if(args.clusterId != undefined){
         levelCode = "CLUSTER"
     }
-    hierarchy = MlHierarchy.findOne({code:levelCode})
+    // hierarchy = MlHierarchy.findOne({code:levelCode})
+    hierarchy = mlDBController.findOne('MlHierarchy', {code:levelCode}, context)
 
-    let communitiesDef = MlCommunityAccess.find({"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}).fetch()
+    // let communitiesDef = MlCommunityAccess.find({"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}).fetch()
+    let communitiesDef = mlDBController.find('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}, context).fetch()
     for(var i = 0; i < communitiesDef.length; i++){
         if(communitiesDef[i].isActive){
             let community = {
@@ -249,13 +268,15 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
                 hierarchyLevel:hierarchy.level,
                 hierarchyCode:hierarchy.code
             }
-            MlCommunityAccess.insert(community)
+            // MlCommunityAccess.insert(community)
+            mlDBController.insert('MlCommunityAccess', community, context)
         }
     }
 }
 
 MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {
-  let communitiesDef = MlCommunityAccess.find({"subChapterId":args.subChapterId}).fetch()
+  // let communitiesDef = MlCommunityAccess.find({"subChapterId":args.subChapterId}).fetch()
+  let communitiesDef = mlDBController.find('MlCommunityAccess', {"subChapterId":args.subChapterId}, context).fetch()
   for(var i = 0; i < communitiesDef.length; i++){
     if(communitiesDef[i]){
       let community = {
@@ -280,7 +301,8 @@ MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) =>
         hierarchyCode:communitiesDef[i].hierarchyCode
       }
 
-      MlCommunity.insert(community)
+      // MlCommunity.insert(community)
+      mlDBController.insert('MlCommunity', community, context)
     }
   }
 }
@@ -309,7 +331,8 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
       return new MlRespPayload().errorPayload("Failed to update community", 400);
     }
 
-    userHierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    // userHierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
+    userHierarchy = mlDBController.findOne('MlHierarchy', {level:Number(userProfile.hierarchyLevel)}, context)
     if(!userHierarchy){
       return new MlRespPayload().errorPayload("Failed to update community", 400);
     }
@@ -333,14 +356,16 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
       levelCode = "PLATFORM"
     }
 
-    let hierarchy = (levelCode && MlHierarchy.findOne({code:levelCode})) || "";
+    // let hierarchy = (levelCode && MlHierarchy.findOne({code:levelCode})) || "";
+    let hierarchy = (levelCode &&  mlDBController.findOne('MlHierarchy', {code:levelCode}, context)) || "";
     if(hierarchy != "" && (hierarchy.isParent || userHierarchy.hierarchyLevel <= hierarchy.hierarchyLevel)) {
       doEdit = true;
     }
 
     if(doEdit)
     {
-        communityAccess = MlCommunityAccess.findOne({"$and":[{"hierarchyCode":userHierarchy.code, "communityDefCode":args.communityId}]});
+        // communityAccess = MlCommunityAccess.findOne({"$and":[{"hierarchyCode":userHierarchy.code, "communityDefCode":args.communityId}]});
+        communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":userHierarchy.code, "communityDefCode":args.communityId}]}, context);
         if(communityAccess){
             let isUpdate = false;
 
@@ -360,10 +385,12 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
           }
 
           if(isUpdate == true)
-            resp = MlCommunityAccess.update({"_id":communityAccess._id}, {"$set":communityAccess}, {upsert:true})
+            // resp = MlCommunityAccess.update({"_id":communityAccess._id}, {"$set":communityAccess}, {upsert:true})
+            resp = mlDBController.update('MlCommunityAccess', communityAccess._id, communityAccess, {$set:true}, context)
         }
 
-        communitiesAccess = MlCommunityAccess.find({"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}).fetch();
+        // communitiesAccess = MlCommunityAccess.find({"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}).fetch();
+        communitiesAccess = mlDBController.find('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}, context).fetch();
         if(communitiesAccess.length == 0){
             clusters = {isActive: true, difference:args.clusters || []}
             chapters = {isActive: true, difference:args.chapters || []};
@@ -381,16 +408,20 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
         }
 
         clusters.difference.map(function(clusterId){
-          resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {$set:{isActive:clusters.isActive}})
+          // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {$set:{isActive:clusters.isActive}})
+          resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {isActive:clusters.isActive}, {$set:true}, context)
         })
 
         chapters.difference.map(function(chapterId){
-          resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {$set:{isActive:chapters.isActive}})
+          // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {$set:{isActive:chapters.isActive}})
+          resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:chapters.isActive}, {$set:true}, context)
         })
 
         subchapters.difference.map(function(subChapterId){
-          resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
-          resp = MlCommunity.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
+          // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
+          resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
+          // resp = MlCommunity.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
+          resp = mlDBController.update('MlCommunity', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
         })
 
         if(resp)

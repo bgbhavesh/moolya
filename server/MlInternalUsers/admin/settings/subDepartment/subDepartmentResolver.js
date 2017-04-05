@@ -25,7 +25,8 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
 
   if (args._id) {
     var id= args._id;
-    let resp = MlSubDepartments.update(id, {$set: args});
+    // let resp = MlSubDepartments.update(id, {$set: args});
+    let resp = mlDBController.update('MlSubDepartments', id, args, {$set:true}, context)
     return resp;
   }
 
@@ -49,11 +50,13 @@ MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info
       let response = new MlRespPayload().errorPayload("Not Authorized", code);
       return response;
     }
-    if(MlSubDepartments.find({subDepartmentName:args.subDepartment.subDepartmentName}).count() > 0){
+    // if(MlSubDepartments.find({subDepartmentName:args.subDepartment.subDepartmentName}).count() > 0){
+    if(mlDBController.find('MlSubDepartments', {subDepartmentName:args.subDepartment.subDepartmentName}, context).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
-    let id = MlSubDepartments.insert({...args.subDepartment});
+    // let id = MlSubDepartments.insert({...args.subDepartment});
+    let id = mlDBController.insert('MlSubDepartments', args.subDepartment, context)
     if(id){
         let code = 200;
         let result = {subDepartmentId: id}
@@ -88,7 +91,8 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
   }
 
   if (args.subDepartmentId) {
-    let subDepartment = MlSubDepartments.findOne({_id: args.subDepartmentId});
+    // let subDepartment = MlSubDepartments.findOne({_id: args.subDepartmentId});
+    let subDepartment = mlDBController.findOne('MlSubDepartments', {_id: args.subDepartmentId}, context)
     if(subDepartment)
     {
       if(subDepartment.isSystemDefined){
@@ -96,7 +100,8 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
         let response = new MlRespPayload().errorPayload("Cannot edit system defined sub-department", code);
         return response;
       }else {
-        let resp = MlSubDepartments.update({_id: args.subDepartmentId}, {$set: args.subDepartment}, {upsert: true})
+        // let resp = MlSubDepartments.update({_id: args.subDepartmentId}, {$set: args.subDepartment}, {upsert: true})
+        let resp = mlDBController.update('MlSubDepartments', args.subDepartmentId, args.subDepartment, {$set:true}, context)
         if (resp) {
           let code = 200;
           let result = {cluster: resp}
@@ -108,10 +113,12 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
 
   }
   if (args.departmentId) {
-    let subDepartment = MlSubDepartments.findOne({departmentId: args.departmentId});
+    // let subDepartment = MlSubDepartments.findOne({departmentId: args.departmentId});
+    let subDepartment = mlDBController.findOne('MlSubDepartments', {departmentId: args.departmentId}, context)
     if(subDepartment) {
       subDepartment.subDepatmentAvailable = args.depatmentAvailable;
-      let resp = MlSubDepartments.update({departmentId: args.departmentId}, {$set: subDepartment}, {upsert: true})
+      // let resp = MlSubDepartments.update({departmentId: args.departmentId}, {$set: subDepartment}, {upsert: true})
+      let resp = mlDBController.update('MlSubDepartments', {departmentId: args.departmentId}, subDepartment, {$set:true}, context)
       if (resp) {
         let code = 200;
         let result = {cluster: resp}
@@ -124,7 +131,8 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['findSubDepartment'] = (obj, args, context, info) =>{
-    return MlSubDepartments.findOne({"_id":args._id});
+    // return MlSubDepartments.findOne({"_id":args._id});
+    return mlDBController.findOne('MlSubDepartments', {"_id": args._id}, context)
 }
 
 MlResolver.MlQueryResolver['findSubDepartments'] = (obj, args, context, info) =>{
@@ -132,9 +140,11 @@ MlResolver.MlQueryResolver['findSubDepartments'] = (obj, args, context, info) =>
 }
 
 MlResolver.MlQueryResolver['fetchActiveSubDepartments'] = (obj, args, context, info) =>{
-    let department = MlDepartments.findOne({"_id":args.departmentId})
+    // let department = MlDepartments.findOne({"_id":args.departmentId})
+    let department = mlDBController.findOne('MlDepartments', {"_id":args.departmentId}, context)
     if(department && department.departmentName) {
-      let response = MlSubDepartments.find({"$and": [{"departmentId": department.departmentName}, {"isActive": true}]}).fetch()
+      // let response = MlSubDepartments.find({"$and": [{"departmentId": department.departmentName}, {"isActive": true}]}).fetch()
+      let response = mlDBController.find('MlSubDepartments', {"$and": [{"departmentId": department.departmentName}, {"isActive": true}]}, context).fetch()
       return response;
     }
 
@@ -144,7 +154,8 @@ MlResolver.MlQueryResolver['fetchActiveSubDepartments'] = (obj, args, context, i
 MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
-    let response= MlSubDepartments.find({"departmentId":id,"isActive":true}).fetch()||[];
+    // let response= MlSubDepartments.find({"departmentId":id,"isActive":true}).fetch()||[];
+    let response= mlDBController.find('MlSubDepartments', {"departmentId":id,"isActive":true}, context).fetch()||[];
     return response;
   }
 }
@@ -152,7 +163,8 @@ MlResolver.MlQueryResolver['fetchSubDepartments'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['fetchSubDepartmentsForRegistration'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
-    let response= MlSubDepartments.find({"departmentId":id}).fetch()||[];
+    // let response= MlSubDepartments.find({"departmentId":id}).fetch()||[];
+    let response= mlDBController.find('MlSubDepartments', {"departmentId":id}, context).fetch()||[];
     return response;
   }
 }

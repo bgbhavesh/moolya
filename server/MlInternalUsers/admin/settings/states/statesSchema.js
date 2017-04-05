@@ -28,7 +28,7 @@ let States = `
         fetchState(stateId: String): States
         FetchActiveStates:[States]
         fetchStatesPerCountry(countryId: String):[States]
-        FetchActiveStatesForSelect:[States]
+        FetchActiveStatesForCluster(clusters:[String]):[States]
     }
     
     type Mutation{

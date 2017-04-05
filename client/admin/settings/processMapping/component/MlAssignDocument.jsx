@@ -61,6 +61,7 @@ export default class MlAssignDocument extends React.Component {
     this.setState({
       assignDocuments: assignDocuments
     })
+    this.props.getAssignedDocuments(assignDocuments)
   }
 
 
@@ -97,17 +98,21 @@ export default class MlAssignDocument extends React.Component {
     data:fetchDocumentsType{label:docTypeName,value:_id}
     }
 `;
-    let docKycquery=gql` query{
-    data:fetchKYCCategories{label:docCategoryName,value:_id}
-    }
+    let docKycquery=gql`query($documentTypeId:String,$clusterId:[String]){
+  data:fetchKycDocProcessMapping(documentTypeId:$documentTypeId,clusterId:$clusterId) {
+    value:_id
+		label:docCategoryName
+  }
+}
 `;
+
     return (
 
       <div>
 
         {/*<div className="form-group"> <a onClick={that.assignDocumentsState.bind(this)} className="mlUpload_btn">Add</a></div>*/}
         {that.state.assignDocuments.map(function(options,id){
-
+          let kycOption={options: { variables: {documentTypeId:options.type,clusterId:that.props.clusterId}}};
           return(
 
                     <div className="panel panel-default" key={id}>
@@ -118,7 +123,7 @@ export default class MlAssignDocument extends React.Component {
                           <Moolyaselect multiSelect={false} placeholder={"Document Type"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.type} queryType={"graphql"} query={docTypequery}  isDynamic={true} id={'document'+id} onSelect={that.optionsBySelectDocument.bind(that,id)} />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder={"KYC Category"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.category} queryType={"graphql"} query={docKycquery}  isDynamic={true} id={'kyc'+id} onSelect={that.optionsBySelectKyc.bind(that,id)} />
+                          <Moolyaselect multiSelect={false} placeholder={"KYC Category"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.category} queryType={"graphql"} query={docKycquery} queryOptions={kycOption}  isDynamic={true} id={'kyc'+id} onSelect={that.optionsBySelectKyc.bind(that,id)} />
                         </div>
                         <div className="form-group switch_wrap inline_switch" style={{marginTop:'7px'}}>
                           <label className="">Status</label>

@@ -1,6 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import  Company from './Company'
+import Step3 from './step3';
+import Step4 from './step4';
+import Step5 from './step5';
+import Step6 from './step6';
+import Step7 from './step7';
 export default class StartupHardReg extends React.Component{
   constructor(props){
     super(props);

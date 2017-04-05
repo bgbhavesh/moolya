@@ -69,7 +69,8 @@ export default class MlListView extends Component {
   }
   render(){
     let data=this.props.data&&this.props.data.data?this.props.data.data:[];
-    let ListComponent =React.cloneElement(this.props.viewComponent,{data:data});
+    let pConfig=_.extend(this.props,{sizePerPage:this.state.sizePerPage,pageNumber:this.state.pageNumber});
+    let ListComponent =React.cloneElement(this.props.viewComponent,{data:data,config:pConfig});
     let loading=this.props.loading;
     let config=this.props;
     let actionsProxyList=[];

@@ -163,10 +163,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
 MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, args, context, info) => {
   // TODO : Authorization
-  if (args.docUrl&&args.documentId) {
+  if (args.docUrl&&args.documentId&&args.docTypeId) {
     var id= args.registrationId;
     var randomId= Math.floor(Math.random()*90000) + 10000;
-    let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
+    let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId,'docTypeId':args.docTypeId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
     return updatedResponse;
   }else if(args.registrationId){
 
@@ -209,7 +209,7 @@ MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, 
     let documentList=args.documentId;
     let updatedResponse;
     //  updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}},'kycDocuments':{$elemMatch: {'documentId.$.docFiles':{$elemMatch:{'fileId':args.fileId}}}}},{$pull: {}});
-    updatedResponse=MlRegistration.update({_id:args.registrationId,"kycDocuments.documentId":args.documentId},{ $pull: { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }} });
+    updatedResponse=MlRegistration.update({"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]},{ $pull: { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }} });
     //return updatedResponse;
     return updatedResponse;
   }

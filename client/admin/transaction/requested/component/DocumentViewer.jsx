@@ -22,9 +22,9 @@ export default class DocumentViewer extends React.Component{
       $('[data-toggle="tooltip"]').tooltip({container:'body'});
     });
   }
-  onFileUpload(documentId){
-    let file=document.getElementById(documentId).files[0];
-    this.props.onFileUpload(file,documentId);
+  onFileUpload(documentId,docTypeId){
+    let file=document.getElementById(docTypeId+documentId).files[0];
+    this.props.onFileUpload(file,documentId,docTypeId);
   }
   onDocSelect(documentId,event){
     if(event.target.checked){
@@ -39,8 +39,8 @@ export default class DocumentViewer extends React.Component{
       this.props.onDocumentSelect(selectedDocs);
     }
   }
-  OnFileRemove(documentId,fileId,event){
-    this.props.onDocumentRemove(documentId,fileId)
+  OnFileRemove(docTypeId,documentId,fileId){
+    this.props.onDocumentRemove(docTypeId,documentId,fileId)
   }
   render(){
     let doc=this.props.doc||{};
@@ -58,7 +58,7 @@ export default class DocumentViewer extends React.Component{
            <div className="pull-right block_action">
            <div className="fileUpload upload_file_mask">
            <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-           <input type="file" className="upload_file upload" name="file_source" id={doc.documentId} ref={doc.documentId} onChange={this.onFileUpload.bind(this,doc.documentId)}/></a>
+           <input type="file" className="upload_file upload" name="file_source" id={doc.docTypeId+doc.documentId} ref={doc.documentId} onChange={this.onFileUpload.bind(this,doc.documentId,doc.docTypeId)}/></a>
            </div>
            </div>
            <div className="pull-right block_action">
@@ -71,12 +71,13 @@ export default class DocumentViewer extends React.Component{
            <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
              {docFiles.map((file,fIndex)=>{
                      return (<li key={file.fileId} className="doc_card" data-toggle="tooltip" data-placement="bottom" title={file.fileName}>
-                                <span className="ml ml-minus" onClick={this.OnFileRemove.bind(this,doc.documentId,file.fileId)}></span>
+                                <span className="ml ml-minus" onClick={this.OnFileRemove.bind(this,doc.docTypeId,doc.documentId,file.fileId)}></span>
                                 <img id={file.fileId} src={file.fileUrl} />
                             </li>);
              })}
 
            </ul>
+             <div><center>{doc.status}</center></div>
            </div>
            </div>
 

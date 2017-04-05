@@ -820,6 +820,16 @@ if(Meteor.isServer){
             subMenu:[]
           },
           {
+            "image" : "/images/cluster_icon.png",
+            "link" : "/admin/settings/hierarchy",
+            "name" : "hierarchy",
+            "uniqueId"   :"settings_hierarchy",
+            "isLink" : true,
+            "isMenu" : true,
+            "hideSubMenu":true,
+            "subMenu":[]
+          },
+          {
             "link" : "/admin/settings/rolesList",
             "name" : "Roles & Permissions",
             "uniqueId" : "settings_roles",

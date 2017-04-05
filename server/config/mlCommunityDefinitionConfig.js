@@ -8,7 +8,7 @@ let communityDef = [{_id:"ideators",name:"Ideators","code":"IDE",displayName:"Id
   {_id:"companies",name:"Companies","code":"CMP",displayName:"Companies","showOnMap":false,"aboutCommunity":"Companies","communityImageLink" : "ml ml-company","isActive":true},
   {_id:"serviceproviders",name:"Service Providers","code":"SPS",displayName:"Service Providers","showOnMap":false,"aboutCommunity":"Service Providers","communityImageLink" : "ml ml-users","isActive":true},
   {_id:"institutions",name:"Institutions","code":"INS",displayName:"Institutions","showOnMap":false,"aboutCommunity":"Institutions","communityImageLink" : "ml ml-institutions","isActive":true},
-  {_id:"browsers",name:"Browsers","code":"BRW",displayName:"Browsers","showOnMap":false,"aboutCommunity":"Browsers","communityImageLink" : "","isActive":true}
+  {_id:"browsers",name:"Browsers","code":"BRW",displayName:"Browsers","showOnMap":false,"aboutCommunity":"Browsers","communityImageLink" : "ml ml-browser","isActive":true}
   ];
 
  Meteor.startup(function () {

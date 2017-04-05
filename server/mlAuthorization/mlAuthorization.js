@@ -60,7 +60,11 @@ class MlAuthorization
                 }
 
                 else if(moduleName == "SUBCHAPTER" && req.chapterId != "" && req.subChapterId != ""){
-                    let userRole = _.find(user_roles, {chapterId:req.chapterId || "all", subChapterId:req.subChapterId || "all"})
+                    let userRole = _.find(user_roles, {chapterId: "all", subChapterId: "all"})
+                    if(!userRole)
+                      userRole = _.find(user_roles, {chapterId:req.chapterId, subChapterId:req.subChapterId})
+                    if(!userRole)
+                      userRole = _.find(user_roles, {chapterId:req.chapterId, subChapterId: 'all'})
                     return self.validateRole(userRole.roleId, module, action)
                   // isAuthorized= self.validateRole(userRole.roleId, module, action)
                 }

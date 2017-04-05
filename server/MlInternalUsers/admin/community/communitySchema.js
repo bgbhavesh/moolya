@@ -4,6 +4,7 @@ import MlSchemaDef from '../mlAdminSchemaDef'
 let communitySchema = `
     type Community{
         name:String,
+        communityName:String,
         displayName:String,
         code:String,
         communityImageLink:String,

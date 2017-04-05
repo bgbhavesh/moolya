@@ -37,6 +37,7 @@ const mlClusterSubChaptersListConfig=new MlViewer.View({
                                    showOnMap
                                    isActive
                                    subChapterDisplayName
+                                   isDefaultSubChapter
                           }
                       }
               }

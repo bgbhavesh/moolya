@@ -63,6 +63,7 @@ let chapterSchema = `
     type SubChapter{
         _id:String
         clusterId:String
+        isDefaultSubChapter:String
         clusterName: String
         chapterId:String
         subChapterImageLink:String
@@ -101,6 +102,7 @@ let chapterSchema = `
     
     input subChapterObject{
         subChapterId:String,
+        isDefaultSubChapter:String,
         clusterId:String, 
         clusterName:String,
         stateId:String,

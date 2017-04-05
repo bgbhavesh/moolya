@@ -794,7 +794,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.templateProcessName){
       return 'TemplateAssignment'
     }
-    if(data.level){
+    if(data.module){
       return 'Hierarchy'
     }
     return null;

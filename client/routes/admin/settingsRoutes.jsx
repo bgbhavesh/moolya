@@ -210,7 +210,7 @@ adminSection.route('/settings/hierarchy/:clusterId/chapters', {
     mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
   }
 });
-adminSection.route('/settings/hierarchy/:clusterId/hierarchydetails', {
+adminSection.route('/settings/hierarchy/:clusterId/platformhierarchy', {
   name: 'hierarchy_details',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyList/>})

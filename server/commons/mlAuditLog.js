@@ -1,6 +1,7 @@
 import async from 'async';
 import each from 'async/each';
 var diff = require('deep-diff').diff;
+// import MlModuleCollectionMap from '../../lib/common/commonSchemas';
 
 class MlAuditLog {
   constructor(){
@@ -31,11 +32,11 @@ class MlAuditLog {
       timeStamp: new Date()
     }
       auditParams.queryPayload = _.omit(auditParams.queryPayload, ['moduleName','actionName']);
-      let oldValue = {};
 
+      let oldValue = {};
       let newValue = auditParams.queryPayload;
       var differences = diff(oldValue, newValue);
-
+      // toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
       async.each(differences, function (say, callback) {
         toInsert.action=say.kind;
         toInsert.field=JSON.stringify(say.path);
@@ -86,7 +87,7 @@ class MlAuditLog {
     let oldValue = auditParams.oldValue;
     let newValue = auditParams.newValue;
     var differences = diff(oldValue, newValue);
-
+    // toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
     async.each(differences, function (say, callback) {
       toInsert.action=say.kind;
       toInsert.field=JSON.stringify(say.path);

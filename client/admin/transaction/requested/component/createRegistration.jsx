@@ -74,26 +74,13 @@ export default class MlCreateRegistration extends React.Component{
       toastr.error(response.result);
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
-    //return response;
-    //this.props.getRegistrationDetails();
-  }
+   }
 
-/*  ondateOfBirthSelection(event) {
-    if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
-      this.setState({loading: false, dateOfBirth: value});
-    }
-  }*/
+
 
   optionsBySelectCountry(value){
     this.setState({country:value})
   }
-
-/*
-  optionsBySelectState(value){
-    this.setState({state:value})
-  }
-*/
 
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
@@ -125,9 +112,9 @@ export default class MlCreateRegistration extends React.Component{
 /*  async handleError(response) {
     alert(response)
   };*/
-/*  enteredUserName(){
+  enteredUserName(){
      this.setState({"userName" : this.refs.email.value});
-  }*/
+  }
 
 /*  async handleSuccess(response) {
 
@@ -245,7 +232,7 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="text" ref="contactNumber"   placeholder="Contact number" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id="" />
+                  <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id="" onChange={this.enteredUserName.bind(this)}/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
@@ -289,7 +276,7 @@ export default class MlCreateRegistration extends React.Component{
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User name" ref="userName"  className="form-control float-label" id=""/>
+                  <input type="text" placeholder="User name" ref="userName"  value={this.state.userName} className="form-control float-label" id="" disabled="disabled"/>
                 </div>
                 <div className="form-group">
                   <input type="Password" placeholder="Password" ref="password"  className="form-control float-label" id=""/>

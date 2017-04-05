@@ -91,6 +91,7 @@ if(!chapterAdmin){
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
   ]
   let role = {
@@ -125,7 +126,7 @@ if(!subchapterAdmin){
 }
 
 var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
-if(!chapterAdmin){
+if(!communityAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [

@@ -169,11 +169,13 @@ let registrationSchema = `
         userId          :   String,
         registrationStatus        :   String,
         assignedUser    :   String,
-        profileImage    :   String
+        profileImage    :   String,
+     
     }
     
     type RegistrationResponse{
         _id             :   String,
+         status          :   String,
         registrationInfo :  RegistrationInfo,
         registrationDetails : RegistrationDetails
         addressInfo     : [AddressInfoSchema]
@@ -384,9 +386,11 @@ let registrationSchema = `
          updateRegistrationUploadedDocumentUrl(registrationId:String,docUrl:String,document:String,documentId:String):response         
          createGeneralInfoInRegistration(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
          updateRegistrationGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,type:String!):response
-         ApprovedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
-         RejectedStatusOfDocuments(documentId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
+         ApprovedStatusOfDocuments(documentId:[String],docTypeId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
+         RejectedStatusOfDocuments(documentId:[String],docTypeId:[String],moduleName:String!,actionName:String!, registrationId:String!):response
          RemoveFileFromDocuments(fileId:String,docTypeId:String,documentId:String,moduleName:String!,actionName:String!, registrationId:String!):response
+         ApprovedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
+         RejectedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

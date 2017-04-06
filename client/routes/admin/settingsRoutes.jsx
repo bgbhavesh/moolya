@@ -9,11 +9,9 @@ import MlAddDepartment from '../../admin/settings/departments/component/MlAddDep
 import MlEditDepartment from '../../admin/settings/departments/component/MlEditDepartment'
 import MlAddSubDepartment from '../../admin/settings/subDepartments/component/MlAddSubDepartment'
 import MlEditSubDepartment from '../../admin/settings/subDepartments/component/MlEditSubDepartment'
-/*import MlAddPermission from '../../admin/settings/permissions/component/MlAddPermission'*/
 import MlAddProcessMapping from '../../admin/settings/processMapping/component/MlAddProcessMapping'
 import MlProcessMappingList from '../../admin/settings/processMapping/component/MlProcessMappingList'
 import MlEditProcessMapping from '../../admin/settings/processMapping/component/MlEditProcessMapping'
-import MlEditPermission from '../../admin/settings/permissions/component/MlEditPermission'
 import MlAddRequestType from '../../admin/settings/requestTypes/component/MlAddRequestType'
 import MlRequestTypeList from '../../admin/settings/requestTypes/component/MlRequestTypeList'
 import MlEditRequestType from  '../../admin/settings/requestTypes/component/MlEditRequestType'
@@ -40,8 +38,6 @@ import MlEditKycCategory from '../../admin/settings/kycCategory/component/MlEdit
 import MlDocumentMappingList from '../../admin/settings/documentMapping/component/MlDocumentMappingList'
 import MlAddDocumentMapping from '../../admin/settings/documentMapping/component/MlAddDocumentMapping'
 import MlEditDocumentMapping from '../../admin/settings/documentMapping/component/MlEditDocumentMapping'
-
-/*import MlRoleTypeList from '../../admin/settings/roleTypes/component/MlRoleTypeList'*/
 import MlAddRole from '../../admin/settings/roleTypes/component/MlAddRole'
 import MlEditRole from '../../admin/settings/roleTypes/component/MlEditRoleType'
 import MlAddTransaction from '../../admin/settings/transactions/component/MlAddTransactionType'
@@ -152,7 +148,7 @@ import {mlClusterSubChaptersListConfig} from '../../admin/settings/hierarchy/con
 import MlViews from '../../admin/core/components/MlViews';
 import MlHierarchyList from '../../admin/settings/hierarchy/component/MlHierarchyList'
 import MlAdminHierarchyHeader from '../../admin/layouts/header/MlAdminHierarchyHeader'
-import MlAssignHierarchy from '../../admin/settings/hierarchy/component/MlAssignHierarchy'
+import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHierarchyDetails'
 
 // @End
 
@@ -219,7 +215,7 @@ adminSection.route('/settings/hierarchy/:clusterId/platformhierarchy', {
 adminSection.route('/settings/hierarchy/:clusterId/clusterhierarchy', {
   name: 'hierarchy_cluster',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlAssignHierarchy/>})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId}/>})
   }
 });
 
@@ -247,13 +243,6 @@ adminSection.route('/settings/editProcess/:id', {
   name: 'settings_editProcess',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditProcessMapping config={params.id} />})
-  }
-});
-
-adminSection.route('/settings/editPermission/:id', {
-  name: 'settings_EditPermissions',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlEditPermission config={params.id} />})
   }
 });
 

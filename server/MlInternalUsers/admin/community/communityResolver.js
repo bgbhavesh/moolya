@@ -92,6 +92,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
           communityAccess.isActive  = false
 
         community["name"] = communityAccess.communityDefName;
+        community["communityName"] = communityAccess.communityDefName;
         community["displayName"] = communityAccess.displayName;
         community["code"] = communityAccess.communityDefCode;
         community["showOnMap"] = communityAccess.showOnMap;

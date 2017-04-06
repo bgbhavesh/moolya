@@ -36,7 +36,7 @@ class MlAuditLog {
       let oldValue = {};
       let newValue = auditParams.queryPayload;
       var differences = diff(oldValue, newValue);
-      // toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
+      toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
       async.each(differences, function (say, callback) {
         toInsert.action=say.kind;
         toInsert.field=JSON.stringify(say.path);

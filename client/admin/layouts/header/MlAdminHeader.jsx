@@ -24,7 +24,7 @@ export default class MlAdminHeader extends Component {
 
     return (
       <div className="admin_header">
-      <MlAdminProfile/>
+        <MlAdminProfile/>
 
         <VerticalBreadCrum {...this.props}/>
         <div className="header_bottom">

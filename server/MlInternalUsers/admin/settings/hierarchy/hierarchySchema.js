@@ -18,6 +18,9 @@ let HierarchySchema = `
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
+        fetchRolesForDepartment(departmentId:String):[Roles]
+        fetchRolesForHierarchy(departmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String): [Roles]
+        fetchRolesForFinalApprovalHierarchy(departmentId:String): [Roles]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);

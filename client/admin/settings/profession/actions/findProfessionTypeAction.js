@@ -7,7 +7,7 @@ export async function findProfessionActionHandler(ProfessionTypeId) {
     query: gql`
     query  ($id: String){
         FindProfession(_id:$id){
-         id:_id
+        id:_id
         professionName
         professionDisplayName
         industryName

@@ -148,7 +148,7 @@ import {mlClusterSubChaptersListConfig} from '../../admin/settings/hierarchy/con
 import MlViews from '../../admin/core/components/MlViews';
 import MlHierarchyList from '../../admin/settings/hierarchy/component/MlHierarchyList'
 import MlAdminHierarchyHeader from '../../admin/layouts/header/MlAdminHierarchyHeader'
-import MlAssignHierarchy from '../../admin/settings/hierarchy/component/MlAssignHierarchy'
+import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHierarchyDetails'
 
 // @End
 
@@ -215,7 +215,7 @@ adminSection.route('/settings/hierarchy/:clusterId/platformhierarchy', {
 adminSection.route('/settings/hierarchy/:clusterId/clusterhierarchy', {
   name: 'hierarchy_cluster',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlAssignHierarchy/>})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId}/>})
   }
 });
 

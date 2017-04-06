@@ -240,4 +240,3 @@ MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, cont
   }
   return resp;
 }
-

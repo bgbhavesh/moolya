@@ -142,10 +142,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlRequestType.find(query,findOptions).fetch();
     totalRecords=MlRequestType.find(query,findOptions).count();
   }
-  if(args.module=="permission"){
-    // data= MlPermissions.find(query,findOptions).fetch();
-    // totalRecords=MlPermissions.find(query,findOptions).count();
-  }
   if(args.module=="countries"){
     data= MlCountries.find(query,findOptions).fetch();
     totalRecords=MlCountries.find(query,findOptions).count();
@@ -679,9 +675,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.requestName){
       return 'Requests'
-    }
-    if (data.permissionName) {
-      return 'Permissions';
     }
     if(data.userTypeName){
       return 'UserTypes'

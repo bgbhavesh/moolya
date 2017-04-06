@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 6/4/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../mlAdminSchemaDef';
+import MlSchemaDef from '../../admin/mlAdminSchemaDef';
 
 
 let portfolioSchema = `

@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import TabPanel from 'react-tab-panel'
-import '../../../stylesheets/tab.css'
+/*import '../../../stylesheets/tab.css'*/
 export default class MlTabComponent extends React.Component {
     constructor(props){
         super(props)

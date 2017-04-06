@@ -45,10 +45,8 @@ let templates = [
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTCMP",templateName:"Hard-Reg-Company",templateDescription:"Hard Registration Template for Company",isActive: true,createdDate: "03-04-2017"},
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTSTU",templateName:"Hard-Reg-Startup-Company",templateDescription:"Hard Registration Template for Startup Company",isActive: true,createdDate: "03-04-2017"},
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTINS",templateName:"Hard-Reg-Institution",templateDescription:"Hard Registration Template for Institution",isActive: true,createdDate: "03-04-2017"},
-
-
-  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTIDE",templateName:"Portfolio-Template-Ideator",templateDescription:"Portfolio Template for Ideator",isActive: true,createdDate: "03-04-2017"},
-  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTSTU",templateName:"Portfolio-Template-Startup",templateDescription:"Portfolio Template for Startup",isActive: true,createdDate: "03-04-2017"}]
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTIDEEDT",templateName:"Portfolio-Template-Ideator-Edit",templateDescription:"Portfolio Template for Ideator Edit",isActive: true,createdDate: "03-04-2017"},
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTIDEVIW",templateName:"Portfolio-Template-Ideator-View",templateDescription:"Portfolio Template for Ideator View",isActive: true,createdDate: "03-04-2017"}]
 
 let templateObject = {
   procesId                    : proc._id,
@@ -151,6 +149,20 @@ if(mltemplateAssignment.length<=0){
     "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "INS", "templatecommunityName" : "Institutions", "templateuserType" : "all",
     "templateidentity" : "all",
     "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTINS","templateName":"Hard-Reg-Institution"}]
+  });
+
+  MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
+    "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "IDE", "templatecommunityName" : "Ideator", "templateuserType" : "all",
+    "templateidentity" : "all",
+    "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTIDEEDT","templateName":"Portfolio-Template-Ideator-Edit"}]
+  });
+
+  MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
+    "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "IDE", "templatecommunityName" : "Ideator", "templateuserType" : "all",
+    "templateidentity" : "all",
+    "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTIDEVIW","templateName":"Portfolio-Template-Ideator-View"}]
   });
 }
 

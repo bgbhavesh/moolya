@@ -1,8 +1,8 @@
 let transactionType = [
-  {_id:'portfolio',name:"portfolio",displayName:"Portfolio",about:"","isActive":true},
-  {_id:'valuation',name:"valuation",displayName:"Valuation",about:"","isActive":true},
-  {_id:'registration',name:"registration",displayName:"Registration",about:"","isActive":true},
-  {_id:'funding',name:"funding",displayName:"Funding",about:"","isActive":true}
+  {_id:'portfolio',transactionName:"portfolio",transactionDisplayName:"Portfolio",transactionDescription:"","isActive":true},
+  {_id:'valuation',transactionName:"valuation",transactionDisplayName:"Valuation",transactionDescription:"","isActive":true},
+  {_id:'registration',transactionName:"registration",transactionDisplayName:"Registration",transactionDescription:"","isActive":true},
+  {_id:'funding',transactionName:"funding",transactionDisplayName:"Funding",transactionDescription:"","isActive":true}
 ];
 Meteor.startup(function () {
   for(var i = 0; i < transactionType.length; i++){

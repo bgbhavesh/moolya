@@ -6,6 +6,28 @@ import MlSchemaDef from '../../mlAdminSchemaDef';
 
 let ideatorPortfolioSchema = `
 
+    type PortfolioMenu{
+        image: String
+        link: String
+        name: String
+        uniqueId:String
+        isLink:Boolean
+        isMenu:Boolean
+        isDisabled:Boolean
+        subMenu:[Menu]
+        dynamicLink:Boolean
+        subMenuMappingId:String
+        subMenusId:String
+        hideSubMenu:Boolean
+        showInBreadCrum:Boolean
+    }
+    type portfolioMenu
+    {
+      name: String
+      id:String
+      menu:[PortfolioMenu]
+    }
+
     input portfoliodetails{
         transcationType:String,
         name:String,
@@ -105,6 +127,7 @@ let ideatorPortfolioSchema = `
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(userId:String, portfolioId:String, docId:String): response
         fetchComments(userId:String, portfolioId:String, docId:String): response
+        fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
     type Mutation{

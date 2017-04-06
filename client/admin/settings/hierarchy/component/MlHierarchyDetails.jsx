@@ -14,7 +14,8 @@ export default class MlHierarchyDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      loading:true,data:{}
+      loading:true,data:{},
+      hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentName:''}]
     }
     return this;
   }
@@ -30,26 +31,36 @@ export default class MlHierarchyDetails extends React.Component {
   }
 
   componentWillMount(){
-    const resp=this.findDeptAndsubDept();
+   const resp=this.findDeptAndsubDept();
     return resp;
   }
   async findDeptAndsubDept(){
     let clusterId = this.props.clusterId;
     const response = await findDeptAndsubDeptActionHandler(clusterId);
-    this.setState({loading:false,data:response});
+    if(response){
+      let hierarchyInfo=[];
+      for (let i = 0; i < response.length; i++) {
+        let json = {
+          departmentId: response[i].departmentId,
+          departmentName:response[i].departmentName,
+          subDepartmentName:response[i].subDepartmentName
+        }
+        hierarchyInfo.push(json)
+      }
+      this.setState({hierarchyInfo:hierarchyInfo});
+    }
+
   }
 
+
   isExpandableRow(row) {
-    if (row.id <= 1) {
-      return true;
-    } else {
-      return false;
-    }
+    if (row.departmentId!=undefined) return true;
+    else return false;
   }
 
   expandComponent(row) {
     return (
-      <MlAssignHierarchy data={ row.expand } />
+      <MlAssignHierarchy data={ row } />
     );
   }
   render() {
@@ -73,10 +84,10 @@ export default class MlHierarchyDetails extends React.Component {
               smoothScrolling={true}
               default={true}
             >
-              <BootstrapTable  data={ this.state.data }
+              <BootstrapTable  data={ this.state.hierarchyInfo }
                                options={ options }
                                expandableRow={ this.isExpandableRow }
-                               expandComponent={ this.expandComponent }
+                               expandComponent={ this.expandComponent.bind(this) }
                                selectRow={ selectRow }
                                pagination
                                search

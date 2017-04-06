@@ -12,7 +12,8 @@ let HierarchySchema = `
       departmentId        : String
       departmentName      : String
       subDepartmentId     : String
-      subDepartmentName   : String     
+      subDepartmentName   : String
+       isMoolya           : Boolean
     }    
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]

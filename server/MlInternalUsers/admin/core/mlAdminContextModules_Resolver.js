@@ -52,7 +52,10 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       let requestParams=args.context;
       requestParams.userId=context.userId;
       result=CoreModulesRepo.MlMasterSettingsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
-
+      break;
+    case "AUDIT_LOG":
+      let auditParams=args.context;
+      result=CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context);
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -83,6 +86,9 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       return 'MasterSettings';
     }
 
+    if(data.collectionName){
+      return 'AuditLogs';
+    }
     return null;
   }
 }

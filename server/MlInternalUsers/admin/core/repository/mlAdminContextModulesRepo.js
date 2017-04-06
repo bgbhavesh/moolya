@@ -145,5 +145,19 @@ export default CoreModulesRepo={
 
     return {totalRecords:totalRecords,data:data};
 
-  }
+  },
+
+  MlAuditLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+    let serverQuery={};
+    let query = {};
+    requestParams=requestParams?requestParams:null;
+    // let reqArray=requestParams.moduleName.split(',');
+    // serverQuery={moduleName:{$in:reqArray}}
+    query=mergeQueries(userFilterQuery,serverQuery);
+    const data  = MlAudit.find(query ,fieldsProj).fetch();
+    const totalRecords = mlDBController.find('MlAudit', query, context, fieldsProj).count();
+
+    return {totalRecords:totalRecords,data:data};
+
+  },
 }

@@ -214,9 +214,20 @@ if(Meteor.isServer){
             "dynamicLinkHandler" : "",
             "subMenusId":"cluster",
             "subMenuMappingId":"cluster_assignusers"
+          },
+          {
+            "link" : "/admin/clusters/history",
+            "name" : "History",
+            "uniqueId" : "cluster_history",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"cluster",
+            "subMenuMappingId": "cluster_history"
           }
         ]
-
       },
       {
         "image" : "/images/chapter_icon.png",

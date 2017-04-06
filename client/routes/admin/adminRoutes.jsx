@@ -37,6 +37,9 @@ import MlIdeatorLibrary from '../../admin/transaction/portfolio/component/Ideato
 import MlIdeatorStrategyAndPlanning from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorStrategyAndPlanning'
 import MlIdeatorIntellectualPlanningAndTrademark from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 
+import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
+import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
+
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
   FlowRouter._askedToWait = true;
@@ -299,5 +302,18 @@ adminSection.route('/templates/assignTemplate/:id', {
   name: 'templates_assignment_edit',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditAssignTemplate config={params.id} />})
+  }
+});
+
+adminSection.route('/portfolio/tabcomponent', {
+    action(params){
+        mount(AdminLayout,{adminContent:<MlIdeatorPortfolioTemplate />})
+
+    }
+});
+
+adminSection.route('/portfolio/about', {
+  action(params){
+      mount(AdminLayout,{adminContent:<MlIdeatorPortfolioAbout />})
   }
 });

@@ -1,26 +1,26 @@
 import React from 'react';
 import gql from 'graphql-tag'
-
+import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Ideator-Edit",
-  templateCode:"PFIDEEDT",
+  templateName:"Portfolio-Template-Ideator-Edit",
+  templateCode:"PFTIDEEDT",
   userType:'external',
   process:'Registration',
   subProcess:'Registration',
-  stepCode:'PORTFOLIO-IDEATOR',
+  stepCode:'PORTFOLIO',
   stepName:'Portfolio',
-  // component:IdeatorCompanyHardReg
+  component:MlIdeatorPortfolioTemplate
 };
 
 const mlIdeatorViewExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Ideator-View",
-  templateCode:"PFIDEVIW",
+  templateName:"Portfolio-Template-Ideator-View",
+  templateCode:"PFTIDEVIW",
   userType:'external',
   process:'Registration',
   subProcess:'Registration',
-  stepCode:'PORTFOLIO-IDEATOR',
-  stepName:'Portfolio-Ideator',
+  stepCode:'PORTFOLIO',
+  stepName:'Portfolio',
   // component:IdeatorCompanyHardReg
 };
 

@@ -248,8 +248,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlDocumentMapping.find(query,findOptions).count();
   }
   if(args.module=="transaction"){
-    data= MlTransactions.find(query,findOptions).fetch();
-    totalRecords=MlTransactions.find(query,findOptions).count();
+    data= MlTransactionTypes.find(query,findOptions).fetch();
+    totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
   if(args.module=="template"){
     data= MlTemplateTypes.find(query,findOptions).fetch();

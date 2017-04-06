@@ -15,7 +15,7 @@ MlResolver.MlMutationResolver['CreateTransaction'] = (obj, args, context, info) 
     let response = new MlRespPayload().errorPayload("Transaction Name is Required", code);
     return response;
   }else {
-    let id = MlTransactions.insert({...args});
+    let id = MlTransactionTypes.insert({...args});
     if (id) {
       let code = 200;
       let result = {transactionId: id}
@@ -41,7 +41,7 @@ MlResolver.MlMutationResolver['UpdateTransaction'] = (obj, args, context, info) 
     if (args._id) {
       var id= args._id;
       args=_.omit(args,'_id');
-      let result= MlTransactions.update(id, {$set: args});
+      let result= MlTransactionTypes.update(id, {$set: args});
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
       return response
@@ -54,7 +54,7 @@ MlResolver.MlQueryResolver['FindTransaction'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlTransactions.findOne({"_id":id});
+    let response= MlTransactionTypes.findOne({"_id":id});
     return response;
   }
 

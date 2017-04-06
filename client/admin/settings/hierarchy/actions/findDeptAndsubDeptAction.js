@@ -10,7 +10,8 @@ export async function findDeptAndsubDeptActionHandler(clusterId) {
             departmentId
             departmentName
             subDepartmentId
-      			subDepartmentName      
+      			subDepartmentName
+      			isMoolya
          }  
         }
     `,

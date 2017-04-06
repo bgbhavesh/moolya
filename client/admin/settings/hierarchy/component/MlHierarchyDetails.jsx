@@ -15,7 +15,7 @@ export default class MlHierarchyDetails extends React.Component {
     super(props);
     this.state={
       loading:true,data:{},
-      hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentName:''}]
+      hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentName:'',isMoolya:''}]
     }
     return this;
   }
@@ -43,7 +43,8 @@ export default class MlHierarchyDetails extends React.Component {
         let json = {
           departmentId: response[i].departmentId,
           departmentName:response[i].departmentName,
-          subDepartmentName:response[i].subDepartmentName
+          subDepartmentName:response[i].subDepartmentName,
+          isMoolya:response[i].isMoolya
         }
         hierarchyInfo.push(json)
       }
@@ -60,7 +61,7 @@ export default class MlHierarchyDetails extends React.Component {
 
   expandComponent(row) {
     return (
-      <MlAssignHierarchy data={ row } />
+      <MlAssignHierarchy departmentInfo={row} />
     );
   }
   render() {
@@ -93,6 +94,7 @@ export default class MlHierarchyDetails extends React.Component {
                                search
               >
                 <TableHeaderColumn dataField="departmentId" isKey={true} dataSort={true} hidden={true}></TableHeaderColumn>
+                <TableHeaderColumn dataField="isMoolya" hidden={true}>isMoolya</TableHeaderColumn>
                 <TableHeaderColumn dataField="departmentName">Department</TableHeaderColumn>
                 <TableHeaderColumn dataField="subDepartmentName">Sub-Department</TableHeaderColumn>
               </BootstrapTable>

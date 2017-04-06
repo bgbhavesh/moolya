@@ -14,7 +14,7 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
     let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
     subDepartments.map(function (subDepartment) {
       let deptAndSubDepartment = null
-      deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isActive:department.isActive}
+      deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isMoolya:department.isMoolya,isActive:department.isActive}
       list.push(deptAndSubDepartment)
     })
   })

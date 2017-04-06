@@ -41,7 +41,8 @@ let Role = `
         subChapterList : [String],
         assignRoles:[AssignRoles],
         modules: [Modules],
-        isActive:Boolean
+        isActive:Boolean,
+        teamStructureAssignment:teamStructureAssignment
   }
   
   scalar Date
@@ -89,6 +90,19 @@ let Role = `
       assignRoles:[assignroles],
       modules:[modules], 
       isActive:Boolean
+      teamStructureAssignment:teamStructureAssignmentInput      
+  }
+  
+  input teamStructureAssignmentInput{
+      isAssigned        : Boolean
+      assignedLevel     : String
+      reportingRole     : String
+  }
+  
+  type teamStructureAssignment{
+      isAssigned        : Boolean
+      assignedLevel     : String
+      reportingRole     : String
   }
   
   type Query {

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import ScrollArea from 'react-scrollbar';
+
 var options = [
   {
     value: 'select',
@@ -19,26 +18,8 @@ var options = [
     label: 'Two'
   }
 ];
-const taxes = [{
-  id: 1,
-  taxName: 'Sys Admin',
-  percentage: 'Active'
-}, {
-  id: 2,
-  taxName: 'Sales Tax',
-  percentage: '3%'
-},
-  {
-    id: 3,
-    taxName: 'Octroi',
-    percentage: '3.5%-5%'
-  }, {
-    id: 4,
-    taxName: 'VAT',
-    percentage: '5%'
-  }];
 
-class MlAssignHierarchy extends React.Component {
+export default class MlAssignHierarchy extends React.Component {
   render() {
     return (
       <div>
@@ -222,85 +203,6 @@ class MlAssignHierarchy extends React.Component {
         </div>
       </div>
 
-
-
     );
   }
 }
-
-const selectRow = {
-  mode: 'checkbox',
-  bgColor: '#feeebf',
-  clickToSelect: true, // click to select, default is false
-  clickToExpand: true // click to expand row, default is false
-};
-
-export default class EditTaxation extends React.Component {
-  componentDidMount() {
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-  }
-  constructor(props) {
-    super(props);
-  }
-
-  componentWillMount(){
-    let clusterId = this.props.clusterId;
-  }
-
-  isExpandableRow(row) {
-    if (row.id <= 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  expandComponent(row) {
-    return (
-      <MlAssignHierarchy data={ row.expand } />
-    );
-  }
-  render() {
-    const options = {
-      expandRowBgColor: 'rgb(242, 255, 163)'
-    };
-    return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
-          <h2>Select Department</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <BootstrapTable  data={ taxes }
-                               options={ options }
-                               expandableRow={ this.isExpandableRow }
-                               expandComponent={ this.expandComponent }
-                               selectRow={ selectRow }
-                               pagination
-                               search
-              >
-                <TableHeaderColumn dataField="id" isKey={true} dataSort={true}>Department</TableHeaderColumn>
-                <TableHeaderColumn dataField="taxName">Sub-Department</TableHeaderColumn>
-                <TableHeaderColumn dataField="percentage">Status</TableHeaderColumn>
-              </BootstrapTable>
-
-            </ScrollArea>
-          </div>
-        </div>
-
-
-      </div>
-    )
-  }
-}
-;

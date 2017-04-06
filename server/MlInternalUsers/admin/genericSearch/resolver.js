@@ -627,6 +627,16 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTemplateAssignment.find(query,findOptions).fetch();
     totalRecords=MlTemplateAssignment.find(query,findOptions).count();
   }
+  if(args.module=="hierarchy"){
+    data= MlHierarchy.find(query,findOptions).fetch();
+    let list = []
+    data.map(function (doc,index) {
+      let entry = {"_id":doc._id,"level":doc.level,"module":doc.module,"role":doc.role}
+      list.push(entry)
+    })
+    data=list
+    totalRecords=MlHierarchy.find(query,findOptions).count();
+  }
 
 
   return {'totalRecords':totalRecords,'data':data};
@@ -772,7 +782,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.contactName){
       return 'ContactType'
     }
-    if(data.code){
+    if(data.code&&data.communityName){
       return 'Community'
     }
     if(data.firstName){
@@ -783,6 +793,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.templateProcessName){
       return 'TemplateAssignment'
+    }
+    if(data.module){
+      return 'Hierarchy'
     }
     return null;
   }

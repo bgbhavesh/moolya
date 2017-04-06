@@ -2,6 +2,20 @@
   <library name="meteor-packages-auto-import-browser" type="javaScript">
     <properties>
       <sourceFilesUrls>
+        <item url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_test.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/export_globals.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/import_globals.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/console.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_cordova.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/client.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/isPlainObject.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/server.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/service-configuration/1.0.11/web.browser/service_configuration_common.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/match_test.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/apollo/0.3.1/web.browser/check-npm.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/preamble.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/lookup.js" />
         <item url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/match.js" />
         <item url="file://$USER_HOME$/.meteor/packages/ordered-dict/1.0.9/web.browser/ordered_dict.js" />
         <item url="file://$USER_HOME$/.meteor/packages/webapp/1.3.13/web.browser/webapp_client.js" />
@@ -165,23 +179,23 @@
         <item url="file://$USER_HOME$/.meteor/packages/allow-deny/1.0.5/web.browser/allow-deny-tests.js" />
         <item url="file://$USER_HOME$/.meteor/packages/ejson/1.0.13/web.browser/stringify.js" />
         <item url="file://$USER_HOME$/.meteor/packages/ejson/1.0.13/web.browser/ejson.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_test.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/export_globals.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/import_globals.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/console.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_cordova.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/client.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/isPlainObject.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/server.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/service-configuration/1.0.11/web.browser/service_configuration_common.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/match_test.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/apollo/0.3.1/web.browser/check-npm.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/preamble.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/lookup.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
+      <root url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_test.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/export_globals.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/import_globals.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/console.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_cordova.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/client.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/isPlainObject.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/server.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/service-configuration/1.0.11/web.browser/service_configuration_common.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/match_test.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/apollo/0.3.1/web.browser/check-npm.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/preamble.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/lookup.js" />
       <root url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/match.js" />
       <root url="file://$USER_HOME$/.meteor/packages/ordered-dict/1.0.9/web.browser/ordered_dict.js" />
       <root url="file://$USER_HOME$/.meteor/packages/webapp/1.3.13/web.browser/webapp_client.js" />
@@ -345,20 +359,6 @@
       <root url="file://$USER_HOME$/.meteor/packages/allow-deny/1.0.5/web.browser/allow-deny-tests.js" />
       <root url="file://$USER_HOME$/.meteor/packages/ejson/1.0.13/web.browser/stringify.js" />
       <root url="file://$USER_HOME$/.meteor/packages/ejson/1.0.13/web.browser/ejson.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_test.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/export_globals.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/import_globals.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/console.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/logging/1.1.17/web.browser/logging_cordova.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/client.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/isPlainObject.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/es5-shim/4.6.15/web.browser/server.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/service-configuration/1.0.11/web.browser/service_configuration_common.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/check/1.2.5/web.browser/match_test.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/apollo/0.3.1/web.browser/check-npm.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/preamble.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/lookup.js" />
     </CLASSES>
     <SOURCES />
   </library>

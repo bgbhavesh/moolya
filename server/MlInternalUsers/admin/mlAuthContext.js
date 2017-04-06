@@ -22,7 +22,10 @@ export default function ({req})
 
   const context = {
     userId: user._id,
-    loginToken: token
+    loginToken: token,
+    ip: req.headers['x-forwarded-for'],
+    url: req.headers['referer'],
+    browser: req.headers['user-agent']
   }
 
   // This allows us to pass the userId to other parts in meteor

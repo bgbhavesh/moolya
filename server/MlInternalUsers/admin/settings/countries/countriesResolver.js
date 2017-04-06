@@ -4,7 +4,9 @@ import {createcluster} from '../../clusters/clusterResolver'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{
-    let result=MlCountries.find({},{sort: {country:1,displayName:1}}).fetch();
+    // let result=MlCountries.find({},{sort: {country:1,displayName:1}}).fetch();
+    // let result=MlCountries.find().fetch();
+   let result= mlDBController.find('MlCountries', {}, context, {sort: {country:1,displayName:1}}).fetch()
     let code = 200;
     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
     return result
@@ -12,12 +14,14 @@ MlResolver.MlQueryResolver['fetchCountries'] = (obj, args, context, info) =>{
 MlResolver.MlQueryResolver['fetchCountry'] = (obj, args, context, info) =>{
     let country=null;
     if(args.countryId){
-        country =  MlCountries.findOne({"_id":args.countryId});
+        // country =  MlCountries.findOne({"_id":args.countryId});
+      country =  mlDBController.findOne('MlCountries', {"_id":args.countryId}, context);
     }
     return country?country:null;
 }
 MlResolver.MlQueryResolver['fetchCountriesSearch'] = (obj, args, context, info) =>{
-    return MlCountries.find({}).fetch();
+    // return MlCountries.find({}).fetch();
+    return mlDBController.find('MlCountries', {}, context).fetch();
 }
 
 
@@ -30,15 +34,18 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
       return response;
     }
 
-    let country = MlCountries.findOne({_id: args.countryId});
+    // let country = MlCountries.findOne({_id: args.countryId});
+    let country = mlDBController.findOne('MlCountries', {_id: args.countryId}, context)
     if(country){
         for( key in args.country){
             country[key] = args.country[key]
         }
-        let resp = MlCountries.update({_id:args.countryId}, {$set:country}, {upsert:true})
-        if(resp){
-          let cluster = MlClusters.findOne({"countryId":args.countryId});
-          if(cluster){
+        // let resp = MlCountries.update({_id:args.countryId}, {$set:country}, {upsert:true})
+      let resp = mlDBController.update('MlCountries', args.countryId, country, {$set:true}, context)
+      if(resp){
+          // let cluster = MlClusters.findOne({"countryId":args.countryId});
+        let cluster = mlDBController.findOne('MlClusters', {"countryId":args.countryId}, context)
+        if(cluster){
             let status = {};
             if(country.isActive){
               status= {

@@ -68,14 +68,14 @@ class MlAssignChapterBackendUsers extends React.Component {
       this.setState({selectedBackendUser: userId})
       this.setState({username: userDetails.userName})
       this.setState({userDisplayName: userDetails.displayName})
-      this.setState({alsoAssignedAs: userDetails.alsoAssignedas})
+      // this.setState({alsoAssignedAs: userDetails.alsoAssignedas})
       let alsoAs = userDetails.alsoAssignedas;
       if(alsoAs){
         let alsoArray = _.compact(alsoAs.split(','));
-        this.setState({alsoUser:alsoArray});
-      }else
-        this.setState({alsoUser:[]});
-
+        this.setState({alsoAssignedAs: alsoArray})
+      }else{
+        this.setState({alsoAssignedAs: []})
+      }
       this.find_Chapter_Roles(userId);
       return userDetails;
     }
@@ -199,14 +199,12 @@ class MlAssignChapterBackendUsers extends React.Component {
       }`
     let userDisplayName = this.state.userDisplayName || "";
     let username = this.state.username || "";
-    let alsoAssignedAs = this.state.alsoAssignedAs || "";
     const showLoader = this.state.loading;
     let userid = this.state.selectedBackendUser || "";
     let clusterId = this.state.data && this.state.data.clusterId || "";
     let chapterId = this.state.data && this.state.data.chapterId || "";
     let loggedInUser = getAdminUserContext();
-
-    const alsoUser = this.state.alsoUser && this.state.alsoUser.length > 0 ? this.state.alsoUser : [" "];
+    const alsoUser = this.state.alsoAssignedAs && this.state.alsoAssignedAs.length > 0 ? this.state.alsoAssignedAs : [" "];
     const alsoAssignList = alsoUser.map(function (userAlso, id) {
       return (
         <li key={id}>

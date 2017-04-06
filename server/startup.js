@@ -4,6 +4,8 @@
 import moolyaEmail from './commons/mlEmail'
 import s3Client from './commons/mlS3'
 import MlAuthorization from './mlAuthorization/mlAuthorization'
+import MlDBController from './commons/mlDBController'
+import MlAuditLog from './commons/mlAuditLog'
 
 Meteor.startup(function ()
 {
@@ -21,6 +23,8 @@ Meteor.startup(function ()
     mlEmail = new moolyaEmail();
     mlS3Client = new s3Client();
     mlAuthorization = new MlAuthorization();
+    mlDBController = new MlDBController();
+    mlAuditLog = new MlAuditLog();
 })
 
 //Copied from SSL package..

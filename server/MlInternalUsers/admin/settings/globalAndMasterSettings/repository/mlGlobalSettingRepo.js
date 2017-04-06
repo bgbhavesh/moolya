@@ -10,14 +10,15 @@ export default class MlGlobalSettingRepo{
 
 
 
-  updateGlobalSetting(requestParams){
+  updateGlobalSetting(requestParams, context){
     let settingsObj=null;
     check(requestParams.type,String);
     //fetch the User context
     let userProfile=new MlAdminUserContext().userProfileDetails(this.userId);
 
     //todo:dynamic handling of resource
-     let cluster=MlClusters.findOne(userProfile.defaultProfileHierarchyRefId);
+    //  let cluster=MlClusters.findOne(userProfile.defaultProfileHierarchyRefId);
+    let cluster = mlDBController.findOne('MlClusters', userProfile.defaultProfileHierarchyRefId, context)
      let updateQuery={"hierarchyLevel":3,"hierarchyCode":"CLUSTER","hierarchyRefId":userProfile.defaultProfileHierarchyRefId,"hierarchyRefName":cluster.clusterName};
 
     switch(requestParams.type){
@@ -34,8 +35,10 @@ export default class MlGlobalSettingRepo{
         break;
     }
 
-     MlGlobalSettings.update(updateQuery,{$set:settingsObj},{upsert:true});
-    return MlGlobalSettings.findOne(updateQuery)._id;
+      // MlGlobalSettings.update(updateQuery,{$set:settingsObj},{upsert:true});
+      mlDBController.update('MlGlobalSettings', updateQuery, settingsObj, {$set:true, multi:false, upsert:true}, context)
+    // return MlGlobalSettings.findOne(updateQuery)._id;
+    return mlDBController.findOne('MlGlobalSettings', updateQuery, context)._id;
   }
 
 

@@ -63,6 +63,7 @@ let chapterSchema = `
     type SubChapter{
         _id:String
         clusterId:String
+        isDefaultSubChapter:String
         clusterName: String
         chapterId:String
         subChapterImageLink:String
@@ -101,6 +102,7 @@ let chapterSchema = `
     
     input subChapterObject{
         subChapterId:String,
+        isDefaultSubChapter:String,
         clusterId:String, 
         clusterName:String,
         stateId:String,
@@ -141,6 +143,7 @@ let chapterSchema = `
         fetchActiveSubChapters(id: String):[SubChapter]
         fetchSubChaptersSelectNonMoolya(id: String):[SubChapter]
         fetchActiveClusterChapters(clusters:[String]):[Chapter]
+        fetchActiveStatesChapters(states:[String]):[Chapter]
         fetchActiveChaptersSubChapters(chapters:[String]):[SubChapter],
         fetchSubChaptersForRegistration(id: String):[SubChapter]
     }

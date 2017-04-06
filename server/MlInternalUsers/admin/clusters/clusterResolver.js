@@ -13,7 +13,8 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
     }
 
   let cluster = args.cluster;
-    if(MlClusters.find({countryId:cluster.countryId}).count() > 0){
+    // if(MlClusters.find({countryId:cluster.countryId}).count() > 0){
+    if(mlDBController.find('MlClusters', {countryId:cluster.countryId}, context).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else{
@@ -24,7 +25,8 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
             cluster.latitude = data.results[0].geometry.location.lat;
             cluster.longitude = data.results[0].geometry.location.lng;
           try{
-            let id = MlClusters.insert(cluster);
+            // let id = MlClusters.insert(cluster);
+            let id = mlDBController.insert('MlClusters', cluster, context)
             if(id){
                 MlResolver.MlMutationResolver['createCommunityAccess'](obj, {clusterId:id, moduleName:"CLUSTER", actionName:"CREATE"}, context, info)
 
@@ -48,8 +50,9 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
     return response;
   }
 
-  let cluster = MlClusters.findOne({_id: args.clusterId});
-    if(cluster){
+  // let cluster = MlClusters.findOne({_id: args.clusterId});
+  let cluster = mlDBController.findOne('MlClusters', {_id: args.clusterId}, context)
+  if(cluster){
         for(key in args.cluster){
             cluster[key] = args.cluster[key]
         }
@@ -75,8 +78,9 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
           }
         }
       }
-        let resp = MlClusters.update({_id:args.clusterId}, {$set:cluster}, {upsert:true})
-        if(resp){
+        // let resp = MlClusters.update({_id:args.clusterId}, {$set:cluster}, {upsert:true})
+      let resp = mlDBController.update('MlClusters', args.clusterId, cluster, {$set:true}, context)
+      if(resp){
             let code = 200;
             let result = {cluster: resp}
             let response = new MlRespPayload().successPayload(result, code);
@@ -95,7 +99,8 @@ MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
   }
   if (args._id) {
     var id= args._id;
-    let response= MlClusters.findOne({"_id":id});
+    // let response= MlClusters.findOne({"_id":id});
+    let response = mlDBController.findOne('MlClusters', {"_id":id}, context)
     return response;
   }
 }
@@ -104,7 +109,8 @@ MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.clusterId) {
     var id = args.clusterId;
-    let updatedResponse= MlClusters.update({_id:id}, {$set: args.clusterDetails});
+    // let updatedResponse= MlClusters.update({_id:id}, {$set: args.clusterDetails});
+    let updatedResponse=  mlDBController.update('MlClusters', id, args.clusterDetails, {$set:true}, context)
     return updatedResponse
   }
 }
@@ -112,13 +118,15 @@ MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
 
 
 MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) => {
-      let result=MlClusters.find({isActive:true}).fetch()||[];
+      // let result=MlClusters.find({isActive:true}).fetch()||[];
+      let result = mlDBController.find('MlClusters', {isActive:true}, context).fetch()||[];
       return result;
 }
 
 MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) => {
   let result = [];
-  let clusterData = MlClusters.find({isActive:true}).fetch()||[];
+  // let clusterData = MlClusters.find({isActive:true}).fetch()||[];
+  let clusterData = mlDBController.find('MlClusters', {isActive:true}, context).fetch()||[];
   if(clusterData.length>0){
     result = clusterData;
     result.push({"countryName" : "All", "_id" : "all"});
@@ -138,11 +146,13 @@ MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) =
 
 
  let createcluster = (cluster) =>{
-    if(MlClusters.find({countryId:cluster.countryId}).count() > 0){
+    // if(MlClusters.find({countryId:cluster.countryId}).count() > 0){
+   if(mlDBController.find('MlClusters', {countryId:cluster.countryId}).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }else{
-        let id = MlClusters.insert(cluster);
+        // let id = MlClusters.insert(cluster);
+     let id= mlDBController.insert('MlClusters', cluster)
         if(id){
             let code = 200;
             let result = {clusterid: id}

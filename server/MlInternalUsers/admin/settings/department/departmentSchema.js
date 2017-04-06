@@ -48,7 +48,6 @@ let departmentSchema = `
     }
     type Query{
         findDepartment(departmentId:String):Department
-        findDepartments:String
         fetchDepartments:[Department]
         fetchActiveDepartment:[Department]
         fetchMoolyaBasedDepartment(isMoolya:Boolean):[Department]
@@ -58,3 +57,4 @@ let departmentSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
+// findDepartments:String

@@ -2,12 +2,18 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'
+
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
 
 
 export default class MlIdeatorDetails extends React.Component{
+  constructor(props){
+      super(props)
+      this.onClick.bind(this);
+  }
   componentDidMount()
   {
     $(function() {
@@ -21,9 +27,16 @@ export default class MlIdeatorDetails extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+  }
 
+  onClick(){
+      FlowRouter.go('/admin/portfolio/about')
+      // return (
+      //     <MlIdeatorPortfolioAbout />
+      // )
 
   }
+
   render(){
     return (
       <div className="admin_main_wrap">
@@ -43,7 +56,7 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group">
                       <input type="text" placeholder="First Name" className="form-control float-label" id="cluster_name" defaultValue="Ravi"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <FontAwesome name='unlock' className="password_icon" onClick={this.onClick}/>
                     </div>
 
                     <div className="form-group">

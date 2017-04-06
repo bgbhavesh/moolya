@@ -65,3 +65,7 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolio'] = (obj, args, context, info)
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioRequests'] = (obj, args, context, info) => {
 
 }
+
+MlResolver.MlQueryResolver['fetchPortfolioMenu'] = (obj, args, context, info) => {
+    return MlPortfolioMenu.findOne({"$and":[{communityType:args.communityType}, {templateName:args.templateName}]});
+}

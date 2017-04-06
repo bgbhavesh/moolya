@@ -12,11 +12,16 @@ let HierarchySchema = `
       departmentId        : String
       departmentName      : String
       subDepartmentId     : String
-      subDepartmentName   : String     
+      subDepartmentName   : String
+       isMoolya           : Boolean
     }    
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
+        fetchRolesForDepartment(departmentId:String):[Roles]
+        fetchRolesForHierarchy(departmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String): [Roles]
+        fetchRolesForFinalApprovalHierarchy(departmentId:String): [Roles]
+        fetchAssignedRoles(departmentId:String,type:String):[Roles]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);

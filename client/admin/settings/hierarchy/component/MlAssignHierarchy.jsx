@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
+import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
 
 var options = [
   {
@@ -20,6 +21,34 @@ var options = [
 ];
 
 export default class MlAssignHierarchy extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state={
+      assignedRoles:[]
+    }
+    return this;
+  }
+
+  async findRoles(type) {
+    //get deptId
+    let departmnetId = '';
+    const response = await findAssignedRolesActionHandler(departmnetId,type);
+    console.log(response);
+    let roles=[];
+    if(response){
+      roles = response||[];
+    }
+    return roles;
+  }
+
+  getAssignedRoles(type){
+    console.log("context : "+type);
+    const roles=this.findRoles(type);
+    this.setState({assignedRoles:roles||[]})
+    console.log(this.state.assignedRoles);
+  }
+
   render() {
     return (
       <div>
@@ -86,7 +115,7 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onClick={this.getAssignedRoles.bind(this,'cluster')}>
                   Cluster
                 </a>
               </h4>
@@ -98,26 +127,7 @@ export default class MlAssignHierarchy extends React.Component {
                     <Select name="form-field-name" value="select"  options={options}  className="float-label" />
                   </div>
                 </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
+
               </div>
               </div>
             </div>
@@ -125,33 +135,14 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onClick={this.getAssignedRoles.bind(this,'chapter')}>
                   Chapter
                 </a>
               </h4>
             </div>
             <div id="collapseTwo" className="panel-collapse collapse">
               <div className="panel-body">            <div className="row">
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
+
                 <div className="col-md-4">
                   <div className="form-group">
                     <Select name="form-field-name" value="select"  options={options}  className="float-label" />
@@ -164,7 +155,7 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" onClick={this.getAssignedRoles.bind(this,'community')}>
                   Community
                 </a>
               </h4>
@@ -176,26 +167,7 @@ export default class MlAssignHierarchy extends React.Component {
                     <Select name="form-field-name" value="select"  options={options}  className="float-label" />
                   </div>
                 </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
+
               </div>
               </div>
             </div>

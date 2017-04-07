@@ -6,6 +6,9 @@ var FontAwesome = require('react-fontawesome');
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
+var Select = require('react-select');
+var FontAwesome = require('react-fontawesome');
 
 var options = [
   {
@@ -32,8 +35,20 @@ export default class MlAssignHierarchy extends React.Component {
     }
     return this;
   }
+  componentWillMount(){
+    const resp=this.findDeptRoles();
+    return resp;
+  }
+  async findDeptRoles(){
+    let departmentInfo=this.props.departmentInfo
+    let departmentId=departmentInfo.departmentId
+    const response = await findDeptRolesActionHandler(departmentId);
+    if(response){
+      console.log(response)
+    }
+  }
   optionsBySelectDepartment(val){
-    this.setState({department:val})
+      this.setState({department:val})
   }
   optionsBySelectSubDepartment(val){
     this.setState({subDepartment:val});
@@ -73,9 +88,15 @@ export default class MlAssignHierarchy extends React.Component {
         label:subDepartmentName
       }
     }`
+
+
+
     return (
       <div>
         <div className="row table_row_class">
+         {/* <div className="col-md-4">test</div>
+          <div className="col-md-4">test2</div>
+          <div className="col-md-4">test3</div>*/}
         </div>
         <div className="panel panel-default">
           <div className="panel-heading">Final Approval</div>

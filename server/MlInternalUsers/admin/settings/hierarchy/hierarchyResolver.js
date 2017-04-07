@@ -23,7 +23,7 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
 }
 
 
-MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) => { // reporting role
   let roles = [];
   let levelCode = ""
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
@@ -69,7 +69,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   return roles;
 }
 
-MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => { //
   let roles = [];
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)

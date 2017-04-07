@@ -3,7 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
+var Select = require('react-select');
+var FontAwesome = require('react-fontawesome');
 
 var options = [
   {
@@ -21,13 +26,32 @@ var options = [
 ];
 
 export default class MlAssignHierarchy extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state={
+      department:null,
+      subDepartment:null,
       assignedRoles:[]
     }
     return this;
+  }
+  componentWillMount(){
+    const resp=this.findDeptRoles();
+    return resp;
+  }
+  async findDeptRoles(){
+    let departmentInfo=this.props.departmentInfo
+    let departmentId=departmentInfo.departmentId
+    const response = await findDeptRolesActionHandler(departmentId);
+    if(response){
+      console.log(response)
+    }
+  }
+  optionsBySelectDepartment(val){
+      this.setState({department:val})
+  }
+  optionsBySelectSubDepartment(val){
+    this.setState({subDepartment:val});
   }
 
   async findRoles(type) {
@@ -50,26 +74,39 @@ export default class MlAssignHierarchy extends React.Component {
   }
 
   render() {
+    let departmentInfo=this.props.departmentInfo
+    let isMoolya=departmentInfo.isMoolya
+    let departmentqueryOptions = {options: {variables: {isMoolya:isMoolya }}};
+    let departmentQuery = gql` query($isMoolya:Boolean){
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+          }
+          `;
+    let subDepartmentOptions = {options: { variables: {id:this.state.department}}};
+    let subDepartmentquery=gql`query($id:String){
+      data:fetchSubDepartments(id:$id) {
+        value:_id
+        label:subDepartmentName
+      }
+    }`
+
+
+
     return (
       <div>
         <div className="row table_row_class">
-          <div className="col-md-4">test</div>
+         {/* <div className="col-md-4">test</div>
           <div className="col-md-4">test2</div>
-          <div className="col-md-4">test3</div>
+          <div className="col-md-4">test3</div>*/}
         </div>
         <div className="panel panel-default">
           <div className="panel-heading">Final Approval</div>
           <div className="panel-body">
             <div className="row">
               <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Department"  selectedValue={this.state.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={this.optionsBySelectDepartment.bind(this)} />
               </div>
               <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Sub-Department" selectedValue={this.state.subDepartment} queryType={"graphql"} query={subDepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={this.optionsBySelectSubDepartment.bind(this)} />
               </div>
               <div className="col-md-4">
                 <div className="form-group">
@@ -88,26 +125,7 @@ export default class MlAssignHierarchy extends React.Component {
                   <Select name="form-field-name" value="select"  options={options}  className="float-label" />
                 </div>
               </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -155,7 +173,7 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" onClick={this.getAssignedRoles.bind(this,'community')}>
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"  onClick={this.getAssignedRoles.bind(this,'community')}>
                   Community
                 </a>
               </h4>

@@ -17,7 +17,7 @@ class MlTemplateEngine{
   }
 
 
-  fetchTemplate(subProcess,templateName,userType){
+  fetchTemplate(subProcess,templateName,userType, mode){
     switch(subProcess){
       case 'Registration':
          let template=mlRegistrationTemplates.getTemplate(templateName,userType);

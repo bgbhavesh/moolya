@@ -66,7 +66,8 @@ MlResolver.MlQueryResolver['fetchAssignedTemplate']=(obj, args, context, info) =
     let subProcess=args.subProcess;
     let recordId=args.recordId;
     let stepCode=args.stepCode;
-    let template=mlTemplateAssignmentRepo.fetchTemplate(process,subProcess,stepCode,recordId);
+    let mode = args.mode;
+    let template=mlTemplateAssignmentRepo.fetchTemplate(process,subProcess,stepCode,recordId, mode);
     return template;
   }
       return null;

@@ -2,8 +2,9 @@
  * Created by venkatasrinag on 5/4/17.
  */
 import React from 'react';
-import TabPanel from 'react-tab-panel'
-import '../../../stylesheets/tab.css'
+import Tabs from 'react-responsive-tabs';
+import 'react-responsive-tabs/styles.css'
+
 export default class MlTabComponent extends React.Component {
     constructor(props){
         super(props)
@@ -17,6 +18,6 @@ export default class MlTabComponent extends React.Component {
 
     render() {
       let tabs = this.state.tabs;
-      return <TabPanel tabAlign="center" tabPosition="top" onActivate={this.onActivate}>{tabs}</TabPanel>
+      return <Tabs items={tabs} onChange={this.onActivate} />;
     }
 }

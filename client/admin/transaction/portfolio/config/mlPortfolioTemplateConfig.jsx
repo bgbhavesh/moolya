@@ -1,6 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag'
 import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
+import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
@@ -45,3 +46,5 @@ const mlStartupViewExternalUserPortfolioTemplateConfig={
   stepName:'Portfolio-Startup',
   // component:IdeatorCompanyHardReg
 };
+
+mlRegistrationTemplates.setTemplate(mlIdeatorEditExternalUserPortfolioTemplateConfig);

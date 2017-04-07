@@ -49,7 +49,7 @@ export default class MlAssignHierarchy extends React.Component {
     }
     return this;
   }
-  componentWillMount(){
+  componentWillUpdate(){
     const resp=this.findDeptRoles();
     return resp;
   }

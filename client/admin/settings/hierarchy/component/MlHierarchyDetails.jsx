@@ -19,11 +19,25 @@ export default class MlHierarchyDetails extends React.Component {
     this.state={
       loading:true,data:{},
       hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentName:'',isMoolya:''}],
-      unassignedRoles:[]
+      unassignedRoles:[],
+      assignedRoles:[],
+      finalApproval:null
     }
     return this;
   }
 
+  getAssignRoleDetails(details){
+    console.log(details);
+    this.setState({'assignedRoles':details})
+  }
+  getUnAssignRoleDetails(details){
+    console.log(details);
+    this.setState({'unassignedRoles':details})
+  }
+  getFinalApprovalDetails(details){
+    console.log(details);
+    this.setState({'finalApproval':details})
+  }
   componentDidMount() {
     $('.switch input').change(function() {
       if ($(this).is(':checked')) {
@@ -74,18 +88,23 @@ export default class MlHierarchyDetails extends React.Component {
 
   expandComponent(row) {
     return (
-      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId}/>
+      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} getFinalApprovalDetails={this.getFinalApprovalDetails.bind(this)}/>
     );
   }
+  updateHierarchy(){
+    const resp=this.updateunassignedRoles();
+    toastr.success("Update Successful");
+    return resp;
+  }
   render() {
+
     let MlActionConfig = [
       {
         actionName: 'edit',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: this.updateHierarchy.bind(this)
       }
-
-    ]
+    ];
     const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
     };
@@ -96,6 +115,7 @@ export default class MlHierarchyDetails extends React.Component {
       clickToExpand: true // click to expand row, default is false
     };
     return (
+
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Select Department</h2>

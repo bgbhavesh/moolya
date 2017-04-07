@@ -34,8 +34,8 @@ MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, inf
   let roles = args.roles;
   if (roles) {
       roles.map(function (role) {
-      if (role._id) {
-        let result = mlDBController.update('MlRoles', {_id:role._id}, {"teamStructureAssignment" : role.teamStructureAssignment}, {$set:true, multi:true}, context)
+      if (role.id) {
+        let result = mlDBController.update('MlRoles', {_id:role.id}, {"teamStructureAssignment" : role.teamStructureAssignment}, {$set:true, multi:true}, context)
         let code = 200;
         response = new MlRespPayload().successPayload(result, code);
        // responses.push(response)
@@ -45,7 +45,7 @@ MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, inf
   }
 };
 
-MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) => { // reporting role
+MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info) => { // reporting role
   let roles = [];
   let levelCode = ""
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)

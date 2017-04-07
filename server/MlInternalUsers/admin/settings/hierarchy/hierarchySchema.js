@@ -3,18 +3,33 @@ import MlSchemaDef from '../../mlAdminSchemaDef'
 let HierarchySchema = `
     type Hierarchy
     {
-      _id       : String
-      level     : String
-      module    : String
-      role      : String
+      _id                 : String
+      level               : String
+      module              : String
+      role                : String
     } 
     type DepartmentAndSubDepartmentDetails{
       departmentId        : String
       departmentName      : String
       subDepartmentId     : String
       subDepartmentName   : String
-       isMoolya           : Boolean
+      isMoolya            : Boolean
+      FinalApproval       : FinalApproval
     }    
+    input FinalApprovalInput{
+      parentDepartment    : String
+      parentSubDepartment : String
+      department          : String
+      subDepartment       : String
+      role                : String
+    }
+    type FinalApproval{
+      parentDepartment    : String
+      parentSubDepartment : String
+      department          : String
+      subDepartment       : String
+      role                : String
+    }
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]

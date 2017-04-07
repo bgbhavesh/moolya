@@ -20,11 +20,11 @@ export async function findAssignedRolesActionHandler(departmentId,type) {
         }
     `,
     variables: {
-      $departmentId:did,
+      departmentId:did,
       type : type
     },
     forceFetch:true
   })
-  const id = result.data.fetchRolesForDepartment;
+  const id = result.data.fetchAssignedRoles;
   return id
 }

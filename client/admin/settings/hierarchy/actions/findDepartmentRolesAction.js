@@ -12,6 +12,11 @@ export async function findDeptRolesActionHandler(department) {
            displayName
            roleType           
            isActive
+            teamStructureAssignment {
+              isAssigned
+              assignedLevel
+              reportingRole
+            }
          } 
         }
     `,

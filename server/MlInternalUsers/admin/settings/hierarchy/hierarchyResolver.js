@@ -22,6 +22,28 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
   return list;
 }
 
+MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, info) => {
+ /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+*/
+  let response ;
+  let roles = args.roles;
+  if (roles) {
+      roles.map(function (role) {
+      if (role._id) {
+        let result = mlDBController.update('MlRoles', {_id:role._id}, {"teamStructureAssignment" : role.teamStructureAssignment}, {$set:true, multi:true}, context)
+        let code = 200;
+        response = new MlRespPayload().successPayload(result, code);
+       // responses.push(response)
+      }
+    })
+    return response
+  }
+};
 
 MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info) => {
   let roles = [];

@@ -31,7 +31,8 @@ export default class MlAssignHierarchy extends React.Component {
     this.state={
       department:null,
       subDepartment:null,
-      assignedRoles:[]
+      assignedRoles:[],
+      unAssignedRoles:[{id:"",roleName:"",displayName:"",roleType:"",teamStructureAssignment:{isAssigned:"",assignedLevel:"",reportingRole:""}}]
     }
     return this;
   }
@@ -41,11 +42,33 @@ export default class MlAssignHierarchy extends React.Component {
   }
   async findDeptRoles(){
     let departmentInfo=this.props.departmentInfo
-    let departmentId=departmentInfo.departmentId
-    const response = await findDeptRolesActionHandler(departmentId);
-    if(response){
-      console.log(response)
+    if(departmentInfo!=undefined){
+      let departmentId=departmentInfo.departmentId
+      const response = await findDeptRolesActionHandler(departmentId);
+      if(response){
+        let roleDetails=[]
+        for(let i=0;i<response.length;i++){
+          let teamAssignment=response[i].teamStructureAssignment
+
+          if(teamAssignment!=undefined&&teamAssignment.isAssigned==false) {
+            let json = {
+              id: response[i]._id,
+              roleName: response[i].roleName,
+              displayName: response[i].displayName,
+              roleType: "Internal User",
+              teamStructureAssignment:{
+                isAssigned:false,
+                assignedLevel:"",
+                reportingRole:""
+              }
+            }
+            roleDetails.push(json);
+          }
+        }
+        this.setState({unAssignedRoles:roleDetails})
+      }
     }
+
   }
   optionsBySelectDepartment(val){
       this.setState({department:val})
@@ -94,9 +117,6 @@ export default class MlAssignHierarchy extends React.Component {
     return (
       <div>
         <div className="row table_row_class">
-         {/* <div className="col-md-4">test</div>
-          <div className="col-md-4">test2</div>
-          <div className="col-md-4">test3</div>*/}
         </div>
         <div className="panel panel-default">
           <div className="panel-heading">Final Approval</div>
@@ -119,7 +139,29 @@ export default class MlAssignHierarchy extends React.Component {
         <div className="panel panel-default">
           <div className="panel-heading">Un Assigned Role</div>
           <div className="panel-body">
-            <div className="row">
+            {this.state.unAssignedRoles.map(function (roles,id) {
+              return(
+            <div className="row" key={roles.id}>
+              <div className="col-md-4">
+                <div className="form-group">
+                  <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="form-group">
+                  <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="form-group">
+                  <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="form-group">
+                  <Select name="form-field-name" value="select"  options={options}  placeholder="Parent Node"className="float-label" />
+                </div>
+              </div>
               <div className="col-md-4">
                 <div className="form-group">
                   <Select name="form-field-name" value="select"  options={options}  className="float-label" />
@@ -127,6 +169,10 @@ export default class MlAssignHierarchy extends React.Component {
               </div>
 
             </div>
+              )
+            })
+
+            }
           </div>
         </div>
         <div className="panel-group" id="accordion">

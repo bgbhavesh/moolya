@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 
@@ -31,6 +32,18 @@ export default class MlAssignHierarchy extends React.Component {
     }
     return this;
   }
+  componentWillMount(){
+    const resp=this.findDeptRoles();
+    return resp;
+  }
+  async findDeptRoles(){
+    let departmentInfo=this.props.departmentInfo
+    let departmentId=departmentInfo.departmentId
+    const response = await findDeptRolesActionHandler(departmentId);
+    if(response){
+      console.log(response)
+    }
+  }
   optionsBySelectDepartment(val){
       this.setState({department:val})
   }
@@ -52,6 +65,9 @@ export default class MlAssignHierarchy extends React.Component {
         label:subDepartmentName
       }
     }`
+
+
+
     return (
       <div>
         <div className="row table_row_class">
@@ -78,7 +94,7 @@ export default class MlAssignHierarchy extends React.Component {
           </div>
         </div>
         <div className="panel panel-default">
-          <div className="panel-heading">Un Assigned Role</div>
+          <div className="panel-heading">Un Assigned Roles</div>
           <div className="panel-body">
             <div className="row">
               <div className="col-md-4">

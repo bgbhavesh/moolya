@@ -7,6 +7,9 @@ var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 import {findDeptAndsubDeptActionHandler} from '../actions/findDeptAndsubDeptAction';
 import MlAssignHierarchy from './MlAssignHierarchy';
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import formHandler from '../../../../commons/containers/MlFormHandler';
+import {updateRolesActionHandler} from '../actions/updateRolesAction'
 
 
 export default class MlHierarchyDetails extends React.Component {
@@ -15,7 +18,8 @@ export default class MlHierarchyDetails extends React.Component {
     super(props);
     this.state={
       loading:true,data:{},
-      hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentName:'',isMoolya:''}]
+      hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentName:'',isMoolya:''}],
+      unassignedRoles:[]
     }
     return this;
   }
@@ -53,6 +57,15 @@ export default class MlHierarchyDetails extends React.Component {
 
   }
 
+  async  updateunassignedRoles() {
+    let roles = {
+      roleObject : this.state.unassignedRoles
+    }
+    const response = await updateRolesActionHandler(roles);
+    return response;
+  }
+
+
 
   isExpandableRow(row) {
     if (row.departmentId!=undefined) return true;
@@ -65,6 +78,14 @@ export default class MlHierarchyDetails extends React.Component {
     );
   }
   render() {
+    let MlActionConfig = [
+      {
+        actionName: 'edit',
+        showAction: true,
+        handler: async(event) => this.props.handler(this.updateAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+      }
+
+    ]
     const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
     };
@@ -102,6 +123,7 @@ export default class MlHierarchyDetails extends React.Component {
             </ScrollArea>
           </div>
         </div>
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )
   }

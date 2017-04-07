@@ -21,6 +21,10 @@ let HierarchySchema = `
         fetchRolesForDepartment(departmentId:String):[Roles]
         fetchRolesForHierarchy(departmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String): [Roles]
         fetchRolesForFinalApprovalHierarchy(departmentId:String): [Roles]
+        fetchAssignedRoles(departmentId:String,type:String):[Roles]
+    }
+    type Mutation{
+        updateHierarchyRoles(roles:[roleObject]):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);

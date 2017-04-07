@@ -3,7 +3,7 @@ import MlSchemaDef from '../mlAdminSchemaDef'
 
 
 let contextSpecificSearch = `
-union ContextSpecSearchResult = Cluster | Chapter | SubChapter  | Community | MasterSettings
+union ContextSpecSearchResult = Cluster | Chapter | SubChapter  | Community | MasterSettings | AuditLogs
 
 
 type ContextSpecSearchResp {
@@ -16,7 +16,8 @@ input ContextParams{
    chapterId:String,
    subChapterId:String,
    communityId:String,
-   settingsType:String
+   settingsType:String,
+   moduleName: String
 }
 
 input SearchSpec{

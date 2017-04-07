@@ -95,8 +95,15 @@ const mlProcessTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          console.log(data)
-          FlowRouter.go("/admin/documents/"+data.id+"/"+data.documents[0].category+"/"+data.documents[0].type);
+          let documents=data.documents
+          for(let i=0;i<documents.length;i++){
+            if(documents[i].isActive){
+
+              FlowRouter.go("/admin/documents/"+data.id+"/"+documents[i].category+"/"+documents[i].type);
+              i=documents.length;
+            }
+          }
+
 
         } else{
           alert("Please select a Process Document Type");

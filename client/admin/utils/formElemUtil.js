@@ -63,3 +63,16 @@ export function passwordVisibilityHandler(){
     }
   });
 }
+export function dataVisibilityHandler(){
+  $('.input_icon').unbind().click(function(){
+    if($(this).hasClass('un_lock')){
+      // $(this).parents('.form-group').find('input').attr('type','text');
+      $(this).removeClass('un_lock').removeClass('fa-unlock').addClass('fa-lock');
+      $(this).parents('.form-group').find('#makePrivate').prop('checked',true);
+    }else{
+      // $(this).parents('.form-group').find('input').attr('type','text');
+      $(this).addClass('un_lock').removeClass('fa-lock').addClass('fa-unlock');
+      $(this).parents('.form-group').find('#makePrivate').prop('checked',false);
+    }
+  });
+}

@@ -74,7 +74,7 @@ export default class MlHierarchyDetails extends React.Component {
 
   expandComponent(row) {
     return (
-      <MlAssignHierarchy departmentInfo={row} />
+      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId}/>
     );
   }
   render() {

@@ -3,6 +3,9 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
 
 var options = [
   {

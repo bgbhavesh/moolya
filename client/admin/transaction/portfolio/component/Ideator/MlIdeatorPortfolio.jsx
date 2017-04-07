@@ -10,13 +10,18 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
     constructor(props){
         super(props)
         this.state =  {tabs: []};
+        this.getIdeatorDetails.bind(this);
+    }
+
+    getIdeatorDetails(details){
+        console.log(details);
     }
 
     getTabComponents(){
         let tabs = [
-          {tabClassName: 'tab', panelClassName: 'panel', title:"first tab" , component:<MlIdeatorDetails key="1"/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"second tab", component:<div  key="2"> second </div>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"third tab", component:<div key="3"> third </div>}
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1" getIdeatorDetails={this.getIdeatorDetails}/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<div  key="2"> second </div>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Problem Solutions", component:<div key="3"> third </div>}
         ]
         return tabs;
     }

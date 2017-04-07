@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {findPortfolioActionHandler} from '../actions/findPortfolioDetails'
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 
 export default class MlPortfolio extends React.Component{
     constructor(props){
@@ -10,6 +11,7 @@ export default class MlPortfolio extends React.Component{
         this.state = {editComponent:''}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
+        this.getPortfolioDetails.bind(this);
         return this;
     }
 
@@ -27,7 +29,23 @@ export default class MlPortfolio extends React.Component{
         const reg= await fetchTemplateHandler({process:"Portfolio",subProcess:"Portfolio", stepCode:"Portfolio", recordId:""});
     }
 
+    getPortfolioDetails(details){
+
+    }
+
     render(){
+        let MlActionConfig = [
+          {
+            actionName: 'save',
+            showAction: true,
+            handler: null
+          },
+          {
+            showAction: true,
+            actionName: 'cancel',
+            handler: null
+          }
+        ]
         let EditComponent=this.state.editComponent;
         let hasComponent = false
         if(EditComponent != "")
@@ -38,9 +56,10 @@ export default class MlPortfolio extends React.Component{
             {showLoader===true?( <div className="loader_wrap"></div>):(
               <div className="admin_padding_wrap">
                 <div className='step-progress' >
-                  {hasComponent && <EditComponent/>}
+                  {hasComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails}/>}
                 </div>
               </div>)}
+              <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>
         )
     }

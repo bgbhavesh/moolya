@@ -13,6 +13,7 @@ export default class MlIdeatorDetails extends React.Component{
   constructor(props){
       super(props)
       this.onClick.bind(this);
+      this.getDetails.bind(this);
   }
   componentDidMount()
   {
@@ -31,13 +32,17 @@ export default class MlIdeatorDetails extends React.Component{
 
   onClick(){
       FlowRouter.go('/admin/portfolio/about')
-      // return (
-      //     <MlIdeatorPortfolioAbout />
-      // )
-
   }
 
-  render(){
+  getDetails(){
+  }
+
+  onChange(event){
+      this.setState({details})
+  }
+
+  render()
+  {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -55,7 +60,7 @@ export default class MlIdeatorDetails extends React.Component{
                   <form>
 
                     <div className="form-group">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id="cluster_name" defaultValue="Ravi"/>
+                      <input type="text" placeholder="First Name" className="form-control float-label" id="cluster_name" defaultValue="Ravi" onChange={this.onChange}/>
                       <FontAwesome name='unlock' className="password_icon" onClick={this.onClick}/>
                     </div>
 

@@ -16,6 +16,7 @@ import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssign
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlClusterCommunityDetails from '../../admin/cluster/components/MlClusterCommunityDetails'
+import MlAuditHistory from '../../admin/auditHistory/components/MlHistoryList'
 
 adminSection.route('/clusters', {
   name: 'cluster',
@@ -105,5 +106,12 @@ adminSection.route('/clusters/:clusterId/assignusers', {
   name: 'cluster_assignusers',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
+  }
+});
+
+adminSection.route('/clusters/:clusterId/history', {
+  name: 'cluster_history',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlAuditHistory params={params}/>})
   }
 });

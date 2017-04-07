@@ -1,7 +1,7 @@
 import async from 'async';
 import each from 'async/each';
+import _ from 'lodash';
 var diff = require('deep-diff').diff;
-// import MlModuleCollectionMap from '../../lib/common/commonSchemas';
 
 class MlAuditLog {
   constructor(){
@@ -36,10 +36,22 @@ class MlAuditLog {
       let oldValue = {};
       let newValue = auditParams.queryPayload;
       var differences = diff(oldValue, newValue);
-      // toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
+      toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
       async.each(differences, function (say, callback) {
         toInsert.action=say.kind;
-        toInsert.field=JSON.stringify(say.path);
+        if(_.head(say.path) == 0){
+          say.path.splice(0,1);
+        }
+
+        let fieldPath = say.path;
+        toInsert.field=_.join(say.path, '.');
+        _.find(fieldPath, function (value, key) {
+          if(_.isNumber(value)){
+            fieldPath.splice(key, 1);
+          }
+        })
+        toInsert.fieldName = _.join(fieldPath, '.')
+
         toInsert.previousValue=JSON.stringify(say.lhs)
         toInsert.currentValue=JSON.stringify(say.rhs)
         MlAudit.insert(toInsert);
@@ -87,21 +99,30 @@ class MlAuditLog {
     let oldValue = auditParams.oldValue;
     let newValue = auditParams.newValue;
     var differences = diff(oldValue, newValue);
-    // toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
+    toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
     async.each(differences, function (say, callback) {
       toInsert.action=say.kind;
-      toInsert.field=JSON.stringify(say.path);
+      if(_.head(say.path) == 0){
+        say.path.splice(0,1);
+      }
+
+      let fieldPath = say.path;
+      toInsert.field=_.join(say.path, '.');
+      _.find(fieldPath, function (value, key) {
+          if(_.isNumber(value)){
+            fieldPath.splice(key, 1);
+          }
+      })
+      toInsert.fieldName = _.join(fieldPath, '.')
+
       if(say.lhs || say.rhs){
         toInsert.previousValue = JSON.stringify(say.lhs)
         toInsert.currentValue = JSON.stringify(say.rhs)
       }else{
         if(say.item){
-          if(say.item.kind == 'D'){
-            toInsert.previousValue = JSON.stringify(say.item)
-            toInsert.currentValue = ''
-          }else {
-            toInsert.previousValue = ''
-            toInsert.currentValue = JSON.stringify(say.item)
+          if(say.item.kind){
+            toInsert.previousValue = JSON.stringify(say.item.lhs)
+            toInsert.currentValue = JSON.stringify(say.item.rhs)
           }
         }
       }

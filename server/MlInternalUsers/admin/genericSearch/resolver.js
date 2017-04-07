@@ -142,10 +142,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlRequestType.find(query,findOptions).fetch();
     totalRecords=MlRequestType.find(query,findOptions).count();
   }
-  if(args.module=="permission"){
-    // data= MlPermissions.find(query,findOptions).fetch();
-    // totalRecords=MlPermissions.find(query,findOptions).count();
-  }
   if(args.module=="countries"){
     data= MlCountries.find(query,findOptions).fetch();
     totalRecords=MlCountries.find(query,findOptions).count();
@@ -248,8 +244,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlDocumentMapping.find(query,findOptions).count();
   }
   if(args.module=="transaction"){
-    data= MlTransactions.find(query,findOptions).fetch();
-    totalRecords=MlTransactions.find(query,findOptions).count();
+    data= MlTransactionTypes.find(query,findOptions).fetch();
+    totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
   if(args.module=="template"){
     data= MlTemplateTypes.find(query,findOptions).fetch();
@@ -679,9 +675,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.requestName){
       return 'Requests'
-    }
-    if (data.permissionName) {
-      return 'Permissions';
     }
     if(data.userTypeName){
       return 'UserTypes'

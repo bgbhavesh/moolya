@@ -26,17 +26,25 @@ export default class DocumentViewer extends React.Component{
     let file=document.getElementById(docTypeId+documentId).files[0];
     this.props.onFileUpload(file,documentId,docTypeId);
   }
-  onDocSelect(documentId,event){
+  onDocSelect(documentId,docTypeId,event){
     if(event.target.checked){
       let selectedDocs=this.props.selectedDocuments
       selectedDocs.push(documentId);
-     // this.setState({selectedDocuments:selectedDocs})
-      this.props.onDocumentSelect(selectedDocs);
+      let selectedDocType=this.props.selectedDocType
+      selectedDocType.push(docTypeId);
+      this.props.onDocumentSelect(selectedDocs,selectedDocType);
     }else{
-    let selectedDocs=this.state.selectedDocuments
-    selectedDocs.pop(documentId);
-    //  this.setState({selectedDocuments:selectedDocs})
-      this.props.onDocumentSelect(selectedDocs);
+    let selectedDocs=this.props.selectedDocuments
+      var index = selectedDocs.indexOf(documentId);
+      if (index > -1) {
+        selectedDocs.splice(index, 1);
+      }
+      let selectedDocType=this.props.selectedDocType
+      var index = selectedDocType.indexOf(docTypeId);
+      if (index > -1) {
+        selectedDocType.splice(index, 1);
+      }
+      this.props.onDocumentSelect(selectedDocs,selectedDocType);
     }
   }
   OnFileRemove(docTypeId,documentId,fileId){
@@ -54,7 +62,7 @@ export default class DocumentViewer extends React.Component{
       <div className="col-lg-4">
            <div className="panel panel-default uploaded_files">
            <div className="panel-heading">
-           <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}{mandatory}</label></div>
+           <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId,doc.docTypeId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}{mandatory}</label></div>
            <div className="pull-right block_action">
            <div className="fileUpload upload_file_mask">
            <a href="javascript:void(0);"><span className="ml ml-upload"></span>

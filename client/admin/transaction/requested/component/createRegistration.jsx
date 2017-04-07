@@ -49,7 +49,7 @@ export default class MlCreateRegistration extends React.Component{
 
         firstName       :  this.refs.firstName.value,
         lastName        :  this.refs.lastName.value,
-        countryId     :  this.state.country,
+        countryId       :  this.state.country,
         contactNumber   :  this.refs.contactNumber.value,
         email           :  this.refs.email.value,
         cityId          :  this.state.selectedCity,
@@ -64,7 +64,8 @@ export default class MlCreateRegistration extends React.Component{
         referralType    :  this.state.refered,
         clusterId       :  this.state.cluster,
         chapterId       :  this.state.chapter,
-        communityName  :  this.state.coummunityName,
+        communityName   :  this.state.coummunityName,
+        source          :  this.refs.source.value
 
     }
     const response = await createRegistrationInfo(Details);
@@ -75,7 +76,6 @@ export default class MlCreateRegistration extends React.Component{
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
    }
-
 
 
   optionsBySelectCountry(value){
@@ -243,7 +243,7 @@ export default class MlCreateRegistration extends React.Component{
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
                     <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} />
                     <div className="form-group">
-                      <input type="text" placeholder="Source"  className="form-control float-label" id=""/>
+                      <input ref="source" type="text" placeholder="Source"  className="form-control float-label"  id=""/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Device name" className="form-control float-label" id=""/>

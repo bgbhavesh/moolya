@@ -1,10 +1,15 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import ScrollArea from 'react-scrollbar';
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
+var Select = require('react-select');
+var FontAwesome = require('react-fontawesome');
+
 var options = [
   {
     value: 'select',
@@ -19,47 +24,89 @@ var options = [
     label: 'Two'
   }
 ];
-const taxes = [{
-  id: 1,
-  taxName: 'Sys Admin',
-  percentage: 'Active'
-}, {
-  id: 2,
-  taxName: 'Sales Tax',
-  percentage: '3%'
-},
-  {
-    id: 3,
-    taxName: 'Octroi',
-    percentage: '3.5%-5%'
-  }, {
-    id: 4,
-    taxName: 'VAT',
-    percentage: '5%'
-  }];
 
-class MlAssignHierarchy extends React.Component {
+export default class MlAssignHierarchy extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      department:null,
+      subDepartment:null,
+      assignedRoles:[]
+    }
+    return this;
+  }
+  componentWillMount(){
+    const resp=this.findDeptRoles();
+    return resp;
+  }
+  async findDeptRoles(){
+    let departmentInfo=this.props.departmentInfo
+    let departmentId=departmentInfo.departmentId
+    const response = await findDeptRolesActionHandler(departmentId);
+    if(response){
+      console.log(response)
+    }
+  }
+  optionsBySelectDepartment(val){
+      this.setState({department:val})
+  }
+  optionsBySelectSubDepartment(val){
+    this.setState({subDepartment:val});
+  }
+
+  async findRoles(type) {
+    //get deptId
+    let departmnetId = '';
+    const response = await findAssignedRolesActionHandler(departmnetId,type);
+    console.log(response);
+    let roles=[];
+    if(response){
+      roles = response||[];
+    }
+    return roles;
+  }
+
+  getAssignedRoles(type){
+    console.log("context : "+type);
+    const roles=this.findRoles(type);
+    this.setState({assignedRoles:roles||[]})
+    console.log(this.state.assignedRoles);
+  }
+
   render() {
+    let departmentInfo=this.props.departmentInfo
+    let isMoolya=departmentInfo.isMoolya
+    let departmentqueryOptions = {options: {variables: {isMoolya:isMoolya }}};
+    let departmentQuery = gql` query($isMoolya:Boolean){
+            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+          }
+          `;
+    let subDepartmentOptions = {options: { variables: {id:this.state.department}}};
+    let subDepartmentquery=gql`query($id:String){
+      data:fetchSubDepartments(id:$id) {
+        value:_id
+        label:subDepartmentName
+      }
+    }`
+
+
+
     return (
       <div>
         <div className="row table_row_class">
-          <div className="col-md-4">test</div>
+         {/* <div className="col-md-4">test</div>
           <div className="col-md-4">test2</div>
-          <div className="col-md-4">test3</div>
+          <div className="col-md-4">test3</div>*/}
         </div>
         <div className="panel panel-default">
           <div className="panel-heading">Final Approval</div>
           <div className="panel-body">
             <div className="row">
               <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Department"  selectedValue={this.state.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={this.optionsBySelectDepartment.bind(this)} />
               </div>
               <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Sub-Department" selectedValue={this.state.subDepartment} queryType={"graphql"} query={subDepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={this.optionsBySelectSubDepartment.bind(this)} />
               </div>
               <div className="col-md-4">
                 <div className="form-group">
@@ -78,26 +125,7 @@ class MlAssignHierarchy extends React.Component {
                   <Select name="form-field-name" value="select"  options={options}  className="float-label" />
                 </div>
               </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -105,7 +133,7 @@ class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onClick={this.getAssignedRoles.bind(this,'cluster')}>
                   Cluster
                 </a>
               </h4>
@@ -117,26 +145,7 @@ class MlAssignHierarchy extends React.Component {
                     <Select name="form-field-name" value="select"  options={options}  className="float-label" />
                   </div>
                 </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
+
               </div>
               </div>
             </div>
@@ -144,33 +153,14 @@ class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onClick={this.getAssignedRoles.bind(this,'chapter')}>
                   Chapter
                 </a>
               </h4>
             </div>
             <div id="collapseTwo" className="panel-collapse collapse">
               <div className="panel-body">            <div className="row">
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
+
                 <div className="col-md-4">
                   <div className="form-group">
                     <Select name="form-field-name" value="select"  options={options}  className="float-label" />
@@ -183,7 +173,7 @@ class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree"  onClick={this.getAssignedRoles.bind(this,'community')}>
                   Community
                 </a>
               </h4>
@@ -195,26 +185,7 @@ class MlAssignHierarchy extends React.Component {
                     <Select name="form-field-name" value="select"  options={options}  className="float-label" />
                   </div>
                 </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group">
-                    <Select name="form-field-name" value="select"  options={options}  className="float-label" />
-                  </div>
-                </div>
+
               </div>
               </div>
             </div>
@@ -222,81 +193,6 @@ class MlAssignHierarchy extends React.Component {
         </div>
       </div>
 
-
-
     );
   }
 }
-
-const selectRow = {
-  mode: 'checkbox',
-  bgColor: '#feeebf',
-  clickToSelect: true, // click to select, default is false
-  clickToExpand: true // click to expand row, default is false
-};
-
-export default class EditTaxation extends React.Component {
-  componentDidMount() {
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-  }
-  constructor(props) {
-    super(props);
-  }
-
-  isExpandableRow(row) {
-    if (row.id <= 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  expandComponent(row) {
-    return (
-      <MlAssignHierarchy data={ row.expand } />
-    );
-  }
-  render() {
-    const options = {
-      expandRowBgColor: 'rgb(239, 70, 71)'
-    };
-    return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
-          <h2>Select Department</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <BootstrapTable  data={ taxes }
-                               options={ options }
-                               expandableRow={ this.isExpandableRow }
-                               expandComponent={ this.expandComponent }
-                               selectRow={ selectRow }
-                               pagination
-                               search
-              >
-                <TableHeaderColumn dataField="id" isKey={true} dataSort={true}>Department</TableHeaderColumn>
-                <TableHeaderColumn dataField="taxName">Sub-Department</TableHeaderColumn>
-                <TableHeaderColumn dataField="percentage">Status</TableHeaderColumn>
-              </BootstrapTable>
-
-            </ScrollArea>
-          </div>
-        </div>
-
-
-      </div>
-    )
-  }
-}
-;

@@ -19,8 +19,8 @@ let ProfessionSchema = `
     type Query{
         FindProfession(_id:String): Profession
         fetchProfessions:[Profession]
-        FetchProfessionIndustry(industry:[String]): [Profession]
-        fetchIndustryBasedProfession(industryId:String):[Profession] 
+        FetchProfessionIndustry(industry:[String]):[Profession]
+        fetchIndustryBasedProfession(industryId:String):[Profession]
     }
 `
 

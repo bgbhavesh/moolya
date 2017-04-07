@@ -86,3 +86,10 @@ MlResolver.MlQueryResolver['FetchProfessionIndustry'] = (obj, args, context, inf
   }
   return professions;
 }
+
+MlResolver.MlQueryResolver['fetchIndustryBasedProfession'] = (obj, args, context, info) => {
+
+  let result = mlDBController.find('MlProfessions',{industryId:args.industryId}, {isActive:true}, context).fetch()||[];
+
+  return result;
+}

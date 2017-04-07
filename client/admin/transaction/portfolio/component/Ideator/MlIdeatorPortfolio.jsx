@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import '../../../../../stylesheets/tab.css'
+// import '../../../../../stylesheets/tab.css'
 
 import MlTabComponent from '../../../../../commons/components/tabcomponent/MlTabComponent'
 import MlIdeatorDetails from '../Ideator/MlIdeatorDetails'

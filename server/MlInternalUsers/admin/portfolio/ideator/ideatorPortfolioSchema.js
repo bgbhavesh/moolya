@@ -81,10 +81,13 @@ let ideatorPortfolioSchema = `
         isEmailIdPublic:Boolean
     }
     
-    input problemsolution{
-        problemImage:String,
-        problemStatment:String,
-        solutions:String
+    input problemSolution{
+        problemStatment   : String,
+        isProblemPublic   : Boolean,
+        problemImage      : String
+        solutionStatment  : String,
+        isSolutionPublic  : Boolean,
+        solutionImage     : String
     }
     
     input audience{
@@ -114,7 +117,7 @@ let ideatorPortfolioSchema = `
         portfolioDetails:portfoliodetails,
         ideatorabout:ideatorabout,
         portfolioIdeatorDetails:portfolioIdeatordetails,
-        problemsolution:problemsolution,
+        problemSolution:problemSolution,
         audience:audience,
         strategyplans:strategyplans,
         intellectualplanning:intellectualplanning,

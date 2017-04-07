@@ -72,6 +72,7 @@ export default class Step5 extends React.Component {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
+      toastr.success("Selected Documents Approved Successfully")
     }
   }
 
@@ -123,6 +124,7 @@ export default class Step5 extends React.Component {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
+      toastr.success("Selected Documents Rejected Successfully")
     }
   }
 

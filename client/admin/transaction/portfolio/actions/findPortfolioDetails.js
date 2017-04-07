@@ -1,6 +1,9 @@
 /**
  * Created by venkatasrinag on 6/4/17.
  */
+import gql from 'graphql-tag'
+import {client} from '../../../core/apolloConnection';
+
 export async function findPortfolioActionHandler(portfolioId) {
   let regId = portfolioId
   const result = await client.query({

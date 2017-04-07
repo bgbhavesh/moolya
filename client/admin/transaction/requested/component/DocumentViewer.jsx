@@ -51,6 +51,10 @@ export default class DocumentViewer extends React.Component{
     this.props.onDocumentRemove(docTypeId,documentId,fileId)
   }
   render(){
+    let selectedDocs=this.props.selectedDocuments
+    if(selectedDocs.length==0){
+      $('.DocCheckBox').attr('checked', false)
+    }
     let doc=this.props.doc||{};
     let docFiles=doc.docFiles||[];
     let mandatory='';
@@ -62,7 +66,7 @@ export default class DocumentViewer extends React.Component{
       <div className="col-lg-4">
            <div className="panel panel-default uploaded_files">
            <div className="panel-heading">
-           <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId,doc.docTypeId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}{mandatory}</label></div>
+           <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" className="DocCheckBox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId,doc.docTypeId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}{mandatory}</label></div>
            <div className="pull-right block_action">
            <div className="fileUpload upload_file_mask">
            <a href="javascript:void(0);"><span className="ml ml-upload"></span>

@@ -160,7 +160,14 @@ export default function dynamicLinkHandler(path,params,queryParams){
       if(_.has(dynamicParams,"clusterId")){
         return `/admin/settings/hierarchy/${dynamicParams.clusterId}/clusterhierarchy`;
       }
-    }
+    },
+    "cluster_history":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"clusterId")){
+        return `/admin/clusters/${dynamicParams.clusterId}/history`;
+      }
+    },
+
   }
   let menuLinkHandler=menuLinkHandlerConfig[path];
   if(menuLinkHandler){

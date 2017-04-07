@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 
 var FontAwesome = require('react-fontawesome');
@@ -11,8 +12,12 @@ var Select = require('react-select');
 
 export default class MlIdeatorDetails extends React.Component{
   constructor(props){
-      super(props)
-      this.onClick.bind(this);
+    super(props);
+    this.state={
+      isfirstNamePublic:true,
+      islastNamePublic:true,
+    }
+    this.onClick.bind(this);
   }
   componentDidMount()
   {
@@ -27,10 +32,15 @@ export default class MlIdeatorDetails extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+    dataVisibilityHandler();
   }
 
-  onClick(){
-      FlowRouter.go('/admin/portfolio/about')
+  onClick(field,e){
+    let status = e.currentTarget.checked;
+    if(field == "firstName"){
+      this.setState({isfirstNamePublic:status});
+    }
+      // FlowRouter.go('/admin/portfolio/about')
       // return (
       //     <MlIdeatorPortfolioAbout />
       // )
@@ -55,48 +65,48 @@ export default class MlIdeatorDetails extends React.Component{
                   <form>
 
                     <div className="form-group">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id="cluster_name" defaultValue="Ravi"/>
-                      <FontAwesome name='unlock' className="password_icon" onClick={this.onClick}/>
+                      <input type="text" placeholder="First Name" ref="firstName" className="form-control float-label" id="cluster_name" defaultValue="Ravi"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/><input type="checkbox" id="makePrivate"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id="cluster_name" defaultValue="Kapoor"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <input type="text" placeholder="Last Name" ref="lastName" className="form-control float-label" id="cluster_name" defaultValue="Kapoor"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Gender" className="form-control float-label" id="cluster_name" defaultValue="Male"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <input type="text" placeholder="Gender" ref="gender" className="form-control float-label" id="cluster_name" defaultValue="Male"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="DOB" className="form-control float-label" id="cluster_name" defaultValue="26-06-1980"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <input type="text" placeholder="DOB" ref="dob" className="form-control float-label" id="cluster_name" defaultValue="26-06-1980"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Education" className="form-control float-label" id="cluster_name" defaultValue="MSC, Mcom, Bcom"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <input type="text" placeholder="Education" ref="education" className="form-control float-label" id="cluster_name" defaultValue="MSC, Mcom, Bcom"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Employment Status" className="form-control float-label" id="cluster_name" defaultValue="Employeed"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <input type="text" placeholder="Employment Status" ref="employmentStatus" className="form-control float-label" id="cluster_name" defaultValue="Employeed"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Sector" className="form-control float-label" id="cluster_name" defaultValue="IT"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <input type="text" placeholder="Sector" ref="sector" className="form-control float-label" id="cluster_name" defaultValue="IT"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Employer Name" className="form-control float-label" id="cluster_name" defaultValue="Mobiletech Solutions"/>
-                      <FontAwesome name='lock' className="password_icon"/>
+                      <input type="text" placeholder="Employer Name" ref="employerName" className="form-control float-label" id="cluster_name" defaultValue="Mobiletech Solutions"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Years of Experience" className="form-control float-label" id="cluster_name" defaultValue="12"/>
-                      <FontAwesome name='unlock' className="password_icon"/>
+                      <input type="text" placeholder="Years of Experience" ref="e" className="form-control float-label" id="cluster_name" defaultValue="12"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
                   </form>
                 </div>
@@ -124,32 +134,32 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group">
                       <input type="text" placeholder="Phone No" className="form-control float-label" id="cluster_name" defaultValue="9028728282"/>
-                      <FontAwesome name='lock' className="password_icon"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Email Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
-                      <FontAwesome name='lock' className="password_icon"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Fcebook Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
-                      <FontAwesome name='lock' className="password_icon"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Linkedin Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
-                      <FontAwesome name='lock' className="password_icon"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Twitter Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
-                      <FontAwesome name='lock' className="password_icon"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Googleplus Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
-                      <FontAwesome name='lock' className="password_icon"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
 

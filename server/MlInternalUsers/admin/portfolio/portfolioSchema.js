@@ -2,15 +2,19 @@
  * Created by venkatasrinag on 6/4/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../admin/mlAdminSchemaDef';
+import MlSchemaDef from '../mlAdminSchemaDef';
 
 
 let portfolioSchema = `
     type Portfoliodetails{
+        _id:String,
         transcationType:String,
-        name:String,
+        portfolioUserName:String,
+        userId:String,
+        userType:String,
         contactNumber:Int,
         communityType:String,
+        communityCode:String,
         cluster:String,
         chapter:String,
         subChapter:String,
@@ -24,11 +28,15 @@ let portfolioSchema = `
         isGoLive:Boolean,
         isActive:Boolean
     }
-    input portfoliodetails{
+      input portfoliodetails{
+        _id:String,
         transcationType:String,
-        name:String,
+        portfolioUserName:String,
+        userId:String,
+        userType:String,
         contactNumber:Int,
         communityType:String,
+        communityCode:String,
         cluster:String,
         chapter:String,
         subChapter:String,
@@ -46,4 +54,9 @@ let portfolioSchema = `
     type Query{
           fetchPortfolioDetails(portfolioId:String):Portfoliodetails
     }
+    
+    type Mutation{
+          createPortfolioRequest(portfoliodetails:portfoliodetails):response
+    }
 `
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

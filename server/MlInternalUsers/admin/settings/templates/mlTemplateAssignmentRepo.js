@@ -18,7 +18,7 @@ class MlTemplateAssignmentRepo{
     return template;
   }
 
-  fetchTemplate(process,subProcess,stepCode,recordId){
+  fetchTemplate(process,subProcess,stepCode,recordId,mode){
     let templateuserType=null,templateidentity=null,templateclusterId=null,templatechapterId=null,templatesubChapterId=null,templatecommunityCode=null;
     let baseQuery={templateProcessName:process,templateSubProcessName:subProcess,assignedTemplates: { $elemMatch: { "stepCode":stepCode } }};
     let specificQuery=[];
@@ -28,19 +28,35 @@ class MlTemplateAssignmentRepo{
       case 'Registration':
         switch(subProcess){
           case 'Registration':
-            let regRec=MlRegistration.findOne(recordId)||{};
-
-             if(regRec){
-               let regInfo=regRec.registrationInfo||{};
-               let {userType,identityType,clusterId,chapterId,subChapterId,registrationType}=regInfo;
-               templateuserType=userType;templateidentity=identityType;templateclusterId=clusterId;
-               templatechapterId=chapterId;templatesubChapterId=subChapterId;templatecommunityCode=registrationType;
-               }
+            if(stepCode == 'PORTFOLIO'){
+              let pfRec=MlPortfolioDetails.findOne(recordId)||{};
+              if(pfRec){
+                let pfInfo=pfRec||{};
+                let {userType,cluster,chapter,subChapter,communityCode}=pfInfo;
+                templateuserType=userType;templateidentity=mode;templateclusterId=cluster;
+                templatechapterId=chapter;templatesubChapterId=subChapter;templatecommunityCode=communityCode;
+              }
+            }
+            else {
+              let regRec = MlRegistration.findOne(recordId) || {};
+              if (regRec) {
+                let regInfo = regRec.registrationInfo || {};
+                let {userType, identityType, clusterId, chapterId, subChapterId, registrationType}=regInfo;
+                templateuserType = userType;
+                templateidentity = identityType;
+                templateclusterId = clusterId;
+                templatechapterId = chapterId;
+                templatesubChapterId = subChapterId;
+                templatecommunityCode = registrationType;
+              }
+            }
+            break;
+            case 'Portfolio':{
+            }
             break;
         }
         break;
-      case 'Portfolio':
-        break;
+
     }
 
     //check for specific condition for all criteria fields of templateAssignment

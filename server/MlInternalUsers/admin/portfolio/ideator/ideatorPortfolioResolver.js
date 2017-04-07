@@ -5,7 +5,20 @@ import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
+      try {
+          if (args && args.userId && args.communityType) {
+              user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
+              if (!user) {
+                  MlIdeatorPortfolio.insert({
+                    userId: args.userId,
+                    communityType: args.communityType,
+                    portfolioDetailsId: args.portfolioDetailsId
+                  })
+              }
+          }
+      }catch(e) {
 
+      }
 }
 
 MlResolver.MlMutationResolver['createIdeatorPortfolioRequest'] = (obj, args, context, info) => {

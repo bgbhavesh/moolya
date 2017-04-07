@@ -83,7 +83,7 @@ let TemplateAssignment = `
     }
     type Query{
             findTemplateSteps(id: String):SubProcess           
-            fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String):template
+            fetchAssignedTemplate(process:String,subProcess:String,stepCode:String,recordId:String, mode:String):template
             fetchSubProcess(id:String):[SubProcess]      
             findAssignedTemplates(id:String):TemplateAssignment
             findTemplateStepsSelect(id:String):[step]

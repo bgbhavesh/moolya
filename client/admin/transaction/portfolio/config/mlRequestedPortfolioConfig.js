@@ -35,9 +35,8 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: (data)=>{
-
-        if(data && data.id){
-          // FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+        if(data && data._id){
+          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data._id);
         } else{
           alert("Please select a User Type");
         }
@@ -61,17 +60,21 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"PortfolioRquest", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on PortfolioRquest{
-                              name
-                          }
-                      }
-              }
-  }
-              `
+    query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
+      data:SearchQuery(module:"Portfoliodetails", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+        totalRecords
+          data{
+            ...on Portfoliodetails{
+                transcationType,
+                portfolioUserName,
+                communityType,
+                contactNumber,
+                _id
+            }
+          }
+      }
+    }
+  `
 });
 
 export {mlRequestedPortfolioTableConfig};

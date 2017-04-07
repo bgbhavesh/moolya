@@ -610,9 +610,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlRegistration.find(query,findOptions).count();
   }
 
-  if(args.module == "PortfolioRquest"){
+  if(args.module == "Portfoliodetails"){
       data = MlPortfolioDetails.find(query,findOptions).fetch();
-      totalRecords = data.count();
+      totalRecords = data.length;
   }
 
   if(args.module=="templates"){
@@ -645,8 +645,8 @@ MlResolver.MlUnionResolver['SearchResult']= {
       return 'RegistrationInfo';
     }
 
-    if(data.transcationType){
-      return 'PortfolioRquest';
+    if(data.portfolioUserName){
+      return 'Portfoliodetails';
     }
 
     if (data.countryCode && data.country) {

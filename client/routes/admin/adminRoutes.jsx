@@ -37,6 +37,7 @@ import MlIdeatorLibrary from '../../admin/transaction/portfolio/component/Ideato
 import MlIdeatorStrategyAndPlanning from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorStrategyAndPlanning'
 import MlIdeatorIntellectualPlanningAndTrademark from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 
+import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio'
 import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
 import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
 
@@ -180,6 +181,14 @@ adminSection.route('/transactions/registrationRequested', {
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }
 });
+
+adminSection.route('/transactions/portfolioRequested/edit', {
+    name: 'transaction_portfolio_requested_edit',
+    action(params){
+        mount(AdminLayout,{adminContent:<MlPortfolio config={params.id}/>})
+    }
+});
+
 /*
 
 adminSection.route('/transactions/editRequests/:id', {
@@ -239,47 +248,11 @@ adminSection.route('/transactions/portfolio/createPortfolio', {
     mount(AdminLayout,{adminContent:<MlCreatePortfolio/>})
   }
 });
-// ************* Portfolio - Ideator Routes **************
-adminSection.route('/transactions/portfolio/ideator/requestedIdeator', {
-  name: 'requested_ideator',
+
+adminSection.route('/transactions/portfolio/editRequests/:id', {
+  name: 'transaction_portfolio_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<MlIdeatorDetails/>})
-  }
-});
-adminSection.route('/transactions/portfolio/ideator/requestedProblemsAndSolutions', {
-  name: 'requested_problemsAndSolutions',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlIdeatorProblemsAndSolutions/>})
-  }
-});
-adminSection.route('/transactions/portfolio/ideator/requestedAudience', {
-  name: 'requested_audience',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlIdeatorAudience/>})
-  }
-});
-adminSection.route('/transactions/portfolio/ideator/requestedLibrary', {
-  name: 'requested_library',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlIdeatorLibrary/>})
-  }
-});
-adminSection.route('/transactions/portfolio/ideator/requestedStrategyAndPlanning', {
-  name: 'requested_strategyAndPlanning',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlIdeatorStrategyAndPlanning/>})
-  }
-});
-adminSection.route('/transactions/portfolio/ideator/requestedIntellectualTrainingAndTrademark', {
-  name: 'requested_IPAndT',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlIdeatorIntellectualPlanningAndTrademark/>})
-  }
-});
-adminSection.route('/transactions/portfolio/ideator/requestedLookingFor', {
-  name: 'requested_lookingFor',
-  action(params){
-    mount(AdminLayout,{adminContent:<MlIdeatorLookingFor/>})
+    mount(AdminLayout,{adminContent:<MlPortfolio config={params.id}/>})
   }
 });
 
@@ -305,6 +278,9 @@ adminSection.route('/templates/assignTemplate/:id', {
   }
 });
 
+
+
+// test routes need to remove later
 adminSection.route('/portfolio/tabcomponent', {
     action(params){
         mount(AdminLayout,{adminContent:<MlIdeatorPortfolioTemplate />})

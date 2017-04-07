@@ -156,29 +156,29 @@ export default class institution extends React.Component{
           <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                  <Moolyaselect multiSelect={false} placeholder="Select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Select institution Type" options={institutionTypes} selectedValue={this.state.selectedInstitutionType} onSelect={this.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>
+                  <Select name="form-field-name" placeholder="Select institution type" options={institutionTypes} value={this.state.selectedInstitutionType}  onChange={this.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="instituteName" placeholder="Institute Name " defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteName} className="form-control float-label" id=""/>
+                  <input type="text" ref="instituteName" placeholder="Institute name " defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="instituteGroupName" placeholder="Institute Group Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteGroupName} className="form-control float-label" id=""/>
+                  <input type="text" ref="instituteGroupName" placeholder="Institute group name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.instituteGroupName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)}/>
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)}/>
                   <FontAwesome name="calendar" className="password_icon"/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="website" placeholder="Website" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.website} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref="registrationNumber" placeholder="Registration Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationNumber} className="form-control float-label" id=""/>
+                  <input type="text" ref="registrationNumber" placeholder="Registration number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationNumber} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text"  ref="isoAccrediationNumber" placeholder="ISO Accrediation Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} className="form-control float-label" id=""/>
+                  <input type="text"  ref="isoAccrediationNumber" placeholder="ISO accrediation number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} className="form-control float-label" id=""/>
                 </div>
           </form>
           </div>
@@ -193,7 +193,7 @@ export default class institution extends React.Component{
               <input type="text" ref="associatedUniversity" placeholder="Associated university" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.associatedUniversity} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <input type="text" ref="studentCount" placeholder="Toatal number of students" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.studentCount} className="form-control float-label" id=""/>
+              <input type="text" ref="studentCount" placeholder="Total number of students" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.studentCount} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
               <input type="text" ref="staffCount" placeholder="Total number of staff" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.staffCount} className="form-control float-label" id=""/>
@@ -205,10 +205,10 @@ export default class institution extends React.Component{
               <input type="text" ref="dean" placeholder="Dean name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.dean} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
+              <Moolyaselect multiSelect={false} placeholder="Headquarter location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
+              <Moolyaselect multiSelect={true} placeholder="Branch location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
             </div>
 
     </form>

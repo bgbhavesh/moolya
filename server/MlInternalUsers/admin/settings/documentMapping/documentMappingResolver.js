@@ -98,7 +98,7 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
       });
       data[index].allowableFormat = allowableFormatNames || [];*/
     });
-    if(kycId.length>1){
+    if(kycId.length>=1){
     console.log(kycId)
       let uniqueKyc = _.uniq(kycId, function(item, key, a) {
         return item.a;

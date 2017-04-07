@@ -240,7 +240,7 @@ export default class MlAssignModulesToRoles extends React.Component {
                 <div className="row">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                      <Moolyaselect multiSelect={false} placeholder="Module Name" className="form-control float-label" valueKey={'value'}
                                     labelKey={'label'} selectedValue={options.moduleId} queryType={"graphql"}
                                     query={getModulesquery} isDynamic={true} id={'moduleId' + id}
                                     onSelect={that.optionsBySelectModule.bind(that, id)}/>

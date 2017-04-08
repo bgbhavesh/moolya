@@ -41,13 +41,13 @@ const mlTransactionTypeTableConfig=new MlViewer.View({
       }
 
     },
-    {
+    /*{
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
         FlowRouter.go("/admin/settings/addTransactionType")
       }
-    },
+    },*/
     // {
     //   showAction: true,
     //   actionName: 'logout',

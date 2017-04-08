@@ -149,9 +149,21 @@ export default class Company extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: this.updateRegistration.bind(this)
+      },
+      {
+        actionName: 'comment',
+        showAction: true,
+        handler: null
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => {
+          FlowRouter.go("/admin/transactions/requestedList")
+        }
       }
     ]
 

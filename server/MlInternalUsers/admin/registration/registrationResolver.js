@@ -19,6 +19,11 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
+  if(!args.registration.registrationType){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!",code);
+    return response;
+  }
   let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
   if(id){
     let code = 200;

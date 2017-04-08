@@ -173,7 +173,9 @@ class MlAssignChapterBackendUsers extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          FlowRouter.go("/admin/chapters/HaZyQ8f9fQEi3g2vx/NDQLFpJBiF2DSXDzy/2LYT6orx2Xh4JBE43/Moolya-Bagalkot/subChapterDetails");
+        }
       }
     ]
     let that = this;

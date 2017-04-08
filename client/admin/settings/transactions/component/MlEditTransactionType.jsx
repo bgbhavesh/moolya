@@ -112,7 +112,7 @@ class MlEditTransactionType extends React.Component{
               <form>
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  <input type="text" ref="transactionName" placeholder="Name" defaultValue={this.state.data&&this.state.data.transactionName} className="form-control float-label" id=""/>
+                  <input type="text" ref="transactionName" placeholder="Name" defaultValue={this.state.data&&this.state.data.transactionName} className="form-control float-label" id="" readOnly="true"/>
 
                 </div>
                 <div className="form-group">

@@ -6,6 +6,8 @@ import {findEmailTypeActionHandler} from '../actions/findEmailTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 class MlEditEmailType extends React.Component{
   constructor(props) {
@@ -21,6 +23,10 @@ class MlEditEmailType extends React.Component{
       $('#status').prop('checked', true);
     }
   }
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
+
   componentWillMount() {
     const resp=this.findEmailType();
     return resp;

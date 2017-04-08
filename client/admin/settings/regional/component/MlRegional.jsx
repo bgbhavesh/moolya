@@ -21,8 +21,10 @@ class MlRegional extends React.Component{
     return this;
   }s
 
-  componentDidMount() {
+  componentDidUpdate() {
     initalizeFloatLabel();
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
   componentWillMount() {
     const resp=this.findRegional();

@@ -5,6 +5,8 @@ import {addSocialLinkTypeActionHandler} from '../actions/addSocialLinkTypeAction
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 class MlAddSocialLinkType extends React.Component{
   constructor(props) {
@@ -15,7 +17,7 @@ class MlAddSocialLinkType extends React.Component{
   }
 
   componentDidMount() {
-
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {

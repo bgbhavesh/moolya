@@ -29,7 +29,7 @@ const mlTaxationTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editTaxation/"+data.id)
         }
         else{
-          alert("Please select a Taxation")
+          toastr.error("Please select a Taxation")
         }
       }
 

@@ -5,6 +5,8 @@ import {addLanguageActionHandler} from '../actions/addLanguageAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 class MlAddLanguage extends React.Component{
   constructor(props) {
@@ -15,7 +17,7 @@ class MlAddLanguage extends React.Component{
   }
 
   componentDidMount() {
-
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {

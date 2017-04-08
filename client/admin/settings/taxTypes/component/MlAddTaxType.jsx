@@ -66,6 +66,7 @@ class MlAddTaxType extends React.Component{
     ];
 
     return (
+
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Create TaxType</h2>

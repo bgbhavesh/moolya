@@ -6,6 +6,7 @@ import {findLanguageActionHandler} from '../actions/findLanguageAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 class MlEditLanguage extends React.Component{
   constructor(props) {
@@ -21,6 +22,11 @@ class MlEditLanguage extends React.Component{
       $('#status').prop('checked', true);
     }
   }
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
+
   componentWillMount() {
     const resp=this.findLang();
     return resp;

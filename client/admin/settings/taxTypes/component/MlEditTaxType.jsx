@@ -20,6 +20,11 @@ class MlEditTaxType extends React.Component{
     return this;
   }
 
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
+
   componentWillMount() {
 
     const resp=this.findTaxType();
@@ -97,6 +102,7 @@ class MlEditTaxType extends React.Component{
       <div>
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_main_wrap">
+
             <div className="admin_padding_wrap">
               <h2>Edit TaxType</h2>
               <div className="col-md-6">

@@ -3,7 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addEmployeeTypeActionHandler} from '../actions/addEmployeeTypeAction.js'
+import {addEmployeeTypeActionHandler} from '../actions/addEmployeeTypeAction.js';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
+
 let FontAwesome = require('react-fontawesome');
 class MlAddEmployeeType extends React.Component{
   constructor(props) {
@@ -27,6 +30,11 @@ class MlAddEmployeeType extends React.Component{
 
     FlowRouter.go("/admin/settings/employeeTypesList");
   };
+
+
+  componentDidMount(){
+    initalizeFloatLabel();
+  }
 
   async  createEmpType() {
     let EmpTypeDetails = {

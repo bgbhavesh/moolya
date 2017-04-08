@@ -4,7 +4,9 @@ import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTitleActionHandler} from '../actions/findTitleAction'
-import {updateTitleActionHandler} from '../actions/updateTitleAction'
+import {updateTitleActionHandler} from '../actions/updateTitleAction';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlEditTitle extends React.Component{
   constructor(props) {
     super(props);
@@ -20,6 +22,10 @@ class MlEditTitle extends React.Component{
     const resp=this.findTitle();
     return resp;
 
+  }
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {

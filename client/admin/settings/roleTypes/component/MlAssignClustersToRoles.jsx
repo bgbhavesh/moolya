@@ -133,24 +133,17 @@ export default class MlAssignClustersToRoles extends React.Component {
     let that=this;
     let departmentqueryOptions=''
     let queryOptions={options: { variables: {searchQuery:null}}};
-    let departmentQuery=gql` query($isMoolya:Boolean){
-            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+    let departmentQuery=gql` query($isMoolya:Boolean,$clusterId:String){
+            data:fetchMoolyaBasedDepartmentRoles(isMoolya:$isMoolya,clusterId:$clusterId){label:departmentName,value:_id}
           }
           `;
-    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
     let chapterquery=gql`query($id:String){  
     data:fetchChapters(id:$id) {
         value:_id,
         label:chapterName
       }  
     }`;
-    let subChapterquery=gql`query($id:String){  
-      data:fetchSubChaptersSelect(id:$id) {
-        value:_id
-        label:subChapterName
-      }  
-    }`;
-  //  let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:displayName}}`;
 
     let subDepartmentquery=gql`query($id:String){  
       data:fetchSubDepartments(id:$id) {
@@ -158,21 +151,37 @@ export default class MlAssignClustersToRoles extends React.Component {
         label:subDepartmentName
       }  
     }`;
+    let subChapterquery=gql`query($chapterId:String,$clusterId:String){  
+        data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
+          value:_id
+          label:subChapterName
+        }  
+      }`;
     let selectedUserType=this.props.selectedBackendUserType
     let selectedSubChapter=this.props.selectedSubChapter
     if(selectedUserType=='moolya'){
-      departmentqueryOptions={options: { variables: {isMoolya:false}}};
-      departmentQuery=gql` query($isMoolya:Boolean){
-            data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
+      departmentQuery=gql`  query($isMoolya:Boolean,$clusterId:String){
+            data:fetchMoolyaBasedDepartmentRoles(isMoolya:$isMoolya,clusterId:$clusterId){label:departmentName,value:_id}
           }
           `;
+       subChapterquery=gql`query($chapterId:String,$clusterId:String){  
+        data:fetchSubChaptersSelectNonMoolya(chapterId:$chapterId,clusterId:$clusterId) {
+          value:_id
+          label:subChapterName
+        }  
+      }`;
     }
     if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){
-      departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:selectedSubChapter}}};
       departmentQuery=gql` query($isMoolya:Boolean,$subChapter:String){
       data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
     }
     `;
+      subChapterquery=gql`query($chapterId:String,$clusterId:String){  
+        data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
+          value:_id
+          label:subChapterName
+        }  
+      }`;
     }
 
     return (
@@ -181,8 +190,15 @@ export default class MlAssignClustersToRoles extends React.Component {
 
         <div className="form-group"></div>
         {that.state.assignRoleToClusters.map(function(assignCluster,id){
+          if(selectedUserType=='moolya') {
+            departmentqueryOptions = {options: {variables: {isMoolya: false, clusterId:assignCluster.cluster}}};
+          }
+          if(selectedUserType=='non-moolya'&& assignCluster.subChapter!=''){
+            departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:assignCluster.subChapter}}};
+          }
+
           let chapterOption={options: { variables: {id:assignCluster.cluster}}};
-          let subchapterOption={options: { variables: {id:assignCluster.chapter}}};
+          let subchapterOption={options: { variables: {chapterId:assignCluster.chapter,clusterId:assignCluster.cluster}}};
           let subDeparatmentOption={options: { variables: {id:assignCluster.department}}};
           return(
             <div className="panel panel-default" key={id}>

@@ -141,11 +141,12 @@ let chapterSchema = `
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String):[SubChapter]
         fetchActiveSubChapters(id: String):[SubChapter]
-        fetchSubChaptersSelectNonMoolya(id: String):[SubChapter]
+        fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String):[SubChapter] 
         fetchActiveClusterChapters(clusters:[String]):[Chapter]
         fetchActiveStatesChapters(states:[String]):[Chapter]
-        fetchActiveChaptersSubChapters(chapters:[String]):[SubChapter],
+        fetchActiveChaptersSubChapters(chapters:[String]):[SubChapter]
         fetchSubChaptersForRegistration(id: String):[SubChapter]
+        fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]        
     }
     
      type Mutation {

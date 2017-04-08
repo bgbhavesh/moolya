@@ -159,16 +159,14 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) =>
 {
-    let id = args.id || "";
+    let id = args.chapterId || "";
     let result = [];
-    if(args.id == "all"){
-        // result=MlSubChapters.find({subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
-        result = mlDBController.find('MlSubChapters', {subChapterName:{$ne:'Moolya'},isActive: true}, context).fetch()||[];
+    if(args.chapterId == "all"){
+        result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:false,isActive: true}, context).fetch()||[];
         console.log(result);
         result.push({"subChapterName" : "All","_id" : "all"});
     }else{
-         // result=MlSubChapters.find({"$and": [{chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}]}).fetch()||[];
-      result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}]}, context).fetch()||[];
+        result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
         if(result.length > 0){
              result.push({"subChapterName" : "All","_id" : "all"});
         }
@@ -176,6 +174,26 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
 
     return result
 }
+
+//roles Moolya subChapter
+MlResolver.MlQueryResolver['fetchSubChaptersSelectMoolya'] = (obj, args, context, info) =>
+{
+  let chapterId = args.chapterId || "";
+  let result = [];
+  if(args.chapterId == "all"){
+    result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:true,isActive: true}, context).fetch()||[];
+    console.log(result);
+    result.push({"subChapterName" : "All","_id" : "all"});
+  }else{
+    result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:true,isActive: true}]}, context).fetch()||[];
+    if(result.length > 0){
+      result.push({"subChapterName" : "All","_id" : "all"});
+    }
+  }
+  return result
+}
+
+
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
   // let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];

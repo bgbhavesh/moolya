@@ -284,7 +284,7 @@ class MlEditAssignTemplate extends React.Component{
 
             <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
-                <h2>Create Template</h2>
+                <h2>Edit Template Assignment</h2>
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg left_wrap">
                     <ScrollArea

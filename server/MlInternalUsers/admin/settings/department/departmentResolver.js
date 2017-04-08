@@ -163,6 +163,13 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartment'] = (obj, args, context, 
   return resp;
 }
 
+
+MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentRoles'] = (obj, args, context, info) => {
+  // let resp = MlDepartments.find({isMoolya: args.isMoolya, isActive: true}).fetch();
+  let resp = mlDBController.find('MlDepartments', {isMoolya: args.isMoolya, isActive: true,"depatmentAvailable.cluster": {$in: ["all",args.clusterId]}}, context).fetch();
+    return resp;
+}
+
 MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
   // let resp = MlDepartments.find({
   //   isMoolya: args.isMoolya,

@@ -68,11 +68,11 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
         FlowRouter.go("/admin/settings/addDocumentMapping")
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    }
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // }
   ],
   // graphQlQuery:gql`
   //            query {

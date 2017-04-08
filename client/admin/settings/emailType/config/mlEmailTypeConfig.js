@@ -44,11 +44,11 @@ const mlEmailTypeTableConfig=new MlViewer.View({
         FlowRouter.go("/admin/settings/addEmailType")
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    }
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // }
   ],
   sizePerPage:5,
   queryOptions:true,

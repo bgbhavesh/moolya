@@ -81,11 +81,11 @@ const mlDepartmentTableConfig=new MlViewer.View({
         FlowRouter.go("/admin/settings/addDepartment")
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    }
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // }
   ],
   sizePerPage:5,
   graphQlQuery:gql`

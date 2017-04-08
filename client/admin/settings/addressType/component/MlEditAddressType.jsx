@@ -6,6 +6,8 @@ import {findAddressTypeActionHandler} from '../actions/findAddressTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 class MlEditAddressType extends React.Component{
   constructor(props) {
@@ -24,6 +26,10 @@ class MlEditAddressType extends React.Component{
   componentWillMount() {
     const resp=this.findAddressType();
     return resp;
+  }
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {

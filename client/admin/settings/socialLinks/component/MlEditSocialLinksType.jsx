@@ -6,6 +6,8 @@ import {findSocialLinksTypeActionHandler} from '../actions/findSocialLinksTypeAc
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 class MlEditSocialLinkType extends React.Component{
   constructor(props) {
@@ -24,6 +26,10 @@ class MlEditSocialLinkType extends React.Component{
   componentWillMount() {
     const resp=this.findSocialLinks();
     return resp;
+  }
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {

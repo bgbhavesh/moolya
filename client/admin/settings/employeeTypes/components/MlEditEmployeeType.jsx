@@ -4,7 +4,9 @@ import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findEmployeeTypeActionHandler} from '../actions/findEmployeeTypeAction'
-import {updateEmployeeTypeActionHandler} from '../actions/updateEmployeeTypeAction'
+import {updateEmployeeTypeActionHandler} from '../actions/updateEmployeeTypeAction';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlEditEmployeeType extends React.Component{
   constructor(props) {
     super(props);
@@ -20,6 +22,10 @@ class MlEditEmployeeType extends React.Component{
     const resp=this.findEmployeeType();
     return resp;
 
+  }
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
   componentDidMount(){
     /*if(this.state.data.isActive){

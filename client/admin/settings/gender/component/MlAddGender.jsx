@@ -5,6 +5,8 @@ import {addGenderActionHandler} from '../actions/addGenderAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 class MlAddGender extends React.Component{
   constructor(props) {
@@ -15,7 +17,7 @@ class MlAddGender extends React.Component{
   }
 
   componentDidMount() {
-
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {

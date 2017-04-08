@@ -3,7 +3,9 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addTitleActionHandler} from '../actions/addTitleAction'
+import {addTitleActionHandler} from '../actions/addTitleAction';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 let FontAwesome = require('react-fontawesome');
 class MlAddTitle extends React.Component{
   constructor(props) {
@@ -25,6 +27,10 @@ class MlAddTitle extends React.Component{
   async handleSuccess(response) {
 
     FlowRouter.go("/admin/settings/titleList");
+  }
+
+  componentDidMount(){
+    initalizeFloatLabel();
   }
 
   async  createTitle() {
@@ -60,6 +66,7 @@ class MlAddTitle extends React.Component{
     ]
 
     return (
+
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Create Title</h2>
@@ -89,8 +96,7 @@ class MlAddTitle extends React.Component{
           </div>
 
         </div>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
-        />
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
 
       </div>
     )

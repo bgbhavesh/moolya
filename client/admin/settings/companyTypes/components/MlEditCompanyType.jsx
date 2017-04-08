@@ -4,7 +4,9 @@ import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findCompanyTypeActionHandler} from '../actions/findCompanyTypeAction'
-import {updateCompanyTypeActionHandler} from '../actions/updateCompanyTypeAction'
+import {updateCompanyTypeActionHandler} from '../actions/updateCompanyTypeAction';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlEditCompanyType extends React.Component{
   constructor(props) {
     super(props);
@@ -25,6 +27,11 @@ class MlEditCompanyType extends React.Component{
     /*if(this.state.data.isActive){
      $('#status').prop('checked', true);
      }*/
+  }
+
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
 
   async addEventHandler() {

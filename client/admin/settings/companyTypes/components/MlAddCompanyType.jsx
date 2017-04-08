@@ -3,7 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addCompanyTypeActionHandler} from '../actions/addCompanyTypeAction'
+import {addCompanyTypeActionHandler} from '../actions/addCompanyTypeAction';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
+
 let FontAwesome = require('react-fontawesome');
 class MlAddCompanyType extends React.Component{
   constructor(props) {
@@ -12,7 +15,9 @@ class MlAddCompanyType extends React.Component{
     this.createCompanyType.bind(this)
     return this;
   }
-
+componentDidMount(){
+  initalizeFloatLabel();
+}
 
   async addEventHandler() {
     const resp=await this.createCompanyType();

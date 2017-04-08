@@ -6,8 +6,10 @@ import ScrollArea from 'react-scrollbar'
 import MlTaxTable from './MlTaxTable'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findTaxationActionHandler} from '../actions/findTaxationAction'
-import {updateTaxationActionHandler} from '../actions/updateTaxationAction'
+import {findTaxationActionHandler} from '../actions/findTaxationAction';
+import {updateTaxationActionHandler} from '../actions/updateTaxationAction';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlAddTaxation extends React.Component{
   constructor(props) {
     super(props);
@@ -24,6 +26,10 @@ class MlAddTaxation extends React.Component{
 
     const resp=this.findTaxation();
     return resp;
+  }
+
+  componentWillUpdate(){
+    initalizeFloatLabel();
   }
 
   getTaxTableDetails(taxTypeInfo){

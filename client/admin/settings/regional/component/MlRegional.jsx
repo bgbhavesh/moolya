@@ -48,14 +48,17 @@ class MlRegional extends React.Component{
   };
 
   async handleSuccess(response) {
+    if(response){
+      toastr.error('Successfully Saved');
+      FlowRouter.go("/admin/settings/regionalsList");
+    }
 
-    FlowRouter.go("/admin/settings/regionalsList");
   };
 
   async  createRegional() {
     let regionalInfo = {
       clusterName :this.refs.cluster.value ,
-      capitalName : '',
+      capitalName : this.refs.cluster.capitalName,
       regionalFlag : '',
       regionalPhoneNumber: this.refs.phoneNumberFormat.value,
       regionalCurrencyName: this.refs.currencyName.value,
@@ -65,8 +68,6 @@ class MlRegional extends React.Component{
       regionalCurrencyValue: this.refs.currencyValue.value,
       aboutRegion: this.refs.about.value,
     }
-    console.log(regionalInfo)
-
     const response = await upsertRegionalActionHandler(regionalInfo);
     return response;
 
@@ -83,7 +84,6 @@ class MlRegional extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async (event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/regionalsList")
         }
       }
@@ -102,7 +102,7 @@ class MlRegional extends React.Component{
                       <input type="text" ref="cluster" defaultValue={this.state.data && this.state.data.clusterName} placeholder="Cluster" className="form-control float-label" readOnly="readOnly"  id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="capital" defaultValue={this.state.data && this.state.data.capitalName} placeholder="Capital" className="form-control float-label" id=""/>
+                      <input type="text" ref="capitalName" defaultValue={this.state.data && this.state.data.capitalName} placeholder="Capital" className="form-control float-label"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="phoneNumberFormat" defaultValue={this.state.data && this.state.data.regionalPhoneNumber} placeholder="Phone Number Format" className="form-control float-label" id=""/>

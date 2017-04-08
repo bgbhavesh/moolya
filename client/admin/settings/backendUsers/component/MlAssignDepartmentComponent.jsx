@@ -30,9 +30,7 @@ export default class MlAssignDepartmentComponent extends React.Component {
     }
 
   }
-  /*componentWillUpdate(){
-    this.props.getAssignedDepartments(this.state.assignDepartmentForm);
-  }*/
+
   AssignDepartment(idx){
     this.setState({
       assignDepartmentForm: this.state.assignDepartmentForm.concat([{ department:null,subDepartment:null}])
@@ -103,13 +101,9 @@ export default class MlAssignDepartmentComponent extends React.Component {
              {idx>0&&(<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentForm.bind(that,idx)}><img src="/images/remove.png"/></div>)}
            </div>
            <div className="panel-body">
-             <div className="form-group">
                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Department"  selectedValue={assignDepartmentForm.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions} isDynamic={true}  onSelect={that.optionsBySelectDepartment.bind(that,idx)} />
 
-             </div>
-             <div className="form-group">
                 <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Sub-Department" selectedValue={assignDepartmentForm.subDepartment} queryType={"graphql"} query={subDepartmentquery} reExecuteQuery={true} queryOptions={subDepartmentOptions} isDynamic={true}  onSelect={that.optionsBySelectSubDepartment.bind(that,idx)} />
-              </div>
            </div>
          </div>
          )}

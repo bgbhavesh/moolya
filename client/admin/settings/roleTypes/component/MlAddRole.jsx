@@ -176,9 +176,9 @@ class MlAddRole extends React.Component{
                     <div className="form-group">
                       <Select name="form-field-name" ref="userType" placeholder="Backend User Role Type" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
                     </div>
-                    {this.state.selectedUserType=='non-moolya'&&(<div className="form-group">
+                    {this.state.selectedUserType=='non-moolya'&&(
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
-                    </div>)}
+                    )}
                     <div className="form-group">
                       <Select name="form-field-name" placeholder="Role Type"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true} />
                     </div>

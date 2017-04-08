@@ -17,6 +17,7 @@ let HierarchySchema = `
       FinalApproval       : FinalApproval
     }    
     input FinalApprovalInput{
+      id                  : String
       parentDepartment    : String
       parentSubDepartment : String
       department          : String
@@ -24,6 +25,7 @@ let HierarchySchema = `
       role                : String
     }
     type FinalApproval{
+      id                  : String
       parentDepartment    : String
       parentSubDepartment : String
       department          : String
@@ -40,6 +42,7 @@ let HierarchySchema = `
     }
     type Mutation{
         updateHierarchyRoles(roles:[roleObject]):response
+        updateFinalApprovalRoles(finalRole:FinalApprovalInput):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);

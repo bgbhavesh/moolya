@@ -10,6 +10,7 @@ import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
+import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
 
 var assignedParent = [
   {
@@ -42,7 +43,7 @@ export default class MlAssignHierarchy extends React.Component {
     super(props);
     this.state={
       loading:true,
-      finalApproval:{parentDepartment:null,parentSubDepartment:null,department:null,subDepartment:null,role:null},
+      finalApproval:{id:null,parentDepartment:null,parentSubDepartment:null,department:null,subDepartment:null,role:null},
       unAssignedRoles:[{id:"",roleName:"",displayName:"",roleType:"",teamStructureAssignment:{isAssigned:"",assignedLevel:"",reportingRole:""}}],
       assignedRoles:[{id:"",roleName:"",displayName:"",roleType:"",teamStructureAssignment:{isAssigned:"",assignedLevel:"",reportingRole:""}}]
     }
@@ -125,8 +126,27 @@ export default class MlAssignHierarchy extends React.Component {
     this.setState({assignedRoles:roles})
     this.props.getAssignRoleDetails(roles)
   }
+  updateFinalApproval(){
+    const resp=this.updateFinalApprovalRoles();
+    toastr.success("Update Successful");
+    return resp;
+  }
 
-
+  async  updateFinalApprovalRoles() {
+    let parentDepartmentInfo = this.props.departmentInfo;
+    let departmnetId = parentDepartmentInfo.departmentId;
+    let subDepartmentId = parentDepartmentInfo.subDepartmentId
+    let roles = {
+      id                    : this.state.finalApproval.id,
+      parentDepartment      : departmnetId,
+      parentSubDepartment   : subDepartmentId,
+      department            : this.state.finalApproval.department,
+      subDepartment         : this.state.finalApproval.subDepartment,
+      role                  : this.state.finalApproval.role
+    }
+    const response = await updateFinalApprovalActionHandler(roles);
+    return response;
+  }
   async findRoles(type) {
     //get deptId
     let parentDepartment = this.props.departmentInfo;

@@ -45,6 +45,34 @@ MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, inf
   }
 };
 
+MlResolver.MlMutationResolver['updateFinalApprovalRoles'] = (obj, args, context, info) => {
+  /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+   if (!isValidAuth) {
+   let code = 401;
+   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+   return response;
+   }
+   */
+  let response ;
+  let role = args.finalRole;
+  if (role) {
+      if (role.id!='') {
+        let result =  mlDBController.update('MlHierarchyFinalApproval',role.id, role, {$set:true}, context)
+        let code = 200;
+        response = new MlRespPayload().successPayload(result, code);
+      }else{
+        let id = MlHierarchyFinalApproval.insert({...args.finalRole});
+        if (id) {
+          let code = 200;
+          let result = {appovalId: id}
+          let response = new MlRespPayload().successPayload(result, code);
+          return response
+        }
+      }
+    return response
+  }
+};
+
 MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info) => { // reporting role
   let roles = [];
   let levelCode = ""

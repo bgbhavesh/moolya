@@ -456,7 +456,7 @@ if(Meteor.isServer){
         "subMenu":[
           {
             "link" : "/admin/transactions/requestedList",
-            "name" : "Requested",
+            "name" : "Requests",
             "uniqueId" : "transaction_Requestes",
             "isLink" : true,
             "isMenu" : true,
@@ -486,7 +486,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/transactions/approvedList",
-            "name" : "Approve",
+            "name" : "Approved",
             "uniqueId" : "transaction_Approved",
             "isLink" : true,
             "isMenu" : true,

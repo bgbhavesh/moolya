@@ -54,7 +54,7 @@ function  communityFormatter(data) {
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.date;
-  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+  return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
 }
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Step1 from './step1';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 export default class SoftRegistration extends React.Component{
 
   constructor(props){
@@ -15,6 +16,10 @@ export default class SoftRegistration extends React.Component{
   }
   componentWillMount(){
     this.props.setSoftRegistrationSteps(this.getRegistrationSteps(this.props));
+  }
+
+  componentDidMount(){
+    initalizeFloatLabel();
   }
 
   compareQueryOptions(a, b) {

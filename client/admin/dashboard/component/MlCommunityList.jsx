@@ -87,6 +87,9 @@ export default class MlCommunityList extends Component {
             <a data-toggle="tooltip" title="Company" data-placement="bottom" data-filter="company">
               <span className="ml ml-company" onClick={this.onStatusChange.bind(this, "Company")}></span>
             </a>
+            <a data-toggle="tooltip" title="Institutions" data-placement="bottom" data-filter="company">
+              <span className="ml ml-institutions" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
+            </a>
             <a data-toggle="tooltip" title="Backend Users" data-placement="bottom" data-filter="internalUser">
               <span className="ml ml-moolya-symbol" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>
             </a>

@@ -163,12 +163,12 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
     let result = [];
     if(args.id == "all"){
         // result=MlSubChapters.find({subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
-        result = mlDBController.find('MlSubChapters', {subChapterName:{$ne:'Moolya'},isActive: true}, context).fetch()||[];
+        result = mlDBController.find('MlSubChapters',{"$and": [{isDefaultSubChapter:false,isActive: true,}]}, context).fetch()||[];
         console.log(result);
         result.push({"subChapterName" : "All","_id" : "all"});
     }else{
          // result=MlSubChapters.find({"$and": [{chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}]}).fetch()||[];
-      result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.id,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
+      result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.id,isDefaultSubChapter:false,isActive: true,}]}, context).fetch()||[];
         if(result.length > 0){
              result.push({"subChapterName" : "All","_id" : "all"});
         }

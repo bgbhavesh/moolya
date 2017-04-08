@@ -176,14 +176,14 @@ class MlClusterCommunityDetails extends React.Component {
           label:chapterName
         }  
     }`;
-    let subChapterquery = gql`query($chapters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+    let subChapterquery = gql`query($chapters:[String],$clusters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
         }  
     }`;
     let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
-    let subChapterOption = {options: {variables: {chapters: this.state.chapters}}};
+    let subChapterOption = {options: {variables: {chapters: this.state.chapters,clusters:this.state.clusters}}};
     let isEditable, isClusterEditable;
     if(this.props.params.communityId && this.props.params.subChapterId) {
       isEditable = "disabled";

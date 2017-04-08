@@ -43,7 +43,10 @@ class MlEditRole extends React.Component {
     //   }
     // });
   }
-
+  componentDidUpdate() {
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+  }
   async addEventHandler() {
     const resp = await this.createBackendUser();
     return resp;

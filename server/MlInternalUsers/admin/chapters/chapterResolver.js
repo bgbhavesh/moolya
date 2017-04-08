@@ -159,23 +159,40 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, context, info) =>
 {
-    let id = args.id || "";
+    let id = args.chapterId || "";
     let result = [];
-    if(args.id == "all"){
-        // result=MlSubChapters.find({subChapterName:{$ne:'Moolya'},isActive: true}).fetch()||[];
-        result = mlDBController.find('MlSubChapters', {subChapterName:{$ne:'Moolya'},isActive: true}, context).fetch()||[];
+    if(args.chapterId == "all"){
+        result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:false,isActive: true}, context).fetch()||[];
         console.log(result);
         result.push({"subChapterName" : "All","_id" : "all"});
     }else{
-         // result=MlSubChapters.find({"$and": [{chapterId: args.id,subChapterName:{$ne:'Moolya'},isActive: true}]}).fetch()||[];
-      result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.id,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
+         result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
         if(result.length > 0){
              result.push({"subChapterName" : "All","_id" : "all"});
         }
     }
-
-    return result
+  return result
 }
+
+//roles Moolya subChapter
+MlResolver.MlQueryResolver['fetchSubChaptersSelectMoolya'] = (obj, args, context, info) =>
+{
+  let chapterId = args.chapterId || "";
+  let result = [];
+  if(args.chapterId == "all"){
+    result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:true,isActive: true}, context).fetch()||[];
+    console.log(result);
+    result.push({"subChapterName" : "All","_id" : "all"});
+  }else{
+    result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:true,isActive: true}]}, context).fetch()||[];
+    if(result.length > 0){
+      result.push({"subChapterName" : "All","_id" : "all"});
+    }
+  }
+  return result
+}
+
+
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
   // let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
@@ -222,7 +239,10 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
       if(clusters.length==1&&clusters[0] == "all"){
         // chapters= MlChapters.find({isActive:true}).fetch()||[];
         chapters= mlDBController.find('MlChapters', {isActive:true}, context).fetch()||[];
-        chapters.push({"chapterName" : "All","_id" : "all"});
+        if(chapters.length>=1){
+          chapters.push({"chapterName" : "All","_id" : "all"});
+        }
+
       }else {
         clusters.map(function (clusterId) {
           // activeChapters = MlChapters.find({"$and": [{clusterId: clusterId, isActive: true}]}).fetch();
@@ -231,7 +251,9 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
             chapters = chapters.concat(activeChapters)
           }
         })
-        chapters.push({"chapterName" : "All","_id" : "all"});
+        if(chapters.length>=1){
+          chapters.push({"chapterName" : "All","_id" : "all"});
+        }
       }
     }
 
@@ -244,6 +266,9 @@ MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, i
     if(states.length==1&&states[0] == "all"){
       chapters= MlChapters.find({isActive:true}).fetch()||[];
       chapters.push({"chapterName" : "All","_id" : "all"});
+      if(chapters.length>=1){
+        chapters.push({"chapterName" : "All","_id" : "all"});
+      }
     }else {
       states.map(function (stateId) {
         activeChapters = MlChapters.find({"$and": [{stateId: stateId, isActive: true}]}).fetch();
@@ -251,7 +276,10 @@ MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, i
           chapters = chapters.concat(activeChapters)
         }
       })
-      chapters.push({"chapterName" : "All","_id" : "all"});
+      if(chapters.length>=1){
+        chapters.push({"chapterName" : "All","_id" : "all"});
+      }
+
     }
   }
 
@@ -262,13 +290,27 @@ MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, i
 
 MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, context, info) => {
   let chapters = args.chapters;
+  let clusters = args.clusters;
   let subChapters = [];
-  if(chapters && chapters.length > 0){
-    if(chapters.length==1&&chapters[0] == "all"){
+  if(chapters && chapters.length > 0) {
+    if (chapters.length == 1 && chapters[0] == "all" && clusters[0] == "all") {
       // subChapters= MlSubChapters.find({isActive:true}).fetch()||[];
-        subChapters= mlDBController.find('MlSubChapters', {isActive:true}, context).fetch()||[];
+      subChapters = mlDBController.find('MlSubChapters', {isActive: true}, context).fetch() || [];
+      subChapters.push({"subChapterName": "All", "_id": "all"});
+    }
+    else if(chapters.length == 1 && chapters[0] == "all"&& clusters[0] != "all"){
+      clusters.map(function (clusterId) {
+        // activeSubChapters = MlSubChapters.find({"$and": [{chapterId: chapterId, isActive: true}]}).fetch();
+        activeSubChapters = mlDBController.find('MlSubChapters', {"$and": [{clusterId: clusterId, isActive: true}]}, context).fetch();
+        if (activeSubChapters && activeSubChapters.length > 0) {
+          subChapters = subChapters.concat(activeSubChapters)
+        }
+      })
+      if(subChapters.length>=1){
         subChapters.push({"subChapterName" : "All","_id" : "all"});
-    }else {
+      }
+    }
+    else{
       chapters.map(function (chapterId) {
         // activeSubChapters = MlSubChapters.find({"$and": [{chapterId: chapterId, isActive: true}]}).fetch();
         activeSubChapters = mlDBController.find('MlSubChapters', {"$and": [{chapterId: chapterId, isActive: true}]}, context).fetch();
@@ -276,7 +318,10 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
           subChapters = subChapters.concat(activeSubChapters)
         }
       })
-      subChapters.push({"subChapterName" : "All","_id" : "all"});
+      if(subChapters.length>=1){
+        subChapters.push({"subChapterName" : "All","_id" : "all"});
+      }
+
     }
   }
 

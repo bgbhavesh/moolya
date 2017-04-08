@@ -46,7 +46,7 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   componentDidUpdate() {
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
     OnToggleSwitch(true, true);
   }
 
@@ -165,11 +165,6 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   render() {
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -219,13 +214,7 @@ class MlAssignChapterBackendUsers extends React.Component {
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Assign Backend Users to Sub Chapter</h2>
-              <div className="main_wrap_scroll">
-                <ScrollArea
-                  speed={0.8}
-                  className="main_wrap_scroll"
-                  smoothScrolling={true}
-                  default={true}
-                >
+
                   <div className="col-md-6 nopadding-left">
                     <div className="row">
                       <div className="left_wrap left_user_blocks">
@@ -314,8 +303,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                       </ScrollArea>
                     </div>
                   </div>
-                </ScrollArea>
-              </div>
+
             </div>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>)}

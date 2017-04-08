@@ -118,12 +118,7 @@ const mlRoleTypeTableConfig=new MlViewer.View({
       handler: (data)=>{
         FlowRouter.go("/admin/settings/createRole")
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   graphQlQuery:gql`
                 query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){

@@ -77,7 +77,7 @@ export default class MlProcessDocMapping extends Component {
             {/*<TableHeaderColumn dataField="docId" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>*/}
             <TableHeaderColumn  dataField="Id" hidden={true}>Id</TableHeaderColumn>
             <TableHeaderColumn  isKey={true} dataField="Name">Name</TableHeaderColumn>
-            <TableHeaderColumn dataField="Formate">Formate</TableHeaderColumn>
+            <TableHeaderColumn dataField="Formate">Format</TableHeaderColumn>
             <TableHeaderColumn dataField="MaxSize">MaxSize</TableHeaderColumn>
             <TableHeaderColumn dataField="Mandatory" dataFormat={this.SwitchMandatoryBtn.bind(this)}>Mandatory</TableHeaderColumn>
             <TableHeaderColumn dataField="Active" dataFormat={this.SwitchBtn.bind(this)}>Action</TableHeaderColumn>

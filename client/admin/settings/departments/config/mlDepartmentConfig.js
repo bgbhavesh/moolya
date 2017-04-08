@@ -69,7 +69,7 @@ const mlDepartmentTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editDepartment/"+data.id)
         }
         else{
-          alert("Please select a department")
+          toastr.error("Please select a department");
         }
         }
 

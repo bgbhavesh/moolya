@@ -338,7 +338,7 @@ export default class MlMyProfile extends React.Component{
                           <input type="text" placeholder="Flat/House/Floor/Bulding No" className="form-control float-label" id="" />
                         </div>
                         <div className="form-group">
-                          <input type="text" placeholder="Colony/Street/Loculaty" className="form-control float-label" id="" />
+                          <input type="text" placeholder="Colony/Street/Locality" className="form-control float-label" id="" />
                         </div>
                         <div className="form-group">
                           <input type="text" placeholder="Landmark" className="form-control float-label" id="" />

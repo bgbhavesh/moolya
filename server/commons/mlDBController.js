@@ -30,7 +30,7 @@ class MlDBController{
       else{
         collection = MlCollections[collectionName]
       }
-      if(updateOptions && updateOptions.$set && !updateOptions.multi)
+      if(updateOptions && updateOptions.$set && !updateOptions.multi && !updateOptions.upsert)
       {
           if(_.isObject(docId)){
             let oldValue  = collection.find(docId).fetch();

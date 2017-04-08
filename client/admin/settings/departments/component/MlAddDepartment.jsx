@@ -50,7 +50,9 @@ class MlAddDepartment extends React.Component{
   }
 
   async handleError(response) {
-    alert(response)
+   // alert(response)
+   // console.log(response)
+    toastr.error(response);
   };
 
   async handleSuccess(response) {
@@ -76,9 +78,13 @@ class MlAddDepartment extends React.Component{
       departmentAvailablity:this.state.departmentAvailability
     }
     console.log(DepartmentDetails)
+      if(DepartmentDetails.departmentName==undefined||DepartmentDetails.departmentName==""){
+        toastr.error("Department Name is mandatory");
+      }else{
+        const response = await addDepartmentActionHandler(DepartmentDetails)
+        return response;
+      }
 
-    const response = await addDepartmentActionHandler(DepartmentDetails)
-   return response;
 
   }
   getMoolyaDepartmentAvailability(details){
@@ -104,11 +110,6 @@ class MlAddDepartment extends React.Component{
 
   render(){
     let MlActionConfig = [
-      /*{
-        actionName: 'edit',
-        showAction: true,
-        handler: null
-      },*/
       {
         showAction: true,
         actionName: 'save',
@@ -118,7 +119,6 @@ class MlAddDepartment extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/departmentsList")
         }
       }

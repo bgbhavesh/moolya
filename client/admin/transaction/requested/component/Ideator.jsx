@@ -221,9 +221,22 @@ export default class Ideator extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: this.updateRegistration.bind(this)
+      },
+      {
+        actionName: 'comment',
+        showAction: true,
+        handler: null
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => {
+          // this.props.handler(" ");
+          FlowRouter.go("/admin/transactions/requestedList")
+        }
       }
     ]
 
@@ -309,7 +322,7 @@ export default class Ideator extends React.Component{
                         <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
                       </div>
                       <div className="form-group">
-                        <input type="text" placeholder="Request id" className="form-control float-label" id=""/>
+                        <input type="text" placeholder="Request Id" className="form-control float-label" id=""/>
                       </div>
                       <div className="ml_tabs">
                         <ul  className="nav nav-pills">
@@ -322,21 +335,21 @@ export default class Ideator extends React.Component{
                         </ul>
                       </div>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                        <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                       </div>
                       {(this.state.identity=='Company'||this.state.identity=='')?
                         <div>
                           <div className="form-group">
-                            <input type="text" ref="companyName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName} placeholder="Company name" className="form-control float-label" id=""/>
+                            <input type="text" ref="companyName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName} placeholder="Company Name" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="groupName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.groupName} placeholder="Group name" className="form-control float-label" id=""/>
+                            <input type="text" ref="groupName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.groupName} placeholder="Group Name" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="companyWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyWebsite} placeholder="Company website" className="form-control float-label" id=""/>
+                            <input type="text" ref="companyWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyWebsite} placeholder="Company Website" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Comapany email" className="form-control float-label" id=""/>
+                            <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "foundation Date"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onfoundationDateSelection.bind(that)}/>
@@ -349,10 +362,10 @@ export default class Ideator extends React.Component{
                             <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="isoAccrediationNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} placeholder="ISO certification number" className="form-control float-label" id=""/>
+                            <input type="text" ref="isoAccrediationNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} placeholder="ISO Certification Number" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="companyTurnOver" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyTurnOver} placeholder="Comapany turnover" className="form-control float-label" id=""/>
+                            <input type="text" ref="companyTurnOver" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyTurnOver} placeholder="Company Turnover" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
                             <input type="text" ref="partnerCompanies" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.partnerCompanies} placeholder="Partners" className="form-control float-label" id=""/>
@@ -425,19 +438,19 @@ export default class Ideator extends React.Component{
                               <input type="text" ref="parentCompany" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.parentCompany} placeholder="Enter Holding/Group/Owner Company Name" className="form-control float-label" id=""/>
                             </div>:<div></div>}
                           <div className="form-group">
-                            <input type="text" ref="registrationNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationNumber} placeholder="Registration number" className="form-control float-label" id=""/>
+                            <input type="text" ref="registrationNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationNumber} placeholder="Registration Number" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="companyCEOName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyCEOName} placeholder="CEO name" className="form-control float-label" id=""/>
+                            <input type="text" ref="companyCEOName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyCEOName} placeholder="CEO Name" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="companyManagement" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyManagement} placeholder="Total number of management people" className="form-control float-label" id=""/>
+                            <input type="text" ref="companyManagement" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyManagement} placeholder="Total Number Of Management People" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="toatalEmployeeCount" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.toatalEmployeeCount} placeholder="Total number of employee" className="form-control float-label" id=""/>
+                            <input type="text" ref="toatalEmployeeCount" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.toatalEmployeeCount} placeholder="Total Number Of Employee" className="form-control float-label" id=""/>
                           </div>
                           <div className="form-group">
-                            <input type="text" ref="associatedCompanies" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.associatedCompanies} placeholder="Associate company" className="form-control float-label" id=""/>
+                            <input type="text" ref="associatedCompanies" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.associatedCompanies} placeholder="Associate Company" className="form-control float-label" id=""/>
                           </div>
                         </div> :<div>
 

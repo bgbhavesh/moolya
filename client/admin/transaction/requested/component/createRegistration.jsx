@@ -98,15 +98,25 @@ export default class MlCreateRegistration extends React.Component{
     this.setState({coummunityName:selObject.label})
   }
   optionBySelectSubscription(val){
-    this.setState({subscription:val.value})
+    if(val){
+      this.setState({subscription:val.value});
+    }else{
+      this.setState({subscription:null});
+    }
   }
   optionBySelectRefered(val){
-    this.setState({refered:val.value})
+    if(val){
+      this.setState({refered:val.value})
+    }else{
+      this.setState({refered:null})
+    }
   }
   optionBySelectinstitutionAssociation(val){
-    this.setState({institutionAssociation:val.value})
-   /* const resp=this.createRegistration();
-    return resp;*/
+    if(val){
+      this.setState({institutionAssociation:val.value})
+    }else{
+      this.setState({institutionAssociation:null});
+    }
   }
 
 /*  async handleError(response) {
@@ -134,11 +144,13 @@ export default class MlCreateRegistration extends React.Component{
         actionName: 'save',
         handler: this.createRegistration.bind(this)
       },
-  /*    {
+      {
         showAction: true,
         actionName: 'cancel',
-        handler: null
-      }*/
+        handler: async(event) => {
+          FlowRouter.go("/admin/transactions/requestedList")
+        }
+      }
     ]
 
     let countryQuery=gql`query{
@@ -207,7 +219,6 @@ export default class MlCreateRegistration extends React.Component{
     ];
 
     return (
-
         <div className="admin_main_wrap">
           <h2>Create Registration</h2>
           <div className="col-md-6 nopadding-left">
@@ -271,6 +282,8 @@ export default class MlCreateRegistration extends React.Component{
                 smoothScrolling={true}
                 default={true}
               >
+
+
               <form>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
@@ -318,7 +331,9 @@ export default class MlCreateRegistration extends React.Component{
         </div>
     )
   }
+
 }
+
 
 /*export default MoolyaCreateRegistation = formHandler()(MlCreateRegistration);*/
 

@@ -5,7 +5,7 @@ import moment from 'moment'
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.createdDateTime;
-  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:mm:ss')}</div>;
 }
 
 const mlDocumentFormatTableConfig=new MlViewer.View({

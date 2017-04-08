@@ -174,9 +174,21 @@ export default class Step1 extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: this.updateRegistration.bind(this)
+      },
+      {
+        actionName: 'comment',
+        showAction: true,
+        handler: this.updateRegistration.bind(this)
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => {
+          FlowRouter.go("/admin/transactions/requestedList")
+        }
       }
     ];
 
@@ -311,10 +323,10 @@ export default class Step1 extends React.Component{
                       <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Device name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceName} className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" placeholder="Device Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceName} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Device number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceNumber} className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" placeholder="Device Number" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.deviceNumber} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="IP Address" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.ipAddress} className="form-control float-label" id="" disabled="true"/>
@@ -334,7 +346,7 @@ export default class Step1 extends React.Component{
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="User name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id="" disabled="true"/>
+                  <input type="text" placeholder="User Name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id="" disabled="true"/>
                 </div>
                 <div className="form-group">
                   <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
@@ -343,7 +355,7 @@ export default class Step1 extends React.Component{
                   <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
+                  <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyname}  className="form-control float-label" id=""/>
@@ -355,7 +367,7 @@ export default class Step1 extends React.Component{
                   <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
+                  <Select name="form-field-name" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
                 </div>
 
                 <div className="panel panel-default">

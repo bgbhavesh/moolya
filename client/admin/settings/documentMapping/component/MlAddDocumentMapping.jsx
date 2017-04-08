@@ -156,8 +156,8 @@ class MlAddDocumentMapping extends React.Component{
           label:chapterName
         }  
     }`;
-    let subChapterquery=gql`query($chapters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
         }  
@@ -182,7 +182,7 @@ class MlAddDocumentMapping extends React.Component{
 }`;
 
     let chapterOption={options: { variables: {clusters:this.state.clusters}}};
-    let subChapterOption={options: { variables: {chapters:this.state.chapters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
 
     return (
       <div className="admin_main_wrap">

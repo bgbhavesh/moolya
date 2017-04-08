@@ -173,14 +173,14 @@ class MlEditCommunityFormComponent extends React.Component {
           label:chapterName
         }  
     }`;
-    let subChapterquery = gql`query($chapters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+    let subChapterquery = gql`query($chapters:[String],$clusters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
         }  
     }`;
     let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
-    let subChapterOption = {options: {variables: {chapters: this.state.chapters}}};
+    let subChapterOption = {options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}};
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">

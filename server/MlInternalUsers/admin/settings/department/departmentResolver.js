@@ -15,7 +15,7 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
     }
     if (departmentClusterLength.length < 1) {
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Cluster name is manditory!!!!", code);
+      let response = new MlRespPayload().errorPayload("Cluster name is mandatory!!!!", code);
       return response;
     }
   }

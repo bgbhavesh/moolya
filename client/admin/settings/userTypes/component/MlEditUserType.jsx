@@ -1,27 +1,28 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findUserTypeActionHandler} from '../actions/findUserTypeAction'
-import {updateUserTypeActionHandler} from '../actions/updateUserTypeAction'
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import React from "react";
+import {render} from "react-dom";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag'
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import {findUserTypeActionHandler} from "../actions/findUserTypeAction";
+import {updateUserTypeActionHandler} from "../actions/updateUserTypeAction";
+import {OnToggleSwitch, initalizeFloatLabel} from "../../../utils/formElemUtil";
 class MlEditUserType extends React.Component{
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
-    this.addEventHandler.bind(this);
     this.updateUserType.bind(this)
     this.findUserType.bind(this);
+    this.onCommunitySelect.bind(this);
     return this;
   }
 
   componentWillMount() {
-
     const resp=this.findUserType();
     return resp;
-
   }
+
   componentDidMount(){
     if(this.state.data.isActive){
       $('#status').prop('checked', true);
@@ -33,9 +34,12 @@ class MlEditUserType extends React.Component{
     initalizeFloatLabel();
   }
 
-  async addEventHandler() {
-    /*const resp=await this.updateUserType()
-   return resp;*/
+  onCommunitySelect(val, callback, selObject) {
+    if(val){
+      this.setState({communityCode: val, communityName : selObject.label})
+    }else {
+      this.setState({communityCode: this.state.data.communityCode, communityName : this.state.data.communityName})
+    }
   }
 
   async handleError(response) {
@@ -55,12 +59,15 @@ class MlEditUserType extends React.Component{
     let userTypeId=this.props.config
     const response = await findUserTypeActionHandler(userTypeId);
     this.setState({loading:false,data:response});
+    this.onCommunitySelect();
   }
   async updateUserType() {
     let UserTypeDetails = {
       id: this.refs.id.value,
       displayName: this.refs.displayName.value,
       userTypeDesc: this.refs.userTypeDesc.value,
+      communityCode: this.state.communityCode,
+      communityName: this.state.communityName,
       isActive: this.refs.isActive.checked
     }
     const response = await updateUserTypeActionHandler(UserTypeDetails)
@@ -77,22 +84,20 @@ class MlEditUserType extends React.Component{
   }
 
   render(){
+    let query = gql` query{
+      data:fetchCommunityDefinition{label:name,value:code}
+    }
+  `;
     let MlActionConfig = [
       {
         actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateUserType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'add',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/userTypeList")
         }
       }
@@ -104,18 +109,21 @@ class MlEditUserType extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
 
         <div className="admin_padding_wrap">
-          <h2>Edit UserType</h2>
+          <h2>Edit User Type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
+                <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                              labelKey={'label'} queryType={"graphql"} placeholder="Select Community"
+                              selectedValue={this.state.communityCode}
+                              query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)}/>
+
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                   <input type="text" ref="userTypeName" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.userTypeName} className="form-control float-label"/>
-
                 </div>
                 <div className="form-group">
                   <textarea  ref="userTypeDesc" placeholder="About" defaultValue={this.state.data&&this.state.data.userTypeDesc}className="form-control float-label"></textarea>
-
                 </div>
               </form>
             </div>

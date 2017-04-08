@@ -283,8 +283,8 @@ class MlEditProcessMapping extends React.Component{
           label:chapterName
         }  
     }`;
-    let subChapterquery=gql`query($chapters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
         }  
@@ -293,7 +293,7 @@ class MlEditProcessMapping extends React.Component{
 
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
     let chapterOption={options: { variables: {states:this.state.states}}};
-    let subChapterOption={options: { variables: {chapters:this.state.chapters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
    return (
       <div className="admin_main_wrap">

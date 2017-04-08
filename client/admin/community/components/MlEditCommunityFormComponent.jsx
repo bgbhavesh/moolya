@@ -120,7 +120,13 @@ class MlEditCommunityFormComponent extends React.Component {
       chapters: this.state.chapters,
       subchapters: this.state.subchapters
     }
-    let response = await multipartFormHandler(data, null);
+    let response;
+    if(data.subchapters.length<1){
+      toastr.error('Please select Sub-Chapter');
+      response = false;
+    }else{
+      response = await multipartFormHandler(data, null);
+    }
     this.setState({loading: false});
     return response;
   }
@@ -180,7 +186,8 @@ class MlEditCommunityFormComponent extends React.Component {
         }  
     }`;
     let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
-    let subChapterOption = {options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}};
+
+    let subChapterOption = this.state.chapters.length>0&&this.state.clusters.length>0?{options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}}:{options: {variables: {chapters: [],clusters: []}}};
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">

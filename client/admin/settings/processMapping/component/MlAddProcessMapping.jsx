@@ -109,15 +109,10 @@ class MlAddProcessMapping extends React.Component{
   }
 
   optionsBySelectCommunities(val){
-  /*  let community=this.state.communities
-    community[0]['id']=val;*/
     this.setState({communities:val})
   }
 
   optionsBySelectUserType(val){
-    //this.setState({userTypes:val})
-  //  let userType=this.state.userTypes
-  //  userType[0]['id']=val;
     this.setState({userTypes:val})
   }
 
@@ -126,38 +121,26 @@ class MlAddProcessMapping extends React.Component{
   }
 
   optionsBySelectIndustries(val){
-   /* let industries=this.state.industries
-    industries[0]['id']=val;*/
     this.setState({industries:val})
   }
 
     optionsBySelectProfessions(val){
-     /* let professions=this.state.professions
-      professions[0]['id']=val;*/
       this.setState({professions:val})
   }
 
   optionsBySelectClusters(val){
-  /*  let clusters=this.state.clusters
-    clusters[0]['id']=val;*/
     this.setState({clusters:val})
   }
 
   optionsBySelectStates(val){
-   /* let states=this.state.states
-    states[0]['id']=val;*/
     this.setState({states:val})
   }
 
   optionsBySelectChapters(val){
-   /* let chapters=this.state.chapters
-    chapters[0]['id']=val;*/
     this.setState({chapters:val})
   }
 
   optionsBySelectSubChapters(val){
-   /* let subChapters=this.state.subChapters
-    subChapters[0]['id']=val;*/
     this.setState({subChapters:val})
   }
 
@@ -231,15 +214,15 @@ class MlAddProcessMapping extends React.Component{
           label:chapterName
         }  
     }`;
-    let subChapterquery=gql`query($chapters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters) {
+    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
         }  
     }`;
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
     let chapterOption={options: { variables: {states:this.state.states}}};
-    let subChapterOption={options: { variables: {chapters:this.state.chapters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
    return (
       <div className="admin_main_wrap">

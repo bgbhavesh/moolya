@@ -20,6 +20,8 @@ var assignedParent = [
   },
   {
     value: 'community',    label: 'community'
+  },{
+    value: 'unassign',    label: 'unassign'
   }
 ];
 var unAssignedParent = [
@@ -31,10 +33,8 @@ var unAssignedParent = [
   },
   {
     value: 'community',    label: 'community'
-  },
-  {
-    value: 'unassign',    label: 'unassign'
   }
+
 ];
 
 export default class MlAssignHierarchy extends React.Component {
@@ -103,7 +103,7 @@ export default class MlAssignHierarchy extends React.Component {
   }
   optionsBySelectParentNode(index, value){
     let roles=this.state.unAssignedRoles
-    roles[index].teamStructureAssignment.assignedLevel = value
+    roles[index].teamStructureAssignment.assignedLevel = value.value
     this.setState({unAssignedRoles:roles})
     this.props.getUnAssignRoleDetails(roles)
   }
@@ -136,16 +136,16 @@ export default class MlAssignHierarchy extends React.Component {
       let roleDetails=[]
       for(let i=0;i<response.length;i++){
         let teamAssignment=response[i].teamStructureAssignment
-        if(teamAssignment) {
+        if(teamAssignment.isAssigned==true) {
           let json = {
             id: response[i]._id,
             roleName: response[i].roleName,
             displayName: response[i].displayName,
             roleType: "Internal User",
             teamStructureAssignment:{
-              isAssigned:response[i].isAssigned,
-              assignedLevel:response[i],
-              reportingRole:response[i]
+              isAssigned:response[i].teamStructureAssignment.isAssigned,
+              assignedLevel:response[i].teamStructureAssignment.assignedLevel,
+              reportingRole:response[i].teamStructureAssignment.reportingRole
             }
           }
           roleDetails.push(json);
@@ -153,23 +153,19 @@ export default class MlAssignHierarchy extends React.Component {
       }
       this.setState({loading:false,assignedRoles:roleDetails})
     }
-    console.log(response);
-    /*let roles=[];
-    if(response){
-      roles = response||[];
-    }*/
-    return roles;
+    return response;
   }
 
   getAssignedRoles(type){
     console.log("context : "+type);
     const roles=this.findRoles(type);
+    return roles;
     //this.setState({assignedRoles:roles||[]})
     //console.log(this.state.assignedRoles);
   }
 
   render() {
-    that = this;
+    let that = this;
     let departmentInfo=this.props.departmentInfo
     let isMoolya=departmentInfo.isMoolya
     let departmentqueryOptions = {options: {variables: {isMoolya:isMoolya }}};
@@ -226,7 +222,7 @@ export default class MlAssignHierarchy extends React.Component {
         <div className="panel panel-default">
           <div className="panel-heading">Un Assigned Role</div>
           <div className="panel-body">
-            {this.state.unAssignedRoles.map(function (roles,id) {
+            {that.state.unAssignedRoles.map(function (roles,id) {
               return(
             <div className="row" key={roles.id}>
               <div className="col-md-4">
@@ -246,7 +242,7 @@ export default class MlAssignHierarchy extends React.Component {
               </div>
               <div className="col-md-4">
                 <div className="form-group">
-                  <Select name="form-field-name" value="select"   options={unAssignedParent} selectedValue={roles.teamStructureAssignment.assignedLevel} onSelect={that.optionsBySelectParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                  <Select name="form-field-name"   options={unAssignedParent} value={roles.teamStructureAssignment.assignedLevel} onChange={that.optionsBySelectParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
                 </div>
               </div>
               <div className="col-md-4">
@@ -265,15 +261,15 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h4 className="panel-title">
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onClick={this.getAssignedRoles.bind(this,'cluster')}>
+                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onClick={that.getAssignedRoles.bind(that,'cluster')}>
                   Cluster
                 </a>
               </h4>
             </div>
             <div id="collapseOne" className="panel-collapse collapse">
-              {this.state.assignedRoles.id!=''?
-              <div className="panel-body">
-                {this.state.assignedRoles.map(function (roles,id) {
+              {that.state.assignedRoles.id!=''?
+                (<div className="panel-body">
+                {that.state.assignedRoles.map(function (roles,id) {
                   return(
                     <div className="row" key={roles.id}>
                       <div className="col-md-4">
@@ -291,22 +287,12 @@ export default class MlAssignHierarchy extends React.Component {
                           <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
                         </div>
                       </div>
-                     {/* <div className="col-md-4">
-                        <div className="form-group">
-                          <Select name="form-field-name" value="select"   options={assignedParent} selectedValue={roles.teamStructureAssignment.assignedLevel} onSelect={that.optionsBySelectAssignedParentNode().bind(that,id)} placeholder="Parent Node" className="float-label" />
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.teamStructureAssignment.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
-                        </div>
-                      </div>*/}
                     </div>
                   )
                 })
 
                 }
-              </div>:<div></div>}
+              </div>):(<div></div>)}
             </div>
           </div>
           <div className="panel panel-default">

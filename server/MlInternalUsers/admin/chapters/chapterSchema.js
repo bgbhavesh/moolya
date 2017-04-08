@@ -75,7 +75,7 @@ let chapterSchema = `
         aboutSubChapter: String
         subChapterImageLink: String
         subChapterEmail: String
-        isEmailNotified: String 
+        isEmailNotified: Boolean 
         showOnMap : Boolean
         isActive: Boolean
         latitude:String

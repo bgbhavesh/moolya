@@ -9,7 +9,7 @@ const mlKycCategoryTableConfig=new MlViewer.View({
   fields:["docCategoryName","docCategoryDisplayName","isActive"],
   searchFields:["docCategoryName","docCategoryDisplayName","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},

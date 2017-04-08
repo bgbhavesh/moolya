@@ -8,6 +8,8 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {findDateAndTimeActionHandler} from '../actions/findDateAndTimeAction'
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 class MlAddDateAndTime extends React.Component{
   constructor(props) {
@@ -28,7 +30,7 @@ class MlAddDateAndTime extends React.Component{
   }
 
   componentDidMount() {
-
+    initalizeFloatLabel();
   }
 
   componentWillMount() {
@@ -130,13 +132,15 @@ class MlAddDateAndTime extends React.Component{
     let MlActionConfig = [
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.createDT.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+        }
       }
     ]
     let clusterquery=gql` query{  

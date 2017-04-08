@@ -9,6 +9,7 @@ export async function updateClusterActionHandler(clusterDetails)
     displayName: clusterDetails.displayName,
     about: clusterDetails.about,
     email: clusterDetails.email,
+    isEmailNotified : clusterDetails.isEmailNotified,
     showOnMap: clusterDetails.showOnMap,
     isActive: clusterDetails.isActive
   }

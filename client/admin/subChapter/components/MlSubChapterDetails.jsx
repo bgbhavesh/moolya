@@ -77,6 +77,7 @@ class MlSubChapterDetails extends React.Component {
       this.setState({data:z,loading:false});
     }
   }
+
   onStatusChangeBespokeRegistration(e) {
     let updatedData = this.state.data||{};
     updatedData=_.omit(updatedData,["isBespokeRegistration"]);
@@ -129,7 +130,6 @@ class MlSubChapterDetails extends React.Component {
         moolyaSubChapterAccess: this.state.moolyaSubChapterAccess
       }
     }
-    console.log(subChapterDetails);
     const response = await updateSubChapterActionHandler(subChapterDetails)
     return response;
   }

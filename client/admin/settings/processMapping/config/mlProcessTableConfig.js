@@ -54,7 +54,7 @@ function  communityFormatter(data) {
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.date;
-  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+  return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
 }
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
@@ -64,7 +64,7 @@ const mlProcessTableConfig=new MlViewer.View({
   fields:["processId","isActive","process"],
   searchFields:["processId","process","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},

@@ -110,7 +110,7 @@ class MlSubChapterDetails extends React.Component {
         aboutSubChapter: this.refs.aboutSubChapter.value,
         // subChapterImageLink: this.refs.subChapterImageLink.value,
         subChapterEmail: this.refs.subChapterEmail.value,
-        // isEmailNotified: this.refs.isEmailNotified.value,
+         isEmailNotified:  this.state.data.isEmailNotified,
         chapterId:this.state.data.chapterId,
         showOnMap: this.refs.showOnMap.checked,
         isActive: this.refs.isActive.checked
@@ -258,7 +258,7 @@ class MlSubChapterDetails extends React.Component {
                     <div className="email_notify">
                       <div className="input_types">
                         <input ref="isEmailNotified" type="checkbox" name="checkbox"
-                               defaultChecked="0"
+                                checked={this.state.data.isEmailNotified}
                                onChange={this.onStatusChangeNotify.bind(this)}/>
                         <label htmlFor="checkbox1"><span> </span>Notify</label>
                       </div>

@@ -87,12 +87,16 @@ class MlEditState extends React.Component{
       //   showAction: true,
       //   actionName: 'add',
       //   handler: null
+      //
       // },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: null
-      }
+       {
+      showAction: true,
+      actionName: 'cancel',
+      handler: async(event) => {
+      this.props.handler(" ");
+      FlowRouter.go("/admin/settings/statesList")
+    }
+  }
     ]
     const showLoader=this.state.loading;
 

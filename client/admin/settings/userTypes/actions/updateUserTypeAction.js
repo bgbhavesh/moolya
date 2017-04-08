@@ -6,14 +6,18 @@ export async function updateUserTypeActionHandler(UserTypeDetails) {
   let displayName = UserTypeDetails.displayName;
   let userTypeDesc = UserTypeDetails.userTypeDesc;
   let isActive = UserTypeDetails.isActive
+  let communityCode = UserTypeDetails.communityCode;
+  let communityName = UserTypeDetails.communityName
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String, $displayName: String, $userTypeDesc: String,$isActive: Boolean, $moduleName:String, $actionName:String){
+    mutation  ($_id:String, $displayName: String, $userTypeDesc: String,$isActive: Boolean, $communityCode: String, $communityName:String, $moduleName:String, $actionName:String){
         UpdateUserType(
           _id: $_id,
           displayName: $displayName,
           userTypeDesc: $userTypeDesc,
           isActive :$isActive,
+          communityCode :$communityCode
+          communityName :$communityName,
           moduleName:$moduleName,
           actionName:$actionName
         ){
@@ -28,6 +32,8 @@ export async function updateUserTypeActionHandler(UserTypeDetails) {
       displayName,
       userTypeDesc,
       isActive,
+      communityCode,
+      communityName,
       moduleName:"USERTYPE",
       actionName:"UPDATE"
     }

@@ -168,6 +168,18 @@ export default class Individual extends React.Component{
         actionName: 'save',
         showAction: true,
         handler: this.updateRegistration.bind(this)
+      },
+      {
+        actionName: 'comment',
+        showAction: true,
+        handler: null
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => {
+          FlowRouter.go("/admin/transactions/requestedList")
+        }
       }
     ]
 
@@ -233,7 +245,7 @@ export default class Individual extends React.Component{
                           <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
                         </div>
                         <div className="form-group">
-                          <input type="text" placeholder="Request id" className="form-control float-label" id=""/>
+                          <input type="text" placeholder="Request Id" className="form-control float-label" id=""/>
                         </div>
                         {/*<div className="form-group">
                           <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
@@ -255,7 +267,7 @@ export default class Individual extends React.Component{
                           <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
                         </div>
                         <div className="form-group">
-                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
                           <FontAwesome name="calendar" className="password_icon"/>
                         </div>
                         <div className="form-group">

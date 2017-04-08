@@ -50,7 +50,9 @@ class MlAddDepartment extends React.Component{
   }
 
   async handleError(response) {
-    alert(response)
+   // alert(response)
+   // console.log(response)
+    toastr.error(response);
   };
 
   async handleSuccess(response) {
@@ -76,9 +78,13 @@ class MlAddDepartment extends React.Component{
       departmentAvailablity:this.state.departmentAvailability
     }
     console.log(DepartmentDetails)
+      if(DepartmentDetails.departmentName==undefined||DepartmentDetails.departmentName==""){
+        toastr.error("Department Name is mandatory");
+      }else{
+        const response = await addDepartmentActionHandler(DepartmentDetails)
+        return response;
+      }
 
-    const response = await addDepartmentActionHandler(DepartmentDetails)
-   return response;
 
   }
   getMoolyaDepartmentAvailability(details){

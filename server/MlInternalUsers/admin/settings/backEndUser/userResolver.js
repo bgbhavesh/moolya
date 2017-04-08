@@ -376,21 +376,23 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
     if(args.subChapterId){
         // let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
       let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
-        if(subChapter && subChapter.isDefaultSubChapter){
-            users = MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'](obj, {clusterId:subChapter.clusterId}, context, info)
-        }else{
+      if(subChapter && subChapter.isActive) {
+        if (subChapter.isDefaultSubChapter) {
+          users = MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'](obj, {clusterId: subChapter.clusterId}, context, info)
+        } else {
           // let departments = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-          let departments = mlDBController.find('MlDepartments', {"depatmentAvailable.subChapter":subChapter._id}, context).fetch();
-          if(departments && departments.length > 0){
-            for(var i = 0; i < departments.length; i++){
+          let departments = mlDBController.find('MlDepartments', {"depatmentAvailable.subChapter": subChapter._id}, context).fetch();
+          if (departments && departments.length > 0) {
+            for (var i = 0; i < departments.length; i++) {
               // let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
-              let depusers = mlDBController.find('users', {"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}, context).fetch();
-              if(depusers && depusers.length > 0){
+              let depusers = mlDBController.find('users', {"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": departments[i]._id}, context).fetch();
+              if (depusers && depusers.length > 0) {
                 users = users.concat(depusers)
               }
             }
           }
         }
+      }
     }
     return users;
 }

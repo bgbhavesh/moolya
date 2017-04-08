@@ -75,7 +75,7 @@ let chapterSchema = `
         aboutSubChapter: String
         subChapterImageLink: String
         subChapterEmail: String
-        isEmailNotified: String 
+        isEmailNotified: Boolean 
         showOnMap : Boolean
         isActive: Boolean
         latitude:String
@@ -144,7 +144,7 @@ let chapterSchema = `
         fetchSubChaptersSelectNonMoolya(id: String):[SubChapter]
         fetchActiveClusterChapters(clusters:[String]):[Chapter]
         fetchActiveStatesChapters(states:[String]):[Chapter]
-        fetchActiveChaptersSubChapters(chapters:[String]):[SubChapter],
+        fetchActiveChaptersSubChapters(chapters:[String],clusters:[String]):[SubChapter],
         fetchSubChaptersForRegistration(id: String):[SubChapter]
     }
     

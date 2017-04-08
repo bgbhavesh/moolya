@@ -10,6 +10,8 @@ export async function findUserTypeActionHandler(userTypeId) {
          id:_id
         userTypeName
         displayName
+        communityCode
+        communityName
         isActive
         userTypeDesc
       }

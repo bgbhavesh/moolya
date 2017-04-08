@@ -13,7 +13,8 @@ MlResolver.MlMutationResolver['UpdateUserType'] = (obj, args, context, info) => 
   if (args._id) {
     var id= args._id;
       args=_.omit(args,'_id');
-    let result= MlUserTypes.update(id, {$set: args});
+    let result=  mlDBController.update('MlUserTypes', id, args, {$set:true}, context)
+    // let result= MlUserTypes.update(id, {$set: args});
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -28,7 +29,8 @@ MlResolver.MlMutationResolver['createUserType'] = (obj, args, context, info) => 
     return response;
   }
 
-  let result= MlUserTypes.insert({...args.userType})
+  // let result= MlUserTypes.insert({...args.userType})
+  let result= mlDBController.insert('MlUserTypes', args.userType, context)
   if (result) {
     let code = 200;
     let result = {userTypeId: result}
@@ -42,18 +44,21 @@ MlResolver.MlQueryResolver['FindUserType'] = (obj, args, context, info) => {
 
   if (args._id) {
     var id= args._id;
-    let response= MlUserTypes.findOne({"_id":id});
+    let response = mlDBController.findOne('MlUserTypes', {_id: id}, context)
+    // let response= MlUserTypes.findOne({"_id":id});
     return response;
   }
 
 }
 MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
-  let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  // let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  let result = mlDBController.find('MlUserTypes', {isActive:true}, context).fetch()||[];
   return result;
 }
 
 MlResolver.MlQueryResolver['FetchUserTypeSelect'] = (obj, args, context, info) => {
-  let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  // let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  let result = mlDBController.find('MlUserTypes', {isActive:true}, context).fetch()||[];
   if(result.length > 0){
     result.push({"userTypeName" : "All","_id" : "all"});
   }

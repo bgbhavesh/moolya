@@ -117,12 +117,12 @@ export default class MlAssignDepartments extends React.Component {
     label:chapterName
   }  
 }`;
-    let subChapterquery=gql`query($id:String){  
-  data:fetchSubChaptersSelectNonMoolya(id:$id) {
-    value:_id
-    label:subChapterName
-  }  
-}`;
+    let subChapterquery=gql`query($chapterId:String,$clusterId:String){  
+        data:fetchSubChaptersSelectNonMoolya(chapterId:$chapterId,clusterId:$clusterId) {
+          value:_id
+          label:subChapterName
+        }  
+      }`;
     return (
 
     <div>
@@ -133,7 +133,7 @@ export default class MlAssignDepartments extends React.Component {
             options.cluster = null;
           }
           let chapterOption={options: { variables: {id:options.cluster}}};
-          let subChapterOption={options: { variables: {id:options.chapter}}}
+          let subChapterOption={options: { variables: {chapterId:options.chapter,clusterId:assignCluster.cluster}}};
           return(
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Department{id==0?(<div className="pull-right block_action" onClick={that.AssignDepartmentAvailability.bind(that,id)}><img src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentAvailability.bind(that,id)}><img src="/images/remove.png"/></div>)}</div>

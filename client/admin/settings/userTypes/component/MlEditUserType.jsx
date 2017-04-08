@@ -109,7 +109,7 @@ class MlEditUserType extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
 
         <div className="admin_padding_wrap">
-          <h2>Edit UserType</h2>
+          <h2>Edit User Type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>

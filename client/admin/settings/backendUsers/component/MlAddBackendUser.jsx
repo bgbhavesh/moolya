@@ -91,9 +91,12 @@ class MlAddBackendUser extends React.Component {
       toastr.error("Display Name is required");
     }
     else if (!email) {
-      toastr.error("Need to set a username or email")
-
-    } else if (confirmPassword != password) {
+      toastr.error("Need to set a username or email");
+    }
+    else if(!password){
+      toastr.error("Password is required");
+    }
+    else if (confirmPassword != password) {
 
       toastr.error("Confirm Password does not match with Password")
 

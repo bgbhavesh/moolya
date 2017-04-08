@@ -6,6 +6,8 @@ import {graphql} from 'react-apollo';
 import ScrollArea from 'react-scrollbar';
 let FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag'
+import Datetime from "react-datetime";
+import moment from "moment";
 export default class MlAssignModulesToRoles extends React.Component {
   constructor(props) {
     super(props);
@@ -176,26 +178,24 @@ export default class MlAssignModulesToRoles extends React.Component {
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
   }
 
-  onClickDate(id, event) {
-    let filedName = event.target.name
-    let fieldId = filedName + id
-    $("#" + fieldId).datepicker({format: "dd-mm-yyyy", autoclose: true});
-    $("#" + fieldId).focus();
-  }
 
   onvalidFromChange(index, event) {
-    console.log(event.target.value);
-    let assignModulesToRoles = this.state.assignModulesToRoles;
-    assignModulesToRoles[index]['validFrom'] = event.target.value
-    this.setState({assignModulesToRoles: assignModulesToRoles})
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      let assignModulesToRoles = this.state.assignModulesToRoles;
+      assignModulesToRoles[index]['validFrom'] = value
+      this.setState({assignModulesToRoles: assignModulesToRoles})
+    }
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
   }
 
   onvalidToChange(index, event) {
-    console.log(event.target.value);
-    let assignModulesToRoles = this.state.assignModulesToRoles
-    assignModulesToRoles[index]['validTo'] = event.target.value
-    this.setState({assignModulesToRoles: assignModulesToRoles})
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      let assignModulesToRoles = this.state.assignModulesToRoles;
+      assignModulesToRoles[index]['validTo'] = value
+      this.setState({assignModulesToRoles: assignModulesToRoles})
+    }
     this.props.getassignModulesToRoles(this.state.assignModulesToRoles)
   }
 
@@ -213,6 +213,10 @@ export default class MlAssignModulesToRoles extends React.Component {
           let statusUpdate=false;
           let statusDelete=false;
           let statusCreate=false;
+          let yesterday = Datetime.moment().subtract(1, 'day');
+          let validDate = function (current) {
+            return current.isAfter(yesterday);
+          }
           _.each(options.actions,function (s,v) {
             if(s.actionId=='DELETE'){
               statusDelete=true;
@@ -278,16 +282,12 @@ export default class MlAssignModulesToRoles extends React.Component {
                   </div>
                   <div className="col-md-3">
                     <div className="form-group">
-                      <input type="text" placeholder="Active From" className="form-control float-label"
-                             id={'validFrom' + id} onClick={that.onClickDate.bind(that, id)} name={'validFrom'}
-                             defaultValue={options.validFrom} onBlur={that.onvalidFromChange.bind(that, id)}/>
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active From"}} closeOnSelect={true} value={that.state.assignModulesToRoles[id].validFrom} onChange={that.onvalidFromChange.bind(that, id)}/>
                     </div>
                   </div>
                   <div className="col-md-3">
                     <div className="form-group">
-                      <input type="text" placeholder="Active Till" className="form-control float-label" ref="validTo"
-                             name={'validTo'} id={'validTo' + id} onClick={that.onClickDate.bind(that, id)}
-                             defaultValue={options.validTo} onBlur={that.onvalidToChange.bind(that, id)}/>
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active Till"}}  closeOnSelect={true} value={that.state.assignModulesToRoles[id].validTo} onChange={that.onvalidToChange.bind(that, id)}/>
                     </div>
                   </div>
                   <div className="col-md-6">

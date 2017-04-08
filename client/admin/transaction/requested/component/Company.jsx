@@ -139,6 +139,7 @@ export default class Company extends React.Component{
     }
     //this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
+    toastr.success("Saved Successfully");
     return response;
   }
   updateRegistration(){
@@ -151,7 +152,7 @@ export default class Company extends React.Component{
       {
         actionName: 'save',
         showAction: true,
-        handler: this.updateRegistration.bind(this)
+        handler: this.updateRegistration.bind(this),
       },
       {
         actionName: 'comment',
@@ -214,7 +215,7 @@ export default class Company extends React.Component{
     let that=this;
     const showLoader=this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="step_form_wrap step2">
 

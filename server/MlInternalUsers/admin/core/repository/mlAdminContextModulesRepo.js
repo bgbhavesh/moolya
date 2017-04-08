@@ -28,7 +28,7 @@ export default CoreModulesRepo={
     let countriesId=[]; 
     let activeCluster = [];
     // let activeCountries = MlCountries.find({isActive:true}).fetch();
-    let activeCountries = mlDBController.find('MlCountries', {isActive:true}, context).fetch();
+    let activeCountries = mlDBController.find('MlCountries', {isActive:true}, context, {sort:{country: 1}}).fetch();
     activeCountries.map(function(country){ 
       countriesId.push(country._id);
      })
@@ -65,7 +65,7 @@ export default CoreModulesRepo={
     let citiesId=[];
     let activeChapters = [];
     // let activeCities = MlCities.find({isActive:true}).fetch();
-    let activeCities = mlDBController.find('MlCities', {isActive:true}, context).fetch();
+    let activeCities = mlDBController.find('MlCities', {isActive:true}, context,  {sort:{name: 1}} ).fetch();
     activeCities.map(function(city){
       citiesId.push(city._id);
     })

@@ -258,7 +258,7 @@ export default class AddressDetails extends React.Component{
                   <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Bulding No" className="form-control float-label" id="" a/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref={'addressLocality'} placeholder="Colony/Street/Loculaty" className="form-control float-label" id="" />
+                  <input type="text" ref={'addressLocality'} placeholder="Colony/Street/Locality" className="form-control float-label" id="" />
                 </div>
                 <div className="form-group">
                   <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" id="" />

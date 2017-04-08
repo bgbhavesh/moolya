@@ -98,13 +98,16 @@ class MlEditProfessionType extends React.Component{
       },
       // {
       //   showAction: true,
-      //   actionName: 'add',
+      //   actionName: 'save',
       //   handler: null
       // },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/professionList")
+        }
       }
     ];
 

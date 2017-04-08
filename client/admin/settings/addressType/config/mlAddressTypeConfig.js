@@ -41,11 +41,11 @@ const mlAddressTypeTableConfig=new MlViewer.View({
         FlowRouter.go("/admin/settings/addAddressType")
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    }
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // }
   ],
   sizePerPage:5,
   queryOptions:true,

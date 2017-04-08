@@ -172,12 +172,12 @@ class MlAssignChapterBackendUsers extends React.Component {
       // },
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.assignBackendUsers.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
+        actionName: 'cancel',
         handler: null
       }
     ]

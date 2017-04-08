@@ -111,13 +111,16 @@ class MlNumericalFormat extends React.Component{
     let MlActionConfig = [
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.upsertNumaericalFormate.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/numericalFormatList")
+        }
       }
     ]
     let clusterquery=gql` query{  

@@ -5,6 +5,8 @@ import {upsertRegionalActionHandler} from '../actions/upsertRegionalAction'
 import {findRegionalActionHandler} from '../actions/findRegionalAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 import ScrollArea from 'react-scrollbar';
 
 class MlRegional extends React.Component{
@@ -20,11 +22,12 @@ class MlRegional extends React.Component{
   }s
 
   componentDidMount() {
-
+    initalizeFloatLabel();
   }
   componentWillMount() {
     const resp=this.findRegional();
     return resp;
+
   }
   async findRegional(){
     const response = await findRegionalActionHandler();
@@ -73,15 +76,18 @@ class MlRegional extends React.Component{
 
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.createRegional.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async (event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/regionalsList")
+        }
       }
-    ]
+    ];
     const showLoader=this.state.loading;
     return (
       <div>

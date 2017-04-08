@@ -96,10 +96,14 @@ class MlEditLookingForType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateLookingForType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/lookingForList")
+        }
       }
     ];
 

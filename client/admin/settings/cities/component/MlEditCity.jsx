@@ -81,7 +81,7 @@ class MlEditCity extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.editCity.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
@@ -92,8 +92,11 @@ class MlEditCity extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/citiesList")
+        }
       }
     ]
     const showLoader=this.state.loading;

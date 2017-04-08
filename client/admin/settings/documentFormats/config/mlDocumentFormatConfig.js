@@ -46,11 +46,11 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
         FlowRouter.go("/admin/settings/addDocumentFormat")
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    }
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // }
   ],
   graphQlQuery:gql`
               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){

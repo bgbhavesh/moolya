@@ -93,7 +93,10 @@ class MlEditDocumentType extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/documentTypeList")
+        }
       }
     ]
     const showLoader=this.state.loading;

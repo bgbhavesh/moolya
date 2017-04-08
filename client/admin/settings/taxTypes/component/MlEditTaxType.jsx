@@ -5,7 +5,12 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTaxTypeActionHandler} from '../actions/findTaxTypeAction'
 import {updateTaxTypeActionHandler} from '../actions/updateTaxTypeAction'
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlEditTaxType extends React.Component{
+
+  componentDidMount(){
+    initalizeFloatLabel();
+  }
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
@@ -63,20 +68,28 @@ class MlEditTaxType extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateTaxType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/taxTypeList")
+        }
+      }
       // {
       //   showAction: true,
       //   actionName: 'add',
       //   handler: null
       // },
-      {
-        showAction: true,
-        actionName: 'logout',
-        handler: null
-      }
+      // {
+      //   showAction: true,
+      //   actionName: 'logout',
+      //   handler: null
+      // }
     ];
 
     const showLoader=this.state.loading;

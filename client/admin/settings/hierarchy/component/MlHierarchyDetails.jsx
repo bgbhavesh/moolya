@@ -18,7 +18,7 @@ export default class MlHierarchyDetails extends React.Component {
     super(props);
     this.state={
       loading:true,data:{},
-      hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentName:'',isMoolya:''}],
+      hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentId:'',subDepartmentName:'',isMoolya:''}],
       unassignedRoles:[],
       assignedRoles:[],
       finalApproval:null
@@ -61,6 +61,7 @@ export default class MlHierarchyDetails extends React.Component {
         let json = {
           departmentId: response[i].departmentId,
           departmentName:response[i].departmentName,
+          subDepartmentId:response[i].subDepartmentId,
           subDepartmentName:response[i].subDepartmentName,
           isMoolya:response[i].isMoolya
         }
@@ -68,7 +69,6 @@ export default class MlHierarchyDetails extends React.Component {
       }
       this.setState({hierarchyInfo:hierarchyInfo});
     }
-
   }
 
   async  updateunassignedRoles() {
@@ -135,6 +135,7 @@ export default class MlHierarchyDetails extends React.Component {
                                search
               >
                 <TableHeaderColumn dataField="departmentId" isKey={true} dataSort={true} hidden={true}></TableHeaderColumn>
+                <TableHeaderColumn dataField="departmentId" dataSort={true} hidden={true}></TableHeaderColumn>
                 <TableHeaderColumn dataField="isMoolya" hidden={true}>isMoolya</TableHeaderColumn>
                 <TableHeaderColumn dataField="departmentName">Department</TableHeaderColumn>
                 <TableHeaderColumn dataField="subDepartmentName">Sub-Department</TableHeaderColumn>

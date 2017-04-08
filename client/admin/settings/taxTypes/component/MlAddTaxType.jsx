@@ -5,7 +5,13 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addTaxActionHandler} from '../actions/addTaxTypeAction'
 let FontAwesome = require('react-fontawesome');
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlAddTaxType extends React.Component{
+
+  componentDidMount(){
+    initalizeFloatLabel();
+}
   constructor(props) {
     super(props);
     this.addEventHandler.bind(this);
@@ -51,10 +57,13 @@ class MlAddTaxType extends React.Component{
       },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
-      }
-    ]
+        actionName: 'cancel',
+        handler: async(event) => {
+           this.props.handler(" ");
+          FlowRouter.go("/admin/settings/taxTypeList")
+        }
+        }
+    ];
 
     return (
       <div className="admin_main_wrap">

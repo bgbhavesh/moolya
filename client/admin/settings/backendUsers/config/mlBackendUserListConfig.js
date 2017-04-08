@@ -16,11 +16,11 @@ export const mlBackendUserListConfig=new MlViewer.View({
   viewComponent:<MlBackendUserListView />,
   showActionComponent:true,
   actionConfiguration:[
-    {
-      actionName: 'edit',
-      showAction: true,
-      handler: null
-    },
+    // {
+    //   actionName: 'edit',
+    //   showAction: true,
+    //   handler: null
+    // },
     {
       showAction: true,
       actionName: 'add',
@@ -28,11 +28,11 @@ export const mlBackendUserListConfig=new MlViewer.View({
         FlowRouter.go("/admin/settings/addBackendUser")
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    }
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // }
   ],
   graphQlQuery:gql`
               query{

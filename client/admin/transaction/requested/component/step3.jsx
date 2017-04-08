@@ -2,6 +2,8 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 import ScrollArea from 'react-scrollbar'
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
@@ -36,6 +38,7 @@ export default class Step3 extends React.Component{
     //$('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
     $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
     this.props.getRegistrationContactDetails();
+    initalizeFloatLabel();
 
 
   }

@@ -67,10 +67,19 @@ class MlAddDocumentType extends React.Component{
         actionName: 'add',
         handler: async(event) => this.props.handler(this.createDocumentType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'logout',
+      //   handler: null
+      // }
+
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/documentTypeList")
+        }
       }
     ]
 

@@ -55,15 +55,18 @@ class MlAddSpecification extends React.Component{
       // },
       {
         showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.createSpecification.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
-        showAction: true,
-        actionName: 'logout',
-        handler: null
-      }
-    ]
+      showAction: true,
+      actionName: 'cancel',
+      handler: async(event) => {
+      this.props.handler(" ");
+      FlowRouter.go("/admin/settings/specificationList")
+    }
+  }
+]
 
     return (
       <div className="admin_main_wrap">

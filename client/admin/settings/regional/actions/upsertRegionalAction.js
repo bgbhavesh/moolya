@@ -14,8 +14,6 @@ let regionalInfo=regionalDetails
    regionalInfo
    }
    })
-   console.log(result)
-
   const id = result.data.updateGlobalSetting;
   return id
 }

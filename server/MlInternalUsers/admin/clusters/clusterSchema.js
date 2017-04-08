@@ -11,6 +11,7 @@ let clusterSchema = `
         link: String
         email:String
         showOnMap : Boolean
+        
         isActive: Boolean
         countryFlag:String
         latitude:String 

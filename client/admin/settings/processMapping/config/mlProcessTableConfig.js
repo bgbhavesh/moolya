@@ -64,7 +64,7 @@ const mlProcessTableConfig=new MlViewer.View({
   fields:["processId","isActive","process"],
   searchFields:["processId","process","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},

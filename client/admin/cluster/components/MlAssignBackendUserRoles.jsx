@@ -47,24 +47,12 @@ export default class MlAssignBackednUserRoles extends React.Component {
   }
 
   componentDidMount() {
-    // const resp=this.findUserDepartments();
     $(function () {
       $('.float-label').jvFloat();
     });
     if (this.props.userId) {
       const resp = this.findUserDepartments();
     }
-
-    // $('.switch input').change(function () {
-    //   if ($(this).is(':checked')) {
-    //     $(this).parent('.switch').addClass('on');
-    //   } else {
-    //     $(this).parent('.switch').removeClass('on');
-    //   }
-    // });
-    // setTimeout(function () {
-    //   // initSwiper();
-    // }, 1000)
   }
 
   optionsBySelectRole(index, did, selectedValue, callback, selObject) {
@@ -229,8 +217,6 @@ export default class MlAssignBackednUserRoles extends React.Component {
 
   render() {
     let that = this
-    // let userDepartments = that.state.roleForm || [];
-    // let roleDetails = that.state.roleDetails;
 
     var yesterday = Datetime.moment().subtract(1, 'day');
     let loggedInUser = getAdminUserContext()

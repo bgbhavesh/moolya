@@ -10,6 +10,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
+import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
@@ -45,34 +46,9 @@ class MlAddBackendUser extends React.Component {
   }
 
   componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function () {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      } else {
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-    $('.ConfirmPassword').click(function () {
-      let pwd = document.getElementById("confirmPassword")
-      if (pwd.getAttribute("type") == "password") {
-        pwd.setAttribute("type", "text");
-      } else {
-        pwd.setAttribute("type", "password");
-      }
-    });
-    $('.Password').click(function () {
-      let pwd = document.getElementById("password");
-      if (pwd.getAttribute("type") == "password") {
-        pwd.setAttribute("type", "text");
-      } else {
-        pwd.setAttribute("type", "password");
-      }
-    });
-
+    initalizeFloatLabel();
+    OnToggleSwitch(false,true);
+    passwordVisibilityHandler();
   }
 
   async addEventHandler() {
@@ -158,7 +134,6 @@ class MlAddBackendUser extends React.Component {
         profile: profile
       }
 
-      console.log(userObject)
       const response = await addBackendUserActionHandler(userObject)
       return response;
     }
@@ -190,7 +165,10 @@ class MlAddBackendUser extends React.Component {
   }
 
   onBackendUserTypeSelect(val){
-    this.setState({selectedBackendUserType:val.value})
+    if(val)
+      this.setState({selectedBackendUserType:val.value})
+    else
+      this.setState({selectedBackendUserType:''})
   }
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
@@ -226,11 +204,6 @@ class MlAddBackendUser extends React.Component {
 
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -240,7 +213,6 @@ class MlAddBackendUser extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/backendUserList")
         }
       }
@@ -277,43 +249,41 @@ class MlAddBackendUser extends React.Component {
                 className="left_wrap"
                 smoothScrolling={true}
               >
+                <form>
                 <div className="form_bg">
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="middleName" placeholder="Middle Name" className="form-control float-label" id=""/>
                     </div>
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)}
-                      />
+                      <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)} />
                     </div>
 
-                    {this.state.selectedBackendUserType=='non-moolya'&&(<div className="form-group">
+                    {this.state.selectedBackendUserType=='non-moolya'&&(
                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
-                   </div>)}
+                   )}
                     <div className="form-group">
-                    {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
                       <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true}
                       />
-                   {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} placeholder="Select Role" queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
                     </div>
                     <div className="form-group">
                       <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
-                      <FontAwesome name='eye' className="password_icon Password"/>
+                      <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                     </div>
                     <div className="form-group">
-                      <text style={{float:'right',color:'#ef4647',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                      <text style={{float:'right',color:'#ef4647',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
                       <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
-                      <FontAwesome name='eye' className="password_icon ConfirmPassword"/>
+                      <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                     </div>
                   {/*  <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>*/}
-
                     <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} />
                 </div>
+                </form>
               </ScrollArea>
             </div>
           </div>
@@ -325,10 +295,12 @@ class MlAddBackendUser extends React.Component {
                   className="left_wrap"
                   smoothScrolling={true}
                 >
-                    <div className="form-group">
+                  <form>
+
+                    <div className="form-group mandatory">
                       <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                     </div>
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text" ref="email" placeholder="Email id" className="form-control float-label" id=""/>
                     </div>
                     <MlContactFormComponent getAssignedContacts={this.getAssignedContacts.bind(this)}/>
@@ -378,6 +350,7 @@ class MlAddBackendUser extends React.Component {
                         </div>
                       </div>
                     </div>*/}
+                  </form>
                 </ScrollArea>
               </div>
             </div>

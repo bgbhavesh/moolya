@@ -82,7 +82,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .admin_main_wrap .alfa_filter_litters ul{  }
 /*.admin_main_wrap .alfa_filter_litters ul li{ display: block;float: left; padding: 20px;background: #ef4647;border-right: #f76a6b solid 1px;border-top: #f76a6b solid 1px;border-bottom:#d23738 solid 1px;border-left:#d23738 solid 1px; }*/
 .admin_main_wrap .alfa_filter_litters ul li a{ display: block;float: left;width: 28px;height: 28px; text-align:center;background: #ef4647;border-right: #d43536 solid 1px;border-top: #d43536 solid 1px;border-bottom:#f65354 solid 1px;border-left:#f65354 solid 1px; text-shadow: none;color: #fff;text-transform: lowercase;line-height: 20px;}
-.admin_main_wrap .alfa_filter_litters ul li a:hover{ background: #f65354;text-decoration: none;}
+.admin_main_wrap .alfa_filter_litters ul li a:hover{ background: #d83233;text-decoration: none;}
 .admin_main_wrap .filter.filter_settings{top: 25%;z-index: 8;}
 .admin_main_wrap .filter.alfa_filter ul{height: 30px;overflow: hidden;}
 .admin_main_wrap .filter.alfa_filter li{line-height: 25px;}
@@ -151,6 +151,7 @@ span.actions_switch.show_act{bottom: 50px;}
 .panel-heading{font-weight: bold;}
 .panel-heading .block_action img{width: 25px; margin-top: -2px;}
 .form-control{padding: 6px 0px;border: 0px; border-bottom: 2px solid #273545;box-shadow: none;color: #273545;background-color: transparent;border-radius: 0px;font-size: 15px;}
+.mandatory:after{content: "";width: 10px;height: 10px;background: #ef4647;border-radius: 50%;position: absolute;margin-top: -6px;}
 .form-control:focus{box-shadow: none;}
 .admin_main_wrap textarea.form-control{height: 80px;}
 .form-group{margin-bottom: 22px;position: relative;}
@@ -264,8 +265,8 @@ a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
 .steps_pic_upload .ProfileImg img{width: 200px;height: 200px;border:2px solid #273545;}
 .steps_pic_upload .mlUpload_btn{float: none;margin: 15px auto;}
 .jvFloat {position: relative;}
-.jvFloat .placeHolder {position: absolute;top: 6px;left: 0;color: #ef4647;font-size: .8em;font-weight: bold;-webkit-transform: translate(0, 0);-moz-transform: translate(0, 0);-o-transform: translate(0, 0);-ms-transform: translate(0, 0);transform: translate(0, 0);-webkit-transition: -webkit-transform 150ms, opacity 120s;transition: transform 150ms, opacity 120s;opacity: 0;visibility: hidden;}
-.jvFloat .placeHolder.active {display: block;visibility: visible;-webkit-transform: translate(0, -1.5em);-moz-transform: translate(0, -1.5em);-o-transform: translate(0, -1.5em);-ms-transform: translate(0, -1.5em);transform: translate(0, -1.5em);-webkit-transition: -webkit-transform 150ms, opacity 120ms;transition: transform 150ms, opacity 120ms;opacity: 1;}
+.jvFloat .placeHolder {position: absolute;top: 6px;left: 0;color: #ef4647;font-size: 12px;font-weight: bold;-webkit-transform: translate(0, 0);-moz-transform: translate(0, 0);-o-transform: translate(0, 0);-ms-transform: translate(0, 0);transform: translate(0, 0);-webkit-transition: -webkit-transform 150ms, opacity 120s;transition: transform 150ms, opacity 120s;opacity: 0;visibility: hidden;}
+.jvFloat .placeHolder.active {display: block;visibility: visible;-webkit-transform: translate(0, -1.5em);-moz-transform: translate(0, -1.5em);-o-transform: translate(0, -1.5em);-ms-transform: translate(0, -1.5em);transform: translate(0, -1.5em);-webkit-transition: -webkit-transform 150ms, opacity 120ms;transition: transform 150ms, opacity 120ms;opacity: 1;font-family: Arial;text-shadow: none;}
 .fa {text-shadow: none}
 table img{width: 40px;}
 table .form-group.switch_wrap{margin-bottom: 0px;margin-right: 0px;height: 26px;}
@@ -902,3 +903,10 @@ button:focus{outline: 0;}
 .cus_scroll::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); border-radius: 10px; background-color: #F5F5F5; }
 .cus_scroll::-webkit-scrollbar{width: 6px; background-color: #F5F5F5; }
 .cus_scroll::-webkit-scrollbar-thumb {border-radius: 10px; -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3); background-color: #ef4647; }
+
+input::-webkit-input-placeholder:after /* Only for Chrome */
+{
+  color:red;
+  content:"*";
+  opacity: 1
+}

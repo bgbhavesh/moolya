@@ -133,7 +133,7 @@ export default class MlAssignDepartments extends React.Component {
             options.cluster = null;
           }
           let chapterOption={options: { variables: {id:options.cluster}}};
-          let subChapterOption={options: { variables: {chapterId:options.chapter,clusterId:assignCluster.cluster}}};
+          let subChapterOption={options: { variables: {chapterId:options.chapter,clusterId:options.cluster}}};
           return(
             <div className="panel panel-default" key={id}>
               <div className="panel-heading">Assign Department{id==0?(<div className="pull-right block_action" onClick={that.AssignDepartmentAvailability.bind(that,id)}><img src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveAssignDepartmentAvailability.bind(that,id)}><img src="/images/remove.png"/></div>)}</div>

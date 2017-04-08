@@ -261,23 +261,23 @@ export default class MlAssignModulesToRoles extends React.Component {
                     <div className="form-group">
                       Actions
                     </div>
-                    <div className="form-group">
-                      <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="CREATE"
+                    `<div className="form-group">
+                      <div className="input_types"><input id="chapter_admin_check1" type="checkbox" name="CREATE"
                                                           checked={statusCreate}
                                                           onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                        htmlFor="chapter_admin_check"><span></span>Create</label></div>
-                      <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="READ"
+                        htmlFor="chapter_admin_check1"><span></span>Create</label></div>
+                      <div className="input_types"><input id="chapter_admin_check2" type="checkbox" name="READ"
                                                           checked={statusRead}
                                                           onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                        htmlFor="chapter_admin_check"><span></span>Read</label></div>
-                      <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="UPDATE"
+                        htmlFor="chapter_admin_check2"><span></span>Read</label></div>
+                      <div className="input_types"><input id="chapter_admin_check3" type="checkbox" name="UPDATE"
                                                           checked={statusUpdate}
                                                           onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                        htmlFor="chapter_admin_check"><span></span>Update</label></div>
-                      <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="DELETE"
+                        htmlFor="chapter_admin_check3"><span></span>Update</label></div>
+                      <div className="input_types"><input id="chapter_admin_check4" type="checkbox" name="DELETE"
                                                           checked={statusDelete}
                                                           onChange={that.optionsBySelectAction.bind(that, id)}/><label
-                        htmlFor="chapter_admin_check"><span></span>Delete</label></div>
+                        htmlFor="chapter_admin_check4"><span></span>Delete</label></div>
                     </div>
                   </div>
                   <div className="col-md-3">

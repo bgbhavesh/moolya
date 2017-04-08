@@ -98,15 +98,25 @@ export default class MlCreateRegistration extends React.Component{
     this.setState({coummunityName:selObject.label})
   }
   optionBySelectSubscription(val){
-    this.setState({subscription:val.value})
+    if(val){
+      this.setState({subscription:val.value});
+    }else{
+      this.setState({subscription:null});
+    }
   }
   optionBySelectRefered(val){
-    this.setState({refered:val.value})
+    if(val){
+      this.setState({refered:val.value})
+    }else{
+      this.setState({refered:null})
+    }
   }
   optionBySelectinstitutionAssociation(val){
-    this.setState({institutionAssociation:val.value})
-   /* const resp=this.createRegistration();
-    return resp;*/
+    if(val){
+      this.setState({institutionAssociation:val.value})
+    }else{
+      this.setState({institutionAssociation:null});
+    }
   }
 
 /*  async handleError(response) {

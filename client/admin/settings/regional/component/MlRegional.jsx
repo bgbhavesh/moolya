@@ -125,9 +125,9 @@ class MlRegional extends React.Component{
                     default={true}
                   >
                     <form>
-                     {/* <div className="previewImg">
-                        <img ref="url" src='https://s3.ap-south-1.amazonaws.com/moolya-app-images/countries-flag/small/India.png'/>
-                      </div>*/}
+                      <div className="previewImg">
+                        <img ref="url" src={this.state.data.regionalFlag}/>
+                      </div>
                       <div className="form-group">
                         <textarea ref="about" defaultValue={this.state.data && this.state.data.aboutRegion} placeholder="About" className="form-control float-label" id=""></textarea>
 

@@ -94,7 +94,10 @@ class MlEditCountry extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/countriesList")
+        }
       }
     ]
     const showLoader=this.state.loading;

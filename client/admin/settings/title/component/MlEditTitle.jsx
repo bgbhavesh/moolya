@@ -63,19 +63,22 @@ class MlEditTitle extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateTitle.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
+      // {
+      //   showAction: true,
+      //   actionName: 'save',
+      //   handler: null
+      // },
       {
         showAction: true,
-        actionName: 'add',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/titleList")
+        }
       }
     ];
 

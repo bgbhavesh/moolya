@@ -73,20 +73,23 @@ class MlEditGender extends React.Component{
 
   render(){
     let MlActionConfig = [
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
-        actionName: 'edit',
         showAction: true,
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: async(event) => this.props.handler(this.updateLang.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/gendersList")
+        }
       }
     ]
     const showLoader=this.state.loading;

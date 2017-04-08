@@ -68,20 +68,23 @@ class MlEditCompanyType extends React.Component{
 
   render(){
     let MlActionConfig = [
+      // {
+      //   actionName: 'edit',
+      //   showAction: true,
+      //   handler: async(event) => this.props.handler(this.updateCompanyType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+      // },
       {
-        actionName: 'edit',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateCompanyType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
-      },
-      {
-        showAction: true,
-        actionName: 'add',
+        actionName: 'save',
         handler: null
       },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/companyTypesList")
+        }
       }
     ];
 

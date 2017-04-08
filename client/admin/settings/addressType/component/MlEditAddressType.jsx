@@ -72,19 +72,22 @@ class MlEditAddressType extends React.Component{
   render(){
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateAddressType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       // {
       //   showAction: true,
-      //   actionName: 'add',
+      //   actionName: 'save',
       //   handler: null
       // },
       {
         showAction: true,
-        actionName: 'logout',
-        handler: null
+        actionName: 'cancel',
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/addressTypeList")
+        }
       }
     ]
     const showLoader=this.state.loading;

@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -150,7 +150,10 @@ class MlEditRole extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/rolesList")
+        }
       }
     ]
     let UserTypeOptions = [

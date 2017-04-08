@@ -95,7 +95,10 @@ class MlEditDocumentFormat extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/documentFormatList")
+        }
       }
     ]
     const showLoader=this.state.loading;

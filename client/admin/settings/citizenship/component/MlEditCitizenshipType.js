@@ -90,7 +90,10 @@ class MlEditCitizenshipType extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/citizenshipList")
+        }
       }
     ];
 

@@ -171,8 +171,7 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
              result.push({"subChapterName" : "All","_id" : "all"});
         }
     }
-
-    return result
+  return result
 }
 
 //roles Moolya subChapter

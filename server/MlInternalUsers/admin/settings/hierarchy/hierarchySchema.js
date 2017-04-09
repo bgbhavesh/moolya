@@ -23,22 +23,25 @@ let HierarchySchema = `
       department          : String
       subDepartment       : String
       role                : String
+      clusterId           : String
     }
     type FinalApproval{
-      id                  : String
+      _id                  : String
       parentDepartment    : String
       parentSubDepartment : String
       department          : String
       subDepartment       : String
       role                : String
+      clusterId           : String
     }
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
-        fetchRolesForDepartment(departmentId:String):[Roles]
+        fetchRolesForDepartment(departmentId:String,clusterId:String):[Roles]
         fetchRolesForHierarchy(departmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String): [Roles]
         fetchRolesForFinalApprovalHierarchy(departmentId:String): [Roles]
         fetchAssignedRoles(departmentId:String,type:String):[Roles]
+        fetchFinalApprovalRole(departmentId:String,subDepartmentId:String,clusterId:String):FinalApproval
     }
     type Mutation{
         updateHierarchyRoles(roles:[roleObject]):response

@@ -88,7 +88,7 @@ export default class MlHierarchyDetails extends React.Component {
 
   expandComponent(row) {
     return (
-      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} getFinalApprovalDetails={this.getFinalApprovalDetails.bind(this)}/>
+      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} />
     );
   }
   updateHierarchy(){
@@ -135,7 +135,7 @@ export default class MlHierarchyDetails extends React.Component {
                                search
               >
                 <TableHeaderColumn dataField="departmentId" isKey={true} dataSort={true} hidden={true}></TableHeaderColumn>
-                <TableHeaderColumn dataField="departmentId" dataSort={true} hidden={true}></TableHeaderColumn>
+                <TableHeaderColumn dataField="subDepartmentId" dataSort={true} hidden={true}></TableHeaderColumn>
                 <TableHeaderColumn dataField="isMoolya" hidden={true}>isMoolya</TableHeaderColumn>
                 <TableHeaderColumn dataField="departmentName">Department</TableHeaderColumn>
                 <TableHeaderColumn dataField="subDepartmentName">Sub-Department</TableHeaderColumn>

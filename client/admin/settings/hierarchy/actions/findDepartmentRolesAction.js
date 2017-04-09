@@ -1,12 +1,11 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findDeptRolesActionHandler(department) {
-  let departmentId=department
+export async function findDeptRolesActionHandler(department,cluster) {
   const result = await client.query({
     query: gql`
-       query  ($departmentId: String){
-         fetchRolesForDepartment(departmentId:$departmentId) {
+       query  ($departmentId: String,$clusterId:String){
+         fetchRolesForDepartment(departmentId:$departmentId,clusterId:$clusterId) {
            _id
            roleName
            displayName
@@ -21,7 +20,8 @@ export async function findDeptRolesActionHandler(department) {
         }
     `,
     variables: {
-      departmentId
+      departmentId:department,
+      clusterId:cluster
     },
     forceFetch:true
   })

@@ -70,7 +70,7 @@ class MlChapterCommunityDetails extends React.Component {
   }
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/chapters");
+    window.history.back()
   };
 
   async findComDef() {

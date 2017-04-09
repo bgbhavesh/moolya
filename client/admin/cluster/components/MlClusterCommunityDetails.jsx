@@ -70,7 +70,8 @@ class MlClusterCommunityDetails extends React.Component {
   }
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/clusters");
+    window.history.back()
+    // FlowRouter.go("/admin/clusters");
   };
 
   async findComDef() {

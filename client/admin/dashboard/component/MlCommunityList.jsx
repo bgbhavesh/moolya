@@ -36,9 +36,14 @@ export default class MlCommunityList extends Component {
       let hasQueryOptions = this.props.config&&this.props.config.queryOptions ? true : false;
       if (hasQueryOptions) {
         let config = this.props.config
-        if(config.params){
+        if(config && config.params){
           let usertype={userType:userType}
           _.extend(config.params,usertype)
+        }else{
+          // _.omit(config,[params]);
+          let newParams = {userType:userType}
+          // _.extend(config,params)
+          config['params'] = newParams;
         }
         let dynamicQueryOption = this.props.config&&this.props.config.buildQueryOptions ? this.props.config.buildQueryOptions(config) : {};
         variables = _.extend(variables,dynamicQueryOption);

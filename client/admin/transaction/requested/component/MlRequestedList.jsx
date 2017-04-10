@@ -11,6 +11,17 @@ export default class MlRequestedList extends Component {
      this.assignActionHandler.bind(this);
   }
   componentDidMount() {
+
+
+
+    $("#Reg_Request").popover({
+      'title' : 'Title Here',
+      'html' : true,
+      'placement' : 'top',
+      'container' : '.admin_main_wrap',
+      'content' : $(".ml_assignrequest").html()
+    });
+
   }
   assignActionHandler(data){
     if(data&&data.id){

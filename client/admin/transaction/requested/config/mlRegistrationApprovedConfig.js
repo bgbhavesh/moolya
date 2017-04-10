@@ -39,17 +39,17 @@ const mlUserTypeTableConfig=new MlViewer.View({
         }
       }
     },
-     {
+    {
       showAction: true,
-       actionName: 'assign',
-       handler: (data)=>{
-         if(data && data.id){
-         const internalConfig=data;
-         } else{
-           alert("Please select a User Type");
-         }
-       }
-       },
+      actionName: 'assign',
+      handler: (data)=>{
+        if(data && data.id){
+          const internalConfig=data;
+        } else{
+          alert("Please select a User Type");
+        }
+      }
+    },
     // {
     //   showAction: true,
     //   actionName: 'logout',
@@ -58,7 +58,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   ],
   graphQlQuery:gql`
              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"registrationInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+              data:SearchQuery(module:"registrationApprovedInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on RegistrationInfo{

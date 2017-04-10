@@ -144,21 +144,21 @@ export default function dynamicLinkHandler(path,params,queryParams){
     "hierarchy_chapters":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")){
-        return `/admin/settings/hierarchy/${dynamicParams.clusterId}/chapters`;
+        return `/admin/settings/hierarchy/clusterhierarchy/${dynamicParams.clusterId}/chapters`;
       }
     },
 
-    "hierarchy_details":function (params,queryParams) {
+/*    "hierarchy_details":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")){
         return `/admin/settings/hierarchy/${dynamicParams.clusterId}/hierarchydetails`;
       }
-    },
+    },*/
 
-    "hierarchy_cluster":function (params,queryParams) {
+    "hierarchy_details":function (params,queryParams) {
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")){
-        return `/admin/settings/hierarchy/${dynamicParams.clusterId}/clusterhierarchy`;
+        return `/admin/settings/hierarchy/clusterhierarchy/${dynamicParams.clusterId}/hierarchyDetails`;
       }
     },
     "cluster_history":function (params,queryParams) {

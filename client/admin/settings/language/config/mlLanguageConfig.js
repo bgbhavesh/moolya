@@ -30,7 +30,7 @@ const mlLanguageTableConfig=new MlViewer.View({
         if(data && data._id){
           FlowRouter.go("/admin/settings/editLanguage/"+data._id);
         } else{
-          alert("Please select a Document Type");
+          toastr.error("Please select a Document Type");
         }
       }
     },

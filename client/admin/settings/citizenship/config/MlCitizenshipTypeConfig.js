@@ -29,7 +29,7 @@ const mlCitizenshipTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editCitizenship/"+data.id)
         }
         else{
-          alert("Please select a Citizenship to edit")
+          toastr.error("Please select a Citizenship to edit")
         }
       }
 

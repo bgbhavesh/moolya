@@ -57,7 +57,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
         if(data && data.documentId){
           FlowRouter.go("/admin/settings/editDocumentMapping/"+data.documentId);
         } else{
-          alert("Please select a Document");
+          toastr.error("Please select a Document");
         }
       }
     },

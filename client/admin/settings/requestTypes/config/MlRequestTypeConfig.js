@@ -29,7 +29,7 @@ const mlRequestTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editRequestType/"+data.id)
         }
         else{
-          alert("Please select a request")
+          toastr.error("Please select a request")
         }
       }
 

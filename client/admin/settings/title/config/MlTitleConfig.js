@@ -28,7 +28,7 @@ const mlTitleTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editTitle/"+data._id)
         }
         else{
-          alert("Please select a Title")
+          toastr.error("Please select a Title")
         }
       }
 

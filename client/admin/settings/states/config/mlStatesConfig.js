@@ -31,7 +31,7 @@ const mlStatesTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editState/"+data.id);
         } else{
-          alert("Please select a State");
+          toastr.error("Please select a State");
         }
       }
     },

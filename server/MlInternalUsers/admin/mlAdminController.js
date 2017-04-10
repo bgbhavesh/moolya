@@ -178,9 +178,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   if(config.registrationAPIPath){
     graphQLServer.post(config.registrationAPIPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
     {
+      console.log("registrationAPIPath ");
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      console.log(req.body);
       if(req && req.body && req.body.data && req.headers.api_key)
       {
         let data = req.body.data

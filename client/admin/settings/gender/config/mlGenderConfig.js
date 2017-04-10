@@ -31,7 +31,7 @@ const mlGenderTableConfig=new MlViewer.View({
         if(data && data._id){
           FlowRouter.go("/admin/settings/editGender/"+data._id);
         } else{
-          alert("Please select a Gender");
+          toastr.error("Please select a Gender");
         }
       }
     },

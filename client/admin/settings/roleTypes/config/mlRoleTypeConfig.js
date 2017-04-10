@@ -108,7 +108,7 @@ const mlRoleTypeTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editRole/"+data.id);
         } else{
-          alert("Please select a Role Type");
+          toastr.error("Please select a Role Type");
         }
       }
     },

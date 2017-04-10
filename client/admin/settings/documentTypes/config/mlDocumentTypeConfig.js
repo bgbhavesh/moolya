@@ -28,7 +28,7 @@ const mlDocumentTypesTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editDocumentType/"+data.id);
         } else{
-          alert("Please select a Document Type");
+          toastr.error("Please select a Document Type");
         }
       }
     },

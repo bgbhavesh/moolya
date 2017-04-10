@@ -54,9 +54,11 @@ export default class MlIdeatorDetails extends React.Component{
       this.sendDataToParent()
   }
   handleBlur(e){
-      let name  = e.target.name
-      this.state.data[name] = e.target.value;
-      this.sendDataToParent()
+    let details =this.state.data;
+    let name  = e.target.name;
+    details[name]= event.target.value
+    this.setState({data:details})
+    this.sendDataToParent()
   }
 
   sendDataToParent(){

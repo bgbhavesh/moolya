@@ -13,8 +13,16 @@ const mlUserTypeTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "firstName", title: "First Name",dataSort:true},
-    {dataField: "lastName", title: "last Name",dataSort:true}
+    {dataField: "firstName", title: "Name",dataSort:true},
+    {dataField: "contactNumber", title: "ContactNo",dataSort:true},
+    {dataField: "communityName", title: "Community",dataSort:true},
+    {dataField: "clusterName", title: "Cluster",dataSort:true},
+    {dataField: "chapterName", title: "Chapter",dataSort:true},
+    {dataField: "subChapterName", title: "SubChapter",dataSort:true},
+    {dataField: "accountType", title: "Subscription Type",dataSort:true},
+    {dataField: "source", title: "Source",dataSort:true},
+    {dataField: "registrationStatus", title: "Status",dataSort:true},
+    {dataField: "assignedUser", title: "Assignto",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -49,14 +57,27 @@ const mlUserTypeTableConfig=new MlViewer.View({
     // }
   ],
   graphQlQuery:gql`
-              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
+             query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
               data:SearchQuery(module:"registrationInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on RegistrationInfo{
+              
                               firstName 
                               lastName
                               id:_id
+                              contactNumber
+                              communityName
+                      			  clusterName
+                      				chapterName
+                              subChapterName
+                              accountType
+                      				source
+                              assignedUser
+              								registrationStatus
+                      				registrationDate
+                               
+                 
                           }
                       }
               }

@@ -40,6 +40,10 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
       this.state.ideatorPortfolio['problemSolution'] = details;
       this.props.getPortfolioDetails(this.state.ideatorPortfolio);
     }
+    getIntellectualPlanning(details) {
+      this.state.ideatorPortfolio['intellectualPlanning'] = details;
+      this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+    }
     getLookingFor(details) {
       this.state.ideatorPortfolio['lookingFor'] = details;
       this.props.getPortfolioDetails(this.state.ideatorPortfolio);

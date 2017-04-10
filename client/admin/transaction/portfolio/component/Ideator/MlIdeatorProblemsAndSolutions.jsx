@@ -21,8 +21,12 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   onInputChange(event){
+    // let name  = event.target.name
+    // this.state.data[name] = event.target.value;
+    let dataDetails =this.state.data;
     let name  = event.target.name
-    this.state.data[name] = event.target.value;
+    dataDetails[name]= event.target.value
+    this.setState({data: dataDetails})
     this.sendDataToParent();
   }
 

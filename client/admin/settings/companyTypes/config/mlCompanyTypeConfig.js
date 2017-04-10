@@ -28,7 +28,7 @@ const mlCompanyTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editCompanyType/"+data._id)
         }
         else{
-          alert("Please select a company type ")
+          toastr.error("Please select a company type ")
         }
       }
 

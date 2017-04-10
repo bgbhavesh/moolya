@@ -28,7 +28,7 @@ const mlTaxTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editTaxType/"+data._id)
         }
         else{
-          alert("Please select a Tax Type")
+          toastr.error("Please select a Tax Type")
         }
       }
 

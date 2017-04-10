@@ -31,7 +31,7 @@ const mltemplatesConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/stepDetails/"+data.subProcessId+"/"+data.id+"/"+data.templates[0].stepCode)
         }
         else{
-          alert("Please select a Template Type")
+          toastr.error("Please select a Template Type")
         }
       }
     }

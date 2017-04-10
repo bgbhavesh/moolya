@@ -11,7 +11,14 @@ const dashboardRoutes = {
   },
   communityListRoute: (clusterId, chapterId, subChapterId, v, router)=> {
     return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/communities?viewMode=${v}`;
-  }
+  },
+  backendUserDetailRoute:(clusterId, chapterId, subChapterId, backendUserId, route)=> {
+    if(clusterId!=""){
+      return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/communities/${backendUserId}/backendUserDetails`;
+    }else{
+      return `/admin/dashboard/communities/${backendUserId}/backendUserDetails`;
+    }
+  },
 }
 
 export default dashboardRoutes;

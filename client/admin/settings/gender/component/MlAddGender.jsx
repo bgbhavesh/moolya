@@ -5,7 +5,7 @@ import {addGenderActionHandler} from '../actions/addGenderAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
 
 
 class MlAddGender extends React.Component{
@@ -18,6 +18,9 @@ class MlAddGender extends React.Component{
 
   componentDidMount() {
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
@@ -42,8 +45,6 @@ class MlAddGender extends React.Component{
       genderUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await addGenderActionHandler(Details);
     return response;
 
@@ -51,11 +52,6 @@ class MlAddGender extends React.Component{
 
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -65,7 +61,6 @@ class MlAddGender extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/gendersList")
         }
       }

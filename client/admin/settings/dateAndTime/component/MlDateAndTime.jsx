@@ -8,7 +8,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {findDateAndTimeActionHandler} from '../actions/findDateAndTimeAction'
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {initalizeFloatLabel,OnToggleSwitch} from '../../../utils/formElemUtil';
 
 
 class MlAddDateAndTime extends React.Component{
@@ -31,6 +31,9 @@ class MlAddDateAndTime extends React.Component{
 
   componentDidMount() {
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   componentWillMount() {
@@ -139,7 +142,7 @@ class MlAddDateAndTime extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
+          FlowRouter.go("/admin/settings/dateAndTimeList");
         }
       }
     ]

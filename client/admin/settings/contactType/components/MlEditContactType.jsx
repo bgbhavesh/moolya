@@ -6,7 +6,7 @@ import {findContactTypeActionHandler} from '../actions/findContactTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
 
 
 class MlEditContactType extends React.Component{
@@ -25,6 +25,9 @@ class MlEditContactType extends React.Component{
   }
   componentDidUpdate(){
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   componentWillMount() {
@@ -82,16 +85,10 @@ class MlEditContactType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateContact.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'save',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/contactTypesList")
         }
       }

@@ -8,7 +8,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTaxationActionHandler} from '../actions/findTaxationAction';
 import {updateTaxationActionHandler} from '../actions/updateTaxationAction';
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
 
 class MlAddTaxation extends React.Component{
   constructor(props) {
@@ -28,8 +28,11 @@ class MlAddTaxation extends React.Component{
     return resp;
   }
 
-  componentWillUpdate(){
+  componentDidUpdate(){
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   getTaxTableDetails(taxTypeInfo){
@@ -101,16 +104,10 @@ class MlAddTaxation extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.editTaxation.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'add',
-      //   handler:null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/taxationList")
 
         }
@@ -122,7 +119,6 @@ class MlAddTaxation extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
 
       <div className="admin_main_wrap">
-
 
 
         <div className="admin_padding_wrap">
@@ -176,9 +172,10 @@ class MlAddTaxation extends React.Component{
 
               < MlTaxTable getTaxTableDetails={this.getTaxTableDetails.bind(this)} taxTableDetails={this.state.data&&this.state.data.taxInformation}/>
 
-              <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </ScrollArea>
           </div>
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+
         </div>
       </div>)}
       </div>

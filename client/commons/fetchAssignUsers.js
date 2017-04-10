@@ -16,7 +16,10 @@ export async function fetchAssignUsersActionHandler(clusterId, chapterId, subCha
         data: fetchAssignedUsers(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,subChapterName:$subChapterName ) 
         {
             _id,
-            username
+            username,
+            profile{
+              isActive
+            }
         }
       }
     `,

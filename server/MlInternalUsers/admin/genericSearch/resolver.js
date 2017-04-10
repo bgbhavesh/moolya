@@ -612,6 +612,21 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data = result;
     totalRecords=MlRegistration.find(query,findOptions).count();
   }
+  if(args.module=="registrationApprovedInfo"){
+    data= MlRegistration.find(query,findOptions).fetch();
+    let result=[];
+    data.map(function (doc,index) {
+      if(doc.status=='Approved'){
+        let object ;
+        object = doc.registrationInfo;
+        object._id = doc._id;
+        object.registrationStatus =doc.status;
+        result.push(object);
+      }
+    });
+    data = result;
+    totalRecords=MlRegistration.find(query,findOptions).count();
+  }
 
   if(args.module == "Portfoliodetails"){
       data = MlPortfolioDetails.find(query,findOptions).fetch();

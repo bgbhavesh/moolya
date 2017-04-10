@@ -10,6 +10,8 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 export default class institution extends React.Component{
   constructor(props){
@@ -43,6 +45,7 @@ export default class institution extends React.Component{
 
   componentDidMount()
   {
+    initalizeFloatLabel();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
   }

@@ -30,8 +30,10 @@ class MlEditUserType extends React.Component{
   }
   componentDidUpdate()
   {
-    OnToggleSwitch(true,true);
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   onCommunitySelect(val, callback, selObject) {

@@ -40,7 +40,7 @@ class MlAddTaxType extends React.Component{
       taxName: this.refs.taxName.value,
       taxDisplayName: this.refs.taxDisplayName.value,
       aboutTax: this.refs.aboutTax.value,
-      isActive: this.refs.isActive.checked
+      isActive: this.refs.isActive.checked,
     }
     const response = await addTaxActionHandler(TaxTypeDetails)
     console.log(response);

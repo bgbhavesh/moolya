@@ -4,46 +4,40 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
   constructor(props) {
     super(props);
+    this.state =  {data:{}};
     this.addEventHandler.bind(this);
-    this.createProblemAndSolution.bind(this)
     return this;
   }
 
   async addEventHandler() {
-    const resp=await this.createProblemAndSolution();
-    console.log(resp);
-    return resp;
+    // const resp=await this.createProblemAndSolution();
+    // return resp;
   }
 
-  async  createProblemAndSolution() {
-    let details = {
-      problems: this.refs.problems.value,
-      solution: this.refs.solution.value
-    }
-    // const response = await addIndustryActionHandler(IndustryDetails)
-    return details;
+  onInputChange(event){
+    let name  = event.target.name
+    this.state.data[name] = event.target.value;
+    this.sendDataToParent();
   }
-  handleClick(event){
-    const value = this.addEventHandler()
+
+  onFileUpload(value){
+    // let file=document.getElementById("profilePic").files[0];
+    // let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
+    // let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    //this.props.onFileUpload(file,documentId);
+  }
+
+  sendDataToParent() {
+    this.props.getProblemSolution(this.state.data);
   }
 
   componentDidMount(){
-    // $(function() {
-    //   $('.float-label').jvFloat();
-    // });
-    //
-    // $('.switch input').change(function() {
-    //   if ($(this).is(':checked')) {
-    //     $(this).parent('.switch').addClass('on');
-    //   }else{
-    //     $(this).parent('.switch').removeClass('on');
-    //   }
-    // });
     dataVisibilityHandler();
   }
 
@@ -67,7 +61,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems"></textarea>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement"></textarea>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" ref="pro"/>
                       </div>
                     </div>
@@ -80,13 +74,29 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution"></textarea>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement"></textarea>
                         <FontAwesome name='lock' className="input_icon req_textarea_icon un_lock" ref="sol"/>
                       </div>
                     </div>
                   </div>
+                  <div className="panel panel-default">
+                    <div className="panel-heading">Add Images</div>
+                    <div className="panel-body nopadding">
+                      <div className="upload-file-wrap">
+                        <input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
+                        <label htmlFor="fileinput">
+                          <figure>
+                            <i className="fa fa-upload" aria-hidden="true"></i>
+                          </figure>
+                        </label>
+                      </div>
+                      <div className="upload-image"><img id="output"/></div>
+                      <div className="upload-image"></div>
+                      <div className="upload-image"></div>
+                    </div>
+                  </div>
                 </div>
-                <submit onClick={this.handleClick.bind(this)}>Click</submit>
+                {/*<submit onClick={this.handleClick.bind(this)}>Click</submit>*/}
               </div>
             </ScrollArea>
           </div>

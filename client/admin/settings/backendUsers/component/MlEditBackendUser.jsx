@@ -387,7 +387,7 @@ class MlEditBackendUser extends React.Component{
                 <div className="form_bg">
                   <form>
                   <div className="form-group">
-                    <input type="text" ref="id" value={that.state.data&&that.state.data._id} hidden="true"/>
+                    <input type="text" ref="id" defaultValue={that.state.data&&that.state.data._id} hidden="true"/>
                     <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.firstName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
@@ -470,23 +470,23 @@ class MlEditBackendUser extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group">
-                      <input type="text" ref="cluster"  placeholder="Cluster" value={userProfiles.clusterName}  className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="cluster"  placeholder="Cluster" defaultValue={userProfiles.clusterName}  className="form-control float-label" id="" disabled="true"/>
                       </div>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
                           <div key={RId}>
                             <div className="form-group">
-                              <input type="text" ref="chapter" value={(userRoles.chapterId=='all')?userRoles.chapterId:userRoles.chapterName} placeholder="Chapter"
+                              <input type="text" ref="chapter" defaultValue={(userRoles.chapterId=='all')?userRoles.chapterId:userRoles.chapterName} placeholder="Chapter"
                                      className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="Department" value={(userRoles.subChapterId=='all')?userRoles.subChapterId:userRoles.subChapterName}  placeholder="Sub Chapter" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="Department" defaultValue={(userRoles.subChapterId=='all')?userRoles.subChapterId:userRoles.subChapterName}  placeholder="Sub Chapter" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="subDepartment" value={(userRoles.communityId=='all')?userRoles.communityId:userRoles.communityName}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="subDepartment" defaultValue={(userRoles.communityId=='all')?userRoles.communityId:userRoles.communityName}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="role" value={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="role" defaultValue={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
                             </div>
                           </div>
                         )

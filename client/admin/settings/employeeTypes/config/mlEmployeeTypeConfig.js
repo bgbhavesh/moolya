@@ -28,7 +28,7 @@ const mlEmployeeTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editEmployeeType/"+data._id)
         }
         else{
-          alert("Please select a employee type ")
+          toastr.error("Please select a employee type ")
         }
       }
 

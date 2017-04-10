@@ -29,7 +29,7 @@ const mlStageOfCompanyTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editStageOfCompany/"+data.id)
         }
         else{
-          alert("Please select a Stage Of Company to edit")
+          toastr.error("Please select a Stage Of Company to edit")
         }
       }
 

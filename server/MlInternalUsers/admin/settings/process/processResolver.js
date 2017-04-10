@@ -37,11 +37,11 @@ MlResolver.MlQueryResolver['findProcess'] = (obj, args, context, info) => {
     let response= MlProcessMapping.findOne({"_id":id});
     console.log(response)
     let documents=response&&response.documents?response.documents:[];
-    documents.map(function (doc, index) {
+    /*documents.map(function (doc, index) {
      let kycCategeotyId=doc.category
      const kycCategory= MlDocumentCategories.findOne({_id:kycCategeotyId})||'';
       doc.categoryName=kycCategory.docCategoryName;
-    });
+    });*/
     return response;
   }
 
@@ -57,7 +57,7 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
 
   if (args.id) {
     var id= args.id;
-    args=_.omit(args,'_id');
+    args=_.omit(args,'id');
     let result= MlProcessMapping.update(id, {$set: args.process});
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);

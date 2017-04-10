@@ -71,9 +71,11 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
 
 MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, info) => {
   // TODO : Authorization
-  if (args.documentTypeId&&args.clusterId) {
+  if (args.documentTypeId&&args.clusterId&&args.chapterId&&args.subChapterId) {
     let id = args.documentTypeId;
     let clusterId=args.clusterId;
+    let chapterId=args.chapterId;
+    let subChapterId=args.subChapterId;
     let data=[];
     if(clusterId.length==1&&clusterId[0]=="all"){
        data = MlDocumentMapping.find({ documentType : { $in: [id] },isActive:true}).fetch();
@@ -81,6 +83,8 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
        data = MlDocumentMapping.find({
         documentType: {$in: [id]},
         clusters: {$in: clusterId},
+         chapters: {$in: chapterId},
+         subChapters:{$in: subChapterId},
         isActive: true
       }).fetch();
     }

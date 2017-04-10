@@ -31,7 +31,7 @@ const mlContactTypeTableConfig=new MlViewer.View({
         if(data && data._id){
           FlowRouter.go("/admin/settings/editContactType/"+data._id);
         } else{
-          alert("Please select a Contact Type");
+          toastr.error("Please select a Contact Type");
         }
       }
     },

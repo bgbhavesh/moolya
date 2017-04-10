@@ -30,7 +30,7 @@ const mlAddressTypeTableConfig=new MlViewer.View({
         if(data && data._id){
           FlowRouter.go("/admin/settings/editAddressType/"+data._id);
         } else{
-          alert("Please select a Address Type");
+          toastr.error("Please select a Address Type");
         }
       }
     },

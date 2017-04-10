@@ -28,7 +28,7 @@ const mlKycCategoryTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editKycCategory/"+data.id);
         } else{
-          alert("Please select a KYC Category");
+          toastr.error("Please select a KYC Category");
         }
       }
     },

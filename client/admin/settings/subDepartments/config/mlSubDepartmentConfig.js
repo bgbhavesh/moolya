@@ -78,7 +78,7 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editSubDepartment/"+data.id);
         } else{
-          alert("Please select a Sub Department");
+          toastr.error("Please select a Sub Department");
         }
       }
     },

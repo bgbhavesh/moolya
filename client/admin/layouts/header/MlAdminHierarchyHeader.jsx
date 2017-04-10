@@ -18,15 +18,15 @@ export default class MlAdminHierarchyHeader extends Component {
   }
   async findProcess() {
     let documentsList=[]
-    let clusterId = this.props.clusterId
-    if(clusterId){
+    //let clusterId = this.props.clusterId
+    //if(clusterId){
      // const response = await findTemplateStepsActionHandler(subProcessId);
       let response = [{"tabName":"platformhierarchy","tabCode":"platform hierarchy"},{"tabName":"clusterhierarchy","tabCode":"cluster hierarchy"},{"tabName":"history","tabCode":"history"}]
       if(response){
         let documents=response
         for(let i=0;i<documents.length;i++){
           let json={
-            "link": "/admin/settings/hierarchy/"+clusterId+"/"+documents[i].tabName,
+            "link": "/admin/settings/hierarchy/"+documents[i].tabName,
             "name":documents[i].tabCode ,
             "uniqueId": "hierrarchy_Steps",
             "isLink": true,
@@ -37,7 +37,7 @@ export default class MlAdminHierarchyHeader extends Component {
         }
         this.setState({"processMenus":documentsList})
       }
-    }
+    //}
   }
   render(){
     let subMenu = this.context.menu.menu||[];

@@ -19,6 +19,7 @@ export default class MlIdeatorDetails extends React.Component{
     }
     this.onClick.bind(this);
   }
+
   componentDidMount()
   {
     $(function() {
@@ -31,20 +32,20 @@ export default class MlIdeatorDetails extends React.Component{
       }else{
         $(this).parent('.switch').removeClass('on');
       }
+      // FlowRouter.go('/admin/portfolio/about')
+      // return (
+      //     <MlIdeatorPortfolioAbout />
+      // )
     });
     dataVisibilityHandler();
   }
 
   onClick(field,e){
-    let status = e.currentTarget.checked;
-    if(field == "firstName"){
-      this.setState({isfirstNamePublic:status});
-    }
-      // FlowRouter.go('/admin/portfolio/about')
-      // return (
-      //     <MlIdeatorPortfolioAbout />
-      // )
-
+      let status = e.currentTarget.checked;
+      if(field == "firstName"){
+        this.setState({isfirstNamePublic:status});
+      }
+      this.props.getIdeatorDetails(this.state)
   }
 
   render(){
@@ -68,7 +69,6 @@ export default class MlIdeatorDetails extends React.Component{
                       <input type="text" placeholder="First Name" ref="firstName" className="form-control float-label" id="cluster_name" defaultValue="Ravi"/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="firstName" onClick={this.onClick.bind(this)}/><input type="checkbox" id="makePrivate" checked={this.state.isfirstNamePublic}/>
                     </div>
-
                     <div className="form-group">
                       <input type="text" placeholder="Last Name" ref="lastName" className="form-control float-label" id="cluster_name" defaultValue="Kapoor"/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="lastName" onClick={this.onClick.bind(this)}/>

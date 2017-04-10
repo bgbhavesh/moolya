@@ -188,7 +188,7 @@ adminSection.route('/settings/addSubDepartment', {
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
   }
 });
-adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
+/*adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
   name: '',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} stepCode={params.stepCode}/>})
@@ -214,6 +214,30 @@ adminSection.route('/settings/hierarchy/:clusterId/platformhierarchy', {
 });
 adminSection.route('/settings/hierarchy/:clusterId/clusterhierarchy', {
   name: 'hierarchy_cluster',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId}/>})
+  }
+});*/
+adminSection.route('/settings/hierarchy/platformhierarchy', {
+  name: 'hierarchy_details',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader />,adminContent:< MlHierarchyList/>})
+  }
+});
+adminSection.route('/settings/hierarchy/clusterhierarchy', {
+  name: 'hierarchy',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader />,adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
+  }
+});
+adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/chapters', {
+  name: 'hierarchy_chapters',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
+  }
+});
+adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/hierarchyDetails', {
+  name: 'hierarchy_details',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId}/>})
   }

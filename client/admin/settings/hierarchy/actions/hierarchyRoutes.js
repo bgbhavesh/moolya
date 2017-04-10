@@ -2,10 +2,10 @@
 
 const hierarchyRoutes={
   chapterListRoute:(clusterId)=>{
-    return `/admin/settings/hierarchy/${clusterId}/chapters`;
+    return `/admin/settings/hierarchy/clusterhierarchy/${clusterId}/chapters`;
   },
   hierarchyDetails:(clusterId)=>{
-    return `/admin/settings/hierarchy/${clusterId}/platformhierarchy`;
+    return `/admin/settings/hierarchy/clusterhierarchy/${clusterId}/hierarchyDetails`;
   },
 }
 

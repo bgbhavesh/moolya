@@ -24,21 +24,11 @@ const mlHierarchyTableConfig=new MlViewer.View({
   actionConfiguration:[
     {
       actionName: 'edit',
-      showAction: true,
-      handler: (data)=>{
-        if(data && data._id){
-          FlowRouter.go("/admin/settings/editGender/"+data._id);
-        } else{
-          alert("Please select a hierarchy");
-        }
-      }
+      showAction: true
     },
     {
       showAction: true,
-      actionName: 'add',
-      handler: (data)=>{
-        FlowRouter.go("/admin/settings/addGender")
-      }
+      actionName: 'add'
     }
   ],
   sizePerPage:5,

@@ -205,6 +205,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           res.send(response);
         }
 
+      }else{
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
       }
     }))
   }

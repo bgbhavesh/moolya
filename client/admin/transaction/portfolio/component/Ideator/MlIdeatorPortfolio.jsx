@@ -8,7 +8,7 @@ import MlIdeatorLibrary from "../Ideator/MlIdeatorLibrary";
 import MlIdeatorStrategyAndPlanning from "../Ideator/MlIdeatorStrategyAndPlanning";
 import MlIdeatorIntellectualPlanningAndTrademark from "../Ideator/MlIdeatorIntellectualPlanningAndTrademark";
 import MlIdeatorLookingFor from "../Ideator/MlIdeatorLookingFor";
-// import '../../../../../stylesheets/tab.css'
+
 
 export default class MlIdeatorPortfolioTemplate extends React.Component{
     constructor(props){
@@ -16,6 +16,19 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         this.state =  {tabs: [], ideatorPortfolio:{}, problemSolution:{}};
         this.getIdeatorDetails.bind(this);
         this.getProblemSolution.bind(this)
+    }
+
+    componentDidMount(){
+      setTimeout(function(){
+        $('div[role="tab"]').each(function( index ) {
+          var test = $(this).text();
+          $(this).empty();
+          $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
+        });
+        $('.RRT__tabs').addClass('horizon-swiper');
+        $('.RRT__tab').addClass('horizon-item');
+        $('.horizon-swiper').horizonSwiper();
+      },300);
     }
 
     getTabComponents(){
@@ -58,8 +71,8 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         let tabs = this.getTabComponents();
         function getTabs() {
           return tabs.map(tab => ({
-            tabClassName: 'tab', // Optional
-            panelClassName: 'panel', // Optional
+            tabClassName: 'moolya_btn', // Optional
+            panelClassName: 'panel1', // Optional
             title: tab.title,
             getContent: () => tab.component
           }));

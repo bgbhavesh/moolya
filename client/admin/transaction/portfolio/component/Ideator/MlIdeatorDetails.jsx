@@ -23,21 +23,6 @@ export default class MlIdeatorDetails extends React.Component{
   componentDidMount()
   {
     OnLockSwitch();
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-      // FlowRouter.go('/admin/portfolio/about')
-      // return (
-      //     <MlIdeatorPortfolioAbout />
-      // )
-    });
     dataVisibilityHandler();
   }
 

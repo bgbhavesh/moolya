@@ -84,6 +84,22 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                       </div>
                     </div>
                   </div>
+                  <div className="panel panel-default">
+                    <div className="panel-heading">Add Images</div>
+                    <div className="panel-body nopadding">
+                      <div className="upload-file-wrap">
+                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
+                        <label htmlFor="fileinput">
+                          <figure>
+                            <i className="fa fa-upload" aria-hidden="true"></i>
+                          </figure>
+                        </label>
+                      </div>
+                      <div className="upload-image"><img id="output"/></div>
+                      <div className="upload-image"></div>
+                      <div className="upload-image"></div>
+                    </div>
+                  </div>
                 </div>
                 <div className="col-lg-6">
                   <div className="panel panel-default panel-form">

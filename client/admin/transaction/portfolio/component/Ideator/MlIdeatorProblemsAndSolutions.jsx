@@ -26,6 +26,22 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     this.sendDataToParent();
   }
 
+  onLockChange(field,e){
+    let data =this.state.data;
+    let className = e.target.className;
+    // let key = e.target.fieldName;
+    let key = e.target.id;
+    if(className.indexOf("fa-lock") != -1){
+      this.state.data[key] = true;
+      data[key] = true;
+      // this.setState({key:true})
+    }else{
+      this.state.data[key] = false;
+      // this.setState({key:false})
+    }
+    this.sendDataToParent();
+  }
+
   onFileUpload(value){
     // let file=document.getElementById("profilePic").files[0];
     // let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
@@ -62,7 +78,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" ref="pro"/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "isProblemPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.isProblemPrivate}/>
                       </div>
                     </div>
                   </div>
@@ -75,7 +91,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement"></textarea>
-                        <FontAwesome name='lock' className="input_icon req_textarea_icon un_lock" ref="sol"/>
+                        <FontAwesome name='lock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "isSolutionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.isSolutionPrivate}/>
                       </div>
                     </div>
                   </div>
@@ -83,7 +99,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-heading">Add Images</div>
                     <div className="panel-body nopadding">
                       <div className="upload-file-wrap">
-                        <input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
+                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
                         <label htmlFor="fileinput">
                           <figure>
                             <i className="fa fa-upload" aria-hidden="true"></i>

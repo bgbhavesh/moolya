@@ -22,7 +22,8 @@ var assignedParent = [
   },
   {
     value: 'community',    label: 'community'
-  },{
+  },
+  {
     value: 'unassign',    label: 'unassign'
   }
 ];
@@ -131,12 +132,16 @@ export default class MlAssignHierarchy extends React.Component {
   optionsBySelectReportingRole(index, selectedIndex){
       let roles=this.state.unAssignedRoles
       roles[index].teamStructureAssignment.reportingRole = selectedIndex
+      roles[index].teamStructureAssignment.isAssigned = true
       this.setState({unAssignedRoles:roles})
       this.props.getUnAssignRoleDetails(roles)
   }
   optionsBySelectAssignedParentNode(index, value){
     let roles=this.state.assignedRoles
     roles[index].teamStructureAssignment.assignedLevel = value
+    if(value=="unassign"){
+      roles[index].teamStructureAssignment.isAssigned = false
+    }
     this.setState({assignedRoles:roles})
     this.props.getAssignRoleDetails(roles)
   }

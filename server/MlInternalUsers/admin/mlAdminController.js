@@ -183,10 +183,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
       console.log(req.body);
-      if(req && req.body && req.body.data && req.headers.api_key)
+      console.log(req.headers);
+      if(req && req.body && req.body.data)
       {
         let data = req.body.data
         let apiKey = req.header("API_KEY")
+        console.log(apiKey);
         if(apiKey=="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           if(data.email&&data.countryId&&data.registrationType){
             let response;

@@ -88,7 +88,11 @@ export default class MlHierarchyDetails extends React.Component {
 
   expandComponent(row) {
     return (
+      <div>
+      {row.departmentId!=''?
       <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} />
+      :<div></div>}
+      </div>
     );
   }
   updateHierarchy(){

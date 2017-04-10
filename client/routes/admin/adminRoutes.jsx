@@ -17,6 +17,7 @@ import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSu
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
+import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
@@ -163,7 +164,7 @@ adminSection.route('/transactions/approvedList', {
 adminSection.route('/transactions/registrationApprovedList', {
   name: 'transaction_registration_approved',
   action(){
-    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+    mount(AdminLayout,{adminContent:<MlRegistrtionApprovedList/>})
   }
 });
 

@@ -29,7 +29,7 @@ const mlEntityTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editEntity/"+data.id)
         }
         else{
-          alert("Please select a Entity to edit")
+          toastr.error("Please select a Entity to edit")
         }
       }
 

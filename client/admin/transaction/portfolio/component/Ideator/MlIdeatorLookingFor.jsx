@@ -4,12 +4,23 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 
 
 export default class MlIdeatorLookingFor extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      isLookingForPrivate:true,
+      description:""
+
+    }
+    this.onClick.bind(this);
+    this.handleBlur.bind(this)
+  }
   componentDidMount()
   {
+    OnLockSwitch();
     $(function() {
       $('.float-label').jvFloat();
     });
@@ -21,9 +32,25 @@ export default class MlIdeatorLookingFor extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
-
-
+    dataVisibilityHandler();
   }
+
+  onClick(field,e){
+    let className = e.target.className;
+    if(className.indexOf("fa-lock") != -1){
+      this.setState({[e.target.id]:true});
+    }else{
+      this.setState({[e.target.id]:false});
+    }
+    this.props.getLookingFor(this.state)
+  }
+
+  handleBlur(e){
+    this.setState({[e.target.name]:e.target.value});
+    this.props.getLookingFor(this.state)
+  }
+
+
   render(){
     return (
       <div className="admin_main_wrap">
@@ -45,8 +72,8 @@ export default class MlIdeatorLookingFor extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about"></textarea>
-                        <FontAwesome name='lock' className="input_icon req_textarea_icon"/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" name="description" onBlur={this.handleBlur.bind(this)}></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLookingForPrivate" onClick={this.onClick.bind(this, "isLookingForPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.isLookingForPrivate}/>
                       </div>
 
                     </div>

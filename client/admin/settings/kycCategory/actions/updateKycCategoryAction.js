@@ -31,7 +31,7 @@ export async function updateKycCategoryActionHandler(Details) {
       docCategoryDisplayName,
       about,
       isActive,
-      moduleName:"KYCCATEGORY",
+      moduleName:"DOCUMENTCATEGORIES",
       actionName:"UPDATE"
     }
   })

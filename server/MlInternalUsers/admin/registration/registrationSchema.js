@@ -170,6 +170,7 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
+        status          : String
      
     }
     

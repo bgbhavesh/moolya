@@ -33,7 +33,7 @@ const mlEmailTypeTableConfig=new MlViewer.View({
         if(data && data._id){
           FlowRouter.go("/admin/settings/editEmailType/"+data._id);
         } else{
-          alert("Please select a Email Type");
+          toastr.error("Please select a Email Type");
         }
       }
     },

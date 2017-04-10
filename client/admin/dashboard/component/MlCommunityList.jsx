@@ -36,9 +36,14 @@ export default class MlCommunityList extends Component {
       let hasQueryOptions = this.props.config&&this.props.config.queryOptions ? true : false;
       if (hasQueryOptions) {
         let config = this.props.config
-        if(config.params){
+        if(config && config.params){
           let usertype={userType:userType}
           _.extend(config.params,usertype)
+        }else{
+          // _.omit(config,[params]);
+          let newParams = {userType:userType}
+          // _.extend(config,params)
+          config['params'] = newParams;
         }
         let dynamicQueryOption = this.props.config&&this.props.config.buildQueryOptions ? this.props.config.buildQueryOptions(config) : {};
         variables = _.extend(variables,dynamicQueryOption);
@@ -56,12 +61,16 @@ export default class MlCommunityList extends Component {
     } else {
       data=this.props.data;
     }
+    let clusterId = this.props.config.params&&this.props.config.params.clusterId?this.props.config.params.clusterId:"";
+    let chapterId = this.props.config.params&&this.props.config.params.chapterId?this.props.config.params.chapterId:"";
+    let subChapterId = this.props.config.params&&this.props.config.params.subChapterId?this.props.config.params.subChapterId:"";
+
     const list=  data.map((prop) =>
       <div className="col-md-2" key={prop._id}>
         <div className="list_block">
           <div className={`cluster_status ${prop.profile.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.profile.isActive?"check":"times"}/></div>
           {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}
-          <a href={dashboardRoutes.communityListRoute(prop.clusterId,prop.chapterId,prop.subChapterId)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
+          <a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
           <h3>{prop.profile.InternalUprofile.moolyaProfile.displayName}</h3>
         </div>
       </div>

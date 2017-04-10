@@ -32,7 +32,7 @@ const mlCitiesTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editCity/"+data.id);
         } else{
-          alert("Please select a City");
+          toastr.error("Please select a City");
         }
       }
     },

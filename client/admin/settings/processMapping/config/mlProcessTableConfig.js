@@ -89,7 +89,7 @@ const mlProcessTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editProcess/"+data.id);
         } else{
-          alert("Please select a Process Type");
+          toastr.error("Please select a Process Type");
         }
       }
     },

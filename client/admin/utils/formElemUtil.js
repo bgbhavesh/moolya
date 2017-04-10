@@ -76,3 +76,16 @@ export function dataVisibilityHandler(){
     }
   });
 }
+export function OnLockSwitch(){
+
+  $('.lock_input[type=checkbox]').each(function () {
+    if ($(this).is(':checked')) {
+      $(this).prev('span').addClass('fa-lock').removeClass('un_lock').removeClass('fa-unlock');
+      // $(this).parent('.switch').addClass('on');
+    } else {
+      $(this).prev('span').addClass('fa-unlock').addClass('un_lock').removeClass('fa-lock');
+      // $(this).parent('.switch').removeClass('on');
+    }
+  });
+
+}

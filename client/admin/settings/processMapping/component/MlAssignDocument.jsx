@@ -98,8 +98,8 @@ export default class MlAssignDocument extends React.Component {
     data:fetchDocumentsType{label:docTypeName,value:_id}
     }
 `;
-    let docKycquery=gql`query($documentTypeId:String,$clusterId:[String]){
-  data:fetchKycDocProcessMapping(documentTypeId:$documentTypeId,clusterId:$clusterId) {
+    let docKycquery=gql`query($documentTypeId:String,$clusterId:[String],$chapterId:[String],$subChapterId:[String]){
+  data:fetchKycDocProcessMapping(documentTypeId:$documentTypeId,clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId) {
     value:_id
 		label:docCategoryName
   }
@@ -112,7 +112,7 @@ export default class MlAssignDocument extends React.Component {
 
         {/*<div className="form-group"> <a onClick={that.assignDocumentsState.bind(this)} className="mlUpload_btn">Add</a></div>*/}
         {that.state.assignDocuments.map(function(options,id){
-          let kycOption={options: { variables: {documentTypeId:options.type,clusterId:that.props.clusterId}}};
+          let kycOption={options: { variables: {documentTypeId:options.type,clusterId:that.props.clusterId,chapterId:that.props.chapterId,subChapterId:that.props.subChapterId}}};
           return(
 
                     <div className="panel panel-default" key={id}>

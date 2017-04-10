@@ -24,7 +24,7 @@ export async function addKycCategoryActionHandler(Details)
         `,
     variables: {
       kycCategory: Details,
-      moduleName:"KYCCATEGORY",
+      moduleName:"DOCUMENTCATEGORIES",
       actionName:"CREATE"
     }
   })

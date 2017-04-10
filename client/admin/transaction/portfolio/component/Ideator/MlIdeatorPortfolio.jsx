@@ -25,7 +25,7 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
           {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component:<MlIdeatorProblemsAndSolutions key="3" getProblemSolution={this.getProblemSolution.bind(this)}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4"/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component:<MlIdeatorLibrary  key="5"/> },
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Planning", component:<MlIdeatorStrategyAndPlanning key="6"/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Planning", component:<MlIdeatorStrategyAndPlanning key="6" getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Planning and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="7"/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For", component:<MlIdeatorLookingFor  key="8" getLookingFor={this.getLookingFor.bind(this)}/>}
         ]
@@ -38,6 +38,10 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
     }
     getProblemSolution(details) {
       this.state.ideatorPortfolio['problemSolution'] = details;
+      this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+    }
+    getStrategyAndPlanning(details) {
+      this.state.ideatorPortfolio['strategyAndPlanning'] = details;
       this.props.getPortfolioDetails(this.state.ideatorPortfolio);
     }
     getLookingFor(details) {

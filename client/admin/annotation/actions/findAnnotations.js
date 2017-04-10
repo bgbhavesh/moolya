@@ -1,3 +1,4 @@
+/*
 import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
@@ -33,3 +34,4 @@ export async function fetchAnnotations(documentId) {
   return result&&result.data?result.data.data:[];
 
 };
+*/

@@ -296,7 +296,7 @@ class MlAddProcessMapping extends React.Component{
                   default={true}
                 >
                   <form style={{marginTop:'5px'}}>
-                      <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters}/>
+                      <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>
                   </form>
                 </ScrollArea>
               </div>

@@ -159,7 +159,7 @@ export default class institution extends React.Component{
     `;
     const showLoader=this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="step_form_wrap step2">
 
@@ -226,7 +226,7 @@ export default class institution extends React.Component{
     </form>
     </div>
     </div>
-    </ScrollArea>
+      </ScrollArea>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div> )}
       </div>

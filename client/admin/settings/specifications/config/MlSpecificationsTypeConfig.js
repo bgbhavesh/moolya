@@ -29,7 +29,7 @@ const mlSpecificationTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editSpecification/"+data.id)
         }
         else{
-          alert("Please select a Specification to Edit");
+          toastr.error("Please select a Specification to Edit");
         }
       }
 

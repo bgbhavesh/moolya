@@ -36,7 +36,7 @@ const mlTransactionTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editTransactionType/"+data.id)
         }
         else{
-          alert("Please select a transaction")
+          toastr.error("Please select a transaction")
         }
       }
 

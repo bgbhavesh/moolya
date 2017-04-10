@@ -30,7 +30,7 @@ const mlLookingForTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editLookingFor/"+data.id)
         }
         else{
-          alert("Please select a Looking For to edit")
+          toastr.error("Please select a Looking For to edit")
         }
       }
 

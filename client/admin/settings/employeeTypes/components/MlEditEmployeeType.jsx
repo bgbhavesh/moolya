@@ -4,7 +4,9 @@ import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findEmployeeTypeActionHandler} from '../actions/findEmployeeTypeAction'
-import {updateEmployeeTypeActionHandler} from '../actions/updateEmployeeTypeAction'
+import {updateEmployeeTypeActionHandler} from '../actions/updateEmployeeTypeAction';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+
 class MlEditEmployeeType extends React.Component{
   constructor(props) {
     super(props);
@@ -20,6 +22,13 @@ class MlEditEmployeeType extends React.Component{
     const resp=this.findEmployeeType();
     return resp;
 
+  }
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
   componentDidMount(){
     /*if(this.state.data.isActive){
@@ -74,16 +83,10 @@ class MlEditEmployeeType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateEmployeeType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'save',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/employeeTypesList")
         }
       }
@@ -96,8 +99,9 @@ class MlEditEmployeeType extends React.Component{
             <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
                 <h2>Edit Employee Type</h2>
-                <div className="col-md-6">
+                <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
+                    <form>
                     <div className="form-group">
                       <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                       <input type="text" ref="employmentName" placeholder="Name" defaultValue={this.state.data&&this.state.data.employmentName} className="form-control float-label" id=""/>
@@ -107,20 +111,23 @@ class MlEditEmployeeType extends React.Component{
                       <textarea  ref="aboutEmployment" placeholder="About" defaultValue={this.state.data&&this.state.data.aboutEmployment}className="form-control float-label" id=""></textarea>
 
                     </div>
+                    </form>
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-6 nopadding-rightd">
                   <div className="form_bg">
+                    <form>
                     <div className="form-group">
                       <input type="text" ref="employmentDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.employmentDisplayName} className="form-control float-label" id=""/>
                     </div>
-                    <div className="form-group switch_wrap">
-                      <label>Status</label><br/>
+                    <div className="form-group switch_wrap inline_switch">
+                      <label>Status</label>
                       <label className="switch">
                         <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                         <div className="slider"></div>
                       </label>
                     </div>
+                    </form>
                   </div>
                 </div>
               </div>

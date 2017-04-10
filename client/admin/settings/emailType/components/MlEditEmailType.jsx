@@ -6,6 +6,8 @@ import {findEmailTypeActionHandler} from '../actions/findEmailTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+
 
 class MlEditEmailType extends React.Component{
   constructor(props) {
@@ -21,6 +23,13 @@ class MlEditEmailType extends React.Component{
       $('#status').prop('checked', true);
     }
   }
+  componentDidUpdate(){
+    initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+  }
+
   componentWillMount() {
     const resp=this.findEmailType();
     return resp;
@@ -54,8 +63,6 @@ class MlEditEmailType extends React.Component{
       emailUploadIcon : this.refs.upload.value,
       isActive: this.refs.status.checked,
     }
-    console.log(Details)
-
     const response = await updateEmailTypeActionHandler(Details);
     return response;
 
@@ -78,16 +85,10 @@ class MlEditEmailType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateEmailType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'save',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/emailTypesList")
         }
       }

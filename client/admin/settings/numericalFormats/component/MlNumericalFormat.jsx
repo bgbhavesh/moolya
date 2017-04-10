@@ -8,6 +8,8 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import {OnToggleSwitch} from '../../../utils/formElemUtil';
+
 
 class MlNumericalFormat extends React.Component{
   constructor(props) {
@@ -28,6 +30,13 @@ class MlNumericalFormat extends React.Component{
   componentWillMount() {
     const resp=this.findLang();
     return resp;
+
+  }
+
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   /*async addEventHandler() {
@@ -78,8 +87,6 @@ class MlNumericalFormat extends React.Component{
       currencySymbol: this.state.currencySymbol,
       valueSeparator: this.state.valueSeparator,
     }
-    console.log(Details)
-
     const response = await upsertNumericalFormatActionHandler(Details);
     return response;
 
@@ -118,7 +125,6 @@ class MlNumericalFormat extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/numericalFormatList")
         }
       }

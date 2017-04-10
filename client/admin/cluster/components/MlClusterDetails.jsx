@@ -45,6 +45,7 @@ class MlClusterDetails extends React.Component {
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
       email: this.refs.email.value,
+      isEmailNotified:  this.state.data.isEmailNotified,
       showOnMap: this.refs.showOnMap.checked,
       isActive: this.refs.isActive.checked
     }
@@ -63,11 +64,21 @@ class MlClusterDetails extends React.Component {
       this.setState({data:z,loading:false});
     }
   }
-
+  onStatusChangeNotify(e)
+  {
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["isEmailNotified"]);
+    if (e.currentTarget.checked) {
+      var z=_.extend(updatedData,{isEmailNotified:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{isEmailNotified:false});
+      this.setState({data:z,loading:false});
+    }
+  }
   onStatusChangeMap(e)
   {
       let updatedData = this.state.data||{};
-
       updatedData=_.omit(updatedData,["showOnMap"]);
       if (e.currentTarget.checked) {
         var z=_.extend(updatedData,{showOnMap:true});
@@ -101,7 +112,9 @@ class MlClusterDetails extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          FlowRouter.go("/admin/clusters");
+        }
       }
     ]
 
@@ -152,6 +165,14 @@ class MlClusterDetails extends React.Component {
                       <input type="text" ref="email" placeholder="email"
                              defaultValue={this.state.data && this.state.data.email}
                              className="form-control float-label"/>
+                      <div className="email_notify">
+                        <div className="input_types">
+                          <input ref="isEmailNotified" type="checkbox" name="checkbox"
+                                 checked={this.state.data.isEmailNotified}
+                                 onChange={this.onStatusChangeNotify.bind(this)}/>
+                          <label htmlFor="checkbox1"><span> </span>Notify</label>
+                        </div>
+                      </div>
                     </div>
                     <div className="form-group switch_wrap inline_switch">
                       <label>Show on map</label>

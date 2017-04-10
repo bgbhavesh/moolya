@@ -165,7 +165,10 @@ class MlAddBackendUser extends React.Component {
   }
 
   onBackendUserTypeSelect(val){
-    this.setState({selectedBackendUserType:val.value})
+    if(val)
+      this.setState({selectedBackendUserType:val.value})
+    else
+      this.setState({selectedBackendUserType:''})
   }
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
@@ -201,11 +204,6 @@ class MlAddBackendUser extends React.Component {
 
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -215,7 +213,6 @@ class MlAddBackendUser extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/backendUserList")
         }
       }
@@ -271,22 +268,19 @@ class MlAddBackendUser extends React.Component {
                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
                    )}
                     <div className="form-group">
-                    {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
                       <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true}
                       />
-                   {/* <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedBackendUser} placeholder="Select Role" queryType={"graphql"} query={rolequery}  isDynamic={true}  onSelect={this.onBackendUserSelect.bind(this)} />*/}
                     </div>
                     <div className="form-group">
                       <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
                       <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                     </div>
                     <div className="form-group">
-                      <text style={{float:'right',color:'#ef4647',"font-size":'12px',"margin-top":'-12px',"font-weight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                      <text style={{float:'right',color:'#ef4647',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
                       <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
                       <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
                     </div>
                   {/*  <div className="form-group"> <a href="" className="mlUpload_btn">Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>*/}
-
                     <MlAssignDepartmentComponent getAssignedDepartments={this.getAssignedDepartments.bind(this)} selectedBackendUserType={this.state.selectedBackendUserType} selectedSubChapter={this.state.selectedSubChapter} />
                 </div>
                 </form>

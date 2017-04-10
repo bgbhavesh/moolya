@@ -74,6 +74,20 @@ MlResolver.MlMutationResolver['updateFinalApprovalRoles'] = (obj, args, context,
   }
 };
 
+
+MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info) => {
+  let response;
+  if (args.departmentId && args.subDepartmentId) {
+     response = mlDBController.findOne("MlHierarchyFinalApproval", {
+      "parentDepartment": args.departmentId,
+      "parentSubDepartment": args.subDepartmentId,
+      "clusterId":args.clusterId
+    }, context)
+  }
+
+  return response;
+}
+
 MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info) => { // reporting role
   let roles = [];
   let levelCode = ""
@@ -158,7 +172,7 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
     _.each(valueGet, function (item, say) {
       let ary = []
       _.each(item.assignRoles, function (value, key) {
-        if ( value.cluster == 'all') {
+        if ( value.cluster == 'all' || value.cluster==args.clusterId) {
           if (value.isActive) {
             ary.push(value);
           }

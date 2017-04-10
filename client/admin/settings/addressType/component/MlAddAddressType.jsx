@@ -5,6 +5,8 @@ import {addAddressTypeActionHandler} from '../actions/addAddressTypeAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+
 
 class MlAddAddressType extends React.Component{
   constructor(props) {
@@ -15,7 +17,10 @@ class MlAddAddressType extends React.Component{
   }
 
   componentDidMount() {
-
+    initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
@@ -47,11 +52,6 @@ class MlAddAddressType extends React.Component{
 
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',

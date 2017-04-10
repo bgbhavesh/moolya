@@ -11,6 +11,7 @@ export async function findClusterTypeActionHandler(clusterId) {
         countryName
         about
         email
+        isEmailNotified
         countryFlag
         displayName
         showOnMap

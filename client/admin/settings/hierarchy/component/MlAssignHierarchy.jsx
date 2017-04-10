@@ -11,6 +11,7 @@ var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
 import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
+import {findFinalApprovalRoleActionHandler} from '../actions/findFinalApprovalRoleAction'
 
 var assignedParent = [
   {
@@ -49,15 +50,37 @@ export default class MlAssignHierarchy extends React.Component {
     }
     return this;
   }
-  componentWillUpdate(){
+/*  componentWillUpdate(){
     const resp=this.findDeptRoles();
     return resp;
+  }*/
+  componentWillMount(){
+    const resp=this.findDeptRoles();
+    const finalApprovalDetails=this.finalApprovalDetails();
+    return resp;
+  }
+  async finalApprovalDetails(){
+    let parentDepartmentInfo = this.props.departmentInfo;
+    let departmnetId = parentDepartmentInfo.departmentId;
+    let subDepartmentId = parentDepartmentInfo.subDepartmentId;
+    let clusterId = this.props.clusterId;
+    const response = await findFinalApprovalRoleActionHandler(departmnetId,subDepartmentId,clusterId);
+    if(response){
+      let json = {
+        id: response._id,
+        department: response.department,
+        subDepartment: response.subDepartment,
+        role: response.role
+      }
+      this.setState({loading:false,finalApproval:json})
+    }
   }
   async findDeptRoles(){
     let departmentInfo=this.props.departmentInfo
+    let clusterId = this.props.clusterId
     if(departmentInfo!=undefined){
       let departmentId=departmentInfo.departmentId
-      const response = await findDeptRolesActionHandler(departmentId);
+      const response = await findDeptRolesActionHandler(departmentId,clusterId);
       if(response){
         let roleDetails=[]
         for(let i=0;i<response.length;i++){
@@ -142,7 +165,8 @@ export default class MlAssignHierarchy extends React.Component {
       parentSubDepartment   : subDepartmentId,
       department            : this.state.finalApproval.department,
       subDepartment         : this.state.finalApproval.subDepartment,
-      role                  : this.state.finalApproval.role
+      role                  : this.state.finalApproval.role,
+      clusterId             : this.props.clusterId
     }
     const response = await updateFinalApprovalActionHandler(roles);
     return response;

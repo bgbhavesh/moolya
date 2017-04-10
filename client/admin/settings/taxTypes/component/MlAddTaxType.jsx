@@ -5,12 +5,15 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addTaxActionHandler} from '../actions/addTaxTypeAction'
 let FontAwesome = require('react-fontawesome');
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
 
 class MlAddTaxType extends React.Component{
 
   componentDidMount(){
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
 }
   constructor(props) {
     super(props);
@@ -45,11 +48,6 @@ class MlAddTaxType extends React.Component{
   }
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -59,38 +57,42 @@ class MlAddTaxType extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-           this.props.handler(" ");
           FlowRouter.go("/admin/settings/taxTypeList")
         }
         }
     ];
 
     return (
+
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Create TaxType</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="taxName" placeholder="Name" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
                 <textarea  ref="aboutTax" placeholder="About" className="form-control float-label" id=""></textarea>
               </div>
+              </form>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="taxDisplayName" placeholder="Display Name" className="form-control float-label" id=""/>
               </div>
-              <div className="form-group switch_wrap">
-                <label>Status</label><br/>
+              <div className="form-group switch_wrap inline_switch">
+                <label>Status</label>
                 <label className="switch">
                   <input type="checkbox" ref="isActive"/>
                   <div className="slider"></div>
                 </label>
               </div>
+              </form>
             </div>
           </div>
 

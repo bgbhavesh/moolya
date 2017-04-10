@@ -6,7 +6,9 @@ import ScrollArea from 'react-scrollbar'
 import MlTaxTable from './MlTaxTable'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addTaxationActionHandler} from '../actions/addTaxationAction'
+import {addTaxationActionHandler} from '../actions/addTaxationAction';
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlAddTaxation extends React.Component{
   constructor(props) {
     super(props);
@@ -54,6 +56,7 @@ class MlAddTaxation extends React.Component{
     $("#"+fieldId).focus();
   }*/
   componentDidMount(){
+    initalizeFloatLabel();
     $('.switch input').change(function() {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');

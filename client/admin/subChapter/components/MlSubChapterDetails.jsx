@@ -34,7 +34,7 @@ class MlSubChapterDetails extends React.Component {
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/chapters");
+        window.history.back()
       else
         toastr.error(response.result);
     }
@@ -77,6 +77,7 @@ class MlSubChapterDetails extends React.Component {
       this.setState({data:z,loading:false});
     }
   }
+
   onStatusChangeBespokeRegistration(e) {
     let updatedData = this.state.data||{};
     updatedData=_.omit(updatedData,["isBespokeRegistration"]);
@@ -129,7 +130,6 @@ class MlSubChapterDetails extends React.Component {
         moolyaSubChapterAccess: this.state.moolyaSubChapterAccess
       }
     }
-    console.log(subChapterDetails);
     const response = await updateSubChapterActionHandler(subChapterDetails)
     return response;
   }

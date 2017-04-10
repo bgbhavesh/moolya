@@ -3,7 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addCompanyTypeActionHandler} from '../actions/addCompanyTypeAction'
+import {addCompanyTypeActionHandler} from '../actions/addCompanyTypeAction';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+
+
 let FontAwesome = require('react-fontawesome');
 class MlAddCompanyType extends React.Component{
   constructor(props) {
@@ -12,7 +15,12 @@ class MlAddCompanyType extends React.Component{
     this.createCompanyType.bind(this)
     return this;
   }
-
+componentDidMount(){
+  initalizeFloatLabel();
+  OnToggleSwitch(true,true);
+  var WinHeight = $(window).height();
+  $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+}
 
   async addEventHandler() {
     const resp=await this.createCompanyType();
@@ -40,11 +48,6 @@ class MlAddCompanyType extends React.Component{
   }
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -54,7 +57,6 @@ class MlAddCompanyType extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/companyTypesList")
         }
       }
@@ -67,28 +69,30 @@ class MlAddCompanyType extends React.Component{
           <h2>Create Company type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="companyName" placeholder="Name" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
                 <textarea  ref="aboutCompany" placeholder="About" className="form-control float-label" id=""></textarea>
               </div>
+              </form>
             </div>
           </div>
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
+              <form>
               <div className="form-group">
                 <input type="text" ref="companyDisplayName" placeholder="Display Name" className="form-control float-label" id=""/>
               </div>
-
-
-              <div className="form-group switch_wrap">
-                <label>Status</label><br/>
+              <div className="form-group switch_wrap inline_switch">
+                <label>Status</label>
                 <label className="switch">
                   <input type="checkbox" ref="isActive"/>
                   <div className="slider"></div>
                 </label>
               </div>
+              </form>
             </div>
           </div>
 

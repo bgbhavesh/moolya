@@ -6,6 +6,7 @@ import {findLanguageActionHandler} from '../actions/findLanguageAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
+import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
 
 class MlEditLanguage extends React.Component{
   constructor(props) {
@@ -21,6 +22,14 @@ class MlEditLanguage extends React.Component{
       $('#status').prop('checked', true);
     }
   }
+
+  componentDidUpdate(){
+    initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+  }
+
   componentWillMount() {
     const resp=this.findLang();
     return resp;
@@ -72,11 +81,6 @@ class MlEditLanguage extends React.Component{
 
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -86,7 +90,6 @@ class MlEditLanguage extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/languagesList")
         }
       }

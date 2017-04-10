@@ -486,7 +486,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/transactions/approvedList",
-            "name" : "Approved",
+            "name" : "Approvals",
             "uniqueId" : "transaction_Approved",
             "isLink" : true,
             "isMenu" : true,

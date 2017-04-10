@@ -41,7 +41,8 @@ class MlEditBackendUser extends React.Component{
       isActive:null,
       globalStatus:null,
       selectedSubChapter:'',
-      showPasswordFields:false
+      showPasswordFields:false,
+      pageLable:"Edit Backend User"
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -62,6 +63,11 @@ class MlEditBackendUser extends React.Component{
     passwordVisibilityHandler();
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+
+    let url = window.location.href;
+    if(url.indexOf("dashboard") != -1){
+      $('input').attr('disabled', 'disabled');
+    }
   }
 
   async addEventHandler() {
@@ -83,6 +89,10 @@ class MlEditBackendUser extends React.Component{
   };
 
   componentWillMount() {
+    let url = window.location.href;
+    if(url.indexOf("dashboard") != -1){
+      this.setState({pageLable:"Backend User Details"})
+    }
     const resp=this.findBackendUser();
     return resp;
   }
@@ -366,7 +376,7 @@ class MlEditBackendUser extends React.Component{
         {showLoader===true?( <div className="loader_container"><div className="loader_wrap"></div></div>):(
 
         <div className="admin_padding_wrap">
-          <h2>Edit Backend User</h2>
+          <h2>{that.state.pageLable}</h2>
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea

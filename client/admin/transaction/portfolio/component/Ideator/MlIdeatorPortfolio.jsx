@@ -15,12 +15,13 @@ import MlIdeatorLookingFor from '../Ideator/MlIdeatorLookingFor'
 export default class MlIdeatorPortfolioTemplate extends React.Component{
     constructor(props){
         super(props)
-        this.state =  {tabs: []};
+        this.state =  {tabs: [], ideatorPortfolio:{}};
+        this.getIdeatorDetails.bind(this);
     }
 
     getTabComponents(){
         let tabs = [
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1"/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1" getIdeatorDetails={this.getIdeatorDetails.bind(this)}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<div  key="2"> second </div>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component:<MlIdeatorProblemsAndSolutions key="3"/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4"/>},
@@ -31,6 +32,12 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         ]
         return tabs;
     }
+
+    getIdeatorDetails(details){
+        this.state.ideatorPortfolio['ideatorDetails'] = details;
+        this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+    }
+
 
     componentWillMount()
     {

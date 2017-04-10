@@ -30,7 +30,8 @@ export default class MlPortfolio extends React.Component{
     }
 
     getPortfolioDetails(details){
-
+        console.log("parent details")
+        console.log(details);
     }
 
     render(){

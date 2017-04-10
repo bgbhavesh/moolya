@@ -14,39 +14,7 @@ export default class MlIdeatorDetails extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      isfirstNamePrivate:true,
-      islastNamePrivate:true,
-      isGenderPrivate:true,
-      isDateOfBirthPrivate:true,
-      isQualificationPrivate:true,
-      isEmploymentStatusPrivate:true,
-      isProfessionalTagPrivate:true,
-      isYoePrivate:true,
-      isIndustryPrivate:true,
-      isProfessionPrivate:true,
-      isEmployerNamePrivate:true,
-      isMobileNumberPrivate:true,
-      isEmailIdPrivate:true,
-      isfacebookIdPrivate:true,
-      islinkedInIdPrivate:true,
-      isTwitterIdPrivate:true,
-      isGplusIdPrivate:true,
-      firstName:"",
-      lastName:"",
-      gender:"",
-      dateOfBirth:"",
-      qualification:"",
-      employmentStatus:"",
-      professionalTag:"",
-      employerName:"",
-      yearsofExperience:"",
-      mobileNumber:"",
-      emailId:"",
-      facebookId:"",
-      linkedInId:"",
-      twitterId:"",
-      gplusId:""
-
+        data:{}
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this)
@@ -74,17 +42,25 @@ export default class MlIdeatorDetails extends React.Component{
   }
 
   onClick(field,e){
+      let details =this.state.data;
       let className = e.target.className;
+      let key = e.target.id;
       if(className.indexOf("fa-lock") != -1){
-        this.setState({[e.target.id]:true});
+        details[key] = true;
       }else{
-        this.setState({[e.target.id]:false});
+        details[key] = false;
       }
-      this.props.getIdeatorDetails(this.state)
+      this.setState({data:details})
+      this.sendDataToParent()
   }
   handleBlur(e){
-    this.setState({[e.target.name]:e.target.value});
-    this.props.getIdeatorDetails(this.state)
+      let name  = e.target.name
+      this.state.data[name] = e.target.value;
+      this.sendDataToParent()
+  }
+
+  sendDataToParent(){
+      this.props.getIdeatorDetails(this.state.data)
   }
   render(){
     return (

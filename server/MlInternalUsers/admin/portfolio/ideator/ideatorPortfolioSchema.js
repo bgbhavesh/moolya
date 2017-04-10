@@ -100,7 +100,8 @@ let ideatorPortfolioSchema = `
     }
     
     input intellectualplanning{
-        description:String
+        description:String, 
+        isIntellectualPrivate :Boolean
     }
     
     input lookingfor{

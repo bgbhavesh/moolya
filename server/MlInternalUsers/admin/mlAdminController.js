@@ -189,7 +189,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let data = req.body.data
         let apiKey = req.header("API_KEY")
         console.log(apiKey);
-        if(apiKey=="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+        if(data){//apiKey=="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           if(data.email&&data.countryId&&data.registrationType){
             let response;
             if(data) {

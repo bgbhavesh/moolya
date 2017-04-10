@@ -41,7 +41,8 @@ class MlEditBackendUser extends React.Component{
       isActive:null,
       globalStatus:null,
       selectedSubChapter:'',
-      showPasswordFields:false
+      showPasswordFields:false,
+      pageLable:"Edit Backend User"
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -62,6 +63,11 @@ class MlEditBackendUser extends React.Component{
     passwordVisibilityHandler();
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+
+    let url = window.location.href;
+    if(url.indexOf("dashboard") != -1){
+      $('input').attr('disabled', 'disabled');
+    }
   }
 
   async addEventHandler() {
@@ -83,6 +89,10 @@ class MlEditBackendUser extends React.Component{
   };
 
   componentWillMount() {
+    let url = window.location.href;
+    if(url.indexOf("dashboard") != -1){
+      this.setState({pageLable:"Backend User Details"})
+    }
     const resp=this.findBackendUser();
     return resp;
   }
@@ -366,7 +376,7 @@ class MlEditBackendUser extends React.Component{
         {showLoader===true?( <div className="loader_container"><div className="loader_wrap"></div></div>):(
 
         <div className="admin_padding_wrap">
-          <h2>Edit Backend User</h2>
+          <h2>{that.state.pageLable}</h2>
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea
@@ -377,7 +387,7 @@ class MlEditBackendUser extends React.Component{
                 <div className="form_bg">
                   <form>
                   <div className="form-group">
-                    <input type="text" ref="id" value={that.state.data&&that.state.data._id} hidden="true"/>
+                    <input type="text" ref="id" defaultValue={that.state.data&&that.state.data._id} hidden="true"/>
                     <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.firstName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
@@ -460,23 +470,23 @@ class MlEditBackendUser extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group">
-                      <input type="text" ref="cluster"  placeholder="Cluster" value={userProfiles.clusterName}  className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="cluster"  placeholder="Cluster" defaultValue={userProfiles.clusterName}  className="form-control float-label" id="" disabled="true"/>
                       </div>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
                           <div key={RId}>
                             <div className="form-group">
-                              <input type="text" ref="chapter" value={(userRoles.chapterId=='all')?userRoles.chapterId:userRoles.chapterName} placeholder="Chapter"
+                              <input type="text" ref="chapter" defaultValue={(userRoles.chapterId=='all')?userRoles.chapterId:userRoles.chapterName} placeholder="Chapter"
                                      className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="Department" value={(userRoles.subChapterId=='all')?userRoles.subChapterId:userRoles.subChapterName}  placeholder="Sub Chapter" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="Department" defaultValue={(userRoles.subChapterId=='all')?userRoles.subChapterId:userRoles.subChapterName}  placeholder="Sub Chapter" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="subDepartment" value={(userRoles.communityId=='all')?userRoles.communityId:userRoles.communityName}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="subDepartment" defaultValue={(userRoles.communityId=='all')?userRoles.communityId:userRoles.communityName}  placeholder="Community" className="form-control float-label" id="" disabled="true"/>
                             </div>
                             <div className="form-group">
-                              <input type="text" ref="role" value={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
+                              <input type="text" ref="role" defaultValue={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
                             </div>
                           </div>
                         )

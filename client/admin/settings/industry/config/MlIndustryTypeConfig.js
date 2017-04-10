@@ -29,7 +29,7 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editIndustry/"+data.id)
         }
         else{
-          alert("Please select a Industry to Edit");
+          toastr.error("Please select a Industry to Edit");
         }
       }
 

@@ -28,7 +28,7 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editTemplateType/"+data.id)
         }
         else{
-          alert("Please select a Template Type")
+          toastr.error("Please select a Template Type")
         }
       }
 

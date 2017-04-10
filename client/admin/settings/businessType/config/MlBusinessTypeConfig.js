@@ -29,7 +29,7 @@ const mlBusinessTypeTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editBusiness/"+data.id)
         }
         else{
-          alert("Please select a Business to edit")
+          toastr.error("Please select a Business to edit")
         }
       }
 

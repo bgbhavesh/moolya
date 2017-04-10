@@ -17,7 +17,7 @@ export async function addProcessActionHandler(ProcessInput) {
       } `,
     variables: {
       ProcessInput,
-      moduleName:"PROCESS",
+      moduleName:"PROCESSMAPPING",
       actionName:"CREATE"
     }
   })

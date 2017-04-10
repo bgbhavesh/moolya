@@ -30,7 +30,7 @@ const mlProfessionTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/editProfession/"+data.id)
         }
         else{
-          alert("Please select a Profession to edit")
+          toastr.error("Please select a Profession to edit")
         }
       }
 

@@ -21,7 +21,7 @@ export async function updateProcessActionHandler(pid,process) {
    variables: {
      pid,
      process,
-     moduleName:"PROCESS",
+     moduleName:"PROCESSMAPPING",
      actionName:"UPDATE"
    }
    })

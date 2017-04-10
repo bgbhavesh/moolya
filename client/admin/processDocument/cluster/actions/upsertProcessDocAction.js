@@ -26,7 +26,7 @@ export async function upsertProcessDocActionHandler(processDocDetails) {
      documentId,
      isMandatory,
      isActive,
-     moduleName:"PROCESS",
+     moduleName:"PROCESSMAPPING",
      actionName:"UPDATE"
    }
    })

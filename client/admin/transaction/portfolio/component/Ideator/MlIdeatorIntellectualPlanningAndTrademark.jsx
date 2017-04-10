@@ -3,27 +3,46 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
+import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
 var Select = require('react-select');
 
-
-
 export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
-  componentDidMount()
-  {
-    $(function() {
-      $('.float-label').jvFloat();
-    });
+   constructor(props) {
+     super(props);
+     this.state =  {data:{}};
+     return this;
+   }
 
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-
-
+  componentDidMount(){
+    dataVisibilityHandler();
   }
+
+  onInputChange(event){
+    let dataDetails =this.state.data;
+    let name  = event.target.name
+    dataDetails[name]= event.target.value
+    this.setState({data: dataDetails})
+    this.sendDataToParent();
+  }
+
+  onLockChange(field, e){
+    let dataDetails =this.state.data;
+    let className = e.target.className;
+    // let key = e.target.fieldName;
+    let key = e.target.id;
+    if(className.indexOf("fa-lock") != -1){
+      dataDetails[key] = true;
+    }else{
+      dataDetails[key] = false;
+    }
+    this.setState({data:dataDetails})
+    this.sendDataToParent();
+  }
+
+  sendDataToParent() {
+    this.props.getIntellectualPlanning(this.state.data);
+  }
+
   render(){
     return (
       <div className="admin_main_wrap">
@@ -45,24 +64,16 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about"></textarea>
-                        <FontAwesome name='lock' className="input_icon req_textarea_icon"/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" onBlur={this.onInputChange.bind(this)} name="description"></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIntellectualPrivate}/>
                       </div>
-
                     </div>
                   </div>
-
-
                 </div>
               </div>
             </ScrollArea>
           </div>
-
-
-
         </div>
-
-
       </div>
     )
   }

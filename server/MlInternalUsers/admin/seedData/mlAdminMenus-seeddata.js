@@ -63,7 +63,20 @@ if(Meteor.isServer){
             "subMenuMappingId":"dashboard_communities",
             "subMenusId":"dashboard",
             "isLink" : true,
-            "image" : ""
+            "image" : "",
+            "subMenu":[
+              {
+                "link" : "/admin/dashboard/clusters",
+                "name" : "Backend User Details",
+                "uniqueId" : "dashboard_backendUserDetails",
+                "subMenuMappingId":"dashboard_communities",
+                "subMenusId":"dashboard",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : ""
+
+              }
+            ]
           },
 
         ]
@@ -486,7 +499,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/transactions/approvedList",
-            "name" : "Approved",
+            "name" : "Approvals",
             "uniqueId" : "transaction_Approved",
             "isLink" : true,
             "isMenu" : true,

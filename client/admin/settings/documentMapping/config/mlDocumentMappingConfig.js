@@ -22,11 +22,12 @@ function allowableFormatformatter (data){
 function clustersformatter (data){
 
   let clusters=data&&data.data&&data.data.clusters?data.data.clusters:[];
-  // let ids =[];
-  // clusters.map(function (doc) {
-  //   ids.push(doc.id)
-  // })
-  return <div>{clusters.join()}</div>;
+  if(clusters.length>0){
+    return <div>{clusters.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+
 
 }
 const mlDocumentMappingTableConfig=new MlViewer.View({
@@ -57,7 +58,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
         if(data && data.documentId){
           FlowRouter.go("/admin/settings/editDocumentMapping/"+data.documentId);
         } else{
-          alert("Please select a Document");
+          toastr.error("Please select a Document");
         }
       }
     },

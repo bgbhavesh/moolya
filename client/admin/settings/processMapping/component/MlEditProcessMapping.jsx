@@ -20,6 +20,7 @@ class MlEditProcessMapping extends React.Component{
     this.state={
       data:{},
       id          : '',
+      loading:true,
       processId   : '',
       assignDocument:[],
       process     : '',
@@ -239,10 +240,10 @@ class MlEditProcessMapping extends React.Component{
       {value: 'Company', label: 'Company'},
       {value: 'Individual', label: 'Individual'}
     ];
-    let query=gql` query{
+   /* let query=gql` query{
     data:fetchCountriesSearch{label:country,value:countryCode}
     }
-    `;
+    `;*/
     let processQuery=gql`query{
  data: FetchProcessType {
     label:processName
@@ -277,8 +278,8 @@ class MlEditProcessMapping extends React.Component{
           label:name
         }  
     }`;
-    let chapterquery=gql`query($states:[String]){  
-        data:fetchActiveStatesChapters(states:$states) {
+    let chapterquery=gql`query($states:[String],$clusters:[String]){  
+        data:fetchActiveStatesChapters(states:$states,clusters:$clusters) {
           value:_id
           label:chapterName
         }  
@@ -292,9 +293,10 @@ class MlEditProcessMapping extends React.Component{
 
 
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
-    let chapterOption={options: { variables: {states:this.state.states}}};
+    let chapterOption={options: { variables: {states:this.state.states,clusters:this.state.clusters}}};
     let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
+    const showLoader=this.state.loading;
    return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -382,7 +384,7 @@ class MlEditProcessMapping extends React.Component{
                   default={true}
                 >
                   <form style={{marginTop:'0px'}}>
-                    {this.state.data&&this.state.data.documents?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents} clusterId={this.state.clusters}/>):''}
+                    {this.state.data&&this.state.data.documents?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>):''}
                   </form>
                 </ScrollArea>
               </div>

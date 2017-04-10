@@ -154,7 +154,6 @@ class MlEditRole extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/rolesList")
         }
       }

@@ -22,6 +22,7 @@ import {
 import MlViews from "../../admin/core/components/MlViews";
 import MlAdminHeader from "../../admin/layouts/header/MlAdminHeader";
 import {getAdminUserContext} from "../../commons/getAdminUserContext";
+import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
 
 adminSection.route('/dashboard', {
   triggersEnter: [function (context, redirect) {
@@ -111,4 +112,15 @@ adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities',
     })
   }
 });
-
+adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities/:backendUserId/backendUserDetails', {
+  name: 'dashboard_backendUserDetails',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+  }
+});
+adminSection.route('/dashboard/communities/:backendUserId/backendUserDetails', {
+  name: 'dashboard_backendUserDetails',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+  }
+});

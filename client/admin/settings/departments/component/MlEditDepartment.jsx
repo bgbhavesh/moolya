@@ -145,9 +145,6 @@ class MlEditDepartment extends React.Component{
     return (
       <div className="admin_main_wrap">
       {showLoader===true?( <div className="loader_wrap"></div>):(
-
-
-
           <div className="admin_padding_wrap">
             <h2>Edit Department</h2>
             <div className="main_wrap_scroll">

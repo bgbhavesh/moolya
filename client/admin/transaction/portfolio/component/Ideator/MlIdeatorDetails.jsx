@@ -66,37 +66,37 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group">
                       <input type="text" placeholder="First Name" ref="firstName" className="form-control float-label" id="cluster_name" defaultValue="Ravi"/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/><input type="checkbox" id="makePrivate"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="firstName" onClick={this.onClick.bind(this)}/><input type="checkbox" id="makePrivate" checked={this.state.isfirstNamePublic}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Last Name" ref="lastName" className="form-control float-label" id="cluster_name" defaultValue="Kapoor"/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="lastName" onClick={this.onClick.bind(this)}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Gender" ref="gender" className="form-control float-label" id="cluster_name" defaultValue="Male"/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="gender" onClick={this.onClick.bind(this)}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="DOB" ref="dob" className="form-control float-label" id="cluster_name" defaultValue="26-06-1980"/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
+                      <input type="text" placeholder="DOB" ref="dateOfBirth" className="form-control float-label" id="cluster_name" defaultValue="26-06-1980"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="dateOfBirth" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Education" ref="education" className="form-control float-label" id="cluster_name" defaultValue="MSC, Mcom, Bcom"/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
+                      <input type="text" placeholder="Education" ref="qualification" className="form-control float-label" id="cluster_name" defaultValue="MSC, Mcom, Bcom"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="firstName" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Employment Status" ref="employmentStatus" className="form-control float-label" id="cluster_name" defaultValue="Employeed"/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="firstName" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Sector" ref="sector" className="form-control float-label" id="cluster_name" defaultValue="IT"/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
+                      <input type="text" placeholder="Sector" ref="professionalTag" className="form-control float-label" id="cluster_name" defaultValue="IT"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="firstName" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
 
                     <div className="form-group">
@@ -105,7 +105,7 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Years of Experience" ref="e" className="form-control float-label" id="cluster_name" defaultValue="12"/>
+                      <input type="text" placeholder="Years of Experience" ref="yearsofExperience" className="form-control float-label" id="cluster_name" defaultValue="12"/>
                       <FontAwesome name='unlock' className="input_icon un_lock" onClick={this.onClick.bind(this, "firstName")}/>
                     </div>
                   </form>
@@ -133,32 +133,32 @@ export default class MlIdeatorDetails extends React.Component{
                     <br className="brclear"/>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Phone No" className="form-control float-label" id="cluster_name" defaultValue="9028728282"/>
+                      <input type="text" placeholder="Phone No" ref="mobileNumber" className="form-control float-label" id="cluster_name" defaultValue="9028728282"/>
                       <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Email Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
+                      <input type="text" placeholder="Email Id" ref="emailId" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
                       <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Fcebook Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
+                      <input type="text" placeholder="Fcebook Id" ref="facebookId" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
                       <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Linkedin Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
+                      <input type="text" placeholder="Linkedin Id" ref="linkedInId" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
                       <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Twitter Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
+                      <input type="text" placeholder="Twitter Id" ref="twitterId" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
                       <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Googleplus Id" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
+                      <input type="text" placeholder="Googleplus Id" ref="gplusId" className="form-control float-label" id="cluster_name" defaultValue="abc@gmail.com"/>
                       <FontAwesome name='unlock' className="input_icon un_lock"/>
                     </div>
 

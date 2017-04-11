@@ -4,8 +4,8 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findIdeatorDetailsActionHandler(portfolioId) {
-  let regId = portfolioId
+export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
+
   const result = await client.query({
       query: gql`
           query ($portfoliodetailsId: String!) {
@@ -50,7 +50,7 @@ export async function findIdeatorDetailsActionHandler(portfolioId) {
 
       `,
       variables: {
-          id: regId
+        portfoliodetailsId: portfoliodetailsId
       },
       forceFetch: true
   })

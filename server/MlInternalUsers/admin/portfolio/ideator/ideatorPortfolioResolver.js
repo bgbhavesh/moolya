@@ -54,7 +54,7 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
     if(args.portfoliodetailsId){
         try {
             let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-            let updateFor = args.ideatorPortfolio;
+            let updateFor = args.portfolio.ideatorPortfolio;
             if (ideatorPortfolio) {
                 for (key in updateFor) {
                     if (ideatorPortfolio.hasOwnProperty(key)) {

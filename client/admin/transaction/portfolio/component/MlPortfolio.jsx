@@ -40,8 +40,8 @@ class MlPortfolio extends React.Component{
     }
 
     getPortfolioDetails(details){
-        // console.log("parent details")
-        // console.log(details);
+        console.log("parent details")
+        console.log(details);
         this.setState({portfolio:details});
     }
 

@@ -167,7 +167,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                       let inner = ideatorPortfolio[key]
                                       if(typeof inner == 'object'){
                                           for (key1 in inner){
-                                              inner[key1] = resp;
+                                              inner[key1].fileUrl = resp;
                                           }
                                       }
                                   }

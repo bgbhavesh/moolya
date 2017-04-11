@@ -81,10 +81,6 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
     }
 }
 
-MlResolver.MlMutationResolver['updateIdeatorPortfolioDocumentUrl'] = (obj, args, context, info) => {
-
-}
-
 MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) => {
 
 }

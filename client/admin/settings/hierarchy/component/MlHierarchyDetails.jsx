@@ -10,6 +10,7 @@ import MlAssignHierarchy from './MlAssignHierarchy';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updateRolesActionHandler} from '../actions/updateRolesAction'
+import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
 
 
 export default class MlHierarchyDetails extends React.Component {
@@ -34,10 +35,11 @@ export default class MlHierarchyDetails extends React.Component {
     console.log(details);
     this.setState({'unassignedRoles':details})
   }
-  getFinalApprovalDetails(details){
+  getFinalApprovalRole(details){
     console.log(details);
     this.setState({'finalApproval':details})
   }
+
   componentDidMount() {
     $('.switch input').change(function() {
       if ($(this).is(':checked')) {
@@ -63,7 +65,8 @@ export default class MlHierarchyDetails extends React.Component {
           departmentName:response[i].departmentName,
           subDepartmentId:response[i].subDepartmentId,
           subDepartmentName:response[i].subDepartmentName,
-          isMoolya:response[i].isMoolya
+          isMoolya:response[i].isMoolya,
+          isActive:response[i].isActive==true?"Active":"In-Active"
         }
         hierarchyInfo.push(json)
       }
@@ -78,7 +81,26 @@ export default class MlHierarchyDetails extends React.Component {
     const response = await updateRolesActionHandler(roles);
     return response;
   }
-
+  async  updateassignRoles() {
+    let roles = {
+      roleObject : this.state.assignedRoles
+    }
+    const response = await updateRolesActionHandler(roles);
+    return response;
+  }
+  async  updatFinalRole() {
+    let role = {
+      id                  : this.state.finalApproval.id,
+      parentDepartment    : this.state.finalApproval.parentDepartment,
+      parentSubDepartment : this.state.finalApproval.parentSubDepartment,
+      department          : this.state.finalApproval.department,
+      subDepartment       : this.state.finalApproval.subDepartment,
+      role                : this.state.finalApproval.role,
+      clusterId           : this.props.clusterId
+    }
+    const response = await updateFinalApprovalActionHandler(role);
+    return response;
+  }
 
 
   isExpandableRow(row) {
@@ -90,15 +112,19 @@ export default class MlHierarchyDetails extends React.Component {
     return (
       <div>
       {row.departmentId!=''?
-      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} />
+      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} getFinalApprovalRole={this.getFinalApprovalRole.bind(this)}/>
       :<div></div>}
       </div>
     );
   }
-  updateHierarchy(){
-    const resp=this.updateunassignedRoles();
+  updateHierarchy() {
+    const assigned = this.updateunassignedRoles();
+    const upAssigned = this.updateassignRoles();
+    if (this.state.finalApproval.isChecked){
+        const finalRole = this.updatFinalRole();
+      }
     toastr.success("Update Successful");
-    return resp;
+    return assigned;
   }
   render() {
 
@@ -122,7 +148,7 @@ export default class MlHierarchyDetails extends React.Component {
 
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Select Department</h2>
+          <h2>Hierarchy Assignment</h2>
           <div className="main_wrap_scroll">
             <ScrollArea
               speed={0.8}
@@ -143,6 +169,7 @@ export default class MlHierarchyDetails extends React.Component {
                 <TableHeaderColumn dataField="isMoolya" hidden={true}>isMoolya</TableHeaderColumn>
                 <TableHeaderColumn dataField="departmentName">Department</TableHeaderColumn>
                 <TableHeaderColumn dataField="subDepartmentName">Sub-Department</TableHeaderColumn>
+                <TableHeaderColumn dataField="isActive">Status</TableHeaderColumn>
               </BootstrapTable>
 
             </ScrollArea>

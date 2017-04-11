@@ -60,7 +60,9 @@ let ideatorPortfolioSchema = `
         lastName:String,
         islastNamePublic:Boolean
         gender:String,
-        isGenderPublic:Boolean
+        isGenderPublic:Boolean,
+        dateOfBirth:String,
+        isDateOfBirthPrivate:Boolean,
         qualification:String,
         isQualificationPublic:Boolean
         employmentStatus:String,
@@ -96,7 +98,8 @@ let ideatorPortfolioSchema = `
     }
     
     input strategyplans{
-        description:String
+        description:String,
+        isStrategyPlansPrivate:Boolean
     }
     
     input intellectualplanning{
@@ -105,7 +108,8 @@ let ideatorPortfolioSchema = `
     }
     
     input lookingfor{
-        lookingFor:String
+        lookingFor:String,
+        isLookingForPrivate:Boolean
     }
     
     input library{

@@ -48,7 +48,7 @@ export default class MlIdeatorLookingFor extends React.Component{
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
-    details[name]= event.target.value
+    details[name]= e.target.value
     this.setState({data:details})
     this.sendDataToParent()
   }

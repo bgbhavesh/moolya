@@ -48,8 +48,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   onFileUpload(e){
       let file = e.target.files[0];
       let name = e.target.name;
+      let fileName = e.target.files[0].name;
       let data = {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:""}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name));
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
 
   sendDataToParent() {
@@ -60,12 +61,16 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
-  onFileUploadCallBack(name, resp){
+  onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp)
         if(result.success){
           let dataDetails =this.state.data;
-          dataDetails[name] = result.result
+          let obj = {
+            fileUrl : result.result,
+            fileName: fileName
+          }
+          dataDetails[name].push = obj;
           this.setState({data: dataDetails})
           this.sendDataToParent();
         }

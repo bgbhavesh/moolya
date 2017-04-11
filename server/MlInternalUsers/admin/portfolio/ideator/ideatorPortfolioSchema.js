@@ -172,13 +172,19 @@ let ideatorPortfolioSchema = `
         profilePic:String
     }
     
+    input imageFilesInputSchema{
+       fileUrl: String,
+       fileName:String
+     }
+     
     input problemSolution{
-        problemStatement   : String,
-        isProblemPrivate   : Boolean,
-        problemImage      : String
-        solutionStatement  : String,
-        isSolutionPrivate  : Boolean,
-        solutionImage     : String
+        problemStatement    : String,
+        isProblemPrivate    : Boolean,
+        problemImage        : [imageFilesInputSchema],
+        problemImage        : String
+        solutionStatement   : String,
+        isSolutionPrivate   : Boolean,
+        solutionImage       : [imageFilesInputSchema]
     }
     
     input audience{

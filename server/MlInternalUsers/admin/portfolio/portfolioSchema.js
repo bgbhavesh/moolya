@@ -51,13 +51,17 @@ let portfolioSchema = `
         isActive:Boolean
     }
     
+    input portfolio{
+        ideatorPortfolio:ideatorPortfolio
+    }
+    
     type Query{
           fetchPortfolioDetails(portfolioId:String):Portfoliodetails
     }
     
     type Mutation{
           createPortfolioRequest(portfoliodetails:portfoliodetails):response
-          updatePortfolio(portfoliodetailsId:String, ideatorPortfolio:ideatorPortfolio):response
+          updatePortfolio(portfoliodetailsId:String, portfolio:portfolio):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

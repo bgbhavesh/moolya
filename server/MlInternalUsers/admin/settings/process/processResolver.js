@@ -37,11 +37,11 @@ MlResolver.MlQueryResolver['findProcess'] = (obj, args, context, info) => {
     let response= MlProcessMapping.findOne({"_id":id});
     console.log(response)
     let documents=response&&response.documents?response.documents:[];
-    /*documents.map(function (doc, index) {
+    documents.map(function (doc, index) {
      let kycCategeotyId=doc.category
      const kycCategory= MlDocumentCategories.findOne({_id:kycCategeotyId})||'';
       doc.categoryName=kycCategory.docCategoryName;
-    });*/
+    });
     return response;
   }
 

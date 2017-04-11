@@ -50,11 +50,7 @@ MlResolver.MlQueryResolver['FindUserType'] = (obj, args, context, info) => {
   }
 
 }
-MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
-  // let result=MlUserTypes.find({isActive:true}).fetch()||[];
-  let result = mlDBController.find('MlUserTypes', {isActive:true}, context).fetch()||[];
-  return result;
-}
+
 
 MlResolver.MlQueryResolver['FetchUserTypeSelect'] = (obj, args, context, info) => {
   // let result=MlUserTypes.find({isActive:true}).fetch()||[];
@@ -64,3 +60,11 @@ MlResolver.MlQueryResolver['FetchUserTypeSelect'] = (obj, args, context, info) =
   }
   return result;
 }
+
+
+MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
+  let result = mlDBController.find('MlUserTypes', {isActive:true,communityCode:args.communityCode}, context).fetch()||[];
+  return result;
+}
+
+

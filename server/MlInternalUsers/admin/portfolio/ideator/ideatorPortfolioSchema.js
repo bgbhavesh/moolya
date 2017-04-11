@@ -100,7 +100,7 @@ let ideatorPortfolioSchema = `
     }
     
     type lookingforInfo{
-        lookingFor:String
+        description:String
         isLookingForPrivate:Boolean
     }
     

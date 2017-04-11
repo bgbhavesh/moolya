@@ -68,7 +68,7 @@ let ideatorPortfolioSchema = `
         employmentStatus:String,
         isEmploymentStatusPrivate:Boolean
         professionalTag:String,
-        isProfessionalTag:Boolean
+        isProfessionalTagPrivate:Boolean
         yearsofExperience:String,
         isYoePrivate:Boolean
         industry:String,
@@ -81,6 +81,15 @@ let ideatorPortfolioSchema = `
         isMobileNumberPrivate:Boolean
         emailId:String
         isEmailIdPrivate:Boolean
+        facebookId:String
+        isfacebookIdPrivate:Boolean
+        linkedInId:String
+        islinkedInIdPrivate:Boolean
+        twitterId:String
+        isTwitterIdPrivate:Boolean
+        gplusId:String
+        isGplusIdPrivate:Boolean
+        profilePic:String
     }
     
     input problemSolution{

@@ -32,7 +32,8 @@ export default class MlProcessDocMapping extends Component {
    /* const respProcessDoc=findProcessDocument();
     console.log(respProcessDoc)*/
     let kycId = this.props.kycConfig
-    const response = await findDocumentMappingActionHandler(kycId);
+    let docTypeId =this.props.docConfig
+    const response = await findDocumentMappingActionHandler(kycId,docTypeId);
     console.log(response);
     if(response){
       let documentDetails=[]

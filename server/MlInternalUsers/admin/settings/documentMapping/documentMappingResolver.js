@@ -53,9 +53,10 @@ MlResolver.MlQueryResolver['findDocuments'] = (obj, args, context, info) => {
 }
 MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) => {
   // TODO : Authorization
-  if (args.kycId) {
+  if (args.kycId&&args.docTypeId) {
     var id = args.kycId;
-    let data = MlDocumentMapping.find({ kycCategory : { $in: [id] },isActive:true}).fetch();
+    var docId= args.docTypeId
+    let data = MlDocumentMapping.find({ kycCategory : { $in: [id] },documentType: {$in :[docId]},isActive:true}).fetch();
     data.map(function (doc,index) {
       const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
       let allowableFormatNames = [];  //@array of strings

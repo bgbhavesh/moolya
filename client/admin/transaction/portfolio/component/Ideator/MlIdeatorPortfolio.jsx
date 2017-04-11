@@ -8,14 +8,27 @@ import MlIdeatorLibrary from "../Ideator/MlIdeatorLibrary";
 import MlIdeatorStrategyAndPlanning from "../Ideator/MlIdeatorStrategyAndPlanning";
 import MlIdeatorIntellectualPlanningAndTrademark from "../Ideator/MlIdeatorIntellectualPlanningAndTrademark";
 import MlIdeatorLookingFor from "../Ideator/MlIdeatorLookingFor";
-// import '../../../../../stylesheets/tab.css'
+
 
 export default class MlIdeatorPortfolioTemplate extends React.Component{
     constructor(props){
         super(props)
-        this.state =  {tabs: [], ideatorPortfolio:{}, problemSolution:{}};
+        this.state =  {tabs: [], ideatorPortfolio:{}};
         this.getIdeatorDetails.bind(this);
         this.getProblemSolution.bind(this)
+    }
+
+    componentDidMount(){
+      setTimeout(function(){
+        $('div[role="tab"]').each(function( index ) {
+          var test = $(this).text();
+          $(this).empty();
+          $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
+        });
+        $('.RRT__tabs').addClass('horizon-swiper');
+        $('.RRT__tab').addClass('horizon-item');
+        $('.horizon-swiper').horizonSwiper();
+      },300);
     }
 
     getTabComponents(){
@@ -33,24 +46,24 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
     }
 
     getIdeatorDetails(details){
-        this.state.ideatorPortfolio['ideatorDetails'] = details;
-        this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+        this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
+        this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getProblemSolution(details) {
       this.state.ideatorPortfolio['problemSolution'] = details;
-      this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getStrategyAndPlanning(details) {
       this.state.ideatorPortfolio['strategyAndPlanning'] = details;
-      this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getIntellectualPlanning(details) {
       this.state.ideatorPortfolio['intellectualPlanning'] = details;
-      this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getLookingFor(details) {
       this.state.ideatorPortfolio['lookingFor'] = details;
-      this.props.getPortfolioDetails(this.state.ideatorPortfolio);
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
 
     componentWillMount()
@@ -58,8 +71,8 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         let tabs = this.getTabComponents();
         function getTabs() {
           return tabs.map(tab => ({
-            tabClassName: 'tab', // Optional
-            panelClassName: 'panel', // Optional
+            tabClassName: 'moolya_btn', // Optional
+            panelClassName: 'panel1', // Optional
             title: tab.title,
             getContent: () => tab.component
           }));

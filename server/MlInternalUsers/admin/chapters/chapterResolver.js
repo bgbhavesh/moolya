@@ -162,8 +162,13 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
     let id = args.chapterId || "";
     let result = [];
     if(args.chapterId == "all"){
-        result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:false,isActive: true}, context).fetch()||[];
-        result.push({"subChapterName" : "All","_id" : "all"});
+       if(args.clusterId == "all"){
+         result = mlDBController.find('MlSubChapters', {isDefaultSubChapter:false,isActive: true}, context).fetch()||[];
+         result.push({"subChapterName" : "All","_id" : "all"});
+       }else{
+         result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:false,isActive: true}, context).fetch()||[];
+         result.push({"subChapterName" : "All","_id" : "all"});
+       }
     }else{
          result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
         if(result.length > 0){
@@ -179,9 +184,16 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectMoolya'] = (obj, args, context
   let chapterId = args.chapterId || "";
   let result = [];
   if(args.chapterId == "all"){
-    result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:true,isActive: true}, context).fetch()||[];
+    if(args.clusterId == "all"){
+      result = mlDBController.find('MlSubChapters', {isDefaultSubChapter:true,isActive: true}, context).fetch()||[];
+      result.push({"subChapterName" : "All","_id" : "all"});
+    }else{
+      result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:true,isActive: true}, context).fetch()||[];
+      result.push({"subChapterName" : "All","_id" : "all"});
+    }
+  /*  result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:true,isActive: true}, context).fetch()||[];
     console.log(result);
-    result.push({"subChapterName" : "All","_id" : "all"});
+    result.push({"subChapterName" : "All","_id" : "all"});*/
   }else{
     result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:true,isActive: true}]}, context).fetch()||[];
     if(result.length > 0){
@@ -260,17 +272,17 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
 }
 MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, info) => {
   let states = args.states;
+  let clusters=args.clusters;
   let chapters = [];
   if(states && states.length > 0){
-    if(states.length==1&&states[0] == "all"){
+    if(states.length==1&&states[0] == "all"&&clusters[0] == "all"){
       chapters= MlChapters.find({isActive:true}).fetch()||[];
-      chapters.push({"chapterName" : "All","_id" : "all"});
       if(chapters.length>=1){
         chapters.push({"chapterName" : "All","_id" : "all"});
       }
-    }else {
-      states.map(function (stateId) {
-        activeChapters = MlChapters.find({"$and": [{stateId: stateId, isActive: true}]}).fetch();
+    }else if(states.length == 1 && states[0] == "all"&& clusters[0] != "all") {
+      clusters.map(function (clusterId) {
+        activeChapters = MlChapters.find({"$and": [{clusterId: clusterId, isActive: true}]}).fetch();
         if (activeChapters && activeChapters.length > 0) {
           chapters = chapters.concat(activeChapters)
         }
@@ -278,9 +290,20 @@ MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, i
       if(chapters.length>=1){
         chapters.push({"chapterName" : "All","_id" : "all"});
       }
+    }else {
+        states.map(function (stateId) {
+          activeChapters = MlChapters.find({"$and": [{stateId: stateId, isActive: true}]}).fetch();
+          if (activeChapters && activeChapters.length > 0) {
+            chapters = chapters.concat(activeChapters)
+          }
+        })
+        if(chapters.length>=1){
+          chapters.push({"chapterName" : "All","_id" : "all"});
+        }
 
+      }
     }
-  }
+
 
   return chapters;
 }

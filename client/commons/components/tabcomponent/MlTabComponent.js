@@ -3,7 +3,6 @@
  */
 import React from 'react';
 import Tabs from 'react-responsive-tabs';
-import 'react-responsive-tabs/styles.css'
 
 export default class MlTabComponent extends React.Component {
     constructor(props){

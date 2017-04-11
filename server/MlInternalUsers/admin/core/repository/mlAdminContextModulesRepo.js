@@ -148,6 +148,9 @@ export default CoreModulesRepo={
   },
 
   MlAuditLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+    if(!fieldsProj.sort){
+      fieldsProj.sort={timeStamp: -1}
+    }
     let serverQuery={};
     let query = {};
     requestParams=requestParams?requestParams:null;

@@ -53,9 +53,10 @@ MlResolver.MlQueryResolver['findDocuments'] = (obj, args, context, info) => {
 }
 MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) => {
   // TODO : Authorization
-  if (args.kycId) {
+  if (args.kycId&&args.docTypeId) {
     var id = args.kycId;
-    let data = MlDocumentMapping.find({ kycCategory : { $in: [id] },isActive:true}).fetch();
+    var docId= args.docTypeId
+    let data = MlDocumentMapping.find({ kycCategory : { $in: [id] },documentType: {$in :[docId]},isActive:true}).fetch();
     data.map(function (doc,index) {
       const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
       let allowableFormatNames = [];  //@array of strings
@@ -77,7 +78,7 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
     let chapterId=args.chapterId;
     let subChapterId=args.subChapterId;
     let data=[];
-    if(clusterId.length==1&&clusterId[0]=="all"){
+    if(clusterId.length==1&&clusterId[0]=="all"&&chapterId[0]=="all"&&subChapterId[0]=="all"){
        data = MlDocumentMapping.find({ documentType : { $in: [id] },isActive:true}).fetch();
     }else {
        data = MlDocumentMapping.find({
@@ -87,6 +88,15 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
          subChapters:{$in: subChapterId},
         isActive: true
       }).fetch();
+       if(data.length<1){
+         data = MlDocumentMapping.find({
+           documentType: {$in: [id]},
+           clusters: {$in: ["all"]},
+           chapters: {$in: ["all"]},
+           subChapters:{$in: ["all"]},
+           isActive: true
+         }).fetch();
+       }
     }
     let kycId=[]
     data.map(function (doc,index) {

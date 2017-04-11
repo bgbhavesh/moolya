@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import ActiveProcessFormatter from "../components/ActiveProcessDocFormatter"
 function stateFormatter(data){
   let processmapping = [];
-  processmapping=data&&data.data&&data.data.states?data.data.states:[];
+  processmapping=data&&data.data&&data.data.stateNames?data.data.stateNames:[];
   if(processmapping.length>0){
     return <div>{processmapping.join()}</div>;
   }else{
@@ -14,7 +14,7 @@ function stateFormatter(data){
 }
 function chapterFormatter(data){
   let processmapping = [];
-  processmapping=data&&data.data&&data.data.chapters?data.data.chapters:[];
+  processmapping=data&&data.data&&data.data.chapterNames?data.data.chapterNames:[];
   if(processmapping.length>0){
     return <div>{processmapping.join()}</div>;
   }else{
@@ -24,7 +24,7 @@ function chapterFormatter(data){
 }
 function subChapterFormatte(data){
   let processmapping = [];
-  processmapping=data&&data.data&&data.data.subChapters?data.data.subChapters:[];
+  processmapping=data&&data.data&&data.data.subChapterNames?data.data.subChapterNames:[];
   if(processmapping.length>0){
     return <div>{processmapping.join()}</div>;
   }else{
@@ -35,7 +35,7 @@ function subChapterFormatte(data){
 
 function clusterFormatter(data){
   let processmapping = [];
-  processmapping=data&&data.data&&data.data.clusters?data.data.clusters:[];
+  processmapping=data&&data.data&&data.data.clusterNames?data.data.clusterNames:[];
   if(processmapping.length>0){
     return <div>{processmapping.join()}</div>;
   }else{
@@ -45,7 +45,7 @@ function clusterFormatter(data){
 }
 function professionFormatter(data){
   let processmapping = [];
-  processmapping=data&&data.data&&data.data.clusters?data.data.professions:[];
+  processmapping=data&&data.data&&data.data.professionNames?data.data.professionNames:[];
   if(processmapping.length>0){
     return <div>{processmapping.join()}</div>;
   }else{
@@ -55,7 +55,7 @@ function professionFormatter(data){
 }
 function  communityFormatter(data) {
   let processmapping = [];
-  processmapping=data&&data.data&&data.data.clusters?data.data.communities:[];
+  processmapping=data&&data.data&&data.data.communityNames?data.data.communityNames:[];
   if(processmapping.length>0){
     return <div>{processmapping.join()}</div>;
   }else{
@@ -76,14 +76,14 @@ const mlProcessTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "processName", title: "Process",dataSort:true},
-    {dataField: "industries", title:"Industry",dataSort:true},
-    {dataField: "professions", title:"Profession",dataSort:true,customComponent:professionFormatter},
-    {dataField: "clusters", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
-    {dataField: "states", title: "State",dataSort:true,customComponent:stateFormatter},
-    {dataField:"chapters", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
-    {dataField:"subChapters", title:"Sub Chapter",dataSort:true,customComponent:subChapterFormatte},
-    {dataField: "communities", title: "Community",dataSort:true,customComponent:communityFormatter},
-    {dataField: "userTypes", title: "User Type",dataSort:true},
+    {dataField: "industrieNames", title:"Industry",dataSort:true},
+    {dataField: "professionNames", title:"Profession",dataSort:true,customComponent:professionFormatter},
+    {dataField: "clusterNames", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
+    {dataField: "stateNames", title: "State",dataSort:true,customComponent:stateFormatter},
+    {dataField:"chapterNames", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
+    {dataField:"subChapterNames", title:"Sub Chapter",dataSort:true,customComponent:subChapterFormatte},
+    {dataField: "communityNames", title: "Community",dataSort:true,customComponent:communityFormatter},
+    {dataField: "userTypeNames", title: "User Type",dataSort:true},
     {dataField: "identity", title: "Identity",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true,customComponent:ActiveProcessFormatter}
   ],
@@ -117,7 +117,7 @@ const mlProcessTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-                query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
+               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
                 data:SearchQuery(module:"processdocument", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                       totalRecords
                       data{
@@ -128,13 +128,21 @@ const mlProcessTableConfig=new MlViewer.View({
                               processName,
                               isActive,
                               communities,
+                        			communityNames
                               industries,
-                              professions,
+                              industrieNames,
+                              professions
+                      				professionNames,
                               clusters,
+                              clusterNames
                               states,
+                              stateNames
                               chapters,
+                        			chapterNames
                               subChapters,
+                        			subChapterNames
                               userTypes,
+                        			userTypeNames
                               identity
                               date
                               documents {

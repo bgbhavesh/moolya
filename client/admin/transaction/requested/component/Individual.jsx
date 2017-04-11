@@ -10,6 +10,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 export default class Individual extends React.Component{
   constructor(props){
@@ -77,6 +78,7 @@ export default class Individual extends React.Component{
 
   componentDidMount()
   {
+    initalizeFloatLabel();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
   }
@@ -296,6 +298,7 @@ export default class Individual extends React.Component{
                     </div>
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true}/>
+
                     </div>
                     <div className="form-group">
                       <input type="text" ref="employerName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerName}  placeholder="Employer Name" className="form-control float-label" id=""/>

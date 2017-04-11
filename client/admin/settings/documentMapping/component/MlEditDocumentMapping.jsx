@@ -210,7 +210,9 @@ class MlEditDocumentMapping extends React.Component{
     data:fetchCountriesSearch{label:country,value:countryCode}
     }
 `;
-    let clusterquery=gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let clusterquery=gql`  query{
+  data:fetchActiveClusters{label:countryName,value:_id}
+}`;
     let chapterquery=gql`query($clusters:[String]){  
         data:fetchActiveClusterChapters(clusters:$clusters) {
           value:_id

@@ -44,6 +44,11 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     },
     {
       showAction: true,
+      actionName: 'comment',
+      handler: null
+    },
+    {
+      showAction: true,
       actionName: 'assign',
       handler: (data)=>{
         if(data && data.id){
@@ -55,9 +60,35 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     },
     {
       showAction: true,
+      actionName: 'add',
+      handler: (data)=>{
+        if(data && data._id){
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data._id);
+        } else{
+          alert("Please select a User Type");
+        }
+      }
+    },
+    {
+      showAction: true,
       actionName: 'logout',
       handler: (data)=>{console.log(data);}
-    }
+    },
+    {
+      showAction: true,
+      actionName: 'cancel',
+      handler: null
+    },
+    {
+      showAction: true,
+      actionName: 'approveUser',
+      handler: null
+    },
+    {
+      showAction: true,
+      actionName: 'rejectUser',
+      handler: null
+    },
   ],
   graphQlQuery:gql`
     query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){

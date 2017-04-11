@@ -12,6 +12,7 @@ import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 class MlEditRole extends React.Component {
   constructor(props) {
@@ -31,21 +32,13 @@ class MlEditRole extends React.Component {
   }
 
   componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
-
-    // $('.switch input').change(function() {
-    //   if ($(this).is(':checked')) {
-    //     $(this).parent('.switch').addClass('on');
-    //   }else{
-    //     $(this).parent('.switch').removeClass('on');
-    //   }
-    // });
+    initalizeFloatLabel();
   }
   componentDidUpdate() {
+    OnToggleSwitch(true,true);
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
   async addEventHandler() {
     const resp = await this.createBackendUser();

@@ -151,13 +151,12 @@ export default class MlAssignClustersToRoles extends React.Component {
         label:subDepartmentName
       }  
     }`;
-  /*  let subChapterquery=gql`query($chapterId:String,$clusterId:String){
+      let subChapterquery=gql`query($chapterId:String,$clusterId:String){
         data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
           value:_id
           label:subChapterName
         }
-      }`;*/
-    let subChapterquery = [];
+      }`;
     let selectedUserType=this.props.selectedBackendUserType
     let selectedSubChapter=this.props.selectedSubChapter
     if(selectedUserType=='moolya'){

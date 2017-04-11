@@ -27,24 +27,43 @@ let ideatorPortfolioSchema = `
       id:String
       menu:[PortfolioMenu]
     }
-
-    input portfoliodetails{
-        transcationType:String,
-        name:String,
-        contactNumber:Int,
-        communityType:String,
-        cluster:String,
-        chapter:String,
-        subChapter:String,
-        subscriptionType:String,
-        source:String,
-        createdBy:String,
-        status:String,
-        assignedTo:String,
-        progress:String,
-        isPublic:Boolean,
-        isGoLive:Boolean,
-        isActive:Boolean
+    
+    type PortfolioIdeatorDetails{
+        firstName:String,
+        isfirstNamePrivate:Boolean
+        lastName:String,
+        islastNamePrivate:Boolean
+        gender:String,
+        isGenderPrivate:Boolean,
+        dateOfBirth:String,
+        isDateOfBirthPrivate:Boolean,
+        qualification:String,
+        isQualificationPrivate:Boolean
+        employmentStatus:String,
+        isEmploymentStatusPrivate:Boolean
+        professionalTag:String,
+        isProfessionalTagPrivate:Boolean
+        yearsofExperience:String,
+        isYoePrivate:Boolean
+        industry:String,
+        isIndustryPrivate:Boolean
+        profession:String,
+        isProfessionPrivate:Boolean
+        employerName:String,
+        isEmployerNamePrivate:Boolean
+        mobileNumber:String,
+        isMobileNumberPrivate:Boolean
+        emailId:String
+        isEmailIdPrivate:Boolean
+        facebookId:String
+        isfacebookIdPrivate:Boolean
+        linkedInId:String
+        islinkedInIdPrivate:Boolean
+        twitterId:String
+        isTwitterIdPrivate:Boolean
+        gplusId:String
+        isGplusIdPrivate:Boolean
+        profilePic:String
     }
 
     input ideatorabout{
@@ -54,33 +73,42 @@ let ideatorPortfolioSchema = `
         isDescriptionPublic:Boolean
     }
     
-    input portfolioIdeatordetails{
+    input portfolioIdeatorDetails{
         firstName:String,
-        isfirstNamePublic:Boolean
+        isfirstNamePrivate:Boolean
         lastName:String,
-        islastNamePublic:Boolean
+        islastNamePrivate:Boolean
         gender:String,
-        isGenderPublic:Boolean,
+        isGenderPrivate:Boolean,
         dateOfBirth:String,
         isDateOfBirthPrivate:Boolean,
         qualification:String,
-        isQualificationPublic:Boolean
+        isQualificationPrivate:Boolean
         employmentStatus:String,
-        isEmploymentStatusPublic:Boolean
+        isEmploymentStatusPrivate:Boolean
         professionalTag:String,
-        isProfessionalTag:Boolean
+        isProfessionalTagPrivate:Boolean
         yearsofExperience:String,
-        isYoePublic:Boolean
+        isYoePrivate:Boolean
         industry:String,
-        isIndustryPublic:Boolean
+        isIndustryPrivate:Boolean
         profession:String,
-        isProfession:Boolean
+        isProfessionPrivate:Boolean
         employerName:String,
-        isEmployerNamePublic:Boolean
+        isEmployerNamePrivate:Boolean
         mobileNumber:String,
-        isMobileNumberPublic:Boolean
+        isMobileNumberPrivate:Boolean
         emailId:String
-        isEmailIdPublic:Boolean
+        isEmailIdPrivate:Boolean
+        facebookId:String
+        isfacebookIdPrivate:Boolean
+        linkedInId:String
+        islinkedInIdPrivate:Boolean
+        twitterId:String
+        isTwitterIdPrivate:Boolean
+        gplusId:String
+        isGplusIdPrivate:Boolean
+        profilePic:String
     }
     
     input problemSolution{
@@ -97,18 +125,18 @@ let ideatorPortfolioSchema = `
         image:String
     }
     
-    input strategyplans{
+    input strategyAndPlanning{
         description:String,
         isStrategyPlansPrivate:Boolean
     }
     
-    input intellectualplanning{
+    input intellectualPlanning{
         description:String, 
         isIntellectualPrivate :Boolean
     }
     
-    input lookingfor{
-        lookingFor:String,
+    input lookingFor{
+        description:String,
         isLookingForPrivate:Boolean
     }
     
@@ -121,17 +149,17 @@ let ideatorPortfolioSchema = `
     input ideatorPortfolio{
         portfolioDetailsId:String,
         ideatorabout:ideatorabout,
-        portfolioIdeatorDetails:portfolioIdeatordetails,
+        portfolioIdeatorDetails:portfolioIdeatorDetails,
         problemSolution:problemSolution,
         audience:audience,
-        strategyplans:strategyplans,
-        intellectualplanning:intellectualplanning,
-        lookingfor:lookingfor,
+        strategyAndPlanning:strategyAndPlanning,
+        intellectualPlanning:intellectualPlanning,
+        lookingFor:lookingFor,
         library:library
     }
     
     type Query{
-        fetchIdeatorPortfolio(userId:String, communityId:String, portfolioId:String):response
+        fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):PortfolioIdeatorDetails
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(userId:String, portfolioId:String, docId:String): response
         fetchComments(userId:String, portfolioId:String, docId:String): response
@@ -140,11 +168,10 @@ let ideatorPortfolioSchema = `
     
     type Mutation{
         createIdeatorPortfolio(portfolio:ideatorPortfolio):response
-        createIdeatorPortfolioRequest(userId:String, communityId:String, portfoliodetails:portfoliodetails):response
         createAnnotation(userId:String, portfolioId:String, docId:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
-          updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
+        updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
     }
 `
 

@@ -515,14 +515,14 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         userTypeNames.push(doc.userTypeName)
       });
 
-      data[index].communities= communityNames || [];
-      data[index].professions= professionNames || [];
-      data[index].industries= industryNames || [];
-      data[index].clusters = clusterNames || [];
-      data[index].states = stateNames || [];
-      data[index].chapters = chapterNames || [];
-      data[index].subChapters = subChapterNames || [];
-      data[index].userTypes = userTypeNames || [];
+      data[index].communityNames= communityNames || [];
+      data[index].professionNames= professionNames || [];
+      data[index].industrieNames= industryNames || [];
+      data[index].clusterNames = clusterNames || [];
+      data[index].stateNames = stateNames || [];
+      data[index].chapterNames = chapterNames || [];
+      data[index].subChapterNames = subChapterNames || [];
+      data[index].userTypeNames = userTypeNames || [];
 
       data[index].processName=processTypes.processName;
 

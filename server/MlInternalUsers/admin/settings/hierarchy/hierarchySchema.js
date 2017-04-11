@@ -14,6 +14,7 @@ let HierarchySchema = `
       subDepartmentId     : String
       subDepartmentName   : String
       isMoolya            : Boolean
+      isActive            : Boolean
       FinalApproval       : FinalApproval
     }    
     input FinalApprovalInput{

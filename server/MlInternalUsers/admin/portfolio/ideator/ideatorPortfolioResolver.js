@@ -24,37 +24,12 @@ MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, i
       }
 }
 
-MlResolver.MlMutationResolver['createIdeatorPortfolioRequest'] = (obj, args, context, info) => {
-    let user;
-    try {
-        if (args && args.userId && args.communityId) {
-            user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityId}]})
-            if (!user) {
-                MlIdeatorPortfolio.insert({
-                    userId: args.userId,
-                    communityId: args.communityId,
-                    portfolioDetails: args.portfolioDetails
-                })
-            }
-        }
-    }
-    catch (e){
-        let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exist", code);
-        return response;
-    }
-
-    let code = 200;
-    let response = new MlRespPayload().successPayload(user, code);
-    return response;
-}
-
 MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, info) =>
 {
     if(args.portfoliodetailsId){
         try {
             let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-            let updateFor = args.ideatorPortfolio;
+            let updateFor = args.portfolio.ideatorPortfolio;
             if (ideatorPortfolio) {
                 for (key in updateFor) {
                     if (ideatorPortfolio.hasOwnProperty(key)) {
@@ -102,8 +77,15 @@ MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
 
 }
 
-MlResolver.MlQueryResolver['fetchIdeatorPortfolio'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {
+    if(args.portfoliodetailsId){
+        let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+        if (ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
+            return ideatorPortfolio['portfolioIdeatorDetails'];
+        }
+    }
 
+    return {};
 }
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioRequests'] = (obj, args, context, info) => {

@@ -788,7 +788,7 @@ if(Meteor.isServer){
           {
             "image" : "/images/cluster_icon.png",
             "link" : "/admin/settings/hierarchy/platformhierarchy",
-            "name" : "hierarchy",
+            "name" : "Hierarchy",
             "uniqueId"   :"settings_hierarchy",
             "isLink" : true,
             "isMenu" : true,

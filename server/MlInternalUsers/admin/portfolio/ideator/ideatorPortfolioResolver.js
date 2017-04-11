@@ -33,7 +33,8 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
             if (ideatorPortfolio) {
                 for (key in updateFor) {
                     if (ideatorPortfolio.hasOwnProperty(key)) {
-                        applyDiff(ideatorPortfolio[key], updateFor[key]);
+                        // applyDiff(ideatorPortfolio[key], updateFor[key]);
+                        ideatorPortfolio[key] = _.extend(ideatorPortfolio[key], updateFor[key]);
                     }
                     else {
                       ideatorPortfolio[key] = updateFor[key];

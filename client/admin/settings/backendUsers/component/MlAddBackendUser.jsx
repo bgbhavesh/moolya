@@ -80,7 +80,8 @@ class MlAddBackendUser extends React.Component {
     let email = this.refs.email.value;
     let password = this.refs.password.value;
     let confirmPassword = this.refs.confirmPassword.value;
-    let departments=this.state.mlAssignDepartmentDetails[0].department
+    let departments=this.state.mlAssignDepartmentDetails[0].department;
+    let subdepartments=this.state.mlAssignDepartmentDetails[0].subDepartment;
     if(!firstName){
       toastr.error("First Name is required");
     }
@@ -101,8 +102,16 @@ class MlAddBackendUser extends React.Component {
       toastr.error("Confirm Password does not match with Password")
 
     } else if(!departments){
-      toastr.error("Assign Department is required")
-    }else {
+
+      toastr.error("Assign Department is required");
+
+    }
+   else if(!subdepartments){
+
+  toastr.error("Sub Department is required");
+
+}
+    else {
       let moolyaProfile = {
         firstName: this.refs.firstName.value,
         middleName: this.refs.middleName.value,
@@ -207,7 +216,7 @@ class MlAddBackendUser extends React.Component {
       {
         showAction: true,
         actionName: 'save',
-        handler: async(event) => this.props.handler(this.createBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) =>this.props.handler(this.createBackendUser.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         showAction: true,

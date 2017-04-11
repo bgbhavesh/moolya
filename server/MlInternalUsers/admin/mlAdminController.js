@@ -11,16 +11,17 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
+
 import getContext from './mlAuthContext'
 import MlResolver from './mlAdminResolverDef';
 import MlSchemaDef from './mlAdminSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
+let cors = require('cors')
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
-
 
 const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
 const typeDefs = MlSchemaDef['schema']
@@ -68,6 +69,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
+  graphQLServer.options('/registrations', cors())
   config.configServer(graphQLServer)
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
@@ -165,7 +167,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                       let inner = ideatorPortfolio[key]
                                       if(typeof inner == 'object'){
                                           for (key1 in inner){
-                                              inner[key1] = resp;
+                                            let file = inner[key1]
+                                            if(typeof file == 'object'){
+                                              for (key2 in file){
+                                                  file[key2].fileUrl = resp;
+                                              }
+                                            }
                                           }
                                       }
                                   }

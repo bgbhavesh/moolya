@@ -48,8 +48,15 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   onFileUpload(e){
       let file = e.target.files[0];
       let name = e.target.name;
-      let data = {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:""}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name));
+      let fileName = e.target.files[0].name;
+
+      if(name=='problemImage'){
+        let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:[{fileUrl:'', fileName : fileName}]}}};
+        let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+      }else if(name=='solutionImage'){
+        let data= {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{solutionImage:[{fileUrl:'', fileName : fileName}]}}};
+        let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+      }
   }
 
   sendDataToParent() {
@@ -60,15 +67,19 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
-  onFileUploadCallBack(name, resp){
+  onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp)
-        if(result.success){
-          let dataDetails =this.state.data;
-          dataDetails[name] = result.result
-          this.setState({data: dataDetails})
-          this.sendDataToParent();
-        }
+        // if(result.success){
+        //   let dataDetails =this.state.data;
+        //   let ary = [{
+        //     fileUrl : result.result,
+        //     fileName: fileName
+        //   }]
+        //   dataDetails[name] = ary;
+        //   this.setState({data: dataDetails})
+        //   this.sendDataToParent();
+        // }
     }
   }
 

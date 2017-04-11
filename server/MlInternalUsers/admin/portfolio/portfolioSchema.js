@@ -21,6 +21,7 @@ let portfolioSchema = `
         subscriptionType:String,
         source:String,
         createdBy:String,
+        createdAt:String,
         status:String,
         assignedTo:String,
         progress:String,

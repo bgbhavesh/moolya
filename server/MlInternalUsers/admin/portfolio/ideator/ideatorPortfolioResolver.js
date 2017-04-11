@@ -34,9 +34,11 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
                 for (key in updateFor) {
                     if (ideatorPortfolio.hasOwnProperty(key)) {
                         // applyDiff(ideatorPortfolio[key], updateFor[key]);
+                      console.log(key)
                         ideatorPortfolio[key] = _.extend(ideatorPortfolio[key], updateFor[key]);
                     }
                     else {
+                      console.log(key)
                       ideatorPortfolio[key] = updateFor[key];
                     }
                 }

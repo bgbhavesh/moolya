@@ -186,24 +186,24 @@ export default class Step1 extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => {
+        handler: async (event) => {
           FlowRouter.go("/admin/transactions/requestedList")
         }
       }
     ];
 
 
-  let countryQuery=gql`query{
+    let countryQuery = gql`query{
  data:fetchCountries {
     value:_id
     label:country
   }
 }`
-    let clusterQuery=gql` query{
+    let clusterQuery = gql` query{
   data:fetchActiveClusters{label:countryName,value:_id}
 }
 `;
-    let chapterQuery=gql`query($id:String){  
+    let chapterQuery = gql`query($id:String){  
   data:fetchChapters(id:$id) {
     value:_id
     label:chapterName
@@ -218,11 +218,13 @@ export default class Step1 extends React.Component{
   data:fetchCommunityDefinition{label:name,value:code}
 } 
 `;
-    let userTypequery = gql`query{
-    data:FetchUserType {label:userTypeName,value:_id}
-    }
+    let userTypequery = gql` query($communityCode:String){  
+    data:FetchUserType(communityCode:$communityCode) {
+      value:_id
+      label:userTypeName
+  }  }
     `;
-
+    let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
     /*let registrationOptions = [
       { value: '0', label: 'simplybrowsing' },
@@ -315,7 +317,7 @@ export default class Step1 extends React.Component{
                     }
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                      <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                     </div>
 
 

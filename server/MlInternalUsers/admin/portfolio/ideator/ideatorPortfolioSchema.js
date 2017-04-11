@@ -27,24 +27,43 @@ let ideatorPortfolioSchema = `
       id:String
       menu:[PortfolioMenu]
     }
-
-    input portfoliodetails{
-        transcationType:String,
-        name:String,
-        contactNumber:Int,
-        communityType:String,
-        cluster:String,
-        chapter:String,
-        subChapter:String,
-        subscriptionType:String,
-        source:String,
-        createdBy:String,
-        status:String,
-        assignedTo:String,
-        progress:String,
-        isPublic:Boolean,
-        isGoLive:Boolean,
-        isActive:Boolean
+    
+    type PortfolioIdeatorDetails{
+        firstName:String,
+        isfirstNamePrivate:Boolean
+        lastName:String,
+        islastNamePrivate:Boolean
+        gender:String,
+        isGenderPrivate:Boolean,
+        dateOfBirth:String,
+        isDateOfBirthPrivate:Boolean,
+        qualification:String,
+        isQualificationPrivate:Boolean
+        employmentStatus:String,
+        isEmploymentStatusPrivate:Boolean
+        professionalTag:String,
+        isProfessionalTagPrivate:Boolean
+        yearsofExperience:String,
+        isYoePrivate:Boolean
+        industry:String,
+        isIndustryPrivate:Boolean
+        profession:String,
+        isProfessionPrivate:Boolean
+        employerName:String,
+        isEmployerNamePrivate:Boolean
+        mobileNumber:String,
+        isMobileNumberPrivate:Boolean
+        emailId:String
+        isEmailIdPrivate:Boolean
+        facebookId:String
+        isfacebookIdPrivate:Boolean
+        linkedInId:String
+        islinkedInIdPrivate:Boolean
+        twitterId:String
+        isTwitterIdPrivate:Boolean
+        gplusId:String
+        isGplusIdPrivate:Boolean
+        profilePic:String
     }
 
     input ideatorabout{
@@ -140,7 +159,7 @@ let ideatorPortfolioSchema = `
     }
     
     type Query{
-        fetchIdeatorPortfolio(userId:String, communityId:String, portfolioId:String):response
+        fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):PortfolioIdeatorDetails
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(userId:String, portfolioId:String, docId:String): response
         fetchComments(userId:String, portfolioId:String, docId:String): response
@@ -149,7 +168,6 @@ let ideatorPortfolioSchema = `
     
     type Mutation{
         createIdeatorPortfolio(portfolio:ideatorPortfolio):response
-        createIdeatorPortfolioRequest(userId:String, communityId:String, portfoliodetails:portfoliodetails):response
         createAnnotation(userId:String, portfolioId:String, docId:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response

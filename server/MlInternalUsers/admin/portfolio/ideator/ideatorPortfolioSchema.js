@@ -75,10 +75,10 @@ let ideatorPortfolioSchema = `
     
     
      type problemSolutionInfo{
-        problemStatment   : String,
+        problemStatement   : String,
         isProblemPrivate   : Boolean,
         problemImage      : String
-        solutionStatment  : String,
+        solutionStatement  : String,
         isSolutionPrivate  : Boolean,
         solutionImage     : String
     }

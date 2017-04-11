@@ -2,6 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
+import MlViewIdeatorPortfolioTemplate from '../component/Ideator/MlViewIdeatorPortfolio'
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
@@ -22,7 +23,7 @@ const mlIdeatorViewExternalUserPortfolioTemplateConfig={
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
   stepName:'Portfolio',
-  // component:IdeatorCompanyHardReg
+  component:MlViewIdeatorPortfolioTemplate
 };
 
 const mlStartupEditExternalUserPortfolioTemplateConfig={
@@ -48,3 +49,4 @@ const mlStartupViewExternalUserPortfolioTemplateConfig={
 };
 
 mlRegistrationTemplates.setTemplate(mlIdeatorEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlIdeatorViewExternalUserPortfolioTemplateConfig);

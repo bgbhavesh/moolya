@@ -14,11 +14,13 @@ class MlPortfolio extends React.Component{
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
+        this.fetchPortfolioDetails.bind(this);
         return this;
     }
 
     async componentWillMount() {
         this.fetchEditPortfolioTemplate(this.props.config);
+        this.fetchPortfolioDetails();
     }
 
     async fetchEditPortfolioTemplate(pId) {
@@ -32,9 +34,16 @@ class MlPortfolio extends React.Component{
     }
 
     getPortfolioDetails(details){
-        console.log("parent details")
-        console.log(details);
+        // console.log("parent details")
+        // console.log(details);
         this.setState({portfolio:details});
+    }
+    async fetchPortfolioDetails() {
+      let portfolioId=this.props.config;
+      const response = await findPortfolioActionHandler(portfolioId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
     }
 
   async updatePortfolioDetails() {
@@ -53,6 +62,16 @@ class MlPortfolio extends React.Component{
 
     render(){
         let MlActionConfig = [
+          // {
+          //   showAction: true,
+          //   actionName: 'progress',
+          //   handler: null
+          // },
+          {
+            showAction: true,
+            actionName: 'edit',
+            handler: null
+          },
           {
             actionName: 'save',
             showAction: true,
@@ -62,7 +81,17 @@ class MlPortfolio extends React.Component{
             showAction: true,
             actionName: 'cancel',
             handler: null
-          }
+          },
+          {
+            showAction: true,
+            actionName: 'assign',
+            handler: null
+          },
+          {
+            showAction: true,
+            actionName: 'comment',
+            handler: null
+          },
         ]
         let EditComponent=this.state.editComponent;
         let hasComponent = false

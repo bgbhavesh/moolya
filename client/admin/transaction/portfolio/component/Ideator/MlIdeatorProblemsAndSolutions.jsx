@@ -21,8 +21,26 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   onInputChange(event){
+    // let name  = event.target.name
+    // this.state.data[name] = event.target.value;
+    let dataDetails =this.state.data;
     let name  = event.target.name
-    this.state.data[name] = event.target.value;
+    dataDetails[name]= event.target.value
+    this.setState({data: dataDetails})
+    this.sendDataToParent();
+  }
+
+  onLockChange(field, e){
+    let dataDetails =this.state.data;
+    let className = e.target.className;
+    // let key = e.target.fieldName;
+    let key = e.target.id;
+    if(className.indexOf("fa-lock") != -1){
+      dataDetails[key] = true;
+    }else{
+      dataDetails[key] = false;
+    }
+    this.setState({data:dataDetails})
     this.sendDataToParent();
   }
 
@@ -62,20 +80,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" ref="pro"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-6">
-                  <div className="panel panel-default panel-form">
-                    <div className="panel-heading">
-                      Solutions
-                    </div>
-                    <div className="panel-body">
-                      <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement"></textarea>
-                        <FontAwesome name='lock' className="input_icon req_textarea_icon un_lock" ref="sol"/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "isProblemPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProblemPrivate}/>
                       </div>
                     </div>
                   </div>
@@ -83,7 +88,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-heading">Add Images</div>
                     <div className="panel-body nopadding">
                       <div className="upload-file-wrap">
-                        <input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
+                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
                         <label htmlFor="fileinput">
                           <figure>
                             <i className="fa fa-upload" aria-hidden="true"></i>
@@ -96,7 +101,35 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                   </div>
                 </div>
-                {/*<submit onClick={this.handleClick.bind(this)}>Click</submit>*/}
+                <div className="col-lg-6">
+                  <div className="panel panel-default panel-form">
+                    <div className="panel-heading">
+                      Solutions
+                    </div>
+                    <div className="panel-body">
+                      <div className="form-group nomargin-bottom">
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement"></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "isSolutionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isSolutionPrivate}/>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="panel panel-default">
+                    <div className="panel-heading">Add Images</div>
+                    <div className="panel-body nopadding">
+                      <div className="upload-file-wrap">
+                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
+                        <label htmlFor="fileinput">
+                          <figure>
+                            <i className="fa fa-upload" aria-hidden="true"></i>
+                          </figure>
+                        </label>
+                      </div>
+                      <div className="upload-image"><img id="output"/></div>
+                      <div className="upload-image"></div>
+                      <div className="upload-image"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </ScrollArea>
           </div>

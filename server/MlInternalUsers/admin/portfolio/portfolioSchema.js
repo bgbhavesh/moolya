@@ -57,6 +57,7 @@ let portfolioSchema = `
     
     type Mutation{
           createPortfolioRequest(portfoliodetails:portfoliodetails):response
+          updatePortfolio(portfoliodetailsId:String, ideatorPortfolio:ideatorPortfolio):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

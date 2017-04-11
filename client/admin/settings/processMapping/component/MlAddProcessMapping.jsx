@@ -208,8 +208,8 @@ class MlAddProcessMapping extends React.Component{
           label:name
         }  
     }`;
-    let chapterquery=gql`query($states:[String]){  
-        data:fetchActiveStatesChapters(states:$states) {
+    let chapterquery=gql`query($states:[String],$clusters:[String]){  
+        data:fetchActiveStatesChapters(states:$states,clusters:$clusters) {
           value:_id
           label:chapterName
         }  
@@ -221,7 +221,7 @@ class MlAddProcessMapping extends React.Component{
         }  
     }`;
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
-    let chapterOption={options: { variables: {states:this.state.states}}};
+    let chapterOption={options: { variables: {states:this.state.states,clusters:this.state.clusters}}};
     let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
    return (

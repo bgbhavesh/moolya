@@ -102,7 +102,7 @@ export default class MlAssignComponent extends Component {
                     }}};
     return (
 
-      <div className="panel panel-default-bottom col-md-12">
+      <div className="ml_assignrequest" style={{'display':'none'}}>
         <div className="mrgn-btm">
           <input type="text" placeholder="Search User" className="search-form-control" id="" />
         </div>

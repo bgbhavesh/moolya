@@ -24,10 +24,12 @@ class MlAddUserType extends React.Component{
     this.setState({communityCode: val, communityName : selObject.label})
   }
 
-  componentDidUpdate()
+  componentDidMount()
   {
-    OnToggleSwitch(true,true);
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
+    var WinHeight = $(window).height();
+    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {

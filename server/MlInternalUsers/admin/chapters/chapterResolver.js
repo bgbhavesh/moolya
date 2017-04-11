@@ -272,17 +272,17 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
 }
 MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, info) => {
   let states = args.states;
+  let clusters=args.clusters;
   let chapters = [];
   if(states && states.length > 0){
-    if(states.length==1&&states[0] == "all"){
+    if(states.length==1&&states[0] == "all"&&clusters[0] == "all"){
       chapters= MlChapters.find({isActive:true}).fetch()||[];
-      chapters.push({"chapterName" : "All","_id" : "all"});
       if(chapters.length>=1){
         chapters.push({"chapterName" : "All","_id" : "all"});
       }
-    }else {
-      states.map(function (stateId) {
-        activeChapters = MlChapters.find({"$and": [{stateId: stateId, isActive: true}]}).fetch();
+    }else if(states.length == 1 && states[0] == "all"&& clusters[0] != "all") {
+      clusters.map(function (clusterId) {
+        activeChapters = MlChapters.find({"$and": [{clusterId: clusterId, isActive: true}]}).fetch();
         if (activeChapters && activeChapters.length > 0) {
           chapters = chapters.concat(activeChapters)
         }
@@ -290,9 +290,20 @@ MlResolver.MlQueryResolver['fetchActiveStatesChapters'] = (obj, args, context, i
       if(chapters.length>=1){
         chapters.push({"chapterName" : "All","_id" : "all"});
       }
+    }else {
+        states.map(function (stateId) {
+          activeChapters = MlChapters.find({"$and": [{stateId: stateId, isActive: true}]}).fetch();
+          if (activeChapters && activeChapters.length > 0) {
+            chapters = chapters.concat(activeChapters)
+          }
+        })
+        if(chapters.length>=1){
+          chapters.push({"chapterName" : "All","_id" : "all"});
+        }
 
+      }
     }
-  }
+
 
   return chapters;
 }

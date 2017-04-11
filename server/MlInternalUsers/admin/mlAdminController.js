@@ -176,16 +176,19 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   if(config.registrationAPIPath){
-    graphQLServer.post(config.registrationAPIPath, multipartMiddleware, Meteor.bindEnvironment(function (req, res)
+    graphQLServer.post(config.registrationAPIPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
     {
+      console.log("registrationAPIPath ");
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      if(req && req.body && req.body.data && req.headers.api_key)
+      console.log(req.body);
+      console.log(req.headers);
+      if(req && req.body && req.body.data)
       {
-        let data = JSON.parse(req.body.data)
-        let apiKey = req.header("API_KEY")
-        if(apiKey=="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+        let data = req.body.data;
+        let apiKey = req.header("api-key");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           if(data.email&&data.countryId&&data.registrationType){
             let response;
             if(data) {
@@ -205,6 +208,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           res.send(response);
         }
 
+      }else{
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
       }
     }))
   }

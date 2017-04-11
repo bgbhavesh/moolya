@@ -50,8 +50,8 @@ let ideatorPortfolioSchema = `
     input ideatorabout{
         title:String,
         description:String,
-        isTitlePublic:String,
-        isDescriptionPublic:String
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
     }
     
     input portfolioIdeatordetails{
@@ -60,7 +60,9 @@ let ideatorPortfolioSchema = `
         lastName:String,
         islastNamePublic:Boolean
         gender:String,
-        isGenderPublic:Boolean
+        isGenderPublic:Boolean,
+        dateOfBirth:String,
+        isDateOfBirthPrivate:Boolean,
         qualification:String,
         isQualificationPublic:Boolean
         employmentStatus:String,
@@ -96,15 +98,18 @@ let ideatorPortfolioSchema = `
     }
     
     input strategyplans{
-        description:String
+        description:String,
+        isStrategyPlansPrivate:Boolean
     }
     
     input intellectualplanning{
-        description:String
+        description:String, 
+        isIntellectualPrivate :Boolean
     }
     
     input lookingfor{
-        lookingFor:String
+        lookingFor:String,
+        isLookingForPrivate:Boolean
     }
     
     input library{
@@ -114,7 +119,7 @@ let ideatorPortfolioSchema = `
     }
   
     input ideatorPortfolio{
-        portfolioDetails:portfoliodetails,
+        portfolioDetailsId:String,
         ideatorabout:ideatorabout,
         portfolioIdeatorDetails:portfolioIdeatordetails,
         problemSolution:problemSolution,
@@ -139,7 +144,7 @@ let ideatorPortfolioSchema = `
         createAnnotation(userId:String, portfolioId:String, docId:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
-        updateIdeatorPortfolio(portfolioId:String, userId:String, portfolio:ideatorPortfolio):response
+          updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
     }
 `
 

@@ -12,7 +12,7 @@ import MlAssignClustersToRoles from './MlAssignClustersToRoles'
 import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 let Select = require('react-select');
 
 class MlAddRole extends React.Component{
@@ -30,17 +30,8 @@ class MlAddRole extends React.Component{
   }
   componentDidMount()
   {
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
+    initalizeFloatLabel();
+    OnToggleSwitch(false,true);
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -115,11 +106,6 @@ class MlAddRole extends React.Component{
 
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -129,7 +115,6 @@ class MlAddRole extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/rolesList")
         }
       }

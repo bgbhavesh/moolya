@@ -80,7 +80,7 @@ MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {
     if(args.portfoliodetailsId){
         let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-        if (ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
+        if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
             return ideatorPortfolio['portfolioIdeatorDetails'];
         }
     }

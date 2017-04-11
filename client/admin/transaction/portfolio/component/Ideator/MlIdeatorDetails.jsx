@@ -4,10 +4,10 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
+import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-
 
 
 export default class MlIdeatorDetails extends React.Component{
@@ -17,13 +17,15 @@ export default class MlIdeatorDetails extends React.Component{
         data:{}
     }
     this.onClick.bind(this);
-    this.handleBlur.bind(this)
+    this.handleBlur.bind(this);
+    this.fetchPortfolioDetails.bind(this);
   }
 
   componentDidMount()
   {
     OnLockSwitch();
     dataVisibilityHandler();
+    this.fetchPortfolioDetails();
   }
 
   onClick(field,e){
@@ -44,6 +46,13 @@ export default class MlIdeatorDetails extends React.Component{
     details[name]= e.target.value
     this.setState({data:details})
     this.sendDataToParent()
+  }
+  async fetchPortfolioDetails() {
+    let portfolioId=this.props.portfolioDetailsId;
+    const response = await findIdeatorDetailsActionHandler(portfolioId);
+    if (response) {
+      this.setState({loading: false, data: response});
+    }
   }
 
   sendDataToParent(){

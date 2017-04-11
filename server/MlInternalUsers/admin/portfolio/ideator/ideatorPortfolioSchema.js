@@ -87,6 +87,7 @@ let ideatorPortfolioSchema = `
     type audienceInfo{
         description:String
         image:String
+        isAudiencePrivate:Boolean
     }
     
     type strategyplansInfo{
@@ -189,7 +190,8 @@ let ideatorPortfolioSchema = `
     
     input audience{
         description:String,
-        image:String
+        image:String,
+        isAudiencePrivate:Boolean
     }
     
     input strategyAndPlanning{
@@ -226,7 +228,7 @@ let ideatorPortfolioSchema = `
     }
     
     type Query{
-        fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):ideatorPortfolioDetails
+        fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(userId:String, portfolioId:String, docId:String): response
         fetchComments(userId:String, portfolioId:String, docId:String): response

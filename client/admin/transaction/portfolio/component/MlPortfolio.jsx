@@ -1,7 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {findPortfolioActionHandler} from '../actions/findPortfolioDetails'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
@@ -14,7 +13,6 @@ class MlPortfolio extends React.Component{
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
-        this.fetchPortfolioDetails.bind(this);
         return this;
     }
 
@@ -24,7 +22,6 @@ class MlPortfolio extends React.Component{
           this.fetchViewPortfolioTemplate(this.props.config);
         }else{
           this.fetchEditPortfolioTemplate(this.props.config);
-          this.fetchPortfolioDetails();
         }
 
     }
@@ -46,13 +43,6 @@ class MlPortfolio extends React.Component{
         // console.log("parent details")
         // console.log(details);
         this.setState({portfolio:details});
-    }
-    async fetchPortfolioDetails() {
-      let portfolioId=this.props.config;
-      const response = await findPortfolioActionHandler(portfolioId);
-      if (response) {
-        this.setState({loading: false, data: response});
-      }
     }
 
   async updatePortfolioDetails() {

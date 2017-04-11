@@ -28,7 +28,14 @@ let ideatorPortfolioSchema = `
       menu:[PortfolioMenu]
     }
     
-    type PortfolioIdeatorDetails{
+    type ideatoraboutInfo{
+        title:String
+        description:String
+        isTitlePublic:Boolean
+        isDescriptionPublic:Boolean
+    }
+    
+    type portfolioIdeatorDetailsInfo{
         firstName:String,
         isfirstNamePrivate:Boolean
         lastName:String,
@@ -65,6 +72,60 @@ let ideatorPortfolioSchema = `
         isGplusIdPrivate:Boolean
         profilePic:String
     }
+    
+    
+     type problemSolutionInfo{
+        problemStatment   : String,
+        isProblemPrivate   : Boolean,
+        problemImage      : String
+        solutionStatment  : String,
+        isSolutionPrivate  : Boolean,
+        solutionImage     : String
+    }
+   
+    
+    type audienceInfo{
+        description:String
+        image:String
+    }
+    
+    type strategyplansInfo{
+        description:String
+        isStrategyPlansPrivate:Boolean
+    }
+    
+    type intellectualplanningInfo{
+        description:String
+        isIntellectualPrivate :Boolean
+    }
+    
+    type lookingforInfo{
+        lookingFor:String
+        isLookingForPrivate:Boolean
+    }
+    
+    type libraryInfo{
+        fileType:String
+        portfolioId:String
+        isActive:Boolean
+    }
+    
+    type ideatorPortfolioDetails{
+         _id            : String
+         userId               : String
+         communityType        : String
+         portfolioDetailsId   : String
+         ideatorabout : ideatoraboutInfo
+         portfolioIdeatorDetails    : portfolioIdeatorDetailsInfo
+         problemSolution : problemSolutionInfo
+         audience : audienceInfo
+         strategyPlans : strategyplansInfo
+         intellectualPlanning : intellectualplanningInfo
+         lookingFor : lookingforInfo
+         library:libraryInfo
+         
+    }
+    
 
     input ideatorabout{
         title:String,
@@ -159,7 +220,7 @@ let ideatorPortfolioSchema = `
     }
     
     type Query{
-        fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):PortfolioIdeatorDetails
+        fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):ideatorPortfolioDetails
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(userId:String, portfolioId:String, docId:String): response
         fetchComments(userId:String, portfolioId:String, docId:String): response

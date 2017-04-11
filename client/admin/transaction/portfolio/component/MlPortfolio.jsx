@@ -35,11 +35,11 @@ class MlPortfolio extends React.Component{
         this.setState({editComponent:reg&&reg.component?reg.component:null});
     }
 
-    async fetchViewPortfolioTemplate(regDetails) {
+    async fetchViewPortfolioTemplate(id) {
         //const reg= await fetchTemplateHandler({process:"Portfolio",subProcess:"Portfolio", stepCode:"Portfolio", recordId:""});
       let userType = this.context.userType;
       const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:userType});
-      this.setState({portfolioComponent:reg&&reg.component?reg.component:null});
+      this.setState({editComponent:reg&&reg.component?reg.component:null});
     }
 
     getPortfolioDetails(details){

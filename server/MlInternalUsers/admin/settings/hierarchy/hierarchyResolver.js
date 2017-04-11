@@ -57,7 +57,7 @@ MlResolver.MlMutationResolver['updateFinalApprovalRoles'] = (obj, args, context,
   let response ;
   let role = args.finalRole;
   if (role) {
-      if (role.id!='') {
+      if (role.id!=''&&role.id!=null) {
         let result =  mlDBController.update('MlHierarchyFinalApproval',role.id, role, {$set:true}, context)
         let code = 200;
         response = new MlRespPayload().successPayload(result, code);
@@ -90,7 +90,7 @@ MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info
 
 MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info) => { // reporting role
   let roles = [];
-  let levelCode = ""
+  let levelCode = args.levelCode
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
     let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
@@ -115,21 +115,20 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
     roles = valueGet;
   }
   _.remove(roles, {roleName: 'platformadmin'})
-  if (levelCode == 'CLUSTER') {
-    _.remove(roles, {roleName: 'chapteradmin'})
+  if (levelCode == 'cluster') {
+   /* _.remove(roles, {roleName: 'chapteradmin'})
     _.remove(roles, {roleName: 'subchapteradmin'})
-    _.remove(roles, {roleName: 'communityadmin'})
+    _.remove(roles, {roleName: 'communityadmin'})*/
   }
 
-  else if (levelCode == 'CHAPTER') {
-    _.remove(roles, {roleName: 'communityadmin'})
+  else if (levelCode == 'chapter') {
+    _.remove(roles, {roleName: 'clusteradmin'})
   }
 
-  else if (levelCode == 'CLUSTER_COMMUNITY' || levelCode == 'COMMUNITY') {
+  else if ( levelCode == 'community') {
     _.remove(roles, {roleName: 'clusteradmin'})
     _.remove(roles, {roleName: 'chapteradmin'})
     _.remove(roles, {roleName: 'subchapteradmin'})
-    _.remove(roles, {roleName: 'communityadmin'})
   }
   return roles;
 }

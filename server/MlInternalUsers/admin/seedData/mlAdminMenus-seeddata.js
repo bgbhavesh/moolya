@@ -623,6 +623,16 @@ if(Meteor.isServer){
                     "isMenu" : true,
                     "hideSubMenu":true,
                     "subMenusId":"portfolio_requested",
+                  },
+                  {
+                    "image" : "/images/cluster_icon.png",
+                    "link" : "/admin/transactions/portfolio/requestedPortfolioList/ideatorDetails",
+                    "name" : "Detail",
+                    "uniqueId"   :"transaction_portfolio_viewPortfolio",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "hideSubMenu":true,
+                    "subMenusId":"portfolio_requested",
                   }
                 ]
               },

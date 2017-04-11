@@ -4,11 +4,11 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {findIdeatorLookingForActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 
 
-export default class MlPortfolioIdeatorLookingForView extends React.Component {
+export default class MlPortfolioIdeatorStrategyPlansView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -27,7 +27,7 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
   }
 
   async fetchPortfolioInfo(){
-    const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
+    const response = await findIdeatorStrategyPlansActionHandler(this.props.portfolioDetailsId);
     if(response){
       this.setState({portfolioIdeatorInfo : response});
     }
@@ -41,7 +41,7 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
 
       <div className="col-lg-12 col-sm-12">
         <div className="row">
-          <h2>Looking For</h2>
+          <h2>Startergy and Planning</h2>
           <div className="panel panel-default panel-form-view">
 
             <div className="panel-body">
@@ -49,8 +49,7 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
             </div>
           </div>
 
-        </div>
-      </div>
+        </div>    </div>
 
     )
 

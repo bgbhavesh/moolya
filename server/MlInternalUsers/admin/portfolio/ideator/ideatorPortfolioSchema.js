@@ -120,7 +120,7 @@ let ideatorPortfolioSchema = `
          portfolioIdeatorDetails    : portfolioIdeatorDetailsInfo
          problemSolution : problemSolutionInfo
          audience : audienceInfo
-         strategyPlans : strategyplansInfo
+         strategyAndPlanning : strategyplansInfo
          intellectualPlanning : intellectualplanningInfo
          lookingFor : lookingforInfo
          library:libraryInfo
@@ -229,6 +229,12 @@ let ideatorPortfolioSchema = `
     
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
+        fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
+        fetchIdeatorPortfolioAudience(portfoliodetailsId:String!): audienceInfo
+        fetchIdeatorPortfolioLibrary(portfoliodetailsId:String!): libraryInfo
+        fetchIdeatorPortfolioStrategyAndPlanning(portfoliodetailsId:String!): strategyplansInfo
+        fetchIdeatorPortfolioIntellectualPlanning(portfoliodetailsId:String!): intellectualplanningInfo
+        fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(userId:String, portfolioId:String, docId:String): response
         fetchComments(userId:String, portfolioId:String, docId:String): response

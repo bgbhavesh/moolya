@@ -46,6 +46,9 @@ class MlPortfolio extends React.Component{
     return response;
 
   }
+  async handleSuccess(response) {
+    FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+  };
 
 
     render(){
@@ -53,7 +56,7 @@ class MlPortfolio extends React.Component{
           {
             actionName: 'save',
             showAction: true,
-            handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this))
+            handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
           },
           {
             showAction: true,
@@ -71,7 +74,7 @@ class MlPortfolio extends React.Component{
             {showLoader===true?( <div className="loader_wrap"></div>):(
               <div className="admin_padding_wrap">
                 <div className='step-progress' >
-                  {hasComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}/>}
+                  {hasComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
                 </div>
               </div>)}
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

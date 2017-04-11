@@ -530,7 +530,7 @@ button:focus{outline: 0;}
 	.nopadding-left {padding-left: 15px !important;}
 }*/
 /*pagination css starts*/
-.react-bs-table-container .pagination{background: #273545; padding: 3px;}
+.react-bs-table-container .pagination{background: #273545; padding: 3px;margin-bottom: 0px;}
 .react-bs-table-container .pagination>li>a, .pagination>li>span{background-color: #273545; border: 0px; text-shadow: none; color: #fff; padding: 2px 8px; }
 .react-bs-table-container .pagination>li:first-child>a, .pagination>li:first-child>span{border-right: #182635 solid 2px;}
 .react-bs-table-container .pagination>li:last-child>a, .pagination>li:last-child>span{border-left: #182635 solid 2px;}
@@ -973,3 +973,29 @@ button:focus{outline: 0;}
 .horizon-swiper,.horizon-swiper *,.horizon-swiper :after,.horizon-swiper :before{box-sizing:border-box}.horizon-swiper{position:relative;/*background:#fff*/}.horizon-swiper a:focus,.horizon-swiper button:focus{outline:0}.horizon-swiper.mouse-drag,.horizon-swiper.mouse-drag *{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.horizon-swiper .horizon-outer{overflow:hidden}.horizon-swiper .horizon-inner{padding:0 0 20px;text-align:center;white-space:nowrap;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding-left: 50px;}.horizon-swiper .horizon-item{display:inline-block;position:relative;white-space:nowrap}.horizon-swiper .horizon-dots{display:none;text-align:center}.horizon-swiper .horizon-dots .horizon-dot{display:inline-block;margin:0 3px}.horizon-swiper.initialized .horizon-dots{display:block}.horizon-swiper .horizon-next,.horizon-swiper .horizon-prev{display:none}/*.horizon-swiper.initialized .horizon-next,.horizon-swiper.initialized .horizon-prev{display:block}*/.horizon-swiper.first-item .horizon-prev,.horizon-swiper.last-item .horizon-next{opacity:.2}
 
 .lock_input{position: absolute;visibility: hidden;}
+
+
+
+.clusterMarker{
+  position: absolute;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  left: -20px;
+  top: -20px;
+
+  border: 5px  solid #ef4647;
+  border-radius: 50%;
+  background-color: white;
+  text-align: center;
+  color: #333;
+
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*.moolya_admin .react-bs-container-body{overflow:hidden;}*/
+/*.react-bs-container-body {position:relative !important;}*/

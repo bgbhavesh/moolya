@@ -4,6 +4,9 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
+let applyDiff   = require('deep-diff').applyDiff,
+  observableDiff  = require('deep-diff').observableDiff
+
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
       try {
           if (args && args.userId && args.communityType) {
@@ -46,8 +49,36 @@ MlResolver.MlMutationResolver['createIdeatorPortfolioRequest'] = (obj, args, con
     return response;
 }
 
-MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, info) =>
+{
+    if(args.portfoliodetailsId){
+        try {
+            let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+            let updateFor = args.ideatorPortfolio;
+            if (ideatorPortfolio) {
+                for (key in updateFor) {
+                    if (ideatorPortfolio.hasOwnProperty(key)) {
+                        applyDiff(ideatorPortfolio[key], updateFor[key]);
+                    }
+                    else {
+                      ideatorPortfolio[key] = updateFor[key];
+                    }
+                }
 
+                let ret = MlIdeatorPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: ideatorPortfolio}, {upsert: true})
+                if (ret) {
+                    let code = 200;
+                    let response = new MlRespPayload().successPayload("Updated Successfully", code);
+                    return response;
+                }
+            }
+        }
+        catch (e){
+            let code = 400;
+            let response = new MlRespPayload().errorPayload(e.message, code);
+            return response;
+        }
+    }
 }
 
 MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) => {

@@ -50,8 +50,8 @@ let ideatorPortfolioSchema = `
     input ideatorabout{
         title:String,
         description:String,
-        isTitlePublic:String,
-        isDescriptionPublic:String
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
     }
     
     input portfolioIdeatordetails{
@@ -115,7 +115,7 @@ let ideatorPortfolioSchema = `
     }
   
     input ideatorPortfolio{
-        portfolioDetails:portfoliodetails,
+        portfolioDetailsId:String,
         ideatorabout:ideatorabout,
         portfolioIdeatorDetails:portfolioIdeatordetails,
         problemSolution:problemSolution,
@@ -140,7 +140,7 @@ let ideatorPortfolioSchema = `
         createAnnotation(userId:String, portfolioId:String, docId:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
-        updateIdeatorPortfolio(portfolioId:String, userId:String, portfolio:ideatorPortfolio):response
+          updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
     }
 `
 

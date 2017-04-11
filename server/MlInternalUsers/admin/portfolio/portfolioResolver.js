@@ -47,3 +47,20 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
   let response = new MlRespPayload().successPayload(ret, code);
   return response;
 }
+
+MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) => {
+    let response;
+    if(args.portfoliodetailsId){
+          let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
+          if(details){
+              switch (details.communityType){
+                  case 'ideators':{
+                      response = MlResolver.MlMutationResolver['updateIdeatorPortfolio'](obj, args, context, info)
+                  }
+                  break;
+              }
+          }
+    }
+
+    return response;
+}

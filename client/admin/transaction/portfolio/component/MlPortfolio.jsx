@@ -2,13 +2,14 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {findPortfolioActionHandler} from '../actions/findPortfolioDetails'
+import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 
 export default class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
-        this.state = {editComponent:''}
+        this.state = {editComponent:'', portfolio:{}}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
@@ -32,14 +33,26 @@ export default class MlPortfolio extends React.Component{
     getPortfolioDetails(details){
         console.log("parent details")
         console.log(details);
+        this.setState({portfolio:details});
     }
+
+  async updatePortfolioDetails() {
+    let jsonData={
+      portfoliodetailsId :this.props.config,
+      portfolio :this.state.portfolio
+    }
+    const response = await updatePortfolioActionHandler(jsonData)
+    return response;
+
+  }
+
 
     render(){
         let MlActionConfig = [
           {
             actionName: 'save',
             showAction: true,
-            handler: null
+            handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this))
           },
           {
             showAction: true,

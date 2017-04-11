@@ -2,11 +2,12 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {findPortfolioActionHandler} from '../actions/findPortfolioDetails'
+import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 
-export default class MlPortfolio extends React.Component{
+class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
         this.state = {editComponent:'', portfolio:{}}
@@ -38,7 +39,7 @@ export default class MlPortfolio extends React.Component{
 
   async updatePortfolioDetails() {
     let jsonData={
-      portfoliodetailsId :this.props.config,
+      portfolioId :this.props.config,
       portfolio :this.state.portfolio
     }
     const response = await updatePortfolioActionHandler(jsonData)
@@ -70,7 +71,7 @@ export default class MlPortfolio extends React.Component{
             {showLoader===true?( <div className="loader_wrap"></div>):(
               <div className="admin_padding_wrap">
                 <div className='step-progress' >
-                  {hasComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails}/>}
+                  {hasComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}/>}
                 </div>
               </div>)}
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
@@ -82,3 +83,5 @@ export default class MlPortfolio extends React.Component{
 MlPortfolio.contextTypes = {
   userType: React.PropTypes.string
 };
+
+export default MlPortfolio = formHandler()(MlPortfolio);

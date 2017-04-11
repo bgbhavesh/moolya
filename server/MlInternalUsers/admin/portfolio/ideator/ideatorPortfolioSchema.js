@@ -54,33 +54,33 @@ let ideatorPortfolioSchema = `
         isDescriptionPublic:Boolean
     }
     
-    input portfolioIdeatordetails{
+    input portfolioIdeatorDetails{
         firstName:String,
-        isfirstNamePublic:Boolean
+        isfirstNamePrivate:Boolean
         lastName:String,
-        islastNamePublic:Boolean
+        islastNamePrivate:Boolean
         gender:String,
-        isGenderPublic:Boolean,
+        isGenderPrivate:Boolean,
         dateOfBirth:String,
         isDateOfBirthPrivate:Boolean,
         qualification:String,
-        isQualificationPublic:Boolean
+        isQualificationPrivate:Boolean
         employmentStatus:String,
-        isEmploymentStatusPublic:Boolean
+        isEmploymentStatusPrivate:Boolean
         professionalTag:String,
         isProfessionalTag:Boolean
         yearsofExperience:String,
-        isYoePublic:Boolean
+        isYoePrivate:Boolean
         industry:String,
-        isIndustryPublic:Boolean
+        isIndustryPrivate:Boolean
         profession:String,
-        isProfession:Boolean
+        isProfessionPrivate:Boolean
         employerName:String,
-        isEmployerNamePublic:Boolean
+        isEmployerNamePrivate:Boolean
         mobileNumber:String,
-        isMobileNumberPublic:Boolean
+        isMobileNumberPrivate:Boolean
         emailId:String
-        isEmailIdPublic:Boolean
+        isEmailIdPrivate:Boolean
     }
     
     input problemSolution{
@@ -97,18 +97,18 @@ let ideatorPortfolioSchema = `
         image:String
     }
     
-    input strategyplans{
+    input strategyAndPlanning{
         description:String,
         isStrategyPlansPrivate:Boolean
     }
     
-    input intellectualplanning{
+    input intellectualPlanning{
         description:String, 
         isIntellectualPrivate :Boolean
     }
     
-    input lookingfor{
-        lookingFor:String,
+    input lookingFor{
+        description:String,
         isLookingForPrivate:Boolean
     }
     
@@ -121,12 +121,12 @@ let ideatorPortfolioSchema = `
     input ideatorPortfolio{
         portfolioDetailsId:String,
         ideatorabout:ideatorabout,
-        portfolioIdeatorDetails:portfolioIdeatordetails,
+        portfolioIdeatorDetails:portfolioIdeatorDetails,
         problemSolution:problemSolution,
         audience:audience,
-        strategyplans:strategyplans,
-        intellectualplanning:intellectualplanning,
-        lookingfor:lookingfor,
+        strategyAndPlanning:strategyAndPlanning,
+        intellectualPlanning:intellectualPlanning,
+        lookingFor:lookingFor,
         library:library
     }
     
@@ -144,7 +144,7 @@ let ideatorPortfolioSchema = `
         createAnnotation(userId:String, portfolioId:String, docId:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
-          updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
+        updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
     }
 `
 

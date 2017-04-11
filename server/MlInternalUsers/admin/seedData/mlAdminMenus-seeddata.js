@@ -675,6 +675,15 @@ if(Meteor.isServer){
                 "isMenu" : true,
                 "image" : "",
                 "subMenusId":"portfolio"
+              },
+              {
+                "link" : "/admin/transactions/portfolio/viewPortfolio",
+                "name" : "Edit",
+                "uniqueId" : "transaction_portfolio_viewPortfolio",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio"
               }
             ]
           }

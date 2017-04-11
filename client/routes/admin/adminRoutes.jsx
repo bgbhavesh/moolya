@@ -253,10 +253,16 @@ adminSection.route('/transactions/portfolio/createPortfolio', {
 adminSection.route('/transactions/portfolio/editRequests/:id', {
   name: 'transaction_portfolio_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio config={params.id}/>})
+    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id}/>})
   }
 });
 
+adminSection.route('/transactions/portfolio/viewPortfolio/:id', {
+  name: 'transaction_portfolio_viewPortfolio',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id}/>})
+  }
+});
 
 adminSection.route('/templates/templateList', {
   name: 'templates_List',

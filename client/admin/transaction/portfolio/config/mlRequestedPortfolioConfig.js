@@ -55,6 +55,17 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     },
     {
       showAction: true,
+      actionName: 'add',
+      handler: (data)=>{
+        if(data && data._id){
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data._id);
+        } else{
+          alert("Please select a User Type");
+        }
+      }
+    },
+    {
+      showAction: true,
       actionName: 'logout',
       handler: (data)=>{console.log(data);}
     }

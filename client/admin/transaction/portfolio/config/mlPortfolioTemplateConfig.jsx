@@ -2,7 +2,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
-import MlViewIdeatorPortfolioTemplate from '../component/Ideator/MlViewIdeatorPortfolio'
+import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",

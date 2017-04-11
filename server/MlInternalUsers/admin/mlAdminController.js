@@ -169,7 +169,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                           }
                                       }
                                   }
-                                  let portfolio = {ideatorPortfolio:ideatorPortfolio, portfoliodetailsId:data.portfolioDetailsId}
+                                  let portfolio = {portfolio:{ideatorPortfolio:ideatorPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                               }
                               break;

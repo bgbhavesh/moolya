@@ -14,11 +14,19 @@ class MlPortfolio extends React.Component{
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
+        this.fetchPortfolioDetails.bind(this);
         return this;
     }
 
     async componentWillMount() {
-        this.fetchEditPortfolioTemplate(this.props.config);
+
+        if(this.props.viewMode){
+          this.fetchViewPortfolioTemplate(this.props.config);
+        }else{
+          this.fetchEditPortfolioTemplate(this.props.config);
+          this.fetchPortfolioDetails();
+        }
+
     }
 
     async fetchEditPortfolioTemplate(pId) {
@@ -27,14 +35,24 @@ class MlPortfolio extends React.Component{
         this.setState({editComponent:reg&&reg.component?reg.component:null});
     }
 
-    async fetchViewPortfolioTemplate(regDetails) {
-        const reg= await fetchTemplateHandler({process:"Portfolio",subProcess:"Portfolio", stepCode:"Portfolio", recordId:""});
+    async fetchViewPortfolioTemplate(id) {
+        //const reg= await fetchTemplateHandler({process:"Portfolio",subProcess:"Portfolio", stepCode:"Portfolio", recordId:""});
+      let userType = this.context.userType;
+      const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:userType});
+      this.setState({editComponent:reg&&reg.component?reg.component:null});
     }
 
     getPortfolioDetails(details){
-        console.log("parent details")
-        console.log(details);
+        // console.log("parent details")
+        // console.log(details);
         this.setState({portfolio:details});
+    }
+    async fetchPortfolioDetails() {
+      let portfolioId=this.props.config;
+      const response = await findPortfolioActionHandler(portfolioId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
     }
 
   async updatePortfolioDetails() {
@@ -53,6 +71,16 @@ class MlPortfolio extends React.Component{
 
     render(){
         let MlActionConfig = [
+          // {
+          //   showAction: true,
+          //   actionName: 'progress',
+          //   handler: null
+          // },
+          {
+            showAction: true,
+            actionName: 'edit',
+            handler: null
+          },
           {
             actionName: 'save',
             showAction: true,
@@ -62,7 +90,17 @@ class MlPortfolio extends React.Component{
             showAction: true,
             actionName: 'cancel',
             handler: null
-          }
+          },
+          {
+            showAction: true,
+            actionName: 'assign',
+            handler: null
+          },
+          {
+            showAction: true,
+            actionName: 'comment',
+            handler: null
+          },
         ]
         let EditComponent=this.state.editComponent;
         let hasComponent = false

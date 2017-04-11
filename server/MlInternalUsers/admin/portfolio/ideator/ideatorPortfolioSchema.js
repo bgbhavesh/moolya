@@ -93,10 +93,10 @@ let ideatorPortfolioSchema = `
     }
     
     input problemSolution{
-        problemStatment   : String,
+        problemStatement   : String,
         isProblemPrivate   : Boolean,
         problemImage      : String
-        solutionStatment  : String,
+        solutionStatement  : String,
         isSolutionPrivate  : Boolean,
         solutionImage     : String
     }

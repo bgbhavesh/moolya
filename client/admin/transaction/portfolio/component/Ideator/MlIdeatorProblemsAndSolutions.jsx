@@ -47,8 +47,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
 
   onFileUpload(e){
       let file = e.target.files[0];
+      let name = e.target.name;
       let data = {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:""}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name));
   }
 
   sendDataToParent() {
@@ -59,9 +60,16 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
-  onFileUploadCallBack(resp){
-      if(resp){
-      }
+  onFileUploadCallBack(name, resp){
+    if(resp){
+      let result = JSON.parse(resp)
+        if(result.success){
+          let dataDetails =this.state.data;
+          dataDetails[name] = result.result
+          this.setState({data: dataDetails})
+          this.sendDataToParent();
+        }
+    }
   }
 
 
@@ -93,7 +101,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-heading">Add Images</div>
                     <div className="panel-body nopadding">
                       <div className="upload-file-wrap">
-                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
+                        <input type="file" name="problemImage" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
                         <label htmlFor="fileinput">
                           <figure>
                             <i className="fa fa-upload" aria-hidden="true"></i>
@@ -122,7 +130,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-heading">Add Images</div>
                     <div className="panel-body nopadding">
                       <div className="upload-file-wrap">
-                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
+                        <input type="file" name="solutionImage" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
                         <label htmlFor="fileinput">
                           <figure>
                             <i className="fa fa-upload" aria-hidden="true"></i>

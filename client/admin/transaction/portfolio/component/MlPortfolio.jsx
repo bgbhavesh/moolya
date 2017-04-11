@@ -46,6 +46,9 @@ class MlPortfolio extends React.Component{
     return response;
 
   }
+  async handleSuccess(response) {
+    FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+  };
 
 
     render(){
@@ -53,7 +56,7 @@ class MlPortfolio extends React.Component{
           {
             actionName: 'save',
             showAction: true,
-            handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this))
+            handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
           },
           {
             showAction: true,

@@ -27,7 +27,8 @@ let UserTypesSchema = `
     }
     type Query{
         FindUserType(_id:String): UserTypes
-        FetchUserType:[UserTypes]
+        FetchUserType(communityCode:String):[UserTypes]
+        FetchUserType1:[UserTypes]
         FetchUserTypeSelect:[UserTypes]
     }
 `

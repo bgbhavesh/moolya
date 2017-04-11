@@ -174,13 +174,7 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
     let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId,'docTypeId':args.docTypeId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
     return updatedResponse;
   }else if(args.registrationId){
-
-    MlRegistration.update({_id:args.registrationId},{ $set:
-    {
-    'registrationInfo.profileImage': args.docUrl,
-
-    }
-    })
+      MlRegistration.update({_id:args.registrationId},{ $set:{'registrationInfo.profileImage': args.docUrl}})
   }
 }
 MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, info) => {

@@ -12,6 +12,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     super(props);
     this.state =  {data:{}};
     this.addEventHandler.bind(this);
+    this.onFileUpload.bind(this);
     return this;
   }
 
@@ -44,11 +45,10 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     this.sendDataToParent();
   }
 
-  onFileUpload(value){
-    // let file=document.getElementById("profilePic").files[0];
-    // let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
-    // let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
-    //this.props.onFileUpload(file,documentId);
+  onFileUpload(e){
+      let file = e.target.files[0];
+      let data = {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:""}}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
 
   sendDataToParent() {
@@ -57,6 +57,11 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
 
   componentDidMount(){
     dataVisibilityHandler();
+  }
+
+  onFileUploadCallBack(resp){
+      if(resp){
+      }
   }
 
 

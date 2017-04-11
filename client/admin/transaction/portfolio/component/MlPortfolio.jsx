@@ -57,7 +57,7 @@ export default class MlPortfolio extends React.Component{
             {showLoader===true?( <div className="loader_wrap"></div>):(
               <div className="admin_padding_wrap">
                 <div className='step-progress' >
-                  {hasComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails}/>}
+                  {hasComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails} portfolioDetailsId={this.props.config}/>}
                 </div>
               </div>)}
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

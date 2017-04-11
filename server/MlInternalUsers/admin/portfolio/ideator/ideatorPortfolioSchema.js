@@ -140,7 +140,8 @@ let ideatorPortfolioSchema = `
         createAnnotation(userId:String, portfolioId:String, docId:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
-          updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
+        updateIdeatorPortfolio(portfoliodetailsId:String, ideatorPortfolio:ideatorPortfolio):response
+        updateIdeatorPortfolioDocumentUrl(portfoliodetailsId:String, ideatorPortfolio:ideatorPortfolio):response
     }
 `
 

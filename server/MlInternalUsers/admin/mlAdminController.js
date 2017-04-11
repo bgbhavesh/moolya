@@ -141,7 +141,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let file  = req.files.file;
 
         if(file){
-
           let imageUploaderPromise=null;
           let imageUploadCallback=null;
           switch (moduleName){
@@ -153,6 +152,33 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               });
               break;
             }
+            case "PORTFOLIO":{
+              if(data.portfolioDetailsId){
+                  imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "portfolioDocuments/");
+                  imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                      let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
+                      if(details){
+                          switch (details.communityType){
+                              case 'ideators':{
+                                  let ideatorPortfolio = data.portfolio;
+                                  for (key in ideatorPortfolio){
+                                      let inner = ideatorPortfolio[key]
+                                      if(typeof inner == 'object'){
+                                          for (key1 in inner){
+                                              inner[key1] = resp;
+                                          }
+                                      }
+                                  }
+                                  let portfolio = {ideatorPortfolio:ideatorPortfolio, portfoliodetailsId:data.portfolioDetailsId}
+                                  MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
+                              }
+                              break;
+                          }
+                      }
+                  });
+              }
+            }
+            break;
           }
 
           if(imageUploaderPromise) {

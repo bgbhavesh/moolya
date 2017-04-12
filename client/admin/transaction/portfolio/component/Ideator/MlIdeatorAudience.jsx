@@ -92,7 +92,7 @@ export default class MlIdeatorAudience extends React.Component{
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "isAudiencePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" s/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "isAudiencePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isAudiencePrivate}/>
                 </div>
 
               </div>

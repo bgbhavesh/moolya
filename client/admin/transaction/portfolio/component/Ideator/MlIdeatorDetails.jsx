@@ -5,7 +5,7 @@ import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
-
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -24,6 +24,11 @@ export default class MlIdeatorDetails extends React.Component{
 
   componentDidMount()
   {
+    // OnLockSwitch();
+    // dataVisibilityHandler();
+  }
+  componentDidUpdate()
+  {
     OnLockSwitch();
     dataVisibilityHandler();
   }
@@ -32,23 +37,28 @@ export default class MlIdeatorDetails extends React.Component{
   }
 
   onClick(field,e){
-      let details =this.state.data;
-      let className = e.target.className;
+      let details = this.state.data||{};
       let key = e.target.id;
+      details=_.omit(details,[key]);
+      let className = e.target.className;
       if(className.indexOf("fa-lock") != -1){
-        details[key] = true;
+        details=_.extend(details,{[key]:true});
       }else{
-        details[key] = false;
+        details=_.extend(details,{[key]:false});
       }
-      this.setState({data:details})
-      this.sendDataToParent()
+      this.setState({data:details}, function () {
+        this.sendDataToParent()
+      })
+
   }
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
-    details[name]= e.target.value
-    this.setState({data:details})
-    this.sendDataToParent()
+    details=_.omit(details,[name]);
+    details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })
   }
   async fetchPortfolioDetails() {
     let that = this;

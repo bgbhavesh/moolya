@@ -11,8 +11,6 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
    constructor(props) {
      super(props);
      this.state =  {loading:true,data:{}};
-     this.onClick.bind(this);
-     this.handleBlur.bind(this);
      this.fetchPortfolioDetails.bind(this);
      return this;
    }
@@ -85,7 +83,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
 
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} onBlur={this.onInputChange.bind(this)} name="description"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIntellectualPrivate}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onLockChange={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIntellectualPrivate}/>
                       </div>
                     </div>
                   </div>

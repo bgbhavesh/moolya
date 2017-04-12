@@ -73,7 +73,7 @@ let ideatorPortfolioSchema = `
         profilePic:String
     }
     
-    type problemSolutionImage{
+    type imagesTypeSchema{
         fileUrl   : String,
         fileName  : String
     }
@@ -81,16 +81,16 @@ let ideatorPortfolioSchema = `
      type problemSolutionInfo{
         problemStatement  : String,
         isProblemPrivate  : Boolean,
-        problemImage      : [problemSolutionImage]
+        problemImage      : [imagesTypeSchema]
         solutionStatement : String,
         isSolutionPrivate : Boolean,
-        solutionImage     : [problemSolutionImage]
+        solutionImage     : [imagesTypeSchema]
     }
    
     type audienceInfo{
         description:String
-        image:String
-        isAudiencePrivate:Boolean
+        isAudiencePrivate:Boolean,
+        audienceImages : [imagesTypeSchema]
     }
     
     type strategyplansInfo{
@@ -192,8 +192,8 @@ let ideatorPortfolioSchema = `
     
     input audience{
         description:String,
-        image:String,
-        isAudiencePrivate:Boolean
+        isAudiencePrivate:Boolean,
+        audienceImages : [imageFilesInputSchema]
     }
     
     input strategyAndPlanning{

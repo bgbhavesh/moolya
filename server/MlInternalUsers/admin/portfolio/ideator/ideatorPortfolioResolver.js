@@ -4,6 +4,9 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
+var extendify = require('extendify');
+var _ = require('lodash')
+
 let applyDiff   = require('deep-diff').applyDiff,
   observableDiff  = require('deep-diff').observableDiff
 
@@ -33,10 +36,16 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
             if (ideatorPortfolio) {
                 for (key in updateFor) {
                     if (ideatorPortfolio.hasOwnProperty(key)) {
-                        // applyDiff(ideatorPortfolio[key], updateFor[key]);
-                        ideatorPortfolio[key] = _.extend(ideatorPortfolio[key], updateFor[key]);
+                      // ideatorPortfolio[key] = myExtend(ideatorPortfolio[key], updateFor[key]);
+                      _.mergeWith(ideatorPortfolio[key], updateFor[key], function (objValue, srcValue) {
+                        if (_.isArray(objValue)) {
+                          return objValue.concat(srcValue);
+                        }
+                      });
+
                     }
                     else {
+                      console.log(key)
                       ideatorPortfolio[key] = updateFor[key];
                     }
                 }
@@ -88,6 +97,68 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
 
     return {};
 }
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioProblemsAndSolutions'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('problemSolution')) {
+      return ideatorPortfolio['problemSolution'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioAudience'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('audience')) {
+      return ideatorPortfolio['audience'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioLibrary'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('library')) {
+      return ideatorPortfolio['library'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioStrategyAndPlanning'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('strategyAndPlanning')) {
+      return ideatorPortfolio['strategyAndPlanning'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioLookingFor'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('lookingFor')) {
+      return ideatorPortfolio['lookingFor'];
+    }
+  }
+
+  return {};
+}
+
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioIntellectualPlanning'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('intellectualPlanning')) {
+      return ideatorPortfolio['intellectualPlanning'];
+    }
+  }
+
+  return {};
+}
+
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioRequests'] = (obj, args, context, info) => {
 

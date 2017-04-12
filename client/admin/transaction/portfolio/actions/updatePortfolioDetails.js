@@ -5,21 +5,18 @@ export async function updatePortfolioActionHandler(details) {
   let portfoliodetailsId  = details.portfolioId;
   let portfolio = details.portfolio;
   const result = await client.mutate({
-    mutation: gql`
-    mutation  ($portfoliodetailsId: String, $portfolio:portfolio){
-        updatePortfolio(
-          portfoliodetailsId:$portfoliodetailsId
-          portfolio:$portfolio
-        ){
-            success,
-            code,
-            result
-        }  
-      }
-    `,
+      mutation: gql`
+          mutation  ($portfoliodetailsId: String, $portfolio:portfolio){
+              updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
     variables: {
-      portfoliodetailsId,
-      portfolio
+        portfoliodetailsId,
+        portfolio
     }
   })
   const id = result.data.updatePortfolio;

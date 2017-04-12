@@ -161,9 +161,14 @@ export default class Step5 extends React.Component {
     let kycDocuments=this.props.registrationData&&this.props.registrationData.kycDocuments?this.props.registrationData.kycDocuments:[];
     if(kycDocuments.length<1) {
       let clusterId = this.props.registrationData && this.props.registrationData.registrationInfo.clusterId ? this.props.registrationData.registrationInfo.clusterId : '';
+      let chapterId = this.props.registrationData && this.props.registrationData.registrationInfo.chapterId ? this.props.registrationData.registrationInfo.chapterId : '';
+      let subChapterId = this.props.registrationData && this.props.registrationData.registrationInfo.subChapterId ? this.props.registrationData.registrationInfo.subChapterId : '';
       let communityType =this.props.registrationData && this.props.registrationData.registrationInfo.registrationType ? this.props.registrationData.registrationInfo.registrationType : '';
-      let userType=this.props.registrationData && this.props.registrationData.registrationDetails.userType ? this.props.registrationData.registrationDetails.userType : '';
-      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,communityType,userType);
+      let userType=this.props.registrationData && this.props.registrationData.registrationInfo.userType ? this.props.registrationData.registrationInfo.userType : '';
+      let identityType=this.props.registrationData && this.props.registrationData.registrationInfo.identityType ? this.props.registrationData.registrationInfo.identityType : '';
+      let profession=this.props.registrationData && this.props.registrationData.registrationDetails.profession ? this.props.registrationData.registrationDetails.profession : '';
+      let industry=this.props.registrationData && this.props.registrationData.registrationDetails.industry ? this.props.registrationData.registrationDetails.industry : '';
+      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry);
       if (response) {
         let processDoc=response
         if (processDoc.processDocuments) {

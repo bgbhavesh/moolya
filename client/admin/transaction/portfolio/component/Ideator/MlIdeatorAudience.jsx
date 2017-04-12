@@ -15,7 +15,8 @@ export default class MlIdeatorAudience extends React.Component{
       data:{}
     }
     this.onClick.bind(this);
-    this.handleBlur.bind(this)
+    this.handleBlur.bind(this);
+    this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioDetails.bind(this);
   }
   componentWillMount(){
@@ -74,9 +75,34 @@ export default class MlIdeatorAudience extends React.Component{
       this.setState({loading: false, data: response});
     }
   }
+  onAudienceImageFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{audience:{audienceImages:[{fileUrl:'', fileName : fileName}]}}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+  onFileUploadCallBack(name,fileName, resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+        this.fetchPortfolioInfo();
+      }
+    }
+  }
 
   render(){
     const showLoader = this.state.loading;
+    const audienceImageArray = this.state.data.audienceImages && this.state.data.audienceImages.length > 0 ? this.state.data.audienceImages : [];
+    const audienceImages = audienceImageArray.map(function (m, id) {
+      return (
+        <div className="upload-image" key={id}>
+          <img id="output" src={m.fileUrl}/>
+        </div>
+      )
+    });
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -92,7 +118,7 @@ export default class MlIdeatorAudience extends React.Component{
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "isAudiencePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" s/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "isAudiencePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isAudiencePrivate}/>
                 </div>
 
               </div>
@@ -101,16 +127,16 @@ export default class MlIdeatorAudience extends React.Component{
               <div className="panel-heading">Add Images</div>
               <div className="panel-body nopadding">
                 <div className="upload-file-wrap">
-                  <input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)" multiple />
-                  <label for="fileinput">
+                  <input type="file" name="audienceImages" id="audienceFileInput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onAudienceImageFileUpload.bind(this)} multiple />
+                  <label htmlFor="piFileinput">
                     <figure>
                       <i className="fa fa-upload" aria-hidden="true"></i>
                     </figure>
                   </label>
                 </div>
-                <div className="upload-image"><img id="output"/></div>
-                <div className="upload-image"></div>
-                <div className="upload-image"></div>
+
+                {audienceImages}
+
               </div>
             </div>
 

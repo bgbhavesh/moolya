@@ -11,6 +11,7 @@ export default class MlIdeatorLookingFor extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      loading:true,
       data:{}
     }
     this.onClick.bind(this);
@@ -76,7 +77,10 @@ export default class MlIdeatorLookingFor extends React.Component{
 
 
   render(){
+    const showLoader = this.state.loading;
     return (
+      <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <div className="main_wrap_scroll">
@@ -114,6 +118,7 @@ export default class MlIdeatorLookingFor extends React.Component{
         </div>
 
 
+      </div>)}
       </div>
     )
   }

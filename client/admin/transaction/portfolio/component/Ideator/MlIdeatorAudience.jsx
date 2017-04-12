@@ -6,6 +6,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 
 export default class MlIdeatorAudience extends React.Component{
   constructor(props){
@@ -17,10 +18,10 @@ export default class MlIdeatorAudience extends React.Component{
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.onAudienceImageFileUpload.bind(this)
-    this.fetchPortfolioDetails.bind(this);
+    this.fetchPortfolioInfo.bind(this);
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    this.fetchPortfolioInfo();
   }
   componentDidMount()
   {
@@ -67,7 +68,7 @@ export default class MlIdeatorAudience extends React.Component{
   sendDataToParent(){
     this.props.getAudience(this.state.data)
   }
-  async fetchPortfolioDetails() {
+  async fetchPortfolioInfo() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
@@ -127,8 +128,8 @@ export default class MlIdeatorAudience extends React.Component{
               <div className="panel-heading">Add Images</div>
               <div className="panel-body nopadding">
                 <div className="upload-file-wrap">
-                  <input type="file" name="audienceImages" id="audienceFileInput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onAudienceImageFileUpload.bind(this)} multiple />
-                  <label htmlFor="piFileinput">
+                  <input type="file" id="siFileinput" name="audienceImages" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onAudienceImageFileUpload.bind(this)} multiple />
+                  <label htmlFor="siFileinput">
                     <figure>
                       <i className="fa fa-upload" aria-hidden="true"></i>
                     </figure>

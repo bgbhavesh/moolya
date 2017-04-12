@@ -4,6 +4,8 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
+var extendify = require('extendify');
+
 let applyDiff   = require('deep-diff').applyDiff,
   observableDiff  = require('deep-diff').observableDiff
 
@@ -33,9 +35,13 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
             if (ideatorPortfolio) {
                 for (key in updateFor) {
                     if (ideatorPortfolio.hasOwnProperty(key)) {
-                        // applyDiff(ideatorPortfolio[key], updateFor[key]);
-                      console.log(key)
-                        ideatorPortfolio[key] = _.extend(ideatorPortfolio[key], updateFor[key]);
+                        myExtend = extendify({
+                            inPlace: true,
+                            arrays : 'concat',
+                            strings: 'replace'
+                        });
+
+                      ideatorPortfolio[key] = myExtend(ideatorPortfolio[key], updateFor[key]);
                     }
                     else {
                       console.log(key)

@@ -19,9 +19,9 @@ class MlPortfolio extends React.Component{
     async componentWillMount() {
 
         if(this.props.viewMode){
-          this.fetchViewPortfolioTemplate(this.props.config);
+            this.fetchViewPortfolioTemplate(this.props.config);
         }else{
-          this.fetchEditPortfolioTemplate(this.props.config);
+           this.fetchEditPortfolioTemplate(this.props.config);
         }
 
     }
@@ -46,10 +46,10 @@ class MlPortfolio extends React.Component{
     }
 
   async updatePortfolioDetails() {
-    let jsonData={
-      portfolioId :this.props.config,
-      portfolio :this.state.portfolio
-    }
+      let jsonData={
+          portfolioId :this.props.config,
+          portfolio :this.state.portfolio
+      }
     const response = await updatePortfolioActionHandler(jsonData)
     return response;
 

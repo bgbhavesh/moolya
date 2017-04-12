@@ -73,17 +73,20 @@ let ideatorPortfolioSchema = `
         profilePic:String
     }
     
+    type problemSolutionImage{
+        fileUrl   : String,
+        fileName  : String
+    }
     
      type problemSolutionInfo{
-        problemStatement   : String,
-        isProblemPrivate   : Boolean,
-        problemImage      : String
-        solutionStatement  : String,
-        isSolutionPrivate  : Boolean,
-        solutionImage     : String
+        problemStatement  : String,
+        isProblemPrivate  : Boolean,
+        problemImage      : [problemSolutionImage]
+        solutionStatement : String,
+        isSolutionPrivate : Boolean,
+        solutionImage     : [problemSolutionImage]
     }
    
-    
     type audienceInfo{
         description:String
         image:String
@@ -182,7 +185,6 @@ let ideatorPortfolioSchema = `
         problemStatement    : String,
         isProblemPrivate    : Boolean,
         problemImage        : [imageFilesInputSchema],
-        problemImage        : String
         solutionStatement   : String,
         isSolutionPrivate   : Boolean,
         solutionImage       : [imageFilesInputSchema]

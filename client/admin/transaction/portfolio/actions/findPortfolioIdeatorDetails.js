@@ -62,19 +62,24 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
 export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodetailsId) {
 
   const result = await client.query({
-    query: gql`
+      query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId: $portfoliodetailsId) {
-                problemStatement    
-                isProblemPrivate  
-                problemImage     
-                problemImage     
-                solutionStatement   
-                isSolutionPrivate 
-                solutionImage      
-            }
+              fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId: $portfoliodetailsId) {
+                  problemStatement
+                  isProblemPrivate
+                  problemImage {
+                    fileUrl
+                    fileName
+                  }
+                  solutionStatement
+                  isSolutionPrivate
+                  solutionImage {
+                    fileUrl
+                    fileName
+                  }      
+              }
           }
-
+  
       `,
     variables: {
       portfoliodetailsId: portfoliodetailsId

@@ -76,6 +76,7 @@
     "cors": "^2.8.1",
     "deep-diff": "^0.3.4",
     "express": "^4.14.0",
+    "extendify": "^1.0.0",
     "geocoder": "^0.2.2",
     "google-map-react": "^0.22.3",
     "gql-merge": "0.0.4",
@@ -113,7 +114,6 @@
     "react-toastr": "^2.8.2",
     "react-utils": "^1.0.0",
     "redux": "^3.6.0",
-    "s3": "^4.4.0",
     "simpl-schema": "^0.2.2",
     "underscore": "^1.8.3"
   }

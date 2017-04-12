@@ -92,7 +92,7 @@ let DocumentMapping = `
       type Query{
         findDocument(documentId:String): DocumentOutput
         findDocuments: [DocumentOutput]
-        findProcessDocuments(kycId:String,docTypeId:String): [DocumentOutput]
+        findProcessDocuments(kycId:String,processId:String): [DocumentOutput]
         fetchKycDocProcessMapping(documentTypeId:String,clusterId:[String],chapterId:[String],subChapterId:[String]):[DocumentOutput]
       }
      

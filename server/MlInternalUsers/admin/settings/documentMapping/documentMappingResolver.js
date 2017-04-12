@@ -53,19 +53,50 @@ MlResolver.MlQueryResolver['findDocuments'] = (obj, args, context, info) => {
 }
 MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) => {
   // TODO : Authorization
-  if (args.kycId&&args.docTypeId) {
-    var id = args.kycId;
-    var docId= args.docTypeId
-    let data = MlDocumentMapping.find({ kycCategory : { $in: [id] },documentType: {$in :[docId]},isActive:true}).fetch();
-    data.map(function (doc,index) {
-      const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
-      let allowableFormatNames = [];  //@array of strings
-      allowableFormatData.map(function (doc) {
-        allowableFormatNames.push(doc.docFormatName)
+  if (args.kycId&&args.processId) {
+
+    var kycId = args.kycId;
+    var processId= args.processId
+    let response= MlProcessMapping.findOne({"_id":processId});
+    if(response){
+      let documents=response.documents;
+      let docIds=[],data=[];
+      for(let i=0;i<documents.length;i++){
+        if(documents[i].category==kycId&&documents[i].isActive==true){
+          docIds.push(documents[i].type)
+        }
+      }
+      var uniquedocId = docIds.filter(function(elem, index, self) {
+        return index == self.indexOf(elem);
+      })
+      if(uniquedocId.length>=1){
+        for(let i=0;i<uniquedocId.length;i++){
+          let Documentdata = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]},isActive:true}]}).fetch();
+          Documentdata.map(function (doc,index) {
+            doc.documentType=[];
+            Documentdata[index].documentType[0]=uniquedocId[i]
+          });
+          if(Documentdata!=undefined){
+            for(let j=0;j<Documentdata.length;j++){
+              data.push(Documentdata[j])
+            }
+          }
+
+        }
+      }
+
+      data.map(function (doc,index) {
+        const allowableFormatData = MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
+        let allowableFormatNames = [];  //@array of strings
+        allowableFormatData.map(function (doc) {
+          allowableFormatNames.push(doc.docFormatName)
+        });
+        data[index].allowableFormat = allowableFormatNames || [];
       });
-      data[index].allowableFormat = allowableFormatNames || [];
-    });
-    return data;
+      return data;
+    }
+
+
   }
 }
 

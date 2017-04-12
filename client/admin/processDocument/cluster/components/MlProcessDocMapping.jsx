@@ -33,7 +33,8 @@ export default class MlProcessDocMapping extends Component {
     console.log(respProcessDoc)*/
     let kycId = this.props.kycConfig
     let docTypeId =this.props.docConfig
-    const response = await findDocumentMappingActionHandler(kycId,docTypeId);
+    let processId=this.props.processConfig
+    const response = await findDocumentMappingActionHandler(kycId,processId);
     console.log(response);
     if(response){
       let documentDetails=[]
@@ -42,8 +43,10 @@ export default class MlProcessDocMapping extends Component {
         let json = {
           Id:response[i]._id,
           Name: response[i].documentName,
+          DocType:response[i].documentType,
           Formate: response[i].allowableFormat,
-          MaxSize: response[i].allowableMaxSize
+          MaxSize: response[i].allowableMaxSize,
+
         }
         documentDetails.push(json);
       }
@@ -78,6 +81,7 @@ export default class MlProcessDocMapping extends Component {
             {/*<TableHeaderColumn dataField="docId" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>*/}
             <TableHeaderColumn  dataField="Id" hidden={true}>Id</TableHeaderColumn>
             <TableHeaderColumn  isKey={true} dataField="Name">Name</TableHeaderColumn>
+            <TableHeaderColumn dataField="DocType">DocType</TableHeaderColumn>
             <TableHeaderColumn dataField="Formate">Format</TableHeaderColumn>
             <TableHeaderColumn dataField="MaxSize">MaxSize</TableHeaderColumn>
             <TableHeaderColumn dataField="Mandatory" dataFormat={this.SwitchMandatoryBtn.bind(this)}>Mandatory</TableHeaderColumn>

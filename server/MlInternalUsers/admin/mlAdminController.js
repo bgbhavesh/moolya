@@ -11,16 +11,17 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
+
 import getContext from './mlAuthContext'
 import MlResolver from './mlAdminResolverDef';
 import MlSchemaDef from './mlAdminSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
+let cors = require('cors')
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
-
 
 const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
 const typeDefs = MlSchemaDef['schema']
@@ -68,6 +69,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
+  graphQLServer.options('/registrations', cors())
   config.configServer(graphQLServer)
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
@@ -141,7 +143,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let file  = req.files.file;
 
         if(file){
-
           let imageUploaderPromise=null;
           let imageUploadCallback=null;
           switch (moduleName){
@@ -153,6 +154,38 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               });
               break;
             }
+            case "PORTFOLIO":{
+              if(data.portfolioDetailsId){
+                  imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "portfolioDocuments/");
+                  imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                      let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
+                      if(details){
+                          switch (details.communityType){
+                              case 'ideators':{
+                                  let ideatorPortfolio = data.portfolio;
+                                  for (key in ideatorPortfolio){
+                                      let inner = ideatorPortfolio[key]
+                                      if(typeof inner == 'object'){
+                                          for (key1 in inner){
+                                            let file = inner[key1]
+                                            if(typeof file == 'object'){
+                                              for (key2 in file){
+                                                  file[key2].fileUrl = resp;
+                                              }
+                                            }
+                                          }
+                                      }
+                                  }
+                                  let portfolio = {portfolio:{ideatorPortfolio:ideatorPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                  MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
+                              }
+                              break;
+                          }
+                      }
+                  });
+              }
+            }
+            break;
           }
 
           if(imageUploaderPromise) {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {OnToggleSwitch} from '../../../admin/utils/formElemUtil';
-
+//var mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
+import $ from "jquery";
 export default class MlTable extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +10,16 @@ export default class MlTable extends React.Component {
 
   componentDidMount(){
     OnToggleSwitch(true,true);
+   // var self = this;
+   // mCustomScrollbar($);
+   // $(".react-bs-container-body").mCustomScrollbar({scrollbarPosition:'outside',alwaysShowScrollbar:0});
+   //   self.forceUpdate();
+  }
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+  }
+  componentWillUpdate(nextProps){
+  //  $(".react-bs-container-body").mCustomScrollbar({scrollbarPosition:'outside',alwaysShowScrollbar:0});
   }
 
   render() {
@@ -17,7 +28,10 @@ export default class MlTable extends React.Component {
       bgColor: '#feeebf',
       onSelect: this.props.handleRowSelect
     };
+    var WinHeight = $(window).height();
+    var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
     const config = {tableHeaderClass:this.props.tableHeaderClass,
+                    maxHeight: tblHeight+'px',
                     striped:true,hover:true,
                     selectRow:(this.props.selectRow?selectRow:{}) ,
                     data:this.props.data,
@@ -55,12 +69,15 @@ export default class MlTable extends React.Component {
           return <CustomComponent data={row} />;
         };
         columnOptions['dataFormat']=customColumnComponent;
+       // if(cl.width){
+        // columnOptions['width']='10%';
+       // }
       }
       return <TableHeaderColumn {...columnOptions}>{cl.title}</TableHeaderColumn>;
     });
 
     return (
-       <BootstrapTable {...config}>
+       <BootstrapTable {...config} bodyStyle={{overflow: 'overlay','overflow-x':'hidden'}}>
                 {columnItems}
        </BootstrapTable>
     );

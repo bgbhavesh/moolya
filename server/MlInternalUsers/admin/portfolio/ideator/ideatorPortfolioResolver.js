@@ -4,6 +4,8 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
+var extendify = require('extendify');
+
 let applyDiff   = require('deep-diff').applyDiff,
   observableDiff  = require('deep-diff').observableDiff
 
@@ -24,43 +26,25 @@ MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, i
       }
 }
 
-MlResolver.MlMutationResolver['createIdeatorPortfolioRequest'] = (obj, args, context, info) => {
-    let user;
-    try {
-        if (args && args.userId && args.communityId) {
-            user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityId}]})
-            if (!user) {
-                MlIdeatorPortfolio.insert({
-                    userId: args.userId,
-                    communityId: args.communityId,
-                    portfolioDetails: args.portfolioDetails
-                })
-            }
-        }
-    }
-    catch (e){
-        let code = 409;
-        let response = new MlRespPayload().errorPayload("Already Exist", code);
-        return response;
-    }
-
-    let code = 200;
-    let response = new MlRespPayload().successPayload(user, code);
-    return response;
-}
-
 MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, info) =>
 {
     if(args.portfoliodetailsId){
         try {
             let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-            let updateFor = args.ideatorPortfolio;
+            let updateFor = args.portfolio.ideatorPortfolio;
             if (ideatorPortfolio) {
                 for (key in updateFor) {
                     if (ideatorPortfolio.hasOwnProperty(key)) {
-                        applyDiff(ideatorPortfolio[key], updateFor[key]);
+                        myExtend = extendify({
+                            inPlace: true,
+                            arrays : 'concat',
+                            strings: 'replace'
+                        });
+
+                      ideatorPortfolio[key] = myExtend(ideatorPortfolio[key], updateFor[key]);
                     }
                     else {
+                      console.log(key)
                       ideatorPortfolio[key] = updateFor[key];
                     }
                 }
@@ -102,9 +86,78 @@ MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
 
 }
 
-MlResolver.MlQueryResolver['fetchIdeatorPortfolio'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {
+    if(args.portfoliodetailsId){
+        let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+        if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
+            return ideatorPortfolio['portfolioIdeatorDetails'];
+        }
+    }
 
+    return {};
 }
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioProblemsAndSolutions'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('problemSolution')) {
+      return ideatorPortfolio['problemSolution'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioAudience'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('audience')) {
+      return ideatorPortfolio['audience'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioLibrary'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('library')) {
+      return ideatorPortfolio['library'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioStrategyAndPlanning'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('strategyAndPlanning')) {
+      return ideatorPortfolio['strategyAndPlanning'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioLookingFor'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('lookingFor')) {
+      return ideatorPortfolio['lookingFor'];
+    }
+  }
+
+  return {};
+}
+
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioIntellectualPlanning'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('intellectualPlanning')) {
+      return ideatorPortfolio['intellectualPlanning'];
+    }
+  }
+
+  return {};
+}
+
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioRequests'] = (obj, args, context, info) => {
 

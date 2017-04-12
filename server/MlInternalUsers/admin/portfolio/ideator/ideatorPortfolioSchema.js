@@ -27,25 +27,109 @@ let ideatorPortfolioSchema = `
       id:String
       menu:[PortfolioMenu]
     }
-
-    input portfoliodetails{
-        transcationType:String,
-        name:String,
-        contactNumber:Int,
-        communityType:String,
-        cluster:String,
-        chapter:String,
-        subChapter:String,
-        subscriptionType:String,
-        source:String,
-        createdBy:String,
-        status:String,
-        assignedTo:String,
-        progress:String,
-        isPublic:Boolean,
-        isGoLive:Boolean,
+    
+    type ideatoraboutInfo{
+        title:String
+        description:String
+        isTitlePublic:Boolean
+        isDescriptionPublic:Boolean
+    }
+    
+    type portfolioIdeatorDetailsInfo{
+        firstName:String,
+        isfirstNamePrivate:Boolean
+        lastName:String,
+        islastNamePrivate:Boolean
+        gender:String,
+        isGenderPrivate:Boolean,
+        dateOfBirth:String,
+        isDateOfBirthPrivate:Boolean,
+        qualification:String,
+        isQualificationPrivate:Boolean
+        employmentStatus:String,
+        isEmploymentStatusPrivate:Boolean
+        professionalTag:String,
+        isProfessionalTagPrivate:Boolean
+        yearsofExperience:String,
+        isYoePrivate:Boolean
+        industry:String,
+        isIndustryPrivate:Boolean
+        profession:String,
+        isProfessionPrivate:Boolean
+        employerName:String,
+        isEmployerNamePrivate:Boolean
+        mobileNumber:String,
+        isMobileNumberPrivate:Boolean
+        emailId:String
+        isEmailIdPrivate:Boolean
+        facebookId:String
+        isfacebookIdPrivate:Boolean
+        linkedInId:String
+        islinkedInIdPrivate:Boolean
+        twitterId:String
+        isTwitterIdPrivate:Boolean
+        gplusId:String
+        isGplusIdPrivate:Boolean
+        profilePic:String
+    }
+    
+    type problemSolutionImage{
+        fileUrl   : String,
+        fileName  : String
+    }
+    
+     type problemSolutionInfo{
+        problemStatement  : String,
+        isProblemPrivate  : Boolean,
+        problemImage      : [problemSolutionImage]
+        solutionStatement : String,
+        isSolutionPrivate : Boolean,
+        solutionImage     : [problemSolutionImage]
+    }
+   
+    type audienceInfo{
+        description:String
+        image:String
+        isAudiencePrivate:Boolean
+    }
+    
+    type strategyplansInfo{
+        description:String
+        isStrategyPlansPrivate:Boolean
+    }
+    
+    type intellectualplanningInfo{
+        description:String
+        isIntellectualPrivate :Boolean
+    }
+    
+    type lookingforInfo{
+        description:String
+        isLookingForPrivate:Boolean
+    }
+    
+    type libraryInfo{
+        fileType:String
+        portfolioId:String
         isActive:Boolean
     }
+    
+    type ideatorPortfolioDetails{
+         _id            : String
+         userId               : String
+         communityType        : String
+         portfolioDetailsId   : String
+         ideatorabout : ideatoraboutInfo
+         portfolioIdeatorDetails    : portfolioIdeatorDetailsInfo
+         problemSolution : problemSolutionInfo
+         audience : audienceInfo
+         strategyAndPlanning : strategyplansInfo
+         intellectualPlanning : intellectualplanningInfo
+         lookingFor : lookingforInfo
+         library:libraryInfo
+         
+    }
+    
 
     input ideatorabout{
         title:String,
@@ -68,7 +152,7 @@ let ideatorPortfolioSchema = `
         employmentStatus:String,
         isEmploymentStatusPrivate:Boolean
         professionalTag:String,
-        isProfessionalTag:Boolean
+        isProfessionalTagPrivate:Boolean
         yearsofExperience:String,
         isYoePrivate:Boolean
         industry:String,
@@ -81,20 +165,35 @@ let ideatorPortfolioSchema = `
         isMobileNumberPrivate:Boolean
         emailId:String
         isEmailIdPrivate:Boolean
+        facebookId:String
+        isfacebookIdPrivate:Boolean
+        linkedInId:String
+        islinkedInIdPrivate:Boolean
+        twitterId:String
+        isTwitterIdPrivate:Boolean
+        gplusId:String
+        isGplusIdPrivate:Boolean
+        profilePic:String
     }
     
+    input imageFilesInputSchema{
+       fileUrl: String,
+       fileName:String
+     }
+     
     input problemSolution{
-        problemStatment   : String,
-        isProblemPrivate   : Boolean,
-        problemImage      : String
-        solutionStatment  : String,
-        isSolutionPrivate  : Boolean,
-        solutionImage     : String
+        problemStatement    : String,
+        isProblemPrivate    : Boolean,
+        problemImage        : [imageFilesInputSchema],
+        solutionStatement   : String,
+        isSolutionPrivate   : Boolean,
+        solutionImage       : [imageFilesInputSchema]
     }
     
     input audience{
         description:String,
-        image:String
+        image:String,
+        isAudiencePrivate:Boolean
     }
     
     input strategyAndPlanning{
@@ -131,7 +230,13 @@ let ideatorPortfolioSchema = `
     }
     
     type Query{
-        fetchIdeatorPortfolio(userId:String, communityId:String, portfolioId:String):response
+        fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
+        fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
+        fetchIdeatorPortfolioAudience(portfoliodetailsId:String!): audienceInfo
+        fetchIdeatorPortfolioLibrary(portfoliodetailsId:String!): libraryInfo
+        fetchIdeatorPortfolioStrategyAndPlanning(portfoliodetailsId:String!): strategyplansInfo
+        fetchIdeatorPortfolioIntellectualPlanning(portfoliodetailsId:String!): intellectualplanningInfo
+        fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(userId:String, portfolioId:String, docId:String): response
         fetchComments(userId:String, portfolioId:String, docId:String): response
@@ -140,7 +245,6 @@ let ideatorPortfolioSchema = `
     
     type Mutation{
         createIdeatorPortfolio(portfolio:ideatorPortfolio):response
-        createIdeatorPortfolioRequest(userId:String, communityId:String, portfoliodetails:portfoliodetails):response
         createAnnotation(userId:String, portfolioId:String, docId:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response

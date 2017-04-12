@@ -623,6 +623,16 @@ if(Meteor.isServer){
                     "isMenu" : true,
                     "hideSubMenu":true,
                     "subMenusId":"portfolio_requested",
+                  },
+                  {
+                    "image" : "/images/cluster_icon.png",
+                    "link" : "/admin/transactions/portfolio/requestedPortfolioList/ideatorDetails",
+                    "name" : "Detail",
+                    "uniqueId"   :"transaction_portfolio_viewPortfolio",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "hideSubMenu":true,
+                    "subMenusId":"portfolio_requested",
                   }
                 ]
               },
@@ -671,6 +681,15 @@ if(Meteor.isServer){
                 "link" : "/admin/transactions/portfolio/editRequests",
                 "name" : "Edit",
                 "uniqueId" : "transaction_portfolio_EditRequests",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio"
+              },
+              {
+                "link" : "/admin/transactions/portfolio/viewPortfolio",
+                "name" : "Edit",
+                "uniqueId" : "transaction_portfolio_viewPortfolio",
                 "isLink" : true,
                 "isMenu" : true,
                 "image" : "",
@@ -779,7 +798,7 @@ if(Meteor.isServer){
           {
             "image" : "/images/cluster_icon.png",
             "link" : "/admin/settings/hierarchy/platformhierarchy",
-            "name" : "hierarchy",
+            "name" : "Hierarchy",
             "uniqueId"   :"settings_hierarchy",
             "isLink" : true,
             "isMenu" : true,

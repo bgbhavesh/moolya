@@ -6,49 +6,68 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
+import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
   constructor(props) {
     super(props);
     this.state =  {data:{}};
-    this.addEventHandler.bind(this);
+    this.onProblemImageFileUpload.bind(this);
+    this.onSolutionImageFileUpload.bind(this);
+    this.fetchPortfolioInfo.bind(this);
     return this;
   }
 
-  async addEventHandler() {
-    // const resp=await this.createProblemAndSolution();
-    // return resp;
+  componentWillMount(){
+      this.fetchPortfolioInfo();
+  }
+
+  async fetchPortfolioInfo(){
+      const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
+      this.setState({data : response});
   }
 
   onInputChange(event){
-    // let name  = event.target.name
-    // this.state.data[name] = event.target.value;
-    let dataDetails =this.state.data;
-    let name  = event.target.name
-    dataDetails[name]= event.target.value
-    this.setState({data: dataDetails})
-    this.sendDataToParent();
+      let dataDetails =this.state.data;
+      let name  = event.target.name
+      dataDetails[name]= event.target.value
+      this.setState({data: dataDetails})
+      this.sendDataToParent();
   }
 
   onLockChange(field, e){
-    let dataDetails =this.state.data;
-    let className = e.target.className;
-    // let key = e.target.fieldName;
-    let key = e.target.id;
-    if(className.indexOf("fa-lock") != -1){
-      dataDetails[key] = true;
-    }else{
-      dataDetails[key] = false;
-    }
-    this.setState({data:dataDetails})
-    this.sendDataToParent();
+      let dataDetails =this.state.data;
+      let className = e.target.className;
+      // let key = e.target.fieldName;
+      let key = e.target.id;
+      if(className.indexOf("fa-lock") != -1){
+        dataDetails[key] = true;
+      }else{
+        dataDetails[key] = false;
+      }
+      this.setState({data:dataDetails})
+      this.sendDataToParent();
   }
 
-  onFileUpload(value){
-    // let file=document.getElementById("profilePic").files[0];
-    // let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
-    // let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
-    //this.props.onFileUpload(file,documentId);
+  onProblemImageFileUpload(e){
+      if(e.target.files[0].length ==  0)
+          return;
+      let file = e.target.files[0];
+      let name = e.target.name;
+      let fileName = e.target.files[0].name;
+      let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:[{fileUrl:'', fileName : fileName}]}}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+
+  onSolutionImageFileUpload(e){
+      if(e.target.files[0].length ==  0)
+          return;
+      let file = e.target.files[0];
+      let name = e.target.name;
+      let fileName = e.target.files[0].name;
+      let data= {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{solutionImage:[{fileUrl:'', fileName : fileName}]}}};
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
 
   sendDataToParent() {
@@ -59,6 +78,14 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
+  onFileUploadCallBack(name,fileName, resp){
+      if(resp){
+          let result = JSON.parse(resp)
+          if(result.success){
+              this.fetchPortfolioInfo();
+          }
+      }
+  }
 
   render(){
     return (
@@ -88,8 +115,8 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-heading">Add Images</div>
                     <div className="panel-body nopadding">
                       <div className="upload-file-wrap">
-                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
-                        <label htmlFor="fileinput">
+                        <input type="file" name="problemImage" id="piFileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onProblemImageFileUpload.bind(this)} multiple />
+                        <label htmlFor="piFileinput">
                           <figure>
                             <i className="fa fa-upload" aria-hidden="true"></i>
                           </figure>
@@ -117,8 +144,8 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-heading">Add Images</div>
                     <div className="panel-body nopadding">
                       <div className="upload-file-wrap">
-                        <input type="file" name="fileinput" id="fileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onFileUpload.bind(this)} multiple />
-                        <label htmlFor="fileinput">
+                        <input type="file" id="siFileinput" name="solutionImage" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onSolutionImageFileUpload.bind(this)} multiple />
+                        <label htmlFor="siFileinput">
                           <figure>
                             <i className="fa fa-upload" aria-hidden="true"></i>
                           </figure>

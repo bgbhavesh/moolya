@@ -48,9 +48,6 @@ let compareQueryOptions=function(a, b) {
 };
 
 const markerDataConfig = lifecycle({
-  getInitialState() {
-    return { config: []} ;
-  },
   componentDidMount() {
     this.setState({markers:this.props.data||[],mapProps:{center:this.props.center,zoom:this.props.zoom}});
   },

@@ -50,19 +50,37 @@ export default class MlStepAvailabilityComponent extends React.Component {
   }
 
   optionsBySelectStep(index,value, calback,selObject){
-    let stepAvailability=this.state.stepAvailability
-    stepAvailability[index]['stepCode']=value
-    stepAvailability[index]['stepName']=selObject.label
-    this.setState({stepAvailability:stepAvailability})
-    this.props.getStepAvailability(this.state.stepAvailability);
+    if(value) {
+      let stepAvailability = this.state.stepAvailability
+      stepAvailability[index]['stepCode'] = value
+      stepAvailability[index]['stepName'] = selObject.label
+      this.setState({stepAvailability: stepAvailability})
+      this.props.getStepAvailability(this.state.stepAvailability);
+    }
+    else{
+      let stepAvailability = this.state.stepAvailability
+      stepAvailability[index]['stepCode'] = value
+      stepAvailability[index]['stepName'] = null
+      this.setState({stepAvailability: stepAvailability})
+      this.props.getStepAvailability(this.state.stepAvailability);
+    }
   }
 
+
   optionsBySelecttemplate(index,value, calback,selObject){
-    let stepAvailability=this.state.stepAvailability
-    stepAvailability[index]['templateCode']=value
-    stepAvailability[index]['templateName']=selObject.label
-    this.setState({stepAvailability:stepAvailability})
-    this.props.getStepAvailability(this.state.stepAvailability);
+    if(value){
+      let stepAvailability = this.state.stepAvailability
+      stepAvailability[index]['templateCode'] = value
+      stepAvailability[index]['templateName'] = selObject.label
+      this.setState({stepAvailability: stepAvailability})
+      this.props.getStepAvailability(this.state.stepAvailability);
+    }else{
+      let stepAvailability = this.state.stepAvailability
+      stepAvailability[index]['templateCode'] = value
+      stepAvailability[index]['templateName'] = null
+      this.setState({stepAvailability: stepAvailability})
+      this.props.getStepAvailability(this.state.stepAvailability);
+    }
   }
 
   render() {
@@ -98,10 +116,9 @@ export default class MlStepAvailabilityComponent extends React.Component {
               <div className="panel-body">
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Step"  selectedValue={stepAvailability.stepCode} queryType={"graphql"} query={stepQuery} queryOptions={stepOptions}  isDynamic={true}  onSelect={that.optionsBySelectStep.bind(that,idx)} />
-
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Template" selectedValue={stepAvailability.templateCode} queryType={"graphql"} query={templateQuery} queryOptions={templateOptions}  reExecuteQuery={true}  isDynamic={true}  onSelect={that.optionsBySelecttemplate.bind(that,idx)} />
+                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Template"  selectedValue={stepAvailability.templateCode} queryType={"graphql"} query={templateQuery} queryOptions={templateOptions}  reExecuteQuery={true}  isDynamic={true} onSelect={that.optionsBySelecttemplate.bind(that,idx)} />
                 </div>
               </div>
             </div>

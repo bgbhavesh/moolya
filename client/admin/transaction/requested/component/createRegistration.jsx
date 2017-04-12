@@ -254,19 +254,19 @@ export default class MlCreateRegistration extends React.Component{
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
                     <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} />
                     <div className="form-group">
-                      <input ref="source" type="text" placeholder="Source"  className="form-control float-label"  id=""/>
+                      <input ref="source" type="text" disabled="true" placeholder="Source"  className="form-control float-label"  id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Device name" className="form-control float-label" id=""/>
+                      <input type="text"  disabled="true" placeholder="Device name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Device number"  className="form-control float-label" id=""/>
+                      <input type="text"  disabled="true" placeholder="Device number"  className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="IP Address"  className="form-control float-label" id="" />
+                      <input type="text"  disabled="true" placeholder="IP Address"  className="form-control float-label" id="" />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="IP Location"  className="form-control float-label" id=""/>
+                      <input type="text"  disabled="true" placeholder="IP Location"  className="form-control float-label" id=""/>
                     </div>
                   </div>
                 </div>

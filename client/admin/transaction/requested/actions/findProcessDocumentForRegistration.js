@@ -1,14 +1,19 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findProcessDocumentForRegistrationActionHandler(clusterIdInfo,communityTypeInfo,userTypeInfo) {
+export async function findProcessDocumentForRegistrationActionHandler(clusterIdInfo,chapterInfo,subchapterInfo,communityTypeInfo,userTypeInfo,identityTypeInfo,professionInfo,industryInfo) {
   let clusterId = clusterIdInfo
   let userType =userTypeInfo
   let communityType=communityTypeInfo
+  let chapterId=chapterInfo
+  let subChapterId=subchapterInfo
+  let identityType=identityTypeInfo
+  let profession=professionInfo
+  let industry=industryInfo
   const result = await client.query({
     query: gql`
-       query($clusterId: String, $userType: String, $communityType: String ){
-            findProcessDocumentForRegistration(clusterId:$clusterId, userType:$userType, communityType:$communityType) {
+       query($clusterId: String,$chapterId:String,$subChapterId:String, $userType: String, $communityType: String,$identityType: String,$profession:String,$industry:String ){
+            findProcessDocumentForRegistration(clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId,userType:$userType, communityType:$communityType,identityType:$identityType,profession:$profession,industry:$industry) {
               _id
               processDocuments {
                 kycCategoryId
@@ -30,8 +35,13 @@ export async function findProcessDocumentForRegistrationActionHandler(clusterIdI
     `,
     variables: {
       clusterId,
+      chapterId,
+      subChapterId,
       userType,
-      communityType
+      communityType,
+      identityType,
+      profession,
+      industry
     },
     forceFetch: true
   })

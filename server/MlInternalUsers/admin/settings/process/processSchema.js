@@ -170,7 +170,7 @@ let Process = `
     
     type Query{
       findProcess(id:String):processOutput
-      findProcessDocumentForRegistration(clusterId:String,userType:String,communityType:String):processOutput
+      findProcessDocumentForRegistration(clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String):processOutput
     }
     
 `

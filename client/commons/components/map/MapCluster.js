@@ -485,8 +485,8 @@ const mapClusterHOC =compose(
             numPoints,
             id: `${numPoints}_${points[0]._id}`,
             recordId: points[0]._id,
-            isActive: `${numPoints}_${points[0].isActive}`,
-            status: `${numPoints}_${points[0].status}`,
+            isActive: points[0].isActive,
+            status: points[0].status,
             desc:points[0].text,
 
           }))

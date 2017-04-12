@@ -14,8 +14,8 @@ let clusterSchema = `
         showOnMap : Boolean
         isActive: Boolean
         countryFlag:String
-        latitude:String 
-        longitude:String
+        latitude:Float 
+        longitude:Float
         status:status
     }
     type status{
@@ -46,8 +46,8 @@ let clusterSchema = `
         isActive:Boolean, 
         moduleName:String, 
         actionName:String, 
-        latitude:String, 
-        longitude:String        
+        latitude:Float, 
+        longitude:Float        
     }
     
     type Query{ 

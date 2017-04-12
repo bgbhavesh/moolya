@@ -13,8 +13,8 @@ let chapterSchema = `
         stateId:String,
         cityId:String,
         cityName:String,
-        latitude:String,
-        longitude:String,
+        latitude:Float,
+        longitude:Float,
         email:String,
         showOnMap:Boolean,
         isActive:Boolean
@@ -36,8 +36,8 @@ let chapterSchema = `
         stateId:String,
         cityId:String,
         cityName:String,
-        latitude:String,
-        longitude:String,
+        latitude:Float,
+        longitude:Float,
         email:String,
         showOnMap:Boolean,
         isActive:Boolean
@@ -78,8 +78,8 @@ let chapterSchema = `
         isEmailNotified: Boolean 
         showOnMap : Boolean
         isActive: Boolean
-        latitude:String
-        longitude:String
+        latitude:Float
+        longitude:Float
         isBespokeRegistration:Boolean
         isBespokeWorkFlow:Boolean
         internalSubChapterAccess:internalSubChapterAccess
@@ -122,8 +122,8 @@ let chapterSchema = `
         showOnMap:Boolean,
         isActive:Boolean,
         isBespokeRegistration:Boolean,
-        latitude:String,
-        longitude:String,
+        latitude:Float,
+        longitude:Float,
         isBespokeWorkFlow:Boolean,
         internalSubChapterAccess:internalSubChapterAccessObject,
         moolyaSubChapterAccess:moolyaSubChapterAccessObject

@@ -86,7 +86,7 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
     },
     forceFetch: true
   })
-  console.log(result)
+  console.log(result.data.fetchIdeatorPortfolioProblemsAndSolutions)
   const id = result.data.fetchIdeatorPortfolioProblemsAndSolutions;
   return id
 }
@@ -98,8 +98,11 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchIdeatorPortfolioAudience(portfoliodetailsId: $portfoliodetailsId) {
                 description
-                image
-                isAudiencePrivate 
+                isAudiencePrivate
+                 audienceImages {
+                    fileUrl
+                    fileName
+                  }
             }
           }
 

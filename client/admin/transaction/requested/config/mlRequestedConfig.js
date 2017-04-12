@@ -46,7 +46,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
          if(data && data.id){
          const internalConfig=data;
          } else{
-           toast.err("Please Select a User Type");
+           toastr.err("Please Select a User Type");
          }
        }
        },

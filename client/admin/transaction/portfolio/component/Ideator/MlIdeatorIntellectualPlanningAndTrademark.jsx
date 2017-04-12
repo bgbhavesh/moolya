@@ -5,38 +5,53 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
 var Select = require('react-select');
+import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
    constructor(props) {
      super(props);
-     this.state =  {data:{}};
+     this.state =  {loading:true,data:{}};
+     this.fetchPortfolioDetails.bind(this);
      return this;
    }
-
+  componentWillMount(){
+    this.fetchPortfolioDetails();
+  }
   componentDidMount(){
     dataVisibilityHandler();
   }
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
+    if (response) {
+      this.setState({loading: false, data: response});
+    }
+  }
 
-  onInputChange(event){
-    let dataDetails =this.state.data;
-    let name  = event.target.name
-    dataDetails[name]= event.target.value
-    this.setState({data: dataDetails})
-    this.sendDataToParent();
+  onInputChange(e){
+    let details =this.state.data;
+    let name  = e.target.name;
+    details=_.omit(details,[name]);
+    details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })
   }
 
   onLockChange(field, e){
-    let dataDetails =this.state.data;
-    let className = e.target.className;
-    // let key = e.target.fieldName;
+    let details = this.state.data||{};
     let key = e.target.id;
+    details=_.omit(details,[key]);
+    let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
-      dataDetails[key] = true;
+      details=_.extend(details,{[key]:true});
     }else{
-      dataDetails[key] = false;
+      details=_.extend(details,{[key]:false});
     }
-    this.setState({data:dataDetails})
-    this.sendDataToParent();
+    this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })
   }
 
   sendDataToParent() {
@@ -44,7 +59,10 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   }
 
   render(){
+    const showLoader = this.state.loading;
     return (
+      <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <div className="main_wrap_scroll">
@@ -64,8 +82,8 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" onBlur={this.onInputChange.bind(this)} name="description"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIntellectualPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} onBlur={this.onInputChange.bind(this)} name="description"></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onLockChange={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIntellectualPrivate}/>
                       </div>
                     </div>
                   </div>
@@ -74,6 +92,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
             </ScrollArea>
           </div>
         </div>
+      </div>)}
       </div>
     )
   }

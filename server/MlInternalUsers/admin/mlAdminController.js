@@ -18,7 +18,7 @@ import MlSchemaDef from './mlAdminSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
-let cors = require('cors')
+let cors = require('cors');
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -69,7 +69,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
+  console.log(graphQLServer);
   graphQLServer.options('/registrations', cors())
+  console.log("graphQLServer :"+graphQLServer);
   config.configServer(graphQLServer)
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
@@ -209,6 +211,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   if(config.registrationAPIPath){
+    console.log("RegistrationAPI Invoked..!!");
+
     graphQLServer.post(config.registrationAPIPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
     {
       console.log("registrationAPIPath ");
@@ -219,6 +223,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       console.log(req.headers);
       if(req && req.body && req.body.data)
       {
+        console.log("Processing started..!!");
         let data = req.body.data;
         let apiKey = req.header("api-key");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){

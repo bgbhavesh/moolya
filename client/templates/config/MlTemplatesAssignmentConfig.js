@@ -7,7 +7,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["processName","subProcessName","createdBy","createdDate"],
-  searchFields:["processName","subProcessName","createdBy","createdDate"],
+  searchFields:["templateProcessName","templateSubProcessName ","createdBy","createdDate","templatecommunityName"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.

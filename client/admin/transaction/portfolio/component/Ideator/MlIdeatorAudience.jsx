@@ -18,6 +18,7 @@ export default class MlIdeatorAudience extends React.Component{
     this.handleBlur.bind(this);
     this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioDetails.bind(this);
+    return this;
   }
   componentWillMount(){
     this.fetchPortfolioDetails();

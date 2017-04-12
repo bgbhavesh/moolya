@@ -85,12 +85,29 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       if(resp){
           let result = JSON.parse(resp)
           if(result.success){
-              // this.fetchPortfolioInfo();
+              this.fetchPortfolioInfo();
           }
       }
   }
 
   render(){
+    const problemImageArray = this.state.data.problemImage && this.state.data.problemImage.length > 0 ? this.state.data.problemImage : [];
+    const problemImages = problemImageArray.map(function (m, id) {
+      return (
+        <div className="upload-image" key={m.id}>
+          <img id="output" src={m.fileUrl}/>
+        </div>
+      )
+    });
+
+    const solutionImageArray = this.state.data.solutionImage && this.state.data.solutionImage.length > 0 ? this.state.data.solutionImage : [];
+    const solutionImages = solutionImageArray.map(function (m, id) {
+      return (
+        <div className="upload-image" key={m.id}>
+          <img id="output" src={m.fileUrl}/>
+        </div>
+      )
+    });
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -125,9 +142,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                           </figure>
                         </label>
                       </div>
-                      <div className="upload-image"><img id="output"/></div>
-                      <div className="upload-image"></div>
-                      <div className="upload-image"></div>
+
+                      {problemImages}
+
                     </div>
                   </div>
                 </div>
@@ -154,9 +171,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                           </figure>
                         </label>
                       </div>
-                      <div className="upload-image"><img id="output"/></div>
-                      <div className="upload-image"></div>
-                      <div className="upload-image"></div>
+
+                      {solutionImages}
+
                     </div>
                   </div>
                 </div>

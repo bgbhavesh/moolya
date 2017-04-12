@@ -8,6 +8,7 @@ import MlIdeatorLibrary from "../Ideator/MlIdeatorLibrary";
 import MlIdeatorStrategyAndPlanning from "../Ideator/MlIdeatorStrategyAndPlanning";
 import MlIdeatorIntellectualPlanningAndTrademark from "../Ideator/MlIdeatorIntellectualPlanningAndTrademark";
 import MlIdeatorLookingFor from "../Ideator/MlIdeatorLookingFor";
+import _ from 'lodash'
 
 
 export default class MlIdeatorPortfolioTemplate extends React.Component{
@@ -50,6 +51,7 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getProblemSolution(details) {
+      // details=_.omit(details,'__typename')
       this.state.ideatorPortfolio['problemSolution'] = details;
       this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }

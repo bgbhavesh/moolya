@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
@@ -29,10 +30,12 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   onInputChange(event){
-      let dataDetails =this.state.data;
       let name  = event.target.name
-      dataDetails[name]= event.target.value
-      this.setState({data: dataDetails})
+      let dataDetails = this.state.data;
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      cloneBackUp = _.omit(cloneBackUp, name)
+      cloneBackUp[name]= event.target.value
+      this.setState({data: cloneBackUp});
       this.sendDataToParent();
   }
 
@@ -82,7 +85,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       if(resp){
           let result = JSON.parse(resp)
           if(result.success){
-              this.fetchPortfolioInfo();
+              // this.fetchPortfolioInfo();
           }
       }
   }
@@ -106,7 +109,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement"></textarea>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement" deafultValue={this.state.data.problemStatement}></textarea>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "isProblemPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProblemPrivate}/>
                       </div>
                     </div>
@@ -135,7 +138,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement"></textarea>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement" deafultValue={this.state.data.solutionStatement}></textarea>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "isSolutionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isSolutionPrivate}/>
                       </div>
                     </div>

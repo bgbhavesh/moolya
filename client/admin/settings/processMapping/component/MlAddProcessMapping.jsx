@@ -184,14 +184,14 @@ class MlAddProcessMapping extends React.Component{
   data:fetchCommunityDefinitionForSelect{label:name,value:code}
 }
 `;
-   /* let fetchUsers = gql`query($community:[String]!){
-  data:FetchUserTypeInProcessMapping (community:$community){
+ /*   let fetchUsers = gql`query{
+  data:FetchUserType {
     label:userTypeName
     value:_id
   }
-}*/
-`
-    let fetchUsers = gql` query($communityId:[String]){
+}
+`;*/
+    let fetchUsers = gql` query($communityId:[String]){  
     data:FetchUserTypeForMultiSelect(communityId:$communityId) {
       value:_id
       label:userTypeName

@@ -93,6 +93,7 @@ MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
 
 
 
+/*
 MlResolver.MlQueryResolver['FetchUserTypeInProcessMapping'] = (obj, args, context, info) => {
 
   let communityCode = args.community;
@@ -113,3 +114,4 @@ MlResolver.MlQueryResolver['FetchUserTypeInProcessMapping'] = (obj, args, contex
   }
   return usertypes;
 }
+*/

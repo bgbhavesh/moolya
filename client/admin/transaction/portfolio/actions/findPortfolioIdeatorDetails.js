@@ -3,6 +3,7 @@
  */
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
+import _ from 'lodash'
 
 export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
 
@@ -61,7 +62,6 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
 }
 
 export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
       query: gql`
           query ($portfoliodetailsId: String!) {
@@ -87,13 +87,12 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
     },
     forceFetch: true
   })
-  console.log(result.data.fetchIdeatorPortfolioProblemsAndSolutions)
   const id = result.data.fetchIdeatorPortfolioProblemsAndSolutions;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 
 export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -113,9 +112,10 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioAudience;
-  return id
+  let data = _.omit(id, '__typename')
+  console.log(data)
+  return data
 }
 export async function findIdeatorLibraryActionHandler(portfoliodetailsId) {
 
@@ -156,9 +156,9 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioStrategyAndPlanning;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
 
@@ -177,9 +177,9 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioLookingFor;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 
 export async function findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId) {
@@ -199,9 +199,9 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioIntellectualPlanning;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 
 

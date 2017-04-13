@@ -69,9 +69,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
-  console.log(graphQLServer);
-  graphQLServer.options('/registrations', cors())
-  console.log("graphQLServer :"+graphQLServer);
+ // console.log("graphQLServer :"+graphQLServer);
   config.configServer(graphQLServer)
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
@@ -213,8 +211,17 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   if(config.registrationAPIPath){
     console.log("RegistrationAPI Invoked..!!");
 
+  /*  graphQLServer.use(function(req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      next();
+    });*/
+    graphQLServer.options('/registrations', cors());
+
     graphQLServer.post(config.registrationAPIPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
     {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
       console.log("registrationAPIPath ");
       var context = {};
       context = getContext({req});
@@ -229,28 +236,32 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       {
         console.log("Processing started..!!");
         let data = req.body.data;
-        let apiKey = req.header("api-key");
+        let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           if(data.email&&data.countryId&&data.registrationType){
             let response;
             if(data) {
               response = MlResolver.MlMutationResolver['createRegistrationAPI'](null, {registration: data}, context, null);
+              console.log(response);
               res.send(response);
             }
           }else{
             let code = 400;
             let result = {message:"email,countyId,registrationType are mandatory fields"}
             let response = new MlRespPayload().errorPayload(result,code );
+            console.log(response);
             res.send(response);
           }
         }else{
           let code = 401;
           let result = {message:"The request did not have valid authorization credentials"}
           let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
           res.send(response);
         }
 
       }else{
+        console.log("Request Payload not provided");
         res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
       }
     }))

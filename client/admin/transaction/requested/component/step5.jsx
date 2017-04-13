@@ -166,8 +166,8 @@ export default class Step5 extends React.Component {
       let communityType =this.props.registrationData && this.props.registrationData.registrationInfo.registrationType ? this.props.registrationData.registrationInfo.registrationType : '';
       let userType=this.props.registrationData && this.props.registrationData.registrationInfo.userType ? this.props.registrationData.registrationInfo.userType : '';
       let identityType=this.props.registrationData && this.props.registrationData.registrationInfo.identityType ? this.props.registrationData.registrationInfo.identityType : '';
-      let profession=this.props.registrationData && this.props.registrationData.registrationDetails.profession ? this.props.registrationData.registrationDetails.profession : '';
-      let industry=this.props.registrationData && this.props.registrationData.registrationDetails.industry ? this.props.registrationData.registrationDetails.industry : '';
+      let profession=this.props.registrationData && this.props.registrationData.registrationInfo.profession ? this.props.registrationData.registrationInfo.profession : '';
+      let industry=this.props.registrationData && this.props.registrationData.registrationInfo.industry ? this.props.registrationData.registrationInfo.industry : '';
       const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry);
       if (response) {
         let processDoc=response

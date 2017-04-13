@@ -162,6 +162,7 @@ class MlAddDepartment extends React.Component{
           </div>
 
           <div className="col-md-6 nopadding-right">
+            <div className="clearfix"></div>
             <div className="form_bg left_wrap">
               <ScrollArea
                 speed={0.8}
@@ -170,6 +171,7 @@ class MlAddDepartment extends React.Component{
                 default={true}
               >
               <form>
+
                 <div className="form-group switch_wrap switch_names">
                   <label>Select Type</label><br/>
                   <span className="state_label acLabel">moolya</span><label className="switch nocolor-switch">

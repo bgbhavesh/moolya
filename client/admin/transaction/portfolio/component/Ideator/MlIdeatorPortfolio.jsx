@@ -62,7 +62,9 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
     }
     getProblemSolution(details) {
       // details=_.omit(details,'__typename')
-      this.state.ideatorPortfolio['problemSolution'] = details;
+      let data = this.state.ideatorPortfolio;
+      data['problemSolution']=details;
+      this.setState({ideatorPortfolio : data})
       this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getStrategyAndPlanning(details) {
@@ -78,7 +80,9 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
       this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getLookingFor(details) {
-      this.state.ideatorPortfolio['lookingFor'] = details;
+      let data = this.state.ideatorPortfolio;
+      data['lookingFor']=details;
+      this.setState({ideatorPortfolio : data})
       this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
 

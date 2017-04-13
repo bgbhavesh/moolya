@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -8,7 +8,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUti
 import {findIdeatorLookingForActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlIdeatorLookingFor extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state={
       loading:true,
@@ -30,9 +30,14 @@ export default class MlIdeatorLookingFor extends React.Component{
   }
 
   async fetchPortfolioDetails() {
-    const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(this.context.ideatorPortfolio.lookingFor)
+    if(empty){
+      const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: this.context.ideatorPortfolio.lookingFor});
     }
   }
 
@@ -63,6 +68,11 @@ export default class MlIdeatorLookingFor extends React.Component{
 
   sendDataToParent(){
     let data = this.state.data;
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
     this.props.getLookingFor(data)
   }
 
@@ -109,4 +119,8 @@ export default class MlIdeatorLookingFor extends React.Component{
       </div>
     )
   }
+};
+
+MlIdeatorLookingFor.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

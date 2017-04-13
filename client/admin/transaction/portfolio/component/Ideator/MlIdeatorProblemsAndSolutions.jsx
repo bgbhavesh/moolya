@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -10,7 +10,7 @@ import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPo
 
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state =  {loading: true, data:{}};
     this.onProblemImageFileUpload.bind(this);
@@ -24,9 +24,14 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   async fetchPortfolioInfo(){
-    const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(this.context.ideatorPortfolio.problemSolution)
+    if(empty){
+      const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: this.context.ideatorPortfolio.problemSolution});
     }
   }
 
@@ -79,6 +84,11 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     let data = this.state.data;
     data = _.omit(data, 'problemImage')
     data = _.omit(data, 'solutionImage')
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
     this.props.getProblemSolution(data);
   }
 
@@ -196,4 +206,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       </div>
     )
   }
+};
+MlIdeatorProblemsAndSolutions.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

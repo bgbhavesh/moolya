@@ -56,6 +56,11 @@ export default class MlIdeatorAudience extends React.Component{
   sendDataToParent(){
     let data = this.state.data;
     data = _.omit(data, 'audienceImages')
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
     this.props.getAudience(data)
   }
   async fetchPortfolioInfo() {

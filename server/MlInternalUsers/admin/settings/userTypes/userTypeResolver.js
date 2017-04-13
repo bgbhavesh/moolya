@@ -54,10 +54,10 @@ MlResolver.MlQueryResolver['FindUserType'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['FetchUserTypeSelect'] = (obj, args, context, info) => {
   // let result=MlUserTypes.find({isActive:true}).fetch()||[];
-  let result = mlDBController.find('MlUserTypes', {isActive:true}, context).fetch()||[];
-  if(result.length > 0){
-    result.push({"userTypeName" : "All","_id" : "all"});
-  }
+  let result = mlDBController.find('MlUserTypes', {isActive:true, communityCode:args.communityCode}, context).fetch()||[];
+  // if(result.length > 0){
+  //   result.push({"userTypeName" : "All","_id" : "all"});
+
   return result;
 }
 

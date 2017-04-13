@@ -29,8 +29,8 @@ let UserTypesSchema = `
         FindUserType(_id:String): UserTypes
         FetchUserType(communityCode:String):[UserTypes]
         FetchUserType1:[UserTypes]
-        FetchUserTypeSelect:[UserTypes]
+        FetchUserTypeSelect(communityCode:String):[UserTypes]
     }
-`
+`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],UserTypesSchema]);

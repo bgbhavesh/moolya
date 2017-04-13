@@ -37,7 +37,9 @@ export default class Step1 extends React.Component{
       coummunityName:'',
       identityType:'',
       userType:null,
-      identityTypesData:[]
+      identityTypesData:[],
+      selectedTypeOfIndustry:'',
+      profession:null
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -49,7 +51,7 @@ export default class Step1 extends React.Component{
     const response = await fetchIdentityTypes(this.props.config);
     this.setState({identityTypesData: response});
     return response;
-  }
+  } profession
 
   componentWillMount() {
     this.fetchIdentityTypesMaster();
@@ -67,7 +69,9 @@ export default class Step1 extends React.Component{
       cluster : details.clusterId,
       chapter :details.chapterId,
       identityType:details.identityType,
-      userType:details.userType
+      userType:details.userType,
+      selectedTypeOfIndustry:details.industry,
+      profession:details.profession
       })
   }
 
@@ -106,6 +110,13 @@ export default class Step1 extends React.Component{
     const resp=this.updateregistrationInfo();
     return resp;
   }
+  optionsBySelectTypeOfIndustry(value){
+    this.setState({selectedTypeOfIndustry:value})
+  }
+  optionsBySelectProfession(val){
+    this.setState({profession:val})
+  }
+
 
   checkIdentity(event){
     console.log(event.target.name)
@@ -157,7 +168,10 @@ export default class Step1 extends React.Component{
       chapterId       :  this.state.chapter,
       communityName  :  this.state.coummunityName,
       identityType      : this.state.identityType,
-      userType          : this.state.userType
+      userType          : this.state.userType,
+        industry       :this.state.selectedTypeOfIndustry,
+        profession:     this.state.profession
+
     }
     }
     const response = await updateRegistrationActionHandler(Details);
@@ -224,6 +238,18 @@ export default class Step1 extends React.Component{
       label:userTypeName
   }  }
     `;
+    let industriesquery=gql` query{
+    data:fetchIndustries{label:industryName,value:_id}
+    }
+    `;
+
+    let professionQuery=gql` query($industryId:String){
+      data:fetchIndustryBasedProfession(industryId:$industryId) {
+        label:professionName
+        value:_id
+      }
+    }`;
+    let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
     /*let registrationOptions = [
@@ -319,7 +345,13 @@ export default class Step1 extends React.Component{
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                     </div>
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
+                    </div>
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true}/>
 
+                    </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label" id="" disabled="true"/>

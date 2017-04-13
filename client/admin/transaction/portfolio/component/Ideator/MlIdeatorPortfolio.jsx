@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlIdeatorDetails from "../Ideator/MlIdeatorDetails";
@@ -17,8 +17,14 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         this.state =  {tabs: [], ideatorPortfolio:{}};
         this.getIdeatorDetails.bind(this);
         this.getProblemSolution.bind(this)
+        this.getChildContext.bind(this)
     }
 
+    getChildContext(){
+      return {
+        ideatorPortfolio: this.state.ideatorPortfolio
+      }
+    }
     componentDidMount(){
       setTimeout(function(){
         $('div[role="tab"]').each(function( index ) {
@@ -47,12 +53,18 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
     }
 
     getIdeatorDetails(details){
-        this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
+        let data = this.state.ideatorPortfolio;
+        data['portfolioIdeatorDetails']=details;
+        this.setState({ideatorPortfolio : data})
+        // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
+        // this.setState({ideatorDetails:details})
         this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getProblemSolution(details) {
       // details=_.omit(details,'__typename')
-      this.state.ideatorPortfolio['problemSolution'] = details;
+      let data = this.state.ideatorPortfolio;
+      data['problemSolution']=details;
+      this.setState({ideatorPortfolio : data})
       this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getStrategyAndPlanning(details) {
@@ -68,7 +80,9 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
       this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getLookingFor(details) {
-      this.state.ideatorPortfolio['lookingFor'] = details;
+      let data = this.state.ideatorPortfolio;
+      data['lookingFor']=details;
+      this.setState({ideatorPortfolio : data})
       this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
 
@@ -91,3 +105,6 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         return <MlTabComponent tabs={tabs}/>
     }
 }
+MlIdeatorPortfolioTemplate.childContextTypes = {
+  ideatorPortfolio: PropTypes.object,
+};

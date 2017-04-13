@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import _ from 'lodash';
 
 export default class MlIdeatorStrategyAndPlanning extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state={
       loading:true,
@@ -21,29 +21,23 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
-  componentDidMount()
-  {
+
+  componentDidUpdate(){
     OnLockSwitch();
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
     dataVisibilityHandler();
-
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(that.context.ideatorPortfolio.strategyAndPlanning)
+    if(empty){
+      const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning});
     }
   }
   onClick(field,e){
@@ -72,10 +66,18 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   }
 
   sendDataToParent(){
-    this.props.getStrategyAndPlanning(this.state.data)
+    let data = this.state.data;
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
+    this.props.getStrategyAndPlanning(data)
   }
 
   render(){
+    let description =this.state.data.description?this.state.data.description:''
+    let isStrategyPlansPrivate = this.state.data.isStrategyPlansPrivate?this.state.data.isStrategyPlansPrivate:false
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -91,7 +93,6 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
             >
               <div className="row requested_input">
                 <div className="col-lg-12">
-
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Startergy and Planning
@@ -99,8 +100,8 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "isStrategyPlansPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isStrategyPlansPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "isStrategyPlansPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={isStrategyPlansPrivate}/>
                       </div>
 
                     </div>
@@ -110,14 +111,12 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
               </div>
             </ScrollArea>
           </div>
-
-
-
         </div>
-
-
       </div>)}
       </div>
     )
   }
+};
+MlIdeatorStrategyAndPlanning.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

@@ -54,11 +54,35 @@ MlResolver.MlQueryResolver['FindUserType'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['FetchUserTypeSelect'] = (obj, args, context, info) => {
   // let result=MlUserTypes.find({isActive:true}).fetch()||[];
-  let result = mlDBController.find('MlUserTypes', {isActive:true}, context).fetch()||[];
-  if(result.length > 0){
-    result.push({"userTypeName" : "All","_id" : "all"});
-  }
+  let result = mlDBController.find('MlUserTypes', {isActive:true, communityCode:args.communityCode}, context).fetch()||[];
+  // if(result.length > 0){
+  //   result.push({"userTypeName" : "All","_id" : "all"});
+
   return result;
+}
+MlResolver.MlQueryResolver['FetchUserTypeForMultiSelect'] = (obj, args, context, info) => {
+  // let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  let community=args.communityId;
+  if(community!=undefined){
+    let result=[];
+    for(let i=0;i<community.length;i++){
+     let userResult = mlDBController.find('MlUserTypes', {isActive:true,communityCode:community[i]}, context).fetch()||[];
+
+          if(userResult!=undefined){
+            for(let j=0;j<userResult.length;j++){
+              result.push(userResult[j]);
+            }
+          }
+
+    }
+
+    if(result.length > 0){
+      result.push({"userTypeName" : "All","_id" : "all"});
+    }
+    return result;
+  }
+
+
 }
 
 
@@ -68,3 +92,26 @@ MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
 }
 
 
+
+/*
+MlResolver.MlQueryResolver['FetchUserTypeInProcessMapping'] = (obj, args, context, info) => {
+
+  let communityCode = args.community;
+  let usertypes = [];
+  if(communityCode && communityCode.length > 0){
+    if(communityCode.length==1){
+      usertypes= MlUserTypes.find({"$and": [{communityCode: communityCode[0], isActive: true}]}).fetch()||[];
+      usertypes.push({"professionName" : "All","_id" : "all"});
+    }else {
+      communityCode.map(function (communityCode) {
+        activeUserType = MlUserTypes.find({"$and": [{communityCode: communityCode, isActive: true}]}).fetch();
+        if (activeUserType && activeUserType.length > 0) {
+          usertypes = usertypes.concat(activeUserType)
+
+        }
+      })
+    }
+  }
+  return usertypes;
+}
+*/

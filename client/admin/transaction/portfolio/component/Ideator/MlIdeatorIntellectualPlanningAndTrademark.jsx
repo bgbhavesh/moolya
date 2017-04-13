@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
-var Select = require('react-select');
+import _ from 'lodash';
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
-   constructor(props) {
+   constructor(props, context) {
      super(props);
      this.state =  {loading:true,data:{}};
      this.fetchPortfolioDetails.bind(this);
@@ -17,15 +17,23 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
-  componentDidMount(){
+
+  componentDidUpdate(){
+    OnLockSwitch();
     dataVisibilityHandler();
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(that.context.ideatorPortfolio.intellectualPlanning)
+    if(empty){
+      const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: that.context.ideatorPortfolio.intellectualPlanning});
     }
   }
 
@@ -55,10 +63,19 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   }
 
   sendDataToParent() {
-    this.props.getIntellectualPlanning(this.state.data);
+    let data = this.state.data;
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
+    this.props.getIntellectualPlanning(data);
   }
 
   render(){
+    let description =this.state.data.description?this.state.data.description:''
+    let isIntellectualPrivate = this.state.data.isIntellectualPrivate?this.state.data.isIntellectualPrivate:false
+
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -82,9 +99,10 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} onBlur={this.onInputChange.bind(this)} name="description"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onLockChange={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIntellectualPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} onBlur={this.onInputChange.bind(this)} name="description"></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={isIntellectualPrivate}/>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -96,4 +114,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
       </div>
     )
   }
+};
+MlIdeatorIntellectualPlanningAndTrademark.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

@@ -3,6 +3,7 @@
  */
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
+import _ from 'lodash'
 
 export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
 
@@ -60,7 +61,6 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
 }
 
 export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
       query: gql`
           query ($portfoliodetailsId: String!) {
@@ -86,9 +86,9 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
     },
     forceFetch: true
   })
-  console.log(result.data.fetchIdeatorPortfolioProblemsAndSolutions)
   const id = result.data.fetchIdeatorPortfolioProblemsAndSolutions;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 
 export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
@@ -176,9 +176,9 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioLookingFor;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 
 export async function findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId) {

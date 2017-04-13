@@ -133,6 +133,8 @@ let registrationSchema = `
     }
     
     input registrationInfoInput{
+        industry        :   String,
+        profession      :   String,
         userType        :   String,
         identityType    :   String,
         firstName       :   String,
@@ -190,6 +192,8 @@ let registrationSchema = `
     type RegistrationInfo{        
         _id             :   String,
         userType        :   String,
+        industry        :   String,
+        profession      :   String,
         identityType    :   String,
         firstName       :   String,
         lastName        :   String,

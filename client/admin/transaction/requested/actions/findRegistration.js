@@ -9,6 +9,8 @@ export async function findRegistrationActionHandler(registrationId) {
         findRegistrationInfo(registrationId:$id){          
           _id
           registrationInfo {
+            industry
+            profession 
             userType
             identityType
             firstName

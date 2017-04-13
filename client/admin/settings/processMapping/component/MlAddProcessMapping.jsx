@@ -184,14 +184,14 @@ class MlAddProcessMapping extends React.Component{
   data:fetchCommunityDefinitionForSelect{label:name,value:code}
 }
 `;
- /*   let fetchUsers = gql`query{
-  data:FetchUserType {
+   /* let fetchUsers = gql`query($community:[String]!){
+  data:FetchUserTypeInProcessMapping (community:$community){
     label:userTypeName
     value:_id
   }
-}
-`;*/
-    let fetchUsers = gql` query($communityId:[String]){  
+}*/
+`
+    let fetchUsers = gql` query($communityId:[String]){
     data:FetchUserTypeForMultiSelect(communityId:$communityId) {
       value:_id
       label:userTypeName
@@ -208,23 +208,23 @@ class MlAddProcessMapping extends React.Component{
     let clusterquery=gql`  query{
   data:fetchActiveClusters{label:countryName,value:_id}
 }`;
-    let statesQuery=gql`query($clusters:[String]){  
+    let statesQuery=gql`query($clusters:[String]){
         data:FetchActiveStatesForCluster(clusters:$clusters) {
           value:_id
           label:name
-        }  
+        }
     }`;
-    let chapterquery=gql`query($states:[String],$clusters:[String]){  
+    let chapterquery=gql`query($states:[String],$clusters:[String]){
         data:fetchActiveStatesChapters(states:$states,clusters:$clusters) {
           value:_id
           label:chapterName
-        }  
+        }
     }`;
-    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){  
+    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){
         data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
-        }  
+        }
     }`;
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
     let chapterOption={options: { variables: {states:this.state.states,clusters:this.state.clusters}}};

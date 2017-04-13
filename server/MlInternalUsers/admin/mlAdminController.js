@@ -69,9 +69,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
-  console.log(graphQLServer);
-  graphQLServer.options('/registrations', cors())
-  console.log("graphQLServer :"+graphQLServer);
+  graphQLServer.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+  graphQLServer.options('/registrations', cors());
+ // console.log("graphQLServer :"+graphQLServer);
   config.configServer(graphQLServer)
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
@@ -220,7 +224,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
       console.log(req.body);
+      console.log("-----------");
       console.log(req.headers);
+      console.log("-----------");
+      console.log(req.body.data);
+      console.log("-----------");
       if(req && req.body && req.body.data)
       {
         console.log("Processing started..!!");

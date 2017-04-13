@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import _ from 'lodash';
 
 export default class MlIdeatorStrategyAndPlanning extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state={
       loading:true,
@@ -29,9 +30,14 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(that.context.ideatorPortfolio.strategyAndPlanning)
+    if(empty){
+      const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning});
     }
   }
   onClick(field,e){
@@ -60,7 +66,13 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   }
 
   sendDataToParent(){
-    this.props.getStrategyAndPlanning(this.state.data)
+    let data = this.state.data;
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
+    this.props.getStrategyAndPlanning(data)
   }
 
   render(){
@@ -104,4 +116,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
       </div>
     )
   }
+};
+MlIdeatorStrategyAndPlanning.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

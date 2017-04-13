@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
-   constructor(props) {
+   constructor(props, context) {
      super(props);
      this.state =  {loading:true,data:{}};
      this.fetchPortfolioDetails.bind(this);
@@ -25,9 +26,14 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(that.context.ideatorPortfolio.intellectualPlanning)
+    if(empty){
+      const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: that.context.ideatorPortfolio.intellectualPlanning});
     }
   }
 
@@ -57,7 +63,13 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   }
 
   sendDataToParent() {
-    this.props.getIntellectualPlanning(this.state.data);
+    let data = this.state.data;
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
+    this.props.getIntellectualPlanning(data);
   }
 
   render(){
@@ -102,4 +114,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
       </div>
     )
   }
+};
+MlIdeatorIntellectualPlanningAndTrademark.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

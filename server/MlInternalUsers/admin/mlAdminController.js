@@ -219,9 +219,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log("Body :"+req.body);
-      console.log("Headers :"+req.headers);
-      console.log("Data :"+req.body.data)
+      console.log(req.body);
+      console.log("-----------");
+      console.log(req.headers);
+      console.log("-----------");
+      console.log(req.body.data);
+      console.log("-----------");
       if(req && req.body && req.body.data)
       {
         console.log("Processing started..!!");

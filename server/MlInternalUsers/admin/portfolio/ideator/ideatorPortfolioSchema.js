@@ -238,14 +238,14 @@ let ideatorPortfolioSchema = `
         fetchIdeatorPortfolioIntellectualPlanning(portfoliodetailsId:String!): intellectualplanningInfo
         fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
         fetchIdeatorPortfolioRequests:response
-        fetchAnnotations(userId:String, portfolioId:String, docId:String): response
+        fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
         fetchComments(userId:String, portfolioId:String, docId:String): response
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
     type Mutation{
         createIdeatorPortfolio(portfolio:ideatorPortfolio):response
-        createAnnotation(userId:String, portfolioId:String, docId:String): response
+        createAnnotation(portfoliodetailsId:String, docId:String, quote:String): response
         createComment(userId:String, portfolioId:String, docId:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
         updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response

@@ -75,6 +75,7 @@
     "connect-multiparty": "^2.0.0",
     "cors": "^2.8.1",
     "deep-diff": "^0.3.4",
+    "deep-extend": "^0.4.1",
     "express": "^4.14.0",
     "extendify": "^1.0.0",
     "geocoder": "^0.2.2",

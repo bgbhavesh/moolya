@@ -66,7 +66,7 @@ export default class MlCommunityList extends Component {
     let subChapterId = this.props.config.params&&this.props.config.params.subChapterId?this.props.config.params.subChapterId:"";
 
     const list=  data.map((prop) =>
-      <div className="col-md-2" key={prop._id}>
+      <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
         <div className="list_block">
           <div className={`cluster_status ${prop.profile.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.profile.isActive?"check":"times"}/></div>
           {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}

@@ -39,7 +39,7 @@ export default class MlClusterListView extends Component {
       }
       return (
 
-        <div className="col-md-2" key={prop._id}>
+        <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
           <div className="list_block provider_block">
             <div className={`cluster_status ${userStatus}_cl`}><span className={`ml ml-${StatusActive}`}></span></div>
             <a href={backendUserRoute.backendUserDetailRoute(prop._id)}>

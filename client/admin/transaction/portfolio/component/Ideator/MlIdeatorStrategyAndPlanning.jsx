@@ -22,6 +22,11 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     this.fetchPortfolioDetails();
   }
 
+  componentDidMount(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();

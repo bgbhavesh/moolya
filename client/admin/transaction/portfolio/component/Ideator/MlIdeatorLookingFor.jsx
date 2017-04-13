@@ -23,6 +23,11 @@ export default class MlIdeatorLookingFor extends React.Component{
     this.fetchPortfolioDetails();
   }
 
+  componentDidMount(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
   componentDidUpdate()
   {
     OnLockSwitch();

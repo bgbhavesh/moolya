@@ -33,16 +33,17 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       }
     }else{
       this.fetchOnlyImages();
-      this.setState({loading: false, data: this.context.ideatorPortfolio.problemSolution});
+      this.setState({loading: true, data: this.context.ideatorPortfolio.problemSolution});
     }
   }
 
   async fetchOnlyImages(){
     const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
     if (response) {
-      let problemImage = response.problemImage
-      let solutionImage = response.solutionImage
-      this.setState({loading: false, data: {problemImage: problemImage, solutionImage:solutionImage}});
+      let dataDetails =this.state.data
+      dataDetails['problemImage'] = response.problemImage
+      dataDetails['solutionImage'] =response.solutionImage
+      this.setState({loading: false, data: dataDetails});
     }
   }
 
@@ -105,6 +106,11 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   componentDidUpdate(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
+  componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
   }

@@ -23,6 +23,11 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
     dataVisibilityHandler();
   }
 
+  componentDidMount(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;

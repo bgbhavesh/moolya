@@ -23,8 +23,12 @@ export default class MlIdeatorAudience extends React.Component{
   componentWillMount(){
     this.fetchPortfolioInfo();
   }
-  componentDidUpdate()
-  {
+  componentDidUpdate(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
+  componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
   }
@@ -75,7 +79,7 @@ export default class MlIdeatorAudience extends React.Component{
       }
     }else{
       this.fetchOnlyImages();
-      this.setState({loading: false, data: that.context.ideatorPortfolio.audience});
+      this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
     }
   }
   onAudienceImageFileUpload(e){
@@ -91,8 +95,9 @@ export default class MlIdeatorAudience extends React.Component{
   async fetchOnlyImages(){
     const response = await findIdeatorAudienceActionHandler(this.props.portfolioDetailsId);
     if (response) {
-      let imagePath = response.audienceImages
-      this.setState({loading: false, data: {audienceImages: imagePath}});
+      let dataDetails =this.state.data
+      dataDetails['audienceImages'] = response.audienceImages
+      this.setState({loading: false, data: dataDetails});
     }
   }
 

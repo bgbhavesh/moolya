@@ -22,7 +22,7 @@ export function initializeMlAnnotator(eventsCallback){
             })
             .subscribe("annotationViewerShown", function (editor, annotation) {
                 console.info("The annotation: %o has just been created!", annotation)
-                // callback('create', annotation)
+                callback('annotationViewer', annotation)
             })
             .subscribe("annotationUpdated", function (annotation) {
                 console.info("The annotation: %o has just been updated!", annotation)

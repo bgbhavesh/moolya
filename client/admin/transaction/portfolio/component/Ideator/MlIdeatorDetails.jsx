@@ -70,7 +70,13 @@ export default class MlIdeatorDetails extends React.Component{
   }
 
   sendDataToParent(){
-      this.props.getIdeatorDetails(this.state.data)
+    let data = this.state.data;
+      for (var propName in data) {
+        if (data[propName] === null || data[propName] === undefined) {
+          delete data[propName];
+        }
+      }
+      this.props.getIdeatorDetails(data)
   }
   render(){
     const showLoader = this.state.loading;

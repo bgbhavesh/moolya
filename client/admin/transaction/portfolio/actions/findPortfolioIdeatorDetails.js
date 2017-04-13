@@ -56,7 +56,8 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
   })
   console.log(result)
   const id = result.data.fetchIdeatorPortfolioDetails;
-  return id
+  let data = _.omit(id,'__typename')
+  return data
 }
 
 export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodetailsId) {

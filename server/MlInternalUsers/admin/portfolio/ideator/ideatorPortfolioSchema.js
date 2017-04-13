@@ -72,6 +72,13 @@ let ideatorPortfolioSchema = `
         isGplusIdPrivate:Boolean
         profilePic:String
     }
+    type ideasObject{
+        title:String,
+        isIdeasTitlePrivate:Boolean,
+        description:String,
+        isIdeasPrivate:Boolean,
+        isActive:Boolean
+    }
     
     type imagesTypeSchema{
         fileUrl   : String,
@@ -120,6 +127,7 @@ let ideatorPortfolioSchema = `
          communityType        : String
          portfolioDetailsId   : String
          ideatorabout : ideatoraboutInfo
+         ideas:ideasObject
          portfolioIdeatorDetails    : portfolioIdeatorDetailsInfo
          problemSolution : problemSolutionInfo
          audience : audienceInfo
@@ -200,6 +208,13 @@ let ideatorPortfolioSchema = `
         description:String,
         isStrategyPlansPrivate:Boolean
     }
+    input ideas{
+        title:String,
+        isIdeasTitlePrivate:Boolean,
+        description:String,
+        isIdeasPrivate:Boolean,
+        isActive:Boolean
+    }
     
     input intellectualPlanning{
         description:String, 
@@ -220,6 +235,7 @@ let ideatorPortfolioSchema = `
     input ideatorPortfolio{
         portfolioDetailsId:String,
         ideatorabout:ideatorabout,
+        ideas:ideas
         portfolioIdeatorDetails:portfolioIdeatorDetails,
         problemSolution:problemSolution,
         audience:audience,
@@ -231,6 +247,7 @@ let ideatorPortfolioSchema = `
     
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
+        fetchIdeatorPortfolioIdeas(portfoliodetailsId:String!):ideasObject
         fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
         fetchIdeatorPortfolioAudience(portfoliodetailsId:String!): audienceInfo
         fetchIdeatorPortfolioLibrary(portfoliodetailsId:String!): libraryInfo

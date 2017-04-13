@@ -42,7 +42,7 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
     getTabComponents(){
         let tabs = [
           {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" portfolioDetailsId={this.props.portfolioDetailsId}/> },
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
           {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component:<MlIdeatorProblemsAndSolutions key="3" getProblemSolution={this.getProblemSolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4" getAudience={this.getAudience.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component:<MlIdeatorLibrary  key="5"/> },
@@ -60,6 +60,12 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
         // this.setState({ideatorDetails:details})
         this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    }
+    getIdeas(details) {
+      let data = this.state.ideatorPortfolio;
+      data['ideas']=details;
+      this.setState({ideatorPortfolio : data})
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getProblemSolution(details) {
       let data = this.state.ideatorPortfolio;

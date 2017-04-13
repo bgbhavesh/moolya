@@ -1,9 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
@@ -23,20 +21,9 @@ export default class MlIdeatorAudience extends React.Component{
   componentWillMount(){
     this.fetchPortfolioInfo();
   }
-  componentDidMount()
+  componentDidUpdate()
   {
     OnLockSwitch();
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
     dataVisibilityHandler();
   }
 
@@ -66,11 +53,12 @@ export default class MlIdeatorAudience extends React.Component{
   }
 
   sendDataToParent(){
-    this.props.getAudience(this.state.data)
+    let data = this.state.data;
+    data = _.omit(data, 'audienceImages')
+    this.props.getAudience(data)
   }
   async fetchPortfolioInfo() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let portfoliodetailsId=this.props.portfolioDetailsId;
     const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
     if (response) {
       this.setState({loading: false, data: response});
@@ -104,6 +92,8 @@ export default class MlIdeatorAudience extends React.Component{
         </div>
       )
     });
+    let description =this.state.data.description?this.state.data.description:''
+    let isAudiencePrivate = this.state.data.isAudiencePrivate?this.state.data.isAudiencePrivate:false
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -118,8 +108,8 @@ export default class MlIdeatorAudience extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "isAudiencePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isAudiencePrivate}/>
+                  <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="description" onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "isAudiencePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>
                 </div>
 
               </div>

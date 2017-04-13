@@ -93,7 +93,6 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
 }
 
 export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
@@ -113,9 +112,10 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioAudience;
-  return id
+  let data = _.omit(id, '__typename')
+  console.log(data)
+  return data
 }
 export async function findIdeatorLibraryActionHandler(portfoliodetailsId) {
 
@@ -156,9 +156,9 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioStrategyAndPlanning;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
 
@@ -199,9 +199,9 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
     },
     forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioIntellectualPlanning;
-  return id
+  let data = _.omit(id, '__typename')
+  return data
 }
 
 

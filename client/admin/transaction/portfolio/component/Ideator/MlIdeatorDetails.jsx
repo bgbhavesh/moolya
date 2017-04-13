@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -11,7 +11,7 @@ var Select = require('react-select');
 
 
 export default class MlIdeatorDetails extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state={
         loading: true,
@@ -64,10 +64,16 @@ export default class MlIdeatorDetails extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(that.context.ideatorPortfolio.portfolioIdeatorDetails)
+    if(empty){
+      const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: that.context.ideatorPortfolio.portfolioIdeatorDetails});
     }
+
   }
 
   sendDataToParent(){
@@ -213,4 +219,7 @@ export default class MlIdeatorDetails extends React.Component{
       </div>
     )
   }
+};
+MlIdeatorDetails.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

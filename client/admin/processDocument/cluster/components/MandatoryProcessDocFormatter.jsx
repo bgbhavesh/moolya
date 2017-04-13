@@ -24,7 +24,7 @@ class MandatoryProcessDocFormatter extends React.Component {
       if(response.processDocuments) {
         let processDocuments = response.processDocuments
         let kycid = this.props.kycConfig;
-        let doctypeId = this.props.docTypeConfig;
+        let doctypeId = this.props.data.DocType;
         let documentId= this.props.data.Id
         let fileterProcessDocuments = _.filter(processDocuments, function (docs) {
           return docs.kycCategoryId == kycid && docs.docTypeId == doctypeId&&docs.documentId== documentId
@@ -62,7 +62,7 @@ class MandatoryProcessDocFormatter extends React.Component {
     let processDocDetails = {
       id:this.props.processConfig,
       kycCategoryId:this.props.kycConfig,
-      docTypeId:this.props.docTypeConfig,
+      docTypeId:this.props.data.DocType,
       documentId:this.props.data.Id,
       isMandatory:this.refs.status.checked,
       isActive:this.state.isActve,

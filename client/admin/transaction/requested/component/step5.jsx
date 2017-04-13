@@ -222,7 +222,10 @@ export default class Step5 extends React.Component {
     let fileName=file.name
      let fileFormate=fileName.split('.').pop()
      let docFormate=kycDoc.allowableFormat[0]
-    let docResponse=_.includes(docFormate, fileFormate);
+     console.log(docFormate)
+     let lowerDocFormate=docFormate.toLowerCase();
+     console.log(lowerDocFormate)
+    let docResponse=_.includes(lowerDocFormate, fileFormate);
     if(docResponse){
       let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,docTypeId:docTypeId,registrationId:id};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));

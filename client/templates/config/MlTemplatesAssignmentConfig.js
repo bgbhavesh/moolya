@@ -7,7 +7,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["processName","subProcessName","createdBy","createdDate"],
-  searchFields:["processName","subProcessName","createdBy","createdDate"],
+  searchFields:["templateProcessName","templateSubProcessName ","createdBy","createdDate","templatecommunityName"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -33,7 +33,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
           FlowRouter.go("/admin/templates/assignTemplate/"+data.id)
         }
         else{
-          alert("Please select a Template Type")
+          toastr.err("Please Select a Template Type")
         }
       }
     },

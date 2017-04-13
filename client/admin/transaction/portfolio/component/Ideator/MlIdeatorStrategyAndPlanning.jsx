@@ -5,18 +5,22 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
-
+import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlIdeatorStrategyAndPlanning extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      loading:true,
       data:{}
     }
     this.onClick.bind(this);
-    this.handleBlur.bind(this)
+    this.handleBlur.bind(this);
+    this.fetchPortfolioDetails.bind(this);
   }
-
+  componentWillMount(){
+    this.fetchPortfolioDetails();
+  }
   componentDidMount()
   {
     OnLockSwitch();
@@ -33,6 +37,14 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     });
     dataVisibilityHandler();
 
+  }
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
+    if (response) {
+      this.setState({loading: false, data: response});
+    }
   }
   onClick(field,e){
     let details = this.state.data||{};
@@ -64,7 +76,10 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   }
 
   render(){
+    const showLoader = this.state.loading;
     return (
+      <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <div className="main_wrap_scroll">
@@ -84,7 +99,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" name="description" onBlur={this.handleBlur.bind(this)}></textarea>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "isStrategyPlansPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isStrategyPlansPrivate}/>
                       </div>
 
@@ -101,6 +116,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
         </div>
 
 
+      </div>)}
       </div>
     )
   }

@@ -98,8 +98,11 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchIdeatorPortfolioAudience(portfoliodetailsId: $portfoliodetailsId) {
                 description
-                image
-                isAudiencePrivate 
+                isAudiencePrivate
+                 audienceImages {
+                    fileUrl
+                    fileName
+                  }
             }
           }
 

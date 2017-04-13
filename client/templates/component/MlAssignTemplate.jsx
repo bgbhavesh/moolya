@@ -162,7 +162,12 @@ class MlAssignTemplate extends React.Component{
   }
 
   optionsBySelectIdentity(val){
+    if(val){
     this.setState({identity:val.value})
+  }else{
+      this.setState({identity:null})
+
+    }
   }
 
   optionsBySelectClusters(value, calback, selObject){

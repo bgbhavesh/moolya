@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import _ from 'lodash';
 
 export default class MlIdeatorAudience extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state={
       loading: true,
@@ -58,10 +59,16 @@ export default class MlIdeatorAudience extends React.Component{
     this.props.getAudience(data)
   }
   async fetchPortfolioInfo() {
-    let portfoliodetailsId=this.props.portfolioDetailsId;
-    const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.ideatorPortfolio.audience)
+    if(empty){
+      const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: that.context.ideatorPortfolio.audience});
     }
   }
   onAudienceImageFileUpload(e){
@@ -137,4 +144,7 @@ export default class MlIdeatorAudience extends React.Component{
       </div>
     )
   }
+};
+MlIdeatorAudience.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

@@ -49,6 +49,13 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
           }
           break;
+          case 'annotationViewer':{
+            $('#annotationss').click();
+
+          }
+          break;
+
+
       }
   }
 
@@ -70,10 +77,24 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
   componentDidMount()
   {
-    this.initalizeAnnotaor()
-    this.fetchPortfolioInfo();
-    this.fetchAnnotations();
-    initalizeFloatLabel();
+      $("#annotationss").popover({
+        'title' : 'Annotations',
+        'html' : true,
+        'placement' : 'top',
+        'container' : '.admin_main_wrap',
+        'content' : $(".ml_annotations").html()
+      });
+    $("#timeLine").popover({
+      'title' : 'Timeline',
+      'html' : true,
+      'placement' : 'top',
+      'container' : '.admin_main_wrap',
+      'content' : $(".ml_timeline").html()
+    });
+      this.initalizeAnnotaor()
+      this.fetchPortfolioInfo();
+      this.fetchAnnotations();
+      initalizeFloatLabel();
   }
 
   async fetchPortfolioInfo(){
@@ -87,6 +108,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       <div>
 
         <h2>Problems and Solutions </h2>
+
+
 
         <div id="psContent" className="ml_tabs">
           <ul  className="nav nav-pills">
@@ -126,6 +149,80 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           </div>
 
         </div>
+        {/*<a href="#" id="annotationss">one</a>*/}
+
+        <div id="mlannotations" style={{'display':'none'}} className="ml_annotations">
+          <div className="comments-container cus_scroll large_popover">
+            <ul id="comments-list" className="comments-list">
+              <li>
+                <div className="comment-main-level">
+                  <div className="comment-avatar"><img src="/images/p_1.jpg" alt=""/></div>
+                  <div className="comment-box">
+                    <div style={{marginTop:'8px'}} className="annotate">1</div>
+                    <div style={{paddingLeft:'50px'}} className="comment-head">
+                      <h6 className="comment-name">Raghunandan</h6>
+                      <div className="author">Chapter Manager</div>
+                      <span>02 Nov 2016, 03:50:33 </span>
+                    </div>
+                    <div className="comment-content">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
+                    </div>
+
+                  </div>
+                </div>
+                <div className="ml_btn">
+                  <a href="#" className="save_btn">Resolve</a>
+                  <a href="#" className="cancel_btn">Re open</a>
+                  <a href="#" className="cancel_btn add_comment">Comment</a>
+                </div>
+                <textarea className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
+                <ul className="comments-list reply-list">
+                  <li>
+                    <div className="comment-avatar"><img src="/images/p_2.jpg" alt=""/></div>
+                    <div className="comment-box">
+                      <div className="comment-head">
+                        <h6 className="comment-name">Pavani</h6>
+                        <span>02 Nov 2016, 03:50:33 </span>
+                      </div>
+                      <div className="comment-content">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="comment-avatar"><img src="/images/p_3.jpg" alt=""/></div>
+                    <div className="comment-box">
+                      <div className="comment-head">
+                        <h6 className="comment-name">Agustin Ortiz</h6>
+                        <span>02 Nov 2016, 03:50:33 </span>
+
+                      </div>
+                      <div className="comment-content">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="comment-avatar"><img src="/images/p_4.jpg" alt=""/></div>
+                    <div className="comment-box">
+                      <div className="comment-head">
+                        <h6 className="comment-name">Agustin Ortiz</h6>
+                        <span>02 Nov 2016, 03:50:33 </span>
+
+                      </div>
+                      <div className="comment-content">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
+                      </div>
+                    </div>
+                  </li>
+
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="overlay"></div>
+
 
       </div>
 

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorLookingForActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
@@ -18,29 +18,19 @@ export default class MlIdeatorLookingFor extends React.Component{
     this.handleBlur.bind(this)
     this.fetchPortfolioDetails.bind(this);
   }
+
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
-  componentDidMount()
+
+  componentDidUpdate()
   {
     OnLockSwitch();
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
     dataVisibilityHandler();
   }
+
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findIdeatorLookingForActionHandler(portfoliodetailsId);
+    const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
     if (response) {
       this.setState({loading: false, data: response});
     }
@@ -72,12 +62,15 @@ export default class MlIdeatorLookingFor extends React.Component{
   }
 
   sendDataToParent(){
-    this.props.getLookingFor(this.state.data)
+    let data = this.state.data;
+    this.props.getLookingFor(data)
   }
 
 
   render(){
     const showLoader = this.state.loading;
+    let description = this.state.data.description?this.state.data.description:''
+    let lockStatus =  this.state.data.isLookingForPrivate?this.state.data.isLookingForPrivate:false
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -100,24 +93,18 @@ export default class MlIdeatorLookingFor extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLookingForPrivate" onClick={this.onClick.bind(this, "isLookingForPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isLookingForPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLookingForPrivate" onClick={this.onClick.bind(this, "isLookingForPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={lockStatus}/>
                       </div>
 
                     </div>
                   </div>
 
-
                 </div>
               </div>
             </ScrollArea>
           </div>
-
-
-
         </div>
-
-
       </div>)}
       </div>
     )

@@ -4,9 +4,8 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 
@@ -77,10 +76,14 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   sendDataToParent() {
-    this.props.getProblemSolution(this.state.data);
+    let data = this.state.data;
+    data = _.omit(data, 'problemImage')
+    data = _.omit(data, 'solutionImage')
+    this.props.getProblemSolution(data);
   }
 
-  componentDidMount(){
+  componentDidUpdate(){
+    OnLockSwitch();
     dataVisibilityHandler();
   }
 
@@ -111,6 +114,10 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
         </div>
       )
     });
+    let problemStatement = this.state.data.problemStatement?this.state.data.problemStatement:''
+    let solutionStatement =   this.state.data.solutionStatement?this.state.data.solutionStatement:''
+    let problemLockStatus =  this.state.data.isProblemPrivate?this.state.data.isProblemPrivate:false
+    let solutionLockStatus =  this.state.data.isSolutionPrivate?this.state.data.isSolutionPrivate:false
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -131,8 +138,8 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement" defaultValue={this.state.data.problemStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "isProblemPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProblemPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement" defaultValue={problemStatement}></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "isProblemPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={problemLockStatus}/>
                       </div>
                     </div>
                   </div>
@@ -160,8 +167,8 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     </div>
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement" value={this.state.data.solutionStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "isSolutionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isSolutionPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement" defaultValue={solutionStatement}></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "isSolutionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={solutionLockStatus}/>
                       </div>
                     </div>
                   </div>

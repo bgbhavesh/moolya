@@ -61,7 +61,6 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getProblemSolution(details) {
-      // details=_.omit(details,'__typename')
       let data = this.state.ideatorPortfolio;
       data['problemSolution']=details;
       this.setState({ideatorPortfolio : data})

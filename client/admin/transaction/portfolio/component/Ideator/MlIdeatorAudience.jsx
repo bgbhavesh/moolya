@@ -18,6 +18,7 @@ export default class MlIdeatorAudience extends React.Component{
     this.handleBlur.bind(this);
     this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
+    this.fetchOnlyImages.bind(this);
   }
   componentWillMount(){
     this.fetchPortfolioInfo();
@@ -73,6 +74,7 @@ export default class MlIdeatorAudience extends React.Component{
         this.setState({loading: false, data: response});
       }
     }else{
+      this.fetchOnlyImages();
       this.setState({loading: false, data: that.context.ideatorPortfolio.audience});
     }
   }
@@ -85,11 +87,20 @@ export default class MlIdeatorAudience extends React.Component{
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{audience:{audienceImages:[{fileUrl:'', fileName : fileName}]}}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
+
+  async fetchOnlyImages(){
+    const response = await findIdeatorAudienceActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let imagePath = response.audienceImages
+      this.setState({loading: false, data: {audienceImages: imagePath}});
+    }
+  }
+
   onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-        this.fetchPortfolioInfo();
+          this.fetchOnlyImages();
       }
     }
   }

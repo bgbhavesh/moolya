@@ -28,9 +28,10 @@ let UserTypesSchema = `
     type Query{
         FindUserType(_id:String): UserTypes
         FetchUserType(communityCode:String):[UserTypes]
-        FetchUserTypeInProcessMapping(community:[String]!):[UserTypes]
-        FetchUserTypeSelect(communityCode:String):[UserTypes]
+        FetchUserTypeForMultiSelect(communityId:[String]):[UserTypes]   
+        FetchUserType1:[UserTypes]
+        FetchUserTypeSelect:[UserTypes]
     }
-`;
+`
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],UserTypesSchema]);

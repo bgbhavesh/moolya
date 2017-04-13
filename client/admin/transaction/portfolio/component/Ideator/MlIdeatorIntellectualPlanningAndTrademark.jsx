@@ -3,8 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler} from '../../../../utils/formElemUtil';
-var Select = require('react-select');
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
@@ -17,9 +16,12 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
-  componentDidMount(){
+
+  componentDidUpdate(){
+    OnLockSwitch();
     dataVisibilityHandler();
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -59,6 +61,9 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   }
 
   render(){
+    let description =this.state.data.description?this.state.data.description:''
+    let isIntellectualPrivate = this.state.data.isIntellectualPrivate?this.state.data.isIntellectualPrivate:false
+
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -82,9 +87,10 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} onBlur={this.onInputChange.bind(this)} name="description"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onLockChange={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIntellectualPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} onBlur={this.onInputChange.bind(this)} name="description"></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={isIntellectualPrivate}/>
                       </div>
+
                     </div>
                   </div>
                 </div>

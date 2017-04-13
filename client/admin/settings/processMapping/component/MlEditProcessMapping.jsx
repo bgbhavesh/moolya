@@ -255,13 +255,19 @@ class MlEditProcessMapping extends React.Component{
   data:fetchCommunityDefinitionForSelect{label:name,value:code}
 }
 `;
-    let fetchUsers = gql`query{
+  /*  let fetchUsers = gql`query{
   data:FetchUserType {
     label:userTypeName
     value:_id
   }
 }
-`;
+`;*/
+    let fetchUsers = gql` query($communityId:[String]){  
+    data:FetchUserTypeForMultiSelect(communityId:$communityId) {
+      value:_id
+      label:userTypeName
+  }  }
+    `;
     let industriesquery=gql` query{
     data:fetchIndustries{label:industryName,value:_id}
     }
@@ -296,6 +302,7 @@ class MlEditProcessMapping extends React.Component{
     let chapterOption={options: { variables: {states:this.state.states,clusters:this.state.clusters}}};
     let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
+    let userTypeOption={options: { variables: {communityId:this.state.communities}}};
     const showLoader=this.state.loading;
    return (
       <div className="admin_main_wrap">
@@ -327,7 +334,7 @@ class MlEditProcessMapping extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"UserType"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectUserType.bind(this)} />
+                      <Moolyaselect multiSelect={true}  placeholder={"UserType"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers} queryOptions={userTypeOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectUserType.bind(this)} />
                     </div>
 
                     <div className="form-group">
@@ -359,7 +366,7 @@ class MlEditProcessMapping extends React.Component{
                     </div>
 
                     <div className="form-group switch_wrap inline_switch">
-                      <label className="">Overall Role Status</label>
+                      <label className="">Over All Status</label>
                       <label className="switch">
                         <input type="checkbox" checked={this.state.isActive} onChange={this.onStatusChange.bind(this)} ref="status"/>
                         <div className="slider"></div>

@@ -60,6 +60,30 @@ MlResolver.MlQueryResolver['FetchUserTypeSelect'] = (obj, args, context, info) =
 
   return result;
 }
+MlResolver.MlQueryResolver['FetchUserTypeForMultiSelect'] = (obj, args, context, info) => {
+  // let result=MlUserTypes.find({isActive:true}).fetch()||[];
+  let community=args.communityId;
+  if(community!=undefined){
+    let result=[];
+    for(let i=0;i<community.length;i++){
+     let userResult = mlDBController.find('MlUserTypes', {isActive:true,communityCode:community[i]}, context).fetch()||[];
+
+          if(userResult!=undefined){
+            for(let j=0;j<userResult.length;j++){
+              result.push(userResult[j]);
+            }
+          }
+
+    }
+
+    if(result.length > 0){
+      result.push({"userTypeName" : "All","_id" : "all"});
+    }
+    return result;
+  }
+
+
+}
 
 
 MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
@@ -69,6 +93,7 @@ MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
 
 
 
+/*
 MlResolver.MlQueryResolver['FetchUserTypeInProcessMapping'] = (obj, args, context, info) => {
 
   let communityCode = args.community;
@@ -89,3 +114,4 @@ MlResolver.MlQueryResolver['FetchUserTypeInProcessMapping'] = (obj, args, contex
   }
   return usertypes;
 }
+*/

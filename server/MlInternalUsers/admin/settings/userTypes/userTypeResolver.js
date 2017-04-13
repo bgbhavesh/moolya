@@ -68,3 +68,24 @@ MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
 }
 
 
+
+MlResolver.MlQueryResolver['FetchUserTypeInProcessMapping'] = (obj, args, context, info) => {
+
+  let communityCode = args.community;
+  let usertypes = [];
+  if(communityCode && communityCode.length > 0){
+    if(communityCode.length==1){
+      usertypes= MlUserTypes.find({"$and": [{communityCode: communityCode[0], isActive: true}]}).fetch()||[];
+      usertypes.push({"professionName" : "All","_id" : "all"});
+    }else {
+      communityCode.map(function (communityCode) {
+        activeUserType = MlUserTypes.find({"$and": [{communityCode: communityCode, isActive: true}]}).fetch();
+        if (activeUserType && activeUserType.length > 0) {
+          usertypes = usertypes.concat(activeUserType)
+
+        }
+      })
+    }
+  }
+  return usertypes;
+}

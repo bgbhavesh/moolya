@@ -128,6 +128,7 @@ class MlAddSubDepartment extends React.Component{
                       </div>
                   </div>
                   <div className="col-md-6 nopadding-right">
+                    <div className="clearfix"></div>
                       <div className="form_bg left_wrap">
                           <ScrollArea
                             speed={0.8}

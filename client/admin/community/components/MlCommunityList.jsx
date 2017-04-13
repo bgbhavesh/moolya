@@ -7,7 +7,7 @@ export default class MlCommunityList extends Component {
   render(){
     const data=this.props.data||[];
     const list=  data.map((prop) =>
-      <div className="col-lg-2 col-md-3 col-sm-3" key={prop.code}>
+      <div className="col-lg-2 col-md-4 col-sm-4" key={prop.code}>
         <div className="list_block">
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.isActive?"check":"times"}/></div>
             <a href={communityRoutes.communityListRoute(prop.code)}>

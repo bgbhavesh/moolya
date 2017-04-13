@@ -69,9 +69,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
-  graphQLServer.header("Access-Control-Allow-Origin", "*");
-  graphQLServer.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  console.log(graphQLServer);
+  graphQLServer.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
   graphQLServer.options('/registrations', cors());
  // console.log("graphQLServer :"+graphQLServer);
   config.configServer(graphQLServer)

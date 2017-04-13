@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
@@ -21,23 +20,12 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
-  componentDidMount()
-  {
+
+  componentDidUpdate(){
     OnLockSwitch();
-    $(function() {
-      $('.float-label').jvFloat();
-    });
-
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
     dataVisibilityHandler();
-
   }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -76,6 +64,8 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   }
 
   render(){
+    let description =this.state.data.description?this.state.data.description:''
+    let isStrategyPlansPrivate = this.state.data.isStrategyPlansPrivate?this.state.data.isStrategyPlansPrivate:false
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -91,7 +81,6 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
             >
               <div className="row requested_input">
                 <div className="col-lg-12">
-
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Startergy and Planning
@@ -99,8 +88,8 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={this.state.data.description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "isStrategyPlansPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isStrategyPlansPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "isStrategyPlansPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={isStrategyPlansPrivate}/>
                       </div>
 
                     </div>
@@ -110,12 +99,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
               </div>
             </ScrollArea>
           </div>
-
-
-
         </div>
-
-
       </div>)}
       </div>
     )

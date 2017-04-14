@@ -18,12 +18,17 @@ export default class MlIdeatorAudience extends React.Component{
     this.handleBlur.bind(this);
     this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
+    this.fetchOnlyImages.bind(this);
   }
   componentWillMount(){
     this.fetchPortfolioInfo();
   }
-  componentDidUpdate()
-  {
+  componentDidUpdate(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
+  componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
   }
@@ -73,7 +78,8 @@ export default class MlIdeatorAudience extends React.Component{
         this.setState({loading: false, data: response});
       }
     }else{
-      this.setState({loading: false, data: that.context.ideatorPortfolio.audience});
+      this.fetchOnlyImages();
+      this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
     }
   }
   onAudienceImageFileUpload(e){
@@ -85,11 +91,21 @@ export default class MlIdeatorAudience extends React.Component{
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{audience:{audienceImages:[{fileUrl:'', fileName : fileName}]}}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
+
+  async fetchOnlyImages(){
+    const response = await findIdeatorAudienceActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let dataDetails =this.state.data
+      dataDetails['audienceImages'] = response.audienceImages
+      this.setState({loading: false, data: dataDetails});
+    }
+  }
+
   onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-        this.fetchPortfolioInfo();
+          this.fetchOnlyImages();
       }
     }
   }

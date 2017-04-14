@@ -178,6 +178,16 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
 
     return {};
 }
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('ideas')) {
+      return ideatorPortfolio['ideas'];
+    }
+  }
+
+  return {};
+}
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioProblemsAndSolutions'] = (obj, args, context, info) => {
   if(args.portfoliodetailsId){
     let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})

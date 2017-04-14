@@ -220,6 +220,3 @@ export default class MlIdeatorDetails extends React.Component{
     )
   }
 };
-MlIdeatorDetails.contextTypes = {
-  ideatorPortfolio: PropTypes.object,
-};

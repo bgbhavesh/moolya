@@ -92,8 +92,8 @@ MlResolver.MlMutationResolver['updateAnnotation'] = (obj, args, context, info) =
 
 MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
     try {
-        if(args.portfoliodetailsId && args.annotationId && args.comment){
-            let comment = {portfolioId:args.portfoliodetailsId, referenceDocId:args.docId, quote:args.quote, isResolved:false, isReopened:false}
+        if(args.portfolioId && args.annotationId && args.comment){
+            let comment = {annotatorId:args.annotatorId, portfolioId:args.portfolioId, quote:args.quote, isResolved:false, isReopened:false}
             MlAnnotatorComments.insert({...comment})
         }
         else{
@@ -145,7 +145,7 @@ MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
     let comments = [];
     try {
         if(args.commentId && args.annotatorId){
-           let commentsObj = MlAnnotatorComments.find({"$and":[{"portfolioId":args.portfoliodetailsId, "referenceDocId":args.docId}]}).fetch()
+           let commentsObj = MlAnnotatorComments.find({"annotatorId":args.annotatorId}).fetch()
             if(commentsObj.length > 0){
                 _.each(commentsObj, function (value) {
                     comments.push(JSON.parse(value))

@@ -5,19 +5,21 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent';
-import {findAnnotations} from '../../../../commons/annotator/findAnnotations'
+import {findComments} from '../../../../commons/annotaterComments/findComments'
+import {createComment} from '../../../../commons/annotaterComments/createComment'
 
 class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
-        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[]}
+        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[],annotationData: {}}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
         this.getSelectedTab.bind(this)
-        this.fetchAnnotations.bind(this)
         this.getContext.bind(this);
         this.getSelectedAnnotation.bind(this);
+        this.fetchComments.bind(this);
+      this.onSavingComment.bind(this);
         return this;
     }
 
@@ -28,7 +30,12 @@ class MlPortfolio extends React.Component{
     }
 
     getSelectedAnnotation(selAnnotation){
-        console.log(selAnnotation)
+
+      if(selAnnotation){
+        this.setState({annotationData : selAnnotation})
+        this.fetchComments();
+      }
+
     }
 
 
@@ -60,8 +67,11 @@ class MlPortfolio extends React.Component{
     }
 
 
-    async fetchAnnotations(tabname){
-      // const response = await findAnnotations(this.props.config,tabname);
+    async fetchComments(){
+      let annotationDetails = this.state.annotationData;
+      console.log("////////////////////////////");
+      console.log(annotationDetails);
+      const response = await findComments(annotationDetails.id);
       // this.setState({annotations:response});
       // return response;
     }
@@ -70,19 +80,30 @@ class MlPortfolio extends React.Component{
         this.setState({portfolio:details});
     }
 
-  async updatePortfolioDetails() {
-      let jsonData={
-          portfolioId :this.props.config,
-          portfolio :this.state.portfolio
-      }
-    const response = await updatePortfolioActionHandler(jsonData)
-    return response;
-  }
+    async updatePortfolioDetails() {
+        let jsonData={
+            portfolioId :this.props.config,
+            portfolio :this.state.portfolio
+        }
+      const response = await updatePortfolioActionHandler(jsonData)
+      return response;
+    }
 
 
-  async handleSuccess(response) {
-    FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
-  };
+    async handleSuccess(response) {
+      FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+    };
+
+    async onSavingComment(){
+        let commentsData={
+          annotatorId : this.state.annotationData.annotationId,
+          portfolioId : this.props.config,
+          comment :  this.refs.comment.value
+        }
+
+      const response = await createComment(commentsData)
+      return response;
+    }
 
 
     render(){
@@ -115,7 +136,7 @@ class MlPortfolio extends React.Component{
           {
             showAction: true,
             actionName: 'comment',
-            handler: async(event) => this.props.handler(this.fetchAnnotations.bind(this,this.state.selectedTab))
+            handler: null
           },
         ]
       let EditComponent = ""; let ViewComponent = "";
@@ -134,7 +155,9 @@ class MlPortfolio extends React.Component{
           hasViewComponent = true
 
       let annotations = this.state.annotations;
-
+      let annotationDetails = this.state.annotationData;
+        console.log("------------------------------------");
+        console.log(annotationDetails)
         const showLoader=this.state.loading;
         return(
           <div className="admin_main_wrap">
@@ -156,13 +179,13 @@ class MlPortfolio extends React.Component{
                       <div className="comment-box">
                         <div style={{marginTop:'8px'}} className="annotate">1</div>
                         <div style={{paddingLeft:'50px'}} className="comment-head">
-                          <h6 className="comment-name">Raghunandan</h6>
+                          <h6 className="comment-name">{annotationDetails.quote}</h6>
                           <div className="author">Chapter Manager</div>
                           <span>02 Nov 2016, 03:50:33 </span>
                         </div>
                         <div className="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                        </div>
+                          {annotationDetails.quote}
+                         </div>
 
                       </div>
                     </div>
@@ -171,7 +194,12 @@ class MlPortfolio extends React.Component{
                       <a href="#" className="cancel_btn">Re open</a>
                       <a href="#" className="cancel_btn add_comment">Comment</a>
                     </div>
-                    <textarea className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
+                    <textarea ref={"comment"} className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
+                    <div className="ml_icon_btn">
+                      <a href="#" onClick={this.onSavingComment.bind(this)} className="save_btn" ><span
+                        className="ml ml-save"></span></a>
+                      {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
+                    </div>
                     <ul className="comments-list reply-list">
                       <li>
                         <div className="comment-avatar"><img src="/images/p_2.jpg" alt=""/></div>

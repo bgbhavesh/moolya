@@ -4,15 +4,16 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {findIdeatorProblemsAndSolutionsActionHandler, findAnnotations} from '../../actions/findPortfolioIdeatorDetails'
+import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
-
+    console.log(context);
     this.state = {
       portfolioIdeatorInfo: {},
       annotations:[],
@@ -33,8 +34,10 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           pluginInit:  function () {
           }
       });
+  }
 
-
+  componentWillUpdate(nextProps, nextState){
+    console.log(nextState)
   }
 
   annotatorEvents(event, annotation, editor){
@@ -42,26 +45,27 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           return;
       switch (event){
           case 'create':{
-              this.createAnnotations(annotation);
+              let response = this.createAnnotations(annotation);
           }
           break;
           case 'update':{
-
           }
           break;
           case 'annotationViewer':{
-            $('#annotationss').click();
-
+              $('.ml-annotate').click();
+              // this.state.annotations.indexOf()
+              this.props.getSelectedAnnotations(annotation);
           }
           break;
-
-
       }
   }
 
   async createAnnotations(annotation){
       let details = {portfolioId:this.props.portfolioDetailsId, docId:"problems", quote:JSON.stringify(annotation)}
       const response = await createAnnotationActionHandler(details);
+      if(response && response.success){
+        this.fetchAnnotations();
+      }
       return response;
   }
 
@@ -69,15 +73,19 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     const response = await findAnnotations(this.props.portfolioDetailsId, "problems");
     this.setState({annotations:JSON.parse(response.result)})
     if(this.state.annotations.length > 0){
+        let quotes = [];
+        _.each(this.state.annotations, function (value) {
+          quotes.push(value.quote)
+        })
         var annotator = jQuery("#psContent").data('annotator');
-        this.state.content.annotator('loadAnnotations', this.state.annotations);
+        this.state.content.annotator('loadAnnotations', quotes);
     }
     return response;
   }
 
-  componentDidMount()
-  {
-      $("#annotationss").popover({
+  componentDidMount(){
+    $('.actions_switch').click();
+      $(".ml-annotate").popover({
         'title' : 'Annotations',
         'html' : true,
         'placement' : 'top',
@@ -91,10 +99,18 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       'container' : '.admin_main_wrap',
       'content' : $(".ml_timeline").html()
     });
-      this.initalizeAnnotaor()
-      this.fetchPortfolioInfo();
-      this.fetchAnnotations();
-      initalizeFloatLabel();
+    $(document).on('click', '.add_comment', function(e){
+      $('.comment-input-box').slideToggle();
+    });
+
+    this.initalizeAnnotaor()
+    this.fetchPortfolioInfo();
+    this.fetchAnnotations();
+    initalizeFloatLabel();
+  }
+
+  async componentWillMount() {
+    this.props.getSelectedTab("problems");
   }
 
   async fetchPortfolioInfo(){
@@ -149,81 +165,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           </div>
 
         </div>
-        {/*<a href="#" id="annotationss">one</a>*/}
-
-        <div id="mlannotations" style={{'display':'none'}} className="ml_annotations">
-          <div className="comments-container cus_scroll large_popover">
-            <ul id="comments-list" className="comments-list">
-              <li>
-                <div className="comment-main-level">
-                  <div className="comment-avatar"><img src="/images/p_1.jpg" alt=""/></div>
-                  <div className="comment-box">
-                    <div style={{marginTop:'8px'}} className="annotate">1</div>
-                    <div style={{paddingLeft:'50px'}} className="comment-head">
-                      <h6 className="comment-name">Raghunandan</h6>
-                      <div className="author">Chapter Manager</div>
-                      <span>02 Nov 2016, 03:50:33 </span>
-                    </div>
-                    <div className="comment-content">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                    </div>
-
-                  </div>
-                </div>
-                <div className="ml_btn">
-                  <a href="#" className="save_btn">Resolve</a>
-                  <a href="#" className="cancel_btn">Re open</a>
-                  <a href="#" className="cancel_btn add_comment">Comment</a>
-                </div>
-                <textarea className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
-                <ul className="comments-list reply-list">
-                  <li>
-                    <div className="comment-avatar"><img src="/images/p_2.jpg" alt=""/></div>
-                    <div className="comment-box">
-                      <div className="comment-head">
-                        <h6 className="comment-name">Pavani</h6>
-                        <span>02 Nov 2016, 03:50:33 </span>
-                      </div>
-                      <div className="comment-content">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="comment-avatar"><img src="/images/p_3.jpg" alt=""/></div>
-                    <div className="comment-box">
-                      <div className="comment-head">
-                        <h6 className="comment-name">Agustin Ortiz</h6>
-                        <span>02 Nov 2016, 03:50:33 </span>
-
-                      </div>
-                      <div className="comment-content">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="comment-avatar"><img src="/images/p_4.jpg" alt=""/></div>
-                    <div className="comment-box">
-                      <div className="comment-head">
-                        <h6 className="comment-name">Agustin Ortiz</h6>
-                        <span>02 Nov 2016, 03:50:33 </span>
-
-                      </div>
-                      <div className="comment-content">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                      </div>
-                    </div>
-                  </li>
-
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="overlay"></div>
-
-
+          {/*<a href="#" id="annotationss">one</a>*/}
       </div>
 
 

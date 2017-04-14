@@ -256,7 +256,7 @@ let ideatorPortfolioSchema = `
         fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
-        fetchComments(userId:String, portfolioId:String, docId:String): response
+        fetchComments(portfoliodetailsId:String, annotationId:String): response
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     

@@ -83,6 +83,7 @@ export default class MlActionComponent extends Component {
         iconClass:'ml ml-inactive-user'
       },
       {
+        //id:'annotationss',
         imagefield:'/images/act_select_icon.png',
         actionName:'comment',
         iconClass:'ml ml-annotate'

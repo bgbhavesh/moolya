@@ -45,5 +45,6 @@ export async function createAnnotationActionHandler(details) {
     }
   })
   const id = result.data.createAnnotation;
+  console.log(id);
   return id
 }

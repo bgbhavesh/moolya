@@ -11,13 +11,12 @@ var Select = require('react-select');
 
 
 export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
-  constructor(props){
+  constructor(props,context){
     super(props);
     this.state={
       loading: true,
       data:{}
     }
-
     this.fetchPortfolioDetails.bind(this);
   }
 

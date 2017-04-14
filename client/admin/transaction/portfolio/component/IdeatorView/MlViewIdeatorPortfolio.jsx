@@ -9,21 +9,20 @@ import MlPortfolioIdeatorLibraryView from '../../component/IdeatorView/MlPortfol
 import MlPortfolioIdeatorStrategyPlansView from '../../component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../component/IdeatorView/MlInAndTrademarkView'
+
 //import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 //import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 
 export default class MlViewIdeatorPortfolioTemplate extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props)
+    console.log(context)
     this.state =  {tabs: [], portfolioIdeatorInfo:{}};
-
   }
-
 
 
   componentDidMount()
   {
-
     setTimeout(function(){
       $('div[role="tab"]').each(function( index ) {
         var test = $(this).text();
@@ -36,7 +35,6 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
     },300);
 
   }
-
 
 
   componentWillMount()
@@ -53,13 +51,11 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
     this.setState({tabs:getTabs() ||[]});
   }
 
-
-
   getTabComponents(){
     let tabs = [
       {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedTab={this.props.getSelectedTab} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedTab={this.props.getSelectedTab}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="4"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="5"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -68,8 +64,6 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
     ]
     return tabs;
   }
-
-
 
   render(){
     let tabs = this.state.tabs;

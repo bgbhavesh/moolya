@@ -8,17 +8,17 @@ import MlSchemaDef from '../mlAdminSchemaDef';
 let portfolioSchema = `
     type Portfoliodetails{
         _id:String,
-        transcationType:String,
+        transactionType:String,
         portfolioUserName:String,
         userId:String,
         userType:String,
-        contactNumber:Int,
+        contactNumber:String,
         communityType:String,
         communityCode:String,
-        cluster:String,
-        chapter:String,
-        subChapter:String,
-        subscriptionType:String,
+        clusterId:String,
+        chapterId:String,
+        subChapterId:String,
+        accountType:String,
         source:String,
         createdBy:String,
         createdAt:String,
@@ -27,21 +27,29 @@ let portfolioSchema = `
         progress:String,
         isPublic:Boolean,
         isGoLive:Boolean,
-        isActive:Boolean
+        isActive:Boolean,
+        registrationId  : String,
+        clusterName     : String,
+        chapterName     : String,
+        subChapterName  : String,
+        communityName   : String
+        identityType    : String,
+        industryId      : String, 
+        professionId    : String
     }
       input portfoliodetails{
         _id:String,
-        transcationType:String,
+        transactionType:String,
         portfolioUserName:String,
         userId:String,
         userType:String,
-        contactNumber:Int,
+        contactNumber:String,
         communityType:String,
         communityCode:String,
-        cluster:String,
-        chapter:String,
-        subChapter:String,
-        subscriptionType:String,
+        clusterId:String,
+        chapterId:String,
+        subChapterId:String,
+        accountType:String,
         source:String,
         createdBy:String,
         status:String,
@@ -49,7 +57,15 @@ let portfolioSchema = `
         progress:String,
         isPublic:Boolean,
         isGoLive:Boolean,
-        isActive:Boolean
+        isActive:Boolean,
+        registrationId  : String,
+        clusterName     : String,
+        chapterName     : String,
+        subChapterName  : String,
+        communityName   : String
+        identityType    : String,
+        industryId      : String, 
+        professionId    : String
     }
     
     input portfolio{

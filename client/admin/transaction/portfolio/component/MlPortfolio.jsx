@@ -1,5 +1,6 @@
 import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
+import classNames from "classnames"
 import { render } from 'react-dom';
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
@@ -11,11 +12,12 @@ import {createComment} from '../../../../commons/annotaterComments/createComment
 class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
-        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[],annotationData: {}}
+        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{}, text:"",annotationData: {}}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
         this.getSelectedTab.bind(this)
+        this.fetchAnnotations.bind(this)
         this.getContext.bind(this);
         this.getSelectedAnnotation.bind(this);
         this.fetchComments.bind(this);
@@ -30,6 +32,9 @@ class MlPortfolio extends React.Component{
     }
 
     getSelectedAnnotation(selAnnotation){
+        console.log(selAnnotation)
+        this.setState({anotationDetails:selAnnotation})
+        this.setState({text:selAnnotation.quote.text})
 
       if(selAnnotation){
         this.setState({annotationData : selAnnotation})
@@ -80,19 +85,19 @@ class MlPortfolio extends React.Component{
         this.setState({portfolio:details});
     }
 
-    async updatePortfolioDetails() {
-        let jsonData={
-            portfolioId :this.props.config,
-            portfolio :this.state.portfolio
-        }
-      const response = await updatePortfolioActionHandler(jsonData)
-      return response;
-    }
+  async updatePortfolioDetails() {
+      let jsonData={
+          portfolioId :this.props.config,
+          portfolio :this.state.portfolio
+      }
+    const response = await updatePortfolioActionHandler(jsonData)
+    return response;
+  }
 
 
-    async handleSuccess(response) {
-      FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
-    };
+  async handleSuccess(response) {
+    FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+  };
 
     async onSavingComment(){
         let commentsData={

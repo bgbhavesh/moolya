@@ -90,7 +90,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       details.communityDefCode=communityDetails.communityDefCode;
 
       details.identityType=details.identityType||null;
+      details.transactionType="registration";
       details.userType=details.userType||null;
+      let user=Meteor.users.findOne({"username":details.userName});
+      details.userId=user?user._id:null;
 
       let registrationDetails={identityType:details.identityType,userType:details.userType};
 
@@ -153,7 +156,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
       if(updateCount===1 ||userId){
         let code = 200;
-        let result = {username: userObject.username}
+        let result = {username: userObject.username};
+        MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
         let response = new MlRespPayload().successPayload(result, code);
         return response
       }
@@ -181,6 +185,37 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
   // TODO : Authorization
   if (args.registrationId) {
      let updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
+
+    //Portfolio Request Generation
+    if(updatedResponse===1){
+    let regRecord=MlRegistration.findOne(args.registrationId)||{"registrationInfo":{}};
+
+    let portfolioDetails={
+      "transactionType" : "portfolio",
+      "communityType" : regRecord.registrationInfo.communityDefName,
+      "communityCode" :regRecord.registrationInfo.communityDefCode,
+      "cluster" :regRecord.registrationInfo.clusterId,
+      "chapter" : regRecord.registrationInfo.chapterId,
+      "subChapter" :regRecord.registrationInfo.subChapterId,
+      "source" : "self",
+      "createdBy" : "admin",
+      "status" : "Yet To Start",
+      "isPublic": false,
+      "isGoLive" : false,
+      "isActive" : false,
+      "portfolioUserName" : regRecord.registrationInfo.userName,
+      "userId" :regRecord.registrationInfo.userId,
+      "userType":regRecord.registrationInfo.userType
+     }
+
+       try{
+          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails},context, info);
+       }catch(e){
+            console.log(e);
+         //send error response;
+       }
+    }
+
     return updatedResponse;
   }
 }

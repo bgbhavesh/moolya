@@ -8,7 +8,7 @@ import MlSchemaDef from '../mlAdminSchemaDef';
 let portfolioSchema = `
     type Portfoliodetails{
         _id:String,
-        transcationType:String,
+        transactionType:String,
         portfolioUserName:String,
         userId:String,
         userType:String,
@@ -31,7 +31,7 @@ let portfolioSchema = `
     }
       input portfoliodetails{
         _id:String,
-        transcationType:String,
+        transactionType:String,
         portfolioUserName:String,
         userId:String,
         userType:String,

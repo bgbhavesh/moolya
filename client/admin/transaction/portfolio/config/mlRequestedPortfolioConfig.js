@@ -15,7 +15,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "createdAt", title: "Date & Time",dataSort:true},
     {dataField: "_id", title: "Requested Id",dataSort:true},
-    {dataField: "transcationType", title: "Transaction Type",dataSort:true},
+    {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "Contact No",dataSort:true},
     {dataField: "communityType", title: "Community",dataSort:true},
@@ -97,7 +97,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
           data{
             ...on Portfoliodetails{
                 _id
-                transcationType,
+                transactionType,
                 portfolioUserName,
               	contactNumber
                 communityType

@@ -4,15 +4,16 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {findIdeatorProblemsAndSolutionsActionHandler, findAnnotations} from '../../actions/findPortfolioIdeatorDetails'
+import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
-
+    console.log(context);
     this.state = {
       portfolioIdeatorInfo: {},
       annotations:[],
@@ -33,8 +34,10 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           pluginInit:  function () {
           }
       });
+  }
 
-
+  componentWillUpdate(nextProps, nextState){
+    console.log(nextState)
   }
 
   annotatorEvents(event, annotation, editor){
@@ -42,11 +45,16 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           return;
       switch (event){
           case 'create':{
-              this.createAnnotations(annotation);
+              let response = this.createAnnotations(annotation);
           }
           break;
           case 'update':{
-
+          }
+          break;
+          case 'annotationViewer':{
+              $('.ml-annotate').click();
+              // this.state.annotations.indexOf()
+              this.props.getSelectedAnnotations(annotation);
           }
           break;
       }
@@ -55,6 +63,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
   async createAnnotations(annotation){
       let details = {portfolioId:this.props.portfolioDetailsId, docId:"problems", quote:JSON.stringify(annotation)}
       const response = await createAnnotationActionHandler(details);
+      if(response && response.success){
+        this.fetchAnnotations();
+      }
       return response;
   }
 
@@ -62,18 +73,44 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     const response = await findAnnotations(this.props.portfolioDetailsId, "problems");
     this.setState({annotations:JSON.parse(response.result)})
     if(this.state.annotations.length > 0){
+        let quotes = [];
+        _.each(this.state.annotations, function (value) {
+          quotes.push(value.quote)
+        })
         var annotator = jQuery("#psContent").data('annotator');
-        this.state.content.annotator('loadAnnotations', this.state.annotations);
+        this.state.content.annotator('loadAnnotations', quotes);
     }
     return response;
   }
 
-  componentDidMount()
-  {
+  componentDidMount(){
+    $('.actions_switch').click();
+      $(".ml-annotate").popover({
+        'title' : 'Annotations',
+        'html' : true,
+        'placement' : 'top',
+        'container' : '.admin_main_wrap',
+        'content' : $(".ml_annotations").html()
+      });
+    $("#timeLine").popover({
+      'title' : 'Timeline',
+      'html' : true,
+      'placement' : 'top',
+      'container' : '.admin_main_wrap',
+      'content' : $(".ml_timeline").html()
+    });
+    $(document).on('click', '.add_comment', function(e){
+      $('.comment-input-box').slideToggle();
+    });
+
     this.initalizeAnnotaor()
     this.fetchPortfolioInfo();
     this.fetchAnnotations();
     initalizeFloatLabel();
+  }
+
+  async componentWillMount() {
+    this.props.getSelectedTab("problems");
   }
 
   async fetchPortfolioInfo(){
@@ -87,6 +124,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       <div>
 
         <h2>Problems and Solutions </h2>
+
+
 
         <div id="psContent" className="ml_tabs">
           <ul  className="nav nav-pills">
@@ -126,7 +165,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           </div>
 
         </div>
-
+          {/*<a href="#" id="annotationss">one</a>*/}
       </div>
 
 

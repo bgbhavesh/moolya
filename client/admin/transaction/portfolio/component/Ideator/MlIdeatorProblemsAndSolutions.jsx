@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -10,12 +10,13 @@ import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPo
 
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state =  {loading: true, data:{}};
     this.onProblemImageFileUpload.bind(this);
     this.onSolutionImageFileUpload.bind(this);
     this.fetchPortfolioInfo.bind(this);
+    this.fetchOnlyImages.bind(this);
     return this;
   }
 
@@ -24,11 +25,28 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   async fetchPortfolioInfo(){
-    const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.problemSolution)
+    if(empty){
+      const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.fetchOnlyImages();
+      this.setState({loading: true, data: this.context.ideatorPortfolio.problemSolution});
     }
   }
+
+  async fetchOnlyImages(){
+    const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let dataDetails =this.state.data
+      dataDetails['problemImage'] = response.problemImage
+      dataDetails['solutionImage'] =response.solutionImage
+      this.setState({loading: false, data: dataDetails});
+    }
+  }
+
 
   onInputChange(e){
       let details =this.state.data;
@@ -79,6 +97,11 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     let data = this.state.data;
     data = _.omit(data, 'problemImage')
     data = _.omit(data, 'solutionImage')
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
     this.props.getProblemSolution(data);
   }
 
@@ -87,11 +110,16 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
+  componentDidMount(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
   onFileUploadCallBack(name,fileName, resp){
       if(resp){
           let result = JSON.parse(resp)
           if(result.success){
-              this.fetchPortfolioInfo();
+              this.fetchOnlyImages();
           }
       }
   }
@@ -196,4 +224,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       </div>
     )
   }
+};
+MlIdeatorProblemsAndSolutions.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

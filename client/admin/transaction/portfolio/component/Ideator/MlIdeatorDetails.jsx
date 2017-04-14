@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -11,7 +11,7 @@ var Select = require('react-select');
 
 
 export default class MlIdeatorDetails extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state={
         loading: true,
@@ -25,8 +25,8 @@ export default class MlIdeatorDetails extends React.Component{
 
   componentDidMount()
   {
-    // OnLockSwitch();
-    // dataVisibilityHandler();
+    OnLockSwitch();
+    dataVisibilityHandler();
   }
   componentDidUpdate()
   {
@@ -64,10 +64,16 @@ export default class MlIdeatorDetails extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.portfolioIdeatorDetails)
+    if(empty){
+      const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.setState({loading: false, data: that.context.ideatorPortfolio.portfolioIdeatorDetails});
     }
+
   }
 
   sendDataToParent(){
@@ -134,7 +140,7 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Employer Name" name="employerName" defaultValue={this.state.data.employerName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate" onClick={this.onClick.bind(this, "isEmployerNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmployerNamePrivate}/>
                     </div>
 
@@ -161,7 +167,7 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group steps_pic_upload">
                       <div className="previewImg ProfileImg">
-                        <img src="/images/ideator_01.png"/>
+                        <img src={this.state.data.profilePic?this.state.data.profilePic:""}/>
                       </div>
                     </div>
                     <br className="brclear"/>
@@ -182,8 +188,8 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Linkedin Id" ref="linkedInId" defaultValue={this.state.data.linkedInId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="islinkedInIdPrivate" onClick={this.onClick.bind(this, "islinkedInIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.islinkedInIdPrivate}/>
+                      <input type="text" placeholder="Linkedin Id" name="linkedInId" defaultValue={this.state.data.linkedInId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="islinkedInIdPrivate" onClick={this.onClick.bind(this, "islinkedInIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.islinkedInIdPrivate}/>
                     </div>
 
                     <div className="form-group">

@@ -182,6 +182,7 @@ class MlEditDepartment extends React.Component{
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">
                 <form>
+                  <div className="clearfix"></div>
                   <div className="form-group switch_wrap switch_names">
                     <label>Select Type</label><br/>
                     <span className="state_label acLabel">moolya</span><label className="switch nocolor-switch">

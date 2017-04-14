@@ -43,7 +43,6 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
                       });
                     }
                     else {
-                      console.log(key)
                       ideatorPortfolio[key] = updateFor[key];
                     }
                 }
@@ -91,7 +90,25 @@ MlResolver.MlMutationResolver['updateAnnotation'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
+    try {
+        if(args.portfoliodetailsId && args.annotationId && args.comment){
+            let comment = {portfolioId:args.portfoliodetailsId, referenceDocId:args.docId, quote:args.quote, isResolved:false, isReopened:false}
+            MlAnnotatorComments.insert({...comment})
+        }
+        else{
+           let code = 400;
+           let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
+           return response;
+        }
+    }catch (e){
+        let code = 400;
+        let response = new MlRespPayload().errorPayload(e.message, code);
+        return response;
+    }
 
+    let code = 200;
+    let response = new MlRespPayload().successPayload("Annotator Created Successfully", code);
+    return response;
 }
 
 
@@ -102,7 +119,8 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
             let annotatorObj = MlAnnotator.find({"$and":[{"portfolioId":args.portfoliodetailsId, "referenceDocId":args.docId}]}).fetch()
             if(annotatorObj.length > 0){
                 _.each(annotatorObj, function (value) {
-                      annotators.push(JSON.parse(value['quote']))
+                      let quote = JSON.parse(value['quote'])
+                      annotators.push({annotatorId:value._id, quote:quote})
                 })
             }
         }
@@ -123,7 +141,30 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
+    let comments = [];
+    try {
+        if(args.commentId && args.annotatorId){
+           let commentsObj = MlAnnotatorComments.find({"$and":[{"portfolioId":args.portfoliodetailsId, "referenceDocId":args.docId}]}).fetch()
+            if(commentsObj.length > 0){
+                _.each(commentsObj, function (value) {
+                    comments.push(JSON.parse(value))
+                })
+            }
+        }
+        else{
+            let code = 400;
+            let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
+            return response;
+        }
+    }catch (e){
+        let code = 400;
+        let response = new MlRespPayload().errorPayload(e.message, code);
+        return response;
+    }
 
+    let code = 200;
+    let response = new MlRespPayload().successPayload(comments, code);
+    return response;
 }
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {
@@ -135,6 +176,16 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
     }
 
     return {};
+}
+MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('ideas')) {
+      return ideatorPortfolio['ideas'];
+    }
+  }
+
+  return {};
 }
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioProblemsAndSolutions'] = (obj, args, context, info) => {
   if(args.portfoliodetailsId){

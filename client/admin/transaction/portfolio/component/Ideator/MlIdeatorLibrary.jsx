@@ -85,8 +85,7 @@ export default class MlIdeatorLibrary extends React.Component{
                     <section className="inner">
                       <p>"My God!" he said, as I drew him in.</p>
 
-                      <p>"What has happened?" I asked.
-                        <img src="/images/afghanistan.png"/></p>
+                      <p>"What has happened?" I asked.</p>
                       <p>"What hasn't?"  In the obscurity I could see he made a gesture of despair.  "They wiped us out--simply wiped us out," he repeated again and again.</p>
 
                       <p>He followed me, almost mechanically, into the dining room.</p>

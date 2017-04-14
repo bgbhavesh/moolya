@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import _ from 'lodash';
 
 export default class MlIdeatorAudience extends React.Component{
-  constructor(props){
+  constructor(props, context){
     super(props);
     this.state={
       loading: true,
@@ -17,12 +18,17 @@ export default class MlIdeatorAudience extends React.Component{
     this.handleBlur.bind(this);
     this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
+    this.fetchOnlyImages.bind(this);
   }
   componentWillMount(){
     this.fetchPortfolioInfo();
   }
-  componentDidUpdate()
-  {
+  componentDidUpdate(){
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
+  componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
   }
@@ -55,13 +61,25 @@ export default class MlIdeatorAudience extends React.Component{
   sendDataToParent(){
     let data = this.state.data;
     data = _.omit(data, 'audienceImages')
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
     this.props.getAudience(data)
   }
   async fetchPortfolioInfo() {
-    let portfoliodetailsId=this.props.portfolioDetailsId;
-    const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, data: response});
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.audience)
+    if(empty){
+      const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+    }else{
+      this.fetchOnlyImages();
+      this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
     }
   }
   onAudienceImageFileUpload(e){
@@ -73,11 +91,21 @@ export default class MlIdeatorAudience extends React.Component{
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{audience:{audienceImages:[{fileUrl:'', fileName : fileName}]}}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
+
+  async fetchOnlyImages(){
+    const response = await findIdeatorAudienceActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let dataDetails =this.state.data
+      dataDetails['audienceImages'] = response.audienceImages
+      this.setState({loading: false, data: dataDetails});
+    }
+  }
+
   onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-        this.fetchPortfolioInfo();
+          this.fetchOnlyImages();
       }
     }
   }
@@ -103,7 +131,7 @@ export default class MlIdeatorAudience extends React.Component{
           <div className="row">
             <div className="panel panel-default panel-form">
               <div className="panel-heading">
-                Object
+                Audience
               </div>
               <div className="panel-body">
 
@@ -137,4 +165,7 @@ export default class MlIdeatorAudience extends React.Component{
       </div>
     )
   }
+};
+MlIdeatorAudience.contextTypes = {
+  ideatorPortfolio: PropTypes.object,
 };

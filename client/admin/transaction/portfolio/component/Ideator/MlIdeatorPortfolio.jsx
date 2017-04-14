@@ -26,6 +26,7 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         ideatorPortfolio: this.state.ideatorPortfolio
       }
     }
+
     componentDidMount(){
       setTimeout(function(){
         $('div[role="tab"]').each(function( index ) {

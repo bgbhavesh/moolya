@@ -43,7 +43,6 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
                       });
                     }
                     else {
-                      console.log(key)
                       ideatorPortfolio[key] = updateFor[key];
                     }
                 }

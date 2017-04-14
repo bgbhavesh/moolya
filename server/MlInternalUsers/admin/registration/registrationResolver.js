@@ -188,15 +188,15 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 
     //Portfolio Request Generation
     if(updatedResponse===1){
-    let regRecord=MlRegistration.findOne(args.registrationId)||{"registrationInfo":{}};
+    let regRecord = MlRegistration.findOne(args.registrationId)||{"registrationInfo":{}};
 
     let portfolioDetails={
       "transactionType" : "portfolio",
       "communityType" : regRecord.registrationInfo.communityDefName,
       "communityCode" :regRecord.registrationInfo.communityDefCode,
-      "cluster" :regRecord.registrationInfo.clusterId,
-      "chapter" : regRecord.registrationInfo.chapterId,
-      "subChapter" :regRecord.registrationInfo.subChapterId,
+      "clusterId" :regRecord.registrationInfo.clusterId,
+      "chapterId" : regRecord.registrationInfo.chapterId,
+      "subChapterId" :regRecord.registrationInfo.subChapterId,
       "source" : "self",
       "createdBy" : "admin",
       "status" : "Yet To Start",

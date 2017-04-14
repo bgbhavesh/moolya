@@ -105,7 +105,7 @@ export default class MlIdeatorIdeas extends React.Component{
         <div className="form_bg col-lg-8 col-lg-offset-2">
           <form>
             <div className="form-group">
-              <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" defaultValue={this.state.data.title}/>
+              <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur.bind(this)}/>
               <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasTitlePrivate" onClick={this.onClick.bind(this, "isIdeasTitlePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIdeasTitlePrivate}/>
             </div>
             <div className="form-group">

@@ -131,7 +131,7 @@ export default class MlIdeatorAudience extends React.Component{
           <div className="row">
             <div className="panel panel-default panel-form">
               <div className="panel-heading">
-                Object
+                Audience
               </div>
               <div className="panel-body">
 

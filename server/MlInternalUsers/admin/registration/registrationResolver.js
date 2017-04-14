@@ -205,7 +205,16 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       "isActive" : false,
       "portfolioUserName" : regRecord.registrationInfo.userName,
       "userId" :regRecord.registrationInfo.userId,
-      "userType":regRecord.registrationInfo.userType
+      "userType":regRecord.registrationInfo.userType,
+      accountType   : regRecord.registrationInfo.accountType,
+      registrationId: regRecord._id,
+      clusterName   : regRecord.registrationInfo.clusterName,
+      chapterName   : regRecord.registrationInfo.chapterName,
+      subChapterName: regRecord.registrationInfo.subChapterName,
+      communityName : regRecord.registrationInfo.communityName,
+      identityType  : regRecord.registrationInfo.identityType,
+      industryId    : regRecord.registrationInfo.industry,
+      professionId  : regRecord.registrationInfo.profession,
      }
 
        try{

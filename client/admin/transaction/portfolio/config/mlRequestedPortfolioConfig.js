@@ -12,17 +12,17 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    // {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "id", title: "Requested Id",dataSort:true, 'isKey':true},
     {dataField: "createdAt", title: "Date & Time",dataSort:true},
-    {dataField: "_id", title: "Requested Id",dataSort:true},
     {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "Contact No",dataSort:true},
     {dataField: "communityType", title: "Community",dataSort:true},
-    {dataField: "cluster", title: "Cluster",dataSort:true},
-    {dataField: "chapter", title: "Chapter",dataSort:true},
-    {dataField: "subChapter", title: "SubChapter",dataSort:true},
-    {dataField: "subscriptionType", title: "Subscription Type",dataSort:true},
+    {dataField: "clusterName", title: "Cluster",dataSort:true},
+    {dataField: "chapterName", title: "Chapter",dataSort:true},
+    {dataField: "subChapterName", title: "SubChapter",dataSort:true},
+    {dataField: "accountType", title: "Account Type",dataSort:true},
     {dataField: "source", title: "Source",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "status", title: "Status",dataSort:true},
@@ -35,10 +35,10 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: (data)=>{
-        if(data && data._id){
-          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data._id);
+        if(data && data.id){
+          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id);
         } else{
-          alert("Please select a User Type");
+          alert("Please select a User");
         }
       }
     },
@@ -54,7 +54,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         if(data && data.id){
           const internalConfig=data;
         } else{
-          alert("Please select a User Type");
+          alert("Please select a User");
         }
       }
     },
@@ -62,10 +62,10 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data && data._id){
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data._id);
+        if(data && data.id){
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data.id);
         } else{
-          alert("Please select a User Type");
+          alert("Please select a User");
         }
       }
     },
@@ -96,15 +96,15 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         totalRecords
           data{
             ...on Portfoliodetails{
-                _id
+                id:_id
                 transactionType,
                 portfolioUserName,
               	contactNumber
                 communityType
-                cluster
-                chapter
-                subChapter
-                subscriptionType
+                clusterName
+                chapterName
+                subChapterName
+                accountType
                 source
                 createdBy
                 createdAt

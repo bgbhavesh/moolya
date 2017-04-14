@@ -35,7 +35,7 @@ export default class MlIdeatorLookingFor extends React.Component{
   }
 
   async fetchPortfolioDetails() {
-    let empty = _.isEmpty(this.context.ideatorPortfolio.lookingFor)
+    let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.lookingFor)
     if(empty){
       const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
       if (response) {

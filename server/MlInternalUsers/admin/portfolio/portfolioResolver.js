@@ -20,7 +20,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
               ret = MlPortfolioDetails.insert({...portfolioDetails})
               if(ret){
                   switch (portfolioDetails.communityType){
-                    case "ideators":{
+                    case "Ideators":{
                         let portfolio = {userId:portfolioDetails.userId, communityType:portfolioDetails.communityType, portfolioDetailsId:ret}
                         MlResolver.MlMutationResolver['createIdeatorPortfolio'](obj, portfolio, context, info)
                     }
@@ -54,7 +54,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
         if(details){
             switch (details.communityType){
-                case 'ideators':{
+                case 'Ideators':{
                     response = MlResolver.MlMutationResolver['updateIdeatorPortfolio'](obj, args, context, info)
                 }
                 break;

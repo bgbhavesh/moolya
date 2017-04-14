@@ -35,7 +35,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.ideatorPortfolio.strategyAndPlanning)
+    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.strategyAndPlanning)
     if(empty){
       const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
       if (response) {

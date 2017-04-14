@@ -1,5 +1,6 @@
 import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
+import classNames from "classnames"
 import { render } from 'react-dom';
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
@@ -10,7 +11,7 @@ import {findAnnotations} from '../../../../commons/annotator/findAnnotations'
 class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
-        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[]}
+        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{}, text:""}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
@@ -29,6 +30,8 @@ class MlPortfolio extends React.Component{
 
     getSelectedAnnotation(selAnnotation){
         console.log(selAnnotation)
+        this.setState({anotationDetails:selAnnotation})
+        this.setState({text:selAnnotation.quote.text})
     }
 
 
@@ -147,8 +150,9 @@ class MlPortfolio extends React.Component{
                 </div>
               </div>)}
 
-            <div style={{'display':'none'}} className="ml_annotations">
-              <div className="comments-container cus_scroll large_popover">
+
+              <div style={{display:"none"}}  className="ml_annotations" >
+                <div className="comments-container cus_scroll large_popover">
                 <ul id="comments-list" className="comments-list">
                   <li>
                     <div className="comment-main-level">
@@ -161,7 +165,7 @@ class MlPortfolio extends React.Component{
                           <span>02 Nov 2016, 03:50:33 </span>
                         </div>
                         <div className="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
+                          {this.state.text}
                         </div>
 
                       </div>
@@ -181,7 +185,7 @@ class MlPortfolio extends React.Component{
                             <span>02 Nov 2016, 03:50:33 </span>
                           </div>
                           <div className="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
+                            {this.state.text}
                           </div>
                         </div>
                       </li>

@@ -9,22 +9,24 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+import _ from 'lodash'
 
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
-    super(props);
-    console.log(context);
-    this.state = {
-      portfolioIdeatorInfo: {},
-      annotations:[],
-      content:{}
-    }
+      super(props);
+      console.log(context);
+      this.state = {
+          portfolioIdeatorInfo: {},
+          annotations:[],
+          content:{}
+      }
 
-    this.createAnnotations.bind(this);
-    this.fetchPortfolioInfo.bind(this);
-    this.fetchAnnotations.bind(this);
-    this.initalizeAnnotaor.bind(this);
-    this.annotatorEvents.bind(this);
+      this.createAnnotations.bind(this);
+      this.fetchPortfolioInfo.bind(this);
+      this.fetchAnnotations.bind(this);
+      this.initalizeAnnotaor.bind(this);
+      this.annotatorEvents.bind(this);
+      this.resetAnnotator.bind(this);
   }
 
   initalizeAnnotaor(){
@@ -34,6 +36,10 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           pluginInit:  function () {
           }
       });
+  }
+
+  resetAnnotator()
+  {
   }
 
   componentWillUpdate(nextProps, nextState){
@@ -52,9 +58,18 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           }
           break;
           case 'annotationViewer':{
+              $(".ml-annotate").popover({
+                'title' : 'Annotations',
+                'html' : true,
+                'placement' : 'top',
+                'container' : '.admin_main_wrap',
+                'content' : $(".ml_annotations").html()
+              });
               $('.ml-annotate').click();
-              // this.state.annotations.indexOf()
-              this.props.getSelectedAnnotations(annotation);
+              let value = this.state.annotations.filter(function ( obj ) {
+                return obj.quote.text == annotation[0].text;
+              })
+              this.props.getSelectedAnnotations(value[0]);
           }
           break;
       }
@@ -64,23 +79,25 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       let details = {portfolioId:this.props.portfolioDetailsId, docId:"problems", quote:JSON.stringify(annotation)}
       const response = await createAnnotationActionHandler(details);
       if(response && response.success){
-        this.fetchAnnotations();
+        this.fetchAnnotations(true);
       }
       return response;
   }
 
-  async fetchAnnotations(){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "problems");
-    this.setState({annotations:JSON.parse(response.result)})
-    if(this.state.annotations.length > 0){
-        let quotes = [];
-        _.each(this.state.annotations, function (value) {
-          quotes.push(value.quote)
-        })
-        var annotator = jQuery("#psContent").data('annotator');
-        this.state.content.annotator('loadAnnotations', quotes);
-    }
-    return response;
+  async fetchAnnotations(isCreate){
+      const response = await findAnnotations(this.props.portfolioDetailsId, "problems");
+      let resp = JSON.parse(response.result);
+      let annotations = this.state.annotations;
+      let diff = resp;
+      this.setState({annotations:JSON.parse(response.result)})
+      if(!isCreate){
+          let quotes = [];
+          _.each(this.state.annotations, function (value) {
+            quotes.push(value.quote)
+          })
+          this.state.content.annotator('loadAnnotations', quotes);
+      }
+      return response;
   }
 
   componentDidMount(){

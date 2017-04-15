@@ -7,21 +7,19 @@ import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent';
 import {findComments} from '../../../../commons/annotaterComments/findComments'
-import {createCommentActionHandler} from '../../../../commons/annotaterComments/createComment'
+import {createCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
+import moment from "moment";
 
 class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
-        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{}, text:"",annotationData: {},comments:[]}
+        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{}, text:"",annotationData: {},commentsData:[]}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
-        //this.getSelectedTab.bind(this)
-      /*  this.fetchAnnotations.bind(this)*/
         this.getContext.bind(this);
         this.getSelectedAnnotation.bind(this);
         this.fetchComments.bind(this);
-        //this.onSavingComment.bind(this);
         return this;
     }
 
@@ -49,14 +47,10 @@ class MlPortfolio extends React.Component{
 
     getSelectedAnnotation(selAnnotation){
       this.setState({anotationDetails:selAnnotation})
-      this.setState({text:selAnnotation.quote.text})
-
       if(selAnnotation){
         this.setState({annotationData : selAnnotation},function(){
           this.fetchComments(selAnnotation);
         })
-        //this.fetchComments();
-
       }
 
     }
@@ -95,9 +89,16 @@ class MlPortfolio extends React.Component{
 
       if(annotation && annotation.id){
         const response = await findComments(annotation.id);
-        console.log("??????????????????????????????///////");
-        console.log(response);
-        this.setState({comments : response});
+        this.setState({commentsData : response},function(){
+          $(".ml-annotate").popover({
+            'title' : 'Annotations',
+            'html' : true,
+            'placement' : 'top',
+            'container' : '.admin_main_wrap',
+            'content' : $(".ml_annotations").html()
+          });
+          $('.ml-annotate').click();
+        });
       }
 
     }
@@ -184,7 +185,7 @@ class MlPortfolio extends React.Component{
 
       let annotations = this.state.annotations;
       let annotationDetails = this.state.annotationData;
-      let commentsList = this.state.comments;
+
         console.log("------------------------------------");
         console.log(annotationDetails)
         const showLoader=this.state.loading;
@@ -195,11 +196,11 @@ class MlPortfolio extends React.Component{
                 <div className='step-progress' >
                   {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
                   {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
-                  {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} getSelectedTab={this.fetchComments.bind(this)} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+                  {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
                 </div>
               </div>)}
 
-            <div style={{'display':'block'}} className="ml_annotations">
+            <div style={{'display':'none'}} className="ml_annotations">
               <div className="comments-container cus_scroll large_popover">
                 <ul id="comments-list" className="comments-list">
                   <li>
@@ -233,18 +234,18 @@ class MlPortfolio extends React.Component{
                     </div>
 
                     <ul className="comments-list reply-list">
-                    {commentsList.map(function (details, idx) {
-                        return(<li>
+                    {that.state.commentsData.map(function (options, key) {
+                        return(<li key={key}>
                           <div className="comment-avatar">
                             <img src="/images/p_2.jpg" alt=""/>
                           </div>
                           <div className="comment-box">
                             <div className="comment-head">
-                              <h6 className="comment-name">Pavani</h6>
-                              <span>02 Nov 2016, 03:50:33 </span>
+                              <h6 className="comment-name">{options.userName}</h6>
+                              <span>{moment(options.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
                             </div>
                             <div className="comment-content">
-                              {details.comment}
+                              {options.comment}
                             </div>
                           </div>
                         </li>)

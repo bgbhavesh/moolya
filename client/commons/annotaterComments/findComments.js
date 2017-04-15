@@ -11,9 +11,15 @@ export async function findComments(annotationId) {
     query: gql`
           query ($annotationId: String!) {
               fetchComments(annotationId: $annotationId) {
+                  _id
                   comment
     							annotatorId
     							portfolioId
+    							userId 
+                  userName
+                  isResolved
+                  isReopened
+                  createdAt
               }
           }
   

@@ -42,9 +42,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
   {
   }
 
-  componentWillUpdate(nextProps, nextState){
-    console.log(nextState)
-  }
+
 
   annotatorEvents(event, annotation, editor){
       if(!annotation)
@@ -59,17 +57,6 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           break;
           case 'annotationViewer':{
             this.props.getSelectedAnnotations(annotation[0]);
-
-
-              $(".ml-annotate").popover({
-                'title' : 'Annotations',
-                'html' : true,
-                'placement' : 'top',
-                'container' : '.admin_main_wrap',
-                'content' : $(".ml_annotations").html()
-              });
-              $('.ml-annotate').click();
-
           }
           break;
       }
@@ -90,15 +77,21 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       const response = await findAnnotations(this.props.portfolioDetailsId, "problems");
       let resp = JSON.parse(response.result);
       let annotations = this.state.annotations;
-      let diff = resp;
       this.setState({annotations:JSON.parse(response.result)})
-      if(!isCreate){
+
           let quotes = [];
+          console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
+          console.log(this.state.annotations);
           _.each(this.state.annotations, function (value) {
-            quotes.push({"id":value.annotatorId,"text" : value.quote.text,"quote" : value.quote.quote,"ranges" : value.quote.ranges})
+            quotes.push({
+                          "id":value.annotatorId,
+                          "text" : value.quote.text,
+                          "quote" : value.quote.quote,
+                          "ranges" : value.quote.ranges
+                      })
           })
           this.state.content.annotator('loadAnnotations', quotes);
-      }
+
       return response;
   }
 
@@ -120,10 +113,6 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     this.fetchPortfolioInfo();
     this.fetchAnnotations();
     initalizeFloatLabel();
-  }
-
-  async componentWillMount() {
-    this.props.getSelectedTab("problems");
   }
 
   async fetchPortfolioInfo(){

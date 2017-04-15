@@ -246,9 +246,27 @@ let ideatorPortfolioSchema = `
     }
     
     type commentsInfo{
+       _id:String,
       annotatorId : String,
       portfolioId : String,
-      comment : String
+      comment : String,
+      userId :String,
+      userName : String,
+      isResolved:Boolean,
+      isReopened:Boolean,
+      createdAt:String
+    }
+    
+     type annotationInfo{
+      _id:String,
+      portfolioId : String,
+      referenceDocId : String,
+      quote : String,
+      userId :String,
+      userName : String,
+      isResolved:Boolean,
+      isReopened:Boolean,
+      createdAt:String
     }
     
     type Query{

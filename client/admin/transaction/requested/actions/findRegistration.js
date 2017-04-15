@@ -76,6 +76,9 @@ export async function findRegistrationActionHandler(registrationId) {
           companyManagement
           toatalEmployeeCount
           associatedCompanies
+          investingFrom
+          currency
+          investmentAmount
           userCategory
           institutionType
           instituteName

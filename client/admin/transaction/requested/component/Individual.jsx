@@ -26,7 +26,7 @@ export default class Individual extends React.Component{
       selectedTypeOfIndustry:null,
       selectedSubDomain:null,
       selectedStageOfCompany:null,
-      selectedSubsidaryComapny:null,
+      employmentStatus:null,
       registrationId:'',
       registrationDetails:'',
       foundationDate:'',
@@ -35,8 +35,8 @@ export default class Individual extends React.Component{
       //identity:'',
       title:'',
       gender:'',
-      citizenships:'',
-      profession:''
+      citizenships:''
+     // profession:''
 
     };
     return this;
@@ -59,14 +59,14 @@ export default class Individual extends React.Component{
         selectedTypeOfIndustry: details.industry,
         selectedSubDomain: details.subDomain,
         selectedStageOfCompany: details.stageOfCompany,
-        selectedSubsidaryComapny: details.subsidaryCompany,
+        employmentStatus: details.employmentStatus,
         foundationDate:details.foundationDate,
         dateOfBirth:details.dateOfBirth,
         employmentDate:details.employmentDate,
         title:details.title,
         gender:details.gender,
         citizenships:details.citizenships,
-        profession:details.profession
+       // profession:details.profession
       })
     }else{
       this.setState({
@@ -90,7 +90,7 @@ export default class Individual extends React.Component{
   }
 
   optionsBySelectSubsidaryComapny(val){
-    this.setState({selectedSubsidaryComapny:val})
+    this.setState({employmentStatus:val.value})
   }
   checkIdentity(event){
     console.log(event.target.name)
@@ -106,10 +106,10 @@ export default class Individual extends React.Component{
   optionsBySelectCitizenships(val){
     this.setState({citizenships:val.value})
   }
-  optionsBySelectProfession(val){
+ /* optionsBySelectProfession(val){
     this.setState({profession:val})
   }
-
+*/
   async  updateregistration() {
     let Details=null;
     Details = {
@@ -288,18 +288,18 @@ export default class Individual extends React.Component{
                       <input type="text" ref="qualification" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.qualification}  placeholder="Qualification" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="Employment Status" options={subsidary} selectedValue={this.state.selectedSubsidaryComapny} onSelect={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
+                      <Select name="form-field-name" placeholder="Employment Status" options={subsidary} value={this.state.employmentStatus} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="professionalTag" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.professionalTag}  placeholder="Professional Tag" className="form-control float-label" id=""/>
                     </div>
-                    <div className="form-group">
+                   {/* <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
                     </div>
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true}/>
 
-                    </div>
+                    </div>*/}
                     <div className="form-group">
                       <input type="text" ref="employerName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerName}  placeholder="Employer Name" className="form-control float-label" id=""/>
                     </div>

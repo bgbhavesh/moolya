@@ -25,7 +25,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   }
 
   async fetchPortfolioInfo(){
-    let empty = _.isEmpty(this.context.ideatorPortfolio.problemSolution)
+    let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.problemSolution)
     if(empty){
       const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
       if (response) {

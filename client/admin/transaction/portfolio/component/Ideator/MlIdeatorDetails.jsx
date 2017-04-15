@@ -64,7 +64,7 @@ export default class MlIdeatorDetails extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.ideatorPortfolio.portfolioIdeatorDetails)
+    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.portfolioIdeatorDetails)
     if(empty){
       const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
       if (response) {
@@ -167,7 +167,7 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group steps_pic_upload">
                       <div className="previewImg ProfileImg">
-                        <img src="/images/ideator_01.png"/>
+                        <img src={this.state.data.profilePic?this.state.data.profilePic:""}/>
                       </div>
                     </div>
                     <br className="brclear"/>

@@ -31,7 +31,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.ideatorPortfolio.intellectualPlanning)
+    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.intellectualPlanning)
     if(empty){
       const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
       if (response) {

@@ -411,8 +411,8 @@ export default class Step1 extends React.Component{
                                   <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
                                   <button type="button" className="btn btn-labeled btn-success" >
                                   <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
-                                  <button type="button" className="btn btn-labeled btn-success" >
-                                  <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>
+                                  {/*<button type="button" className="btn btn-labeled btn-success" >
+                                  <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*/}
                                                    </div>
                  </div>
 

@@ -3,11 +3,45 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
+import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
+import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
+import {initalizeFloatLabel} from '../../utils/formElemUtil';
+
 
 
 export default class MlMyProfile extends React.Component{
-  componentDidMount()
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading:true,
+      firstName: " ",
+      middleName: " ",
+      lastName:" ",
+      userName: " "
+    };
+    this.getValue = this.getValue.bind(this);
+    return this;
+  }
+   async getValue() {
+    let userType = Meteor.userId();
+     let response = await findBackendUserActionHandler(userType);
+     console.log(response);
+     this.setState({loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
+                    middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
+                    lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
+                    userName: response.profile.InternalUprofile.moolyaProfile.displayName
+     });
+  }
+
+  componentWillMount(){
+    initalizeFloatLabel();
+    const resp=this.getValue();
+    return resp;
+  }
+
+componentDidMount()
   {
+
     $(function() {
       $('.float-label').jvFloat();
     });
@@ -48,9 +82,12 @@ export default class MlMyProfile extends React.Component{
     });
   }
   render(){
+    const showLoader=this.state.loading;
+
     return (
       <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
+          <div className="admin_padding_wrap">
           <h2>My Profile</h2>
           <div className="col-md-10 nopadding">
             <div id="information_div" className="hide_div">
@@ -58,13 +95,13 @@ export default class MlMyProfile extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="First Name" className="form-control float-label" id="" defaultValue={this.state.firstName}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Middle Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Middle Name" className="form-control float-label" id="" defaultValue={this.state.middleName}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName}/>
                     </div>
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
@@ -82,7 +119,7 @@ export default class MlMyProfile extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName}/>
                     </div>
                     <div className="form-group">
                       <input type="password" placeholder="Password" className="form-control float-label" id=""/>
@@ -383,7 +420,7 @@ export default class MlMyProfile extends React.Component{
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
           </div>
-        </div>
+        </div>)}
       </div>
     )
   }

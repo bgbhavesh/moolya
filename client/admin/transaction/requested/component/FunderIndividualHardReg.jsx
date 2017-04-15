@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Individual from './Individual'
+import Individual from './FunderIndividualComponent'
 import Step3 from './step3';
 import Step4 from './step4';
 import Step5 from './step5';

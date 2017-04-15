@@ -220,7 +220,7 @@ export default class MlCreateRegistration extends React.Component{
 
     return (
         <div className="admin_main_wrap">
-          <h2>Create Registration</h2>
+          <h2>Fill Registration Details</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg left_wrap">
               <ScrollArea

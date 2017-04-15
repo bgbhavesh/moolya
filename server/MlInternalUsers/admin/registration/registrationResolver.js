@@ -419,6 +419,30 @@ MlResolver.MlQueryResolver['findRegistration'] = (obj, args, context, info) => {
   //     return response
   // }
 }
+
+
+
+
+
+
+MlResolver.MlQueryResolver['findRegistration'] = (obj, args, context, info) => {
+  let resp = users.findOne({_id: args.registrationId});
+  return resp;
+  // if(resp){
+  //     let code = 200;
+  //     let result = {department: resp}
+  //     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  //     return response
+  // }
+}
+
+
+
+
+
+
+
+
 MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, context, info) => {
  let id = " "
   let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};

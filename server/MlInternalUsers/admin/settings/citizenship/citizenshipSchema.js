@@ -14,6 +14,7 @@ let Citizenship = `
     }
     type Query{
       FindCitizenship(_id: String):Citizenship
+      FetchCitizenship:[Citizenship]
     }
 `
 

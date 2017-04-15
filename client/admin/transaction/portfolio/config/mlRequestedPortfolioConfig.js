@@ -12,8 +12,8 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
-    // {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "id", title: "Requested Id",dataSort:true, 'isKey':true},
+    {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "portfolioId", title: "Requested Id",dataSort:true},
     {dataField: "createdAt", title: "Date & Time",dataSort:true},
     {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
@@ -97,6 +97,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
           data{
             ...on Portfoliodetails{
                 id:_id
+                portfolioId
                 transactionType,
                 portfolioUserName,
               	contactNumber

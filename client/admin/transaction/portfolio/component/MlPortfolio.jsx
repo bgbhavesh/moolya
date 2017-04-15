@@ -17,7 +17,7 @@ class MlPortfolio extends React.Component{
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
         this.getSelectedTab.bind(this)
-        this.fetchAnnotations.bind(this)
+        // this.fetchAnnotations.bind(this)
         this.getContext.bind(this);
         this.getSelectedAnnotation.bind(this);
         this.fetchComments.bind(this);

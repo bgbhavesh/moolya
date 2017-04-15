@@ -35,7 +35,8 @@ let portfolioSchema = `
         communityName   : String
         identityType    : String,
         industryId      : String, 
-        professionId    : String
+        professionId    : String,
+        portfolioId     : String
     }
       input portfoliodetails{
         _id:String,
@@ -65,7 +66,8 @@ let portfolioSchema = `
         communityName   : String
         identityType    : String,
         industryId      : String, 
-        professionId    : String
+        professionId    : String,
+        portfolioId     : String
     }
     
     input portfolio{

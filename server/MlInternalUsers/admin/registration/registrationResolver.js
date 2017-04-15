@@ -4,15 +4,6 @@ import MlRespPayload from '../../../commons/mlPayload'
 
 
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
-
-
-/*  let id = MlSubDepartments.insert({...args.subDepartment});
-  if(id){
-    let code = 200;
-    let result = {subDepartmentId: id}
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
-  }*/
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -24,12 +15,19 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!",code);
     return response;
   }
+
+  let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
+
+  args.registration.clusterName=subChapterDetails.clusterName;
+  args.registration.chapterName=subChapterDetails.chapterName;
+  args.registration.subChapterName=subChapterDetails.subChapterName;
+  args.registration.subChapterId=subChapterDetails._id;
+
+  orderNumberGenService.assignRegistrationId(args.registration, args.registration.registrationType)
+
   let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
   if(id){
     let code = 200;
-
-    let insertedData =  MlRegistration.findOne(id) || {};
-    /*  let tabName = insertedData.contactInfo[0].numberTypeName;*/
     let result = {registrationId : id}
     let response = new MlRespPayload().successPayload(result, code);
     return response
@@ -217,6 +215,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       industryId    : regRecord.registrationInfo.industry,
       professionId  : regRecord.registrationInfo.profession,
      }
+     orderNumberGenService.assignPortfolioId(portfolioDetails, portfolioDetails.communityCode)
 
        try{
           MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails},context, info);

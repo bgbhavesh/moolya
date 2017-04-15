@@ -228,16 +228,15 @@ export default class Ideator extends React.Component{
         showAction: true,
         handler: this.updateRegistration.bind(this)
       },
-      {
-        actionName: 'comment',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'comment',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          // this.props.handler(" ");
           FlowRouter.go("/admin/transactions/requestedList")
         }
       }

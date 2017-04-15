@@ -192,11 +192,11 @@ export default class Step1 extends React.Component{
         showAction: true,
         handler: this.updateRegistration.bind(this)
       },
-      {
-        actionName: 'comment',
-        showAction: true,
-        handler: this.updateRegistration.bind(this)
-      },
+      // {
+      //   actionName: 'comment',
+      //   showAction: true,
+      //   handler: this.updateRegistration.bind(this)
+      // },
       {
         showAction: true,
         actionName: 'cancel',

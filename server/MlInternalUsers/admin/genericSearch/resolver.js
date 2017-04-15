@@ -1,6 +1,16 @@
 import MlResolver from '../mlAdminResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
 
+let mergeQueries=function(userFilter,serverFilter){
+  let query=userFilter||{};
+  if (_.isEmpty(query)) {
+    query = serverFilter||{};
+  } else {
+    query = {$and: [userFilter,serverFilter]};
+  }
+  return query;
+}
+
 MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     let totalRecords=0;
   const findOptions = {
@@ -624,8 +634,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         result.push(object);
       }
     });
+    let serverQuery = {status:'Approved'}
+    let queryCount = mergeQueries(query,serverQuery);
     data = result;
-    totalRecords=MlRegistration.find(query,findOptions).count();
+    totalRecords = MlRegistration.find(queryCount,findOptions).count();
   }
 
   if(args.module == "Portfoliodetails"){

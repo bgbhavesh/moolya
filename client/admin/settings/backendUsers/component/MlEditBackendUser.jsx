@@ -15,6 +15,8 @@ import {resetPasswordActionHandler} from '../actions/resetPasswordAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
+import {MlMyProfile} from '../../../profile/component/MlMyprofile'
+
 
 
 class MlEditBackendUser extends React.Component{

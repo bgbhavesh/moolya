@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Company from './Company'
+import Company from './FunderCompanyComponent'
 import Step3 from './step3';
 import Step4 from './step4';
 import Step5 from './step5';

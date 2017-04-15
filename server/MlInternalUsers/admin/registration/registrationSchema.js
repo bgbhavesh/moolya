@@ -269,6 +269,10 @@ let registrationSchema = `
           companyManagement: String,
           toatalEmployeeCount: String,
           associatedCompanies:  String,
+          investingFrom:String,
+          currency:String,
+          investmentAmount:String,
+
               
           userCategory: String,
           institutionType:String,
@@ -345,6 +349,9 @@ let registrationSchema = `
           companyManagement: String,
           toatalEmployeeCount: String,
           associatedCompanies:  String,
+          investingFrom:String,
+          currency:String,
+          investmentAmount:String,
               
           userCategory: String,
           institutionType:String,

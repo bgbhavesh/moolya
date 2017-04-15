@@ -245,6 +245,12 @@ let ideatorPortfolioSchema = `
         library:library
     }
     
+    type commentsInfo{
+      annotatorId : String,
+      portfolioId : String,
+      comment : String
+    }
+    
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
         fetchIdeatorPortfolioIdeas(portfoliodetailsId:String!):ideasObject
@@ -256,7 +262,7 @@ let ideatorPortfolioSchema = `
         fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
-        fetchComments(annotationId:String): response
+        fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     

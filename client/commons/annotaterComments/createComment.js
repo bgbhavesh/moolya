@@ -3,8 +3,9 @@ import gql from 'graphql-tag'
 
 import {client} from '../../../client/admin/core/apolloConnection'
 
-export async function createComment(details) {
-
+export async function createCommentActionHandler(details) {
+  console.log("?????????????????????????????");
+  console.log(details);
   const result = await client.mutate({
     mutation: gql`
           mutation  ($annotatorId: String, $portfolioId:String, $comment:String){

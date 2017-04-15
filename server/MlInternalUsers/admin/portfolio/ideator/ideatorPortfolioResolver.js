@@ -91,8 +91,8 @@ MlResolver.MlMutationResolver['updateAnnotation'] = (obj, args, context, info) =
 
 MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
     try {
-        if(args.portfolioId && args.annotationId && args.comment){
-            let comment = {annotatorId:args.annotatorId, portfolioId:args.portfolioId, quote:args.quote, isResolved:false, isReopened:false}
+        if(args.portfolioId && args.annotatorId && args.comment){
+            let comment = {annotatorId:args.annotatorId, portfolioId:args.portfolioId,comment:args.comment,quote:args.quote, isResolved:false, isReopened:false}
             MlAnnotatorComments.insert({...comment})
         }
         else{
@@ -141,30 +141,13 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
-    let comments = [];
-    try {
-        if(args.commentId && args.annotatorId){
-           let commentsObj = MlAnnotatorComments.find({"annotatorId":args.annotatorId}).fetch()
-            if(commentsObj.length > 0){
-                _.each(commentsObj, function (value) {
-                    comments.push(JSON.parse(value))
-                })
-            }
-        }
-        else{
-            let code = 400;
-            let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
-            return response;
-        }
-    }catch (e){
-        let code = 400;
-        let response = new MlRespPayload().errorPayload(e.message, code);
-        return response;
-    }
 
-    let code = 200;
-    let response = new MlRespPayload().successPayload(comments, code);
-    return response;
+        if( args.annotationId){
+           let result =   MlAnnotatorComments.find({"annotatorId":args.annotationId}).fetch() || [];
+           return result;
+
+        }
+
 }
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {

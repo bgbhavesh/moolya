@@ -7,24 +7,40 @@ import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent';
 import {findComments} from '../../../../commons/annotaterComments/findComments'
-import {createComment} from '../../../../commons/annotaterComments/createComment'
+import {createCommentActionHandler} from '../../../../commons/annotaterComments/createComment'
 
 class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
-        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{}, text:"",annotationData: {}}
+        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{}, text:"",annotationData: {},comments:[]}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
-        this.getSelectedTab.bind(this)
-        this.fetchAnnotations.bind(this)
+        //this.getSelectedTab.bind(this)
+      /*  this.fetchAnnotations.bind(this)*/
         this.getContext.bind(this);
         this.getSelectedAnnotation.bind(this);
         this.fetchComments.bind(this);
-      this.onSavingComment.bind(this);
+        //this.onSavingComment.bind(this);
         return this;
     }
 
+    componentDidMount(){
+      let portfolioId = this.props.config;
+      $(document).on('click', '#saveComment', function(e){
+        let annotationId = $("#saveComment").data("id");
+        let commentsData={
+          annotatorId : annotationId,
+          portfolioId : portfolioId,
+          comment :  $(this).parent().prev().val()
+        }
+
+        const response = createCommentActionHandler(commentsData)
+        return response;
+      });
+
+
+    }
     getContext(){
         return {
           annotationsInfo: this.state.annotations
@@ -32,21 +48,23 @@ class MlPortfolio extends React.Component{
     }
 
     getSelectedAnnotation(selAnnotation){
-        console.log(selAnnotation)
-        this.setState({anotationDetails:selAnnotation})
-        this.setState({text:selAnnotation.quote.text})
+      this.setState({anotationDetails:selAnnotation})
+      this.setState({text:selAnnotation.quote.text})
 
       if(selAnnotation){
-        this.setState({annotationData : selAnnotation})
-        this.fetchComments();
+        this.setState({annotationData : selAnnotation},function(){
+          this.fetchComments(selAnnotation);
+        })
+        //this.fetchComments();
+
       }
 
     }
 
-
+/*
     getSelectedTab(tabName){
           this.setState({selectedTab:tabName})
-    }
+    }*/
 
     async componentWillMount() {
 
@@ -72,46 +90,51 @@ class MlPortfolio extends React.Component{
     }
 
 
-    async fetchComments(){
-      let annotationDetails = this.state.annotationData;
-      console.log("////////////////////////////");
-      console.log(annotationDetails);
-      const response = await findComments(annotationDetails.id);
-      // this.setState({annotations:response});
-      // return response;
+    async fetchComments(annotation){
+
+
+      if(annotation && annotation.id){
+        const response = await findComments(annotation.id);
+        console.log("??????????????????????????????///////");
+        console.log(response);
+        this.setState({comments : response});
+      }
+
     }
 
     getPortfolioDetails(details){
         this.setState({portfolio:details});
     }
 
-  async updatePortfolioDetails() {
-      let jsonData={
-          portfolioId :this.props.config,
-          portfolio :this.state.portfolio
-      }
-    const response = await updatePortfolioActionHandler(jsonData)
-    return response;
-  }
+    async updatePortfolioDetails() {
+        let jsonData={
+            portfolioId :this.props.config,
+            portfolio :this.state.portfolio
+        }
+      const response = await updatePortfolioActionHandler(jsonData)
+      return response;
+    }
 
+    async handleSuccess(response) {
+      FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+    };
+/*
 
-  async handleSuccess(response) {
-    FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
-  };
-
-    async onSavingComment(){
+     onSavingComment(){
         let commentsData={
-          annotatorId : this.state.annotationData.annotationId,
+          annotatorId : this.state.annotationData.id,
           portfolioId : this.props.config,
           comment :  this.refs.comment.value
         }
 
-      const response = await createComment(commentsData)
+      const response =  createComment(commentsData)
       return response;
     }
+*/
 
 
     render(){
+      let that=this;
         let MlActionConfig = [
           // {
           //   showAction: true,
@@ -141,7 +164,7 @@ class MlPortfolio extends React.Component{
           {
             showAction: true,
             actionName: 'comment',
-            handler: null
+            handler:  null
           },
         ]
       let EditComponent = ""; let ViewComponent = "";
@@ -161,6 +184,7 @@ class MlPortfolio extends React.Component{
 
       let annotations = this.state.annotations;
       let annotationDetails = this.state.annotationData;
+      let commentsList = this.state.comments;
         console.log("------------------------------------");
         console.log(annotationDetails)
         const showLoader=this.state.loading;
@@ -171,11 +195,11 @@ class MlPortfolio extends React.Component{
                 <div className='step-progress' >
                   {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
                   {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
-                  {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} getSelectedTab={this.getSelectedTab.bind(this)} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+                  {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} getSelectedTab={this.fetchComments.bind(this)} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
                 </div>
               </div>)}
 
-            <div style={{'display':'none'}} className="ml_annotations">
+            <div style={{'display':'block'}} className="ml_annotations">
               <div className="comments-container cus_scroll large_popover">
                 <ul id="comments-list" className="comments-list">
                   <li>
@@ -199,52 +223,32 @@ class MlPortfolio extends React.Component{
                       <a href="#" className="cancel_btn">Re open</a>
                       <a href="#" className="cancel_btn add_comment">Comment</a>
                     </div>
-                    <textarea ref={"comment"} className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
-                    <div className="ml_icon_btn">
-                      <a href="#" onClick={this.onSavingComment.bind(this)} className="save_btn" ><span
-                        className="ml ml-save"></span></a>
-                      {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
+                    <div>
+                      <textarea ref="comment" id="comment" className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
+                      <div className="ml_icon_btn">
+                        <a href="#" id="saveComment"  data-id={annotationDetails.id} className="save_btn"><span
+                          className="ml ml-save"></span></a>
+                        {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
+                      </div>
                     </div>
+
                     <ul className="comments-list reply-list">
-                      <li>
-                        <div className="comment-avatar"><img src="/images/p_2.jpg" alt=""/></div>
-                        <div className="comment-box">
-                          <div className="comment-head">
-                            <h6 className="comment-name">Pavani</h6>
-                            <span>02 Nov 2016, 03:50:33 </span>
+                    {commentsList.map(function (details, idx) {
+                        return(<li>
+                          <div className="comment-avatar">
+                            <img src="/images/p_2.jpg" alt=""/>
                           </div>
-                          <div className="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
+                          <div className="comment-box">
+                            <div className="comment-head">
+                              <h6 className="comment-name">Pavani</h6>
+                              <span>02 Nov 2016, 03:50:33 </span>
+                            </div>
+                            <div className="comment-content">
+                              {details.comment}
+                            </div>
                           </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="comment-avatar"><img src="/images/p_3.jpg" alt=""/></div>
-                        <div className="comment-box">
-                          <div className="comment-head">
-                            <h6 className="comment-name">Agustin Ortiz</h6>
-                            <span>02 Nov 2016, 03:50:33 </span>
-
-                          </div>
-                          <div className="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="comment-avatar"><img src="/images/p_4.jpg" alt=""/></div>
-                        <div className="comment-box">
-                          <div className="comment-head">
-                            <h6 className="comment-name">Agustin Ortiz</h6>
-                            <span>02 Nov 2016, 03:50:33 </span>
-
-                          </div>
-                          <div className="comment-content">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure laudantium vitae, praesentium optio, sapiente distinctio illo?
-                          </div>
-                        </div>
-                      </li>
-
+                        </li>)
+                      })}
                     </ul>
                   </li>
                 </ul>

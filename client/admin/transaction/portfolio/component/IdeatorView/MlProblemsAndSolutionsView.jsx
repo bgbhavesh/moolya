@@ -14,7 +14,7 @@ import _ from 'lodash'
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
       super(props);
-      console.log(context);
+      console.log(props);
       this.state = {
           portfolioIdeatorInfo: {},
           annotations:[],
@@ -58,11 +58,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           }
           break;
           case 'annotationViewer':{
-          /*  let value = this.state.annotations.filter(function ( obj ) {
-              return obj.quote.text == annotation[0].text;
-            })
-            this.props.getSelectedAnnotations(value[0]);*/
             this.props.getSelectedAnnotations(annotation[0]);
+
+
               $(".ml-annotate").popover({
                 'title' : 'Annotations',
                 'html' : true,
@@ -85,6 +83,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       }
       return response;
   }
+
+
 
   async fetchAnnotations(isCreate){
       const response = await findAnnotations(this.props.portfolioDetailsId, "problems");

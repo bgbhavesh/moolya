@@ -207,10 +207,13 @@ export default class Company extends React.Component{
     `;
 
 
-    let userTypequery = gql`query{
-    data:FetchUserType {label:userTypeName,value:_id}
-    }
+    let userTypequery = gql` query($communityCode:String){  
+    data:FetchUserType(communityCode:$communityCode) {
+      value:_id
+      label:userTypeName
+  }  }
     `;
+    let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
     let citiesquery = gql`query{
       data:fetchCities {label:name,value:_id }
     }
@@ -249,7 +252,7 @@ export default class Company extends React.Component{
                 <input type="text" placeholder="Request Id" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
                 <input type="text" ref="companyName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName} placeholder="Company Name" className="form-control float-label" id=""/>

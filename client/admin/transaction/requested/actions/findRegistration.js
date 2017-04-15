@@ -99,6 +99,7 @@ export async function findRegistrationActionHandler(registrationId) {
           displayName
           dateOfBirth
           gender
+          citizenships
           qualification
           employmentStatus
           professionalTag

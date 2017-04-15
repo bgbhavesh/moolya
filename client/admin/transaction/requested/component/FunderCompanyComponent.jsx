@@ -199,7 +199,7 @@ export default class Company extends React.Component{
      }
      }
      `;
-    let companytypesOption={options: { variables: {type : "COMPANYTYPE",hierarchyRefId:this.props.clusterId}}};
+    let companytypesOption={options: { variables: {type : "COMPANYTYPE",hierarchyRefId:this.props.registrationInfo.clusterId}}};
 
     let businesstypesquery=gql` query{
     data:fetchBusinessTypes{label:businessTypeName,value:_id}
@@ -306,7 +306,7 @@ export default class Company extends React.Component{
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select Type Of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} query={companytypesquery} onSelect={that.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Select Type Of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} query={companytypesquery} queryOptions={companytypesOption} onSelect={that.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select Type Of Entity" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfEntity} queryType={"graphql"} query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this)} isDynamic={true}/>

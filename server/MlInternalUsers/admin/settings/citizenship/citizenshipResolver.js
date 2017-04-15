@@ -58,5 +58,14 @@ MlResolver.MlQueryResolver['FindCitizenship'] = (obj, args, context, info) => {
     return response;
   }
 }
+MlResolver.MlQueryResolver['FetchCitizenship'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+  let result=MlCitizenship.find({isActive:true}).fetch()||[];
+  return result;
+}
+
+
+
 
 

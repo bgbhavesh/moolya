@@ -138,7 +138,7 @@ class MlAddSubDepartment extends React.Component{
                           >
                               <form>
                                   <div className="form-group">
-                                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'} onSelect={this.optionsBySelectDepartment.bind(this)} />
+                                    <Moolyaselect multiSelect={false} placeholder={"Select Department"}className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.department} queryType={"graphql"} query={departmentquery}  isDynamic={true} id={'department'} onSelect={this.optionsBySelectDepartment.bind(this)} />
                                      </div>
                                 {this.state.data!=''&&(<div>
                                 <div className="form-group switch_wrap switch_names" disabled="true">

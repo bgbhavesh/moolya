@@ -30,8 +30,10 @@ export default class Company extends React.Component{
       selectedSubsidaryComapny:null,
       registrationId:'',
       registrationDetails:'',
-      foundationDate:null
-
+      foundationDate:null,
+      investingFrom:null,
+      investmentAmount:'',
+      currency:null
     };
     return this;
   }
@@ -54,7 +56,10 @@ export default class Company extends React.Component{
         selectedSubDomain: details.subDomain,
         selectedStageOfCompany: details.stageOfCompany,
         selectedSubsidaryComapny: details.subsidaryCompany,
-        foundationDate:details.foundationDate
+        foundationDate:details.foundationDate,
+        investingFrom:details.investingFrom,
+        currency:details.currency,
+        investmentAmout:details.investmentAmout
       })
     }
   }
@@ -104,6 +109,13 @@ export default class Company extends React.Component{
       this.setState({loading: false, foundationDate: value});
     }
   }
+  optionsBySelectCurrency(value){
+  this.setState({currency:value})
+  }
+
+  optionsBySelectInvestingFrom(val){
+   this.setState({investingFrom:val.value})
+  }
 
 
   async  updateregistration() {
@@ -134,7 +146,10 @@ export default class Company extends React.Component{
         companyCEOName        :   this.refs.companyCEOName.value,
         companyManagement     :   this.refs.companyManagement.value,
         toatalEmployeeCount   :   this.refs.toatalEmployeeCount.value,
-        associatedCompanies   :   this.refs.associatedCompanies.value
+        associatedCompanies   :   this.refs.associatedCompanies.value,
+        investingFrom         :   this.state.investingFrom,
+        currency               :   this.state.currency,
+        investmentAmount       :   this.refs.investmentAmount.value
       }
     }
     //this.props.getRegistrationDetails(Details);
@@ -154,11 +169,11 @@ export default class Company extends React.Component{
         showAction: true,
         handler: this.updateRegistration.bind(this),
       },
-      // {
-      //   actionName: 'comment',
-      //   showAction: true,
-      //   handler: null
-      // },
+      {
+        actionName: 'comment',
+        showAction: true,
+        handler: null
+      },
       {
         showAction: true,
         actionName: 'cancel',
@@ -171,6 +186,10 @@ export default class Company extends React.Component{
     let subsidary = [
       {value: 'Yes', label: 'Yes'},
       {value: 'No', label: 'No'}
+    ];
+    let investingFrom=[
+    {value: 'Personal Fund', label: 'Personal Fund'},
+      {value: 'Family Fund', label: 'Family Fund'}
     ];
 
     let companytypesquery=gql`query($type:String,$hierarchyRefId:String){
@@ -194,6 +213,7 @@ export default class Company extends React.Component{
       label:userTypeName
   }  }
     `;
+    let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
     let citiesquery = gql`query{
       data:fetchCities {label:name,value:_id }
     }
@@ -214,7 +234,6 @@ export default class Company extends React.Component{
     data:fetchStageOfCompany{label:stageOfCompanyName,value:_id}
     }
     `;
-    let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
     let that=this;
     const showLoader=this.state.loading;
     return (
@@ -230,10 +249,10 @@ export default class Company extends React.Component{
                 <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Request Id" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationId}/>
+                <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery}  reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
                 <input type="text" ref="companyName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName} placeholder="Company Name" className="form-control float-label" id=""/>
@@ -272,6 +291,17 @@ export default class Company extends React.Component{
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Looking For" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedLookingFor} queryType={"graphql"} query={lookinforquery} onSelect={that.optionsBySelectLookingFor.bind(that)} isDynamic={true}/>
               </div>
+               <div className="panel panel-default">
+                  <div className="panel-heading">Investment Per Year</div>
+                  <div className="panel-body">
+                   <div className="form-group">
+                        <Moolyaselect multiSelect={false} placeholder="Select Currency" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.currency} queryType={"graphql"} query={lookinforquery} onSelect={that.optionsBySelectCurrency.bind(that)} isDynamic={true}/>
+                  </div>
+                   <div className="form-group">
+                   <input type="text" ref="investmentAmount" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.investmentAmount} placeholder="Enter Amount" className="form-control float-label" id=""/>
+                  </div>
+                  </div>
+              </div>
             </form>
           </div>
         </div>
@@ -279,7 +309,7 @@ export default class Company extends React.Component{
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select Type Of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} queryOptions={companytypesOption} query={companytypesquery} onSelect={that.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Select Type Of Company" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} query={companytypesquery} queryOptions={companytypesOption} onSelect={that.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select Type Of Entity" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfEntity} queryType={"graphql"} query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this)} isDynamic={true}/>
@@ -317,6 +347,9 @@ export default class Company extends React.Component{
               </div>
               <div className="form-group">
                 <input type="text" ref="associatedCompanies" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.associatedCompanies} placeholder="Associate Company" className="form-control float-label" id=""/>
+              </div>
+               <div className="form-group">
+                <Select name="form-field-name" placeholder="Investing From" options={investingFrom} value={this.state.investingFrom} onChange={this.optionsBySelectInvestingFrom.bind(this)}  className="float-label"/>
               </div>
 
             </form>

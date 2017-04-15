@@ -34,7 +34,7 @@ export default class institution extends React.Component{
         loading: false,
         registrationDetails: details,
         registrationId: this.props.registrationId,
-        selectedUserType: details.userCategory,
+        selectedUserType: details.userType,
         selectedHeadquarter: details.headQuarterLocation,
         selectedBranches: details.branchLocations,
         selectedInstitutionType: details.institutionType,
@@ -66,7 +66,7 @@ export default class institution extends React.Component{
     let Details = {
       registrationId      : this.props.registrationId,
       details:{
-              userCategory        : this.state.selectedUserType,
+               userType        : this.state.selectedUserType,
               institutionType     : this.state.selectedInstitutionType,
               instituteName       : this.refs.instituteName.value,
               instituteGroupName  : this.refs.instituteGroupName.value,
@@ -107,11 +107,11 @@ export default class institution extends React.Component{
         showAction: true,
         handler: this.updateRegistration.bind(this)
       },
-      {
-        actionName: 'comment',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'comment',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'cancel',
@@ -136,10 +136,13 @@ export default class institution extends React.Component{
     }
     `;
 
-    let userTypequery = gql`query{
-    data:FetchUserType {label:userTypeName,value:_id}
-    }
+    let userTypequery = gql` query($communityCode:String){  
+    data:FetchUserType(communityCode:$communityCode) {
+      value:_id
+      label:userTypeName
+  }  }
     `;
+    let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
     let citiesquery = gql`query{
       data:fetchCities {label:name,value:_id }
     }
@@ -171,7 +174,7 @@ export default class institution extends React.Component{
           <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                  <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="Select Institution Type" options={institutionTypes} value={this.state.selectedInstitutionType}  onChange={this.optionsBySelectInstitutionType.bind(this)}  className="float-label"/>

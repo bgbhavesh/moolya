@@ -16,7 +16,6 @@ export async function addTaxationActionHandler(TaxationDetails)
       taxation
     }
   })
-  console.log(result)
   const id = result.data.createTaxation;
   return id
 }

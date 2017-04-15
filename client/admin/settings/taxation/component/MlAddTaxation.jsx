@@ -8,6 +8,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addTaxationActionHandler} from '../actions/addTaxationAction';
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import Datetime from "react-datetime";
 
 class MlAddTaxation extends React.Component{
   constructor(props) {
@@ -33,28 +34,27 @@ class MlAddTaxation extends React.Component{
   };
 
   async handleSuccess(response) {
-
     FlowRouter.go("/admin/settings/taxationList");
   };
 
   async  createTaxation() {
     let TaxationDetails = {
       taxationName: this.refs.taxationName.value,
-      taxationValidityFrom: this.refs.taxationValidityFrom.value,
-      taxationValidityTo: this.refs.taxationValidityTo.value,
+      taxationValidityFrom: this.refs.taxationValidityFrom.state.inputValue,
+      taxationValidityTo: this.refs.taxationValidityTo.state.inputValue,
       aboutTaxation: this.refs.aboutTaxation.value,
       isActive: this.refs.isActive.checked,
       taxInformation: this.state.taxInformation
     }
-    const response = await addTaxationActionHandler(TaxationDetails)
-    return response;
+    if(TaxationDetails.taxationName){
+      const response = await addTaxationActionHandler(TaxationDetails)
+      return response;
+    }else{
+      toastr.error("Tax Name is mandatory");
+      return false
+    }
   }
- /* onClickDate(event){
-   let filedName=event.target.name
-    let fieldId=filedName+id
-    $("#"+fieldId).datepicker({ format: this.state.dateformate });
-    $("#"+fieldId).focus();
-  }*/
+
   componentDidMount(){
     initalizeFloatLabel();
     $('.switch input').change(function() {
@@ -81,7 +81,6 @@ class MlAddTaxation extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/taxationList")
         }
       }
@@ -89,9 +88,6 @@ class MlAddTaxation extends React.Component{
     return (
 
       <div className="admin_main_wrap">
-
-
-
         <div className="admin_padding_wrap">
           <h2>Taxation</h2>
           <div className="main_wrap_scroll">
@@ -107,10 +103,8 @@ class MlAddTaxation extends React.Component{
               <form>
                 <div className="form-group">
                   <input type="text" ref="taxationName" placeholder="Taxation Name" className="form-control float-label" id="cluster_name"/>
-
                 </div>
                 <div className="form-group">
-
                    <textarea ref="aboutTaxation" placeholder="About" className="form-control float-label" id="cl_about">
                     </textarea>
                 </div>
@@ -121,12 +115,15 @@ class MlAddTaxation extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group col-md-6 nopadding-left">
-                 <input type="text" ref="taxationValidityFrom" placeholder="Valid from" className="form-control float-label" id="cluster_name"/>
-                 {/* <input type="text" placeholder="Valid from" ref="taxationValidityFrom" onClick={this.onClickDate.bind(this)} className="form-control float-label" name={'validFrom'}   id="#validFrom"/>*/}
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                            inputProps={{placeholder: "Valid From"}}
+                            closeOnSelect={true} ref="taxationValidityFrom"/>
                   <FontAwesome name='calendar' className="password_icon" />
                 </div>
                 <div className="form-group col-md-6 nopadding-right">
-                  <input type="text" ref="taxationValidityTo" placeholder="Valid to" className="form-control float-label" id="cluster_name"/>
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                            inputProps={{placeholder: "Valid to"}}
+                            closeOnSelect={true} ref="taxationValidityTo"/>
                   <FontAwesome name='calendar' className="password_icon"/>
                 </div>
                 <div className="form-group switch_wrap inline_switch">
@@ -141,12 +138,6 @@ class MlAddTaxation extends React.Component{
           </div>
           <br className="brclear"/>
 
-
-
-
-
-
-
          < MlTaxTable getTaxTableDetails={this.getTaxTableDetails.bind(this)}/>
 
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
@@ -154,8 +145,6 @@ class MlAddTaxation extends React.Component{
           </div>
         </div>
       </div>
-
-
     )
   }
 };

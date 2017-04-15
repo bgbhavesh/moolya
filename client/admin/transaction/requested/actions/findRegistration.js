@@ -9,6 +9,7 @@ export async function findRegistrationActionHandler(registrationId) {
         findRegistrationInfo(registrationId:$id){          
           _id
           registrationInfo {
+          registrationId
             industry
             profession 
             userType
@@ -76,6 +77,9 @@ export async function findRegistrationActionHandler(registrationId) {
           companyManagement
           toatalEmployeeCount
           associatedCompanies
+          investingFrom
+          currency
+          investmentAmount
           userCategory
           institutionType
           instituteName
@@ -96,6 +100,7 @@ export async function findRegistrationActionHandler(registrationId) {
           displayName
           dateOfBirth
           gender
+          citizenships
           qualification
           employmentStatus
           professionalTag

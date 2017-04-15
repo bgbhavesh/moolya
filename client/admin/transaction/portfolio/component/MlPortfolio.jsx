@@ -164,7 +164,7 @@ class MlPortfolio extends React.Component{
           {
             showAction: true,
             actionName: 'comment',
-            handler:  null
+            handler: null
           },
         ]
       let EditComponent = ""; let ViewComponent = "";
@@ -234,7 +234,7 @@ class MlPortfolio extends React.Component{
 
                     <ul className="comments-list reply-list">
                     {commentsList.map(function (details, idx) {
-                        return(<li>
+                        <li>
                           <div className="comment-avatar">
                             <img src="/images/p_2.jpg" alt=""/>
                           </div>
@@ -247,7 +247,7 @@ class MlPortfolio extends React.Component{
                               {details.comment}
                             </div>
                           </div>
-                        </li>)
+                        </li>
                       })}
                     </ul>
                   </li>

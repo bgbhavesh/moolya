@@ -59,7 +59,7 @@ export default class Step1 extends React.Component{
     let details=this.props.registrationInfo;
     this.setState({loading:false,
       registrationDetails:details,
-      registrationId:this.props.registrationId,
+      registrationId:details.registrationId,
       country :details.countryId,
       selectedCity : details.cityId,
       registrationType : details.registrationType,
@@ -147,8 +147,9 @@ export default class Step1 extends React.Component{
 
   async  updateregistrationInfo() {
     let Details = {
-      registrationId : this.state.registrationId,
+      registrationId : this.props.registrationId,
       registrationDetail:{
+        registrationId : this.state.registrationId,
       firstName       :  this.refs.firstName.value,
       lastName        :  this.refs.lastName.value,
       countryId     :  this.state.country,
@@ -192,11 +193,11 @@ export default class Step1 extends React.Component{
         showAction: true,
         handler: this.updateRegistration.bind(this)
       },
-      {
-        actionName: 'comment',
-        showAction: true,
-        handler: this.updateRegistration.bind(this)
-      },
+      // {
+      //   actionName: 'comment',
+      //   showAction: true,
+      //   handler: this.updateRegistration.bind(this)
+      // },
       {
         showAction: true,
         actionName: 'cancel',
@@ -296,7 +297,7 @@ export default class Step1 extends React.Component{
                   <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Request ID" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" />

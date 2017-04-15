@@ -133,6 +133,7 @@ let registrationSchema = `
     }
     
     input registrationInfoInput{
+    registrationId      :   String,
         industry        :   String,
         profession      :   String,
         userType        :   String,
@@ -191,6 +192,7 @@ let registrationSchema = `
     
     type RegistrationInfo{        
         _id             :   String,
+        registrationId  :   String,
         userType        :   String,
         industry        :   String,
         profession      :   String,
@@ -269,6 +271,10 @@ let registrationSchema = `
           companyManagement: String,
           toatalEmployeeCount: String,
           associatedCompanies:  String,
+          investingFrom:String,
+          currency:String,
+          investmentAmount:String,
+
               
           userCategory: String,
           institutionType:String,
@@ -345,6 +351,9 @@ let registrationSchema = `
           companyManagement: String,
           toatalEmployeeCount: String,
           associatedCompanies:  String,
+          investingFrom:String,
+          currency:String,
+          investmentAmount:String,
               
           userCategory: String,
           institutionType:String,

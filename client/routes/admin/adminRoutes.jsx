@@ -16,6 +16,7 @@ import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapter
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
+import MlTransactionRequested from '../../admin/transaction/requested/component/MlTransactionRequested'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
@@ -150,14 +151,14 @@ adminSection.route('/documents/:pid/:kycid/:docid', {
 adminSection.route('/transactions/requestedList', {
   name: 'transaction_RequestList',
   action(){
-    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+    mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
   }
 });
 
 adminSection.route('/transactions/approvedList', {
   name: 'transaction_ApprovedList',
   action(){
-    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+    mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
   }
 });
 

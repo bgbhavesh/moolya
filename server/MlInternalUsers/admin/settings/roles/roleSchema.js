@@ -42,7 +42,7 @@ let Role = `
         assignRoles:[AssignRoles],
         modules: [Modules],
         isActive:Boolean,
-        teamStructureAssignment:teamStructureAssignment
+        isHierarchyAssigned:Boolean
   }
   
   scalar Date
@@ -90,21 +90,10 @@ let Role = `
       about:String, 
       assignRoles:[assignroles],
       modules:[modules], 
-      isActive:Boolean
-      teamStructureAssignment:teamStructureAssignmentInput      
+      isActive:Boolean,
+      isHierarchyAssigned:Boolean
   }
   
-  input teamStructureAssignmentInput{
-      isAssigned        : Boolean
-      assignedLevel     : String
-      reportingRole     : String
-  }
-  
-  type teamStructureAssignment{
-      isAssigned        : Boolean
-      assignedLevel     : String
-      reportingRole     : String
-  }
   
   type Query {
       fetchRole(roleName: String, roleValue: String, name: String): String

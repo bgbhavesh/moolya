@@ -15,10 +15,8 @@ let HierarchySchema = `
       subDepartmentName   : String
       isMoolya            : Boolean
       isActive            : Boolean
-      FinalApproval       : FinalApproval
     }    
     input FinalApprovalInput{
-      id                  : String
       parentDepartment    : String
       parentSubDepartment : String
       department          : String
@@ -27,7 +25,6 @@ let HierarchySchema = `
       clusterId           : String
     }
     type FinalApproval{
-      _id                  : String
       parentDepartment    : String
       parentSubDepartment : String
       department          : String
@@ -41,8 +38,6 @@ let HierarchySchema = `
         fetchRolesForDepartment(departmentId:String,clusterId:String):[Roles]
         fetchRolesForHierarchy(departmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String): [Roles]
         fetchRolesForFinalApprovalHierarchy(departmentId:String): [Roles]
-        fetchAssignedRoles(departmentId:String,type:String):[Roles]
-        fetchFinalApprovalRole(departmentId:String,subDepartmentId:String,clusterId:String):FinalApproval
     }
     type Mutation{
         updateHierarchyRoles(roles:[roleObject]):response

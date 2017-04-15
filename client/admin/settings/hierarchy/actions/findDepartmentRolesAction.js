@@ -10,12 +10,8 @@ export async function findDeptRolesActionHandler(department,cluster) {
            roleName
            displayName
            roleType           
-           isActive
-            teamStructureAssignment {
-              isAssigned
-              assignedLevel
-              reportingRole
-            }
+           isActive     
+           isHierarchyAssigned       
          } 
         }
     `,

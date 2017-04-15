@@ -55,7 +55,6 @@ class MlAddTaxation extends React.Component{
   async findTaxation(){
     let TaxationId=this.props.config
     const response = await findTaxationActionHandler(TaxationId);
-    console.log(response)
     this.setState({loading:false,data:response});
   }
   async  editTaxation() {
@@ -67,12 +66,19 @@ class MlAddTaxation extends React.Component{
       isActive: this.refs.isActive.checked,
       taxInformation: this.state.taxInformation
     }
-    let TaxationDetails={
-      id:this.props.config,
-      taxation:taxation
+    if(taxation.taxationName){
+      let TaxationDetails={
+        id:this.props.config,
+        taxation:taxation
+      }
+      const response = await updateTaxationActionHandler(TaxationDetails)
+      return response;
+    }else{
+      toastr.error("Tax Name is mandatory");
+      return false
     }
-    const response = await updateTaxationActionHandler(TaxationDetails)
-    return response;
+
+
   }
   onClickDate(event){
     let filedName=event.target.name

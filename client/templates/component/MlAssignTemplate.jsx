@@ -158,7 +158,7 @@ class MlAssignTemplate extends React.Component{
   }
 
   optionsBySelectUserType(val){
-    this.setState({userTypes:val})
+    this.setState({userTypes:val.value})
   }
 
   optionsBySelectIdentity(val){
@@ -226,7 +226,7 @@ class MlAssignTemplate extends React.Component{
     }
     `;
     let fetchUsers = gql`query($id:String){
-      data:FetchUserTypeSelect(communityCode:$id){
+      data:FetchUserType(communityCode:$id){
       label:userTypeName
       value:_id
       }
@@ -285,7 +285,7 @@ class MlAssignTemplate extends React.Component{
                           <Moolyaselect multiSelect={false}  placeholder={"Communities"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} id={'fetchcommunities'} onSelect={this.optionsBySelectCommunities.bind(this)} />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false}  placeholder={"User Types"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers} queryOptions={usertypeOption} isDynamic={true} id={'fetchuserTypes'} onSelect={this.optionsBySelectUserType.bind(this)} />
+                          <Moolyaselect multiSelect={false}  placeholder={"User Types"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers} queryOptions={usertypeOption} isDynamic={true} onSelect={this.optionsBySelectUserType.bind(this)} />
                         </div>
                         <div className="form-group">
                           <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>

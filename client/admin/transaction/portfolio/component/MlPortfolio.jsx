@@ -208,7 +208,7 @@ class MlPortfolio extends React.Component{
                       <div className="comment-box">
                         <div style={{marginTop:'8px'}} className="annotate">1</div>
                         <div style={{paddingLeft:'50px'}} className="comment-head">
-                          <h6 className="comment-name">{annotationDetails.quote}</h6>
+                          <h6 className="comment-name">Test</h6>
                           <div className="author">Chapter Manager</div>
                           <span>02 Nov 2016, 03:50:33 </span>
                         </div>

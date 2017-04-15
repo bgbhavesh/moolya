@@ -4,7 +4,9 @@ import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findRoleTypeActionHandler} from '../actions/findRoleTypeAction'
-import {updateRoleTypeActionHandler} from '../actions/updateRoleTypeAction'
+import {updateRoleTypeActionHandler} from '../actions/updateRoleTypeAction';
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 class MlEditRoleType extends React.Component{
   constructor(props) {
     super(props);
@@ -18,6 +20,13 @@ class MlEditRoleType extends React.Component{
   componentWillMount() {
 
   }
+
+  componentDidUpdate() {
+    initalizeFloatLabel();
+    OnToggleSwitch(false,true);
+  }
+
+
   componentDidMount(){
     const resp=this.findRoleType();
     if(this.state.data.isActive){
@@ -83,7 +92,6 @@ class MlEditRoleType extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/roleTypeList")
         }
       }
@@ -91,13 +99,14 @@ class MlEditRoleType extends React.Component{
 
     const showLoader=this.state.loading;
     return (
-      <div>
+      <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_main_wrap">
+
             <div className="admin_padding_wrap">
               <h2>Edit Role Type</h2>
-              <div className="col-md-6">
+              <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
+                  <form>
                   <div className="form-group">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                     <input type="text" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label" readOnly="readOnly"/>
@@ -107,10 +116,12 @@ class MlEditRoleType extends React.Component{
                     <textarea  ref="roleTypeDescription" placeholder="About" defaultValue={this.state.data&&this.state.data.roleTypeDescription}className="form-control float-label" id=""></textarea>
 
                   </div>
+                  </form>
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
+                  <form>
                   <div className="form-group">
                     <input type="text" ref="roleTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.roleTypeDisplayName} className="form-control float-label" id=""/>
                   </div>
@@ -121,9 +132,10 @@ class MlEditRoleType extends React.Component{
                       <div className="slider"></div>
                     </label>
                   </div>
+                  </form>
                 </div>
               </div>
-            </div>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"
             />
 

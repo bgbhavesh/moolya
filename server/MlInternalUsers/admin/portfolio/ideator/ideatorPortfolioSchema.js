@@ -256,14 +256,14 @@ let ideatorPortfolioSchema = `
         fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
-        fetchComments(portfoliodetailsId:String, annotationId:String): response
+        fetchComments(annotationId:String): response
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
     type Mutation{
         createIdeatorPortfolio(portfolio:ideatorPortfolio):response
         createAnnotation(portfoliodetailsId:String, docId:String, quote:String): response
-        createComment(userId:String, portfolioId:String, docId:String): response
+        createComment(annotatorId:String, portfolioId:String,comment:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
         updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
     }

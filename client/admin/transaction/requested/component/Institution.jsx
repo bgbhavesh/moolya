@@ -107,11 +107,11 @@ export default class institution extends React.Component{
         showAction: true,
         handler: this.updateRegistration.bind(this)
       },
-      {
-        actionName: 'comment',
-        showAction: true,
-        handler: null
-      },
+      // {
+      //   actionName: 'comment',
+      //   showAction: true,
+      //   handler: null
+      // },
       {
         showAction: true,
         actionName: 'cancel',

@@ -16,7 +16,7 @@ export async function updateRolesActionHandler(roles)
       }
     `,
     variables: {
-      roles:roles.roleObject
+      roles:roles
     }
   })
   const id = result.data.updateHierarchyRoles;

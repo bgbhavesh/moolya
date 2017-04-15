@@ -6,7 +6,7 @@ export async function findFinalApprovalRoleActionHandler(department,subDepartmen
     query: gql`
        query  ($departmentId: String,$subDepartmentId:String,$clusterId:String){
          fetchFinalApprovalRole(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId) {
-           _id
+           isChecked
            department
            subDepartment
            role

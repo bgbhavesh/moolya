@@ -26,8 +26,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       this.fetchAnnotations.bind(this);
       this.initalizeAnnotaor.bind(this);
       this.annotatorEvents.bind(this);
-      this.resetAnnotator.bind(this);
-  }
+    }
 
   initalizeAnnotaor(){
       initializeMlAnnotator(this.annotatorEvents.bind(this))
@@ -38,9 +37,6 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       });
   }
 
-  resetAnnotator()
-  {
-  }
 
 
 

@@ -80,15 +80,16 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       this.setState({annotations:JSON.parse(response.result)})
 
           let quotes = [];
-          console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
-          console.log(this.state.annotations);
+
           _.each(this.state.annotations, function (value) {
-            quotes.push({
-                          "id":value.annotatorId,
-                          "text" : value.quote.text,
-                          "quote" : value.quote.quote,
-                          "ranges" : value.quote.ranges
-                      })
+              quotes.push({
+                  "id":value.annotatorId,
+                  "text" : value.quote.text,
+                  "quote" : value.quote.quote,
+                  "ranges" : value.quote.ranges,
+                  "userName" : value.userName,
+                  "createdAt" : value.createdAt
+              })
           })
           this.state.content.annotator('loadAnnotations', quotes);
 

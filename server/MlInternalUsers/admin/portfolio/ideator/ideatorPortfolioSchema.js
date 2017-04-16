@@ -290,6 +290,8 @@ let ideatorPortfolioSchema = `
         createComment(annotatorId:String, portfolioId:String,comment:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
         updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
+        resolveComment(commentId:String): response
+        reopenComment(commentId:String): response
     }
 `
 

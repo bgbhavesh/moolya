@@ -8,6 +8,8 @@ import {fetchTemplateHandler} from "../../../../commons/containers/templates/mlt
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent';
 import {findComments} from '../../../../commons/annotaterComments/findComments'
 import {createCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
+import {resolveCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
+import {reopenCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import moment from "moment";
 
 class MlPortfolio extends React.Component{
@@ -36,6 +38,21 @@ class MlPortfolio extends React.Component{
         const response = createCommentActionHandler(commentsData)
         return response;
       });
+      $(document).on('click', '.resolveComment', function(e){
+        alert($(this).attr("id"));
+        let commentId = $(this).attr("id");
+        const response = resolveCommentActionHandler(commentId)
+        return response;
+
+      });
+      $(document).on('click', '.reopenComment', function(e){
+        alert($(this).attr("id"));
+        let commentId = $(this).attr("id");
+        const response = reopenCommentActionHandler(commentId)
+        return response;
+
+      });
+
 
 
     }
@@ -209,19 +226,19 @@ class MlPortfolio extends React.Component{
                       <div className="comment-box">
                         <div style={{marginTop:'8px'}} className="annotate">1</div>
                         <div style={{paddingLeft:'50px'}} className="comment-head">
-                          <h6 className="comment-name">Test</h6>
+                          <h6 className="comment-name"> {annotationDetails.userName}</h6>
                           <div className="author">Chapter Manager</div>
-                          <span>02 Nov 2016, 03:50:33 </span>
+                          <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
                         </div>
                         <div className="comment-content">
-                          {annotationDetails.quote}
+                          {annotationDetails.text}
                          </div>
 
                       </div>
                     </div>
                     <div className="ml_btn">
-                      <a href="#" className="save_btn">Resolve</a>
-                      <a href="#" className="cancel_btn">Re open</a>
+                      <a href="#" className="save_btn resolveComment" id={annotationDetails.id}>Resolve</a>
+                      <a href="#" className="cancel_btn reopenComment" id={annotationDetails.id}>Re open</a>
                       <a href="#" className="cancel_btn add_comment">Comment</a>
                     </div>
                     <div>

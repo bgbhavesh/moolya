@@ -65,8 +65,6 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
 
 MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) => {
     try {
-      console.log( Meteor.users.findOne({_id:context.userId}));
-      console.log(context);
       let userDetails = Meteor.users.findOne({_id:context.userId});
         if(args.portfoliodetailsId && args.docId && args.quote && context.userId){
           let annotator = {
@@ -134,6 +132,27 @@ MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
     return response;
 }
 
+MlResolver.MlMutationResolver['resolveComment'] = (obj, args, context, info) => {
+  if (args.commentId) {
+    let id = MlAnnotator.update(args.commentId, {$set:  {isResolved:true}});
+    if(id){
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Comment resolved", code);
+      return response;
+    }
+  }
+}
+
+MlResolver.MlMutationResolver['reopenComment'] = (obj, args, context, info) => {
+  if (args.commentId) {
+    let id = MlAnnotator.update(args.commentId, {$set:  {isReopened:true}});
+    if(id){
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Comment resolved", code);
+      return response;
+    }
+  }
+}
 
 MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
     let annotators = [];
@@ -143,7 +162,7 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
             if(annotatorObj.length > 0){
                 _.each(annotatorObj, function (value) {
                       let quote = JSON.parse(value['quote'])
-                      annotators.push({annotatorId:value._id, quote:quote})
+                      annotators.push({annotatorId:value._id, quote:quote,userName: value.userName,createdAt:value.createdAt})
                 })
             }
         }

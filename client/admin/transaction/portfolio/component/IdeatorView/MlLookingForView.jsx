@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {findIdeatorLookingForActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
-import {findAnnotations} from '../../actions/findPortfolioIdeatorDetails'
+import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 
@@ -41,11 +41,14 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
       return;
     switch (event){
       case 'create':{
-        this.createAnnotations(annotation);
+        let response = this.createAnnotations(annotation);
       }
         break;
       case 'update':{
-
+      }
+        break;
+      case 'annotationViewer':{
+        this.props.getSelectedAnnotations(annotation[0]);
       }
         break;
     }
@@ -54,27 +57,55 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
   async createAnnotations(annotation){
     let details = {portfolioId:this.props.portfolioDetailsId, docId:"lookingFor", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
-    return response;
-  }
-
-  async fetchAnnotations(){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "lookingFor");
-    this.setState({annotations:JSON.parse(response.result)})
-    if(this.state.annotations.length > 0){
-      var annotator = jQuery("#lookingForContent").data('annotator');
-      this.state.content.annotator('loadAnnotations', this.state.annotations);
+    if(response && response.success){
+      this.fetchAnnotations(true);
     }
     return response;
   }
 
+  async fetchAnnotations(isCreate){
+    const response = await findAnnotations(this.props.portfolioDetailsId, "lookingFor");
+    let resp = JSON.parse(response.result);
+    let annotations = this.state.annotations;
+    this.setState({annotations:JSON.parse(response.result)})
+
+    let quotes = [];
+
+    _.each(this.state.annotations, function (value) {
+      quotes.push({
+        "id":value.annotatorId,
+        "text" : value.quote.text,
+        "quote" : value.quote.quote,
+        "ranges" : value.quote.ranges,
+        "userName" : value.userName,
+        "createdAt" : value.createdAt
+      })
+    })
+    this.state.content.annotator('loadAnnotations', quotes);
+
+    return response;
+  }
+
+
   componentDidMount()
   {
-    OnLockSwitch();
-    dataVisibilityHandler();
+    $('.actions_switch').click();
+
+    $("#timeLine").popover({
+      'title' : 'Timeline',
+      'html' : true,
+      'placement' : 'top',
+      'container' : '.admin_main_wrap',
+      'content' : $(".ml_timeline").html()
+    });
+    $(document).on('click', '.add_comment', function(e){
+      $('.comment-input-box').slideToggle();
+    });
+
+    this.initalizeAnnotaor()
     this.fetchPortfolioInfo();
-    initalizeFloatLabel();
-    this.initalizeAnnotaor();
     this.fetchAnnotations();
+    initalizeFloatLabel();
   }
 
   async fetchPortfolioInfo(){

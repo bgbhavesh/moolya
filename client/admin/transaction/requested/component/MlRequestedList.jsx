@@ -12,15 +12,13 @@ export default class MlRequestedList extends Component {
   }
   componentDidMount() {
 
-
-
-    $("#Reg_Request").popover({
+    /*$("#Reg_Request").popover({
       'title' : 'Title Here',
       'html' : true,
       'placement' : 'top',
       'container' : '.admin_main_wrap',
       'content' : $(".ml_assignrequest").html()
-    });
+    });*/
 
   }
   assignActionHandler(data){
@@ -30,7 +28,7 @@ export default class MlRequestedList extends Component {
     console.log("yipppe its working");
     }else{
       this.setState({requestId:null,show:false});
-      alert("please select a record");
+      toastr.error("Please select a record");
     }
   }
 

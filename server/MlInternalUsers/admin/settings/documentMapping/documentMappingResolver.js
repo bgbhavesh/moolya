@@ -60,6 +60,9 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
     let response= MlProcessMapping.findOne({"_id":processId});
     if(response){
       let documents=response.documents;
+      let clusterId=response.clusters;
+      let chapterId=response.chapters;
+      let subChapterId=response.subChapters;
       let docIds=[],data=[];
       for(let i=0;i<documents.length;i++){
         if(documents[i].category==kycId&&documents[i].isActive==true){
@@ -71,14 +74,28 @@ MlResolver.MlQueryResolver['findProcessDocuments'] = (obj, args, context, info) 
       })
       if(uniquedocId.length>=1){
         for(let i=0;i<uniquedocId.length;i++){
-          let Documentdata = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]},isActive:true}]}).fetch();
-          Documentdata.map(function (doc,index) {
-            doc.documentType=[];
-            Documentdata[index].documentType[0]=uniquedocId[i]
-          });
-          if(Documentdata!=undefined){
+          let Documentdata = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]}, clusters: {$in: clusterId},
+            chapters: {$in: chapterId},
+            subChapters:{$in: subChapterId},isActive:true}]}).fetch();
+
+          if(Documentdata.length>=1){
+            Documentdata.map(function (doc,index) {
+              doc.documentType=[];
+              Documentdata[index].documentType[0]=uniquedocId[i]
+            });
             for(let j=0;j<Documentdata.length;j++){
               data.push(Documentdata[j])
+            }
+          }else{
+            let DocumentdataDetails = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [kycId] },documentType: {$in :[uniquedocId[i]]}, clusters: {$in: ["all"]},
+              chapters: {$in: ["all"]},
+              subChapters:{$in: ["all"]},isActive:true}]}).fetch();
+            DocumentdataDetails.map(function (doc,index) {
+              doc.documentType=[];
+              DocumentdataDetails[index].documentType[0]=uniquedocId[i]
+            });
+            for(let j=0;j<DocumentdataDetails.length;j++){
+              data.push(DocumentdataDetails[j])
             }
           }
 

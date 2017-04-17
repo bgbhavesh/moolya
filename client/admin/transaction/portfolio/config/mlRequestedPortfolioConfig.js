@@ -6,8 +6,8 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   module:"PortfolioRquest",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["name"],
-  searchFields:[],
+  fields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'accountType', 'source', 'createdBy', 'status'],
+  searchFields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'accountType', 'source', 'createdBy', 'status'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -38,7 +38,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id);
         } else{
-          alert("Please select a User");
+          toastr.error("Please select a record");
         }
       }
     },
@@ -54,7 +54,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         if(data && data.id){
           const internalConfig=data;
         } else{
-          alert("Please select a User");
+          toastr.error("Please select a record");
         }
       }
     },
@@ -65,7 +65,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data.id);
         } else{
-          alert("Please select a User");
+          toastr.error("Please select a record");
         }
       }
     },

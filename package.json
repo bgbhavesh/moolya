@@ -120,7 +120,6 @@
     "react-tab-panel": "^2.2.7",
     "react-toastr": "^2.8.2",
     "react-utils": "^1.0.0",
-    "reactstrap": "^4.5.0",
     "recompose": "^0.23.1",
     "redux": "^3.6.0",
     "simpl-schema": "^0.2.2",

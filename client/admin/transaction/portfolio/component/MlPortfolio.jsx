@@ -219,7 +219,7 @@ class MlPortfolio extends React.Component{
         console.log(annotationDetails)
         const showLoader=this.state.loading;
         return(
-          <div style={{"display" : "none"}} className="admin_main_wrap">
+          <div className="admin_main_wrap">
             {showLoader===true?( <div className="loader_wrap"></div>):(
               <div className="admin_padding_wrap">
                 <div className='step-progress' >
@@ -229,7 +229,7 @@ class MlPortfolio extends React.Component{
                 </div>
               </div>)}
 
-            <div className="ml_annotations">
+            <div style={{"display":"none"}} className="ml_annotations">
               <div className="comments-container cus_scroll large_popover">
                 <ul id="comments-list" className="comments-list">
                   <li>

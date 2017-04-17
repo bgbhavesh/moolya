@@ -6,8 +6,8 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   module:"PortfolioRquest",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["name"],
-  searchFields:[],
+  fields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'accountType', 'source', 'createdBy', 'status'],
+  searchFields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'accountType', 'source', 'createdBy', 'status'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.

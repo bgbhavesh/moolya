@@ -224,11 +224,15 @@ export default class Step1 extends React.Component{
     label:chapterName
   }  
 }`;
-    let citiesquery = gql`query{
+/*    let citiesquery = gql`query{
   data:fetchCities {label:name,value:_id
   }
 }
-`;
+`;*/
+    let citiesquery = gql`query($countryId:String){
+      data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
+    }
+    `;
     let fetchcommunities = gql` query{
   data:fetchCommunityDefinition{label:name,value:code}
 } 
@@ -284,6 +288,7 @@ export default class Step1 extends React.Component{
     let identityTypez=_.filter(that.state.identityTypesData, function(i) { return _.indexOf(i.communities,that.state.registrationType)>=0?true:false;})||[];
     console.log(identityTypez);
     let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
+    let countryOption = {options: { variables: {countryId:this.state.country}}};
     return (
       <div>
       {showLoader===true?( <div className="loader_wrap"></div>):(
@@ -315,7 +320,7 @@ export default class Step1 extends React.Component{
                   <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true"/>
                 </div>
                 <div className="form-group">
-                  {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
+                  <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>

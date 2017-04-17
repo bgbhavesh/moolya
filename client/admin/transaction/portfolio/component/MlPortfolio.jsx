@@ -11,7 +11,7 @@ import {createCommentActionHandler} from '../../../../commons/annotaterComments/
 import {resolveCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import {reopenCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import moment from "moment";
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+// import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
 class MlPortfolio extends React.Component{
     constructor(props){

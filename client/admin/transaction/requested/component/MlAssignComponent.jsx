@@ -17,7 +17,8 @@ export default class MlAssignComponent extends Component {
                   selectedCommunity:null,
                   selectedDepartment:null,
                   selectedSubDepartment:null,
-                  selectedRole:null
+                  selectedRole:null,
+                  selectedUser:null
                 };
     return this;
   }
@@ -32,6 +33,10 @@ export default class MlAssignComponent extends Component {
   optionsBySelectChapter(value){
 
     this.setState({selectedChapter:value})
+  }
+  optionsBySelectCommunity(){
+
+    this.setState({selectedCommunity:value})
   }
   optionsBySelectSubChapter(value){
 
@@ -48,6 +53,10 @@ export default class MlAssignComponent extends Component {
   optionsByRole(value){
 
     this.setState({selectedRole:value})
+  }
+  optionsBySelectUser(value){
+
+    this.setState({selectedUser:value})
   }
 
 
@@ -87,6 +96,10 @@ export default class MlAssignComponent extends Component {
         label:roleName
       }  
     }`;
+    let fetchcommunities = gql` query{
+      data:fetchCommunityDefinition{label:name,value:code}
+    }
+    `;
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
     let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}
@@ -102,31 +115,24 @@ export default class MlAssignComponent extends Component {
                     }}};
     return (
 
-      <div className="ml_assignrequest" style={{'display':'none'}}>
+    /*  <div className="ml_assignrequest" style={{'display':'none'}}>*/
+      <div className="panel panel-default-bottom col-md-12">
         <div className="mrgn-btm">
           <input type="text" placeholder="Search User" className="search-form-control" id="" />
         </div>
         <div className="col-md-6 nopadding-left">
           <div className="form-group">
-          {/*  <Select name="form-field-name"value="select" className="float-label"/>*/}
             <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCluster} queryType={"graphql"} query={clusterQuery} onSelect={that.optionsBySelectCluster.bind(this)} isDynamic={true}/>
           </div>
           <div className="form-group">
-           {/*<Select name="form-field-name"value="select" className="float-label"disabled= {true} />*/}
             <Moolyaselect multiSelect={false} placeholder="Select Subchapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterquery} reExecuteQuery={true} queryOptions={subChapterOption} isDynamic={true} onSelect={this.optionsBySelectSubChapter.bind(this)} />
-
           </div>
           <div className="form-group">
-            {/*<Select name="form-field-name"value="select" className="float-label"disabled={true} />*/}
             <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedDepartment} queryType={"graphql"} query={departmentQuery} reExecuteQuery={true} queryOptions={departmentOption} isDynamic={true} onSelect={this.optionsBySelectDepartment.bind(this)} />
           </div>
-
           <div className="form-group">
-            {/*<Select name="form-field-name"value="select" className="float-label"disabled={true} />*/}
             <Moolyaselect multiSelect={false} placeholder="Select Role" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedRole} queryType={"graphql"} query={roleQuery} reExecuteQuery={true} queryOptions={roleOption} isDynamic={true} onSelect={this.optionsByRole.bind(this)} />
           </div>
-
-
         </div>
 
         <div className="col-md-6 nopadding-right">
@@ -134,16 +140,13 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedChapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption} isDynamic={true} onSelect={this.optionsBySelectChapter.bind(this)} />
           </div>
           <div className="form-group">
-            {/*<Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label"  queryType={"graphql"}  reExecuteQuery={true} isDynamic={true}  />*/}
+            <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label"  queryType={"graphql"} query={fetchcommunities}  reExecuteQuery={true} isDynamic={true} selectedValue={this.state.selectedCommunity}  onSelect={this.optionsBySelectCommunity.bind(this)} />
           </div>
           <div className="form-group">
-            {/*<Select name="form-field-name"value="select" className="float-label"disabled={true} />*/}
             <Moolyaselect multiSelect={false} placeholder="Select Sub Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubDepartment} queryType={"graphql"} query={subDepartmentQuery} reExecuteQuery={true} queryOptions={subDepartmentOption} isDynamic={true} onSelect={this.optionsBySelectSubDepartment.bind(this)} />
           </div>
-
-
           <div className="form-group">
-            <Select name="form-field-name"value="select" className="float-label"disabled={true} />
+            <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={subDepartmentQuery} reExecuteQuery={true} queryOptions={subDepartmentOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
           </div>
         </div>
 

@@ -217,8 +217,13 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
      }
      orderNumberGenService.assignPortfolioId(portfolioDetails, portfolioDetails.communityCode)
 
+      let registrationData = regRecord.registrationDetails;
+      registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
+      registrationData.emailId = regRecord.registrationInfo.userName;
+      registrationData.industry = regRecord.registrationInfo.industry;
+
        try{
-          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails},context, info);
+          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);
        }catch(e){
             console.log(e);
          //send error response;

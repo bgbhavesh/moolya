@@ -11,21 +11,32 @@ import {createCommentActionHandler} from '../../../../commons/annotaterComments/
 import {resolveCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import {reopenCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import moment from "moment";
+import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
 class MlPortfolio extends React.Component{
     constructor(props){
         super(props)
-        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{}, text:"",annotationData: {},commentsData:[]}
+        this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false, anotationDetails:{},
+                          text:"",annotationData: {},commentsData:[], popoverOpen: false}
         this.fetchEditPortfolioTemplate.bind(this);
         this.fetchViewPortfolioTemplate.bind(this);
         this.getPortfolioDetails.bind(this);
         this.getContext.bind(this);
         this.getSelectedAnnotation.bind(this);
         this.fetchComments.bind(this);
+      this.toggle = this.toggle.bind(this);
+
         return this;
     }
 
-    componentDidMount(){
+  toggle() {
+    this.setState({
+      popoverOpen: !this.state.popoverOpen
+    });
+  }
+
+
+  componentDidMount(){
       let portfolioId = this.props.config;
       $(document).on('click', '#saveComment', function(e){
         let annotationId = $("#saveComment").data("id");
@@ -107,6 +118,7 @@ class MlPortfolio extends React.Component{
       if(annotation && annotation.id){
         const response = await findComments(annotation.id);
         this.setState({commentsData : response},function(){
+          this.toggle();
           $(".ml-annotate").popover({
             'title' : 'Annotations',
             'html' : true,
@@ -217,7 +229,7 @@ class MlPortfolio extends React.Component{
                 </div>
               </div>)}
 
-            <div style={{'display':'none'}} className="ml_annotations">
+            <div style={{"display":"none"}} className="ml_annotations">
               <div className="comments-container cus_scroll large_popover">
                 <ul id="comments-list" className="comments-list">
                   <li>
@@ -246,7 +258,7 @@ class MlPortfolio extends React.Component{
                       <div className="ml_icon_btn">
                         <a href="#" id="saveComment"  data-id={annotationDetails.id} className="save_btn"><span
                           className="ml ml-save"></span></a>
-                        {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
+                        <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
                       </div>
                     </div>
 
@@ -273,6 +285,72 @@ class MlPortfolio extends React.Component{
               </div>
             </div>
             <div className="overlay"></div>
+  {/*          <div>
+              <Button id="Popover1">
+                Launch Popover
+              </Button>
+              <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+                <PopoverTitle>Popover Title</PopoverTitle>
+                <PopoverContent>
+                  <div className="ml_annotations">
+                    <div className="comments-container cus_scroll large_popover">
+                      <ul id="comments-list" className="comments-list">
+                        <li>
+                          <div className="comment-main-level">
+                            <div className="comment-avatar"><img src="/images/p_1.jpg" alt=""/></div>
+                            <div className="comment-box">
+                              <div style={{marginTop:'8px'}} className="annotate">1</div>
+                              <div style={{paddingLeft:'50px'}} className="comment-head">
+                                <h6 className="comment-name"> {annotationDetails.userName}</h6>
+                                <div className="author">Chapter Manager</div>
+                                <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
+                              </div>
+                              <div className="comment-content">
+                                {annotationDetails.text}
+                              </div>
+
+                            </div>
+                          </div>
+                          <div className="ml_btn">
+                            <a href="#" className="save_btn resolveComment" id={annotationDetails.id}>Resolve</a>
+                            <a href="#" className="cancel_btn reopenComment" id={annotationDetails.id}>Re open</a>
+                            <a href="#" className="cancel_btn add_comment">Comment</a>
+                          </div>
+                          <div>
+                            <textarea ref="comment" id="comment" className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
+                            <div className="ml_icon_btn">
+                              <a href="#" id="saveComment"  data-id={annotationDetails.id} className="save_btn"><span
+                                className="ml ml-save"></span></a>
+                              <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
+                            </div>
+                          </div>
+
+                          <ul className="comments-list reply-list">
+                            {that.state.commentsData.map(function (options, key) {
+                              return(<li key={key}>
+                                <div className="comment-avatar">
+                                  <img src="/images/p_2.jpg" alt=""/>
+                                </div>
+                                <div className="comment-box">
+                                  <div className="comment-head">
+                                    <h6 className="comment-name">{options.userName}</h6>
+                                    <span>{moment(options.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
+                                  </div>
+                                  <div className="comment-content">
+                                    {options.comment}
+                                  </div>
+                                </div>
+                              </li>)
+                            })}
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="overlay"></div>
+                </PopoverContent>
+              </Popover>
+            </div>*/}
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>
         )

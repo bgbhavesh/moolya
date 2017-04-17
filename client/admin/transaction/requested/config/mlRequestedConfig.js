@@ -35,21 +35,22 @@ const mlUserTypeTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
         } else{
-          toastr.err("Please Select a User Type");
+          toastr.error("Please Select a User Type");
         }
       }
     },
-     {
+    {
       showAction: true,
-       actionName: 'assign',
-       handler: (data)=>{
-         if(data && data.id){
-         const internalConfig=data;
-         } else{
-           toastr.err("Please Select a User Type");
-         }
-       }
-       },
+      actionName: 'assign',
+      handler: (data) => {
+        console.log(data);
+        if (data && data.id) {
+          const internalConfig = data;
+        } else {
+          toastr.error("Please Select a User Type");
+        }
+      }
+    }
     // {
     //   showAction: true,
     //   actionName: 'logout',

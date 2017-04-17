@@ -234,9 +234,16 @@ class MlEditAssignTemplate extends React.Component{
     let that=this;
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: async(event) => this.props.handler(this.updateTemplateAssignment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+      },
+      {
+        actionName: 'cancel',
+        showAction: true,
+        handler: async(event) => {
+            FlowRouter.go("/admin/templates/templateList");
+        }
       }
     ]
 

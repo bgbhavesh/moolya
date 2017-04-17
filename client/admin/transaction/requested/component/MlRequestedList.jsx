@@ -30,7 +30,7 @@ export default class MlRequestedList extends Component {
     console.log("yipppe its working");
     }else{
       this.setState({requestId:null,show:false});
-      alert("please select a record");
+      toastr.error("Please select a record");
     }
   }
 

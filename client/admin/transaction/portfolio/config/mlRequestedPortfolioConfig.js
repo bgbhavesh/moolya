@@ -38,7 +38,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id);
         } else{
-          alert("Please select a record");
+          toastr.error("Please select a record");
         }
       }
     },
@@ -54,7 +54,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         if(data && data.id){
           const internalConfig=data;
         } else{
-          alert("Please select a record");
+          toastr.error("Please select a record");
         }
       }
     },
@@ -65,7 +65,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data.id);
         } else{
-          alert("Please select a record");
+          toastr.error("Please select a record");
         }
       }
     },

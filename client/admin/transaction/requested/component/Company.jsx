@@ -194,8 +194,12 @@ export default class Company extends React.Component{
       label:userTypeName
   }  }
     `;
-    let citiesquery = gql`query{
+/*    let citiesquery = gql`query{
       data:fetchCities {label:name,value:_id }
+    }
+    `;*/
+    let citiesquery = gql`query($countryId:String){
+      data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
     }
     `;
     let entitiesquery = gql`query{
@@ -206,15 +210,21 @@ export default class Company extends React.Component{
     data:fetchIndustries{label:industryName,value:_id}
     }
     `;
-    let lookinforquery=gql` query{
-    data:fetchLookingFor{label:lookingForName,value:_id}
-    }
+    let lookinforquery=gql`query($communityCode:String){
+  data:fetchLookingFor(communityCode:$communityCode) {
+    label:lookingForName
+  	value:_id
+  }
+  
+}
     `;
+    let lookingOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
     let stageofcompquery=gql` query{
     data:fetchStageOfCompany{label:stageOfCompanyName,value:_id}
     }
     `;
     let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
+    let countryOption = {options: { variables: {countryId:this.props.clusterId}}};
     let that=this;
     const showLoader=this.state.loading;
     return (
@@ -252,10 +262,10 @@ export default class Company extends React.Component{
                 <FontAwesome name="calendar" className="password_icon"/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
                 <input type="text" ref="isoAccrediationNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} placeholder="ISO certification number" className="form-control float-label" id=""/>
@@ -270,7 +280,7 @@ export default class Company extends React.Component{
                 <input type="text" ref="investors" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.investors} placeholder="Investors" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Looking For" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedLookingFor} queryType={"graphql"} query={lookinforquery} onSelect={that.optionsBySelectLookingFor.bind(that)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Looking For" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedLookingFor} queryType={"graphql"} query={lookinforquery}  queryOptions={lookingOption} onSelect={that.optionsBySelectLookingFor.bind(that)} isDynamic={true}/>
               </div>
             </form>
           </div>

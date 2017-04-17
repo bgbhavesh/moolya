@@ -119,14 +119,14 @@ class MlPortfolio extends React.Component{
         const response = await findComments(annotation.id);
         this.setState({commentsData : response},function(){
           this.toggle();
-   /*       $(".ml-annotate").popover({
+          $(".ml-annotate").popover({
             'title' : 'Annotations',
             'html' : true,
             'placement' : 'top',
             'container' : '.admin_main_wrap',
             'content' : $(".ml_annotations").html()
           });
-          $('.ml-annotate').click();*/
+          $('.ml-annotate').click();
         });
       }
 
@@ -229,7 +229,7 @@ class MlPortfolio extends React.Component{
                 </div>
               </div>)}
 
-          {/*  <div className="ml_annotations">
+            <div className="ml_annotations">
               <div className="comments-container cus_scroll large_popover">
                 <ul id="comments-list" className="comments-list">
                   <li>
@@ -284,8 +284,8 @@ class MlPortfolio extends React.Component{
                 </ul>
               </div>
             </div>
-            <div className="overlay"></div>*/}
-            <div>
+            <div className="overlay"></div>
+  {/*          <div>
               <Button id="Popover1">
                 Launch Popover
               </Button>
@@ -350,7 +350,7 @@ class MlPortfolio extends React.Component{
                   <div className="overlay"></div>
                 </PopoverContent>
               </Popover>
-            </div>
+            </div>*/}
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>
         )

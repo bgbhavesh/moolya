@@ -33,7 +33,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
           FlowRouter.go("/admin/templates/assignTemplate/"+data.id)
         }
         else{
-          toastr.err("Please Select a Template Type")
+          toastr.error("Please Select a Template Type")
         }
       }
     },

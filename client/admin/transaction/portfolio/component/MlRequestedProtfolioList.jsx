@@ -19,7 +19,7 @@ export default class MlRequestedPortfolioList extends Component {
       console.log("yipppe its working");
     }else{
       this.setState({requestId:null,show:false});
-      alert("please select a record");
+      toastr.error("please select a record");
     }
   }
 

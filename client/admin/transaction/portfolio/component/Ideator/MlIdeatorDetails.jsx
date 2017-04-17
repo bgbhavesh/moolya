@@ -183,7 +183,7 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Fcebook Id" name="facebookId" defaultValue={this.state.data.facebookId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Facebook Id" name="facebookId" defaultValue={this.state.data.facebookId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isfacebookIdPrivate" onClick={this.onClick.bind(this, "isfacebookIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isfacebookIdPrivate}/>
                     </div>
 

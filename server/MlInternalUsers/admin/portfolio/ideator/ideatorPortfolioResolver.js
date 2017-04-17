@@ -18,7 +18,8 @@ MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, i
                   MlIdeatorPortfolio.insert({
                     userId: args.userId,
                     communityType: args.communityType,
-                    portfolioDetailsId: args.portfolioDetailsId
+                    portfolioDetailsId: args.portfolioDetailsId,
+                    portfolioIdeatorDetails:args.portfolioIdeatorDetails
                   })
               }
           }

@@ -12,15 +12,13 @@ export default class MlRequestedList extends Component {
   }
   componentDidMount() {
 
-
-
-    $("#Reg_Request").popover({
+    /*$("#Reg_Request").popover({
       'title' : 'Title Here',
       'html' : true,
       'placement' : 'top',
       'container' : '.admin_main_wrap',
       'content' : $(".ml_assignrequest").html()
-    });
+    });*/
 
   }
   assignActionHandler(data){

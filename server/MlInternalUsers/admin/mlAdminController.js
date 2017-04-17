@@ -161,7 +161,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                       let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
                       if(details){
                           switch (details.communityType){
-                              case 'ideators':{
+                              case 'Ideators':{
                                   let ideatorPortfolio = data.portfolio;
                                   for (key in ideatorPortfolio){
                                       let inner = ideatorPortfolio[key]

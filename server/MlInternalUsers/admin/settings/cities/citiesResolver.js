@@ -104,8 +104,13 @@ MlResolver.MlQueryResolver['fetchCitiesPerState'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['fetchCitiesPerCountry'] = (obj, args, context, info) => {
 
   if(args.countryId){
+    let countryId = args.countryId;
+    if(args.countryId.length>5){
+      let resp = mlDBController.findOne('MlClusters', {"_id":countryId}, context);
+      countryId = resp.countryId;
+    }
     // let resp = MlCities.find({"countryId":args.countryId,"isActive":true},{sort: {name:1}}).fetch()
-    let resp = mlDBController.find('MlCities', {"countryId":args.countryId,"isActive":true}, context, {sort: {name:1}}).fetch()
+    let resp = mlDBController.find('MlCities', {"countryId":countryId,"isActive":true}, context, {sort: {name:1}}).fetch()
     return resp;
   }
 };

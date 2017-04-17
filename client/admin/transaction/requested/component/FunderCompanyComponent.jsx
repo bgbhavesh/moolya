@@ -226,10 +226,15 @@ export default class Company extends React.Component{
     data:fetchIndustries{label:industryName,value:_id}
     }
     `;
-    let lookinforquery=gql` query{
-    data:fetchLookingFor{label:lookingForName,value:_id}
-    }
+    let lookinforquery=gql`query($communityCode:String){
+  data:fetchLookingFor(communityCode:$communityCode) {
+    label:lookingForName
+  	value:_id
+  }
+  
+}
     `;
+    let lookingOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
     let stageofcompquery=gql` query{
     data:fetchStageOfCompany{label:stageOfCompanyName,value:_id}
     }
@@ -289,13 +294,13 @@ export default class Company extends React.Component{
                 <input type="text" ref="investors" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.investors} placeholder="Investors" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Looking For" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedLookingFor} queryType={"graphql"} query={lookinforquery} onSelect={that.optionsBySelectLookingFor.bind(that)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Looking For" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedLookingFor} queryType={"graphql"} query={lookinforquery} queryOptions={lookingOption} onSelect={that.optionsBySelectLookingFor.bind(that)} isDynamic={true}/>
               </div>
                <div className="panel panel-default">
                   <div className="panel-heading">Investment Per Year</div>
                   <div className="panel-body">
                    <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Currency" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.currency} queryType={"graphql"} query={lookinforquery} onSelect={that.optionsBySelectCurrency.bind(that)} isDynamic={true}/>
+                        <Moolyaselect multiSelect={false} placeholder="Select Currency" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.currency} queryType={"graphql"} query={lookinforquery} queryOptions={lookingOption} onSelect={that.optionsBySelectCurrency.bind(that)} isDynamic={true}/>
                   </div>
                    <div className="form-group">
                    <input type="text" ref="investmentAmount" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.investmentAmount} placeholder="Enter Amount" className="form-control float-label" id=""/>

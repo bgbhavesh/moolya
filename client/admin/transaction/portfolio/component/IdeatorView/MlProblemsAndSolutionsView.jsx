@@ -14,7 +14,6 @@ import _ from 'lodash'
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
       super(props);
-      console.log(props);
       this.state = {
           portfolioIdeatorInfo: {},
           annotations:[],
@@ -94,18 +93,6 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
   componentDidMount(){
     $('.actions_switch').click();
-
-    $("#timeLine").popover({
-      'title' : 'Timeline',
-      'html' : true,
-      'placement' : 'top',
-      'container' : '.admin_main_wrap',
-      'content' : $(".ml_timeline").html()
-    });
-    $(document).on('click', '.add_comment', function(e){
-      $('.comment-input-box').slideToggle();
-    });
-
     this.initalizeAnnotaor()
     this.fetchPortfolioInfo();
     this.fetchAnnotations();

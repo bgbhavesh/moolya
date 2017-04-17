@@ -86,7 +86,8 @@ export default class MlActionComponent extends Component {
         //id:'annotationss',
         imagefield:'/images/act_select_icon.png',
         actionName:'comment',
-        iconClass:'ml ml-annotate'
+        iconClass:'ml ml-annotate',
+        iconID:'Popover1'
       },
       {
         imagefield:'/images/act_select_icon.png',
@@ -121,7 +122,7 @@ export default class MlActionComponent extends Component {
         }
         return (
           <div className={`${activeClass} `} key={option.actionName}  >
-            <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `}>
+            <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `} id={action['iconID']}>
               {/*<img src={action['imagefield']} />*/}
               <span className={action['iconClass']}></span>
             </div></div>

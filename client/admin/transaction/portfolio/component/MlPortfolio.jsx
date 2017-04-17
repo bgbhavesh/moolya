@@ -219,7 +219,7 @@ class MlPortfolio extends React.Component{
         console.log(annotationDetails)
         const showLoader=this.state.loading;
         return(
-          <div className="admin_main_wrap">
+          <div style={{"display" : "none"}} className="admin_main_wrap">
             {showLoader===true?( <div className="loader_wrap"></div>):(
               <div className="admin_padding_wrap">
                 <div className='step-progress' >

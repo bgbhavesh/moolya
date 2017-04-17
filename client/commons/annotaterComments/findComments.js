@@ -11,7 +11,15 @@ export async function findComments(annotationId) {
     query: gql`
           query ($annotationId: String!) {
               fetchComments(annotationId: $annotationId) {
-                    result
+                  _id
+                  comment
+    							annotatorId
+    							portfolioId
+    							userId 
+                  userName
+                  isResolved
+                  isReopened
+                  createdAt
               }
           }
   
@@ -22,7 +30,11 @@ export async function findComments(annotationId) {
     forceFetch: true
   })
   const data = result.data.fetchComments;
-  return data
+  let commitsArray = []
+  commitsArray  = _.map(data, function (row) {
+    return _.omit(row, ['__typename']);
+  });
+  return commitsArray;
 }
 
 

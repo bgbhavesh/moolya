@@ -36,7 +36,7 @@ MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, inf
   if (roles) {
       roles.map(function (role) {
       if (role.id) {
-        let result = mlDBController.update('MlRoles', {_id:role.id}, {"teamStructureAssignment" : role.teamStructureAssignment}, {$set:true, multi:true}, context)
+        let result = mlDBController.update('MlRoles', {_id:role.id}, {"isHierarchyAssigned" : role.isHierarchyAssigned}, {$set:true, multi:true}, context)
         let code = 200;
         response = new MlRespPayload().successPayload(result, code);
        // responses.push(response)
@@ -75,18 +75,7 @@ MlResolver.MlMutationResolver['updateFinalApprovalRoles'] = (obj, args, context,
 };
 
 
-MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info) => {
-  let response;
-  if (args.departmentId && args.subDepartmentId) {
-     response = mlDBController.findOne("MlHierarchyFinalApproval", {
-      "parentDepartment": args.departmentId,
-      "parentSubDepartment": args.subDepartmentId,
-      "clusterId":args.clusterId
-    }, context)
-  }
 
-  return response;
-}
 
 MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info) => { // reporting role
   let roles = [];
@@ -172,42 +161,6 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
       let ary = []
       _.each(item.assignRoles, function (value, key) {
         if ( value.cluster == 'all' || value.cluster==args.clusterId) {
-          if (value.isActive) {
-            ary.push(value);
-          }
-        }
-      })
-      item.assignRoles = ary
-    })
-    _.each(valueGet, function (item, key) {
-      if (item) {
-        if (item.assignRoles.length < 1) {
-          valueGet.splice(key, 1)
-        }
-      }
-    })
-    if(!department.isSystemDefined){
-      _.remove(roles, {roleName: 'platformadmin'})
-      _.remove(roles, {roleName: 'clusteradmin'})
-      _.remove(roles, {roleName: 'chapteradmin'})
-      _.remove(roles, {roleName: 'subchapteradmin'})
-      _.remove(roles, {roleName: 'communityadmin'})
-    }
-    roles = valueGet;
-  }
-  return roles;
-}
-
-MlResolver.MlQueryResolver['fetchAssignedRoles'] = (obj, args, context, info) => {
-  let roles = [];
-  let levelCode = "";
-  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive) {
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}},{'$and':[{"teamStructureAssignment.isAssigned":true},{"teamStructureAssignment.assignedLevel":args.type}]}, {"isActive":true}]}, context).fetch()
-    _.each(valueGet, function (item, say) {
-      let ary = []
-      _.each(item.assignRoles, function (value, key) {
-        if ( value.cluster == 'all') {
           if (value.isActive) {
             ary.push(value);
           }

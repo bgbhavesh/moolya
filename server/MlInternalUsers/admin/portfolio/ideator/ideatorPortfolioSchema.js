@@ -245,6 +245,30 @@ let ideatorPortfolioSchema = `
         library:library
     }
     
+    type commentsInfo{
+       _id:String,
+      annotatorId : String,
+      portfolioId : String,
+      comment : String,
+      userId :String,
+      userName : String,
+      isResolved:Boolean,
+      isReopened:Boolean,
+      createdAt:String
+    }
+    
+     type annotationInfo{
+      _id:String,
+      portfolioId : String,
+      referenceDocId : String,
+      quote : String,
+      userId :String,
+      userName : String,
+      isResolved:Boolean,
+      isReopened:Boolean,
+      createdAt:String
+    }
+    
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
         fetchIdeatorPortfolioIdeas(portfoliodetailsId:String!):ideasObject
@@ -256,7 +280,7 @@ let ideatorPortfolioSchema = `
         fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
-        fetchComments(annotationId:String): response
+        fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
@@ -266,6 +290,8 @@ let ideatorPortfolioSchema = `
         createComment(annotatorId:String, portfolioId:String,comment:String): response
         updateAnnotation(userId:String, portfolioId:String, docId:String, annotationId:String): response
         updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
+        resolveComment(commentId:String): response
+        reopenComment(commentId:String): response
     }
 `
 

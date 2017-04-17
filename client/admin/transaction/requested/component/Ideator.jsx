@@ -321,7 +321,7 @@ export default class Ideator extends React.Component{
                   <div className="form_bg">
                     <form>
                       <div className="form-group">
-                        <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
+                        <input type="text" placeholder="Date & Time" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}/>
                       </div>
                       <div className="form-group">
                         <input type="text" placeholder="Request Id" className="form-control float-label" id=""/>

@@ -65,8 +65,18 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
 
 MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) => {
     try {
-        if(args.portfoliodetailsId && args.docId && args.quote){
-          let annotator = {portfolioId:args.portfoliodetailsId, referenceDocId:args.docId, quote:args.quote, isResolved:false, isReopened:false}
+      let userDetails = Meteor.users.findOne({_id:context.userId});
+        if(args.portfoliodetailsId && args.docId && args.quote && context.userId){
+          let annotator = {
+            portfolioId:args.portfoliodetailsId,
+            referenceDocId:args.docId,
+            quote:args.quote,
+            userId:context.userId,
+            userName:userDetails.username,
+            isResolved:false,
+            isReopened:false,
+            createdAt: new Date()
+          }
           MlAnnotator.insert({...annotator})
         }
         else{
@@ -90,9 +100,20 @@ MlResolver.MlMutationResolver['updateAnnotation'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
+    let userDetails = Meteor.users.findOne({_id:context.userId});
     try {
-        if(args.portfolioId && args.annotationId && args.comment){
-            let comment = {annotatorId:args.annotatorId, portfolioId:args.portfolioId, quote:args.quote, isResolved:false, isReopened:false}
+        if(args.portfolioId && args.annotatorId && args.comment && context.userId){
+            let comment = {
+                              annotatorId:args.annotatorId,
+                              portfolioId:args.portfolioId,
+                              comment:args.comment,
+                              quote:args.quote,
+                              userId:context.userId,
+                              userName:userDetails.username,
+                              isResolved:false,
+                              isReopened:false,
+                              createdAt: new Date()
+                          }
             MlAnnotatorComments.insert({...comment})
         }
         else{
@@ -111,6 +132,27 @@ MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
     return response;
 }
 
+MlResolver.MlMutationResolver['resolveComment'] = (obj, args, context, info) => {
+  if (args.commentId) {
+    let id = MlAnnotator.update(args.commentId, {$set:  {isResolved:true}});
+    if(id){
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Comment resolved", code);
+      return response;
+    }
+  }
+}
+
+MlResolver.MlMutationResolver['reopenComment'] = (obj, args, context, info) => {
+  if (args.commentId) {
+    let id = MlAnnotator.update(args.commentId, {$set:  {isReopened:true}});
+    if(id){
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Comment resolved", code);
+      return response;
+    }
+  }
+}
 
 MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
     let annotators = [];
@@ -120,7 +162,7 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
             if(annotatorObj.length > 0){
                 _.each(annotatorObj, function (value) {
                       let quote = JSON.parse(value['quote'])
-                      annotators.push({annotatorId:value._id, quote:quote})
+                      annotators.push({annotatorId:value._id, quote:quote,userName: value.userName,createdAt:value.createdAt})
                 })
             }
         }
@@ -143,13 +185,9 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
     let comments = [];
     try {
-        if(args.commentId && args.annotatorId){
-           let commentsObj = MlAnnotatorComments.find({"annotatorId":args.annotatorId}).fetch()
-            if(commentsObj.length > 0){
-                _.each(commentsObj, function (value) {
-                    comments.push(JSON.parse(value))
-                })
-            }
+        if( args.annotationId){
+           let response = MlAnnotatorComments.find({"annotatorId":args.annotationId}).fetch()
+            return response
         }
         else{
             let code = 400;

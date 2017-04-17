@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function updateFinalApprovalActionHandler(approvalDetails)
+export async function updateHierarchyAssignmentsActionHandler(hierarchy)
 {
   const result = await client.mutate({
     mutation: gql`
-   mutation  ($finalRole:FinalApprovalInput){
-        updateFinalApprovalRoles(
-          finalRole:$finalRole         
+   mutation  ($hierarchy:HierarchyAssignmentInput){
+        updateHierarchyAssignment(
+          hierarchy:$hierarchy         
         ){
             success,
             code,
@@ -16,9 +16,9 @@ export async function updateFinalApprovalActionHandler(approvalDetails)
       }
     `,
     variables: {
-      finalRole:approvalDetails
+      hierarchy:hierarchy
     }
   })
-  const id = result.data.updateFinalApprovalRoles;
+  const id = result.data.updateHierarchyAssignment;
   return id
 }

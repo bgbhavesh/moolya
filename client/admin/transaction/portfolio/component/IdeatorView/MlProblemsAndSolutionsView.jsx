@@ -14,7 +14,7 @@ import _ from 'lodash'
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
       super(props);
-      console.log(context);
+      console.log(props);
       this.state = {
           portfolioIdeatorInfo: {},
           annotations:[],
@@ -26,8 +26,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       this.fetchAnnotations.bind(this);
       this.initalizeAnnotaor.bind(this);
       this.annotatorEvents.bind(this);
-      this.resetAnnotator.bind(this);
-  }
+    }
 
   initalizeAnnotaor(){
       initializeMlAnnotator(this.annotatorEvents.bind(this))
@@ -38,13 +37,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       });
   }
 
-  resetAnnotator()
-  {
-  }
 
-  componentWillUpdate(nextProps, nextState){
-    console.log(nextState)
-  }
+
 
   annotatorEvents(event, annotation, editor){
       if(!annotation)
@@ -58,20 +52,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           }
           break;
           case 'annotationViewer':{
-          /*  let value = this.state.annotations.filter(function ( obj ) {
-              return obj.quote.text == annotation[0].text;
-            })
-            this.props.getSelectedAnnotations(value[0]);*/
             this.props.getSelectedAnnotations(annotation[0]);
-              $(".ml-annotate").popover({
-                'title' : 'Annotations',
-                'html' : true,
-                'placement' : 'top',
-                'container' : '.admin_main_wrap',
-                'content' : $(".ml_annotations").html()
-              });
-              $('.ml-annotate').click();
-
           }
           break;
       }
@@ -86,19 +67,28 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       return response;
   }
 
+
+
   async fetchAnnotations(isCreate){
       const response = await findAnnotations(this.props.portfolioDetailsId, "problems");
       let resp = JSON.parse(response.result);
       let annotations = this.state.annotations;
-      let diff = resp;
       this.setState({annotations:JSON.parse(response.result)})
-      if(!isCreate){
+
           let quotes = [];
+
           _.each(this.state.annotations, function (value) {
-            quotes.push({"id":value.annotatorId,"text" : value.quote.text,"quote" : value.quote.quote,"ranges" : value.quote.ranges})
+              quotes.push({
+                  "id":value.annotatorId,
+                  "text" : value.quote.text,
+                  "quote" : value.quote.quote,
+                  "ranges" : value.quote.ranges,
+                  "userName" : value.userName,
+                  "createdAt" : value.createdAt
+              })
           })
           this.state.content.annotator('loadAnnotations', quotes);
-      }
+
       return response;
   }
 
@@ -120,10 +110,6 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     this.fetchPortfolioInfo();
     this.fetchAnnotations();
     initalizeFloatLabel();
-  }
-
-  async componentWillMount() {
-    this.props.getSelectedTab("problems");
   }
 
   async fetchPortfolioInfo(){

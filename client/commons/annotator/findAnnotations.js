@@ -10,7 +10,7 @@ export async function findAnnotations(portfoliodetailsId, docId) {
     query: gql`
           query ($portfoliodetailsId: String!, $docId:String!) {
               fetchAnnotations(portfoliodetailsId: $portfoliodetailsId, docId:$docId) {
-                    result
+                result
               }
           }
   
@@ -25,25 +25,6 @@ export async function findAnnotations(portfoliodetailsId, docId) {
   return data
 }
 
-export async function findComments(annotationId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($annotationId: String!) {
-              fetchComments(annotationId: $annotationId) {
-                    result
-              }
-          }
-  
-      `,
-    variables: {
-      annotationId: annotationId
-    },
-    forceFetch: true
-  })
-  const data = result.data.fetchComments;
-  return data
-}
 
 
 

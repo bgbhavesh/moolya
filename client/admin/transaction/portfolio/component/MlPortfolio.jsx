@@ -11,7 +11,7 @@ import {createCommentActionHandler} from '../../../../commons/annotaterComments/
 import {resolveCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import {reopenCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import moment from "moment";
-// import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
 
 class MlPortfolio extends React.Component{
@@ -77,7 +77,7 @@ class MlPortfolio extends React.Component{
     let userType = this.context.userType;
     const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType});
     this.setState({editComponent:reg&&reg.component?reg.component:null});
-  }
+  }d
 
   async fetchViewPortfolioTemplate(id) {
     //const reg= await fetchTemplateHandler({process:"Portfolio",subProcess:"Portfolio", stepCode:"Portfolio", recordId:""});

@@ -68,6 +68,7 @@ class MlAssignChapterBackendUsers extends React.Component {
       this.setState({selectedBackendUser: userId})
       this.setState({username: userDetails.userName})
       this.setState({userDisplayName: userDetails.displayName})
+      this.setState({isActive:userDetails.deActive})
       // this.setState({alsoAssignedAs: userDetails.alsoAssignedas})
       let alsoAs = userDetails.alsoAssignedas;
       if(alsoAs){
@@ -288,6 +289,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                                                                       chapterId={that.props.params.chapterId}
                                                                       subChapterId={that.props.params.subChapterId}
                                                                       communityId={that.props.params.communityId}
+                                                                      isActive={that.state.isActive}
                                                                       getAssignedRoles={this.getAssignedRoles.bind(this)}
                                                                       getChapterAdmin={this.isChapterAdmin.bind(this)}/>) :
                             <div></div>}
@@ -296,8 +298,8 @@ class MlAssignChapterBackendUsers extends React.Component {
                           <div className="form-group switch_wrap inline_switch">
                             <label className="">De-Activate User</label>
                             <label className="switch">
-                              <input type="checkbox"/>
-                              {(loggedInUser.hierarchyCode=="PLATFORM")?<input type="checkbox"/>:<input type="checkbox" disabled="disabled"/>}
+                              <input type="checkbox" disabled="disabled" checked={this.state.isActive}/>
+                              {/*{(loggedInUser.hierarchyCode=="PLATFORM")?<input type="checkbox"/>:<input type="checkbox" disabled="disabled"/>}*/}
                               <div className="slider"></div>
                             </label>
                           </div>

@@ -54,6 +54,13 @@ export default class MlAssignBackednUserRoles extends React.Component {
       const resp = this.findUserDepartments();
     }
   }
+  componentDidUpdate(){
+    let isActive = this.props.isActive;
+    if(!isActive){
+      $("input[type=text]").prop('disabled', true);
+      $("input[type=checkbox]").prop('disabled', true);
+    }
+  }
 
   optionsBySelectRole(index, did, selectedValue, callback, selObject) {
     let roleDetails = this.state.rolesData;
@@ -87,28 +94,30 @@ export default class MlAssignBackednUserRoles extends React.Component {
   }
 
   addRoleComponent(did) {
-    let emptyRoleBox = {
-      roleId: '',
-      validFrom: '',
-      validTo: '',
-      isActive: '',
-      clusterId: this.props.clusterId ? this.props.clusterId : "",
-      chapterId: this.props.chapterId ? this.props.chapterId : "",
-      subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
-      communityId: this.props.communityId ? this.props.communityId : "",
-      hierarchyLevel: "",
-      hierarchyCode: "",
-      departmentId: '',
-      departmentName: '',
-      subDepartmentId: '',
-      subDepartmentName: ''
-    };
+    if(this.props.isActive){
+      let emptyRoleBox = {
+        roleId: '',
+        validFrom: '',
+        validTo: '',
+        isActive: '',
+        clusterId: this.props.clusterId ? this.props.clusterId : "",
+        chapterId: this.props.chapterId ? this.props.chapterId : "",
+        subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
+        communityId: this.props.communityId ? this.props.communityId : "",
+        hierarchyLevel: "",
+        hierarchyCode: "",
+        departmentId: '',
+        departmentName: '',
+        subDepartmentId: '',
+        subDepartmentName: ''
+      };
 
-    let allData = this.state.rolesData
-    let specificDepartment = allData[did];
-    let rolesArray = specificDepartment.roles;
-    rolesArray.push(emptyRoleBox);
-    this.setState({rolesData: allData});
+      let allData = this.state.rolesData
+      let specificDepartment = allData[did];
+      let rolesArray = specificDepartment.roles;
+      rolesArray.push(emptyRoleBox);
+      this.setState({rolesData: allData});
+    }
   }
 
   onStatusChange(index, did, event) {

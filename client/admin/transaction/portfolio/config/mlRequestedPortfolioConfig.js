@@ -69,11 +69,11 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         }
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    },
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // },
     {
       showAction: true,
       actionName: 'cancel',

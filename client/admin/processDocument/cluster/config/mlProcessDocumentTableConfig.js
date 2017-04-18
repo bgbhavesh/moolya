@@ -106,15 +106,15 @@ const mlProcessTableConfig=new MlViewer.View({
 
 
         } else{
-          alert("Please select a Process Document Type");
+          toastr.error("Please select a Process Document Type");
         }
       }
     },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
-    }
+    // {
+    //   showAction: true,
+    //   actionName: 'logout',
+    //   handler: (data)=>{console.log(data);}
+    // }
   ],
   graphQlQuery:gql`
                query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){

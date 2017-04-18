@@ -214,12 +214,10 @@ export default class Step1 extends React.Component{
     label:country
   }
 }`
-    let clusterQuery = gql` query{
-  data:fetchActiveClusters{label:countryName,value:_id}
-}
-`;
+    let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}
+    `;
     let chapterQuery = gql`query($id:String){  
-  data:fetchChapters(id:$id) {
+  data:fetchChaptersWithoutAll(id:$id) {
     value:_id
     label:chapterName
   }  

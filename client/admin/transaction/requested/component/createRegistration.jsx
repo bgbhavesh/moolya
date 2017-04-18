@@ -171,16 +171,14 @@ export default class MlCreateRegistration extends React.Component{
     `;
 
 
-    let clusterQuery=gql` query{
-      data:fetchActiveClusters{label:countryName,value:_id}
-    }
+    let clusterQuery=gql`query{data:fetchClustersForMap{label:displayName,value:_id}}
     `;
     let chapterQuery=gql`query($id:String){  
-      data:fetchChapters(id:$id) {
-        value:_id
-        label:chapterName
-      }  
-    }`;
+  data:fetchChaptersWithoutAll(id:$id) {
+    value:_id
+    label:chapterName
+  }  
+}`;
 
 
     let fetchcommunities = gql` query{

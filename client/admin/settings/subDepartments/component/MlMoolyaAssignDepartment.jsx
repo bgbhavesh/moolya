@@ -123,7 +123,14 @@ export default class MlMoolyaAssignDepartment extends React.Component {
                   </div>
                   <div className="form-group">
                     <input placeholder=" Sub Department Email Id" className="form-control float-label" defaultValue={options.email} onBlur={that.onEmailChange.bind(that,id)} />
+                    <div className="email_notify">
+                      <div className="input_types">
+                        <input type="checkbox"/>
+                    <label htmlFor="checkbox1"><span> </span>Notify</label>
                   </div>
+                  </div>
+                  </div>
+
                  {/* <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">

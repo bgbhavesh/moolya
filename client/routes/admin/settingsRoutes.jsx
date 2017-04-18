@@ -188,12 +188,13 @@ adminSection.route('/settings/addSubDepartment', {
     mount(AdminLayout,{adminContent:< MlAddSubDepartment/>})
   }
 });
-/*adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
+adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
   name: '',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} stepCode={params.stepCode}/>})
   }
 });
+/*
 adminSection.route('/settings/hierarchy', {
   name: 'hierarchy',
   action(){

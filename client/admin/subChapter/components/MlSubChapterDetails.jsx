@@ -185,7 +185,11 @@ class MlSubChapterDetails extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async (event) => {
+          console.log(this.state.data.chapterId);
+          console.log(this.state.data);
+          FlowRouter.go("/admin/clusters/")
+        }
       }
     ]
      // let chapterData=this.state.data;

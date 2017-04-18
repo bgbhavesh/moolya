@@ -131,9 +131,9 @@ class MlNumericalFormat extends React.Component{
       }
     ]
     let clusterquery=gql` query{  
-      data:fetchDocumentsType{
+      data:fetchCurrency{
         value:_id
-        label:docTypeName
+        label:currencyName
       }  
     }`;
 

@@ -37,33 +37,31 @@ class MlAuditLog {
       let newValue = auditParams.queryPayload;
       var differences = diff(oldValue, newValue);
       toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
-      async.each(differences, function (say, callback) {
-        toInsert.action=say.kind;
-        if(_.head(say.path) == 0){
-          say.path.splice(0,1);
-        }
 
-        let fieldPath = say.path;
-        toInsert.field=_.join(say.path, '.');
-        _.find(fieldPath, function (value, key) {
-          if(_.isNumber(value)){
-            fieldPath.splice(key, 1);
+      try {
+        async.each(differences, function (say, callback) {
+          toInsert.action=say.kind;
+          if(_.head(say.path) == 0){
+            say.path.splice(0,1);
           }
-        })
-        toInsert.fieldName = _.join(fieldPath, '.')
 
-        toInsert.previousValue=JSON.stringify(say.lhs)
-        toInsert.currentValue=JSON.stringify(say.rhs)
-        MlAudit.insert(toInsert);
-        callback();
-      }, function(err){
-        if( err ) {
-          toInsert.errorReason=JSON.stringify(err)
-          MlAudit.insert(toInsert)
-        } else {
-          // console.log('All data have been processed successfully');
-        }
-      });
+          let fieldPath = say.path;
+          toInsert.field=_.join(say.path, '.');
+          _.find(fieldPath, function (value, key) {
+            if(_.isNumber(value)){
+              fieldPath.splice(key, 1);
+            }
+          })
+          toInsert.fieldName = _.join(fieldPath, '.')
+
+          toInsert.previousValue=JSON.stringify(say.lhs)
+          toInsert.currentValue=JSON.stringify(say.rhs)
+          MlAudit.insert(toInsert);
+        })
+      }catch (err){
+        toInsert.errorReason=JSON.stringify("Error: " + err + ".")
+        MlAudit.insert(toInsert)
+      }
       return true;
   }
 
@@ -100,42 +98,41 @@ class MlAuditLog {
     let newValue = auditParams.newValue;
     var differences = diff(oldValue, newValue);
     toInsert.moduleName = MlModuleCollectionMap[auditParams.collectionName];
-    async.each(differences, function (say, callback) {
-      toInsert.action=say.kind;
-      if(_.head(say.path) == 0){
-        say.path.splice(0,1);
-      }
 
-      let fieldPath = say.path;
-      toInsert.field=_.join(say.path, '.');
-      _.find(fieldPath, function (value, key) {
+    try{
+      async.each(differences, function (say, callback) {
+        toInsert.action=say.kind;
+        if(_.head(say.path) == 0){
+          say.path.splice(0,1);
+        }
+
+        let fieldPath = say.path;
+        toInsert.field=_.join(say.path, '.');
+        _.find(fieldPath, function (value, key) {
           if(_.isNumber(value)){
             fieldPath.splice(key, 1);
           }
-      })
-      toInsert.fieldName = _.join(fieldPath, '.')
+        })
+        toInsert.fieldName = _.join(fieldPath, '.')
 
-      if(say.lhs || say.rhs){
-        toInsert.previousValue = JSON.stringify(say.lhs)
-        toInsert.currentValue = JSON.stringify(say.rhs)
-      }else{
-        if(say.item){
-          if(say.item.kind){
-            toInsert.previousValue = JSON.stringify(say.item.lhs)
-            toInsert.currentValue = JSON.stringify(say.item.rhs)
+        if(say.lhs || say.rhs){
+          toInsert.previousValue = JSON.stringify(say.lhs)
+          toInsert.currentValue = JSON.stringify(say.rhs)
+        }else{
+          if(say.item){
+            if(say.item.kind){
+              toInsert.previousValue = JSON.stringify(say.item.lhs)
+              toInsert.currentValue = JSON.stringify(say.item.rhs)
+            }
           }
         }
-      }
-      MlAudit.insert(toInsert);
-      callback();
-    }, function(err){
-      if( err ) {
-        toInsert.errorReason=JSON.stringify(err)
-        MlAudit.insert(toInsert)
-      } else {
-        // console.log('All data have been processed successfully');
-      }
-    });
+        MlAudit.insert(toInsert);
+      })
+    }catch(err){
+      toInsert.errorReason=JSON.stringify("Error: " + err + ".")
+      MlAudit.insert(toInsert)
+    }
+
     return true;
   }
 

@@ -77,7 +77,7 @@ class MlPortfolio extends React.Component{
     let userType = this.context.userType;
     const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType});
     this.setState({editComponent:reg&&reg.component?reg.component:null});
-  }d
+  }
 
   async fetchViewPortfolioTemplate(id) {
     //const reg= await fetchTemplateHandler({process:"Portfolio",subProcess:"Portfolio", stepCode:"Portfolio", recordId:""});
@@ -96,9 +96,8 @@ class MlPortfolio extends React.Component{
     const response =  await createCommentActionHandler(commentsData)
 
     if(response){
-      this.setState({annotationData : this.state.annotationData.id},function(){
-        this.fetchComments(commentsData.annotatorId);
-        this.setState({saveButton : false})
+      this.setState({annotationData : this.state.annotationData},function(){
+        this.fetchComments(this.state.annotationData.id);
       })
     }
   }
@@ -118,7 +117,9 @@ class MlPortfolio extends React.Component{
   async fetchComments(annotationId){
     if(annotationId){
       const response = await findComments(annotationId);
-      this.setState({commentsData : response});
+      this.setState({commentsData : response},function () {
+        $('.comment-input-box').slideToggle();
+      });
     }
   }
 
@@ -274,7 +275,7 @@ class MlPortfolio extends React.Component{
                         <div className="comment-box">
                           <div style={{marginTop:'8px'}} className="annotate">1</div>
                           <div style={{paddingLeft:'50px'}} className="comment-head">
-                            <h6 className="comment-name"> {annotationDetails.userName}</h6>
+                            <h6 className="comment-name"> {annotationDetails.userName?annotationDetails.userName:""}</h6>
                             <div className="author">Chapter Manager</div>
                             <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
                           </div>
@@ -293,7 +294,7 @@ class MlPortfolio extends React.Component{
                         <textarea ref="comment" id="comment" className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
                         <div className="ml_icon_btn">
                           <a href="#" data-id={annotationDetails.id} className="save_btn"><span
-                            className="ml ml-save"  onClick={this.onSavingComment.bind(this)} isHidden={this.state.saveButton}></span></a>
+                            className="ml ml-save"  onClick={this.onSavingComment.bind(this)}></span></a>
                         </div>
                       </div>
 

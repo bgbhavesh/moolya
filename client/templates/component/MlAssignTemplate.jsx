@@ -171,13 +171,15 @@ class MlAssignTemplate extends React.Component{
   }
 
   optionsBySelectClusters(value, calback, selObject){
-    this.setState({clusters:value})
-    this.setState({clusterName:selObject.label})
+    this.setState({clusters:value,chapters:null})
+    this.setState({clusterName:selObject.label});
+    this.setState({chapterName:null});
   }
 
   optionsBySelectChapters(value, calback, selObject){
-    this.setState({chapters:value})
-    this.setState({chapterName:selObject.label})
+    this.setState({chapters:value,subChapters:null})
+    this.setState({chapterName:selObject.label});
+    this.setState({subChapterName:null})
   }
 
   optionsBySelectSubChapters(value, calback, selObject){
@@ -245,15 +247,16 @@ class MlAssignTemplate extends React.Component{
     label:chapterName
       }  
     }`;
-        let subChapterquery=gql`query($id:String){  
-      data:fetchSubChaptersSelect(id:$id) {
+
+    let subChapterquery=gql`query($id:String,$displayAllOption:Boolean){  
+      data:fetchSubChaptersSelect(id:$id,displayAllOption:$displayAllOption) {
         value:_id
         label:subChapterName
       }  
     }`;
     let subprocessOption={options:{variables: {id:this.state.process}}};
     let chapterOption={options: { variables: {id:this.state.clusters}}};
-    let subChapterOption={options: { variables: {id:this.state.chapters}}};
+    let subChapterOption={options: { variables: {id:this.state.chapters,displayAllOption:true}}};
     let usertypeOption={options: { variables: { id: this.state.communities,displayAllOption:true}}};
 
     const showLoader=this.state.loading;

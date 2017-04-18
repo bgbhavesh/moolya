@@ -182,7 +182,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function fetchProcessProxy(query){
     console.log(query)
-    let document= MlProcessMapping.findOne(query,{"userTypes":args.userType,"identity":args.identityType,"industries":args.industry})
+    let document= MlProcessMapping.findOne({ $and: [query,{"userTypes":{ $in: [args.userType]},"identity":{ $in: [args.identityType]},"industries":{ $in: [args.industry]},"isActive":true}]})
     if(document!=undefined){
       data=document.processDocuments;
       data.map(function (doc,index) {

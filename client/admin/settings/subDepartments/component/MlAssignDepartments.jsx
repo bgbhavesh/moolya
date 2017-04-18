@@ -157,7 +157,7 @@ export default class MlAssignDepartments extends React.Component {
               <div className="panel-body">
 
                 <div className="form-group" >
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)}  disabled="true"/>
+                  <Moolyaselect multiSelect={false}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)}  disabled="true"/>
 
                 </div>
 

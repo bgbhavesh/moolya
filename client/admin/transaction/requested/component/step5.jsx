@@ -74,6 +74,9 @@ export default class Step5 extends React.Component {
       this.props.getRegistrationKYCDetails();
       toastr.success("Selected Documents Approved Successfully")
     }
+    else{
+      toastr.success("please select kyc documents")
+    }
   }
 
   async downloadSelectedDocuments() {
@@ -99,8 +102,19 @@ export default class Step5 extends React.Component {
       }
 
     }
-    console.log(kycDocFile)
-
+    if(kycDocFile.length>=1){
+      for(let i=0;i<kycDocFile.length;i++){
+        var pom = document.createElement('a');
+        pom.setAttribute('href', kycDocFile[i]);
+        pom.setAttribute('download', kycDocFile[i]);
+        pom.click();
+      }
+      this.setState({selectedFiles: []})
+      this.setState({selectedDocTypeFiles:[]})
+      this.props.getRegistrationKYCDetails();
+    }else{
+      toastr.success("please select kyc documents")
+    }
 
   }
 
@@ -125,6 +139,8 @@ export default class Step5 extends React.Component {
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
       toastr.success("Selected Documents Rejected Successfully")
+    }else{
+      toastr.success("please select kyc documents")
     }
   }
 
@@ -139,6 +155,9 @@ export default class Step5 extends React.Component {
     if (response) {
       this.props.getRegistrationKYCDetails();
       toastr.success("User Approved Successfully")
+    }else{
+      this.props.getRegistrationKYCDetails();
+      toastr.success("Please upload the kyc documents")
     }
   }
   approveUser(){
@@ -260,12 +279,12 @@ export default class Step5 extends React.Component {
        handler: this.downloadDocuments.bind(this)
        },
       {
-        showAction: true,
+        showAction: false,
         actionName: 'save',
         handler: null
       },
       {
-        showAction: true,
+        showAction: false,
         actionName: 'comment',
         handler: null
       },

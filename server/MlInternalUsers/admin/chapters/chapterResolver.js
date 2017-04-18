@@ -107,6 +107,15 @@ MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
 
 }
 
+MlResolver.MlQueryResolver['fetchChaptersWithoutAll'] = (obj, args, context, info) => {
+  if (args.id) {
+    let id= args.id;
+    let response = [];
+      // response = MlChapters.find({"clusterId":id, "isActive":true}).fetch()||[];
+      response = mlDBController.find('MlChapters', {"clusterId":id, "isActive":true}, context).fetch()||[];
+    return response;
+  }
+}
 MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
   if (args.id) {
     let id= args.id;
@@ -153,7 +162,17 @@ MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info) => {
   // let result = MlSubChapters.find({chapterId: args.id}).fetch()||[];
-  let result = mlDBController.find('MlSubChapters', {chapterId: args.id}, context).fetch()||[];
+  let chapterId=args.id;
+  if(args.id&&args.id==='all'){
+    chapterId={$regex:'.*',$options:"i"};
+  }
+
+  let result = mlDBController.find('MlSubChapters', {chapterId:chapterId}, context).fetch()||[];
+
+  if(args&&args.displayAllOption&&args.id&&args.id.trim()!==""){
+    result.push({"subChapterName" : "All","_id" : "all"});
+  }
+
   return result
 }
 

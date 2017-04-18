@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import dashboardRoutes from '../actions/routesActionHandler';
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash';
 import {fetchCommunityUsersHandler} from '../actions/fetchCommunityUsersActions'
 export default class MlCommunityList extends Component {
 
@@ -9,6 +10,7 @@ export default class MlCommunityList extends Component {
     super(props);
     this.state={
       userType : "All",
+      configState:{}
     }
     return this;
   }
@@ -40,10 +42,9 @@ export default class MlCommunityList extends Component {
           let usertype={userType:userType}
           _.extend(config.params,usertype)
         }else{
-          // _.omit(config,[params]);
-          let newParams = {userType:userType}
-          // _.extend(config,params)
-          config['params'] = newParams;
+          let newParams = {params:{userType:userType}}
+          data = _.omit(config, 'params')
+          config=_.extend(data,newParams);
         }
         let dynamicQueryOption = this.props.config&&this.props.config.buildQueryOptions ? this.props.config.buildQueryOptions(config) : {};
         variables = _.extend(variables,dynamicQueryOption);

@@ -10,6 +10,7 @@ export default class MlAssignComponent extends Component {
   constructor(props){
     super(props);
     this.state={
+                  show:true,
                   selectedValue:false,
                   selectedCluster:null,
                   selectedChapter:null,
@@ -24,6 +25,11 @@ export default class MlAssignComponent extends Component {
   }
 
   componentDidMount() {
+  }
+
+  cancel(){
+    //this.state.show = false
+    FlowRouter.go("/admin/transactions/registrationApprovedList");/*/transactions/registrationRequested");*/
   }
 
   optionsBySelectCluster(value){
@@ -114,6 +120,8 @@ export default class MlAssignComponent extends Component {
                         subDepartment:this.state.selectedSubDepartment
                     }}};
     return (
+      <div>
+      {this.state.show==true?
 
     /*  <div className="ml_assignrequest" style={{'display':'none'}}>*/
       <div className="panel panel-default-bottom col-md-12">
@@ -154,15 +162,15 @@ export default class MlAssignComponent extends Component {
           <a data-toggle="tooltip" title="Save" data-placement="top" href="" className="hex_btn hex_btn_in">
             <span className="ml ml-save"></span>
           </a>
-          <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in">
+          <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>
             <span className="ml ml-delete"></span>
           </a>
         </div>
 
 
       </div>
-
-
+        :<div></div>}
+      </div>
 
     )
   }

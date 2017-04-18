@@ -53,7 +53,7 @@ export default class MlTable extends React.Component {
     };
 
      config['options']={sizePerPage:this.props.sizePerPage,
-      sizePerPageList: [5,10,20,50,100],
+      sizePerPageList: [10,20,50,100],
       page: this.props.pageNumber,
       onPageChange: this.props.onPageChange,
       onSizePerPageList: this.props.onSizePerPageList,

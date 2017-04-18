@@ -46,7 +46,6 @@ class MlEditDepartment extends React.Component{
   };
 
   async handleSuccess(response) {
-    //FlowRouter.go("/admin/settings/departmentsList");
     if (response){
       if(response.success)
         FlowRouter.go("/admin/settings/departmentsList");
@@ -91,11 +90,6 @@ class MlEditDepartment extends React.Component{
     this.setState({'departmentAvailability':details})
   }
 
-  onSubmit(){
-    console.log(this.state.departmentAvailability)
-  }
-
-
   onStatusChange(e){
           let updatedData = this.state.data||{};
           updatedData=_.omit(updatedData,["isActive"]);
@@ -129,19 +123,12 @@ class MlEditDepartment extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
           FlowRouter.go("/admin/settings/departmentsList")
         }
-      }/*,
-      {
-        showAction: true,
-        actionName: 'logout',
-        handler: null
-      }*/
+      }
     ];
 
     const showLoader=this.state.loading;
-
     return (
       <div className="admin_main_wrap">
       {showLoader===true?( <div className="loader_wrap"></div>):(

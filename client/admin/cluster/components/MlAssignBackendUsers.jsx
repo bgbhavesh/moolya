@@ -83,6 +83,7 @@ class MlAssignBackendUsers extends React.Component {
           this.setState({selectedBackendUser:userId})
           this.setState({username:userDetails.userName})
           this.setState({userDisplayName:userDetails.displayName})
+          this.setState({isActive:userDetails.deActive})
           let alsoAs = userDetails.alsoAssignedas;
           if(alsoAs){
             let alsoArray = _.compact(alsoAs.split(','));
@@ -121,7 +122,7 @@ class MlAssignBackendUsers extends React.Component {
       let user = {
           profile: {
               InternalUprofile: {moolyaProfile: {userProfiles: userProfile}},
-              deActive: this.refs.deActive.checked
+              // deActive: this.refs.deActive.checked
           }
       }
       let data = {moduleName: "USERS", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
@@ -265,7 +266,7 @@ class MlAssignBackendUsers extends React.Component {
                       </ul>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Display Name" ref="displayName" defaultValue={userDisplayName}
+                      <input type="text" placeholder="Display Name" ref="displayName" readOnly="true" defaultValue={userDisplayName}
                              className="form-control float-label" id="dName"/>
                     </div>
                     <div className="form-group">
@@ -275,12 +276,14 @@ class MlAssignBackendUsers extends React.Component {
 
                     {userid ? (<MlAssignBackednUserRoles userId={userid} clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId} subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId}
                                                          assignedRoles={this.state.user_Roles}
+                                                         isActive = {this.state.isActive}
                                                          getAssignedRoles={this.getAssignedRoles.bind(this)}/>) :
                       <div></div>}
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">De-Activate User</label>
                       <label className="switch">
-                        {(loggedInUser.hierarchyCode=="PLATFORM")?<input type="checkbox" ref="deActive" checked={deActive}/>:<input type="checkbox" ref="deActive" checked={deActive} disabled="disabled"/>}
+                        <input type="checkbox" checked={this.state.isActive} disabled="disabled"/>
+                        {/*{(loggedInUser.hierarchyCode=="PLATFORM")?<input type="checkbox" ref="deActive" checked={deActive}/>:<input type="checkbox" ref="deActive" checked={deActive} disabled="disabled"/>}*/}
                         <div className="slider"></div>
                       </label>
                     </div>

@@ -87,7 +87,16 @@ MlResolver.MlQueryResolver['FetchUserTypeForMultiSelect'] = (obj, args, context,
 
 
 MlResolver.MlQueryResolver['FetchUserType'] = (obj, args, context, info) => {
-  let result = mlDBController.find('MlUserTypes', {isActive:true,communityCode:args.communityCode}, context).fetch()||[];
+  let communityCode=args.communityCode;
+  if(args.communityCode==='all'){
+    communityCode={$regex:'.*',$options:"i"};
+  }
+  let result = mlDBController.find('MlUserTypes', {isActive:true,communityCode:communityCode}, context).fetch()||[];
+
+  if(args&&args.displayAllOption&&args.communityCode&&args.communityCode.trim()!==""){
+    result.push({"userTypeName" : "All","_id" : "all"});
+  }
+
   return result;
 }
 

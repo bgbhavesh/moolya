@@ -87,3 +87,11 @@ MlResolver.MlMutationResolver['updateCountry'] = (obj, args, context, info) => {
         }
     }
 }
+
+MlResolver.MlQueryResolver['fetchCountriesAPI'] = (obj, args, context, info) =>{
+  let result=MlCountries.find({},{sort: {country:1,displayName:1}}).fetch();
+  //let result=MlCountries.find().fetch();
+  let code = 200;
+  let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  return result
+}

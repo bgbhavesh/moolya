@@ -197,7 +197,7 @@ class MlEditAssignTemplate extends React.Component{
   }
 
   optionsBySelectUserType(val){
-    this.setState({userTypes:val.value})
+    this.setState({userTypes:val})
   }
 
   optionsBySelectIdentity(val){
@@ -264,8 +264,8 @@ class MlEditAssignTemplate extends React.Component{
       data:fetchCommunityDefinitionForSelect{label:name,value:code}
     }
     `;
-    let fetchUsers = gql`query($id:String){
-      data:FetchUserType(communityCode:$id){
+    let fetchUsers = gql`query($id:String,$displayAllOption:Boolean){
+      data:FetchUserType(communityCode:$id,displayAllOption:$displayAllOption){
       label:userTypeName
       value:_id
       }
@@ -277,16 +277,16 @@ class MlEditAssignTemplate extends React.Component{
     label:chapterName
       }  
     }`;
-    let subChapterquery=gql`query($id:String){  
-      data:fetchSubChaptersSelect(id:$id) {
+    let subChapterquery=gql`query($id:String,$displayAllOption:Boolean){  
+      data:fetchSubChaptersSelect(id:$id,displayAllOption:$displayAllOption) {
         value:_id
         label:subChapterName
       }  
     }`;
     let subprocessOption={options:{variables: {id:this.state.process}}};
     let chapterOption={options: { variables: {id:this.state.clusters}}};
-    let subChapterOption={options: { variables: {id:this.state.chapters}}};
-    let usertypeOption={options: { variables: { id: this.state.communities}}};
+    let subChapterOption={options: { variables: {id:this.state.chapters,displayAllOption:true}}};
+    let usertypeOption={options: { variables: { id: this.state.communities,displayAllOption:true}}};
 
     const showLoader=this.state.loading;
     return (

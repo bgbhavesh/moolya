@@ -619,8 +619,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         result.push(object);
       }
     });
+    let serverQuery ={$or: [{status:"Rejected"}, {status: "Pending"}]}
+    let queryCount = mergeQueries(query,serverQuery);
     data = result;
-    totalRecords=MlRegistration.find(query,findOptions).count();
+    totalRecords=MlRegistration.find(queryCount,findOptions).count();
   }
   if(args.module=="registrationApprovedInfo"){
     data= MlRegistration.find(query,findOptions).fetch();

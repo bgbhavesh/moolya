@@ -165,22 +165,20 @@ export default class MlCreateRegistration extends React.Component{
     }
     `;
 */
-    let citiesquery = gql`query($countryId:String){
-      data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
+    let citiesquery = gql`query($searchQuery:String){
+      data:searchCities(searchQuery:$searchQuery){label:name,value:_id}
     }
     `;
 
 
-    let clusterQuery=gql` query{
-      data:fetchActiveClusters{label:countryName,value:_id}
-    }
+    let clusterQuery=gql`query{data:fetchClustersForMap{label:displayName,value:_id}}
     `;
     let chapterQuery=gql`query($id:String){  
-      data:fetchChapters(id:$id) {
-        value:_id
-        label:chapterName
-      }  
-    }`;
+  data:fetchChaptersWithoutAll(id:$id) {
+    value:_id
+    label:chapterName
+  }  
+}`;
 
 
     let fetchcommunities = gql` query{
@@ -191,7 +189,7 @@ export default class MlCreateRegistration extends React.Component{
     let stateOption={options: { variables: {countryId:this.state.country}}};
     let cityOption={options: { variables: {stateId:this.state.state}}};*/
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-    let countryOption = {options: { variables: {countryId:this.state.country}}};
+    let countryOption = {options: { variables: {}}};
 
     let subscriptionOptions = [
       {value: 'Starter', label: 'Starter'},

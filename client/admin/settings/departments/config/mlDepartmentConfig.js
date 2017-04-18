@@ -78,7 +78,9 @@ const mlDepartmentTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addDepartment")
+        if(data&&data.id){FlowRouter.go("/admin/settings/departmentsList")}
+        else{
+        FlowRouter.go("/admin/settings/addDepartment")}
       }
     },
     // {

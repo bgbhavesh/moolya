@@ -136,10 +136,11 @@ let chapterSchema = `
     type Query{ 
         fetchChapter:String
         fetchChapters(id:String):[Chapter]
+        fetchChaptersWithoutAll(id:String):[Chapter]
         fetchSubChapter(_id: String):SubChapter
         fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
-        fetchSubChaptersSelect(id: String):[SubChapter]
+        fetchSubChaptersSelect(id: String,displayAllOption:Boolean):[SubChapter]
         fetchActiveSubChapters(id: String):[SubChapter]
         fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String):[SubChapter] 
         fetchActiveClusterChapters(clusters:[String]):[Chapter]

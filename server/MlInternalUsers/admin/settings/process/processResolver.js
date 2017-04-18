@@ -1,6 +1,6 @@
-import MlResolver from '../../mlAdminResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import _ from 'lodash';
+import MlResolver from "../../mlAdminResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import _ from "lodash";
 /*
 MlResolver.MlQueryResolver['fetchProcess'] = (obj, args, context, info) =>{
   return MlProcessMapping.findOne({name});
@@ -15,12 +15,14 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
   }
 
   let process = args.process;
-    if(MlProcessMapping.find({processId:process.processId}).count() > 0){
+    // if(MlProcessMapping.find({processId:process.processId}).count() > 0){
+      if(mlDBController.find('MlProcessMapping', {processId:process.processId}, context).count() > 0){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
         return response
     }
-    let id = MlProcessMapping.insert({...args.process});
+    // let id = MlProcessMapping.insert({...args.process});
+    let id = mlDBController.insert('MlProcessMapping', args.process, context)
     if(id){
         let code = 200;
         let result = {roleId: id}
@@ -33,13 +35,14 @@ MlResolver.MlQueryResolver['findProcess'] = (obj, args, context, info) => {
 
   if (args.id) {
     var id= args.id;
-    let response= MlProcessMapping.findOne({"_id":id});
-    console.log(response)
+    // let response= MlProcessMapping.findOne({"_id":id});
+    let response = mlDBController.findOne('MlProcessMapping', {_id: id}, context)
     let documents=response&&response.documents?response.documents:[];
     documents.map(function (doc, index) {
      let kycCategeotyId=doc.category
-     const kycCategory= MlDocumentCategories.findOne({_id:kycCategeotyId})||'';
-      doc.categoryName=kycCategory.docCategoryName;
+     // const kycCategory= MlDocumentCategories.findOne({_id:kycCategeotyId})||'';
+      const kycCategory = mlDBController.findOne('MlDocumentCategories', {_id: kycCategeotyId}, context)||'';
+        doc.categoryName=kycCategory.docCategoryName;
     });
     return response;
   }
@@ -57,8 +60,9 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
     args=_.omit(args,'id');
-    let result= MlProcessMapping.update(id, {$set: args.process});
-    let code = 200;
+    // let result= MlProcessMapping.update(id, {$set: args.process});
+    let result = mlDBController.update('MlProcessMapping', id, args.process, {$set:true}, context)
+      let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
@@ -76,18 +80,32 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
     var id = args.id;
     args = _.omit(args, '_id');
     if (args.kycCategoryId) {
-      let result = MlProcessMapping.update({_id:id,'processDocuments' : {
+      // let result = MlProcessMapping.update({_id:id,'processDocuments' : {
+      //     $elemMatch: {
+      //       'kycCategoryId': args.kycCategoryId,'docTypeId': args.docTypeId, 'documentId':args.documentId}
+      //   }
+      // }, {$set: {"processDocuments.$.isMandatory": args.isMandatory,"processDocuments.$.isActive": args.isActive}});
+
+      let result = mlDBController.update('MlProcessMapping', {
+        _id: id, 'processDocuments': {
           $elemMatch: {
-            'kycCategoryId': args.kycCategoryId,'docTypeId': args.docTypeId, 'documentId':args.documentId}
+            'kycCategoryId': args.kycCategoryId, 'docTypeId': args.docTypeId, 'documentId': args.documentId
+          }
         }
-      }, {$set: {"processDocuments.$.isMandatory": args.isMandatory,"processDocuments.$.isActive": args.isActive}});
-      console.log(result);
+      }, {
+        "processDocuments.$.isMandatory": args.isMandatory,
+        "processDocuments.$.isActive": args.isActive
+      }, {$set: true}, context)
+
       if(result!=1){
           console.log("insertion opertion");
           let processDocument={};
-          let documentMappingDef=MlDocumentMapping.findOne(args.documentId);
-          let doctypeDetails=MlDocumentTypes.findOne({_id:args.docTypeId})
-          let kycCategories=MlDocumentCategories.findOne({_id:args.kycCategoryId})
+          // let documentMappingDef=MlDocumentMapping.findOne(args.documentId);
+          let documentMappingDef = mlDBController.findOne('MlDocumentMapping', args.documentId, context)
+          // let doctypeDetails=MlDocumentTypes.findOne({_id:args.docTypeId})
+          let doctypeDetails = mlDBController.findOne('MlDocumentTypes', {_id: args.docTypeId}, context)
+          // let kycCategories=MlDocumentCategories.findOne({_id:args.kycCategoryId})
+          let kycCategories = mlDBController.findOne('MlDocumentCategories', {_id:args.kycCategoryId}, context)
            processDocument=_.pick(documentMappingDef, ['documentDisplayName','allowableFormat','documentName','inputLength','allowableMaxSize'])
            processDocument.kycCategoryId=args.kycCategoryId;
            processDocument.kycCategoryName=kycCategories.docCategoryName
@@ -96,7 +114,8 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
            processDocument.documentId=documentMappingDef._id;
            processDocument.isMandatory=args.isMandatory;
            processDocument.isActive=args.isActive;
-        MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
+        mlDBController.update('MlProcessMapping', id, {'processDocuments':processDocument}, {$push:true}, context)
+        // MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
       }
       let code = 200;
       let response = new MlRespPayload().successPayload(result, code);
@@ -163,7 +182,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function fetchProcessProxy(query){
     console.log(query)
-    let document= MlProcessMapping.findOne(query,{"userTypes":args.userType,"identity":args.identityType,"industries":args.industry})
+    let document= MlProcessMapping.findOne({ $and: [query,{"userTypes":{ $in: [args.userType]},"identity":{ $in: [args.identityType]},"industries":{ $in: [args.industry]},"isActive":true}]})
     if(document!=undefined){
       data=document.processDocuments;
       data.map(function (doc,index) {

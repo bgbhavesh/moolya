@@ -158,7 +158,7 @@ class MlAssignTemplate extends React.Component{
   }
 
   optionsBySelectUserType(val){
-    this.setState({userTypes:val.value})
+    this.setState({userTypes:val})
   }
 
   optionsBySelectIdentity(val){

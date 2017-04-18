@@ -209,8 +209,7 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
 MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-     // let updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
-    let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Approved"}, {$set: true}, context)
+
     let temp=0
         let registrationRecord=MlRegistration.findOne(args.registrationId)
       if(registrationRecord){
@@ -259,7 +258,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         }
     let updatedResponse;
         if(temp==1){
-          updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
+         // updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
+           updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Approved"}, {$set: true}, context)
         }
 
 

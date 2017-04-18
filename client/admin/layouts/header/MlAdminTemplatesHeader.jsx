@@ -28,7 +28,7 @@ export default class MlAdminTemplatesHeader extends Component {
         let documents=response.steps
         for(let i=0;i<documents.length;i++){
           let json={
-            "link": "/admin/settings/hierarchy/"+subProcessId+"/"+templateId+"/"+documents[i].stepCode,
+            "link": "/admin/settings/stepDetails/"+subProcessId+"/"+templateId+"/"+documents[i].stepCode,
             "name":documents[i].stepName ,
             "uniqueId": "subProcess_Steps",
             "subMenuMappingId":"subProcess_Steps_subMapping",

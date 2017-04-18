@@ -39,6 +39,7 @@ const defaultServerConfig = {
   assignUsersPath: '/adminMultipartFormData',
   registrationPath: '/registration',
   registrationAPIPath:'/registrations',
+  countries:'/countries',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -266,6 +267,48 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       }
     }))
   }
+ if(config.countries){
+    console.log("Countries Invoked..!!");
+    graphQLServer.options('/countries', cors());
+
+  graphQLServer.post(config.countries, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
+  {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    var context = {};
+    context = getContext({req});
+    context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log(req.body);
+    console.log("-----------");
+    console.log(req.headers);
+    console.log("-----------");
+    console.log(req.body.data);
+    console.log("-----------");
+    if(req)
+    {
+      console.log("Processing started..!!");
+      let data = req.body.data;
+      let apiKey = req.header("apiKey");
+      if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          if(data) {
+            response = MlResolver.MlQueryResolver['fetchCountriesAPI'](null, null, context, null);
+            console.log(response);
+            res.send(response);
+          }
+      }else{
+        let code = 401;
+        let result = {message:"The request did not have valid authorization credentials"}
+        let response = new MlRespPayload().errorPayload(result, code);
+        console.log(response);
+        res.send(response);
+      }
+    }else{
+      console.log("Request Payload not provided");
+      res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+    }
+  }))
+}
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }

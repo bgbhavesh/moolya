@@ -17,7 +17,7 @@ export async function findDeptAndsubDeptActionHandler(clusterId) {
         }
     `,
     variables: {
-      $clusterId:cid
+      clusterId:cid
     },
     forceFetch:true
   })

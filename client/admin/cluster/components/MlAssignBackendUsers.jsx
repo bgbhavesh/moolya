@@ -182,8 +182,13 @@ class MlAssignBackendUsers extends React.Component {
       ]
       let loggedInUser = getAdminUserContext();
       let that = this;
-      let queryOptions = {options: {variables: {clusterId: that.props.params.clusterId}}};
-      let query = gql`query($clusterId:String){data:fetchUsersByClusterDepSubDep(clusterId: $clusterId){label:username,value:_id}}`;
+      let queryOptions = {options: {variables: {
+        clusterId: that.props.params.clusterId,
+        chapterId: that.props.params.chapterId?that.props.params.chapterId:"",
+        subChapterId: that.props.params.subChapterId?that.props.params.subChapterId:"",
+        communityId: that.props.params.communityId?that.props.params.communityId:""
+      }}};
+      let query = gql`query($clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String){data:fetchUsersByClusterDepSubDep(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId){label:username,value:_id}}`;
       let userid = this.state.selectedBackendUser || "";
       let userDisplayName = this.state.userDisplayName || "";
       let username = this.state.username || "";

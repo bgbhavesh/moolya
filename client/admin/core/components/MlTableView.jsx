@@ -7,7 +7,7 @@ export default class MlTableView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sizePerPage: this.props.sizePerPage || 5,
+      sizePerPage: 10,    //this.props.sizePerPage ||
       pageNumber: 1,
       sort: null,
       selectedRow: null,

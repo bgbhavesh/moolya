@@ -115,3 +115,13 @@ MlResolver.MlQueryResolver['fetchCitiesPerCountry'] = (obj, args, context, info)
   }
 };
 
+MlResolver.MlQueryResolver['searchCities'] = (obj, args, context, info) => {
+  let result=[];
+  let query={};
+  if(args.searchQuery&&args.searchQuery.trim()!==""){
+     query={name:{$regex:'.*'+args.searchQuery+'.*',$options:"i"}};
+     result = mlDBController.find('MlCities',query, context,{limit:100}).fetch()||[];
+  }
+  return result;
+}
+

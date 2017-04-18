@@ -45,4 +45,23 @@ MlResolver.MlMutationResolver['createDateAndTime'] = (obj, args, context, info) 
 //   return result;
 // }
 
+MlResolver.MlQueryResolver['findDateFormat'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  let response= MlDateFormats.find({}).fetch() || [];
+  return response;
+}
+
+MlResolver.MlQueryResolver['findTimeFormat'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  let response= MlTimeFormats.find({}).fetch() || [];
+  return response;
+}
+
+MlResolver.MlQueryResolver['findWeekDays'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  let response= MlWeekDays.find({}).fetch() || [];
+  return response;
+}
+
+
 

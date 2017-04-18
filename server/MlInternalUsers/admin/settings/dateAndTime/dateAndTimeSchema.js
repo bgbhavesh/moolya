@@ -33,3 +33,41 @@ let DateAndTimeSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DateAndTimeSchema]);
+
+let dateFormat = `        
+    
+    type DateFormat{
+      dateFormatName :String
+      dateFormatDisplayName :String
+      about: String
+      createdDateTime: String
+      _id:String
+      isActive:Boolean
+    }
+    
+    type TimeFormat{
+      timeFormatName :String
+      timeFormatDisplayName :String
+      about: String
+      createdDateTime: String
+      _id:String
+      isActive:Boolean
+    }
+    
+    type WeekDaysFormat{
+      dayName :String
+      displayName :String
+      about: String
+      createdDateTime: String
+      _id:String
+      isActive:Boolean
+    }
+    
+    type Query{
+      findDateFormat:[DateFormat]
+      findTimeFormat:[TimeFormat]
+      findWeekDays:[WeekDaysFormat]
+    }
+`
+
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],dateFormat]);

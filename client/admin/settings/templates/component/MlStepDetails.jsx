@@ -42,6 +42,14 @@ export default class MlStepDetails extends Component {
     }
   }
 
+  showEyeButton(cell, row){
+    return    (<div>
+      <a className="list-group-item" >
+        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
+      </a>
+    </div>);
+  }
+
   render() {
     const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
@@ -50,7 +58,7 @@ export default class MlStepDetails extends Component {
       mode: 'checkbox',
       bgColor: '#feeebf',
       clickToSelect: true,  // click to select, default is false
-      clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
+      clickToExpand: true   // click to expand row, default is false// click to expand row, default is false
     }
 
     return (
@@ -61,9 +69,9 @@ export default class MlStepDetails extends Component {
                            selectRow={ selectRow }
                            pagination>
             <TableHeaderColumn  dataField="Id" hidden={true}>Id</TableHeaderColumn>
-            <TableHeaderColumn   dataField="date">Date</TableHeaderColumn>
-            <TableHeaderColumn   isKey={true}  dataField="templateName">Template Name</TableHeaderColumn>
-            <TableHeaderColumn dataField="view">View</TableHeaderColumn>
+            <TableHeaderColumn  dataField="date">Date</TableHeaderColumn>
+            <TableHeaderColumn  isKey={true}  dataField="templateName">Template Name</TableHeaderColumn>
+            <TableHeaderColumn  dataField="view" >View</TableHeaderColumn>
           </BootstrapTable>
         </div>
       </div>

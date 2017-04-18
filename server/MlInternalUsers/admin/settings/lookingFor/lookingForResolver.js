@@ -56,7 +56,7 @@ MlResolver.MlQueryResolver['FindLookingFor'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchLookingFor'] = (obj, args, context, info) => {
-  let result=MlLookingFor.find({isActive:true}).fetch()||[];
+  let result=MlLookingFor.find({isActive:true, communityCode:args.communityCode}).fetch()||[];
   return result;
 }
 

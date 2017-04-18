@@ -18,7 +18,7 @@ let LookingForSchema = `
     }
     type Query{
         FindLookingFor(_id:String): LookingFor
-        fetchLookingFor:[LookingFor]
+        fetchLookingFor(communityCode:String):[LookingFor]
     }
 `
 

@@ -14,7 +14,7 @@ export default class  MlTableViewComposer extends Component {
       forceFetch: true,
       variables: {
         offset: 0,
-        limit: config.sizePerPage||5,
+        limit: 10,    //config.sizePerPage||
         context:null,
         fieldsData:config.fieldsData||null,
         sortData:config.sort||null

@@ -78,6 +78,38 @@ class MlDBController{
             return result;
           }
       }
+      else if(updateOptions && updateOptions.$push)
+      {
+        if (_.isObject(docId)){
+          let oldValue  = collection.find(docId).fetch();
+          let result = collection.update(docId, {$push: payload});
+          let newValue  = collection.find(docId).fetch()
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          return result;
+        }else {
+          let oldValue  = collection.find({_id:docId}).fetch();
+          let result= collection.update({_id:docId}, {$push: payload});
+          let newValue  = collection.find({_id:docId}).fetch()
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          return result;
+        }
+      }
+      else if(updateOptions && updateOptions.$pull)
+      {
+        if (_.isObject(docId)){
+          let oldValue  = collection.find(docId).fetch();
+          let result = collection.update(docId, {$pull: payload});
+          let newValue  = collection.find(docId).fetch()
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          return result;
+        }else {
+          let oldValue  = collection.find({_id:docId}).fetch();
+          let result= collection.update({_id:docId}, {$pull: payload});
+          let newValue  = collection.find({_id:docId}).fetch()
+          let response= mlAuditLog.updateAudit({collectionName: collectionName, docId: docId, oldValue: oldValue, newValue : newValue}, context)
+          return result;
+        }
+      }
   }
 
   find(collectionName, query, context, fieldsProj){

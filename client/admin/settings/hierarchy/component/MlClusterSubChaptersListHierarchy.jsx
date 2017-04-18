@@ -33,7 +33,7 @@ export default class MlClusterSubChaptersListHierarchy extends Component
           <div className="list_block">
             <div className={`cluster_status ${prop.isActive|| ""}_cl `}></div>
             <a href={hierarchyRoutes.hierarchyDetails(prop.clusterId)}> <div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div></a>
-            <h3>{prop.subChapterName}</h3>
+            <h3>Moolya</h3>
           </div>
         </div>
       );

@@ -272,8 +272,8 @@ class MlEditProcessMapping extends React.Component{
     data:fetchIndustries{label:industryName,value:_id}
     }
     `;
-    let professionquery=gql` query{
-    data:fetchProfessions{label:professionName,value:_id}
+    let professionquery=gql` query($industry:[String]!){
+    data:FetchProfessionIndustry(industry:$industry){label:professionName,value:_id}
     }
 `; let clusterquery=gql`  query{
   data:fetchActiveClusters{label:countryName,value:_id}
@@ -296,7 +296,7 @@ class MlEditProcessMapping extends React.Component{
           label:subChapterName
         }  
     }`;
-
+console.log(this.state.industries);
 
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
     let chapterOption={options: { variables: {states:this.state.states,clusters:this.state.clusters}}};

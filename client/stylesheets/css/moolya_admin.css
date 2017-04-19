@@ -166,7 +166,8 @@ span.actions_switch.show_act{bottom: 50px;}
 .panel-body .from_date{margin-right: 1%;}
 .panel-body .to_date{margin-left: 1%;}
 .panel-body .form-group.switch_wrap.inline_switch{margin-bottom: 0px;height: 36px;}
-.form-group.switch_wrap.inline_switch label:first-of-type{position: relative;top: -13px;margin-right: 10px;font-weight: normal;}
+/*.form-group.switch_wrap.inline_switch label:first-of-type{position: relative;top: -13px;margin-right: 10px;font-weight: normal;}*/
+.form-group.switch_wrap.inline_switch label{margin:0 10px;font-weight: normal; vertical-align: middle}
 .form-group.switch_wrap.switch_names .switch{margin:10px 16px 0px 16px;}
 .form-group.switch_wrap.switch_names .state_label{position: relative; top: -14px; color: #ef4647; background: #f5f5f5; padding: 0px 4px 3px 4px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px;}
 .form-group.switch_wrap.switch_names .state_label.acLabel{background: #ef4647; color: #fff; border: 1px solid #ef4647; text-shadow: 1px 1px 1px #333;} .form_inner_block{width: 360px;min-height: 100px;padding:20px 10px 0px 10px;margin-bottom: 15px;background: #fff;border: 1px solid #ccc;    border-radius: 6px;float: left;margin-right: 10px;}
@@ -921,24 +922,24 @@ button:focus{outline: 0;}
 
 .paddingtop20{padding-top: 20px;}
 .RRT__container {position: relative; }
-.RRT__tabs {display: flex; /* flex-wrap: wrap; */ margin: -55px auto 0px auto;  width: 940px; overflow: auto;} 
+.RRT__tabs {display: flex; /* flex-wrap: wrap; */ margin: -55px auto 0px auto;  width: 940px; overflow: auto;}
 .RRT__accordion {flex-direction: column; }
-.RRT__tab { white-space: nowrap;margin-right: 30px;/*background: #eee; border-style: solid; border-color: #ddd; border-width: 1px 1px 1px 0; cursor: pointer; z-index: 1; white-space: nowrap; padding: .7em 1em;*/ } 
-.RRT__tab:focus {outline: 0; background-color: #e6e6e6; } 
-.RRT__accordion .RRT__tab {border-left-width: 1px; } 
-.RRT__tab--first {/*border-left-width: 1px;*/ } 
-.RRT__tab--selected {/*background: #fff; border-color: #ddd #ddd #fff; */} 
-.RRT__tab--selected:focus {background-color: #fff; } 
-.RRT__tab--disabled {opacity: 0.5; cursor: not-allowed; } 
+.RRT__tab { white-space: nowrap;margin-right: 30px;/*background: #eee; border-style: solid; border-color: #ddd; border-width: 1px 1px 1px 0; cursor: pointer; z-index: 1; white-space: nowrap; padding: .7em 1em;*/ }
+.RRT__tab:focus {outline: 0; background-color: #e6e6e6; }
+.RRT__accordion .RRT__tab {border-left-width: 1px; }
+.RRT__tab--first {/*border-left-width: 1px;*/ }
+.RRT__tab--selected {/*background: #fff; border-color: #ddd #ddd #fff; */}
+.RRT__tab--selected:focus {background-color: #fff; }
+.RRT__tab--disabled {opacity: 0.5; cursor: not-allowed; }
 .RRT__tab:focus {z-index: 2; }
-.RRT__panel {margin-top: 22px;/*margin-top: -1px; padding: 1em; border: 1px solid #ddd;*/ } 
+.RRT__panel {margin-top: 22px;/*margin-top: -1px; padding: 1em; border: 1px solid #ddd;*/ }
 .RRT__accordion .RRT__panel {margin-top: 0; }
-.RRT__showmore {background: #eee; border: 1px solid #ddd; cursor: pointer; z-index: 1; white-space: nowrap; margin-left: -1px; position: relative; } 
-.RRT__showmore-label {padding: .7em 1em; position: relative; bottom: -1px; z-index: 1; } 
-.RRT__showmore-label--selected {background-color: #eee; } 
-.RRT__showmore-list {position: absolute; right: -1px; top: 100%; display: none; } 
-.RRT__showmore-list--opened {display: block; } 
-.RRT__inkbar-wrapper {width: 100%; } 
+.RRT__showmore {background: #eee; border: 1px solid #ddd; cursor: pointer; z-index: 1; white-space: nowrap; margin-left: -1px; position: relative; }
+.RRT__showmore-label {padding: .7em 1em; position: relative; bottom: -1px; z-index: 1; }
+.RRT__showmore-label--selected {background-color: #eee; }
+.RRT__showmore-list {position: absolute; right: -1px; top: 100%; display: none; }
+.RRT__showmore-list--opened {display: block; }
+.RRT__inkbar-wrapper {width: 100%; }
 .RRT__inkbar {position: relative; bottom: 0; height: 2px; margin-top: -2px; background-color: deepskyblue; transition: left 800ms cubic-bezier(0.23, 1, 0.32, 1); z-index: 2; }
 
 

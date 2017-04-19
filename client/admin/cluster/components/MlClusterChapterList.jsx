@@ -23,7 +23,7 @@ export default class MlClusterChapterList extends Component
               {/*<img src={prop.countryFlag}/>*/}
               {image}
             </div></a>
-            <h3>{prop.chapterName}</h3>
+            <h3>{prop.displayName}</h3>
           </div>
         </div>
     )}

@@ -70,124 +70,137 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
+    //validate community availability in the cluster
+    let reginfo =args.registrationDetails||{};
+    let countryId = reginfo.countryId;
+    let commId = reginfo.registrationType;
+    let cluster =  mlDBController.findOne('MlClusters', {countryId: countryId}, context) || {};
+    let community = mlDBController.findOne('MlCommunity',{communityDefCode:commId,clusterId:cluster._id,isActive:true},context)||{};
+
     let updatedResponse
-    var id= args.registrationId;
-    if(args.registrationDetails){
-      let details=args.registrationDetails||{};
+    if(community._id) {
+      var id = args.registrationId;
+      if (args.registrationDetails) {
+        let details = args.registrationDetails || {};
 
-      // let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
-      let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: details.chapterId}, context) || {};
+        // let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
+        let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: details.chapterId}, context) || {};
 
-      details.clusterName=subChapterDetails.clusterName;
-      details.chapterName=subChapterDetails.chapterName;
-      details.subChapterName=subChapterDetails.subChapterName;
-      details.subChapterId=subChapterDetails._id;
+        details.clusterName = subChapterDetails.clusterName;
+        details.chapterName = subChapterDetails.chapterName;
+        details.subChapterName = subChapterDetails.subChapterName;
+        details.subChapterId = subChapterDetails._id;
 
-      // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
-      let communityDetails = mlDBController.findOne('MlCommunity', {
-          subChapterId: details.subChapterId,
-          communityDefCode: details.registrationType
-        }, context) || {};
+        // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
+        let communityDetails = mlDBController.findOne('MlCommunity', {
+            subChapterId: details.subChapterId,
+            communityDefCode: details.registrationType
+          }, context) || {};
 
-      details.communityId=communityDetails._id;
-      //details.communityName=communityDetails.communityName;
-      details.communityDefName=communityDetails.communityDefName;
-      details.communityDefCode=communityDetails.communityDefCode;
+        details.communityId = communityDetails._id;
+        //details.communityName=communityDetails.communityName;
+        details.communityDefName = communityDetails.communityDefName;
+        details.communityDefCode = communityDetails.communityDefCode;
 
-      details.identityType=details.identityType||null;
-      details.transactionType="registration";
-      details.userType=details.userType||null;
-      let user=Meteor.users.findOne({"username":details.userName});
-      details.userId=user?user._id:null;
+        details.identityType = details.identityType || null;
+        details.transactionType = "registration";
+        details.userType = details.userType || null;
+        let user = Meteor.users.findOne({"username": details.userName});
+        details.userId = user ? user._id : null;
 
-      let registrationDetails={identityType:details.identityType,userType:details.userType};
+        let registrationDetails = {identityType: details.identityType, userType: details.userType};
 
-      //validate the registrationInfo for mandatory fields such as cluster chapter etc
-      // updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details,"registrationDetails.identityType":details.identityType,"registrationDetails.userType":details.userType }});
+        //validate the registrationInfo for mandatory fields such as cluster chapter etc
+        // updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details,"registrationDetails.identityType":details.identityType,"registrationDetails.userType":details.userType }});
 
-      updatedResponse = mlDBController.update('MlRegistration', id, {
-        registrationInfo: details,
-        "registrationDetails.identityType": details.identityType,
-        "registrationDetails.userType": details.userType
-      }, {$set: true}, context)
+        updatedResponse = mlDBController.update('MlRegistration', id, {
+          registrationInfo: details,
+          "registrationDetails.identityType": details.identityType,
+          "registrationDetails.userType": details.userType
+        }, {$set: true}, context)
 
         let userProfile = {
-        registrationId    : id,
-        countryName       : '',
-        countryId         : details.countryId,
-        cityName          : '',
-        cityId            : details.cityId,
-        mobileNumber      : details.contactNumber,
-        clusterId         : details.clusterId,
-        clusterName       : details.clusterName,
-        chapterId         : details.chapterId,
-        chapterName       : details.chapterName,
-        subChapterId      : details.subChapterId,
-        subChapterName    : details.subChapterName,
-        communityId       : details.communityId,
-        communityName     : details.communityName,
-        communityDefCode  : details.communityDefCode,
-        communityDefName  : details.communityDefName,
-        communityType     : '',
-        isDefault         : false,
-        isProfileActive   : false,
-        accountType       : details.accountType,
-        optional          : false,
-        userType          :details.userType||null,
-        identityType      :details.identityType||null
-      }
-      let profile = {
-        isInternaluser  : false,
-        isExternaluser  : true,
-        email           : details.email,
-        isActive        : false,
-        externalUserProfile: [userProfile]
-      }
-      let userObject = {
-        username        : details.email,
-        password        : details.password,
-        profile         : profile
-      }
-
-      // let existingUser = Meteor.users.findOne({"username":userObject.username});
-      let existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
-      let updateCount=0;
-      let userId=null;
-      if(existingUser){
-
-        // let result = Meteor.users.update({username:userObject.username,'profile.externalUserProfile' : {
-        //   $elemMatch: {'registrationId': id}}}, {$set: {"profile.externalUserProfile.$":userProfile}});
-
-        let result = mlDBController.update('users', {
-          username: userObject.username, 'profile.externalUserProfile': {
-            $elemMatch: {'registrationId': id}
-          }
-        }, {"profile.externalUserProfile.$": userProfile}, {$set: true}, context)
-
-        if(result!=1) {
-          // updateCount= Meteor.users.update({username:userObject.username},{'$push':{'profile.externalUserProfile':userProfile}},{upsert:false});
-          updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfile': userProfile}, {$push: true}, context)
-        }else{
-          updateCount==1;
+          registrationId: id,
+          countryName: '',
+          countryId: details.countryId,
+          cityName: '',
+          cityId: details.cityId,
+          mobileNumber: details.contactNumber,
+          clusterId: details.clusterId,
+          clusterName: details.clusterName,
+          chapterId: details.chapterId,
+          chapterName: details.chapterName,
+          subChapterId: details.subChapterId,
+          subChapterName: details.subChapterName,
+          communityId: details.communityId,
+          communityName: details.communityName,
+          communityDefCode: details.communityDefCode,
+          communityDefName: details.communityDefName,
+          communityType: '',
+          isDefault: false,
+          isProfileActive: false,
+          accountType: details.accountType,
+          optional: false,
+          userType: details.userType || null,
+          identityType: details.identityType || null
         }
-      }else{
-        // userId = Accounts.createUser(userObject);
-        userId = mlDBController.insert('users', userObject, context)
-      }
+        let profile = {
+          isInternaluser: false,
+          isExternaluser: true,
+          email: details.email,
+          isActive: false,
+          externalUserProfile: [userProfile]
+        }
+        let userObject = {
+          username: details.email,
+          password: details.password,
+          profile: profile
+        }
 
-      if(updateCount===1 ||userId){
-        let code = 200;
-        let result = {username: userObject.username};
-        // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
-        mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
-        let response = new MlRespPayload().successPayload(result, code);
-        return response
-      }
+        // let existingUser = Meteor.users.findOne({"username":userObject.username});
+        let existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
+        let updateCount = 0;
+        let userId = null;
+        if (existingUser) {
 
-      // MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
+          // let result = Meteor.users.update({username:userObject.username,'profile.externalUserProfile' : {
+          //   $elemMatch: {'registrationId': id}}}, {$set: {"profile.externalUserProfile.$":userProfile}});
+
+          let result = mlDBController.update('users', {
+            username: userObject.username, 'profile.externalUserProfile': {
+              $elemMatch: {'registrationId': id}
+            }
+          }, {"profile.externalUserProfile.$": userProfile}, {$set: true}, context)
+
+          if (result != 1) {
+            // updateCount= Meteor.users.update({username:userObject.username},{'$push':{'profile.externalUserProfile':userProfile}},{upsert:false});
+            updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfile': userProfile}, {$push: true}, context)
+          } else {
+            updateCount = 1;
+          }
+        } else {
+          // userId = Accounts.createUser(userObject);
+          userId = mlDBController.insert('users', userObject, context)
+        }
+
+        if (updateCount === 1 || userId) {
+          let code = 200;
+          let result = {username: userObject.username};
+          // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
+          mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
+          let response = new MlRespPayload().successPayload(result, code);
+          return response
+        }
+
+        // MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
+      } else {
+        // updatedResponse = MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
+        updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context)
+      }
     }else{
-      // updatedResponse = MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
-      updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context)
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Community not available for cluster", code);
+      return response;
     }
     return updatedResponse
   }

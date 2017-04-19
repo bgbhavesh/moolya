@@ -9,15 +9,15 @@ const mlClusterDashboardListConfig=new MlViewer.View({
   name:"clusterDashBoardList",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
-  fields:["userName","mobileNumber","eMail","city","regType"],
-  searchFields:["userName","mobileNumber","eMail","city","regType"],
+  fields:["displayName"],
+  searchFields:["displayName"],
   throttleRefresh:true,
   pagination:true,
   sort:true,
   viewComponent:<MlClusterList />,
   graphQlQuery:gql`
-              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-                    data:ContextSpecSearch(module:"cluster",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec, $fieldsData:[GenericFilter]){
+                    data:ContextSpecSearch(module:"cluster",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec, fieldsData:$fieldsData){
                     totalRecords
                     data{
                      ...on Cluster{

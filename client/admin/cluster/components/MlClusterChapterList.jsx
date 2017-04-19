@@ -16,14 +16,14 @@ export default class MlClusterChapterList extends Component
     const list=  data.map((prop) =>{
       let image=prop.countryFlag&&prop.countryFlag.trim()!==""?<img src={`${prop.countryFlag}`}/>:<span className="ml ml-chapter"></span>;
       return (
-        <div className="col-md-2" key={prop.chapterName}>
+        <div className="col-lg-2 col-md-4 col-sm-4" key={prop.chapterName}>
           <div className="list_block">
             <div className={`cluster_status ${prop.isActive|| ""}_cl `}></div>
             <a href={clusterRoutes.subChapterListRoute(prop.clusterId,prop._id)}> <div className={"hex_outer"}>
               {/*<img src={prop.countryFlag}/>*/}
               {image}
             </div></a>
-            <h3>{prop.chapterName}</h3>
+            <h3>{prop.displayName}</h3>
           </div>
         </div>
     )}

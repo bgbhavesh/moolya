@@ -16,12 +16,10 @@ export function initializeMlAnnotator(eventsCallback){
         },
         pluginInit: function () {
             this.annotator.subscribe("annotationCreated", function(annotation){
-                console.info("The annotation: %o has just been created!", annotation)
                 delete annotation.highlights
                 callback && callback('create', annotation)
             })
             .subscribe("annotationViewerShown", function (editor, annotation) {
-                console.info("The annotation: %o has just been created!", annotation)
                 callback('annotationViewer', annotation)
             })
             .subscribe("annotationUpdated", function (annotation) {

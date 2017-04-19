@@ -75,7 +75,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     let countryId = reginfo.countryId;
     let commId = reginfo.registrationType;
     let cluster =  mlDBController.findOne('MlClusters', {countryId: countryId}, context) || {};
-    let community = mlDBController.findOne('MlCommunity',{communityDefCode:commId,clusterId:cluster._id},context)||{};
+    let community = mlDBController.findOne('MlCommunity',{communityDefCode:commId,clusterId:cluster._id,isActive:true},context)||{};
 
     let updatedResponse
     if(community._id) {

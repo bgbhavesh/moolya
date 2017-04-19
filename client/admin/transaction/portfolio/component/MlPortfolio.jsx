@@ -47,12 +47,16 @@ class MlPortfolio extends React.Component{
     }
   }
   getSelectedAnnotation(selAnnotation){
-    this.toggle();
+    if(!this.state.popoverOpen){
+      this.toggle();
+      $('.comment-input-box').slideToggle();
+     }
     if(selAnnotation){
       this.setState({annotationData : selAnnotation},function(){
         this.fetchComments(selAnnotation.id);
       })
     }
+
 
   }
 
@@ -118,7 +122,7 @@ class MlPortfolio extends React.Component{
     if(annotationId){
       const response = await findComments(annotationId);
       this.setState({commentsData : response},function () {
-        $('.comment-input-box').slideToggle();
+
       });
     }
   }

@@ -51,7 +51,12 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
           }
           break;
           case 'annotationViewer':{
-            this.props.getSelectedAnnotations(annotation[0]);
+            if(annotation[0].id){
+              this.props.getSelectedAnnotations(annotation[0]);
+            }else{
+              this.props.getSelectedAnnotations(annotation[1]);
+            }
+
           }
           break;
       }

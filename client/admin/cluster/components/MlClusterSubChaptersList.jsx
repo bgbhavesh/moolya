@@ -20,7 +20,7 @@ export default class MlClusterSubChaptersList extends Component
           <div className="list_block">
             <div className={`cluster_status ${prop.isActive|| ""}_cl `}></div>
             <a href={clusterRoutes.subChapterDetails(prop.clusterId,prop.chapterId,prop._id,prop.subChapterName)}> <div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div></a>
-            <h3>{prop.subChapterName}</h3>
+            <h3>{prop.subChapterDisplayName}</h3>
           </div>
         </div>
       );

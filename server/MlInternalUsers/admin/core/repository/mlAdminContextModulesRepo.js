@@ -91,8 +91,11 @@ export default CoreModulesRepo={
     let query=contextQuery;
     //User selection filter.
     let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
+    let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(chapterId){
       query={"chapterId":chapterId};
+    }else{ //added to handle subchapter for hierarchy
+      query={"clusterId":clusterId};
     }
 
     // if(contextQuery && contextQuery._id && contextQuery._id.length > 0)

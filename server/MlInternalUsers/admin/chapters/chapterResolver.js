@@ -164,12 +164,13 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info
   // let result = MlSubChapters.find({chapterId: args.id}).fetch()||[];
   let chapterId=args.id;
   if(args.id&&args.id==='all'){
-    chapterId={$regex:'.*',$options:"i"};
+    //chapterId={$regex:'.*',$options:"i"};
   }
 
   let result = mlDBController.find('MlSubChapters', {chapterId:chapterId}, context).fetch()||[];
 
-  if(args&&args.displayAllOption&&args.id&&args.id.trim()!==""){
+ // if(args&&args.id&&args.id.trim()!==""){
+    if(args&&args.displayAllOption&&args.id&&args.id.trim()!==""){
     result.push({"subChapterName" : "All","_id" : "all"});
   }
 

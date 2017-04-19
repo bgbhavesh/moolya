@@ -9,6 +9,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {OnToggleSwitch} from '../../../utils/formElemUtil';
+let Select = require('react-select');
 
 
 class MlNumericalFormat extends React.Component{
@@ -91,14 +92,14 @@ class MlNumericalFormat extends React.Component{
     return response;
 
   }
-  optionsBySelectNumberOfDigitsAfterDecimal(val){
-    this.setState({numberOfDigitsAfterDecimal:val})
+  optionsBySelectNumberOfDigitsAfterDecimal(data){
+    this.setState({numberOfDigitsAfterDecimal:data.value})
   }
-  optionsBySelectMeasurementSystem(val){
-    this.setState({measurementSystem:val})
+  optionsBySelectMeasurementSystem(data){
+    this.setState({measurementSystem:data.value})
   }
-  optionsBySelectValueSeparator(val){
-    this.setState({valueSeparator:val})
+  optionsBySelectValueSeparator(data){
+    this.setState({valueSeparator:data.value})
   }
   optionsBySelectCurrencySymbol(val){
     this.setState({currencySymbol:val})
@@ -130,11 +131,33 @@ class MlNumericalFormat extends React.Component{
       }
     ]
     let clusterquery=gql` query{  
-  data:fetchDocumentsType{
-    value:_id
-    label:docTypeName
-  }  
-}`;
+      data:fetchCurrency{
+        value:_id
+        label:currencyName
+      }  
+    }`;
+
+
+    let decimalsLimit = [
+      {value: '0', label: '0'},
+      {value: '1', label: '1'},
+      {value: '2', label: '2'},
+      {value: '3', label: '3'}
+    ]
+
+    let measurementType = [
+      {value: 'US System', label: 'US System'},
+      {value: 'Metric System', label: 'Metric System'},
+    ]
+    let valueSeperators = [
+      {value: ',', label: ','},
+      {value: '.', label: '.'},
+      {value: '/', label: '/'},
+      {value: '_', label: '_'},
+      {value: ';', label: ';'},
+      {value: ':', label: ':'},
+      {value: '-', label: '-'},
+    ]
 
     const showLoader=this.state.loading;
     return (
@@ -148,7 +171,11 @@ class MlNumericalFormat extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false}  placeholder={"Number Of Digits After Decimal"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.numberOfDigitsAfterDecimal} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectNumberOfDigitsAfterDecimal.bind(this)} />
+                      {/*<Moolyaselect multiSelect={false}  placeholder={"Number Of Digits After Decimal"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.numberOfDigitsAfterDecimal} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectNumberOfDigitsAfterDecimal.bind(this)} />*/}
+                      <Select
+                        name="form-field-name"  options={decimalsLimit} placeholder={"Number Of Digits After Decimal"}
+                        value={this.state.numberOfDigitsAfterDecimal} onChange={this.optionsBySelectNumberOfDigitsAfterDecimal.bind(this)}
+                        className="float-label"/>
                     </div>
                     <div className="form-group">
                       <Moolyaselect multiSelect={false}  placeholder={"Currency Symbol"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)} />
@@ -167,10 +194,18 @@ class MlNumericalFormat extends React.Component{
                   >
                     <form>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false}  placeholder={"Measurement System"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.measurementSystem} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectMeasurementSystem.bind(this)} />
+                        <Select
+                          name="form-field-name"  options={measurementType} placeholder={"Measurement System"}
+                          value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}
+                          className="float-label"/>
+                        {/*<Moolyaselect multiSelect={false}  placeholder={"Measurement System"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.measurementSystem} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectMeasurementSystem.bind(this)} />*/}
                       </div>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false}  placeholder={"Value Separator"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.valueSeparator} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectValueSeparator.bind(this)} />
+                        <Select
+                          name="form-field-name"  options={valueSeperators} placeholder={"Value Separator"}
+                          value={this.state.valueSeparator} onChange={this.optionsBySelectValueSeparator.bind(this)}
+                          className="float-label"/>
+                        {/*<Moolyaselect multiSelect={false}  placeholder={"Value Separator"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.valueSeparator} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectValueSeparator.bind(this)} />*/}
                       </div>
                       <div className="form-group switch_wrap inline_switch">
                         <label>Currency Format</label>

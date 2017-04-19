@@ -205,13 +205,15 @@ class MlEditAssignTemplate extends React.Component{
   }
 
   optionsBySelectClusters(value, calback, selObject){
-    this.setState({clusters:value})
+    this.setState({clusters:value,chapters:null})
     this.setState({clusterName:selObject.label})
+    this.setState({chapterName:null});
   }
 
   optionsBySelectChapters(value, calback, selObject){
-    this.setState({chapters:value})
+    this.setState({chapters:value,subChapters:null})
     this.setState({chapterName:selObject.label})
+    this.setState({subChapterName:null})
   }
 
   optionsBySelectSubChapters(value, calback, selObject){

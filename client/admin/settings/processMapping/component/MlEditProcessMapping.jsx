@@ -8,6 +8,8 @@ import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {findProcessActionHandler} from '../actions/findProcessAction'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+
 
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
@@ -51,6 +53,12 @@ class MlEditProcessMapping extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+  }
+
+  componentDidUpdate(){
+    OnToggleSwitch(true, true);
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
   componentWillMount() {
     const resp=this.findProcess();
@@ -308,6 +316,13 @@ console.log(this.state.industries);
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Edit Process</h2>
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea
@@ -397,7 +412,8 @@ console.log(this.state.industries);
               </div>
             </div>
           </div>
-
+            </ScrollArea>
+          </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
 
         </div>

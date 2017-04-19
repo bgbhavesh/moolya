@@ -48,6 +48,7 @@ class MlAssignBackendUsers extends React.Component {
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
     OnToggleSwitch(true, true);
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
   // async findCluster() {
@@ -218,6 +219,13 @@ class MlAssignBackendUsers extends React.Component {
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_padding_wrap">
             <h2>Assign Backend User to {contextHeader}</h2>
+            <div className="main_wrap_scroll">
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}
+              >
             <div className="col-md-6 nopadding-left">
               <div className="row">
                 <div className="left_wrap left_user_blocks">
@@ -295,6 +303,8 @@ class MlAssignBackendUsers extends React.Component {
                   </form>
                 </ScrollArea>
               </div>
+            </div>
+              </ScrollArea>
             </div>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>

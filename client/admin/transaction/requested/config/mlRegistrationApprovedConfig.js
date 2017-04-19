@@ -40,7 +40,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
       }
     },
     {
-      showAction: true,
+      showAction: false,
       actionName: 'assign',
       handler: (data)=>{
         if(data && data.id){
@@ -49,7 +49,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
           toastr.error("Please select a User Type");
         }
       }
-    },
+    }
     // {
     //   showAction: true,
     //   actionName: 'logout',

@@ -209,6 +209,15 @@ export default class Individual extends React.Component{
      }
      }
      `;
+    let currencyquery = gql `query{  
+      data:fetchCurrency{
+        value:_id
+        label:currencyName
+      }  
+    }`;
+
+
+
     let genderOption={options: { variables: {type : "GENDER",hierarchyRefId:this.props.clusterId}}};
     let titlequery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -299,7 +308,7 @@ export default class Individual extends React.Component{
                     <div className="panel-heading">Investment Per Year</div>
                     <div className="panel-body">
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Currency" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.currency} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectCurrency.bind(that)} isDynamic={true}/>
+                        <Moolyaselect multiSelect={false} placeholder="Select Currency" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.currency} queryType={"graphql"} query={currencyquery}  queryOptions={genderOption} onSelect={that.optionsBySelectCurrency.bind(that)} isDynamic={true}/>
                       </div>
                       <div className="form-group">
                         <input type="text" ref="investmentAmount" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.investmentAmount} placeholder="Enter Amount" className="form-control float-label" id=""/>

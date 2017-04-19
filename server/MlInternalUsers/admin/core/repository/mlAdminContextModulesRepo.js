@@ -55,11 +55,13 @@ export default CoreModulesRepo={
     let clusterId=requestParams&&requestParams.clusterId&&requestParams.clusterId!='all'?requestParams.clusterId:null;
     if(clusterId){
         query={"clusterId":clusterId};
+        query = mergeQueries(query,contextQuery);
     }
 
     if(contextQuery && contextQuery._id && contextQuery._id.length > 0){
           if(_.indexOf(contextQuery._id, "all") < 0)
               query = { _id: {$in : contextQuery._id}}
+              query = mergeQueries(query,contextQuery);
     }
 
     let citiesId=[];
@@ -94,8 +96,10 @@ export default CoreModulesRepo={
     let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(chapterId){
       query={"chapterId":chapterId};
+      query = mergeQueries(query,contextQuery);
     }else{ //added to handle subchapter for hierarchy
       query={"clusterId":clusterId};
+      query = mergeQueries(query,contextQuery);
     }
 
     // if(contextQuery && contextQuery._id && contextQuery._id.length > 0)

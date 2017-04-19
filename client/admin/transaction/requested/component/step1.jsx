@@ -43,6 +43,7 @@ export default class Step1 extends React.Component{
     }
 
     this.fetchIdentityTypesMaster.bind(this);
+    this.updateregistrationInfo.bind(this);
 
     return this;
   }
@@ -107,7 +108,6 @@ export default class Step1 extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    const resp=this.updateregistrationInfo();
     return resp;
   }
   optionsBySelectTypeOfIndustry(value){
@@ -127,25 +127,8 @@ export default class Step1 extends React.Component{
     this.setState({userType:value})
   }
 
-  async handleError(response) {
-    //alert(response)
-  };
 
-  async handleSuccess(response) {
-    if (response) {
-      if (response.success) {
-        toastr.error("Update Successful");
-        //FlowRouter.go("/admin/transactions/editRequests/");
-      }
-      else {
-        toastr.error(response.result);
-      }
-    }else {
-      console.log(response)
-    }
-  };
-
-  async  updateregistrationInfo() {
+ async updateregistrationInfo() {
     let Details = {
       registrationId : this.props.registrationId,
       registrationDetail:{
@@ -176,14 +159,18 @@ export default class Step1 extends React.Component{
     }
     }
     const response = await updateRegistrationActionHandler(Details);
-    //return response;
-    this.props.refetchRegistrationAndTemplates();
+    return response;
   }
 
-  updateRegistration(){
-    const resp=this.updateregistrationInfo();
-    toastr.success("Update Successful");
-    return resp;
+  async updateRegistration(){
+    const response= await this.updateregistrationInfo();
+    console.log(response);
+    if(response.success){
+      this.props.refetchRegistrationAndTemplates();
+    }else{
+      toastr.error(response.result);
+    }
+    return response;
   }
 
   render(){

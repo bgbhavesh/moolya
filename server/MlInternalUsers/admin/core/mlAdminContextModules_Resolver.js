@@ -53,7 +53,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       result=CoreModulesRepo.MlClusterRepo(args.context,queryCount,findOptions, context);
       break;
     case "chapter":
-      result=CoreModulesRepo.MlChapterRepo(args.context,contextQuery,findOptions, context);
+      result=CoreModulesRepo.MlChapterRepo(args.context,queryCount,findOptions, context);
       break;
     case "subChapter":
       result=CoreModulesRepo.MlSubChapterRepo(args.context,contextQuery,findOptions, context);

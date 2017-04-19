@@ -17,7 +17,7 @@ export default class MlChapterList extends Component {
               {image}
             </div>
           </a>
-          <h3>{prop.chapterName} </h3>
+          <h3>{prop.displayName} </h3>
         </div>
       </div>)
     }

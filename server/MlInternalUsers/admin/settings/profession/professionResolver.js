@@ -55,6 +55,7 @@ MlResolver.MlQueryResolver['FindProfession'] = (obj, args, context, info) => {
     var id= args._id;
     // let response= MlProfessions.findOne({"_id":id});
     let response= mlDBController.findOne("MlProfessions", {_id:id}, context);
+    response.push({"professionName" : "All","_id" : "all"});
     return response;
   }
 
@@ -62,7 +63,7 @@ MlResolver.MlQueryResolver['FindProfession'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchProfessions'] = (obj, args, context, info) => {
   // let result=MlProfessions.find({isActive:true}).fetch()||[];
-  let result = mlDBController.find('MlProfessions', {isActive:true}, context).fetch()||[];
+  let result = mlDBController.find('MlProfessions', {isActive:true, industry:args.industry}, context).fetch()||[];
   return result;
 }
 MlResolver.MlQueryResolver['FetchProfessionIndustry'] = (obj, args, context, info) => {

@@ -20,7 +20,7 @@ export default class MlAdminLeftNav extends Component {
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     $('.admin_menu, .admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
-    //$('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     /*$('.actions_switch').click(function(){
       $('.bottom_actions_block').toggleClass('show_block');
       $(this).toggleClass('show_act');

@@ -42,6 +42,8 @@ const mlSubChapterListConfig=new MlViewer.View({
   extraFields:[],
   module:"subChapter",
   throttleRefresh:true,
+  fields:["subChapterDisplayName"],
+  searchFields:["subChapterDisplayName"],
   pagination:true,
   sort:true,
   viewComponent:<MlSubChapterList />,
@@ -49,8 +51,8 @@ const mlSubChapterListConfig=new MlViewer.View({
   buildQueryOptions:(config)=>{
     return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
   },
-  graphQlQuery:gql`query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-              data:ContextSpecSearch(module:"subChapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+  graphQlQuery:gql`query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter]){
+              data:ContextSpecSearch(module:"subChapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec, fieldsData:$fieldsData){
                     totalRecords
                     data{
                      ...on SubChapter{

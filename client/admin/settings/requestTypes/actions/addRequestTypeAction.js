@@ -6,16 +6,21 @@ export async function addRequestActionHandler(RequestTypeDetails) {
   let displayName = RequestTypeDetails.displayName;
   let requestDesc = RequestTypeDetails.requestDesc;
   let isActive = RequestTypeDetails.isActive;
+  let transactionType = RequestTypeDetails.transactionType;
+  let transactionId = RequestTypeDetails.transactionId;
+
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($requestName: String, $displayName: String, $requestDesc: String,$isActive: Boolean, $moduleName:String, $actionName:String){
+    mutation  ($requestName: String, $displayName: String, $requestDesc: String,$isActive: Boolean, $moduleName:String, $actionName:String, $transactionType:String,$transactionId:String){
         CreateRequestType(
           requestName: $requestName,
           displayName: $displayName,
           requestDesc: $requestDesc,
           isActive :$isActive,
           moduleName:$moduleName,
-          actionName:$actionName
+          actionName:$actionName,
+          transactionType:$transactionType,
+          transactionId:$transactionId
         ){
             success,
             code,
@@ -29,7 +34,9 @@ export async function addRequestActionHandler(RequestTypeDetails) {
       requestDesc,
       isActive,
       moduleName:"REQUEST",
-      actionName:"CREATE"
+      actionName:"CREATE",
+      transactionType,
+      transactionId
     }
   })
   const id = result.data.CreateRequestType;

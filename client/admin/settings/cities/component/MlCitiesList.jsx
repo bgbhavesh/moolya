@@ -11,7 +11,7 @@ export default class MlCitiesList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>City Details</h2>
+          <h2>City List</h2>
 
           <MlTableViewContainer {...mlCitiesTableConfig}/>
 

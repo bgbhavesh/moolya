@@ -5,12 +5,21 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addRequestActionHandler} from '../actions/addRequestTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import gql from 'graphql-tag'
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+
+
+
 let FontAwesome = require('react-fontawesome');
 class MlAddRequestType extends React.Component{
   constructor(props) {
     super(props);
+    this.state = {transactionId: ' ',
+      transactionType: ' '
+    }
     this.addEventHandler.bind(this);
     this.createRequestType.bind(this)
+    this.optionBySelectTransactionType.bind(this)
     return this;
   }
 
@@ -37,9 +46,11 @@ class MlAddRequestType extends React.Component{
       requestName: this.refs.requestName.value,
       displayName: this.refs.displayName.value,
       requestDesc: this.refs.requestDesc.value,
-      isActive: this.refs.isActive.checked
-    }
-    const response = await addRequestActionHandler(RequestTypeDetails)
+      isActive: this.refs.isActive.checked,
+      transactionType:this.state.transactionType,
+      transactionId:this.state.transactionId
+    };
+    const response = await addRequestActionHandler(RequestTypeDetails);
     return response;
 
   }
@@ -48,13 +59,12 @@ class MlAddRequestType extends React.Component{
     OnToggleSwitch(false,true);
     initalizeFloatLabel();
   }
+  optionBySelectTransactionType(value, calback, selObject){
+    this.setState({transactionType:value});
+    this.setState({transactionId:selObject.label})
+  }
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -68,8 +78,14 @@ class MlAddRequestType extends React.Component{
           FlowRouter.go("/admin/settings/requestTypeList")
         }
       }
-    ]
-
+    ];
+    let transactionType=gql`query  {
+  data:fetchTransaction{
+    value:transactionName
+    label:_id
+  }
+}
+ `;
 
     return (
       <div className="admin_main_wrap">
@@ -102,6 +118,9 @@ class MlAddRequestType extends React.Component{
                     <input type="checkbox" ref="isActive"/>
                     <div className="slider"></div>
                   </label>
+                </div>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true}/>
                 </div>
               </form>
             </div>

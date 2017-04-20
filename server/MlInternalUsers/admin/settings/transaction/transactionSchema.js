@@ -16,6 +16,7 @@ let Transaction = `
     }
     type Query{
       FindTransaction(_id: String):Transaction
+      fetchTransaction:[Transaction]
     }
 `
 

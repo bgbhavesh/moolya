@@ -22,7 +22,7 @@ let transactionsSchema = `
       updateTransaction(transactionId:TransactionsInput):response
     }
     type Query{
-      fetchTransactionsByUser(userId:String):[Transactions] 
+      fetchTransactionsByUser(userId:String):[Transactions]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);

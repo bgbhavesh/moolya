@@ -5,12 +5,22 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addRequestActionHandler} from '../actions/addRequestTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import gql from 'graphql-tag'
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+
+
+
 let FontAwesome = require('react-fontawesome');
 class MlAddRequestType extends React.Component{
   constructor(props) {
     super(props);
+    this.state = {
+
+
+    }
     this.addEventHandler.bind(this);
     this.createRequestType.bind(this)
+    this.optionsBySelectTypeOfCompany.bind(this)
     return this;
   }
 
@@ -48,6 +58,10 @@ class MlAddRequestType extends React.Component{
     OnToggleSwitch(false,true);
     initalizeFloatLabel();
   }
+  optionBySelectTransactionType(value, calback, selObject){
+    this.setState({registrationType:value});
+    this.setState({coummunityName:selObject.label})
+  }
   render(){
     let MlActionConfig = [
       // {
@@ -68,8 +82,14 @@ class MlAddRequestType extends React.Component{
           FlowRouter.go("/admin/settings/requestTypeList")
         }
       }
-    ]
-
+    ];
+    let transactionType=gql`query  {
+  data:fetchTransaction{
+    transactionName
+    _id
+  }
+}
+ `;
 
     return (
       <div className="admin_main_wrap">
@@ -102,6 +122,9 @@ class MlAddRequestType extends React.Component{
                     <input type="checkbox" ref="isActive"/>
                     <div className="slider"></div>
                   </label>
+                </div>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} queryoptions={transactiontypesOption} query={transactionType} onSelect={this.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
                 </div>
               </form>
             </div>

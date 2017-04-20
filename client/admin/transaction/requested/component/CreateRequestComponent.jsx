@@ -26,7 +26,11 @@ export default class CreateRequestComponent extends Component {
   async createRequest(){
     let transaction={
       requestTypeId:this.state.requestType,
-      requestDescription:this.refs.about.value
+      requestDescription:this.refs.about.value,
+      transactionStatus:{
+        code: 1,
+        description:"requested"
+      }
     }
     const response = await addReqgistrationRequestInfo(transaction);
     if(response.success){

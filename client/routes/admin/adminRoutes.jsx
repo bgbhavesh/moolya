@@ -251,10 +251,10 @@ adminSection.route('/transactions/portfolio/createPortfolio', {
   }
 });
 
-adminSection.route('/transactions/portfolio/editRequests/:id', {
+adminSection.route('/transactions/portfolio/editRequests/:id/:communityType', {
   name: 'transaction_portfolio_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id}/>})
+    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
   }
 });
 

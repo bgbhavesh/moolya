@@ -61,3 +61,12 @@ MlResolver.MlQueryResolver['FindTransaction'] = (obj, args, context, info) => {
 }
 
 
+MlResolver.MlQueryResolver['fetchTransaction'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+    let response= MlTransactionTypes.find({isActive:true}).fetch();
+    return response;
+
+}
+
+

@@ -8,6 +8,7 @@ let transactionsSchema = `
       transactionTypeId         : String
       requestTypeName           : String
       requestTypeId             : String
+      requestDescription        : String
       transactionStatus         : String
       transactionAssignedBy     : String
       transactionCompletedBy    : String
@@ -20,6 +21,7 @@ let transactionsSchema = `
       transactionTypeId         : String
       requestTypeName           : String
       requestTypeId             : String
+      requestDescription        : String
       transactionStatus         : String
       transactionAssignedBy     : String
       transactionCompletedBy    : String

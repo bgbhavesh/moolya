@@ -4,11 +4,11 @@ import MlRespPayload from "../../../../commons/mlPayload";
 
 MlResolver.MlMutationResolver['CreateRequestType'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
+ /* if (!isValidAuth) {
     let code = 401;
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
-  }
+  }*/
 
   if (!args.requestName) {
     let code = 401;
@@ -61,4 +61,9 @@ MlResolver.MlQueryResolver['FindRequestType'] = (obj, args, context, info) => {
 
 }
 
+MlResolver.MlQueryResolver['FetchRequestType'] = (obj, args, context, info) => {
+  // let result=MlDocumentCategories.find({isActive:true}).fetch()||[];
+  let result = MlRequestType.find({isActive:true}).fetch()||[];
+  return result;
+};
 

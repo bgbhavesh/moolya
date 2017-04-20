@@ -18,6 +18,7 @@ let RequestTypeSchema = `
     }
     type Query{
         FindRequestType(_id:String): Requests
+        FetchRequestType:[Requests]
     }
 `
 

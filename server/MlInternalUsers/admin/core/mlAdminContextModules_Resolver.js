@@ -2,6 +2,18 @@ import MlResolver from '../mlAdminResolverDef'
 import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
 import MlAdminContextQueryConstructor from './repository/mlAdminContextQueryConstructor';
 import getQuery from "../genericSearch/queryConstructor";
+
+let mergeQueries=function(userFilter,serverFilter){
+  let query=userFilter||{};
+  if (_.isEmpty(query)) {
+    query = serverFilter||{};
+  } else {
+    query = {$and: [userFilter,serverFilter]};
+  }
+  return query;
+}
+
+
 MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   let totalRecords=0;
   let findOptions = {};
@@ -34,16 +46,17 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
 
   let contextQuery={};
   contextQuery=new MlAdminContextQueryConstructor(context.userId,{module:args.module,action:args.action}).contextQuery();
+  let queryCount = mergeQueries(contextQuery, userFilterQuery);
   let result=null;
   switch(moduleName){
     case "cluster":
-      result=CoreModulesRepo.MlClusterRepo(args.context,contextQuery,findOptions, context);
+      result=CoreModulesRepo.MlClusterRepo(args.context,queryCount,findOptions, context);
       break;
     case "chapter":
-      result=CoreModulesRepo.MlChapterRepo(args.context,contextQuery,findOptions, context);
+      result=CoreModulesRepo.MlChapterRepo(args.context,queryCount,findOptions, context);
       break;
     case "subChapter":
-      result=CoreModulesRepo.MlSubChapterRepo(args.context,contextQuery,findOptions, context);
+      result=CoreModulesRepo.MlSubChapterRepo(args.context,queryCount,findOptions, context);
       break;
     case "community":
       result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions, context);

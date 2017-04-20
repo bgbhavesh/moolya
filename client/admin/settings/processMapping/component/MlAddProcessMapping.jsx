@@ -47,6 +47,11 @@ class MlAddProcessMapping extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+
+  }
+  componentDidMount(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -235,6 +240,13 @@ class MlAddProcessMapping extends React.Component{
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Create Process</h2>
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea
@@ -309,7 +321,8 @@ class MlAddProcessMapping extends React.Component{
               </div>
             </div>
           </div>
-
+            </ScrollArea>
+          </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
 
         </div>

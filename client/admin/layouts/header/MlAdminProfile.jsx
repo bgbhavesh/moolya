@@ -3,12 +3,22 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {logout} from "../header/actions/logoutAction";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
+
 export default class  MlAdminProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      firstName: " ",
+      lastName:" "
     }
+    this.getValue = this.getValue.bind(this);
+
     return this;
+  }
+  componentWillMount(){
+    const resp=this.getValue();
+    return resp;
   }
   componentDidMount(){
     $('.ml_profile h1').click(function(){
@@ -24,6 +34,18 @@ export default class  MlAdminProfile extends Component {
       FlowRouter.go('/admin/dashboard/clusters');
     else
       FlowRouter.go('/admin/dashboard/chapters');
+  }
+
+
+  async getValue() {
+    // let Details = {
+    //   profilePic: this.refs.upload.value};
+    let userType = Meteor.userId();
+    let response = await findBackendUserActionHandler(userType);
+    // let profilePicResponse = await addProfilePicAction(Details);
+    console.log(response);
+    this.setState({firstName : response.profile.InternalUprofile.moolyaProfile.displayName
+    });
   }
 
   render() {
@@ -45,7 +67,7 @@ export default class  MlAdminProfile extends Component {
             <li><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
           </ol>
         </div>
-        {/*<div className="profile-name">Welcome Mohasin</div>*/}
+        <div className="profile-name">Welcome {this.state.firstName}  {this.state.lastName}</div>
       </div>
 
 

@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
-import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+// import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');

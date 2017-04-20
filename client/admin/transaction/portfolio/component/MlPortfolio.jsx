@@ -175,7 +175,8 @@ class MlPortfolio extends React.Component{
       {
         showAction: true,
         actionName: 'comment',
-        handler: null
+        handler: null,
+        iconID:'Popover1'
       },
     ]
     let EditComponent = ""; let ViewComponent = "";

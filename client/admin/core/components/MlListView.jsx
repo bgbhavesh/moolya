@@ -27,7 +27,7 @@ export default class MlListView extends Component {
       let hasQueryOptions = this.props.queryOptions ? true : false;
       let variables = {
         offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
-        limit: nextState.sizePerPage || 20
+        limit: nextState.sizePerPage || 20  //5
       }
       if (hasQueryOptions) {
         let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
@@ -49,7 +49,6 @@ export default class MlListView extends Component {
       }
       this.props.fetchMore(variables);
     }
-
   }
 
   constructSearchCriteria(search){
@@ -67,8 +66,9 @@ export default class MlListView extends Component {
     this.setState({searchValue:e.target.value});
   }
 
-
   onPageChange(page,sizePerPage) {
+    console.log("parent page")
+    console.log(page)
     this.setState({
       pageNumber: page
     });
@@ -105,6 +105,7 @@ export default class MlListView extends Component {
     let data=this.props.data&&this.props.data.data?this.props.data.data:[];
     let pConfig=_.extend(this.props,{sizePerPage:this.state.sizePerPage,pageNumber:this.state.pageNumber});
     let ListComponent =React.cloneElement(this.props.viewComponent,{data:data,config:pConfig});
+    let totalRecords=this.props.data&&this.props.data.totalRecords;
     let loading=this.props.loading;
     let config=this.props;
     let actionsProxyList=[];
@@ -125,7 +126,7 @@ export default class MlListView extends Component {
       <div className="col-md-12">
           {ListComponent}
       </div>
-        {/*<Pagination/>*/}
+        {/*<Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>*/}
     </div>)}
       {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
     </div>)

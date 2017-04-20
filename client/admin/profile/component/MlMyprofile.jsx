@@ -6,6 +6,12 @@ import ScrollArea from 'react-scrollbar'
 import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
 import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
 import {initalizeFloatLabel} from '../../utils/formElemUtil';
+//import {addProfilePicAction} from "../actions/addProfilePicAction"
+import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
+import {RegistrationWizard} from '../../../admin/transaction/requested/component/RegistrationWizard';
+import {findRegistrationActionHandler} from '../../../admin/transaction/requested/actions/findRegistration'
+import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+
 
 
 
@@ -17,21 +23,69 @@ export default class MlMyProfile extends React.Component{
       firstName: " ",
       middleName: " ",
       lastName:" ",
-      userName: " "
+      userName: " ",
+      uploadedProfilePic : "/images/ideator_01.png",
+      registrationDetails: {},
+      selectedBackendUser: " ",
+      data:{}
     };
     this.getValue = this.getValue.bind(this);
+   // this.getRegistrationSocialLinks.bind(this);
+    this.findRegistration.bind(this);
+    this.onFileUpload.bind(this);
+    this.onFileUploadCallBack.bind(this);
     return this;
   }
+  async findRegistration() {
+    const response = await findRegistrationActionHandler(this.props.config);
+    this.setState({loading: false, registrationDetails: response});
+    return response;
+  }
+
+  //
+  // sendDataToParent(){
+  //   let data = this.state.data;
+  //   for (var propName in data) {
+  //     if (data[propName] === null || data[propName] === undefined) {
+  //       delete data[propName];
+  //     }
+  //   }
+  //   this.props.getIdeatorDetails(data)
+  // }
+  //
+  //
+  // onClick(field,e){
+  //   let details = this.state.data||{};
+  //   let key = e.target.id;
+  //   details=_.omit(details,[key]);
+  //   let className = e.target.className;
+  //   if(className.indexOf("fa-lock") != -1){
+  //     details=_.extend(details,{[key]:true});
+  //   }else{
+  //     details=_.extend(details,{[key]:false});
+  //   }
+  //   this.setState({data:details}, function () {
+  //     this.sendDataToParent()
+  //   })
+  //
+  // }
+
+
    async getValue() {
+  // let Details = {
+  //   profilePic: this.refs.upload.value};
     let userType = Meteor.userId();
      let response = await findBackendUserActionHandler(userType);
+     // let profilePicResponse = await addProfilePicAction(Details);
      console.log(response);
-     this.setState({loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
+     this.setState({selectedBackendUser: userType,loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
                     middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
                     lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
                     userName: response.profile.InternalUprofile.moolyaProfile.displayName
      });
   }
+
+
 
   componentWillMount(){
     initalizeFloatLabel();
@@ -81,7 +135,56 @@ componentDidMount()
       }
     });
   }
+
+  async handleSuccess() {
+    this.resetBackendUers();
+  }
+
+  handleError(response) {
+    console.log('error handle');
+    console.log(response);
+  }
+  updateProfile(){
+    const resp=this.onFileUpload();
+    toastr.success("Update Successful");
+    return resp;
+  }
+
+  onFileUpload(e){
+    let user = {
+      profile: {
+        InternalUprofile: {moolyaProfile: {profileImage:" "}}
+      }
+    }
+    let fileName= e.target.files[0].name;
+    let userId = Meteor.userId();
+    let data = {moduleName: "PORTFOLIO", actionName: "UPDATE", userId:userId, user: user}
+    let response = multipartASyncFormHandler(data, fileName, "registration", this.onFileUploadCallBack.bind(this));
+  }
+
+  onFileUploadCallBack(resp){
+    if(resp){
+       this.setState({"uploadedProfilePic" : resp.result})
+      // this.props.getRegistrationSocialLinks();
+      console.log(resp.result)
+    }
+  }
+
+
+
   render(){
+    // let MlActionConfig = [
+    //   {
+    //     showAction: true,
+    //     actionName: 'save',
+    //     handler: this.updateProfile.bind(this)
+    //   },
+    //   {
+    //     showAction: true,
+    //     actionName: 'cancel',
+    //     handler: null
+    //   }
+    // ];
     const showLoader=this.state.loading;
 
     return (
@@ -103,14 +206,15 @@ componentDidMount()
                     <div className="form-group">
                       <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName}/>
                     </div>
-                    <div className="form-group">
+                    <div className="form-group steps_pic_upload">
+                      <div className="previewImg ProfileImg">
+                        <img src=" "/>
+                      </div>
                       <div className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
-                        <input type="file" className="upload" />
+                        <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
                       </div>
-                      <div className="previewImg ProfileImg">
-                        <img src="/images/def_profile.png"/>
-                      </div>
+
                     </div>
                   </form>
                 </div>
@@ -152,60 +256,7 @@ componentDidMount()
               </div>
             </div>
             <div id="location_div" className="hide_div">
-              {/*
-               <div className="col-md-6">
-               <div className="row">
-               <div className="col-md-2">
-               <div className="form-group">
-               <img src="../images/documents_icon.png"/>
-               </div>
-               </div>
-               <div className="col-md-10">
-               <div className="form-group">
-               <input type="text" placeholder="Rupee" className="form-control float-label" id=""/>
-               </div>
-               </div>
-               </div>
-               <div className="row">
-               <div className="col-md-2">
-               <div className="form-group">
-               <img src="../images/documents_icon.png"/>
-               </div>
-               </div>
-               <div className="col-md-10">
-               <div className="form-group">
-               <input type="text" placeholder="US Metric" className="form-control float-label" id=""/>
-               </div>
-               </div>
-               </div>
-               </div>
-               <div className="col-md-6">
-               <div className="row">
-               <div className="col-md-2">
-               <div className="form-group">
-               <img src="../images/documents_icon.png"/>
-               </div>
-               </div>
-               <div className="col-md-10">
-               <div className="form-group">
-               <input type="text" placeholder="English" className="form-control float-label" id=""/>
-               </div>
-               </div>
-               </div>
-               <div className="row">
-               <div className="col-md-2">
-               <div className="form-group">
-               <img src="../images/documents_icon.png"/>
-               </div>
-               </div>
-               <div className="col-md-10">
-               <div className="form-group">
-               <input type="text" placeholder="IST" className="form-control float-label" id=""/>
-               </div>
-               </div>
-               </div>
-               </div>
-               */}
+
               <div className="swiper-container profile_container">
                 <div className="swiper-wrapper">
                   <div className="swiper-slide profile_accounts">
@@ -413,14 +464,14 @@ componentDidMount()
             </div>
           </div>
           <span></span>
-          <div className="bottom_actions_block">
+        {/*  <div className="bottom_actions_block">
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
             <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
-          </div>
-        </div>)}
+          </div>*/}
+                    </div>)}
       </div>
     )
   }

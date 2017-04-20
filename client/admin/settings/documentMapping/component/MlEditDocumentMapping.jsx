@@ -183,6 +183,8 @@ class MlEditDocumentMapping extends React.Component{
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
     OnToggleSwitch(true,true);
     initalizeFloatLabel();
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
   render(){
     let MlActionConfig = [
@@ -254,6 +256,13 @@ class MlEditDocumentMapping extends React.Component{
 
             <div className="admin_padding_wrap">
               <h2>Edit Document</h2>
+              <div className="main_wrap_scroll">
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
               <div className="col-md-6 nopadding-left">
                 <div className="left_wrap">
                   <ScrollArea
@@ -329,6 +338,8 @@ class MlEditDocumentMapping extends React.Component{
                 </div>
                   </form>
                 </div>
+              </div>
+                </ScrollArea>
               </div>
 
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

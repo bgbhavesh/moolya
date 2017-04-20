@@ -119,7 +119,7 @@ export default class MlListView extends Component {
     }
     return(<div className="admin_padding_wrap">{loading?(<div className="loader_wrap"></div>):(
       <div className="list_view_block">
-        <input type="text" className="form-control pull-right" id="btn-search" placeholder="isDiscover" onKeyUp={this.onKeyUp.bind(this)}/>
+        <input type="text" className="form-control pull-right" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/>
 
         <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
       <div className="col-md-12">

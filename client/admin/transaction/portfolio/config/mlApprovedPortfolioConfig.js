@@ -37,14 +37,14 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
       handler: (data)=>{
 
         if(data && data.id){
-          // FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+          FlowRouter.go("/admin/transactions/editRequests/"+data.id);
         } else{
-          alert("Please select a User Type");
+          toastr.error("Please select a User Type");
         }
       }
     },
     {
-      showAction: true,
+      showAction: false,
       actionName: 'assign',
       handler: (data)=>{
         if(data && data.id){
@@ -53,11 +53,6 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
           alert("Please select a User Type");
         }
       }
-    },
-    {
-      showAction: true,
-      actionName: 'logout',
-      handler: (data)=>{console.log(data);}
     }
   ],
   graphQlQuery:gql`

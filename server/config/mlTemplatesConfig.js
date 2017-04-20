@@ -169,7 +169,7 @@ if(mltemplateAssignment.length<=0){
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
     "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "STU", "templatecommunityName" : "startups", "templateuserType" : "all",
-    "templateidentity" : "view", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTSTUEDT","templateName":"Portfolio-Template-Startup-Edit"}]
+    "templateidentity" : "edit", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTSTUEDT","templateName":"Portfolio-Template-Startup-Edit"}]
   });
 
 

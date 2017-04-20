@@ -162,7 +162,7 @@ class MlClusterDetails extends React.Component {
                     </div>
                     <br className="brclear"/>
                     <div className="form-group ">
-                      <input type="text" ref="email" placeholder="email"
+                      <input type="text" ref="email" placeholder="Email"
                              defaultValue={this.state.data && this.state.data.email}
                              className="form-control float-label"/>
                       <div className="email_notify">

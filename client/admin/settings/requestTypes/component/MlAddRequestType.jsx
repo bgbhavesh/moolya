@@ -14,13 +14,12 @@ let FontAwesome = require('react-fontawesome');
 class MlAddRequestType extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {
-
-
+    this.state = {transactionId: ' ',
+      transactionType: ' '
     }
     this.addEventHandler.bind(this);
     this.createRequestType.bind(this)
-    this.optionsBySelectTypeOfCompany.bind(this)
+    this.optionBySelectTransactionType.bind(this)
     return this;
   }
 
@@ -47,9 +46,11 @@ class MlAddRequestType extends React.Component{
       requestName: this.refs.requestName.value,
       displayName: this.refs.displayName.value,
       requestDesc: this.refs.requestDesc.value,
-      isActive: this.refs.isActive.checked
-    }
-    const response = await addRequestActionHandler(RequestTypeDetails)
+      isActive: this.refs.isActive.checked,
+      transactionType:this.state.transactionType,
+      transactionId:this.state.transactionId
+    };
+    const response = await addRequestActionHandler(RequestTypeDetails);
     return response;
 
   }
@@ -59,16 +60,11 @@ class MlAddRequestType extends React.Component{
     initalizeFloatLabel();
   }
   optionBySelectTransactionType(value, calback, selObject){
-    this.setState({registrationType:value});
-    this.setState({coummunityName:selObject.label})
+    this.setState({transactionType:value});
+    this.setState({transactionId:selObject.label})
   }
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -85,8 +81,8 @@ class MlAddRequestType extends React.Component{
     ];
     let transactionType=gql`query  {
   data:fetchTransaction{
-    transactionName
-    _id
+    value:transactionName
+    label:_id
   }
 }
  `;
@@ -124,7 +120,7 @@ class MlAddRequestType extends React.Component{
                   </label>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfCompany} queryType={"graphql"} queryoptions={transactiontypesOption} query={transactionType} onSelect={this.optionsBySelectTypeOfCompany.bind(this)} isDynamic={true}/>
+                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true}/>
                 </div>
               </form>
             </div>

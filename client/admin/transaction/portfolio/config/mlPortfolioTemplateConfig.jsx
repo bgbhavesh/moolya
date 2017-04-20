@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
+import MlStartupEditTemplate from '../startUp/component/edit/MlStartupEditTemplate'
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
@@ -27,26 +28,27 @@ const mlIdeatorViewExternalUserPortfolioTemplateConfig={
 };
 
 const mlStartupEditExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Ideator-Edit",
+  templateName:"Portfolio-Template-Startup-Edit",
   templateCode:"PFSTUEDT",
   userType:'external',
   process:'Registration',
   subProcess:'Registration',
-  stepCode:'PORTFOLIO-IDEATOR',
+  stepCode:'PORTFOLIO',
   stepName:'Portfolio',
-  // component:IdeatorCompanyHardReg
+  component:MlStartupEditTemplate
 };
 
 const mlStartupViewExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Startup-View",
+  templateName:"Portfolio-Template-Startup-View",
   templateCode:"PFSTUVIW",
   userType:'external',
   process:'Registration',
   subProcess:'Registration',
-  stepCode:'PORTFOLIO-STARTUP',
-  stepName:'Portfolio-Startup',
+  stepCode:'PORTFOLIO',
+  stepName:'Portfolio',
   // component:IdeatorCompanyHardReg
 };
 
 mlRegistrationTemplates.setTemplate(mlIdeatorEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlIdeatorViewExternalUserPortfolioTemplateConfig);

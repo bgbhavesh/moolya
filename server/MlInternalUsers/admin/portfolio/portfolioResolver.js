@@ -1,9 +1,9 @@
 /**
  * Created by venkatasrinag on 6/4/17.
  */
-import MlResolver from '../mlAdminResolverDef'
-import MlRespPayload from '../../../commons/mlPayload'
-import _ from 'lodash';
+import MlResolver from "../mlAdminResolverDef";
+import MlRespPayload from "../../../commons/mlPayload";
+import _ from "lodash";
 
 MlResolver.MlQueryResolver['fetchPortfolioDetails'] = (obj, args, context, info) => {
 }
@@ -71,7 +71,13 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                     }
                       break;
 
-                    case "startup":
+                    case "Startups":
+                      let portfolio = {
+                        userId: portfolioDetails.userId,
+                        communityType: portfolioDetails.communityType,
+                        portfolioDetailsId: ret
+                      }
+                      MlResolver.MlMutationResolver['createStartupPortfolio'](obj, portfolio, context, info)
                       break;
                   }
               }

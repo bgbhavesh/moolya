@@ -32,6 +32,8 @@ class MlAddRole extends React.Component{
   {
     initalizeFloatLabel();
     OnToggleSwitch(false,true);
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -140,6 +142,13 @@ class MlAddRole extends React.Component{
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Create Roles & Permissions</h2>
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
           <div className="col-md-6 nopadding-left">
             <div className="left_wrap">
               <ScrollArea
@@ -190,6 +199,8 @@ class MlAddRole extends React.Component{
           </div>
           <div className="col-md-6 nopadding-right"  >
           <MlAssignModulesToRoles getassignModulesToRoles={this.getassignModulesToRoles.bind(this)}/>
+          </div>
+            </ScrollArea>
           </div>
 
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

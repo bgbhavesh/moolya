@@ -614,7 +614,7 @@ if(Meteor.isServer){
           },
           {                                  // @Created By Sireesha on 23-02-2017 for Cluster Admin Settings Employee Type
             "link" : "/admin/settings/employeeTypesList",
-            "name" : "EmployeeTypes",
+            "name" : "Employee Types",
             "uniqueId" : "settings_EmployeeTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -656,7 +656,7 @@ if(Meteor.isServer){
           },  // @End
           {                                  // @Created By Sireesha on 24-02-2017 for Cluster Admin Settings Company Type
             "link" : "/admin/settings/companyTypesList",
-            "name" : "CompanyTypes",
+            "name" : "Company Types",
             "uniqueId" : "settings_CompanyTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -863,7 +863,7 @@ if(Meteor.isServer){
           },
           {                                  // @Created By Sireesha on 24-02-2017 for Cluster Admin Settings Email Type
             "link" : "/admin/settings/emailTypesList",
-            "name" : "EmailTypes",
+            "name" : "Email Types",
             "uniqueId" : "settings_EmailTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -905,7 +905,7 @@ if(Meteor.isServer){
           },  // @End
           {                                  // @Created By Sireesha on 24-02-2017 for Cluster Admin Settings Contact Type
             "link" : "/admin/settings/contactTypesList",
-            "name" : "ContactTypes",
+            "name" : "Contact Types",
             "uniqueId" : "settings_ContactTypes",
             "isLink" : true,
             "isMenu" : true,

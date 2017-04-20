@@ -13,6 +13,8 @@ const mlChapterDashboardListConfig=new MlViewer.View({
   viewType:MlViewerTypes.LIST,
   extraFields:[],
   throttleRefresh:true,
+  fields:["displayName"],
+  searchFields:["displayName"],
   pagination:true,
   sort:true,
   queryOptions:true,
@@ -27,8 +29,8 @@ const mlChapterDashboardListConfig=new MlViewer.View({
   },
   viewComponent:<MlChapterList />,
   graphQlQuery:gql`
-              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-              data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+              query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec, $fieldsData:[GenericFilter]){
+              data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec, fieldsData:$fieldsData){
                     totalRecords
                     data{
                      ...on Chapter{

@@ -4,18 +4,28 @@ import MlSchemaDef from '../mlAdminSchemaDef';
 let transactionsSchema = `        
     
     type Transactions{
-      transactionType       : String
-      transactionStatus     : String
-      transactionAssignedBy : String
-      transactionCompletedBy: String
-      hierarchy             : String
+      transactionTypeName       : String
+      transactionTypeId         : String
+      requestTypeName           : String
+      requestTypeId             : String
+      transactionStatus         : String
+      transactionAssignedBy     : String
+      transactionCompletedBy    : String
+      transactionCreatedDate    : String
+      transactionUpdatedDate    : String
+      hierarchy                 : String
     }
     input TransactionsInput{
-      transactionType       : String
-      transactionStatus     : String
-      transactionAssignedBy : String
-      transactionCompletedBy: String
-      hierarchy             : String
+      transactionTypeName       : String
+      transactionTypeId         : String
+      requestTypeName           : String
+      requestTypeId             : String
+      transactionStatus         : String
+      transactionAssignedBy     : String
+      transactionCompletedBy    : String
+      transactionCreatedDate    : String
+      transactionUpdatedDate    : String
+      hierarchy                 : String
     }
     type Mutation{
       createTransaction(transaction:TransactionsInput):response

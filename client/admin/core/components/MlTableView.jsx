@@ -104,7 +104,7 @@ export default class MlTableView extends Component {
     let actionsConf = _.clone(config.actionConfiguration);
     let actionsProxyList = [];
     actionsConf.forEach(function (action) {
-      let act = {actionName: action.actionName, showAction: action.showAction};
+      let act = {actionName: action.actionName, showAction: action.showAction, iconID: action.iconID};
       act.handler = that.actionHandlerProxy.bind(that);
       actionsProxyList.push(act);
     });

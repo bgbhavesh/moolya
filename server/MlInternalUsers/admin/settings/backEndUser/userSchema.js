@@ -133,7 +133,8 @@ let BackEndUser = `
         contact:[contacts],
         globalAssignment:Boolean,
         isActive:Boolean,
-        userProfiles:[userprofiles]
+        userProfiles:[userprofiles],
+        profileImage:String
         
     }
 

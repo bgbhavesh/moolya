@@ -124,6 +124,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {communityId:data.communityId, community:data.community, clusters:data.clusters, chapters:data.chapters, subchapters:data.subchapters}, context, null);
             }
             break;
+            case "PROFILE":{
+              response = MlResolver.MlMutationResolver['updateProfile'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName}, context, null);
+              //console.log(response)
+            }
+            break;
         }
         res.send(response);
       }
@@ -187,6 +192,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               }
             }
             break;
+            case "PROFILE":{
+              console.log("this is a profile hit  ")
+            }
           }
 
           if(imageUploaderPromise) {

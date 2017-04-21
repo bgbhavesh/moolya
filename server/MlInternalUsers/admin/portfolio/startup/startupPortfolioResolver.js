@@ -62,3 +62,15 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
     }
   }
 }
+
+
+MlResolver.MlQueryResolver['fetchStartupPortfolioManagement'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('management')) {
+      return portfolio['management'];
+    }
+  }
+
+  return {};
+}

@@ -42,14 +42,14 @@ class MlAdminContextQueryConstructor
       }
       //Chapter/Sub Chapter  Admin
       else if(userProfile&&userProfile.hierarchyCode===hierarchy.code)  {
-          // if(this.module == 'chapter')
+          if(this.module == 'chapter')
           {
               query["_id"]=userProfile.defaultChapters;
           }
 
-          // else if(this.module == 'subChapter'){
-          //     query["_id" ]=userProfile.defaultSubChapters;
-          // }
+          else if(this.module == 'subChapter'){
+              query["_id" ]=userProfile.defaultSubChapters;
+          }
 
           return query;
       }

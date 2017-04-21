@@ -29,10 +29,38 @@ let startupPortfolioSchema = `
     }
     
     input management{
-        title:String,
-        description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+       title :String
+       logo : String
+       isTitlePrivate : Boolean
+       firstName : String
+       isFirstNamePrivate : Boolean
+       lastName : String
+       isLastNamePrivate : Boolean
+       middleName : String
+       isMiddleNamePrivate : Boolean
+       qualification : String
+       isQualificationPrivate :  Boolean
+       certification : String
+       isCertificationPrivate : Boolean
+       profilePic : String
+       isProfilePicPrivate : Boolean
+       gender : String
+       isGenderPrivate : Boolean
+       designation : String
+       isDesignationPrivate: Boolean
+       yearsOfExperience : String
+       isYOEPrivate : Boolean
+       joiningDate : String
+       isJoiningDatePrivate : Boolean
+       firstJobJoiningDate : String
+       isFJJDPrivate : Boolean
+     universities :   String
+     isUniversitiesPrivate: Boolean
+     awards : String
+     isAwardsPrivate : Boolean
+     linkedInUrl : String
+     isLinkedInUrlPrivate : Boolean
+     about : String
     }
     
     input clients{
@@ -106,9 +134,11 @@ let startupPortfolioSchema = `
     }
     
     input aboutUs{
-        description:String,
-        isAudiencePrivate:Boolean,
-        audienceImages : [imageFilesInputSchema]
+        logo : String
+        description : String
+        annotatorId : String
+        isLogoPrivate :Boolean
+        isDescriptionPrivate : Boolean
     }
     
     input awardsRecognisition{
@@ -131,7 +161,11 @@ let startupPortfolioSchema = `
         portfolioId:String,
         isActive:Boolean
     }
-  
+   input charts{
+        fileType:String,
+        portfolioId:String,
+        isActive:Boolean
+    }
     input startupPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
@@ -148,7 +182,8 @@ let startupPortfolioSchema = `
         assets              : assets
         branches            : branches
         clients             : clients 
-        management          : management
+        management          : [management]
+        charts              : charts
     }
     
     type Query{
@@ -158,6 +193,7 @@ let startupPortfolioSchema = `
     
     type Mutation{
         createStartupPortfolio(portfolio:startupPortfolio):response
+        updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio):response
     }
 `
 

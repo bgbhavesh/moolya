@@ -2,20 +2,23 @@ import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlIdeatorDetails from "../../../component/Ideator/MlIdeatorDetails";
+import MlStartupManagement from '../../component/edit/MlStartupManagement'
 import _ from 'lodash'
+import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage"
 
 
 export default class MlStartupEditTemplate extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [], ideatorPortfolio:{}};
+    this.state =  {tabs: [],aboutUs: {}, startupPortfolio:{}};
     this.getIdeatorDetails.bind(this);
     this.getChildContext.bind(this)
+    this.getManagementDetails.bind(this);
   }
 
   getChildContext(){
     return {
-      ideatorPortfolio: this.state.ideatorPortfolio
+      startupPortfolio: this.state.startupPortfolio
     }
   }
 
@@ -35,8 +38,8 @@ export default class MlStartupEditTemplate extends React.Component{
   getTabComponents(){
     let tabs = [
 
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlIdeatorDetails key="1" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlIdeatorDetails key="2" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupManagement key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlIdeatorDetails key="3" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlIdeatorDetails key="4" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -50,11 +53,20 @@ export default class MlStartupEditTemplate extends React.Component{
     return tabs;
   }
 
-  getIdeatorDetails(details){
-    let data = this.state.ideatorPortfolio;
-    data['portfolioIdeatorDetails']=details;
-    this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+  getAboutus(details){
+    let data = this.state.startupPortfolio;
+    data = details;
+    this.props.getPortfolioDetails({startupPortfolio : data});
+  }
+
+  getManagementDetails(details){
+    let data = this.state.startupPortfolio;
+    if(data && !data.management){
+      data['management']=[];
+    }
+    data['management'] = details;
+    this.setState({startupPortfolio : data})
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }
 
   componentWillMount()
@@ -77,5 +89,5 @@ export default class MlStartupEditTemplate extends React.Component{
   }
 }
 MlStartupEditTemplate.childContextTypes = {
-  ideatorPortfolio: PropTypes.object,
+  startupPortfolio: PropTypes.object,
 };

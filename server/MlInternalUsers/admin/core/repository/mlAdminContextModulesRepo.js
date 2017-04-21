@@ -62,7 +62,7 @@ export default CoreModulesRepo={
       if(_.indexOf(contextQuery._id, "all") < 0) {
         query = {_id: {$in: contextQuery._id}}
       }
-      query = mergeQueries(query, contextQuery);
+      // query = mergeQueries(query, contextQuery);
     }
 
     let citiesId=[];
@@ -72,8 +72,8 @@ export default CoreModulesRepo={
     activeCities.map(function(city){
       citiesId.push(city._id);
     })
-    // let Chapters = MlChapters.find(query,fieldsProj).fetch();
-    let Chapters = mlDBController.find('MlChapters', query, context, fieldsProj).fetch();
+    let Chapters = MlChapters.find(query,fieldsProj).fetch();
+    // let Chapters = mlDBController.find('MlChapters', query, context, fieldsProj).fetch();
     citiesId.map(function (id){
       Chapters.map(function(chapter){
         if(chapter.cityId == id){
@@ -82,8 +82,8 @@ export default CoreModulesRepo={
       })
     })
     const data = activeChapters;
-    // const totalRecords=MlChapters.find(query,fieldsProj).count();
-    const totalRecords = mlDBController.find('MlChapters', query, context, fieldsProj).count();
+    const totalRecords=MlChapters.find(query,fieldsProj).count();
+    // const totalRecords = mlDBController.find('MlChapters', query, context, fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
   },
@@ -97,17 +97,20 @@ export default CoreModulesRepo={
     let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(chapterId){
       query={"chapterId":chapterId};
-      query = mergeQueries(query,contextQuery);
-    }else{ //added to handle subchapter for hierarchy
-      query={"clusterId":clusterId};
-      query = mergeQueries(query,contextQuery);
+      if(_.indexOf(contextQuery._id, "all") < 0) {
+          query = mergeQueries(query,contextQuery);
+      }
     }
+    // else{ //added to handle subchapter for hierarchy
+    //   query={"clusterId":clusterId};
+    //   query = mergeQueries(query,contextQuery);
+    // }
 
     // if(contextQuery && contextQuery._id && contextQuery._id.length > 0)
     //   query = { _id: {$in : contextQuery._id}}
 
-    // const data= MlSubChapters.find(query,fieldsProj).fetch();
-    const data = mlDBController.find('MlSubChapters', query, context, fieldsProj).fetch();
+    const data= MlSubChapters.find(query,fieldsProj).fetch();
+    // const data = mlDBController.find('MlSubChapters', query, context, fieldsProj).fetch();
     // const totalRecords=MlChapters.find(query,fieldsProj).count();
     const totalRecords = mlDBController.find('MlChapters', query, context, fieldsProj).count();
     return {totalRecords:totalRecords,data:data};

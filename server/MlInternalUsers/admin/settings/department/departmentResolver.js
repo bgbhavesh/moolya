@@ -176,10 +176,7 @@ MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, contex
   //   isActive: true
   // }, {depatmentAvailable: {$elemMatch: {subChapter: args.subChapter}}}).fetch();
 
-  let resp = mlDBController.find('MlDepartments', {
-    isMoolya: args.isMoolya,
-    isActive: true
-  }, context, {depatmentAvailable: {$elemMatch: {subChapter: args.subChapter}}}).fetch();
+  ;
   return resp;
 }
 

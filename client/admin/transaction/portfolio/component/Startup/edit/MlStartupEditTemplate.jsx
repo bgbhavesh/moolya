@@ -58,14 +58,14 @@ export default class MlStartupEditTemplate extends React.Component{
     this.props.getPortfolioDetails({startupPortfolio : data});
   }
 
-  getManagementDetails(details){
+  getManagementDetails(details, indexArray){
     let data = this.state.startupPortfolio;
     if(data && !data.management){
       data['management']=[];
     }
     data['management'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, indexArray);
   }
 
   componentWillMount()

@@ -2,7 +2,8 @@ import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlIdeatorDetails from "../../../component/Ideator/MlIdeatorDetails";
-import _ from 'lodash'
+import _ from 'lodash';
+import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage"
 
 
 export default class MlStartupEditTemplate extends React.Component{
@@ -35,26 +36,17 @@ export default class MlStartupEditTemplate extends React.Component{
   getTabComponents(){
     let tabs = [
 
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlIdeatorDetails key="1" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlIdeatorDetails key="2" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlIdeatorDetails key="3" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlIdeatorDetails key="4" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlIdeatorDetails key="6" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlIdeatorDetails key="7" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlIdeatorDetails key="8" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlIdeatorDetails key="9" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
 
     ]
     return tabs;
   }
 
-  getIdeatorDetails(details){
-    let data = this.state.ideatorPortfolio;
+  getAboutus(details){
+  /*  let data = this.state.ideatorPortfolio;
     data['portfolioIdeatorDetails']=details;
     this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});*/
   }
 
   componentWillMount()

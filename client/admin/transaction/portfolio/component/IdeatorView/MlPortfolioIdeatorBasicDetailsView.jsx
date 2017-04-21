@@ -26,6 +26,15 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     dataVisibilityHandler();
     initalizeFloatLabel();
   }
+
+  componentDidUpdate()
+  {
+    OnLockSwitch();
+    dataVisibilityHandler();
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+  }
+
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
@@ -44,10 +53,9 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
   render(){
     const showLoader = this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-          <div className="admin_main_wrap">
-            <div className="admin_padding_wrap">
+            <div>
               <h2>Ideator</h2>
 
               <div className="col-md-6 nopadding-left">
@@ -62,46 +70,37 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
                       <form>
 
                         <div className="form-group">
-                          <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label"/>
+                          <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isfirstNamePrivate"/>
                         </div>
                         <div className="form-group">
-                          <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label"/>
+                          <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="islastNamePrivate"/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label"/>
+                          <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="DOB" name="dateOfBirth" defaultValue={this.state.data.dateOfBirth} className="form-control float-label"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isDateOfBirthPrivate"/>
-                        </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label"/>
+                          <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Employment Status" name="employmentStatus" defaultValue={this.state.data.employmentStatus} className="form-control float-label"/>
+                          <input type="text" placeholder="Employment Status" name="employmentStatus" defaultValue={this.state.data.employmentStatus} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isEmploymentStatusPrivate"/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Sector" name="professionalTag" defaultValue={this.state.data.professionalTag} className="form-control float-label"/>
+                          <input type="text" placeholder="Professional Tag" name="professionalTag" defaultValue={this.state.data.professionalTag} className="form-control float-label" disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionalTagPrivate"/>
                         </div>
 
-                        <div className="form-group">
-                          <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} className="form-control float-label"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate"/>
-                        </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Years of Experience" name="yearsofExperience" defaultValue={this.state.data.yearsofExperience} className="form-control float-label" />
+                          <input type="text" placeholder="Years of Experience" name="yearsofExperience" defaultValue={this.state.data.yearsofExperience} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isYoePrivate"/>
                         </div>
                       </form>
@@ -129,46 +128,37 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
                         <br className="brclear"/>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label"/>
+                          <input type="text" placeholder="Industry" ref="industry" defaultValue={this.state.data.industryDisplayName} className="form-control float-label"  disabled="disabled"/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate"/>
+                        </div>
+
+
+                        <div className="form-group">
+                          <input type="text" placeholder="Profession" ref="profession" defaultValue={this.state.data.profession} className="form-control float-label" disabled="disabled"/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isprofessionPrivate"/>
+                        </div>
+
+
+                        <div className="form-group">
+                          <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} className="form-control float-label"  disabled="disabled"/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate"/>
+                        </div>
+
+                        <div className="form-group">
+                          <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isMobileNumberPrivate"/>
                         </div>
 
                         <div className="form-group">
-                          <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} className="form-control float-label"/>
+                          <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isEmailIdPrivate"/>
                         </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="Fcebook Id" name="facebookId" defaultValue={this.state.data.facebookId} className="form-control float-label" />
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isfacebookIdPrivate"/>
-                        </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="Linkedin Id" ref="linkedInId" defaultValue={this.state.data.linkedInId} className="form-control float-label"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="islinkedInIdPrivate"/>
-                        </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="Twitter Id" name="twitterId" defaultValue={this.state.data.twitterId} className="form-control float-label"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isTwitterIdPrivate"/>
-                        </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="Googleplus Id" name="gplusId" defaultValue={this.state.data.gplusId} className="form-control float-label"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isGplusIdPrivate"/>
-                        </div>
-
 
                       </form>
                     </div>
                   </ScrollArea>
                 </div>
               </div>
-
-
-
-
-            </div>
 
 
           </div>)}

@@ -36,7 +36,8 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
           {
             if(_.isArray(startupPortfolio[key])){
               if(startupPortfolio[key].length != updateFor[key].length){
-                // need to push new added object
+                  let newObj = _.last(updateFor[key])
+                  startupPortfolio[key].push(newObj)
               }else{
                 _.each(args.indexArray, function (index) {
                   _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {

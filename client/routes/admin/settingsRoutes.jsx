@@ -101,6 +101,16 @@ import MlEditGender from '../../admin/settings/gender/component/MlEditGender'
 import MlRoleTypeList from '../../admin/settings/roleType/component/MlRoleTypeList'
 import MlEditRoleType from '../../admin/settings/roleType/component/MlEditRoleType'
 
+
+import MlAssetsList from '../../admin/settings/assets/component/MlAssetsList'
+import MlAddAssets from '../../admin/settings/assets/component/MlAddAssets'
+import MlEditAssets from '../../admin/settings/assets/component/MlEditAssets'
+
+import MlTechnologiesList from '../../admin/settings/technologies/component/MlTechnologiesList'
+import MlAddTechnology from '../../admin/settings/technologies/component/MlAddTechnology'
+import MlEditTechnology from '../../admin/settings/technologies/component/MlEditTechnology'
+
+
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
 // @Importing Cluster Admin SettNing Employee Type Components from parent directory
@@ -647,6 +657,51 @@ adminSection.route('/settings/editLookingFor/:id', {
     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})
   }
 });
+
+adminSection.route('/settings/assetsList', {
+  name: 'settings_assetsList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAssetsList/>})
+  }
+});
+adminSection.route('/settings/addassets', {
+  name: 'settings_Addassets',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddAssets />})
+  }
+});
+adminSection.route('/settings/editassets/:id', {
+  name: 'settings_Editassets',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAssets config={params.id} />})
+  }
+});
+
+
+
+adminSection.route('/settings/technologiesList', {
+  name: 'settings_technologiesList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlTechnologiesList/>})
+  }
+});
+adminSection.route('/settings/addTechnology', {
+  name: 'settings_AddTechnology',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddTechnology />})
+  }
+});
+adminSection.route('/settings/edittechnology/:id', {
+  name: 'settings_Edittechnology',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditTechnology config={params.id} />})
+  }
+});
+
+
+
+
+
 adminSection.route('/settings/regionalsList', {
   name: 'settings_RegionalsList',
   action(){

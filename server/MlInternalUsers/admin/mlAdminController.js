@@ -153,45 +153,48 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           let imageUploaderPromise=null;
           let imageUploadCallback=null;
           switch (moduleName){
-            case "REGISTRATION":{
-              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
-              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                let registrationDocumentUploadReq={registrationId:data.registrationId,docUrl: resp,document: file,documentId:documentId,docTypeId:docTypeId,moduleName: data.moduleName,actionName: data.actionName};
-                MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null,registrationDocumentUploadReq, context, null);
-              });
-              break;
-            }
-            case "PORTFOLIO":{
-              if(data.portfolioDetailsId){
-                  imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "portfolioDocuments/");
-                  imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                      let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
-                      if(details){
-                          switch (details.communityType){
-                              case 'Ideators':{
-                                  let ideatorPortfolio = data.portfolio;
-                                  for (key in ideatorPortfolio){
-                                      let inner = ideatorPortfolio[key]
-                                      if(typeof inner == 'object'){
-                                          for (key1 in inner){
-                                            let file = inner[key1]
-                                            if(typeof file == 'object'){
+              case "REGISTRATION":{
+                imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+                imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                  let registrationDocumentUploadReq={registrationId:data.registrationId,docUrl: resp,document: file,documentId:documentId,docTypeId:docTypeId,moduleName: data.moduleName,actionName: data.actionName};
+                  MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null,registrationDocumentUploadReq, context, null);
+                });
+                break;
+              }
+              case "PORTFOLIO":{
+                  if(data.portfolioDetailsId){
+                      let portfolio = {};
+                      imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "portfolioDocuments/");
+                      imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                          let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
+                          if(details){
+                              let clientPortfolio = data.portfolio;
+                              for (key in clientPortfolio){
+                                  let inner = clientPortfolio[key]
+                                  if(typeof inner == 'object'){
+                                      for (key1 in inner){
+                                          let file = inner[key1]
+                                          if(typeof file == 'object'){
                                               for (key2 in file){
-                                                  file[key2].fileUrl = resp;
+                                                 file[key2].fileUrl = resp;
                                               }
-                                            }
                                           }
                                       }
                                   }
-                                  let portfolio = {portfolio:{ideatorPortfolio:ideatorPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
-                                  MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                               }
-                              break;
+                              switch (details.communityType){
+                                  case 'Ideators':
+                                      portfolio = {portfolio:{ideatorPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                  break;
+                                  case 'Startups':
+                                      portfolio = {portfolio:{startupsPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                  break;
+                              }
+                              MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                           }
-                      }
-                  });
+                      });
+                  }
               }
-            }
             break;
             case "PROFILE":{
               console.log("this is a profile hit  ")

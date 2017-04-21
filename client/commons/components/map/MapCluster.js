@@ -437,9 +437,8 @@ const mapClusterHOC =compose(
     withState(
       'mapProps',
       'setMapProps',
-      {
-        center: {lat: 17.1144718, lng: 5.7694891},
-        zoom: 1,
+      (configurations)=>{
+        return {center:configurations.center,zoom:configurations.zoom};
       }
     ),
     // describe events

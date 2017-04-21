@@ -62,10 +62,10 @@ export default class MlCreateRegistration extends React.Component{
         companyUrl      :  this.refs.companyUrl.value,
         remarks         :  this.refs.remarks.value,
         referralType    :  this.state.refered,
-        clusterId       :  this.state.cluster,
-        chapterId       :  this.state.chapter,
-        communityName   :  this.state.coummunityName,
-        source          :  this.refs.source.value
+        /*clusterId       :  this.state.cluster,
+        chapterId       :  this.state.chapter,*/
+        communityName   :  this.state.coummunityName
+        //source          :  this.refs.source.value
 
     }
     const response = await createRegistrationInfo(Details);
@@ -246,7 +246,7 @@ export default class MlCreateRegistration extends React.Component{
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
                 </div>
-                <div className="panel panel-default">
+               {/* <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>
                   <div className="panel-body">
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
@@ -267,7 +267,7 @@ export default class MlCreateRegistration extends React.Component{
                       <input type="text"  disabled="true" placeholder="IP Location"  className="form-control float-label" id=""/>
                     </div>
                   </div>
-                </div>
+                </div>*/}
               </form>
               </ScrollArea>
             </div>
@@ -310,7 +310,7 @@ export default class MlCreateRegistration extends React.Component{
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
                 </div>
-                <div className="panel panel-default">
+                {/*<div className="panel panel-default">
                   <div className="panel-heading">Process Status</div>
                   <div className="panel-body button-with-icon">
                     <button type="button" className="btn btn-labeled btn-success" >
@@ -320,7 +320,7 @@ export default class MlCreateRegistration extends React.Component{
                     <button type="button" className="btn btn-labeled btn-success" >
                       <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>
                   </div>
-                </div>
+                </div>*/}
               </form>
               </ScrollArea>
             </div>

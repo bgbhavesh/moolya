@@ -8,23 +8,34 @@ import GoogleMap from 'google-map-react';
 import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
 
+let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
 export default class MoolyaMapView extends Component {
 
   constructor(props){
     super(props);
   }
-  componentWillMount(){
-    this.setState({
-      center: {lat: 17.1144718, lng: 5.7694891},
-      zoom: 1,
-    });
+  async componentWillMount() {
+
+    let hasCenter=this.props.fetchCenter||false;
+    if(hasCenter){
+      let center= await this.props.fetchCenterHandler();
+      this.setState({center:center||defaultCenter,zoom:1});
+     }else{
+      this.setState({
+        center:defaultCenter,
+        zoom: 1,
+      });
+    }
   }
 
   render()
   {
+    const hasCenter=this.state&&this.state.center?this.state.center:null;
+    if(!hasCenter){
+      return <div className="loader_wrap"></div>;
+    }
     const data=this.props.data&&this.props.data.data?this.props.data.data:[];
-
     return (
       <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
       );

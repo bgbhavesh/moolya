@@ -47,8 +47,8 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
 
   let contextQuery={};
   contextQuery=new MlAdminContextQueryConstructor(context.userId,{module:args.module,action:args.action}).contextQuery();
-  // let queryCount = mergeQueries(contextQuery, userFilterQuery);
-  let queryCount = contextQuery;
+  let queryCount = mergeQueries(contextQuery, userFilterQuery);
+  // let queryCount = contextQuery;
   let result=null;
   switch(moduleName){
     case "cluster":

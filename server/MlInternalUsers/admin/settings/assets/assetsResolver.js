@@ -3,7 +3,6 @@
  */
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-import _ from 'lodash';
 
 
 MlResolver.MlMutationResolver['createAssets'] = (obj, args, context, info) => {

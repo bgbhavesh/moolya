@@ -1639,7 +1639,7 @@ if(Meteor.isServer){
                 "subMenuMappingId":"settings_assets",
                 "subMenusId":"settings",
                 "isLink": true,
-                "isMenu": false,
+                "isMenu": true,
                 "image": ""
               },
               {
@@ -1647,6 +1647,45 @@ if(Meteor.isServer){
                 "name": "Edit Assets",
                 "uniqueId": "settings_Editassets",
                 "subMenuMappingId":"settings_assets",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+
+          {
+            "link" : "/admin/settings/technologiesList",
+            "name" : "Technologies",
+            "uniqueId" : "settings_technologies",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addTechnology",
+              "name": "Add Technology",
+              "uniqueId": "settings_AddTechnology",
+              "subMenuMappingId":"settings_technologies",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": true,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/technologiesList",
+                "name": "List Technologies",
+                "uniqueId": "settings_technologiesList",
+                "subMenuMappingId":"settings_technologies",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/edittechnology",
+                "name": "Edit Technology",
+                "uniqueId": "settings_Edittechnology",
+                "subMenuMappingId":"settings_technologies",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": true,

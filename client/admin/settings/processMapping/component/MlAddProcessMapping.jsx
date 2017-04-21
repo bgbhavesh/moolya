@@ -49,9 +49,14 @@ class MlAddProcessMapping extends React.Component{
     });
 
   }
-  componentDidMount(){
+  /*componentDidMount(){
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+  }*/
+  componentDidUpdate()
+  {
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
   async addEventHandler() {
     const resp=await this.createBackendUser();

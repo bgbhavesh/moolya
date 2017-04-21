@@ -219,37 +219,17 @@ MlResolver.MlQueryResolver['fetchRolesForRegistration'] = (obj, args, context, i
   let subDepartmentId = args.subDepartment || "";
   if (clusterId || chapterId || subChapterId || departmentId || subDepartmentId) {
 
-    // resp = MlRoles.find({"$or": [{"$and": [{"assignRoles.cluster": clusterId}, {"assignRoles.chapter": chapterId}, {"assignRoles.subChapter": subChapterId},
-    //                                 {"assignRoles.department": departmentId},{"assignRoles.subDepartment": subDepartmentId}]},
-    //                                 {"assignRoles.cluster": clusterId},
-    //                                 {"assignRoles.chapter": chapterId},
-    //                                 {"assignRoles.department": departmentId},
-    //                                 {"assignRoles.subDepartment": subDepartmentId}]}).fetch();
-
     resp = mlDBController.find('MlRoles', {
       "$or": [{
         "$and": [{"assignRoles.cluster": clusterId}, {"assignRoles.chapter": chapterId}, {"assignRoles.subChapter": subChapterId},
           {"assignRoles.department": departmentId}, {"assignRoles.subDepartment": subDepartmentId}]
       },
-        {"assignRoles.cluster": clusterId},
-        {"assignRoles.chapter": chapterId},
+        {"$or":[{"assignRoles.cluster": clusterId},{"assignRoles.cluster":"all"}]},
+        {"$or":[{"assignRoles.chapter": chapterId},{"assignRoles.chapter":"all"}]},
         {"assignRoles.department": departmentId},
         {"assignRoles.subDepartment": subDepartmentId}]
     }, context).fetch();
   }
-  /*else if(args.cluster){
-   resp = MlDepartments.find( {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}}).fetch()
-   }else if(args.cluster  && args.chapter ){
-   resp = MlDepartments.find( {
-   $and : [{  },
-   {"depatmentAvailable.cluster" :  {$in : ["all",args.cluster]}},
-   { "depatmentAvailable":{
-   $elemMatch: {
-   chapter: args.chapter
-   }} },
-   ]
-   } ).fetch()
-   }*/
 
   return resp;
 }

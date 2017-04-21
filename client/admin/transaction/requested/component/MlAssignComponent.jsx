@@ -84,6 +84,10 @@ export default class MlAssignComponent extends Component {
         label:subChapterName
       }  
     }`;
+    let fetchcommunities = gql` query{
+      data:fetchCommunityDefinition{label:name,value:code}
+    }
+    `;
     let departmentQuery=gql`query($cluster:String,$chapter:String,$subChapter:String){  
       data:fetchDepartmentsForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter) {
         value:_id
@@ -102,10 +106,13 @@ export default class MlAssignComponent extends Component {
         label:roleName
       }  
     }`;
-    let fetchcommunities = gql` query{
-      data:fetchCommunityDefinition{label:name,value:code}
-    }
-    `;
+    let usersQuery=gql`query($cluster:String,$chapter:String,$subChapter:String,$department:String,$subDepartment:String,$role:String){  
+      data:fetchRolesForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter,department:$department,subDepartment:$subDepartment,role:$role) {
+        value:_id
+        label:username
+      }  
+    }`;
+   
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
     let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}
@@ -119,6 +126,17 @@ export default class MlAssignComponent extends Component {
                         department:this.state.selectedDepartment,
                         subDepartment:this.state.selectedSubDepartment
                     }}};
+    let usersOption = {
+                  options: {
+                    variables: {
+                      cluster:this.state.selectedCluster,
+                      chapter:this.state.selectedChapter,
+                      subChapter:this.state.selectedSubChapter,
+                      department:this.state.selectedDepartment,
+                      subDepartment:this.state.selectedSubDepartment,
+                      role:this.state.selectedRole
+                    }}};
+
     return (
       <div>
       {this.state.show==true?
@@ -154,7 +172,7 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select Sub Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubDepartment} queryType={"graphql"} query={subDepartmentQuery} reExecuteQuery={true} queryOptions={subDepartmentOption} isDynamic={true} onSelect={this.optionsBySelectSubDepartment.bind(this)} />
           </div>
           <div className="form-group">
-            <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={subDepartmentQuery} reExecuteQuery={true} queryOptions={subDepartmentOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
+            <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={usersQuery} reExecuteQuery={true} queryOptions={usersOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
           </div>
         </div>
 

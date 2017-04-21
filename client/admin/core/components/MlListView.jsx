@@ -4,6 +4,7 @@ import AlphaSearch from "../../../commons/components/alphaSearch/AlphaSearch";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import Pagination from "../../../commons/components/pagination/Pagination";
 import _ from "lodash";
+import ScrollArea from 'react-scrollbar'
 export default class MlListView extends Component {
   constructor(props) {
     super(props);
@@ -20,14 +21,17 @@ export default class MlListView extends Component {
     this.constructSearchCriteria.bind(this);
     this.actionHandlerProxy=this.actionHandlerProxy.bind(this);
   }
-
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    $('.list_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+  }
   componentWillUpdate(nextProps, nextState) {
     if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
 
       let hasQueryOptions = this.props.queryOptions ? true : false;
       let variables = {
         offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
-        limit: nextState.sizePerPage || 20
+        limit: nextState.sizePerPage || 20  //5
       }
       if (hasQueryOptions) {
         let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
@@ -49,7 +53,6 @@ export default class MlListView extends Component {
       }
       this.props.fetchMore(variables);
     }
-
   }
 
   constructSearchCriteria(search){
@@ -67,8 +70,9 @@ export default class MlListView extends Component {
     this.setState({searchValue:e.target.value});
   }
 
-
   onPageChange(page,sizePerPage) {
+    console.log("parent page")
+    console.log(page)
     this.setState({
       pageNumber: page
     });
@@ -105,6 +109,7 @@ export default class MlListView extends Component {
     let data=this.props.data&&this.props.data.data?this.props.data.data:[];
     let pConfig=_.extend(this.props,{sizePerPage:this.state.sizePerPage,pageNumber:this.state.pageNumber});
     let ListComponent =React.cloneElement(this.props.viewComponent,{data:data,config:pConfig});
+    let totalRecords=this.props.data&&this.props.data.totalRecords;
     let loading=this.props.loading;
     let config=this.props;
     let actionsProxyList=[];
@@ -117,16 +122,25 @@ export default class MlListView extends Component {
       actionsProxyList.push(act);
     });
     }
-    return(<div className="admin_padding_wrap">{loading?(<div className="loader_wrap"></div>):(
-      <div className="list_view_block">
-        <input type="text" className="form-control pull-right" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/>
+    return(<div className="admin_padding_wrap"><input type="text" className="form-control" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/>{loading?(<div className="loader_wrap"></div>):(
+      <div className="list_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="list_scroll"
+          smoothScrolling={true}
+        >
+        <div className="list_view_block">
 
-        <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
-      <div className="col-md-12">
-          {ListComponent}
+
+          <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
+          <div className="col-md-12">
+              {ListComponent}
+          </div>
+          {/*<Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>*/}
+        </div>
+        </ScrollArea>
       </div>
-        {/*<Pagination/>*/}
-    </div>)}
+        )}
       {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
     </div>)
   }

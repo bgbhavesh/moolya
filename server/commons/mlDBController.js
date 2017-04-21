@@ -121,7 +121,7 @@ class MlDBController{
 
     let response;
     if(fieldsProj){
-      response = collection.find(query, fieldsProj);
+       response = collection.find(query, fieldsProj);
     }else {
       response = collection.find(query);
     }

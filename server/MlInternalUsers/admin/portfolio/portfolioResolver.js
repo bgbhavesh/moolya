@@ -109,6 +109,11 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                     response = MlResolver.MlMutationResolver['updateIdeatorPortfolio'](obj, args, context, info)
                 }
                 break;
+
+              case "Startups":{
+                  response = MlResolver.MlMutationResolver['updateStartupPortfolio'](obj, args, context, info)
+              }
+              break;
             }
         }
     }

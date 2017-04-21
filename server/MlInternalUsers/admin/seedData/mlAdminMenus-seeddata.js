@@ -1614,6 +1614,46 @@ if(Meteor.isServer){
                 "image": ""
               }]
           },
+
+          {
+            "link" : "/admin/settings/assetsList",
+            "name" : "Assets",
+            "uniqueId" : "settings_assets",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+                "link": "/admin/settings/addassets",
+                "name": "Add assets",
+                "uniqueId": "settings_Addassets",
+                "subMenuMappingId":"settings_assets",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/assetsList",
+                "name": "List Assets",
+                "uniqueId": "settings_assetsList",
+                "subMenuMappingId":"settings_assets",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editassets",
+                "name": "Edit Assets",
+                "uniqueId": "settings_Editassets",
+                "subMenuMappingId":"settings_assets",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+
           {
             "link" : "/admin/settings/processList",
             "name" : "Process Mapping",

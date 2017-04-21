@@ -37,8 +37,6 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
             _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
               if (_.isArray(objValue)) {
                 return objValue.concat(srcValue);
-              } else{
-                return objValue.push(srcValue);
               }
             });
           }

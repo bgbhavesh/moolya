@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
-import MlStartupEditTemplate from '../startUp/component/edit/MlStartupEditTemplate'
+import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",

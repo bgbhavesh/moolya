@@ -27,8 +27,7 @@ let startupPortfolioSchema = `
       id:String
       menu:[PortfolioMenu]
     }
-    
-    input management{
+    type startupManagementOutput{
        title :String
        logo : String
        isTitlePrivate : Boolean
@@ -54,13 +53,173 @@ let startupPortfolioSchema = `
        isJoiningDatePrivate : Boolean
        firstJobJoiningDate : String
        isFJJDPrivate : Boolean
-     universities :   String
-     isUniversitiesPrivate: Boolean
-     awards : String
-     isAwardsPrivate : Boolean
-     linkedInUrl : String
-     isLinkedInUrlPrivate : Boolean
-     about : String
+       universities :   String
+       isUniversitiesPrivate: Boolean
+       awards : String
+       isAwardsPrivate : Boolean
+       linkedInUrl : String
+       isLinkedInUrlPrivate : Boolean
+       about : String
+       isAboutPrivate:Boolean
+    }
+    
+    type clientsOutput{
+        title:String,
+        description:String,
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
+    }
+    
+    type branchesOutput{
+        title:String,
+        description:String,
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
+    }
+    
+    type assetsOutput{
+        title:String,
+        description:String,
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
+    }
+    
+    type technologiesOutput{
+        title:String,
+        description:String,
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
+    }
+    
+    type investorOutput{
+        title:String,
+        description:String,
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
+    }
+    
+    type lookingForOutput{
+        title:String,
+        description:String,
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
+    }
+    
+
+    type informationOutput{
+        title:String,
+        description:String,
+        isTitlePublic:Boolean,
+        isDescriptionPublic:Boolean
+    }
+    
+    type serviceProductsOutput{
+        firstName:String,
+        isfirstNamePrivate:Boolean
+        lastName:String
+    }
+    
+    type imageFilesInputSchemaOutput{
+       fileUrl: String,
+       fileName:String
+     }
+     
+    type ratingOutput{
+        problemStatement    : String,
+        isProblemPrivate    : Boolean,
+        problemImage        : [imageFilesInputSchemaOutput],
+        solutionStatement   : String,
+        isSolutionPrivate   : Boolean,
+        solutionImage       : [imageFilesInputSchemaOutput]
+    }
+    
+    type aboutUsOutput{
+        logo : String
+        description : String
+        annotatorId : String
+        isLogoPrivate :Boolean
+        isDescriptionPrivate : Boolean
+    }
+    
+    type awardsRecognisitionOutput{
+        description:String,
+        isStrategyPlansPrivate:Boolean
+    }
+
+    type membershipsOutput{
+        description:String, 
+        isIntellectualPrivate :Boolean
+    }
+    
+    type compliancesOutput{
+        description:String,
+        isLookingForPrivate:Boolean
+    }
+    
+    type licensesOutput{
+        fileType:String,
+        portfolioId:String,
+        isActive:Boolean
+    }
+   type chartsOutput{
+        fileType:String,
+        portfolioId:String,
+        isActive:Boolean
+    }
+    type startupPortfolioOutput{
+        portfolioDetailsId  : String
+        licenses            : licensesOutput
+        compliances         : compliancesOutput
+        memberships         : membershipsOutput
+        awardsRecognisition : awardsRecognisitionOutput
+        aboutUs             : aboutUsOutput
+        rating              : ratingOutput
+        serviceProducts     : serviceProductsOutput
+        information         : informationOutput
+        lookingFor          : lookingForOutput
+        investor            : investorOutput
+        technologies        : technologiesOutput
+        assets              : assetsOutput
+        branches            : branchesOutput
+        clients             : clientsOutput
+        management          : [startupManagementOutput]
+        charts              : chartsOutput
+    }
+    
+    input startupManagement{
+       title :String
+       logo : String
+       isTitlePrivate : Boolean
+       firstName : String
+       isFirstNamePrivate : Boolean
+       lastName : String
+       isLastNamePrivate : Boolean
+       middleName : String
+       isMiddleNamePrivate : Boolean
+       qualification : String
+       isQualificationPrivate :  Boolean
+       certification : String
+       isCertificationPrivate : Boolean
+       profilePic : String
+       isProfilePicPrivate : Boolean
+       gender : String
+       isGenderPrivate : Boolean
+       designation : String
+       isDesignationPrivate: Boolean
+       yearsOfExperience : String
+       isYOEPrivate : Boolean
+       joiningDate : String
+       isJoiningDatePrivate : Boolean
+       firstJobJoiningDate : String
+       isFJJDPrivate : Boolean
+       universities :   String
+       isUniversitiesPrivate: Boolean
+       awards : String
+       isAwardsPrivate : Boolean
+       linkedInUrl : String
+       isLinkedInUrlPrivate : Boolean
+       about : String
+       isAboutPrivate:Boolean
     }
     
     input clients{
@@ -182,12 +341,12 @@ let startupPortfolioSchema = `
         assets              : assets
         branches            : branches
         clients             : clients 
-        management          : [management]
+        management          : [startupManagement]
         charts              : charts
     }
     
     type Query{
-        
+        fetchStartupPortfolioManagement(portfoliodetailsId:String!):[startupManagementOutput]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     

@@ -45,6 +45,11 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
   searchFields:["userName","mobileNumber","eMail","city","regType"],
   throttleRefresh:true,
   pagination:false,
+  fetchCenter:true,
+  fetchCenterHandler:async function(){
+          let center=await maphandler.fetchDefaultCenterOfUser();
+          return center;
+  },
   viewComponent:<MlMapViewContainer />,
   actionConfiguration:[
     {

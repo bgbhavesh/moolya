@@ -75,6 +75,11 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
       else
         return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
+  fetchCenter:true,
+  fetchCenterHandler:async function(){
+    let center=await maphandler.fetchDefaultCenterOfUser();
+    return center;
+  },
   viewComponent:<MlMapViewContainer />,
   actionConfiguration:[
     {

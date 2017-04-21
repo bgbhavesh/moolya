@@ -32,7 +32,8 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
       let updateFor = args.portfolio.startupPortfolio;
       if (startupPortfolio) {
         for (key in updateFor) {
-          if (startupPortfolio.hasOwnProperty(key)) {
+          if (startupPortfolio.hasOwnProperty(key))
+          {
             _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
               if (_.isArray(objValue)) {
                 return objValue.concat(srcValue);
@@ -58,4 +59,16 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
       return response;
     }
   }
+}
+
+
+MlResolver.MlQueryResolver['fetchStartupPortfolioManagement'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('management')) {
+      return portfolio['management'];
+    }
+  }
+
+  return {};
 }

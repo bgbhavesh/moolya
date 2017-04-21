@@ -4,12 +4,25 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import passwordUtil from '../../../../commons/passwordUtil'
+import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
 
 var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
    let user=Meteor.users.findOne(context.userId);
     return user&&user.profile&&user.profile.isInternaluser?"external":"internal";
+}
+
+MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {
+  //Resolve the context of the User and hierarchy
+  //todo: check internal /external user
+  let userProfile=new MlAdminUserContext().userProfileDetails(context.userId);
+  if(userProfile&&userProfile.defaultProfileHierarchyRefId&&userProfile.defaultProfileHierarchyRefId!==null) {
+      let clusterDetails = MlClusters.findOne(userProfile.defaultProfileHierarchyRefId);
+         if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
+               return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
+         }
+    }
 }
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {

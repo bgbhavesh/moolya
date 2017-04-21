@@ -135,7 +135,7 @@ let startupPortfolioSchema = `
     
     input aboutUs{
         logo : String
-        description : Boolean
+        description : String
         annotatorId : String
         isLogoPrivate :Boolean
         isDescriptionPrivate : Boolean
@@ -193,6 +193,7 @@ let startupPortfolioSchema = `
     
     type Mutation{
         createStartupPortfolio(portfolio:startupPortfolio):response
+        updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio):response
     }
 `
 

@@ -24,3 +24,38 @@ MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, i
     console.log("Error: In creating Startup portfolio");
   }
 }
+MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, info) =>
+{
+  if(args.portfoliodetailsId){
+    try {
+      let startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+      let updateFor = args.portfolio.startupPortfolio;
+      if (startupPortfolio) {
+        for (key in updateFor) {
+          if (startupPortfolio.hasOwnProperty(key)) {
+            _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
+              if (_.isArray(objValue)) {
+                return objValue.concat(srcValue);
+              }
+            });
+          }
+          else {
+            startupPortfolio[key] = updateFor[key];
+          }
+        }
+
+        let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio}, {upsert: true})
+        if (ret) {
+          let code = 200;
+          let response = new MlRespPayload().successPayload("Updated Successfully", code);
+          return response;
+        }
+      }
+    }
+    catch (e){
+      let code = 400;
+      let response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
+    }
+  }
+}

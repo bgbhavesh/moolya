@@ -69,7 +69,7 @@ let portfolioSchema = `
         professionId    : String,
         portfolioId     : String
     }
-    
+   
     input portfolio{
         ideatorPortfolio:ideatorPortfolio,
         startupPortfolio:startupPortfolio

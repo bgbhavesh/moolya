@@ -54,13 +54,14 @@ let startupPortfolioSchema = `
        isJoiningDatePrivate : Boolean
        firstJobJoiningDate : String
        isFJJDPrivate : Boolean
-     universities :   String
-     isUniversitiesPrivate: Boolean
-     awards : String
-     isAwardsPrivate : Boolean
-     linkedInUrl : String
-     isLinkedInUrlPrivate : Boolean
-     about : String
+       universities :   String
+       isUniversitiesPrivate: Boolean
+       awards : String
+       isAwardsPrivate : Boolean
+       linkedInUrl : String
+       isLinkedInUrlPrivate : Boolean
+       about : String
+       isAboutPrivate:Boolean
     }
     
     input clients{

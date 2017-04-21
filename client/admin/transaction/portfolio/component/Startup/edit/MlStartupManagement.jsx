@@ -17,6 +17,7 @@ export default class MlStartupManagement extends React.Component{
       loading: true,
       data:{},
       managmentDetails:[],
+      arrIndex:"",
       managementIndex:""
     }
     this.onClick.bind(this);
@@ -50,6 +51,11 @@ export default class MlStartupManagement extends React.Component{
     // this.setState({loading: false})
   }
   addManagement(){
+    if(this.context.startupPortfolio && this.context.startupPortfolio.management){
+      this.setState({arrIndex:this.context.startupPortfolio.management.length})
+    }else{
+      this.setState({arrIndex:0})
+    }
     // this.setState({loading: false, data:{}})
   }
 
@@ -101,7 +107,7 @@ export default class MlStartupManagement extends React.Component{
       }
     }
     let managmentDetails = this.state.managmentDetails;
-    managmentDetails[0] = data
+    managmentDetails[this.state.arrIndex] = data;
     this.setState({managmentDetails:managmentDetails}, function () {
       this.props.getManagementDetails(managmentDetails)
     })

@@ -2,15 +2,15 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
-import MlStartupAboutUs from "../aboutUs/MlStartupAboutUs";
-import MlStartupRating from "../aboutUs/MlStartupRating";
-import MlStartupClients from "../aboutUs/MlStartupClients";
-import MlStartupBranches from "../aboutUs/MlStartupBranches";
-import MlStartupInformation from "../aboutUs/MlStartupInformation";
-import MlStartupLegal from "../aboutUs/MlStartupLegal";
-import MlStartupSP from "../aboutUs/MlStartupSP";
-import MlStartupTechnology from "../aboutUs/MlStartupTechnology";
-import MlStartupAssets from "../aboutUs/MlStartupAssets";
+import MlStartupAboutUs from "./MlStartupAboutUs";
+import MlStartupRating from "./MlStartupRating";
+import MlStartupClients from "./MlStartupClients";
+import MlStartupBranches from "./MlStartupBranches";
+import MlStartupInformation from "./MlStartupInformation";
+import MlStartupLegal from "./MlStartupLegal";
+import MlStartupSP from "./MlStartupSP";
+import MlStartupTechnology from "./MlStartupTechnology";
+import MlStartupAssets from "./MlStartupAssets";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent"
 
 export default class MlStartupTab extends React.Component{

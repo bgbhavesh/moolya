@@ -9,8 +9,8 @@ import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage"
 export default class MlStartupEditTemplate extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [], ideatorPortfolio:{}};
-    this.getIdeatorDetails.bind(this);
+    this.state =  {tabs: [],aboutUs: {}};
+    //this.getIdeatorDetails.bind(this);
     this.getChildContext.bind(this)
   }
 
@@ -43,10 +43,7 @@ export default class MlStartupEditTemplate extends React.Component{
   }
 
   getAboutus(details){
-  /*  let data = this.state.ideatorPortfolio;
-    data['portfolioIdeatorDetails']=details;
-    this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});*/
+    this.props.getPortfolioDetails(details);
   }
 
   componentWillMount()

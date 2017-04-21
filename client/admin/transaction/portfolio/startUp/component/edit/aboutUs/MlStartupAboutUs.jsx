@@ -6,6 +6,33 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
 export default class MlStartupAboutUs extends React.Component{
+  constructor(props, context){
+    super(props);
+    this.state={
+      loading: true,
+      data:{}
+    }
+    this.handleBlur.bind(this);
+    return this;
+  }
+  handleBlur(e){
+    let details =this.state.data;
+    let name  = e.target.name;
+    details=_.omit(details,[name]);
+    details=_.extend(details,{[name]:e.target.value});
+    this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })
+  }
+  sendDataToParent(){
+    let data = this.state.data;
+    for (var propName in data) {
+      if (data[propName] === null || data[propName] === undefined) {
+        delete data[propName];
+      }
+    }
+    this.props.getStartupAboutUs(data)
+  }
   render(){
     return(
       <div className="requested_input">
@@ -19,7 +46,7 @@ export default class MlStartupAboutUs extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control" id="cl_about"></textarea>
+                  <textarea placeholder="Describe..." className="form-control"  name="description" id="description"  onBlur={this.handleBlur.bind(this)}></textarea>
                   <FontAwesome name='lock' className="input_icon req_textarea_icon"/>
                 </div>
 

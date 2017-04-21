@@ -16,7 +16,7 @@ import MlTabComponent from "../../../../../../../commons/components/tabcomponent
 export default class MlStartupTab extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: []};
+    this.state =  {tabs: [], portfolioStartupAboutUs:{}};
   }
 
   componentDidMount(){
@@ -34,7 +34,7 @@ export default class MlStartupTab extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlStartupAboutUs  key="1"  portfolioDetailsId={this.props.portfolioDetailsId}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlStartupAboutUs  key="1"  getStartupAboutUs={this.getStartupAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlStartupRating key="2"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlStartupClients key="3" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlStartupSP key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -45,6 +45,16 @@ export default class MlStartupTab extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Legal", component:<MlStartupLegal  key="9"  portfolioDetailsId={this.props.portfolioDetailsId}/>}
     ]
     return tabs;
+  }
+
+
+  getStartupAboutUs(details){
+    let data = this.state.portfolioStartupAboutUs;
+    data['aboutUs']=details;
+    this.setState({portfolioStartupAboutUs : data})
+    // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
+    // this.setState({ideatorDetails:details})
+    this.props.getPortfolioStartupAboutUsDetails(this.state.portfolioStartupAboutUs);
   }
 
   componentWillMount()

@@ -19,6 +19,9 @@ export default class MlStartupAboutUs extends React.Component{
   selectedTab(field,e){
    this.setState({aboutStartup : true})
   }
+  getPortfolioStartupAboutUsDetails(details){
+    this.props.getAboutus(details);
+  }
   render(){
 
     return (
@@ -73,7 +76,7 @@ export default class MlStartupAboutUs extends React.Component{
 
         </div>
 
-      </div>):(<div>{<MlStartupTab></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlStartupTab getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}></MlStartupTab> }</div>)}
       </div>
 
     )

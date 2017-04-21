@@ -71,7 +71,8 @@ let portfolioSchema = `
     }
     
     input portfolio{
-        ideatorPortfolio:ideatorPortfolio
+        ideatorPortfolio:ideatorPortfolio,
+        startupPortfolio:startupPortfolio
     }
     
     type Query{

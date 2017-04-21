@@ -69,9 +69,10 @@ let portfolioSchema = `
         professionId    : String,
         portfolioId     : String
     }
-    
+   
     input portfolio{
-        ideatorPortfolio:ideatorPortfolio
+        ideatorPortfolio:ideatorPortfolio,
+        startupPortfolio:startupPortfolio
     }
     
     type Query{

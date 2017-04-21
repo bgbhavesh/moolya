@@ -78,10 +78,12 @@ let startupPortfolioSchema = `
     }
     
     input assets{
-        title:String,
+        assetType:String,
+        isAssetTypePrivate:Boolean,
+        quantity:String,
+        isQuantityTypePrivate:Boolean,
         description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+        makePrivate:Boolean
     }
     
     input technologies{
@@ -179,7 +181,7 @@ let startupPortfolioSchema = `
         lookingFor          : lookingFor
         investor            : investor
         technologies        : technologies
-        assets              : assets
+        assets              : [assets]
         branches            : branches
         clients             : clients 
         management          : [management]

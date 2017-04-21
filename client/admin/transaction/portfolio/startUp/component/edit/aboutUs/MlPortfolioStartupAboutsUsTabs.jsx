@@ -16,7 +16,7 @@ import MlTabComponent from "../../../../../../../commons/components/tabcomponent
 export default class MlStartupTab extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [], portfolioStartupAboutUs:{}};
+    this.state =  {tabs: [], portfolioStartupAboutUs:{}, portfolioStartupAssets:[]};
   }
 
   componentDidMount(){
@@ -39,7 +39,7 @@ export default class MlStartupTab extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlStartupClients key="3" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlStartupSP key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Information", component:<MlStartupInformation  key="5"/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Assets", component:<MlStartupAssets key="6"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Assets", component:<MlStartupAssets key="6"  getStartupAssets={this.getStartupAssets.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupBranches key="7"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Technology", component:<MlStartupTechnology  key="8"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Legal", component:<MlStartupLegal  key="9"  portfolioDetailsId={this.props.portfolioDetailsId}/>}
@@ -50,11 +50,15 @@ export default class MlStartupTab extends React.Component{
 
   getStartupAboutUs(details){
     let data = this.state.portfolioStartupAboutUs;
-    data['aboutUs']=details;
+    data=details;
     this.setState({portfolioStartupAboutUs : data})
-    // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
-    // this.setState({ideatorDetails:details})
-    this.props.getPortfolioStartupAboutUsDetails(this.state.portfolioStartupAboutUs);
+    this.props.getPortfolioStartupAboutUsDetails(data,"aboutUs");
+  }
+  getStartupAssets(details){
+    let data = this.state.portfolioStartupAssets;
+    data = details;
+    this.setState({portfolioStartupAssets : data})
+    this.props.getPortfolioStartupAboutUsDetails(data,"assets");
   }
 
   componentWillMount()

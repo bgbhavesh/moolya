@@ -4,6 +4,7 @@ import AlphaSearch from "../../../commons/components/alphaSearch/AlphaSearch";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import Pagination from "../../../commons/components/pagination/Pagination";
 import _ from "lodash";
+import ScrollArea from 'react-scrollbar'
 export default class MlListView extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +21,10 @@ export default class MlListView extends Component {
     this.constructSearchCriteria.bind(this);
     this.actionHandlerProxy=this.actionHandlerProxy.bind(this);
   }
-
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    $('.list_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+  }
   componentWillUpdate(nextProps, nextState) {
     if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
 
@@ -118,16 +122,25 @@ export default class MlListView extends Component {
       actionsProxyList.push(act);
     });
     }
-    return(<div className="admin_padding_wrap">{loading?(<div className="loader_wrap"></div>):(
-      <div className="list_view_block">
-        <input type="text" className="form-control pull-right" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/>
+    return(<div className="admin_padding_wrap"><input type="text" className="form-control" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/>{loading?(<div className="loader_wrap"></div>):(
+      <div className="list_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="list_scroll"
+          smoothScrolling={true}
+        >
+        <div className="list_view_block">
 
-        <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
-      <div className="col-md-12">
-          {ListComponent}
+
+          <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
+          <div className="col-md-12">
+              {ListComponent}
+          </div>
+          {/*<Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>*/}
+        </div>
+        </ScrollArea>
       </div>
-        {/*<Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>*/}
-    </div>)}
+        )}
       {config.showActionComponent===true && <MlActionComponent ActionOptions={actionsProxyList} />}
     </div>)
   }

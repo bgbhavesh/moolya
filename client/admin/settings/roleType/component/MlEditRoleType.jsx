@@ -22,8 +22,8 @@ class MlEditRoleType extends React.Component{
   }
 
   componentDidUpdate() {
-    initalizeFloatLabel();
     OnToggleSwitch(false,true);
+    initalizeFloatLabel();
   }
 
 
@@ -109,7 +109,7 @@ class MlEditRoleType extends React.Component{
                   <form>
                   <div className="form-group">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label" readOnly="readOnly"/>
+                    <input type="text" placeholder="User Type Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label"  disabled="disabled"/>
 
                   </div>
                   <div className="form-group">
@@ -123,7 +123,7 @@ class MlEditRoleType extends React.Component{
                 <div className="form_bg">
                   <form>
                   <div className="form-group">
-                    <input type="text" ref="roleTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.roleTypeDisplayName} className="form-control float-label" id=""/>
+                    <input type="text" ref="roleTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.roleTypeDisplayName} className="form-control float-label"  disabled="disabled"/>
                   </div>
                   <div className="form-group switch_wrap">
                     <label>Status</label><br/>

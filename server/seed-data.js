@@ -184,7 +184,7 @@ if(!userObj){
 
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(role){
-  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM"}]
+  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:"", departmentName:"", subDepartmentId:"", subDepartmentName:""}]
   var userProfiles = [{
     clusterId:"all",
     userRoles:userRoles,
@@ -276,14 +276,103 @@ Accounts.validateLoginAttempt(function (user)
 {
 
     let isValid=false;
+
     if(user && user.user && user.user.profile && !user.user.profile.isActive){
         user.allowed = false
         throw new Meteor.Error(403, "User account is inactive!");
     }
 
+    else if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
+        return validateinternalUserLoginAttempt(user)
+    }
+
 
     return true;
 })
+
+validateinternalUserLoginAttempt=(user)=>{
+    let userProfiles = user.user.profile.InternalUprofile && user.user.profile.InternalUprofile.moolyaProfile && user.user.profile.InternalUprofile.moolyaProfile.userProfiles;
+    let roleActive = false, chapterActive = false, subChapterActive = false, communityActive = false, hierarchyLevel, hierarchyCode;
+    if(!userProfiles){
+        user.allowed = false
+        throw new Meteor.Error(403, "No Active Profile");
+    }
+
+    let defaultProfile = _.find(userProfiles, {isDefault:true});
+    if(!defaultProfile){
+        user.allowed = false
+        throw new Meteor.Error(403, "Default Profile is not active");
+    }
+
+    let defaultRoles = defaultProfile.userRoles;
+    let defaultCluster = MlClusters.findOne({"$and":[{_id:defaultProfile.clusterId}, {isActive:true}]})
+    if(!defaultCluster && defaultProfile.clusterId != 'all'){
+        user.allowed = false
+        throw new Meteor.Error(403, "Default Cluster is not active");
+    }
+
+    defaultRoles.map(function (userRole) {
+        if(!hierarchyLevel){
+            hierarchyLevel=userRole.hierarchyLevel;
+            hierarchyCode=userRole.hierarchyCode;
+        }else if(hierarchyLevel&&hierarchyLevel<userRole.hierarchyLevel){
+            hierarchyLevel=userRole.hierarchyLevel;
+            hierarchyCode=userRole.hierarchyCode;
+        }
+    })
+
+    if(hierarchyCode != 'CLUSTER' || hierarchyCode != 'PLATFORM'){
+        defaultRoles.map(function (role) {
+            let assignedRoleActive = false;
+            let defaultRole = MlRoles.findOne({_id:role.roleId});
+            defaultRole.assignRoles.map(function (assignedRole) {
+                if(assignedRole.isActive)
+                    assignedRoleActive = true
+            })
+
+            if(role.isActive && defaultRole && defaultRole.isActive && assignedRoleActive){
+                roleActive = true;
+            }
+
+            let defaultChapter = MlChapters.findOne({"$and":[{_id:role.chapterId}, {isActive:true}]})
+            if(defaultChapter || role.chapterId == "all"){
+              chapterActive = true
+            }
+
+            let defaultSubChapter = MlSubChapters.findOne({"$and":[{_id:role.chapterId}, {isActive:true}]})
+            if(defaultSubChapter || role.subChapterId == "all"){
+              subChapterActive = true
+            }
+
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{_id:role.chapterId}, {isActive:true}]})
+            if(defaultCommunity || role.communityId == "all"){
+              communityActive = true
+            }
+        })
+    }
+
+    if(!roleActive){
+        user.allowed = false
+        throw new Meteor.Error(403, "None of the roles are active");
+    }
+
+    if(!chapterActive){
+        user.allowed = false
+        throw new Meteor.Error(403, "None of the Chapters are active");
+    }
+
+    if(!subChapterActive){
+        user.allowed = false
+        throw new Meteor.Error(403, "None of the Sub Chapters are active");
+    }
+
+    if(!communityActive){
+      user.allowed = false
+      throw new Meteor.Error(403, "None of the Communities are active");
+    }
+
+    return true;
+}
 
 /******************************************* User Login <End> *********************************************************/
 /******************************************* Teplates <Start> *******************************************************/

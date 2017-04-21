@@ -59,9 +59,10 @@ export default CoreModulesRepo={
     }
 
     if(contextQuery && contextQuery._id && contextQuery._id.length > 0){
-          if(_.indexOf(contextQuery._id, "all") < 0)
-              query = { _id: {$in : contextQuery._id}}
-              query = mergeQueries(query,contextQuery);
+      if(_.indexOf(contextQuery._id, "all") < 0) {
+        query = {_id: {$in: contextQuery._id}}
+      }
+      query = mergeQueries(query, contextQuery);
     }
 
     let citiesId=[];

@@ -40,7 +40,7 @@ export default class MlAssignComponent extends Component {
 
     this.setState({selectedChapter:value})
   }
-  optionsBySelectCommunity(){
+  optionsBySelectCommunity(value){
 
     this.setState({selectedCommunity:value})
   }
@@ -106,13 +106,14 @@ export default class MlAssignComponent extends Component {
         label:roleName
       }  
     }`;
-    let usersQuery=gql`query($cluster:String,$chapter:String,$subChapter:String,$department:String,$subDepartment:String,$role:String){  
-      data:fetchRolesForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter,department:$department,subDepartment:$subDepartment,role:$role) {
+    let usersQuery=gql`query($clusterId:String,$chapterId:String,$subChapterId:String,$communityId:String,$departmentId:String,$subDepartmentId:String,$roleId:String){  
+      data:fetchUserForReistration(clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId,communityId:$communityId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,roleId:$roleId) {
         value:_id
         label:username
       }  
     }`;
-   
+
+
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
     let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}
@@ -129,12 +130,14 @@ export default class MlAssignComponent extends Component {
     let usersOption = {
                   options: {
                     variables: {
-                      cluster:this.state.selectedCluster,
-                      chapter:this.state.selectedChapter,
-                      subChapter:this.state.selectedSubChapter,
-                      department:this.state.selectedDepartment,
-                      subDepartment:this.state.selectedSubDepartment,
-                      role:this.state.selectedRole
+                      clusterId:this.state.selectedCluster,
+                      chapterId:this.state.selectedChapter,
+                      subChapterId:this.state.selectedSubChapter,
+                      departmentId:this.state.selectedDepartment,
+                      subDepartmentId:this.state.selectedSubDepartment,
+                      departmentId:this.state.selectedDepartment,
+                      subDepartmentId:this.state.selectedSubDepartment,
+                      roleId:this.state.selectedRole
                     }}};
 
     return (

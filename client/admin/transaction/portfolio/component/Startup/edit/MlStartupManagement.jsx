@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
-// import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import {findStartupDetailsActionHandler} from '../../../actions/findPortfolioStartupDetails'
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -16,13 +16,14 @@ export default class MlStartupManagement extends React.Component{
     this.state={
       loading: true,
       data:{},
-      managmentDetails:[],
+      startupManagement:[],
+      arrIndex:"",
       managementIndex:""
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
-    this.saveManagementDetails.bind(this);
     this.addManagement.bind(this);
+    this.onSelectUser.bind(this);
     this.fetchPortfolioDetails.bind(this);
     return this;
   }
@@ -43,14 +44,15 @@ export default class MlStartupManagement extends React.Component{
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
-  saveManagementDetails(){
-    // let data = this.state.data;
-    // this.sendDataToParent()
-    // // $('#management-form').slideUp();
-    // this.setState({loading: false})
-  }
   addManagement(){
-    // this.setState({loading: false, data:{}})
+    if(this.state.startupManagement){
+      this.setState({arrIndex:this.state.startupManagement.length})
+    }else{
+      this.setState({arrIndex:0})
+    }
+  }
+  onSelectUser(index, e){
+    alert(index);
   }
 
   onClick(field,e){
@@ -78,19 +80,17 @@ export default class MlStartupManagement extends React.Component{
     })
   }
   async fetchPortfolioDetails() {
-  //   let that = this;
-  //   let portfoliodetailsId=that.props.portfolioDetailsId;
-  //   let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.portfolioIdeatorDetails)
-  //   if(empty){
-  //     const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
-  //     if (response) {
-  //       this.setState({loading: false, data: response});
-  //     }
-  //   }else{
-  //     this.setState({loading: false, data: that.context.ideatorPortfolio.portfolioIdeatorDetails});
-  //   }
-  //
-    this.setState({loading: false})
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.portfolioIdeatorDetails)
+    if(empty){
+      const response = await findStartupDetailsActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, startupManagement: response});
+      }
+    }else{
+      this.setState({loading: false, startupManagement: that.context.ideatorPortfolio.portfolioIdeatorDetails});
+    }
   }
 
   sendDataToParent(){
@@ -100,15 +100,16 @@ export default class MlStartupManagement extends React.Component{
         delete data[propName];
       }
     }
-    let managmentDetails = this.state.managmentDetails;
-    managmentDetails[0] = data
-    this.setState({managmentDetails:managmentDetails}, function () {
-      this.props.getManagementDetails(managmentDetails)
+    let startupManagement = this.state.startupManagement;
+    startupManagement[this.state.arrIndex] = data;
+    this.setState({startupManagement:startupManagement}, function () {
+      this.props.getManagementDetails(startupManagement)
     })
   }
   render(){
-    const showLoader = this.state.loading;
-    let managementArr =  [];
+    let that = this;
+    const showLoader = that.state.loading;
+    let managementArr = that.state.startupManagement || [];
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -135,12 +136,10 @@ export default class MlStartupManagement extends React.Component{
                   {managementArr.map(function (user) {
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3">
-                        <a href="#">
-                          <div className="list_block notrans">
+                          <div className="list_block notrans" onClick={this.onSelectUser.bind(this, index)}>
                             <div className="hex_outer"><span className="ml ml-plus "></span></div>
                             <h3>{user.firstName}</h3>
                           </div>
-                        </a>
                       </div>
                     )
                   })}
@@ -256,7 +255,6 @@ export default class MlStartupManagement extends React.Component{
 
                   </div>
                   <br className="brclear"/>
-                  <input type="Submit" value="save" onClick={this.saveManagementDetails.bind(this)}/>
                 </div>
 
             </ScrollArea>

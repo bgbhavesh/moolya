@@ -1,8 +1,8 @@
 import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import MlIdeatorDetails from "../../../component/Ideator/MlIdeatorDetails";
-import MlStartupManagement from '../../component/edit/MlStartupManagement'
+import MlIdeatorDetails from "../../Ideator/MlIdeatorDetails";
+import MlStartupManagement from './MlStartupManagement'
 import _ from 'lodash'
 import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage"
 

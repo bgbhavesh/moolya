@@ -78,7 +78,7 @@ class MlAuthorization
                 else if(moduleName == 'CLUSTER'){
                     let userRole = _.find(user_roles, {clusterId:"all"})
                     if(!userRole)
-                        userRole = _.find(user_roles, {clusterId:req.clusterId})
+                        userRole = _.find(user_roles, {clusterId:req.clusterId, hierarchyCode:"CLUSTER"})
                     return self.validateRole(userRole.roleId, module, action)
                 }
 
@@ -88,19 +88,10 @@ class MlAuthorization
                       if(ret)
                         return ret;
                     })
-
                 }
             }
-            // if(isAuthorized){
-            //      try{
-            //       isAuthorized= this.hasAccessBasedOnContext({userId:userId},moduleName,actionName,req)
-            //      }catch(e){
-            //        isAuthorized=false;
-            //      }
-            // }
         }
         return ret;
-        // return isAuthorized;
     }
 
     validateRole(roleId, accessModule, accessAction){

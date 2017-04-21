@@ -16,7 +16,7 @@ export default class MlStartupManagement extends React.Component{
     this.state={
       loading: true,
       data:{},
-      managmentDetails:[],
+      startupManagement:[],
       arrIndex:"",
       managementIndex:""
     }
@@ -106,10 +106,10 @@ export default class MlStartupManagement extends React.Component{
         delete data[propName];
       }
     }
-    let managmentDetails = this.state.managmentDetails;
-    managmentDetails[this.state.arrIndex] = data;
-    this.setState({managmentDetails:managmentDetails}, function () {
-      this.props.getManagementDetails(managmentDetails)
+    let startupManagement = this.state.startupManagement;
+    startupManagement[this.state.arrIndex] = data;
+    this.setState({startupManagement:startupManagement}, function () {
+      this.props.getManagementDetails(startupManagement)
     })
   }
   render(){

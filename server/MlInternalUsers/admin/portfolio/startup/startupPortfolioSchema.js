@@ -28,7 +28,7 @@ let startupPortfolioSchema = `
       menu:[PortfolioMenu]
     }
     
-    input management{
+    input startupManagement{
        title :String
        logo : String
        isTitlePrivate : Boolean
@@ -183,7 +183,7 @@ let startupPortfolioSchema = `
         assets              : assets
         branches            : branches
         clients             : clients 
-        management          : [management]
+        management          : [startupManagement]
         charts              : charts
     }
     

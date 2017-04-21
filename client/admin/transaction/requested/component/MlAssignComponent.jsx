@@ -27,9 +27,29 @@ export default class MlAssignComponent extends Component {
   componentDidMount() {
   }
 
+  async createRequest(){
+    let transaction={
+      requestTypeId:this.state.requestType,
+      requestDescription:this.refs.about.value,
+      transactionStatus:{
+        code: 1,
+        description:"requested"
+      }
+    }
+    const response = await addReqgistrationRequestInfo(transaction);
+    if(response.success){
+      this.setState({show:false})
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }else{
+      toastr.error(response.result);
+      this.setState({show:false})
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }
+  }
+
   cancel(){
-    //this.state.show = false
-    FlowRouter.go("/admin/transactions/registrationApprovedList");/*/transactions/registrationRequested");*/
+    this.setState({show:false})
+    FlowRouter.go("/admin/transactions/registrationRequested");/*/transactions/registrationRequested");*/
   }
 
   optionsBySelectCluster(value){
@@ -112,7 +132,7 @@ export default class MlAssignComponent extends Component {
         label:username
       }  
     }`;
-   
+
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
     let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}

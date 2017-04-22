@@ -1,6 +1,7 @@
 import React from 'react';
 import {upsertProcessDocActionHandler} from '../actions/upsertProcessDocAction'
 import {findProcessDocActionHandler} from '../actions/findProcessDocAction'
+import {OnToggleSwitch, MoolyaToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class DocumentActiveComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +16,12 @@ class DocumentActiveComponent extends React.Component {
 
     return processResp;
   }
+  componentDidUpdate()
+  {
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
+  }
+
   async findProcessDocument(){
     let pid=this.props.processConfig
     const response =await  findProcessDocActionHandler(pid);

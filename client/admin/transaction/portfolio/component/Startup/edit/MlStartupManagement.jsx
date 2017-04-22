@@ -17,6 +17,8 @@ export default class MlStartupManagement extends React.Component{
       loading: true,
       data:{},
       startupManagement:[],
+      startupManagementList:[],
+      indexArray:[],
       arrIndex:"",
       managementIndex:""
     }
@@ -50,9 +52,21 @@ export default class MlStartupManagement extends React.Component{
     }else{
       this.setState({arrIndex:0})
     }
+    this.setState({data:{}})
+    $('#management-form').slideDown();
   }
   onSelectUser(index, e){
-    alert(index);
+    let managmentDetails = this.state.startupManagement[index]
+    managmentDetails = _.omit(managmentDetails, "__typename");
+    this.setState({arrIndex:index});
+    this.setState({data:managmentDetails}, function () {
+      $('#management-form').slideDown();
+    })
+    let indexes = this.state.indexArray;
+    let indexArray = _.cloneDeep(indexes)
+    indexArray.push(index);
+    indexArray = _.uniq(indexArray);
+    this.setState({indexArray: indexArray})
   }
 
   onClick(field,e){
@@ -82,34 +96,43 @@ export default class MlStartupManagement extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.portfolioIdeatorDetails)
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.management)
     if(empty){
       const response = await findStartupDetailsActionHandler(portfoliodetailsId);
       if (response) {
-        this.setState({loading: false, startupManagement: response});
+        this.setState({loading: false, startupManagement: response, startupManagementList: response});
       }
     }else{
-      this.setState({loading: false, startupManagement: that.context.ideatorPortfolio.portfolioIdeatorDetails});
+      this.setState({loading: false, startupManagement: that.context.startupPortfolio.management});
     }
   }
 
   sendDataToParent(){
     let data = this.state.data;
-    for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined) {
-        delete data[propName];
-      }
-    }
-    let startupManagement = this.state.startupManagement;
+    let startupManagement1 = this.state.startupManagement;
+    let startupManagement = _.cloneDeep(startupManagement1);
     startupManagement[this.state.arrIndex] = data;
-    this.setState({startupManagement:startupManagement}, function () {
-      this.props.getManagementDetails(startupManagement)
+    let managementArr = [];
+    _.each(startupManagement, function (item) {
+        for (var propName in item) {
+          if (item[propName] === null || item[propName] === undefined) {
+            delete item[propName];
+          }
+        }
+       newItem = _.omit(item, "__typename")
+      managementArr.push(newItem)
     })
+    startupManagement = managementArr;
+    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
+    this.setState({startupManagement:startupManagement})
+    let indexArray = this.state.indexArray;
+    this.props.getManagementDetails(startupManagement, indexArray)
   }
+
   render(){
     let that = this;
     const showLoader = that.state.loading;
-    let managementArr = that.state.startupManagement || [];
+    let managementArr = that.state.startupManagementList || [];
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -126,17 +149,17 @@ export default class MlStartupManagement extends React.Component{
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="#" id="testing">
+                    <a href="" id="testing">
                       <div className="list_block notrans" onClick={this.addManagement.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3>Add New</h3>
                       </div>
                     </a>
                   </div>
-                  {managementArr.map(function (user) {
+                  {managementArr.map(function (user, index) {
                     return (
-                      <div className="col-lg-2 col-md-3 col-sm-3">
-                          <div className="list_block notrans" onClick={this.onSelectUser.bind(this, index)}>
+                      <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
+                          <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
                             <div className="hex_outer"><span className="ml ml-plus "></span></div>
                             <h3>{user.firstName}</h3>
                           </div>

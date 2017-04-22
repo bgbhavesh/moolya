@@ -551,6 +551,17 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlLookingFor.find(query,findOptions).fetch();
     totalRecords=MlLookingFor.find(query,findOptions).count();
   }
+
+  if(args.module=="Assets"){
+    data= MlAssets.find(query,findOptions).fetch();
+    totalRecords=MlAssets.find(query,findOptions).count();
+  }
+
+  if(args.module=="Technologies"){
+    data= MlTechnologies.find(query,findOptions).fetch();
+    totalRecords=MlTechnologies.find(query,findOptions).count();
+  }
+
   if(args.module=="EmployeeType"){
     data= MlGlobalSettings.find(query,findOptions).fetch();
     totalRecords=MlGlobalSettings.find(query,findOptions).count();
@@ -762,6 +773,15 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.lookingForName){
       return 'LookingFor'
     }
+
+    if(data.assetName){
+      return 'Assets'
+    }
+
+    if(data.technologyName){
+      return 'Technologies'
+    }
+
     if(data.processId){
       return 'ProcessType'
     }

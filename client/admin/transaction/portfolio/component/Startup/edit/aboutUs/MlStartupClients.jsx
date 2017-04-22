@@ -5,6 +5,12 @@ import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import _ from 'lodash';
+import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
+
 
 
 export default class MlStartupClients extends React.Component{
@@ -13,9 +19,13 @@ export default class MlStartupClients extends React.Component{
     this.state={
       loading: true,
       data:{},
-      startupClients:[],
+      startupClients:this.props.clientsDetails || [],
       popoverOpen:false,
       index:"",
+      startupClientsList:this.props.clientsDetails || [],
+      indexArray:[],
+      selectedVal:null,
+      selectedObject:"default"
     }
     this.handleBlur.bind(this);
     return this;
@@ -31,13 +41,29 @@ export default class MlStartupClients extends React.Component{
   }
 
   addClient(){
-
+    this.setState({selectedObject : "default"})
     this.setState({popoverOpen : !(this.state.popoverOpen)})
+    this.setState({data : {}})
     if(this.state.startupClients){
       this.setState({index:this.state.startupClients.length})
     }else{
       this.setState({index:0})
     }
+  }
+
+  onSelect(index, e){
+    let details = this.state.startupClients[index]
+    details = _.omit(details, "__typename");
+    this.setState({index:index});
+    this.setState({data:details})
+    this.setState({selectedObject : index})
+    this.setState({popoverOpen : !(this.state.popoverOpen)});
+    this.setState({"selectedVal" : details.companyName});
+    let indexes = this.state.indexArray;
+    let indexArray = _.cloneDeep(indexes)
+    indexArray.push(index);
+    indexArray = _.uniq(indexArray);
+    this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -55,6 +81,33 @@ export default class MlStartupClients extends React.Component{
     })
   }
 
+  onStatusChangeNotify(e)
+  {
+    let updatedData = this.state.data||{};
+    let key = e.target.id;
+    updatedData=_.omit(updatedData,[key]);
+    if (e.currentTarget.checked) {
+      updatedData=_.extend(updatedData,{[key]:true});
+    } else {
+      updatedData=_.extend(updatedData,{[key]:false});
+    }
+    this.setState({data:updatedData}, function () {
+      this.sendDataToParent()
+    })
+  }
+
+  onOptionSelected(selectedIndex,handler,selectedObj){
+
+    let details =this.state.data;
+    details=_.omit(details,["companyName"]);
+    details=_.extend(details,{["companyName"]:selectedIndex});
+    this.setState({data:details}, function () {
+      this.setState({"selectedVal" : selectedIndex})
+      this.sendDataToParent()
+    })
+
+  }
+
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -66,18 +119,34 @@ export default class MlStartupClients extends React.Component{
   }
   sendDataToParent(){
     let data = this.state.data;
-    for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined) {
-        delete data[propName];
-      }
-    }
-    let startupClients = this.state.startupClients;
+    let startupClients1 = this.state.startupClients;
+    let startupClients = _.cloneDeep(startupClients1);
     startupClients[this.state.index] = data;
-    this.setState({startupClients:startupClients}, function () {
-      this.props.getStartupClients(startupClients)
+    let arr = [];
+    _.each(startupClients, function (item) {
+      for (var propName in item) {
+        if (item[propName] === null || item[propName] === undefined) {
+          delete item[propName];
+        }
+      }
+      newItem = _.omit(item, "__typename")
+      arr.push(newItem)
     })
+    startupClients = arr;
+    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
+    this.setState({startupClients:startupClients})
+    let indexArray = this.state.indexArray;
+    this.props.getStartupClients(startupClients,indexArray);
   }
   render(){
+    let query=gql`query{
+      data:fetchStageOfCompany {
+        label:stageOfCompanyDisplayName
+        value:_id
+      }
+    }`;
+    let that = this;
+    let clientsArray = that.state.startupClientsList || [];
     return(
       <div>
 
@@ -93,38 +162,42 @@ export default class MlStartupClients extends React.Component{
             <div className="col-lg-12">
               <div className="row">
                 <div className="col-lg-2 col-md-3 col-sm-3">
-                  <a href="#" id="create_client" data-placement="right" data-class="large_popover" >
+                  <a href="#" id="create_clientdefault" data-placement="right" data-class="large_popover" >
                     <div className="list_block notrans" onClick={this.addClient.bind(this)}>
                       <div className="hex_outer"><span className="ml ml-plus "></span></div>
                       <h3 onClick={this.addClient.bind(this)}>Add New Client</h3>
                     </div>
                   </a>
                 </div>
-
-                <div className="col-lg-2 col-md-3 col-sm-3">
-                  <a href="#" >
-                    <div className="list_block">
-                      <FontAwesome name='lock'/>
-                      <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
-                      <div className="hex_outer portfolio-font-icons"><FontAwesome name='laptop'/></div>
-                      <h3>Laptop <span className="assets-list">50</span></h3>
-                    </div>
-                  </a>
-                </div>
+                {clientsArray.map(function (details, idx) {
+                  return(<div className="col-lg-2 col-md-3 col-sm-3">
+                    <a href="#" id={"create_client"+idx}>
+                      <div className="list_block">
+                        <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                        <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
+                        <div className="hex_outer portfolio-font-icons"><FontAwesome name='laptop'/></div>
+                        <h3>{details.description} <span className="assets-list">50</span></h3>
+                      </div>
+                    </a>
+                  </div>)
+                })}
 
               </div>
             </div>
 
           </ScrollArea>
-          <Popover placement="right" isOpen={this.state.popoverOpen} target="create_client" toggle={this.toggle}>
+          <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject}  toggle={this.toggle}>
             {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
             <PopoverContent>
               <div className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <input type="text" name="companyName" placeholder="Company Name" className="form-control float-label" id="" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                    labelKey={'label'} queryType={"graphql"} query={query}
+                                    isDynamic={true}
+                                    onSelect={this.onOptionSelected.bind(this)}
+                                    selectedValue={this.state.selectedVal}/>
                     </div>
 
                     <div className="form-group">
@@ -135,12 +208,13 @@ export default class MlStartupClients extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="About" className="form-control float-label" id="" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                      <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                      <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
 
                     <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>Make Default</label></div>
+                      <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
                       <a href="#" className="save_btn">Save</a>

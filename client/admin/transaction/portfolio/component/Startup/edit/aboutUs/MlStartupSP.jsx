@@ -11,7 +11,7 @@ export default class MlStartupSP extends React.Component{
     super(props);
     this.state={
       loading: true,
-      data:{}
+      data:this.props.serviceProductsDetails || {},
     }
     this.handleBlur.bind(this);
     return this;
@@ -71,8 +71,8 @@ export default class MlStartupSP extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about" onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                  <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data&&this.state.data.isDescriptionPrivate} onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 
               </div>

@@ -12,10 +12,13 @@ export default class MlStartupAboutUs extends React.Component{
     super(props);
     this.state={
       loading: true,
-      data:{}
+      data:this.props.aboutUsDetails || {},
     }
+
     this.handleBlur.bind(this);
+
     return this;
+
   }
   componentDidUpdate(){
     OnLockSwitch();
@@ -62,6 +65,14 @@ export default class MlStartupAboutUs extends React.Component{
       }
     }
   }
+  async fetchOnlyImages(){
+    const response = this.props.aboutUsDetails;
+    if (response) {
+      let dataDetails =this.state.data
+      dataDetails['logo'] = response.logo
+      this.setState({loading: false, data: dataDetails});
+    }
+  }
   onLockChange(field, e){
     let details = this.state.data||{};
     let key = e.target.id;
@@ -79,6 +90,14 @@ export default class MlStartupAboutUs extends React.Component{
 
 
   render(){
+    const aboutUsImages = (this.state.data.logo&&this.state.data.logo.map(function (m, id) {
+      return (
+        <div className="upload-image" key={id}>
+          <img id="output" src={m.fileUrl}/>
+        </div>
+      )
+    }));
+
     return(
       <div className="requested_input">
         <div className="col-lg-12">
@@ -91,7 +110,7 @@ export default class MlStartupAboutUs extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control"  name="description" id="description"  onBlur={this.handleBlur.bind(this)}></textarea>
+                  <textarea placeholder="Describe..." className="form-control"  name="description" id="description" defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                 </div>
 
@@ -117,13 +136,14 @@ export default class MlStartupAboutUs extends React.Component{
               <div className="panel-heading">Add Images</div>
               <div className="panel-body nopadding">
                 <div className="upload-file-wrap">
-                  <input type="file" name="aboutusLogo" id="logoFileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onLogoFileUpload.bind(this)} multiple />
+                  <input type="file" name="logo" id="logoFileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onLogoFileUpload.bind(this)} multiple />
                   <label htmlFor="logoFileinput">
                     <figure>
                       <i className="fa fa-upload" aria-hidden="true"></i>
                     </figure>
                   </label>
                 </div>
+                {aboutUsImages}
               </div>
             </div>
 

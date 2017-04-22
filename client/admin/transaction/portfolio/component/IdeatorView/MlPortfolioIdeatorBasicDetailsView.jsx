@@ -129,7 +129,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group">
                           <input type="text" placeholder="Industry" ref="industry" defaultValue={this.state.data.industryDisplayName} className="form-control float-label"  disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate"/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate"/>
                         </div>
 
 

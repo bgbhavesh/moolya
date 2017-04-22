@@ -170,7 +170,7 @@ export default class Step4 extends React.Component{
   }
 
   onFileUpload(value){
-    let file=document.getElementById("profilePic").files[0];
+    let file=document.getElementByClass("previewImg ProfileImg").files[0];
     let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
     //this.props.onFileUpload(file,documentId);

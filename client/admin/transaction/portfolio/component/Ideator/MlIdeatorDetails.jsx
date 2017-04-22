@@ -2,7 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
@@ -27,6 +27,7 @@ export default class MlIdeatorDetails extends React.Component{
   {
     OnLockSwitch();
     dataVisibilityHandler();
+
   }
   componentDidUpdate()
   {
@@ -34,9 +35,11 @@ export default class MlIdeatorDetails extends React.Component{
     dataVisibilityHandler();
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    initalizeFloatLabel();
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
+
   }
 
   onClick(field,e){
@@ -165,7 +168,7 @@ export default class MlIdeatorDetails extends React.Component{
                     <br className="brclear"/>
                     <div className="form-group">
                       <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industryDisplayName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isindustryPrivate" onClick={this.onClick.bind(this, "isindustryPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate" onClick={this.onClick.bind(this, "isIndustryPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
                     </div>
 
                     <div className="form-group">

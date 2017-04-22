@@ -42,11 +42,11 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         }
       }
     },
-    {
+    /*{
       showAction: true,
       actionName: 'comment',
       handler: null
-    },
+    },*/
     {
       showAction: true,
       actionName: 'assign',
@@ -74,20 +74,32 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     //   actionName: 'logout',
     //   handler: (data)=>{console.log(data);}
     // },
-    {
+    /*{
       showAction: true,
       actionName: 'cancel',
       handler: null
-    },
+    },*/
     {
       showAction: true,
       actionName: 'approveUser',
-      handler: null
+      handler: (data) => {
+        if (data && data.id) {
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id);
+        } else {
+          toastr.error("Please select a record");
+        }
+      }
     },
     {
       showAction: true,
       actionName: 'rejectUser',
-      handler: null
+      handler: (data) => {
+        if (data && data.id) {
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id);
+        } else {
+          toastr.error("Please select a record");
+        }
+      }
     },
   ],
   graphQlQuery:gql`

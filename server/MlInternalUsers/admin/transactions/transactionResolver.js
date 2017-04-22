@@ -67,3 +67,15 @@ MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, con
     return response
   }
 }
+
+/*MlResolver.MlQueryResolver['fetchTransactions']=(obj, args, context, info) => {
+  if (args.transactionType) {
+    //todo: conditions based on record id for steps like registration,portfolio
+    //resolve userType:internal/external and send with response
+    let transactionType=args.process;
+    let userId = context.userId;
+    let transactions=mlTemplateAssignmentRepo.fetchTransactions(transactionType,userId);
+    return transactions;
+  }
+  return null;
+}*/

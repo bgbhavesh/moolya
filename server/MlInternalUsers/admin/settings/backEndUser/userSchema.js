@@ -218,6 +218,10 @@ let BackEndUser = `
         subDepartmentName:String
     }
    
+    type mapCenterCords{
+    lat:Float,
+    lng:Float
+    }
     
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
@@ -241,6 +245,7 @@ let BackEndUser = `
         fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String): SearchResp
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
+        fetchMapCenterCordsForUser:mapCenterCords
     }
 `
 

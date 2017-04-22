@@ -18,7 +18,7 @@ class MlPortfolio extends React.Component{
   constructor(props){
     super(props)
     this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false,
-      annotationData: {},commentsData:[], popoverOpen: false, saveButton:false}
+      annotationData: {},commentsData:[], popoverOpen: false, saveButton:false, indexArray:[]}
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -127,8 +127,8 @@ class MlPortfolio extends React.Component{
     }
   }
 
-  getPortfolioDetails(details){
-    this.setState({portfolio:details});
+  getPortfolioDetails(details, indexArray){
+    this.setState({portfolio:details, indexArray:indexArray});
   }
 
   async updatePortfolioDetails() {
@@ -136,7 +136,8 @@ class MlPortfolio extends React.Component{
       portfolioId :this.props.config,
       portfolio :this.state.portfolio
     }
-    const response = await updatePortfolioActionHandler(jsonData)
+    let indexArray = this.state.indexArray;
+    const response = await updatePortfolioActionHandler(jsonData, indexArray)
     return response;
   }
 

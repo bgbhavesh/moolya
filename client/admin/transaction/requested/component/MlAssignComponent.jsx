@@ -4,7 +4,7 @@ import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-
+import {assignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
 export default class MlAssignComponent extends Component {
 
   constructor(props){
@@ -25,31 +25,6 @@ export default class MlAssignComponent extends Component {
   }
 
   componentDidMount() {
-  }
-
-  async createRequest(){
-    let transaction={
-      requestTypeId:this.state.requestType,
-      requestDescription:this.refs.about.value,
-      transactionStatus:{
-        code: 1,
-        description:"requested"
-      }
-    }
-    const response = await addReqgistrationRequestInfo(transaction);
-    if(response.success){
-      this.setState({show:false})
-      FlowRouter.go("/admin/transactions/registrationRequested");
-    }else{
-      toastr.error(response.result);
-      this.setState({show:false})
-      FlowRouter.go("/admin/transactions/registrationRequested");
-    }
-  }
-
-  cancel(){
-    this.setState({show:false})
-    FlowRouter.go("/admin/transactions/registrationRequested");/*/transactions/registrationRequested");*/
   }
 
   optionsBySelectCluster(value){
@@ -84,7 +59,33 @@ export default class MlAssignComponent extends Component {
 
     this.setState({selectedUser:value})
   }
+  cancel(){
+    this.setState({show:false})
+    FlowRouter.go("/admin/transactions/registrationRequested");/*/transactions/registrationRequested");*/
+  }
+  async assignUser(){
+    let params={
+      "cluster": this.state.selectedCluster,
+      "chapter": this.state.selectedChapter,
+      "subChapter": this.state.selectedSubChapter,
+      "community": this.state.selectedCommunity,
+      "department": this.state.selectedDepartment,
+      "subDepartment": this.state.selectedSubDepartment,
+      "role": this.state.selectedRole,
+      "user": this.state.selectedUser
+    }
+    const response = await assignUserForTransactionAction(params);
+    if(response){
+      this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
+      toastr.error("User Assigned to transaction successfully");
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }else{
+      toastr.error(response.result);
+      this.setState({show:false})
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }
 
+  }
 
   render() {
     let that=this;
@@ -201,7 +202,7 @@ export default class MlAssignComponent extends Component {
         </div>
 
         <div className="assign-popup">
-          <a data-toggle="tooltip" title="Save" data-placement="top" href="" className="hex_btn hex_btn_in">
+          <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.assignUser.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml ml-save"></span>
           </a>
           <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>

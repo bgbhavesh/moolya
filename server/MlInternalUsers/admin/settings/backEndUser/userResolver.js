@@ -635,3 +635,76 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
 
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
+
+
+MlResolver.MlMutationResolver['updateProfileImage'] = (obj, args, context, info) => {
+  // let user = Meteor.users.findOne({_id: args.userId});
+  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let resp;
+  if(user){
+    resp = mlDBController.update('users', args.userId, {"profile.profileImage":args.profileImage}, {$set:true}, context)
+  }
+  if(resp){
+    resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
+    return resp
+  }
+  resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
+  return resp
+}
+
+
+
+MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) => {
+  // let user = Meteor.users.findOne({_id: args.userId});
+  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let resp;
+  if(user){
+    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
+    resp = mlDBController.update('users', args.userId,{"profile.InternalUprofile.moolyaProfile.firstName":args.firstName,"profile.InternalUprofile.moolyaProfile.lastName":args.lastName},{$set:true}, context)
+  }
+  if(resp){
+    resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
+    return resp
+  }
+  resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
+  return resp
+}
+
+
+//
+// MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
+//
+//   let user = mlDBController.findOne('users', {_id: args.userId}, context)
+//   if (user) {
+//     if (user.profile.isSystemDefined) {
+//       let code = 409;
+//       let response = new MlRespPayload().errorPayload("Cannot edit system defined User", code);
+//       return response;
+//     } else {
+//       if (args.user.profile) {
+//         for (key in args.user) {
+//           user[key] = args.user[key]
+//         }
+//
+//         if (!args.user.username) {
+//           let code = 409;
+//           let response = new MlRespPayload().errorPayload("Email/Username is required", code);
+//           return response;
+//         }
+//
+//         // let resp = Meteor.users.update({_id: args.userId}, {$set: {profile: user.profile}}, {upsert: true})
+//         let resp = mlDBController.find('users', args.userId, {"profile.InternalUprofile.moolyaProfile":args.},  context)
+//         if (resp) {
+//           let code = 200;
+//           let result = {user: resp};
+//           let response = new MlRespPayload().successPayload(result, code);
+//           return response
+//         }
+//       } else {
+//         let code = 409;
+//         let response = new MlRespPayload().errorPayload("Profile is required", code);
+//         return response;
+//       }
+//     }
+//   }
+// };

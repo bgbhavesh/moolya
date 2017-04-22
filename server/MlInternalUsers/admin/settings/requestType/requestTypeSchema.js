@@ -19,6 +19,6 @@ let RequestTypeSchema = `
     type Query{
         FindRequestType(_id:String): Requests
     }
-`
+`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],RequestTypeSchema]);

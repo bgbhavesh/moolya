@@ -39,6 +39,12 @@ import MlIdeatorLibrary from '../../admin/transaction/portfolio/component/Ideato
 import MlIdeatorStrategyAndPlanning from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorStrategyAndPlanning'
 import MlIdeatorIntellectualPlanningAndTrademark from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 
+import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
+import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
+
+import MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
+
 import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio'
 import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
 import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
@@ -74,6 +80,28 @@ adminSection.route('/', {
     redirect("/admin/dashboard");
   }]
 });
+
+adminSection.route('/myprofile/personalInfo', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MlMyProfile/>})
+  }
+});
+
+adminSection.route('/myprofile/AddressBook', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileAddressBook/>})
+  }
+});
+
+adminSection.route('/myprofile/Settings', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileSettings/>})
+  }
+});
+
 
 adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',

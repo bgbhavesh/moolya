@@ -20,8 +20,10 @@ export default class MlStartupAssets extends React.Component{
     super(props);
     this.state={
       loading: true,
-      data:[],
-      popoverOpen:false
+      data:{},
+      startupAssets:[],
+      popoverOpen:false,
+      arrIndex:"",
     }
     this.handleBlur.bind(this);
     return this;
@@ -37,11 +39,17 @@ export default class MlStartupAssets extends React.Component{
   }
 
   addAsset(){
+
     this.setState({popoverOpen : !(this.state.popoverOpen)})
+    if(this.state.startupAssets){
+      this.setState({arrIndex:this.state.startupAssets.length})
+    }else{
+      this.setState({arrIndex:0})
+    }
   }
 
   onLockChange(field, e){
-    let details = {};
+    let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
@@ -50,21 +58,17 @@ export default class MlStartupAssets extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
-    let dataArray = [];
-    dataArray.push(details);
-    this.setState({data:dataArray}, function () {
+    this.setState({data:details}, function () {
       this.sendDataToParent()
     })
   }
 
   handleBlur(e){
-    let details = {};
+    let details =this.state.data;
     let name  = e.target.name;
     details=_.omit(details,[name]);
     details=_.extend(details,{[name]:e.target.value});
-    let dataArray = [];
-    dataArray.push(details);
-    this.setState({data:dataArray}, function () {
+    this.setState({data:details}, function () {
       this.sendDataToParent()
     })
   }
@@ -75,7 +79,11 @@ export default class MlStartupAssets extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStartupAssets(data)
+    let startupAssets = this.state.startupAssets;
+    startupAssets[this.state.arrIndex] = data;
+    this.setState({startupAssets:startupAssets}, function () {
+      this.props.getStartupAssets(startupAssets)
+    })
   }
   render(){
     return(

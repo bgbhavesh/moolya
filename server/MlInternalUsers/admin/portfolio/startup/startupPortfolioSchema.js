@@ -223,17 +223,36 @@ let startupPortfolioSchema = `
     }
     
     input clients{
-        title:String,
+        companyName:String,
+        isCompanyNamePrivate:Boolean,
+        logo:String
         description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+        isDescriptionPrivate:Boolean
     }
     
     input branches{
-        title:String,
-        description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+        addressType:String,
+        name:String,
+        isNamePrivate:Boolean,
+        phoneNumber:String,
+        isPhoneNumberPrivate:Boolean,
+        address1:String,
+        isAddressOnePrivate:String,
+        address2:String,
+        isAddressTwoPrivate:String,
+        landmark:String,
+        isLandmarkPrivate:String,
+        area:String,
+        isAreaPrivate:String,
+        city:String,
+        isCityPrivate:String,
+        state:String,
+        isStatePrivate:String,
+        country:String,
+        isCountryPrivate:String,
+        addressImage:String,
+        isAddressImagePrivate:Boolean,
+        makePrivate:Boolean
     }
     
     input assets{
@@ -246,10 +265,10 @@ let startupPortfolioSchema = `
     }
     
     input technologies{
-        title:String,
+        technology:String,
         description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+        isTechnologyPrivate:Boolean,
+        isDescriptionPrivate:Boolean
     }
     
     input investor{
@@ -268,16 +287,18 @@ let startupPortfolioSchema = `
     
 
     input information{
-        title:String,
         description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+        isDescriptionPrivate:Boolean
     }
     
     input serviceProducts{
-        firstName:String,
-        isfirstNamePrivate:Boolean
-        lastName:String
+        description:String,
+        isDescriptionPrivate:Boolean
+    }
+    
+    input legalIssue{
+        description:String,
+        isDescriptionPrivate:Boolean
     }
     
     input imageFilesInputSchema{
@@ -339,12 +360,13 @@ let startupPortfolioSchema = `
         information         : information
         lookingFor          : lookingFor
         investor            : investor
-        technologies        : technologies
+        technologies        : [technologies]
         assets              : [assets]
-        branches            : branches
-        clients             : clients 
+        branches            : [branches]
+        clients             : [clients]
         management          : [startupManagement]
         charts              : charts
+        legalIssue          : legalIssue
     }
     
     type Query{

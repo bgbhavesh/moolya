@@ -1312,7 +1312,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/industryList",
-            "name" : "Industry Types",
+            "name" : "Industry",
             "uniqueId" : "settings_industryTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -1350,7 +1350,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/specificationList",
-            "name" : "Specification Types",
+            "name" : "Specification",
             "uniqueId" : "settings_specificationTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -1388,7 +1388,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/professionList",
-            "name" : "Profession Types",
+            "name" : "Profession",
             "uniqueId" : "settings_professionTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -1464,7 +1464,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/stageOfCompanyList",
-            "name" : "Stage Of Company Types",
+            "name" : "Stage Of Company",
             "uniqueId" : "settings_stageOfCompanyTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -1540,7 +1540,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/citizenshipList",
-            "name" : "Citizenship Types",
+            "name" : "Citizenship",
             "uniqueId" : "settings_citizenshipTypes",
             "isLink" : true,
             "isMenu" : true,

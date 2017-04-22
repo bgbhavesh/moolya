@@ -10,7 +10,7 @@ export default class  MlAdminProfile extends Component {
     super(props);
     this.state = {
       firstName: " ",
-      lastName:" "
+      profilePic:" "
     }
     this.getValue = this.getValue.bind(this);
 
@@ -44,9 +44,17 @@ export default class  MlAdminProfile extends Component {
     let response = await findBackendUserActionHandler(userType);
     // let profilePicResponse = await addProfilePicAction(Details);
     console.log(response);
-    this.setState({firstName : response.profile.InternalUprofile.moolyaProfile.displayName
+    this.setState({firstName : response.profile.InternalUprofile.moolyaProfile.displayName,
+      profilePic:response.profile.profileImage
     });
   }
+
+  componentWillUpdate(){
+     let temp =this.state.profilePic;
+     console.log(temp);
+  }
+
+
 
   render() {
     return (
@@ -58,16 +66,17 @@ export default class  MlAdminProfile extends Component {
           <img className="logo" src="/images/logo.png" />
         </a>
         <div className="ml_profile" role="navigation">
-          <h1 id="NavLbl" className=""></h1>
+          <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center -5px`}}
+          ></h1>
           <ol>
-            <li><a href="/admin/myprofile"><img className="profile-img" src="/images/1.png" /></a></li>
+            <li><a href="/admin/myprofile/personalInfo"><img className="profile-img" src="/images/1.png" /></a></li>
             <li><a href="/admin/logas"><img className="profile-img" src="/images/2.png" /></a></li>
             <li><a href="#"><img className="profile-img" src="/images/3.png" /></a></li>
             <li><a href="/admin/switchprofile"><img className="profile-img" src="/images/4.png" /></a></li>
             <li><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
           </ol>
         </div>
-        <div className="profile-name">Welcome {this.state.firstName}  {this.state.lastName}</div>
+        <div className="profile-name">Welcome {this.state.firstName} </div>
       </div>
 
 

@@ -175,6 +175,13 @@ export default class MlMasterSettingRepo{
           options.push({"label":option.companyTypeInfo.companyName,"value":option._id,"type" : option.companyTypeInfo.companyName})})
 
         break;
+      case "LANGUAGE":
+        result= MlMasterSettings.find({"type":"LANGUAGE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+
+        let languageResponse=_.each(result,function (option,id) {
+          options.find({"label":option.language,"value":option._id,"type" : option.languagetype})})
+
+        break;
 
     }
 

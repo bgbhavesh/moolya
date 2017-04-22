@@ -19,7 +19,8 @@ let BackEndUser = `
         isActive: Boolean,
         isChapterAdmin :Boolean,
         email: String,
-        InternalUprofile: internalUserprofile
+        InternalUprofile: internalUserprofile,
+        profileImage:String
     }
     
      type internalUserprofile{
@@ -176,12 +177,19 @@ let BackEndUser = `
         isChapterAdmin    : Boolean,
         InternalUprofile  : InternalUprofile,
         externalUserProfile:up
+        profileImage:String
     }
     
     input userObject{
         username: String,
         password: String,
         profile:profile
+    }
+    
+    input attributesObject{
+      firstName: String, 
+      middleName:String, 
+      lastName: String
     }
     
     type dep{
@@ -230,6 +238,8 @@ let BackEndUser = `
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
+        updateProfileImage(userId:String,profileImage:String, moduleName:String, actionName:String):response
+        updateDataEntry(userId: String, profileImage: String, moduleName: String, actionName: String, attributes:attributesObject):response
     }
     
     type Query{

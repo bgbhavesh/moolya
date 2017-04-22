@@ -361,12 +361,12 @@ adminSection.route('/settings/editCity/:id', {
   }
 });
 
-adminSection.route('/myprofile', {
+/*adminSection.route('/myprofile', {
   name: 'myprofile',
   action(){
     mount(AdminLayout,{adminContent:< MlMyProfile/>})
   }
-});
+});*/
 adminSection.route('/settings/userTypeList', {
   name: 'settings_UserTypeList',
   action(){

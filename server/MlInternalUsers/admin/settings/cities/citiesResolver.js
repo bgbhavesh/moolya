@@ -125,3 +125,16 @@ MlResolver.MlQueryResolver['searchCities'] = (obj, args, context, info) => {
   return result;
 }
 
+MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'] = (obj, args, context, info) => {
+
+  if(args.countryId){
+    let countryId = args.countryId;
+    if(args.countryId.length>5){
+      let resp = mlDBController.findOne('MlClusters', {"_id":countryId}, context);
+      countryId = resp.countryId;
+    }
+    // let resp = MlCities.find({"countryId":args.countryId,"isActive":true},{sort: {name:1}}).fetch()
+    let resp = mlDBController.find('MlCities', {"countryId":countryId}, context, {sort: {name:1}}).fetch()
+    return resp;
+  }
+};

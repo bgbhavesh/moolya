@@ -11,7 +11,7 @@ export default class MlSpecificationTypeList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Specification Types</h2>
+          <h2>Specification Types List</h2>
           <MlTableViewContainer {...mlSpecificationTypeTableConfig}/>
         </div>
       </div>

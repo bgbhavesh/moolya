@@ -14,6 +14,11 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:false,
   sort:false,
+  fetchCenter:true,
+  fetchCenterHandler:async function(){
+    let center=await maphandler.fetchDefaultCenterOfUser();
+    return center;
+  },
   viewComponent:<MlMapViewContainer />,
   queryOptions:true,
   buildQueryOptions:(config)=>{

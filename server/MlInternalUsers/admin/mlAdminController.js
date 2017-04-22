@@ -153,45 +153,48 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           let imageUploaderPromise=null;
           let imageUploadCallback=null;
           switch (moduleName){
-            case "REGISTRATION":{
-              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
-              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                let registrationDocumentUploadReq={registrationId:data.registrationId,docUrl: resp,document: file,documentId:documentId,docTypeId:docTypeId,moduleName: data.moduleName,actionName: data.actionName};
-                MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null,registrationDocumentUploadReq, context, null);
-              });
-              break;
-            }
-            case "PORTFOLIO":{
-              if(data.portfolioDetailsId){
-                  imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "portfolioDocuments/");
-                  imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                      let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
-                      if(details){
-                          switch (details.communityType){
-                              case 'Ideators':{
-                                  let ideatorPortfolio = data.portfolio;
-                                  for (key in ideatorPortfolio){
-                                      let inner = ideatorPortfolio[key]
-                                      if(typeof inner == 'object'){
-                                          for (key1 in inner){
-                                            let file = inner[key1]
-                                            if(typeof file == 'object'){
+              case "REGISTRATION":{
+                imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+                imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                  let registrationDocumentUploadReq={registrationId:data.registrationId,docUrl: resp,document: file,documentId:documentId,docTypeId:docTypeId,moduleName: data.moduleName,actionName: data.actionName};
+                  MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null,registrationDocumentUploadReq, context, null);
+                });
+                break;
+              }
+              case "PORTFOLIO":{
+                  if(data.portfolioDetailsId){
+                      let portfolio = {};
+                      imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "portfolioDocuments/");
+                      imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                          let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
+                          if(details){
+                              let clientPortfolio = data.portfolio;
+                              for (key in clientPortfolio){
+                                  let inner = clientPortfolio[key]
+                                  if(typeof inner == 'object'){
+                                      for (key1 in inner){
+                                          let file = inner[key1]
+                                          if(typeof file == 'object'){
                                               for (key2 in file){
-                                                  file[key2].fileUrl = resp;
+                                                 file[key2].fileUrl = resp;
                                               }
-                                            }
                                           }
                                       }
                                   }
-                                  let portfolio = {portfolio:{ideatorPortfolio:ideatorPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
-                                  MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                               }
-                              break;
+                              switch (details.communityType){
+                                  case 'Ideators':
+                                      portfolio = {portfolio:{ideatorPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                  break;
+                                  case 'Startups':
+                                      portfolio = {portfolio:{startupsPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                  break;
+                              }
+                              MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                           }
-                      }
-                  });
+                      });
+                  }
               }
-            }
             break;
             case "PROFILE":{
               imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
@@ -284,7 +287,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     console.log("Countries Invoked..!!");
     graphQLServer.options('/countries', cors());
 
-  graphQLServer.post(config.countries, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
+  graphQLServer.get(config.countries, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
   {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -303,12 +306,21 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       let data = req.body.data;
       let apiKey = req.header("apiKey");
       if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
-          let response;
-          if(data) {
+            let response;
+            let countries = [];
             response = MlResolver.MlQueryResolver['fetchCountriesAPI'](null, null, context, null);
-            console.log(response);
-            res.send(response);
-          }
+            if(response){
+              response.map(function (country, key){
+                let json={
+                  id:country._id,
+                  name:country.country
+                }
+                countries.push(json)
+              })
+            }
+            console.log(countries);
+            res.send(countries);
+
       }else{
         let code = 401;
         let result = {message:"The request did not have valid authorization credentials"}
@@ -348,9 +360,19 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           let response;
           if(data) {
-            response = MlResolver.MlQueryResolver['fetchCitiesPerCountry'](null, {countryId:data.countryId}, context, null);
-            console.log(response);
-            res.send(response);
+            let cities = [];
+            response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {countryId:data.countryId}, context, null);
+            if(response){
+              response.map(function (city, key){
+                    let json={
+                      id:city._id,
+                      name:city.name
+                    }
+                    cities.push(json)
+                })
+            }
+            console.log(cities);
+            res.send(cities);
           }
         }else{
           let code = 401;

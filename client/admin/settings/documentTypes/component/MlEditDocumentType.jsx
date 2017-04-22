@@ -111,7 +111,7 @@ class MlEditDocumentType extends React.Component{
               <form>
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data._id} hidden="true"/>
-                  <input type="text" ref="docTypeName" placeholder="Name" defaultValue={this.state.data&&this.state.data.docTypeName} readOnly="true" className="form-control float-label" id=""/>
+                  <input type="text" ref="docTypeName" placeholder="Name" defaultValue={this.state.data&&this.state.data.docTypeName} readOnly="true" className="form-control float-label"  disabled="disabled"/>
                 </div>
                 <div className="form-group">
                   <textarea ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label" id=""></textarea>
@@ -124,7 +124,7 @@ class MlEditDocumentType extends React.Component{
 
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docTypeDisplayName} readOnly="true" className="form-control float-label" id=""/>
+                    <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docTypeDisplayName} readOnly="true" className="form-control float-label"  disabled="disabled"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

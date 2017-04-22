@@ -35,7 +35,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
         } else{
-          toastr.error("Please select a User Type");
+          toastr.error("Please select a record");
         }
       }
     },
@@ -46,7 +46,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
         if(data && data.id){
           const internalConfig=data;
         } else{
-          toastr.error("Please select a User Type");
+          toastr.error("Please select a record");
         }
       }
     }

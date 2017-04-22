@@ -106,13 +106,13 @@ class MlEditTransactionType extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
 
         <div className="admin_padding_wrap">
-          <h2>Edit TransactionType</h2>
+          <h2>Edit Transaction Type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  <input type="text" ref="transactionName" placeholder="Name" defaultValue={this.state.data&&this.state.data.transactionName} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" ref="transactionName" placeholder="Name" defaultValue={this.state.data&&this.state.data.transactionName} className="form-control float-label"  disabled="disabled"/>
 
                 </div>
                 <div className="form-group">
@@ -126,7 +126,7 @@ class MlEditTransactionType extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input type="text" ref="transactionDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.transactionDisplayName} className="form-control float-label" id=""/>
+                  <input type="text" ref="transactionDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.transactionDisplayName} className="form-control float-label"  disabled="disabled"/>
                 </div>
                <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>

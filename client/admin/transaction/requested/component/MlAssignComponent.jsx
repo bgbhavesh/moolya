@@ -4,7 +4,7 @@ import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-
+import {assignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
 export default class MlAssignComponent extends Component {
 
   constructor(props){
@@ -27,11 +27,6 @@ export default class MlAssignComponent extends Component {
   componentDidMount() {
   }
 
-  cancel(){
-    //this.state.show = false
-    FlowRouter.go("/admin/transactions/registrationApprovedList");/*/transactions/registrationRequested");*/
-  }
-
   optionsBySelectCluster(value){
 
     this.setState({selectedCluster:value})
@@ -40,7 +35,7 @@ export default class MlAssignComponent extends Component {
 
     this.setState({selectedChapter:value})
   }
-  optionsBySelectCommunity(){
+  optionsBySelectCommunity(value){
 
     this.setState({selectedCommunity:value})
   }
@@ -64,7 +59,33 @@ export default class MlAssignComponent extends Component {
 
     this.setState({selectedUser:value})
   }
+  cancel(){
+    this.setState({show:false})
+    FlowRouter.go("/admin/transactions/registrationRequested");/*/transactions/registrationRequested");*/
+  }
+  async assignUser(){
+    let params={
+      "cluster": this.state.selectedCluster,
+      "chapter": this.state.selectedChapter,
+      "subChapter": this.state.selectedSubChapter,
+      "community": this.state.selectedCommunity,
+      "department": this.state.selectedDepartment,
+      "subDepartment": this.state.selectedSubDepartment,
+      "role": this.state.selectedRole,
+      "user": this.state.selectedUser
+    }
+    const response = await assignUserForTransactionAction(params);
+    if(response){
+      this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
+      toastr.error("User Assigned to transaction successfully");
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }else{
+      toastr.error(response.result);
+      this.setState({show:false})
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }
 
+  }
 
   render() {
     let that=this;
@@ -84,6 +105,10 @@ export default class MlAssignComponent extends Component {
         label:subChapterName
       }  
     }`;
+    let fetchcommunities = gql` query{
+      data:fetchCommunityDefinition{label:name,value:code}
+    }
+    `;
     let departmentQuery=gql`query($cluster:String,$chapter:String,$subChapter:String){  
       data:fetchDepartmentsForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter) {
         value:_id
@@ -102,10 +127,15 @@ export default class MlAssignComponent extends Component {
         label:roleName
       }  
     }`;
-    let fetchcommunities = gql` query{
-      data:fetchCommunityDefinition{label:name,value:code}
-    }
-    `;
+    let usersQuery=gql`query($clusterId:String,$chapterId:String,$subChapterId:String,$communityId:String,$departmentId:String,$subDepartmentId:String,$roleId:String){  
+      data:fetchUserForReistration(clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId,communityId:$communityId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,roleId:$roleId) {
+        value:_id
+        label:username
+      }  
+    }`;
+
+
+
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
     let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}
@@ -119,6 +149,19 @@ export default class MlAssignComponent extends Component {
                         department:this.state.selectedDepartment,
                         subDepartment:this.state.selectedSubDepartment
                     }}};
+    let usersOption = {
+                  options: {
+                    variables: {
+                      clusterId:this.state.selectedCluster,
+                      chapterId:this.state.selectedChapter,
+                      subChapterId:this.state.selectedSubChapter,
+                      departmentId:this.state.selectedDepartment,
+                      subDepartmentId:this.state.selectedSubDepartment,
+                      departmentId:this.state.selectedDepartment,
+                      subDepartmentId:this.state.selectedSubDepartment,
+                      roleId:this.state.selectedRole
+                    }}};
+
     return (
       <div>
       {this.state.show==true?
@@ -154,12 +197,12 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select Sub Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubDepartment} queryType={"graphql"} query={subDepartmentQuery} reExecuteQuery={true} queryOptions={subDepartmentOption} isDynamic={true} onSelect={this.optionsBySelectSubDepartment.bind(this)} />
           </div>
           <div className="form-group">
-            <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={subDepartmentQuery} reExecuteQuery={true} queryOptions={subDepartmentOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
+            <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={usersQuery} reExecuteQuery={true} queryOptions={usersOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
           </div>
         </div>
 
         <div className="assign-popup">
-          <a data-toggle="tooltip" title="Save" data-placement="top" href="" className="hex_btn hex_btn_in">
+          <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.assignUser.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml ml-save"></span>
           </a>
           <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>

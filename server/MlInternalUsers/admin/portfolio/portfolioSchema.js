@@ -69,9 +69,10 @@ let portfolioSchema = `
         professionId    : String,
         portfolioId     : String
     }
-    
+   
     input portfolio{
-        ideatorPortfolio:ideatorPortfolio
+        ideatorPortfolio:ideatorPortfolio,
+        startupPortfolio:startupPortfolio
     }
     
     type Query{
@@ -80,7 +81,7 @@ let portfolioSchema = `
     
     type Mutation{
           createPortfolioRequest(portfoliodetails:portfoliodetails):response
-          updatePortfolio(portfoliodetailsId:String, portfolio:portfolio):response
+          updatePortfolio(portfoliodetailsId:String, portfolio:portfolio, indexArray:[String]):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

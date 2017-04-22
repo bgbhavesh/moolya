@@ -2,7 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
@@ -27,14 +27,19 @@ export default class MlIdeatorDetails extends React.Component{
   {
     OnLockSwitch();
     dataVisibilityHandler();
+
   }
   componentDidUpdate()
   {
     OnLockSwitch();
     dataVisibilityHandler();
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    initalizeFloatLabel();
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
+
   }
 
   onClick(field,e){
@@ -88,10 +93,10 @@ export default class MlIdeatorDetails extends React.Component{
   render(){
     const showLoader = this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
+
+        <div>
           <h2>Ideator</h2>
 
           <div className="col-md-6 nopadding-left">
@@ -120,11 +125,6 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="DOB" name="dateOfBirth" defaultValue={this.state.data.dateOfBirth} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isDateOfBirthPrivate" onClick={this.onClick.bind(this, "isDateOfBirthPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDateOfBirthPrivate}/>
-                    </div>
-
-                    <div className="form-group">
                       <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "isQualificationPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>
                     </div>
@@ -135,13 +135,8 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Sector" name="professionalTag" defaultValue={this.state.data.professionalTag} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Professional Tag" name="professionalTag" defaultValue={this.state.data.professionalTag} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionalTagPrivate" onClick={this.onClick.bind(this, "isProfessionalTagPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProfessionalTagPrivate}/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="Employer Name" name="employerName" defaultValue={this.state.data.employerName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate" onClick={this.onClick.bind(this, "isEmployerNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmployerNamePrivate}/>
                     </div>
 
                     <div className="form-group">
@@ -171,6 +166,20 @@ export default class MlIdeatorDetails extends React.Component{
                       </div>
                     </div>
                     <br className="brclear"/>
+                    <div className="form-group">
+                      <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industryDisplayName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate" onClick={this.onClick.bind(this, "isIndustryPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
+                    </div>
+
+                    <div className="form-group">
+                      <input type="text" placeholder="Profession" name="profession" defaultValue={this.state.data.profession} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionPrivate" onClick={this.onClick.bind(this, "isProfessionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProfessionPrivate}/>
+                    </div>
+
+                    <div className="form-group">
+                      <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} className="form-control float-label"/>
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate"/>
+                    </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
@@ -182,38 +191,11 @@ export default class MlIdeatorDetails extends React.Component{
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isEmailIdPrivate" onClick={this.onClick.bind(this, "isEmailIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmailIdPrivate}/>
                     </div>
 
-                    <div className="form-group">
-                      <input type="text" placeholder="Facebook Id" name="facebookId" defaultValue={this.state.data.facebookId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isfacebookIdPrivate" onClick={this.onClick.bind(this, "isfacebookIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isfacebookIdPrivate}/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="Linkedin Id" name="linkedInId" defaultValue={this.state.data.linkedInId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="islinkedInIdPrivate" onClick={this.onClick.bind(this, "islinkedInIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.islinkedInIdPrivate}/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="Twitter Id" name="twitterId" defaultValue={this.state.data.twitterId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isTwitterIdPrivate" onClick={this.onClick.bind(this, "isTwitterIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isTwitterIdPrivate}/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="Googleplus Id" name="gplusId" defaultValue={this.state.data.gplusId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isGplusIdPrivate" onClick={this.onClick.bind(this, "isGplusIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGplusIdPrivate}/>
-                    </div>
-
-
                   </form>
                 </div>
               </ScrollArea>
             </div>
           </div>
-
-
-
-
-        </div>
-
 
       </div>)}
       </div>

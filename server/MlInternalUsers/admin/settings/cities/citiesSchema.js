@@ -31,6 +31,7 @@ let citiesSchema = `
         fetchCitiesPerState(stateId: String):[Cities]
         fetchCitiesPerCountry(countryId: String):[Cities]
         searchCities(searchQuery:String,displayAllOption:Boolean):[Cities]
+        fetchCitiesPerCountryAPI(countryId: String):[Cities]
         
     }
     

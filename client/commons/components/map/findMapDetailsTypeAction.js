@@ -22,3 +22,19 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
   const totalResult = result.data.data;
   return totalResult
 }
+
+export async function fetchDefaultCenterOfUser() {
+  let result = await client.query({
+    query: gql`
+        query{
+         data:fetchMapCenterCordsForUser{
+          lat
+          lng
+      }
+    }
+    `,
+    forceFetch:true
+  });
+  result=result&&result.data&&result.data.data?result.data.data:null;
+  return result;
+}

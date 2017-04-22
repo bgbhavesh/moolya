@@ -55,6 +55,15 @@ let transactionsSchema = `
       description               : String
       trail                     : [trailInput]
     }
+     input allocationInput{
+        assignee            : String
+        assigneeId          : String
+        assignedDate        : String
+        department          : String
+        departmentId        : String
+        subDepartment       : String
+        subDepartmentId     : String
+    }
     input TransactionsInput{
       transactionTypeName       : String
       transactionTypeId         : String
@@ -68,15 +77,6 @@ let transactionsSchema = `
       transactionUpdatedDate    : String
       hierarchy                 : String
       allocation                : allocationInput
-    }
-    input allocationInput{
-        assignee            : String
-        assigneeId          : String
-        assignedDate        : Date
-        department          : String
-        departmentId        : String
-        subDepartment       : String
-        subDepartmentId     : String
     }
     input assignmentParams{
        cluster        : String

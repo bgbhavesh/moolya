@@ -239,7 +239,6 @@ let BackEndUser = `
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
-        updateProfileImage(userId:String,profileImage:String, moduleName:String, actionName:String):response
         updateDataEntry(userId: String, moduleName: String, actionName: String, attributes:attributesObject):response
     }
     

@@ -90,10 +90,8 @@ export default class MlMyProfile extends React.Component{
       var temp = $.parseJSON(this.state.uploadedProfilePic).result;
       this.setState({"uploadedProfilePic":temp});
       console.log(temp);
-      toastr.success("Update Successful");
+     // toastr.success("Update Successful");
       this.storeImage();
-     // this.fileUpdation(this.state.details);
-      toastr.success("Update Successful");
       return temp;
 
     }
@@ -131,6 +129,7 @@ export default class MlMyProfile extends React.Component{
   }
     const dataresponse = await updateDataEntry(Details);
   console.log(dataresponse);
+    toastr.success("Update Successful")
     return dataresponse;
   }
 
@@ -178,11 +177,12 @@ export default class MlMyProfile extends React.Component{
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
     }
     else{
-      this.onFileUploadCallBack();
+      this.storeImage();
     }
-    return response;
+
     //this.props.onFileUpload(file,documentId);
   }
 
@@ -217,13 +217,13 @@ export default class MlMyProfile extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" id="first_name" placeholder="First Name" className="form-control float-label"  defaultValue={this.state.firstName} onChange={this.firstNameUpdation.bind(this)}/>
+                      <input type="text" id="first_name" placeholder="First Name" className="form-control float-label"  defaultValue={this.state.firstName} onBlur={this.firstNameUpdation.bind(this)}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Middle Name" className="form-control float-label" id="" defaultValue={this.state.middleName} onChange={this.middleNameUpdation.bind(this)} />
+                      <input type="text" placeholder="Middle Name" className="form-control float-label" id="" defaultValue={this.state.middleName} onBlur={this.middleNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName} onChange={this.lastNameUpdation.bind(this)} />
+                      <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName} onBlur={this.lastNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">

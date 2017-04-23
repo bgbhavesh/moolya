@@ -90,7 +90,7 @@ export default class MlStartupEditTemplate extends React.Component{
   getAwardsDetails(details,indexArray){
 
     let data = this.state.startupPortfolio;
-    if(data && !data.investor){
+    if(data && !data.awardsRecognition){
       data['awardsRecognition']=[];
     }
     data['awardsRecognition'] = details;
@@ -101,7 +101,7 @@ export default class MlStartupEditTemplate extends React.Component{
   getLookingForDetails(details,indexArray){
 
     let data = this.state.startupPortfolio;
-    if(data && !data.investor){
+    if(data && !data.lookingFor){
       data['lookingFor']=[];
     }
     data['lookingFor'] = details;

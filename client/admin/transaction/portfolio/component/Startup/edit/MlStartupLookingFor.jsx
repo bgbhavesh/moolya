@@ -10,7 +10,7 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {findStartupInvestorDetailsActionHandler} from '../../../actions/findPortfolioStartupDetails'
+import {fetchStartupPortfolioLookingFor} from '../../../actions/findPortfolioStartupDetails'
 var Select = require('react-select');
 var options = [
   { value: '1', label: '1' },
@@ -30,13 +30,14 @@ export default class MlStartupLookingFor extends React.Component{
       startupInvestor: [],
       popoverOpen:false,
       index:"",
-      startupInvestorList:[],
+      startupLookingForList:[],
       indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.onSaveAction.bind(this);
     return this;
   }
 
@@ -55,9 +56,9 @@ export default class MlStartupLookingFor extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findStartupInvestorDetailsActionHandler(portfoliodetailsId);
+    const response = await fetchStartupPortfolioLookingFor(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, startupInvestor: response, startupInvestorList: response});
+      this.setState({loading: false, startupInvestor: response, startupLookingForList:response});
     }
   }
   addInvestor(){
@@ -83,6 +84,9 @@ export default class MlStartupLookingFor extends React.Component{
     indexArray.push(index);
     indexArray = _.uniq(indexArray);
     this.setState({indexArray: indexArray})
+  }
+  onSaveAction(e){
+    this.setState({startupLookingForList:this.state.startupInvestor})
   }
 
   onLockChange(field, e){
@@ -118,8 +122,8 @@ export default class MlStartupLookingFor extends React.Component{
   onOptionSelected(selectedIndex,handler,selectedObj){
 
     let details =this.state.data;
-    details=_.omit(details,["fundingType"]);
-    details=_.extend(details,{["fundingType"]:selectedIndex});
+    details=_.omit(details,["type"]);
+    details=_.extend(details,{["type"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()
@@ -165,7 +169,7 @@ export default class MlStartupLookingFor extends React.Component{
       }
     }`;
     let that = this;
-    let investorsArray = that.state.startupInvestorList || [];
+    let startupLookingForList = that.state.startupLookingForList || [];
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap portfolio-main-wrap">
@@ -181,19 +185,19 @@ export default class MlStartupLookingFor extends React.Component{
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover" >
+                    <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover" >
                       <div className="list_block notrans" onClick={this.addInvestor.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3 onClick={this.addInvestor.bind(this)}>Add New Looking For</h3>
                       </div>
                     </a>
                   </div>
-                  {investorsArray.map(function (details, idx) {
-                    return(<div className="col-lg-2 col-md-3 col-sm-3">
-                      <a href="#" id={"create_client"+idx}>
+                  {startupLookingForList.map(function (details, idx) {
+                    return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
+                      <a href="" id={"create_client"+idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                          <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
+                          {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                           <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src="/images/meteor-logo.png"/></div>
                           <h3>{details.description}</h3>
                         </div>
@@ -229,7 +233,7 @@ export default class MlStartupLookingFor extends React.Component{
                         <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                       </div>
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="" className="save_btn">Save</a>
+                        <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                       </div>
                     </div>
                   </div></div>

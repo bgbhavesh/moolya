@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 import _ from "underscore";
 
-export async function findStartupDetailsActionHandler(portfoliodetailsId) {
+export async function findStartupManagementActionHandler(portfoliodetailsId) {
 
   const result = await client.query({
     query: gql`
@@ -180,6 +180,32 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
     forceFetch: true
   })
   const id = result.data.fetchStartupPortfolioInvestor;
+  // let data = _.omit(id,'__typename')
+  // return data
+  return id
+}
+
+export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
+                type,
+                isTypePrivate
+                description
+                isDescriptionPrivate
+                makePrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioLookingFor;
   // let data = _.omit(id,'__typename')
   // return data
   return id

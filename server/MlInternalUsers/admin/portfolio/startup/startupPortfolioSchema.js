@@ -133,10 +133,11 @@ let startupPortfolioSchema = `
     }
     
     type lookingForOutput{
-        title:String,
+        type:String,
+        isTypePrivate:Boolean,
         description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+        isDescriptionPrivate:Boolean
+        makePrivate:Boolean
     }
     
 
@@ -310,10 +311,11 @@ let startupPortfolioSchema = `
     }
     
     input lookingFor{
-        title:String,
+        type:String,
+        isTypePrivate:Boolean,
         description:String,
-        isTitlePublic:Boolean,
-        isDescriptionPublic:Boolean
+        isDescriptionPrivate:Boolean
+        makePrivate:Boolean
     }
     
 
@@ -389,7 +391,7 @@ let startupPortfolioSchema = `
         rating              : rating
         serviceProducts     : serviceProducts
         information         : information
-        lookingFor          : lookingFor
+        lookingFor          : [lookingFor]
         investor            : [investor]
         technologies        : [technologies]
         assets              : [assets]
@@ -404,6 +406,7 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioAboutUs(portfoliodetailsId:String!):startupPortfolioAboutUsOutput
         fetchStartupPortfolioManagement(portfoliodetailsId:String!):[startupManagementOutput]
         fetchStartupPortfolioInvestor(portfoliodetailsId:String!):[investorOutput]
+        fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     

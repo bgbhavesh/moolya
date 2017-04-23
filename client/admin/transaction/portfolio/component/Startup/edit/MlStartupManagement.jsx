@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
-import {findStartupDetailsActionHandler} from '../../../actions/findPortfolioStartupDetails'
+import {findStartupManagementActionHandler} from '../../../actions/findPortfolioStartupDetails'
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -107,7 +107,7 @@ export default class MlStartupManagement extends React.Component{
     let portfoliodetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.management)
     if(empty){
-      const response = await findStartupDetailsActionHandler(portfoliodetailsId);
+      const response = await findStartupManagementActionHandler(portfoliodetailsId);
       if (response) {
         this.setState({loading: false, startupManagement: response, startupManagementList: response});
       }

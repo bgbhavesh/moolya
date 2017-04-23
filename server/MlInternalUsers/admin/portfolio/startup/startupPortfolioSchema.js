@@ -172,9 +172,14 @@ let startupPortfolioSchema = `
         isDescriptionPrivate : Boolean
     }
     
-    type awardsRecognisitionOutput{
-        description:String,
-        isStrategyPlansPrivate:Boolean
+    type awardsRecognitionOutput{
+          award:String
+          isAwardPrivate:Boolean
+          year:String
+          isYearPrivate:Boolean
+          description:String
+          isDescriptionPrivate:Boolean
+          makePrivate:Boolean
     }
 
     type membershipsOutput{
@@ -356,9 +361,14 @@ let startupPortfolioSchema = `
         isDescriptionPrivate : Boolean
     }
     
-    input awardsRecognisition{
-        description:String,
-        isStrategyPlansPrivate:Boolean
+    input awardsRecognition{
+          award:String
+          isAwardPrivate:Boolean
+          year:String
+          isYearPrivate:Boolean
+          description:String
+          isDescriptionPrivate:Boolean
+          makePrivate:Boolean
     }
 
     input memberships{
@@ -386,7 +396,7 @@ let startupPortfolioSchema = `
         licenses            : licenses
         compliances         : compliances
         memberships         : memberships
-        awardsRecognisition : awardsRecognisition
+        awardsRecognition : [awardsRecognition]
         aboutUs             : aboutUs
         rating              : rating
         serviceProducts     : serviceProducts
@@ -407,6 +417,7 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioManagement(portfoliodetailsId:String!):[startupManagementOutput]
         fetchStartupPortfolioInvestor(portfoliodetailsId:String!):[investorOutput]
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]
+        fetchStartupPortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     

@@ -8,7 +8,7 @@ import {initalizeFloatLabel} from '../../utils/formElemUtil';
 //import {addProfilePicAction} from "../actions/addProfilePicAction"
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
-import {addProfilePicActionHandler} from '../actions/addProfilePicAction'
+import {updateDataEntry} from '../actions/addProfilePicAction'
 import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction'
 import Datetime from "react-datetime";
 import moment from "moment";
@@ -30,11 +30,22 @@ export default class MlMyProfile extends React.Component{
       selectedBackendUser: " ",
       profilePic: " ",
       foundationDate: null
+      // Details:{
+      //   firstName: " ",
+      //   middleName:" ",
+      //   lastName: " "
+      // }
     };
     this.getValue = this.getValue.bind(this);
     this.onFileUploadCallBack.bind(this);
     this.storeImage.bind(this);
     this.onFoundationDateSelection.bind(this);
+    this.firstNameUpdation.bind(this);
+    this.middleNameUpdation.bind(this);
+    this.lastNameUpdation.bind(this);
+    this.updateProfile.bind(this);
+    //this.fileUpdation.bind(this);
+   // this.firstNameUpdation.bind(this);
     return this;
   }
   onFoundationDateSelection(event) {
@@ -79,23 +90,47 @@ export default class MlMyProfile extends React.Component{
       var temp = $.parseJSON(this.state.uploadedProfilePic).result;
       this.setState({"uploadedProfilePic":temp});
       console.log(temp);
-      toastr.success("Update Successful");
+     // toastr.success("Update Successful");
       this.storeImage();
       return temp;
 
     }
   }
 
+  // async fileUpdation(Details){
+  //   let userId = Meteor.userId();
+  //   const response = await updateDataEntry(Details,userId);
+  //   toastr.success("Update Successful");
+  //   return response;
+  //
+  // }
+  //
+  async firstNameUpdation(e) {
+    this.setState({firstName: e.target.value})
+  }
+
+  async middleNameUpdation(e) {
+    this.setState({middleName: e.target.value})
+  }
+
+  async lastNameUpdation(e) {
+    this.setState({lastName: e.target.value})
+  }
+
+
+
   async storeImage() {
-    let profileImage = this.state.uploadedProfilePic;
-    let userId = Meteor.userId();
-    console.log(profileImage);
-    console.log(userId);
-    const response = await addProfilePicActionHandler(profileImage, userId);
-    // this.updateImage();
-    //  const response2 =  await findBackendUserActionHandler(userId);
-    //  this.setState({uploadedProfilePic:response.profile.profileImage});
-    return response;
+  let Details = {
+    profileImage : this.state.uploadedProfilePic,
+    firstName :this.state.firstName,
+    middleName : this.state.middleName,
+    lastName : this.state.lastName,
+    userId : Meteor.userId()
+  }
+    const dataresponse = await updateDataEntry(Details);
+  console.log(dataresponse);
+    toastr.success("Update Successful")
+    return dataresponse;
   }
 
   async getValue() {
@@ -139,9 +174,15 @@ export default class MlMyProfile extends React.Component{
       }
     }
     let file=document.getElementById("profilePic").files[0];
-    let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
-    let response = await multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
-    return response;
+    if(file) {
+      let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
+    }
+    else{
+      this.storeImage();
+    }
+
     //this.props.onFileUpload(file,documentId);
   }
 
@@ -172,18 +213,17 @@ export default class MlMyProfile extends React.Component{
               smoothScrolling={true}
               default={true}
             >
-
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id="" defaultValue={this.state.firstName}/>
+                      <input type="text" id="first_name" placeholder="First Name" className="form-control float-label"  defaultValue={this.state.firstName} onBlur={this.firstNameUpdation.bind(this)}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Middle Name" className="form-control float-label" id="" defaultValue={this.state.middleName}/>
+                      <input type="text" placeholder="Middle Name" className="form-control float-label" id="" defaultValue={this.state.middleName} onBlur={this.middleNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName}/>
+                      <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName} onBlur={this.lastNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
@@ -201,7 +241,7 @@ export default class MlMyProfile extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName}/>
+                      <input type="text" placeholder="Display Name" className="form-control float-label" id="" defaultValue={this.state.userName}/>
                     </div>
                     <div className="form-group">
                       <input type="password" placeholder="Password" className="form-control float-label" id=""/>
@@ -235,18 +275,8 @@ export default class MlMyProfile extends React.Component{
 
             </ScrollArea>
           </div>
-
-
-
         </div>)}
         <span className="actions_switch"></span>
-        {/*<div className="bottom_actions_block">
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
-        </div>*/}
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )

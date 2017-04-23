@@ -89,3 +89,48 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioManagement'] = (obj, args, cont
 
   return [];
 }
+
+MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let startAboutUsArray = {}
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    startAboutUsArray["aboutUs"]=portfolio.aboutUs;
+    startAboutUsArray["clients"]=portfolio.clients;
+    startAboutUsArray["serviceProducts"]=portfolio.serviceProducts;
+    startAboutUsArray["information"]=portfolio.information;
+    startAboutUsArray["branches"]=portfolio.branches;
+    startAboutUsArray["technologies"]=portfolio.technologies;
+    startAboutUsArray["legalIssue"]=portfolio.legalIssue;
+
+    startAboutUsArray["assets"]=portfolio.assets
+    if(startAboutUsArray){
+      return startAboutUsArray
+    }
+
+
+  }
+
+  return [];
+}
+
+MlResolver.MlQueryResolver['fetchStartupPortfolioInvestor'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('investor')) {
+      return portfolio['investor'];
+    }
+  }
+
+  return [];
+}
+MlResolver.MlQueryResolver['fetchStartupPortfolioLookingFor'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('lookingFor')) {
+      return portfolio['lookingFor'];
+    }
+  }
+
+  return [];
+}
+

@@ -32,6 +32,7 @@ let TechnologiesSchema = `
     }
     type Query{
         findTechnology(technologyId:String): Technologies
+        fetchTechnologies:[Technologies]
     }
 `
 

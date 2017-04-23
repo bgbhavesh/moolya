@@ -47,20 +47,29 @@ export default class MlStartupManagement extends React.Component{
     this.fetchPortfolioDetails();
   }
   addManagement(){
+    this.setState({loading:true})
     if(this.state.startupManagement){
       this.setState({arrIndex:this.state.startupManagement.length})
     }else{
       this.setState({arrIndex:0})
     }
-    this.setState({data:{}})
-    $('#management-form').slideDown();
+    this.setState({data:{}}, function () {
+      this.setState({loading:false}, function () {
+        $('#management-form').slideDown();
+      })
+    })
+    // this.setState({data:{}})
+    // $('#management-form').slideDown();
   }
   onSelectUser(index, e){
+    this.setState({loading:true})
     let managmentDetails = this.state.startupManagement[index]
     managmentDetails = _.omit(managmentDetails, "__typename");
     this.setState({arrIndex:index});
     this.setState({data:managmentDetails}, function () {
-      $('#management-form').slideDown();
+      this.setState({loading:false}, function () {
+          $('#management-form').slideDown();
+      })
     })
     let indexes = this.state.indexArray;
     let indexArray = _.cloneDeep(indexes)
@@ -161,7 +170,7 @@ export default class MlStartupManagement extends React.Component{
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                           <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
                             <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                            <h3>{user.firstName}</h3>
+                            <h3>{user.firstName?user.firstName:""}</h3>
                           </div>
                       </div>
                     )

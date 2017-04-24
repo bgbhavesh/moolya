@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -24,6 +24,12 @@ export default class MlStartupInformation extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+  }
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.information)
+    if(!empty){
+      this.setState({loading: false, data: this.context.startupPortfolio.information});
+    }
   }
 
   handleBlur(e){
@@ -92,3 +98,6 @@ export default class MlStartupInformation extends React.Component{
     )
   }
 }
+MlStartupInformation.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

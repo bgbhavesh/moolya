@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import MlDetailsNotesComponent from './MlDetailsNotesComponent'
 export default class MlTransactionRequested extends Component {
   constructor(props){
     super(props);
@@ -24,7 +25,7 @@ export default class MlTransactionRequested extends Component {
 
   expandComponent(row) {
    return (
-      <div>hello</div>
+     <MlDetailsNotesComponent/>
     )
   }
   render() {

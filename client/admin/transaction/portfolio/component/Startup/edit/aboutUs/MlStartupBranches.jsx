@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -36,6 +36,16 @@ export default class MlStartupBranches extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+  }
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.branches)
+    if(!empty){
+      this.setState({loading: false, startupBranches: this.context.startupPortfolio.branches, startupBranchesList:this.context.startupPortfolio.branches});
+    }
+  }
+  onSaveAction(e){
+    this.setState({startupBranchesList:this.state.startupBranches})
+    this.setState({popoverOpen : false})
   }
   addBranch(){
     this.setState({selectedObject : "default"})
@@ -290,7 +300,7 @@ export default class MlStartupBranches extends React.Component{
                           <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="#" className="save_btn">Save</a>
+                          <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                         </div>
                       </div>
                     </div>
@@ -313,3 +323,6 @@ export default class MlStartupBranches extends React.Component{
     )
   }
 }
+MlStartupBranches.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

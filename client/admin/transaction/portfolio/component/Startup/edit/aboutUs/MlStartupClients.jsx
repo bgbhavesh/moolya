@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -28,6 +28,7 @@ export default class MlStartupClients extends React.Component{
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
+    this.onSaveAction.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -38,6 +39,12 @@ export default class MlStartupClients extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+  }
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
+    if(!empty){
+      this.setState({loading: false, startupClients: this.context.startupPortfolio.clients, startupClientsList:this.context.startupPortfolio.clients});
+    }
   }
 
   addClient(){
@@ -79,6 +86,10 @@ export default class MlStartupClients extends React.Component{
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
+  }
+  onSaveAction(e){
+    this.setState({startupClientsList:this.state.startupClients})
+    this.setState({popoverOpen : false})
   }
 
   onStatusChangeNotify(e)
@@ -150,7 +161,7 @@ export default class MlStartupClients extends React.Component{
     return(
       <div>
 
-        <h2>Assets</h2>
+        <h2>Clients</h2>
         <div className="requested_input main_wrap_scroll">
 
           <ScrollArea
@@ -217,7 +228,7 @@ export default class MlStartupClients extends React.Component{
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn">Save</a>
+                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                     </div>
                   </div>
                 </div></div>
@@ -236,3 +247,6 @@ export default class MlStartupClients extends React.Component{
     )
   }
 }
+MlStartupClients.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

@@ -62,7 +62,7 @@ export default class RegistrationWizard extends React.Component{
     this.setState({'registrationDetails':resp})
 
   }
-  async componentWillMount() {
+    async componentWillMount() {
     const resp=await this.findRegistration();
     this.fetchHardRegistrationTemplate(resp);
     this.fetchSoftRegistrationTemplate(resp);

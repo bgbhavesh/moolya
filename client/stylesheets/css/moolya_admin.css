@@ -1089,7 +1089,7 @@ button:focus{outline: 0;}
   align-items: center;
   justify-content: center;
 }
-
+.rdtPicker{ position: fixed !important;}
 /*.moolya_admin .react-bs-container-body{overflow:hidden;}*/
 /*.react-bs-container-body {position:relative !important;}*/
 /*media quaries started*/
@@ -1109,3 +1109,5 @@ ol.progtrckr li{ margin-bottom: 40px}}
     padding-left: 0 !important;
   }
 }
+.profile_block img{display: block;border-radius: 5px;width: auto;margin:0 auto;}
+.profile_block span{font-size: 20px;}

@@ -130,6 +130,7 @@ export default class MlMyProfile extends React.Component{
     firstName :this.state.firstName,
     middleName : this.state.middleName,
     lastName : this.state.lastName,
+    userName: this.state.userName,
     userId : Meteor.userId()
   }
     const dataresponse = await updateDataEntry(Details);

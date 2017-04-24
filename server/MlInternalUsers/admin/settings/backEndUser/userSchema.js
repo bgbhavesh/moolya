@@ -190,7 +190,8 @@ let BackEndUser = `
       profileImage: String,
       firstName: String, 
       middleName:String, 
-      lastName: String
+      lastName: String,
+      userName: String
     }
     
     type dep{

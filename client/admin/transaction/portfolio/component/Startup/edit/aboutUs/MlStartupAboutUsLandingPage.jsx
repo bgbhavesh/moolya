@@ -7,23 +7,37 @@ import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
+import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 
 
 
 export default class MlStartupAboutUs extends React.Component{
   constructor(props){
     super(props)
-    this.state = {aboutStartup:false}
-
+    this.state = {aboutStartup:false,startupAboutUs:[], startupAboutUsList:[]}
+    this.fetchPortfolioDetails.bind(this);
   }
   selectedTab(field,e){
    this.setState({aboutStartup : true})
   }
-  getPortfolioStartupAboutUsDetails(details){
-    this.props.getAboutus(details);
+  getPortfolioStartupAboutUsDetails(details,tabName,indexArray){
+    this.props.getAboutus(details,tabName,indexArray);
   }
-  render(){
+  componentWillMount(){
+    this.fetchPortfolioDetails();
+  }
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    if (response) {
+      this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response});
+    }
 
+  }
+
+  render(){
+    console.log(this.state.startupAboutUs.aboutUs);
     return (
       <div>
       {this.state.aboutStartup===false?(<div>
@@ -32,9 +46,7 @@ export default class MlStartupAboutUs extends React.Component{
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">About Us <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu" onClick={this.selectedTab.bind(this)}/></div>
             <div className="panel-body panel-body-scroll" style={{'height':'384px'}}>
-              <h4>Infosis</h4>
-              <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-              <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+              <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.description}</p>
             </div>
           </div>
         </div>
@@ -58,7 +70,7 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
               <div className="panel-heading">Service & Products <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu"/></div>
               <div className="panel-body panel-body-scroll">
-                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+                <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.description}</p>
               </div>
             </div></div>
           </div>
@@ -66,17 +78,14 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="panel-heading">Information <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu"/></div>
             <div className="panel-body">
               <ul className="list-info">
-                <li>Lorem Ipsum is simply  printing and typesetting industry.</li>
-                <li>Lorem Ipsum is simply dummy text of the printing and industry.</li>
-                <li>Lorem Ipsum is simply dummy text of the printing and typesetting.</li>
-                <li>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</li>
+                <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.description}</li>
               </ul>
             </div>
           </div></div>
 
         </div>
 
-      </div>):(<div>{<MlStartupTab getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlStartupTab getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs}></MlStartupTab> }</div>)}
       </div>
 
     )

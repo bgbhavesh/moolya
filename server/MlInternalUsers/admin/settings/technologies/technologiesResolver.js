@@ -51,3 +51,8 @@ MlResolver.MlQueryResolver['findTechnology'] = (obj, args, context, info) => {
     return MlTechnologies.findOne({"_id":args.technologyId})
   }
 }
+
+
+MlResolver.MlQueryResolver['fetchTechnologies'] = (obj, args, context, info) => {
+  return MlTechnologies.find({isActive : true}).fetch();
+}

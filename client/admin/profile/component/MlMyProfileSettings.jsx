@@ -6,6 +6,8 @@ import ScrollArea from 'react-scrollbar'
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
+import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+
 //import ContactDetails from '../../transaction/requested/component/contactDetails';
 
 export default class MyProfileSettings extends React.Component{
@@ -67,6 +69,22 @@ export default class MyProfileSettings extends React.Component{
 
 
   render(){
+
+    let MlActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: null
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: null
+      }
+    ];
+
+
+
     let currencyquery=gql` query{  
       data:fetchCurrency{
         value:_id
@@ -97,7 +115,7 @@ export default class MyProfileSettings extends React.Component{
                   {/*<FontAwesome name='inr' className="password_icon"/>*/}
                 </div>
                 <Select
-                  name="form-field-name"  options={measurementType} placeholder={"Measurement System"}
+                  name="form-field-name"  options={measurementType} placeholder={"Numerical Format"}
                   value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}
                   className="float-label"/>
               </div>
@@ -119,14 +137,16 @@ export default class MyProfileSettings extends React.Component{
 
 
         </div>
-        <span className="actions_switch"></span>
-        <div className="bottom_actions_block">
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
-          <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
-        </div>
+        {/*<span className="actions_switch"></span>*/}
+        {/*<div className="bottom_actions_block">*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>*/}
+          {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>*/}
+        {/*</div>*/}
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+
       </div>
     )
   }

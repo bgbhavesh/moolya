@@ -47,7 +47,7 @@ MlResolver.MlMutationResolver['updateSelectedAsset'] = (obj, args, context, info
 }
 
 MlResolver.MlQueryResolver['fetchAssets'] = (obj, args, context, info) => {
-
+    return MlAssets.find({isActive : true}).fetch();
 }
 
 MlResolver.MlQueryResolver['findAsset'] = (obj, args, context, info) => {

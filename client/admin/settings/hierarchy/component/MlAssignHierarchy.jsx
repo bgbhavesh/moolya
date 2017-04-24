@@ -54,7 +54,7 @@ export default class MlAssignHierarchy extends React.Component {
 
   componentWillMount(){
     const resp=this.findUnAssignedDeptRoles();
-    const hierarchyDetails=this.findHierarchyDetails();
+   const hierarchyDetails=this.findHierarchyDetails();
     return resp;
   }
 
@@ -73,6 +73,7 @@ export default class MlAssignHierarchy extends React.Component {
       }
       this.setState({loading:false,finalApproval:json})
     }
+    return response
   }
   async findUnAssignedDeptRoles(){
     let departmentInfo=this.props.departmentInfo
@@ -84,7 +85,7 @@ export default class MlAssignHierarchy extends React.Component {
         let roleDetails=[]
         for(let i=0;i<response.length;i++){
           let role=response[i]
-          if((role.isHierarchyAssigned==false)) {
+          if((role.isHierarchyAssigned==false||role.isHierarchyAssigned==null)) {
             let json = {
                 roleId: role._id,
                 roleName: role.roleName,
@@ -99,6 +100,7 @@ export default class MlAssignHierarchy extends React.Component {
         }
         this.setState({loading:false,unAssignedRoles:{teamStructureAssignment:roleDetails}})
       }
+      return response
     }
   }
   optionsBySelectDepartment(val){

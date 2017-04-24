@@ -3,7 +3,6 @@ import {client} from '../../core/apolloConnection';
 
 
 export async function updateDataEntry(Details) {
- // let Details = Details;
   const result = await client.mutate({
     mutation: gql`
     mutation ($userId: String, $moduleName: String, $actionName: String, $attributes: attributesObject) {

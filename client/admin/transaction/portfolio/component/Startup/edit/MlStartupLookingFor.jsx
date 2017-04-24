@@ -87,6 +87,7 @@ export default class MlStartupLookingFor extends React.Component{
   }
   onSaveAction(e){
     this.setState({startupLookingForList:this.state.startupInvestor})
+    this.setState({popoverOpen : false})
   }
 
   onLockChange(field, e){

@@ -73,6 +73,7 @@ export default class MlStartupAwards extends React.Component{
   }
   onSaveAction(e){
     this.setState({startupAwardsList:this.state.startupInvestor})
+    this.setState({popoverOpen : false})
   }
   onSelect(index, e){
     let details = this.state.startupInvestor[index]

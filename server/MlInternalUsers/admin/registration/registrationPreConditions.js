@@ -15,11 +15,9 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
          subChapterId=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.subChapterId:null;
     }
 
-    communityDetails = mlDBController.findOne('MlCommunity', {
-      subChapterId: subChapterId,
-      communityDefCode:registrationType,
-      isActive:true
-    }, context);
+    // {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]}
+
+    communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{subChapterId: subChapterId, communityDefCode:registrationType, "isActive":true}]}, context);
 
     //validate community availability in the cluster
     if(!communityDetails){

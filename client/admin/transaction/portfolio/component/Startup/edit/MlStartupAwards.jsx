@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -56,9 +56,18 @@ export default class MlStartupAwards extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchStartupPortfolioAwards(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, startupInvestor: response, startupAwardsList: response});
+    // const response = await fetchStartupPortfolioAwards(portfoliodetailsId);
+    // if (response) {
+    //   this.setState({loading: false, startupInvestor: response, startupAwardsList: response});
+    // }
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.awardsRecognition)
+    if(empty){
+      const response = await fetchStartupPortfolioAwards(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, startupInvestor: response, startupAwardsList: response});
+      }
+    }else{
+      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.awardsRecognition, startupAwardsList: that.context.startupPortfolio.awardsRecognition});
     }
   }
   addInvestor(){
@@ -73,6 +82,7 @@ export default class MlStartupAwards extends React.Component{
   }
   onSaveAction(e){
     this.setState({startupAwardsList:this.state.startupInvestor})
+    this.setState({popoverOpen : false})
   }
   onSelect(index, e){
     let details = this.state.startupInvestor[index]
@@ -259,3 +269,6 @@ export default class MlStartupAwards extends React.Component{
     )
   }
 }
+MlStartupAwards.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

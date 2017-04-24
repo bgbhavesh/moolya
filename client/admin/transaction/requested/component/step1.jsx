@@ -159,10 +159,16 @@ export default class Step1 extends React.Component{
     }
     }
     const response = await updateRegistrationActionHandler(Details);
-    return response;
+   this.props.refetchRegistrationAndTemplates();
+ }
+
+  updateRegistration(){
+    const resp=this.updateregistrationInfo();
+    toastr.success("Update Successful");
+    return resp;
   }
 
-  async updateRegistration(){
+  /*async updateRegistration(){
     const response= await this.updateregistrationInfo();
     console.log(response);
     if(response.success){
@@ -171,7 +177,7 @@ export default class Step1 extends React.Component{
       toastr.error(response.result);
     }
     return response;
-  }
+  }*/
 
   render(){
     let MlActionConfig = [

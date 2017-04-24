@@ -14,7 +14,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                 isExternaluser,
                 isActive,
                 email,
-                profileImage
+                profileImage,
                 InternalUprofile{
                   moolyaProfile{
                     firstName,

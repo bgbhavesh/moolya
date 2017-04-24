@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
@@ -38,7 +38,16 @@ export default class MlStartupAssets extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
   }
-
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.assets)
+    if(!empty){
+      this.setState({loading: false, startupAssets: this.context.startupPortfolio.assets, startupAssetsList:this.context.startupPortfolio.assets});
+    }
+  }
+  onSaveAction(e){
+    this.setState({startupAssetsList:this.state.startupAssets})
+    this.setState({popoverOpen : false})
+  }
   addAsset(){
     this.setState({selectedAsset : "default"})
     this.setState({popoverOpen : !(this.state.popoverOpen)})
@@ -222,7 +231,7 @@ export default class MlStartupAssets extends React.Component{
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn">Save</a>
+                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                     </div>
                   </div>
                 </div></div>
@@ -241,3 +250,6 @@ export default class MlStartupAssets extends React.Component{
     )
   }
 }
+MlStartupAssets.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

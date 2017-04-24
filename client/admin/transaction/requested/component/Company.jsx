@@ -140,6 +140,7 @@ export default class Company extends React.Component{
     //this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
     if(response.success){
+      toastr.success("Saved Successfully");
       this.props.getRegistrationDetails();
     }else{
       toastr.error(response.result);

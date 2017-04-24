@@ -138,6 +138,7 @@ export default class Individual extends React.Component{
     //this.props.getRegistrationDetails();
     const response = await updateRegistrationActionHandler(Details);
     if(response.success){
+      toastr.success("Saved Successfully");
       this.props.getRegistrationDetails();
     }else{
       toastr.error(response.result);

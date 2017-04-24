@@ -270,7 +270,7 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
       if(clusters.length==1&&clusters[0] == "all"){
         // chapters= MlChapters.find({isActive:true}).fetch()||[];
         chapters= mlDBController.find('MlChapters', {isActive:true}, context).fetch()||[];
-        if(chapters.length>=1){
+        if(args&&args.displayAllOption&&chapters.length>=1){
           chapters.push({"chapterName" : "All","_id" : "all"});
         }
 
@@ -282,7 +282,9 @@ MlResolver.MlQueryResolver['fetchActiveClusterChapters'] = (obj, args, context, 
             chapters = chapters.concat(activeChapters)
           }
         })
-        if(chapters.length>=1){
+
+        if(args&&args.displayAllOption&&chapters.length>=1){
+        //if(chapters.length>=1){
           chapters.push({"chapterName" : "All","_id" : "all"});
         }
       }

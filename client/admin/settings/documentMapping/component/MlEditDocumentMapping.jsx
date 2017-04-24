@@ -215,8 +215,8 @@ class MlEditDocumentMapping extends React.Component{
     let clusterquery=gql`  query{
   data:fetchActiveClusters{label:countryName,value:_id}
 }`;
-    let chapterquery=gql`query($clusters:[String]){  
-        data:fetchActiveClusterChapters(clusters:$clusters) {
+    let chapterquery=gql`query($clusters:[String],$displayAllOption:Boolean){  
+        data:fetchActiveClusterChapters(clusters:$clusters,displayAllOption:$displayAllOption) {
           value:_id
           label:chapterName
         }  
@@ -246,7 +246,7 @@ class MlEditDocumentMapping extends React.Component{
   }  
 }`;
 
-    let chapterOption={options: { variables: {clusters:this.state.clusters}}};
+    let chapterOption={options: { variables: {clusters:this.state.clusters,displayAllOption:true}}};
     let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
 
     const showLoader=this.state.loading;

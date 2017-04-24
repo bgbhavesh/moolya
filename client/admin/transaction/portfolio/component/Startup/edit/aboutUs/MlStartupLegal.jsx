@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
@@ -25,7 +25,12 @@ export default class MlStartupLegal extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
   }
-
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.legalIssue)
+    if(!empty){
+      this.setState({loading: false, data: this.context.startupPortfolio.legalIssue});
+    }
+  }
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -92,3 +97,6 @@ export default class MlStartupLegal extends React.Component{
     )
   }
 }
+MlStartupLegal.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

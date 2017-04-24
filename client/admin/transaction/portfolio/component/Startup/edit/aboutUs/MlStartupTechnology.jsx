@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -37,6 +37,16 @@ export default class MlStartupTechnology extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+  }
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.technologies)
+    if(!empty){
+      this.setState({loading: false, startupTechnologies: this.context.startupPortfolio.technologies, startupTechnologiesList:this.context.startupPortfolio.technologies});
+    }
+  }
+  onSaveAction(e){
+    this.setState({startupTechnologiesList:this.state.startupTechnologies})
+    this.setState({popoverOpen : false})
   }
   addTechnology(){
     this.setState({selectedObject : "default"})
@@ -211,7 +221,7 @@ export default class MlStartupTechnology extends React.Component{
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn">Save</a>
+                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                     </div>
                   </div>
                 </div></div>
@@ -229,3 +239,6 @@ export default class MlStartupTechnology extends React.Component{
     )
   }
 }
+MlStartupTechnology.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

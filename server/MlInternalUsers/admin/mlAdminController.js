@@ -176,18 +176,28 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                           let file = inner[key1]
                                           if(typeof file == 'object'){
                                               for (key2 in file){
-                                                 file[key2].fileUrl = resp;
+                                                if(key2 == "fileUrl"){
+                                                  file.fileUrl = resp;
+                                                }else{
+                                                  file[key2].fileUrl = resp;
+                                                }
                                               }
                                           }
                                       }
                                   }
                               }
+                              console.log(clientPortfolio);
                               switch (details.communityType){
                                   case 'Ideators':
                                       portfolio = {portfolio:{ideatorPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                                   case 'Startups':
+                                    if(data.indexArray){
+                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId,indexArray:data.indexArray}
+                                    }else{
                                       portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                    }
+
                                   break;
                               }
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)

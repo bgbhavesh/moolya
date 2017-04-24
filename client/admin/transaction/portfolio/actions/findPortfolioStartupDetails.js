@@ -77,6 +77,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                   companyName
                   isCompanyNamePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                   makePrivate
                 }
                 serviceProducts{

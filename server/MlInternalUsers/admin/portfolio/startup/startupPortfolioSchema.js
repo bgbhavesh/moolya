@@ -71,7 +71,7 @@ let startupPortfolioSchema = `
     type clientsOutput{
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        logo:String
+        logo:imagesTypeSchema,
         description:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean

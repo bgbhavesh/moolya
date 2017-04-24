@@ -34,7 +34,7 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
         for (key in updateFor) {
           if (startupPortfolio.hasOwnProperty(key))
           {
-            if(_.isArray(startupPortfolio[key])){
+            if(_.isArray(startupPortfolio[key]) && _.isArray(updateFor[key])){
               if(startupPortfolio[key].length != updateFor[key].length){
                 var diff = (updateFor[key].length)-(startupPortfolio[key].length);
                 for (i = diff; i > 0; i--){
@@ -44,8 +44,10 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
                 }
                   // let newObj = _.last(updateFor[key])
                   // startupPortfolio[key].push(newObj)
+              }else if(startupPortfolio[key].length == updateFor[key].length){
+                _.mergeWith(startupPortfolio[key], updateFor[key])
               }
-              if(args.indexArray.length>0){
+              if(args.indexArray && args.indexArray.length>0){
                 _.each(args.indexArray, function (index) {
                   _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
                     if (_.isArray(objValue)) {
@@ -54,8 +56,15 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
                   })
                 })
               }
-
-            } else{
+            }else if(_.isArray(startupPortfolio[key]) && _.isObject(updateFor[key])){
+              if(args.indexArray && args.indexArray.length>0){
+                _.each(args.indexArray, function (index) {
+                  _.extend(startupPortfolio[key][index], updateFor[key])
+                })
+              }else{
+                startupPortfolio[key].push(updateFor[key])
+              }
+            }else{
               _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
                 if (_.isArray(objValue)) {
                   return objValue.concat(srcValue);
@@ -63,8 +72,7 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
               });
             }
 
-          }
-          else {
+          }else {
             startupPortfolio[key] = updateFor[key];
           }
         }

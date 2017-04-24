@@ -60,7 +60,7 @@ MlResolver.MlQueryResolver['FindTransaction'] = (obj, args, context, info) => {
 
 }
 
-
+// This is being used in Request Types
 MlResolver.MlQueryResolver['fetchTransaction'] = (obj, args, context, info) => {
   // TODO : Authorization
 

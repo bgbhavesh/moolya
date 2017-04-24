@@ -3,19 +3,20 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
-import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
 import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
 import {initalizeFloatLabel} from '../../utils/formElemUtil';
 //import {addProfilePicAction} from "../actions/addProfilePicAction"
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
-import {RegistrationWizard} from '../../../admin/transaction/requested/component/RegistrationWizard';
-import {findRegistrationActionHandler} from '../../../admin/transaction/requested/actions/findRegistration'
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
-
-
+import {updateDataEntry} from '../actions/addProfilePicAction'
+import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction'
+import Datetime from "react-datetime";
+import moment from "moment";
+import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 
 
 export default class MlMyProfile extends React.Component{
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,99 +25,46 @@ export default class MlMyProfile extends React.Component{
       middleName: " ",
       lastName:" ",
       userName: " ",
-      uploadedProfilePic : "/images/ideator_01.png",
+      uploadedProfilePic : " ",
       registrationDetails: {},
       selectedBackendUser: " ",
-      data:{}
+      profilePic: " ",
+      foundationDate: null
+      // Details:{
+      //   firstName: " ",
+      //   middleName:" ",
+      //   lastName: " "
+      // }
     };
     this.getValue = this.getValue.bind(this);
-   // this.getRegistrationSocialLinks.bind(this);
-    this.findRegistration.bind(this);
-    this.onFileUpload.bind(this);
     this.onFileUploadCallBack.bind(this);
+    this.storeImage.bind(this);
+    this.onFoundationDateSelection.bind(this);
+    this.firstNameUpdation.bind(this);
+    this.middleNameUpdation.bind(this);
+    this.lastNameUpdation.bind(this);
+    this.displayNameUpdation.bind(this);
+    this.updateProfile.bind(this);
+    //this.fileUpdation.bind(this);
+   // this.firstNameUpdation.bind(this);
     return this;
   }
-  async findRegistration() {
-    const response = await findRegistrationActionHandler(this.props.config);
-    this.setState({loading: false, registrationDetails: response});
-    return response;
+  onFoundationDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, foundationDate: value});
+    }
   }
 
-  //
-  // sendDataToParent(){
-  //   let data = this.state.data;
-  //   for (var propName in data) {
-  //     if (data[propName] === null || data[propName] === undefined) {
-  //       delete data[propName];
-  //     }
-  //   }
-  //   this.props.getIdeatorDetails(data)
-  // }
-  //
-  //
-  // onClick(field,e){
-  //   let details = this.state.data||{};
-  //   let key = e.target.id;
-  //   details=_.omit(details,[key]);
-  //   let className = e.target.className;
-  //   if(className.indexOf("fa-lock") != -1){
-  //     details=_.extend(details,{[key]:true});
-  //   }else{
-  //     details=_.extend(details,{[key]:false});
-  //   }
-  //   this.setState({data:details}, function () {
-  //     this.sendDataToParent()
-  //   })
-  //
-  // }
-
-
-   async getValue() {
-  // let Details = {
-  //   profilePic: this.refs.upload.value};
-    let userType = Meteor.userId();
-     let response = await findBackendUserActionHandler(userType);
-     // let profilePicResponse = await addProfilePicAction(Details);
-     console.log(response);
-     this.setState({selectedBackendUser: userType,loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
-                    middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
-                    lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
-                    userName: response.profile.InternalUprofile.moolyaProfile.displayName
-     });
-  }
-
-
-
-  componentWillMount(){
-    initalizeFloatLabel();
-    const resp=this.getValue();
-    return resp;
-  }
-
-componentDidMount()
+  componentDidMount()
   {
-
     $(function() {
       $('.float-label').jvFloat();
     });
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
-    $("#informationb").click(function(){
-      $(".hide_div").hide();
-      $("#information_div").show();
-    });
-    $("#contactb").click(function(){
-      $(".hide_div").hide();
-      $("#contact_div").show();
-    });
-    $("#locationb").click(function(){
-      $(".hide_div").hide();
-      $("#location_div").show();
+
+    $('.myprofile_left a').click(function(){
+      $('.myprofile_left a').removeClass("active");
+      $(this).addClass("active");
     });
 
     var swiper = new Swiper('.profile_container', {
@@ -136,6 +84,80 @@ componentDidMount()
     });
   }
 
+  onFileUploadCallBack(resp) {
+    if (resp) {
+      console.log(resp);
+      this.setState({"uploadedProfilePic": resp});
+      var temp = $.parseJSON(this.state.uploadedProfilePic).result;
+      this.setState({"uploadedProfilePic":temp});
+      console.log(temp);
+     // toastr.success("Update Successful");
+      this.storeImage();
+      return temp;
+
+    }
+  }
+
+  // async fileUpdation(Details){
+  //   let userId = Meteor.userId();
+  //   const response = await updateDataEntry(Details,userId);
+  //   toastr.success("Update Successful");
+  //   return response;
+  //
+  // }
+  //
+  async firstNameUpdation(e) {
+    this.setState({firstName: e.target.value})
+  }
+
+  async middleNameUpdation(e) {
+    this.setState({middleName: e.target.value})
+  }
+
+  async lastNameUpdation(e) {
+    this.setState({lastName: e.target.value})
+  }
+
+  async displayNameUpdation(e) {
+    this.setState({userName: e.target.value})
+  }
+
+
+
+  async storeImage() {
+  let Details = {
+    profileImage : this.state.uploadedProfilePic,
+    firstName :this.state.firstName,
+    middleName : this.state.middleName,
+    lastName : this.state.lastName,
+    userId : Meteor.userId()
+  }
+    const dataresponse = await updateDataEntry(Details);
+  console.log(dataresponse);
+    toastr.success("Update Successful")
+    return dataresponse;
+  }
+
+  async getValue() {
+    let userType = Meteor.userId();
+    let response = await findBackendUserActionHandler(userType);
+    console.log(response);
+    this.setState({loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
+      middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
+      lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
+      userName: response.profile.InternalUprofile.moolyaProfile.displayName,
+      uploadedProfilePic:response.profile.profileImage
+    });
+  }
+
+  componentWillMount(){
+    const resp=this.getValue();
+    return resp;
+  }
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
+
   async handleSuccess() {
     this.resetBackendUers();
   }
@@ -144,77 +166,78 @@ componentDidMount()
     console.log('error handle');
     console.log(response);
   }
-  updateProfile(){
+  async updateProfile(){
     const resp=this.onFileUpload();
-    toastr.success("Update Successful");
     return resp;
   }
 
-  onFileUpload(e){
+  async onFileUpload(){
+    // let file=document.getElementById("profilePic").files[0];
     let user = {
       profile: {
-        InternalUprofile: {moolyaProfile: {profileImage:" "}}
+        InternalUprofile: {moolyaProfile: {profileImage:" " }}
       }
     }
-    let fileName= e.target.files[0].name;
-    let userId = Meteor.userId();
-    let data = {moduleName: "PORTFOLIO", actionName: "UPDATE", userId:userId, user: user}
-    let response = multipartASyncFormHandler(data, fileName, "registration", this.onFileUploadCallBack.bind(this));
-  }
-
-  onFileUploadCallBack(resp){
-    if(resp){
-       this.setState({"uploadedProfilePic" : resp.result})
-      // this.props.getRegistrationSocialLinks();
-      console.log(resp.result)
+    let file=document.getElementById("profilePic").files[0];
+    if(file) {
+      let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
     }
+    else{
+      this.storeImage();
+    }
+
+    //this.props.onFileUpload(file,documentId);
   }
-
-
 
   render(){
-    // let MlActionConfig = [
-    //   {
-    //     showAction: true,
-    //     actionName: 'save',
-    //     handler: this.updateProfile.bind(this)
-    //   },
-    //   {
-    //     showAction: true,
-    //     actionName: 'cancel',
-    //     handler: null
-    //   }
-    // ];
+    let MlActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: this.updateProfile.bind(this)
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: null
+      }
+    ];
     const showLoader=this.state.loading;
 
     return (
       <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_padding_wrap">
-          <h2>My Profile</h2>
-          <div className="col-md-10 nopadding">
-            <div id="information_div" className="hide_div">
+        <div className="admin_padding_wrap">
+          <h2>My Profile Info</h2>
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id="" defaultValue={this.state.firstName}/>
+                      <input type="text" id="first_name" placeholder="First Name" className="form-control float-label"  defaultValue={this.state.firstName} onBlur={this.firstNameUpdation.bind(this)}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Middle Name" className="form-control float-label" id="" defaultValue={this.state.middleName}/>
+                      <input type="text" placeholder="Middle Name" className="form-control float-label" id="" defaultValue={this.state.middleName} onBlur={this.middleNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName}/>
+                      <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName} onBlur={this.lastNameUpdation.bind(this)} />
                     </div>
-                    <div className="form-group steps_pic_upload">
-                      <div className="previewImg ProfileImg">
-                        <img src=" "/>
-                      </div>
+                    <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
-                        <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
+                        <input type="file" className="upload" id="profilePic"/>
                       </div>
-
+                      <div className="previewImg ProfileImg">
+                        <img src={this.state.uploadedProfilePic}/>
+                      </div>
                     </div>
                   </form>
                 </div>
@@ -223,7 +246,7 @@ componentDidMount()
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName}/>
+                      <input type="text" placeholder="Display Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
                       <input type="password" placeholder="Password" className="form-control float-label" id=""/>
@@ -234,15 +257,15 @@ componentDidMount()
                       <FontAwesome name='eye' className="password_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Date Picker" className="form-control float-label" id=""/>
-                      <FontAwesome name='calendar' className="password_icon"/>
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.foundationDate} onChange={this.onFoundationDateSelection.bind(this)}/>
+                      <FontAwesome name="calendar" className="password_icon"/>
                     </div>
                     <div className="form-group">
                       <div className="input_types">
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="1"/><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="1" defaultChecked="checked"/><label htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
                         <input id="radio2" type="radio" name="radio" value="2"/><label htmlFor="radio2"><span><span></span></span>Female</label>
@@ -254,224 +277,12 @@ componentDidMount()
                   </form>
                 </div>
               </div>
-            </div>
-            <div id="location_div" className="hide_div">
 
-              <div className="swiper-container profile_container">
-                <div className="swiper-wrapper">
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-
-                </div>
-                <div className="swiper-pagination"></div>
-              </div>
-              <div className="col-md-5">
-                <div className="form-group">
-                  <input type="text" placeholder="Cluster" className="form-control float-label" id="" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Wing" className="form-control float-label" id="" />
-                </div>
-              </div>
-              <div className="col-md-5">
-                <div className="form-group">
-                  <input type="text" placeholder="Chapter" className="form-control float-label" id="" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Sub Wing" className="form-control float-label" id="" />
-                </div>
-              </div>
-              <div className="col-md-2"></div>
-              <div className="col-md-12">
-                <div className="form-group">
-                  <input type="text" placeholder="Role" className="form-control float-label" id="" />
-                </div>
-              </div>
-            </div>
-            <div id="contact_div" className="hide_div">
-
-
-              <div className="col-md-6 nopadding-left">
-
-                <div className="panel panel-default profile_tabs">
-                  <div className="panel-heading">
-                    <h3 className="panel-title">Contact Number</h3>
-                  </div>
-                  <div className="panel-body">
-
-                    <div className="form_emails_left">
-                      <ul>
-                        <li><a href="#">Work</a></li>
-                        <li><a href="#">Office</a></li>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">New</a></li>
-                      </ul>
-                    </div>
-                    <div className="form_emails_right">
-                      <div className="form-group">
-                        <select className="form-control float-label">
-                          <option>Number Type</option>
-                          <option>test</option>
-                        </select>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Country Code" className="form-control float-label" id="" />
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Enter Number" className="form-control float-label" id="" />
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-                <div className="col-md-12 nopadding">
-                  <div className="panel panel-default profile_tabs">
-                    <div className="panel-heading">
-                      <h3 className="panel-title">Email Id</h3>
-                    </div>
-                    <div className="panel-body">
-
-                      <div className="form_emails_left">
-                        <ul>
-                          <li><a href="#">Work</a></li>
-                          <li><a href="#">Office</a></li>
-                          <li><a href="#">Home</a></li>
-                          <li><a href="#">New</a></li>
-                        </ul>
-                      </div>
-                      <div className="form_emails_right">
-                        <div className="form-group">
-                          <select className="form-control float-label">
-                            <option>Email Id Type</option>
-                            <option>test</option>
-                          </select>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Email Id" className="form-control float-label" id="" />
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="panel panel-default profile_tabs">
-                  <div className="panel-heading">
-                    <h3 className="panel-title">Address</h3>
-                  </div>
-                  <div className="panel-body">
-                    <div className="form_emails_left">
-                      <ul>
-                        <li><a href="#">Work</a></li>
-                        <li><a href="#">Office</a></li>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">New</a></li>
-                      </ul>
-                    </div>
-                    <div className="form_emails_right">
-                      <ScrollArea
-                        speed={0.8}
-                        className="form_emails_right_scroll"
-                        smoothScrolling={true}
-                      >
-                        <div className="form-group">
-                          <select className="form-control float-label">
-                            <option>Address Type</option>
-                            <option>test</option>
-                          </select>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Name" className="form-control float-label" id="" />
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Phone Number" className="form-control float-label" id="" />
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Flat/House/Floor/Bulding No" className="form-control float-label" id="" />
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Colony/Street/Locality" className="form-control float-label" id="" />
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Landmark" className="form-control float-label" id="" />
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Area" className="form-control float-label" id="" />
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Town/City" className="form-control float-label" id="" />
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="State" className="form-control float-label" id="" />
-                        </div>
-                      </ScrollArea>
-                    </div>
-                  </div>
-                </div>
-
-
-
-              </div>
-            </div>
+            </ScrollArea>
           </div>
-          <div className="col-md-2 nopadding">
-            <div className="myprofile_left">
-              <a href="" className="hex_btn hex_btn_in" id="informationb">
-                <FontAwesome name='info'/>
-              </a>
-              <a href="" className="hex_btn hex_btn_in" id="contactb">
-                <FontAwesome name='sort-desc' className=""/>
-              </a>
-              <a href="" className="hex_btn hex_btn_in" id="locationb">
-                <FontAwesome name='eye'/>
-              </a>
-            </div>
-          </div>
-          <span></span>
-        {/*  <div className="bottom_actions_block">
-            <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
-            <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
-            <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
-            <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
-            <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
-          </div>*/}
-                    </div>)}
+        </div>)}
+        <span className="actions_switch"></span>
+        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )
   }

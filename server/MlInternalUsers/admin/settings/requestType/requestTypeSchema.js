@@ -20,6 +20,6 @@ let RequestTypeSchema = `
         FindRequestType(_id:String): Requests
         FetchRequestType:[Requests]
     }
-`
+`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],RequestTypeSchema]);

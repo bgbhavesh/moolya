@@ -157,7 +157,7 @@ export default class Step5 extends React.Component {
       toastr.success("User Approved Successfully")
     }else{
       this.props.getRegistrationKYCDetails();
-      toastr.error("Please upload the kyc documents")
+      toastr.error("Please validate user")
     }
   }
   approveUser(){

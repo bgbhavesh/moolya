@@ -187,7 +187,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                       portfolio = {portfolio:{ideatorPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                                   case 'Startups':
-                                      portfolio = {portfolio:{startupsPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                               }
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
@@ -197,7 +197,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               }
             break;
             case "PROFILE":{
-              console.log("this is a profile hit  ")
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                MlResolver.MlMutationResolver['createRegistration'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
+              });
+              break;
             }
           }
 
@@ -283,7 +287,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     console.log("Countries Invoked..!!");
     graphQLServer.options('/countries', cors());
 
-  graphQLServer.post(config.countries, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
+  graphQLServer.get(config.countries, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
   {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -302,12 +306,21 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       let data = req.body.data;
       let apiKey = req.header("apiKey");
       if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
-          let response;
-          if(data) {
+            let response;
+            let countries = [];
             response = MlResolver.MlQueryResolver['fetchCountriesAPI'](null, null, context, null);
-            console.log(response);
-            res.send(response);
-          }
+            if(response){
+              response.map(function (country, key){
+                let json={
+                  id:country._id,
+                  name:country.country
+                }
+                countries.push(json)
+              })
+            }
+            console.log(countries);
+            res.send(countries);
+
       }else{
         let code = 401;
         let result = {message:"The request did not have valid authorization credentials"}
@@ -347,9 +360,19 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           let response;
           if(data) {
-            response = MlResolver.MlQueryResolver['fetchCitiesPerCountry'](null, {countryId:data.countryId}, context, null);
-            console.log(response);
-            res.send(response);
+            let cities = [];
+            response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {countryId:data.countryId}, context, null);
+            if(response){
+              response.map(function (city, key){
+                    let json={
+                      id:city._id,
+                      name:city.name
+                    }
+                    cities.push(json)
+                })
+            }
+            console.log(cities);
+            res.send(cities);
           }
         }else{
           let code = 401;

@@ -21,7 +21,7 @@ export default class ContactDetails extends React.Component{
       selectedContactTab: null,
       selectedNumberTypeLabel: null,
       contactNumberObject:{numberType : "",numberTypeName: "",countryCode: "",contactNumber: ""},
-      contactNumberArray : this.props.registrationInfo.contactInfo || [],
+      contactNumberArray : this.props.registrationInfo.contactInfo|| [],
       activeTab : "active"
 
     }

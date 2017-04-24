@@ -67,6 +67,7 @@ export function multipartASyncFormHandler(data,file,endPoint,callback) {
       filexmlhttp.addEventListener("load", function () {
 
         if (filexmlhttp.status < 400) {
+          console.log(filexmlhttp.response);
             callback(filexmlhttp.response);
         }
         else {

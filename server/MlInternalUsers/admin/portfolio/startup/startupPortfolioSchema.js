@@ -249,11 +249,14 @@ let startupPortfolioSchema = `
        about : String
        isAboutPrivate:Boolean
     }
-    
+    input logo{
+      fileName : String,
+      fileUrl:String
+    }
     input clients{
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        logo:String
+        logo:logo,
         description:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean

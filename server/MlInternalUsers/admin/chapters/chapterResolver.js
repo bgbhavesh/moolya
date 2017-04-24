@@ -350,7 +350,7 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
           subChapters = subChapters.concat(activeSubChapters)
         }
       })
-      if(subChapters.length>=1){
+      if(args&&args.displayAllOption&&subChapters.length>=1){
         subChapters.push({"subChapterName" : "All","_id" : "all"});
       }
     }
@@ -362,7 +362,7 @@ MlResolver.MlQueryResolver['fetchActiveChaptersSubChapters'] = (obj, args, conte
           subChapters = subChapters.concat(activeSubChapters)
         }
       })
-      if(subChapters.length>=1){
+      if(args&&args.displayAllOption&&subChapters.length>=1){
         subChapters.push({"subChapterName" : "All","_id" : "all"});
       }
 

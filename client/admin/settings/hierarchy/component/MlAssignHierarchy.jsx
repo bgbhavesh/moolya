@@ -85,7 +85,7 @@ export default class MlAssignHierarchy extends React.Component {
         let roleDetails=[]
         for(let i=0;i<response.length;i++){
           let role=response[i]
-          if((role.isHierarchyAssigned==false)) {
+          if((role.isHierarchyAssigned==false||role.isHierarchyAssigned==null)) {
             let json = {
                 roleId: role._id,
                 roleName: role.roleName,

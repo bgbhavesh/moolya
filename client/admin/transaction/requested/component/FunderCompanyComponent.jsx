@@ -318,6 +318,7 @@ export default class Company extends React.Component{
                    <div className="form-group">
                    <input type="text" ref="investmentAmount" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.investmentAmount} placeholder="Enter Amount" className="form-control float-label" id=""/>
                   </div>
+                    <br/><br/><br/><br/><br/><br/><br/>
                   </div>
               </div>
             </form>

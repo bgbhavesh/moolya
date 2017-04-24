@@ -234,6 +234,7 @@ export default class institution extends React.Component{
             </div>
             <div className="form-group">
               <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
+              <br/><br/><br/><br/><br/><br/><br/>
             </div>
 
     </form>

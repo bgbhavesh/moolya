@@ -70,15 +70,7 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-    //validate community availability in the cluster
-    /*let reginfo =args.registrationDetails||{};
-    let countryId = reginfo.countryId;
-    let commId = reginfo.registrationType;
-    let cluster =  mlDBController.findOne('MlClusters', {countryId: countryId}, context) || {};
-    let community = mlDBController.findOne('MlCommunity',{communityDefCode:commId,clusterId:cluster._id,isActive:true},context)||{};*/
-
-    let updatedResponse
-    //if(community._id) {
+    let updatedResponse;
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
@@ -188,21 +180,19 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           let result = {username: userObject.username};
           // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
           mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
-          let response = new MlRespPayload().successPayload(result, code);
-          return response
+          updatedResponse = new MlRespPayload().successPayload(result, code);
+          return updatedResponse;
         }
 
         // MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
       } else {
-        // updatedResponse = MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
         updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context)
-      /*}
-    }else{
-      let code = 409;
-      let response = new MlRespPayload().errorPayload("Community not available for cluster", code);
-      return response;*/
     }
-    return updatedResponse
+
+    let code = 200;
+    let result = {id: id};
+    updatedResponse = new MlRespPayload().successPayload(result, code);
+    return updatedResponse;
   }
 }
 

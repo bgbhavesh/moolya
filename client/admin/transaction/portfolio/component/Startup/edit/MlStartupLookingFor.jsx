@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -56,9 +56,14 @@ export default class MlStartupLookingFor extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchStartupPortfolioLookingFor(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, startupInvestor: response, startupLookingForList:response});
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.lookingFor)
+    if(empty){
+      const response = await fetchStartupPortfolioLookingFor(portfoliodetailsId);
+      if (response) {
+          this.setState({loading: false, startupInvestor: response, startupLookingForList:response});
+      }
+    }else{
+      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.lookingFor, startupLookingForList: that.context.startupPortfolio.lookingFor});
     }
   }
   addInvestor(){
@@ -87,6 +92,7 @@ export default class MlStartupLookingFor extends React.Component{
   }
   onSaveAction(e){
     this.setState({startupLookingForList:this.state.startupInvestor})
+    this.setState({popoverOpen : false})
   }
 
   onLockChange(field, e){
@@ -162,12 +168,13 @@ export default class MlStartupLookingFor extends React.Component{
   }
 
   render(){
-    let query=gql`query{
-      data:fetchTechnologies {
-        label:displayName
-        value:_id
-      }
-    }`;
+    let query=gql`query($communityCode:String){
+        data:fetchLookingFor(communityCode:$communityCode) {
+          label:lookingForName
+          value:_id
+        }
+      }`;
+    let lookingOption={options: { variables: {communityCode:"STU"}}};
     let that = this;
     let startupLookingForList = that.state.startupLookingForList || [];
     return (
@@ -222,6 +229,7 @@ export default class MlStartupLookingFor extends React.Component{
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                       labelKey={'label'} queryType={"graphql"} query={query}
                                       isDynamic={true}
+                                      queryOptions={lookingOption}
                                       onSelect={this.onOptionSelected.bind(this)}
                                       selectedValue={this.state.selectedVal}/>
                       </div>
@@ -252,3 +260,6 @@ export default class MlStartupLookingFor extends React.Component{
     )
   }
 }
+MlStartupLookingFor.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

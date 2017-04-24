@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -28,6 +28,7 @@ export default class MlStartupClients extends React.Component{
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
+    this.onSaveAction.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -38,6 +39,12 @@ export default class MlStartupClients extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+  }
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
+    if(!empty){
+      this.setState({loading: false, startupClients: this.context.startupPortfolio.clients, startupClientsList:this.context.startupPortfolio.clients});
+    }
   }
 
   addClient(){
@@ -84,6 +91,10 @@ export default class MlStartupClients extends React.Component{
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
+  }
+  onSaveAction(e){
+    this.setState({startupClientsList:this.state.startupClients})
+    this.setState({popoverOpen : false})
   }
 
   onStatusChangeNotify(e)
@@ -275,3 +286,6 @@ export default class MlStartupClients extends React.Component{
     )
   }
 }
+MlStartupClients.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

@@ -27,6 +27,7 @@ let transactionsSchema = `
         subDepartmentId     : String
     }
     type Transactions{
+       _id                      : String
       transactionTypeName       : String
       transactionTypeId         : String
       requestTypeName           : String
@@ -95,7 +96,7 @@ let transactionsSchema = `
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]
-      fetchTransactions(transactionType:String):[Transactions]
+      fetchTransactions(transactionType:String,):[Transactions]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);

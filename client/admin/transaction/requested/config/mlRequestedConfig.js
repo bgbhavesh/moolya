@@ -50,13 +50,13 @@ const mlUserTypeTableConfig=new MlViewer.View({
           toastr.error("Please Select a record");
         }
       }
-    },
+    }/*,
     {
       showAction: true,
       actionName: 'add',
       iconID:'createRegistrationRequest',
       handler: null
-    }
+    }*/
     // {
     //   showAction: true,
     //   actionName: 'logout',

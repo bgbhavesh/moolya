@@ -134,3 +134,13 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLookingFor'] = (obj, args, cont
   return [];
 }
 
+MlResolver.MlQueryResolver['fetchStartupPortfolioAwards'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
+      return portfolio['awardsRecognition'];
+    }
+  }
+
+  return [];
+}

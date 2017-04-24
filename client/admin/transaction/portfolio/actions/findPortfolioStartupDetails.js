@@ -210,3 +210,31 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
   // return data
   return id
 }
+
+export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
+                  award
+                  isAwardPrivate
+                  year
+                  isYearPrivate
+                  description
+                  isDescriptionPrivate
+                  makePrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioAwards;
+  // let data = _.omit(id,'__typename')
+  // return data
+  return id
+}

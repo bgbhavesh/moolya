@@ -14,15 +14,18 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
         {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
       ]},context)
      }
-    let teamStructureAssignment = response.teamStructureAssignment;
-    let filteredSteps = [];
-    teamStructureAssignment.map(function (step, key){
-        if(step.assignedLevel==args.type){
-          filteredSteps.push(step)
-        }
-    })
-    response.teamStructureAssignment = filteredSteps;
-  return response;
+     if(response){
+       let teamStructureAssignment = response.teamStructureAssignment;
+       let filteredSteps = [];
+       teamStructureAssignment.map(function (step, key){
+         if(step.assignedLevel==args.type){
+           filteredSteps.push(step)
+         }
+       })
+       response.teamStructureAssignment = filteredSteps;
+       return response;
+     }
+
 }
 
 MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info) => {

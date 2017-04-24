@@ -1,6 +1,6 @@
 import MlResolver from "../mlAdminResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
-
+import MlRegistrationPreCondition from './registrationPreConditions';
 
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -71,6 +71,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
   // TODO : Authorization
   if (args.registrationId) {
     let updatedResponse;
+    let validationCheck=null;
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
@@ -88,6 +89,9 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
             subChapterId: details.subChapterId,
             communityDefCode: details.registrationType
           }, context) || {};
+
+        validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,details);
+        if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
         details.communityId = communityDetails._id;
         //details.communityName=communityDetails.communityName;
@@ -186,7 +190,9 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         // MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
       } else {
-        updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context)
+        validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id);
+        if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+        updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context);
     }
 
     let code = 200;

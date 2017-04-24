@@ -71,14 +71,14 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
   // TODO : Authorization
   if (args.registrationId) {
     //validate community availability in the cluster
-    let reginfo =args.registrationDetails||{};
+    /*let reginfo =args.registrationDetails||{};
     let countryId = reginfo.countryId;
     let commId = reginfo.registrationType;
     let cluster =  mlDBController.findOne('MlClusters', {countryId: countryId}, context) || {};
-    let community = mlDBController.findOne('MlCommunity',{communityDefCode:commId,clusterId:cluster._id,isActive:true},context)||{};
+    let community = mlDBController.findOne('MlCommunity',{communityDefCode:commId,clusterId:cluster._id,isActive:true},context)||{};*/
 
     let updatedResponse
-    if(community._id) {
+    //if(community._id) {
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
@@ -196,11 +196,11 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       } else {
         // updatedResponse = MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
         updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context)
-      }
+      /*}
     }else{
       let code = 409;
       let response = new MlRespPayload().errorPayload("Community not available for cluster", code);
-      return response;
+      return response;*/
     }
     return updatedResponse
   }

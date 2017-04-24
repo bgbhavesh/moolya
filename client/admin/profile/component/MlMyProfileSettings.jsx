@@ -7,6 +7,8 @@ import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+import {updateSettings} from '../actions/addSettingsAction';
+
 
 //import ContactDetails from '../../transaction/requested/component/contactDetails';
 
@@ -19,6 +21,8 @@ export default class MyProfileSettings extends React.Component{
     }
     this.optionsBySelectCurrencySymbol.bind(this);
     this.optionsBySelectMeasurementSystem.bind(this);
+    this.dataSaving.bind(this);
+    this.onSave.bind(this);
   }
   componentDidMount()
   {
@@ -67,6 +71,24 @@ export default class MyProfileSettings extends React.Component{
     this.setState({measurementSystem:data.value})
   }
 
+ async onSave(){
+
+    this.dataSaving();
+  }
+
+
+  async dataSaving(){
+
+    let Details = {
+      currencySymbol : this.state.currencySymbol,
+      measurementSystem :this.state.measurementSystem,
+      userId : Meteor.userId()
+    }
+    const dataresponse = await updateSettings(Details);
+    console.log(dataresponse);
+    toastr.success("Update Successful")
+    return dataresponse;
+  }
 
   render(){
 
@@ -74,15 +96,22 @@ export default class MyProfileSettings extends React.Component{
       {
         showAction: true,
         actionName: 'save',
-        handler: null
+        handler: async(event) => this.onSave()
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => FlowRouter.go('/admin/myprofile/AddressBook')
       }
     ];
-
+    //
+    // let languagequery =gql`
+    //
+    // `;
+    //
+    // let timezonequery =gql`
+    //
+    // `;
 
 
     let currencyquery=gql` query{  
@@ -121,12 +150,14 @@ export default class MyProfileSettings extends React.Component{
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Language" className="form-control float-label" id=""/>
-                  <FontAwesome name='language' className="password_icon"/>
+                  <Select
+                    name="form-field-name" placeholder={"Language"}
+                    className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Time Zone" className="form-control float-label" id=""/>
-                  <FontAwesome name='clock-o' className="password_icon"/>
+                  <Select
+                    name="form-field-name"   placeholder={"Time Zone"}
+                    className="float-label"/>
                 </div>
               </div>
             </form>

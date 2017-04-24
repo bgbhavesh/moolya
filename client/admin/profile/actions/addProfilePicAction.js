@@ -22,8 +22,8 @@ export async function updateDataEntry(Details) {
       "profileImage": Details.profileImage,
       "firstName": Details.firstName,
       "middleName": Details.middleName,
-      "lastName":  Details.lastName
-
+      "lastName":  Details.lastName,
+      "userName": Details.userName
       }
     }
   })

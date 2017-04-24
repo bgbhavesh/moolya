@@ -39,7 +39,9 @@ export default class MlHierarchyDetails extends React.Component {
     console.log(details);
     this.setState({'finalApproval':details})
   }
-
+  getFinalApprovalDetails(details){
+    this.setState({'finalApproval':details})
+  }
   componentDidMount() {
     $('.switch input').change(function() {
       if ($(this).is(':checked')) {
@@ -142,17 +144,35 @@ export default class MlHierarchyDetails extends React.Component {
   }*/
 
 
-  isExpandableRow(row) {
+  /*isExpandableRow(row) {
     if (row.departmentId!=undefined) return true;
     else return false;
+  }*/
+
+  isExpandableRow() {
+    return true;
   }
 
   expandComponent(row) {
+    let rowValue,selctedRowDetails=false;
+    let selectedRow=this.refs.table
+    if(selectedRow){
+     let selectedRowValue=selectedRow.state.selectedRowKeys;
+     if(selectedRowValue.length==1){
+       if(selectedRowValue[0]){
+         rowValue=selectedRowValue[0]
+         if(rowValue==row.departmentId){
+           selctedRowDetails=true
+         }
+       }
+     }
+    }
     return (
       <div>
-      {row.departmentId!=''?
-      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} getFinalApprovalRole={this.getFinalApprovalRole.bind(this)}/>
-      :<div></div>}
+      {selctedRowDetails?
+      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} getFinalApprovalRole={this.getFinalApprovalRole.bind(this)} getFinalApprovalDetails={this.getFinalApprovalDetails.bind(this)}/>:
+        <div></div>
+      }
       </div>
     );
   }
@@ -176,7 +196,7 @@ export default class MlHierarchyDetails extends React.Component {
     const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
     };
-    const selectRow = {
+   const selectRow = {
       mode: 'checkbox',
       bgColor: '#feeebf',
       clickToSelect: true, // click to select, default is false
@@ -194,11 +214,11 @@ export default class MlHierarchyDetails extends React.Component {
               smoothScrolling={true}
               default={true}
             >
-              <BootstrapTable  data={ this.state.hierarchyInfo }
+              <BootstrapTable ref='table' data={ this.state.hierarchyInfo }
                                options={ options }
                                expandableRow={ this.isExpandableRow }
                                expandComponent={ this.expandComponent.bind(this) }
-                               selectRow={ selectRow }
+                              selectRow={selectRow}
                                pagination
                                search
               >

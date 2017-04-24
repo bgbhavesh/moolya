@@ -43,6 +43,7 @@ export default class MlMyProfile extends React.Component{
     this.firstNameUpdation.bind(this);
     this.middleNameUpdation.bind(this);
     this.lastNameUpdation.bind(this);
+    this.displayNameUpdation.bind(this);
     this.updateProfile.bind(this);
     //this.fileUpdation.bind(this);
    // this.firstNameUpdation.bind(this);
@@ -117,6 +118,10 @@ export default class MlMyProfile extends React.Component{
     this.setState({lastName: e.target.value})
   }
 
+  async displayNameUpdation(e) {
+    this.setState({userName: e.target.value})
+  }
+
 
 
   async storeImage() {
@@ -125,6 +130,7 @@ export default class MlMyProfile extends React.Component{
     firstName :this.state.firstName,
     middleName : this.state.middleName,
     lastName : this.state.lastName,
+    userName: this.state.userName,
     userId : Meteor.userId()
   }
     const dataresponse = await updateDataEntry(Details);
@@ -241,7 +247,7 @@ export default class MlMyProfile extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Display Name" className="form-control float-label" id="" defaultValue={this.state.userName}/>
+                      <input type="text" placeholder="Display Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
                       <input type="password" placeholder="Password" className="form-control float-label" id=""/>
@@ -260,7 +266,7 @@ export default class MlMyProfile extends React.Component{
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="1"/><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="1" defaultChecked="checked"/><label htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
                         <input id="radio2" type="radio" name="radio" value="2"/><label htmlFor="radio2"><span><span></span></span>Female</label>

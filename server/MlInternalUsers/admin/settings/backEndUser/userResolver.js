@@ -700,3 +700,20 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
   resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
   return resp
 }
+
+
+MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => {
+  // let user = Meteor.users.findOne({_id: args.userId});
+  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let resp;
+  if(user){
+    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
+    resp = mlDBController.update('users', args.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
+  }
+  if(resp){
+    resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
+    return resp
+  }
+  resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
+  return resp
+}

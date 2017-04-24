@@ -36,9 +36,16 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
           {
             if(_.isArray(startupPortfolio[key])){
               if(startupPortfolio[key].length != updateFor[key].length){
-                  let newObj = _.last(updateFor[key])
+                var diff = (updateFor[key].length)-(startupPortfolio[key].length);
+                for (i = diff; i > 0; i--){
+                  let idx = updateFor[key].length-i;
+                  let newObj = updateFor[key][idx];
                   startupPortfolio[key].push(newObj)
-              }else{
+                }
+                  // let newObj = _.last(updateFor[key])
+                  // startupPortfolio[key].push(newObj)
+              }
+              if(args.indexArray.length>0){
                 _.each(args.indexArray, function (index) {
                   _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
                     if (_.isArray(objValue)) {

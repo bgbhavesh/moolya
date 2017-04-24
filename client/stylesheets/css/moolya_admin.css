@@ -1089,7 +1089,7 @@ button:focus{outline: 0;}
   align-items: center;
   justify-content: center;
 }
-
+.rdtPicker{ position: fixed !important;}
 /*.moolya_admin .react-bs-container-body{overflow:hidden;}*/
 /*.react-bs-container-body {position:relative !important;}*/
 /*media quaries started*/

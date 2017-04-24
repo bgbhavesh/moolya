@@ -22,7 +22,7 @@ class MlSms{
       MlSms.instance = this;
     }
     this.sendSMS.bind(this);
-    this.sendSMSIntl.bind(this);
+    this.send.bind(this);
     return MlSms.instance;
   }
 
@@ -48,7 +48,7 @@ class MlSms{
     }
   }
 
-    sendSMSIntl(countryCode,number,msg){
+    send(countryCode,number,msg){
          //extract countryCode
       let country=mlDBController.findOne('MlCountries',{$or:[{"_id":countryCode},{"countryCode":countryCode}]});
       let countryPhoneNumberCode=country&&country.phoneNumberCode?country.phoneNumberCode:null;

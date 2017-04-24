@@ -16,7 +16,7 @@ import {mlSubChapterListConfig} from '../../admin/subChapter/config/mlSubChapter
 import {mlSubChapterDashboardListConfig} from '../../admin/dashboard/config/mlSubChapterDashboardConfig'
 import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
-import MlTransactionRequested from '../../admin/transaction/requested/component/MlTransactionRequested'
+import MlTransactionRequested from '../../admin/transaction/requests/components/MlTransactionRequested'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'

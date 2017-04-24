@@ -10,6 +10,9 @@
       "username": "raksanconsulting",
       "key": "IMRne62ShKE6Q8zU0NJBsQ"
     },
+    "smsConfig":{
+      "isWhiteListEnabled":true
+    },
     "aws":{
       "s3Config":{
         "accessKeyId":"",

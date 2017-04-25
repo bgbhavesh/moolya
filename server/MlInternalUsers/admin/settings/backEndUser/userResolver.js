@@ -717,3 +717,31 @@ MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => 
   resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
   return resp
 }
+
+
+MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, info) => {
+  let id = " "
+  //let registrationDetails = mlDBController.findOne('users', {_id: args.userId}, context) || {};
+  if (args && args.addressBook) {
+    if (args.type == "CONTACTTYPE") {
+      id = mlDBController.update('users', context.userId, {"profile.contactInfo": args.addressBook.contactInfo}, {$set: true}, context)
+    } else if (args.type == "ADDRESSTYPE") {
+      id = mlDBController.update('users', context.userId, {"profile.addressInfo": args.addressBook.addressInfo}, {$set: true}, context)
+    } else if (args.type == "EMAILTYPE") {
+      id = mlDBController.update('users', context.userId, {"profile.emailInfo": args.addressBook.emailInfo}, {$set: true}, context)
+    }
+    if (id) {
+      let code = 200;
+      let insertedData = users.findOne(id) || {};
+      let result = {registrationId: id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  }
+}
+
+MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
+       let rest = null;
+        let user = mlDBController.findOne('users', {_id: args.userId}, context);
+        return user.profile;
+}

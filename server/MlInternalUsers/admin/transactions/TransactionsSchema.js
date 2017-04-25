@@ -27,6 +27,7 @@ let transactionsSchema = `
         subDepartmentId     : String
     }
     type Transactions{
+       _id                      : String
       transactionTypeName       : String
       transactionTypeId         : String
       requestTypeName           : String

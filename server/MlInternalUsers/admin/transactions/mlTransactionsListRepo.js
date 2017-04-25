@@ -51,15 +51,18 @@ class MlTransactionsListRepo{
             transasctions=_.filter(transactionsInfo,function(transc){ return transc.transactionTypeName == 'registration'; })
             return transasctions
           break;
-          case 'Portfolio':
-            transasctions=_.filter(transactionsInfo, [transactionTypeName='Portfolio'])
+          case 'portfolio':
+            transasctions=_.filter(transactionsInfo,function(transc){ return transc.transactionTypeName == 'portfolio'; })
+            return transasctions
           break;
           case 'Office':
-            transasctions=_.filter(transactionsInfo, [transactionTypeName='Office'])
+            transasctions=_.filter(transactionsInfo,function(transc){ return transc.transactionTypeName == 'Office'; })
+            return transasctions
           break;
           case 'Others':
-          transasctions=_.filter(transactionsInfo, [transactionTypeName='Others'])
-          break;
+            transasctions=_.filter(transactionsInfo,function(transc){ return transc.transactionTypeName == 'Others'; })
+            return transasctions
+            break;
     }
    return null;
   }

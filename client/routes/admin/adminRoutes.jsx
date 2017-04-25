@@ -320,7 +320,6 @@ adminSection.route('/templates/assignTemplate/:id', {
 adminSection.route('/portfolio/tabcomponent', {
     action(params){
         mount(AdminLayout,{adminContent:<MlIdeatorPortfolioTemplate />})
-
     }
 });
 

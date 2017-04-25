@@ -3,19 +3,39 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import MlDetailsNotesComponent from './MlDetailsNotesComponent'
+import {findTransactionRequestActionHandler} from '../actions/findTransactionRequests'
+import moment from 'moment'
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import CreateRequestComponent from '../../requested/component/CreateRequestComponent'
 export default class MlTransactionRequested extends Component {
   constructor(props){
     super(props);
     this.state={
       requetsInfo:[],
+      createRequest:false,
     }
     return this;
   }
   componentWillMount() {
-    this.setState({requetsInfo:[{transactionCreatedDate:'',transactionTypeId:'',transactionTypeName:'',status:''}]})
-
+   // this.setState({requetsInfo:[{transactionCreatedDate:'',transactionTypeId:'',transactionTypeName:'',status:''}]})
+    const resp=this.findRequestDetails();
+    return resp;
   }
-
+    async findRequestDetails(){
+      let requestDetails = await findTransactionRequestActionHandler('registration');
+      let requestInfo = []
+      for (let i = 0; i < requestDetails.length; i++) {
+        let json = {
+          transactionCreatedDate: requestDetails[i].transactionCreatedDate,
+          requestTypeId: requestDetails[i].requestTypeId,
+          transactionTypeName: requestDetails[i].transactionTypeName,
+          status:'pending',
+          transactionId:requestDetails[i]._id
+        }
+        requestInfo.push(json)
+      }
+      this.setState({'requetsInfo':requestInfo})
+    }
 
   isExpandableRow(row) {
     if (row.transactionCreatedDate!=undefined) return true;
@@ -25,10 +45,25 @@ export default class MlTransactionRequested extends Component {
 
   expandComponent(row) {
    return (
-     <MlDetailsNotesComponent/>
+     <MlDetailsNotesComponent id={ row.transactionId } transaction={row}/>
     )
   }
+  creatRequestType(){
+      this.setState({createRequest:true});
+   /* return (
+      <CreateRequestComponent openPopUp={true}/>
+    )*/
+  }
+
   render() {
+    let MlActionConfig = [
+      {
+        showAction: true,
+        actionName: 'add',
+        iconID:'createRegistrationRequest',
+        handler: this.creatRequestType.bind(this)
+      }
+    ];
     const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
     };
@@ -37,6 +72,10 @@ export default class MlTransactionRequested extends Component {
       bgColor: '#feeebf',
       clickToSelect: true,  // click to select, default is false
       clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
+    }
+    function dateFormatter (data){
+     /* let createdDateTime=data&&data.state.requetsInfo&&data.state.requetsInfo;
+      return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;*/
     }
     return (
       <div className="admin_main_wrap">
@@ -56,13 +95,16 @@ export default class MlTransactionRequested extends Component {
                              selectRow={ selectRow }
                              pagination
             >
-              <TableHeaderColumn dataField="transactionCreatedDate" isKey={true} dataSort={true} width='62px' dataAlign='center'>Date&Time</TableHeaderColumn>
-              <TableHeaderColumn dataField="transactionTypeId">RequestId</TableHeaderColumn>
+              <TableHeaderColumn dataField="transactionId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
+              <TableHeaderColumn dataField="transactionCreatedDate" customComponent={dateFormatter(this)}>Date&Time</TableHeaderColumn>
+              <TableHeaderColumn dataField="requestTypeId">RequestId</TableHeaderColumn>
               <TableHeaderColumn dataField="transactionTypeName">Type</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             </BootstrapTable>
             </ScrollArea>
           </div>
+          {this.state.createRequest?(<CreateRequestComponent openPopUp={true}/>):""}
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
         </div>
       </div>
 

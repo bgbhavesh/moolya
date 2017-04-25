@@ -32,8 +32,6 @@ export default class MlStartupViewAboutUs extends React.Component {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
-    console.log("-------------------------------------");
-    console.log(response);
     if (response) {
       this.setState({loading: false,startupAboutUsList: response});
     }
@@ -123,13 +121,13 @@ export default class MlStartupViewAboutUs extends React.Component {
                       <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.aboutUs&&this.state.startupAboutUsList.aboutUs.description}.</p>
                       <h4>Rating</h4>
                       <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections .</p>
-                      <h4>Clients</h4>
+                      {/*<h4>Clients</h4>
 
                       {clientsArray.map(function (details, idx) {
                         return(<div className="col-lg-2 col-md-3 col-sm-3">
                           <p>{details.clients && details.clients.description}</p>
                         </div>)
-                      })}
+                      })}*/}
                       <h4>Service & Products</h4>
                       <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.serviceProducts.description}.</p>
                       <h4>Information</h4>

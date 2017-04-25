@@ -70,8 +70,12 @@ export default class MlStartupLookingFor extends React.Component{
     }
   }
   onSelect(index, e){
-    let details = this.state.startupInvestor[index]
+    let cloneArray = _.cloneDeep(this.state.startupInvestor);
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
+    if(details && details.logo){
+      delete details.logo['__typename'];
+    }
     this.setState({index:index});
     this.setState({data:details})
     this.setState({selectedObject : index})
@@ -121,8 +125,8 @@ export default class MlStartupLookingFor extends React.Component{
   onOptionSelected(selectedIndex,handler,selectedObj){
 
     let details =this.state.data;
-    details=_.omit(details,["type"]);
-    details=_.extend(details,{["type"]:selectedIndex});
+    details=_.omit(details,["type"],["typeId"]);
+    details=_.extend(details,{["type"]:selectedObj.label},{["typeId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()
@@ -151,6 +155,9 @@ export default class MlStartupLookingFor extends React.Component{
         }
       }
       newItem = _.omit(item, "__typename")
+      if(item && item.logo){
+        delete item.logo['__typename'];
+      }
       arr.push(newItem)
     })
     startupInvestor = arr;

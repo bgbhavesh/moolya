@@ -70,8 +70,9 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-    let updatedResponse;
-    let validationCheck=null;
+    var updatedResponse;
+    var validationCheck=null;
+    var result=null;
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
@@ -115,7 +116,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           "registrationDetails.userType": details.userType
         }, {$set: true}, context)
 
-        let userProfile = {
+        var userProfile = {
           registrationId: id,
           countryName: '',
           countryId: details.countryId,
@@ -154,15 +155,14 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         }
 
         // let existingUser = Meteor.users.findOne({"username":userObject.username});
-        let existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
-        let updateCount = 0;
-        let userId = null;
+        var existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
+        var updateCount = 0;
+        var userId = null;
         if (existingUser) {
-
           // let result = Meteor.users.update({username:userObject.username,'profile.externalUserProfile' : {
           //   $elemMatch: {'registrationId': id}}}, {$set: {"profile.externalUserProfile.$":userProfile}});
-
-          let result = mlDBController.update('users', {
+           userId=existingUser._id;
+           result = mlDBController.update('users', {
             username: userObject.username, 'profile.externalUserProfile': {
               $elemMatch: {'registrationId': id}
             }
@@ -181,7 +181,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         if (updateCount === 1 || userId) {
           let code = 200;
-          let result = {username: userObject.username};
+           result = {username: userObject.username};
           // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
           mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
           updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -196,7 +196,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     }
 
     let code = 200;
-    let result = {id: id};
+     result = {id: id};
     updatedResponse = new MlRespPayload().successPayload(result, code);
     return updatedResponse;
   }

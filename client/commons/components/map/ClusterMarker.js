@@ -14,13 +14,13 @@ export const clusterMarker = ({
     {
       ({ scale }) => (
         <div
-          className={'clusterMarker'}
+          className={'chapter_map'}
           style={{
             transform: `translate3D(0,0,0) scale(${scale}, ${scale})`,
           }}
         >
           <div
-            className={styles.text}
+            className={'hex_btn'}
           >
             {text}
           </div>

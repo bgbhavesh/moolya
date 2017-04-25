@@ -154,7 +154,13 @@ export default class Company extends React.Component{
     }
     //this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
-    toastr.success("Saved Successfully");
+    if(response.success){
+      this.props.getRegistrationDetails();
+      toastr.success("Saved Successfully");
+    }else{
+      toastr.error(response.result);
+    }
+   // toastr.success("Saved Successfully");
     return response;
   }
   updateRegistration(){
@@ -312,6 +318,7 @@ export default class Company extends React.Component{
                    <div className="form-group">
                    <input type="text" ref="investmentAmount" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.investmentAmount} placeholder="Enter Amount" className="form-control float-label" id=""/>
                   </div>
+                    <br/><br/><br/><br/><br/><br/><br/>
                   </div>
               </div>
             </form>

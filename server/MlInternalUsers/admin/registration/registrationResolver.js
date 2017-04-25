@@ -112,6 +112,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         updatedResponse = mlDBController.update('MlRegistration', id, {
           registrationInfo: details,
+          "registrationDetails.firstName": details.firstName,
+          "registrationDetails.lastName": details.lastName,
           "registrationDetails.identityType": details.identityType,
           "registrationDetails.userType": details.userType
         }, {$set: true}, context)

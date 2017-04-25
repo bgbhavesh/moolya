@@ -10,6 +10,10 @@ if(Meteor.isServer){
   if(!registrationNumber){
     MlSerialNumbers.insert({_id:"registrationNumber", seq:0});
   }
+
+}var transactionNumber = MlSerialNumbers.findOne({_id:"transactionNumber"});
+if(!transactionNumber){
+  MlSerialNumbers.insert({_id:"transactionNumber", seq:0});
 }
 
 orderNumberGenService = (function(){
@@ -34,6 +38,9 @@ orderNumberGenService = (function(){
     },
     assignPortfolioId:function(portfolio, communityCode){
       portfolio.portfolioId="ML-PF-"+communityCode+"-"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),6);
+    },
+    assignTransationRequest:function(transaction){
+      transaction.requestId="ML-REQ-"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),6);
     }
   }})();
 

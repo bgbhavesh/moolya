@@ -30,6 +30,8 @@ let transactionsSchema = `
        _id                      : String
       transactionTypeName       : String
       transactionTypeId         : String
+      requestId                 : String
+      userId                    : String
       requestTypeName           : String
       requestTypeId             : String
       requestDescription        : String
@@ -68,6 +70,8 @@ let transactionsSchema = `
     input TransactionsInput{
       transactionTypeName       : String
       transactionTypeId         : String
+      requestId                 : String
+      userId                    : String
       requestTypeName           : String
       requestTypeId             : String
       requestDescription        : String

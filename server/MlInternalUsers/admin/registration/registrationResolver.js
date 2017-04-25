@@ -534,12 +534,7 @@ MlResolver.MlQueryResolver['findRegistration'] = (obj, args, context, info) => {
   // let resp = MlRegistration.findOne({_id: args.registrationId});
   let resp = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context)
   return resp;
-  // if(resp){
-  //     let code = 200;
-  //     let result = {department: resp}
-  //     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-  //     return response
-  // }
+
 }
 
 MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, context, info) => {

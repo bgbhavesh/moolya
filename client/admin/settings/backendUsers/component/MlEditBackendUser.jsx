@@ -15,6 +15,8 @@ import {resetPasswordActionHandler} from '../actions/resetPasswordAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
+import Datetime from "react-datetime";
+import moment from "moment";
 import {MlMyProfile} from '../../../profile/component/MlMyprofile'
 
 
@@ -44,7 +46,8 @@ class MlEditBackendUser extends React.Component{
       globalStatus:null,
       selectedSubChapter:'',
       showPasswordFields:false,
-      pageLable:"Edit Backend User"
+      pageLable:"Edit Backend User",
+      foundationDate:" "
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -52,7 +55,8 @@ class MlEditBackendUser extends React.Component{
     this.onBackendUserSelect.bind(this);
     this.onGlobalStatusChanged = this.onGlobalStatusChanged.bind(this);
     this.onisActiveChanged= this.onisActiveChanged.bind(this);
-    this.onMakeDefultChange=this.onMakeDefultChange.bind(this)
+    this.onMakeDefultChange=this.onMakeDefultChange.bind(this);
+    this.onFoundationDateSelection.bind(this);
     return this;
   }
   componentDidMount()
@@ -307,6 +311,13 @@ class MlEditBackendUser extends React.Component{
 
   }
 
+  onFoundationDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, foundationDate: value});
+    }
+  }
+
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
   }
@@ -454,6 +465,26 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="email" placeholder="Email id" defaultValue={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.email} className="form-control float-label" id="" disabled="disabled"/>
                   </div>
 
+                    <div className="form-group">
+                      <Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.foundationDate} onChange={this.onFoundationDateSelection.bind(this)}/>
+                      <FontAwesome name="calendar" className="password_icon"/>
+                    </div>
+
+                    <div className="form-group">
+                      <div className="input_types">
+                        <label>Gender : </label>
+                      </div>
+                      <div className="input_types">
+                        <input id="radio1" type="radio" name="radio" value="1" /><label htmlFor="radio1"><span><span></span></span>Male</label>
+                      </div>
+                      <div className="input_types">
+                        <input id="radio2" type="radio" name="radio" value="2"/><label htmlFor="radio2"><span><span></span></span>Female</label>
+                      </div>
+                      <div className="input_types">
+                        <input id="radio3" type="radio" name="radio" value="2"/><label htmlFor="radio3"><span><span></span></span>Others</label>
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
                   <MlContactFormComponent getAssignedContacts={that.getAssignedContacts.bind(that)} contacts={that.state.data && that.state.data.profile.InternalUprofile.moolyaProfile.contact}/>
 
                   <div className="form-group switch_wrap inline_switch">

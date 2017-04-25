@@ -245,6 +245,7 @@ export default class MlCreateRegistration extends React.Component{
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
+                  <br/><br/><br/><br/><br/>
                 </div>
                {/* <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>

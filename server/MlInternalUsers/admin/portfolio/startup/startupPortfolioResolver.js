@@ -164,3 +164,33 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAwards'] = (obj, args, context,
 
   return [];
 }
+MlResolver.MlQueryResolver['fetchStartupPortfolioMemberships'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('memberships')) {
+      return portfolio['memberships'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchStartupPortfolioCompliances'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('compliances')) {
+      return portfolio['compliances'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('licenses')) {
+      return portfolio['licenses'];
+    }
+  }
+
+  return {};
+}

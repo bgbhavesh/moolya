@@ -36,11 +36,11 @@ export default class CreateRequestComponent extends Component {
     if(response.success){
       this.setState({show:false,requestType:null})
       toastr.success("Request is created successfully");
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.go("/admin/transactions/requestedList");
     }else{
       toastr.error(response.result);
       this.setState({show:false})
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.go("/admin/transactions/requestedList");
     }
   }
 

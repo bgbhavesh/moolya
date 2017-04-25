@@ -193,8 +193,8 @@ export default class MlStartupAwards extends React.Component{
 
   render(){
     let query=gql`query{
-      data:fetchTechnologies {
-        label:displayName
+      data:fetchActiveAwards {
+        label:awardDisplayName
         value:_id
       }
     }`;

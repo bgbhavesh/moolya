@@ -1653,7 +1653,44 @@ if(Meteor.isServer){
                 "image": ""
               }]
           },
-
+          {
+            "link" : "/admin/settings/awardList",
+            "name" : "Award",
+            "uniqueId" : "settings_awardTypes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addAward",
+              "name": "Add AwardType",
+              "uniqueId": "settings_AddAwardType",
+              "subMenuMappingId":"settings_awardTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+            {
+              "link": "/admin/settings/awardList",
+              "name": "List AwardType",
+              "uniqueId": "settings_AwardTypeList",
+              "subMenuMappingId":"settings_awardTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": ""
+            },
+            {
+              "link": "/admin/settings/editAward",
+              "name": "Edit AwardType",
+              "uniqueId": "settings_EditAwardType",
+              "subMenuMappingId":"settings_awardTypes",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": true,
+              "image": ""
+            }]
+          },
           {
             "link" : "/admin/settings/technologiesList",
             "name" : "Technologies",

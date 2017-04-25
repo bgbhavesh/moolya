@@ -362,6 +362,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlIndustries.find(query,findOptions).fetch();
     totalRecords=MlIndustries.find(query, findOptions).count();
   }
+  if(args.module=="award"){
+    data= MlAwards.find(query,findOptions).fetch();
+    totalRecords=MlAwards.find(query, findOptions).count();
+  }
   if(args.module=="specification"){
     data= MlSpecifications.find(query,findOptions).fetch();
     totalRecords=MlSpecifications.find(query,findOptions).count();
@@ -754,6 +758,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.industryName){
       return 'Industry'
+    }
+    if(data.awardName){
+      return 'Award'
     }
     if(data.specificationName){
       return 'Specification'

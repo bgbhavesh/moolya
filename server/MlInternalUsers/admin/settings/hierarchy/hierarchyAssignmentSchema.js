@@ -61,7 +61,7 @@ let HierarchyAssignmentSchema = `
     }
     type Query{
       fetchAssignedRolesHierarchy(hierarchyId:String,departmentId:String,subDepartmentId:String,type:String):HierarchyAssignment      
-      fetchFinalApprovalRole(departmentId:String,subDepartmentId:String,clusterId:String):finalApproval
+      fetchFinalApprovalRole(departmentId:String,subDepartmentId:String,clusterId:String):HierarchyAssignment
     }
     type Mutation {
       updateHierarchyAssignment(hierarchy:HierarchyAssignmentInput):response

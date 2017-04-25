@@ -13,6 +13,8 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
   args.transaction.requestTypeName=requestDetails.requestName;
   args.transaction.transactionTypeName=requestDetails.transactionType;
   args.transaction.transactionTypeId=requestDetails.transactionId;
+  args.transaction.userId=context.userId;
+  orderNumberGenService.assignTransationRequest(args.transaction)
   let transactionDetails=args.transaction
   let id = mlDBController.insert('MlTransactions', args.transaction, context)
   if(id){
@@ -25,7 +27,7 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
 
 MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
     let transaction={};
-  let transact = MlTransactionTypes.findOne({"_id":"registration"})|| {};
+  let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
   transaction.transactionTypeName=transact.transactionName;
   transaction.transactionTypeId=transact._id;
   //find hierarchy

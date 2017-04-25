@@ -1,13 +1,14 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function assignUserForTransactionAction(paramDetails) {
+export async function assignUserForTransactionAction(paramDetails,transactionTypeDetails) {
 
  let params=paramDetails
+  let transactionType=transactionTypeDetails
   const result = await client.mutate({
     mutation: gql`
-     mutation($params:assignmentParams){
-    createRegistrationTransaction(params:$params){
+     mutation($params:assignmentParams,$transactionType:String){
+    createRegistrationTransaction(params:$params,transactionType:$transactionType){
       success
       code
       result
@@ -15,7 +16,8 @@ export async function assignUserForTransactionAction(paramDetails) {
   }
     `,
     variables: {
-      params
+      params,
+      transactionType
     }
   })
 

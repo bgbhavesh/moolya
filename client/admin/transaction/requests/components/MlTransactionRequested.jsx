@@ -22,7 +22,7 @@ export default class MlTransactionRequested extends Component {
     return resp;
   }
     async findRequestDetails(){
-      let requestDetails = await findTransactionRequestActionHandler('registration');
+      let requestDetails = await findTransactionRequestActionHandler('All');
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {

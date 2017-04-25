@@ -208,6 +208,9 @@ let startupPortfolioSchema = `
         portfolioId:String,
         isActive:Boolean
     }
+    type ratingOutput{
+        rating:String
+    }
     type startupPortfolioAboutUsOutput{
         portfolioDetailsId  : String
         aboutUs             : aboutUsOutput
@@ -218,6 +221,7 @@ let startupPortfolioSchema = `
         branches            : [branchesOutput]
         clients             : [clientsOutput]
         legalIssue          : legalIssueOutput
+        rating              : ratingOutput
     }
     
     input logo{
@@ -361,12 +365,7 @@ let startupPortfolioSchema = `
      }
      
     input rating{
-        problemStatement    : String,
-        isProblemPrivate    : Boolean,
-        problemImage        : [imageFilesInputSchema],
-        solutionStatement   : String,
-        isSolutionPrivate   : Boolean,
-        solutionImage       : [imageFilesInputSchema]
+        rating:String
     }
     
     input aboutUs{

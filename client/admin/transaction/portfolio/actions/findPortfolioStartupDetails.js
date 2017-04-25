@@ -148,6 +148,9 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   description
                   isDescriptionPrivate
                 }
+                rating{
+                  rating
+                }
             }
           }
 
@@ -169,6 +172,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   aboutUsArray["technologies"]=_.map(data.technologies, function (row) {return _.omit(row, ['__typename'])});
   aboutUsArray["legalIssue"]=_.omit(data.legalIssue,'__typename');
   aboutUsArray["assets"]=_.map(data.assets, function (row) {return _.omit(row, ['__typename'])});
+  aboutUsArray["rating"]=_.omit(data.rating,'__typename');
 
   return aboutUsArray
 }

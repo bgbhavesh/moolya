@@ -1084,7 +1084,7 @@ ol.progtrckr li{ margin-bottom: 40px}}
     padding-left: 0 !important;
   }
 }
-.profile_block img{display: block;border-radius: 5px;width: auto;margin:0 auto;}
+.profile_block img{display: block;border-radius: 5px;width:100px;margin:0 auto; height: 100px; }
 .profile_block span{font-size: 20px;}
 
 

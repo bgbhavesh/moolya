@@ -96,7 +96,7 @@ let transactionsSchema = `
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput):response
-      createRegistrationTransaction(params:assignmentParams):response
+      createRegistrationTransaction(params:assignmentParams,transactionType:String):response
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]

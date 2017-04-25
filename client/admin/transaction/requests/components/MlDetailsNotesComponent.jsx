@@ -28,10 +28,33 @@ export default class MlDetailsNotesComponent extends React.Component {
       if(userDetails.profile.isInternaluser){
           let userInternalProfile=userDetails.profile.InternalUprofile.moolyaProfile.userProfiles
         if(userInternalProfile){
-            let userRoles=userInternalProfile[0].userRoles[0]
-          this.setState({"role":userRoles.roleName})
-          this.setState({"departmentName":userRoles.departmentName})
-          this.setState({"subDepartmentName":userRoles.subDepartmentName})
+          let roleIds=[]
+          let hirarichyLevel=[]
+          userInternalProfile.map(function (doc,index) {
+            if(doc.isDefault) {
+              let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+              userRoles.map(function (doc, index) {
+                hirarichyLevel.push(doc.hierarchyLevel)
+
+              });
+              hirarichyLevel.sort(function (a, b) {
+                return b - a
+              });
+              for (let i = 0; i < userRoles.length; i++) {
+                if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
+                  roleIds.push(userRoles[i]);
+                  break
+                }
+              }
+            }
+          });
+
+          if(roleIds.length==1){
+            this.setState({"role":roleIds[0].roleName})
+            this.setState({"departmentName":roleIds[0].departmentName})
+            this.setState({"subDepartmentName":roleIds[0].subDepartmentName})
+          }
+
         }
         this.setState({profileImage:userDetails.profile.profileImage})
       }

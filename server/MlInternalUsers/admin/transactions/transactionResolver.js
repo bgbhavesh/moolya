@@ -27,7 +27,7 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
 
 MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
     let transaction={};
-  let transact = MlTransactionTypes.findOne({"_id":"registration"})|| {};
+  let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
   transaction.transactionTypeName=transact.transactionName;
   transaction.transactionTypeId=transact._id;
   //find hierarchy

@@ -73,10 +73,10 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
             }
 
           }else {
-            if(updateFor[key] && updateFor[key][0]){
-              startupPortfolio[key] = updateFor[key];
-            }else{
+            if(updateFor[key].logo){
               startupPortfolio[key] = [updateFor[key]];
+            }else{
+              startupPortfolio[key] = updateFor[key];
             }
             }
         }

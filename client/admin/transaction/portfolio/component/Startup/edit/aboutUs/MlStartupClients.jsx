@@ -177,17 +177,9 @@ export default class MlStartupClients extends React.Component{
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-        //this.fetchOnlyImages();
+
       }
     }
-  }
-  async fetchOnlyImages(){
-   /* const response = that.state.startupBranchesList;
-    if (response) {
-      let dataDetails =this.state.data
-      dataDetails['addressImage'] = response.addressImage
-      this.setState({loading: false, data: dataDetails});
-    }*/
   }
 
   render(){
@@ -227,7 +219,7 @@ export default class MlStartupClients extends React.Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onSelect.bind(that, idx)}><FontAwesome name='laptop'/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                         <h3>{details.description} <span className="assets-list">50</span></h3>
                       </div>
                     </a>

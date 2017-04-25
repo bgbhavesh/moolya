@@ -62,6 +62,9 @@ export default class MlStartupTechnology extends React.Component{
   onSelect(index, e){
     let details = this.state.startupTechnologies[index]
     details = _.omit(details, "__typename");
+    if(details && details.logo){
+      delete details.logo['__typename'];
+    }
     this.setState({index:index});
     this.setState({data:details})
     this.setState({selectedObject : index})
@@ -138,6 +141,9 @@ export default class MlStartupTechnology extends React.Component{
         }
       }
       newItem = _.omit(item, "__typename")
+      if(item && item.logo){
+        delete item.logo['__typename'];
+      }
       arr.push(newItem)
     })
     startupTechnologies = arr;
@@ -145,6 +151,23 @@ export default class MlStartupTechnology extends React.Component{
     this.setState({startupTechnologies:startupTechnologies})
     let indexArray = this.state.indexArray;
     this.props.getStartupTechnology(startupTechnologies,indexArray);
+  }
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{technologies:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+  onFileUploadCallBack(name,fileName, resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+
+      }
+    }
   }
   render(){
     let query=gql`query{
@@ -183,8 +206,9 @@ export default class MlStartupTechnology extends React.Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
-                        <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src="/images/meteor-logo.png"/></div>
-                        <h3>{details.description}</h3>
+                        <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+
+                        <h3>{details.description && details.description}</h3>
                       </div>
                     </a>
                   </div>)
@@ -216,6 +240,14 @@ export default class MlStartupTechnology extends React.Component{
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
+
+                    <div className="form-group">
+                      <div className="fileUpload mlUpload_btn">
+                        <span>Upload Logo</span>
+                        <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
 
                     <div className="form-group">
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>

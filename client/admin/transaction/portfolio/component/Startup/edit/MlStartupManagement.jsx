@@ -5,6 +5,7 @@ import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findStartupManagementActionHandler} from '../../../actions/findPortfolioStartupDetails'
+import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -137,6 +138,23 @@ export default class MlStartupManagement extends React.Component{
     let indexArray = this.state.indexArray;
     this.props.getManagementDetails(startupManagement, indexArray)
   }
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{management:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+  onFileUploadCallBack(name,fileName, resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+
+      }
+    }
+  }
 
   render(){
     let that = this;
@@ -243,12 +261,14 @@ export default class MlStartupManagement extends React.Component{
                         <div className="form-group">
                           <div className="fileUpload mlUpload_btn">
                             <span>Upload Icon</span>
-                            <input type="file" className="upload" />
+                            <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>
                           <div className="previewImg ProfileImg">
                             <img src="/images/ideator_01.png"/>
                           </div>
                         </div>
+
+
                         <br className="brclear"/>
 
                         <div className="form-group">

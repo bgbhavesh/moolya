@@ -27,9 +27,12 @@ let startupPortfolioSchema = `
       id:String
       menu:[PortfolioMenu]
     }
+    type imagesTypeSchema{
+        fileUrl   : String,
+        fileName  : String
+    }
     type startupManagementOutput{
        title :String
-       logo : String
        isTitlePrivate : Boolean
        firstName : String
        isFirstNamePrivate : Boolean
@@ -61,12 +64,10 @@ let startupPortfolioSchema = `
        isLinkedInUrlPrivate : Boolean
        about : String
        isAboutPrivate:Boolean
+       logo:imagesTypeSchema,
     }
     
-    type imagesTypeSchema{
-        fileUrl   : String,
-        fileName  : String
-    }
+ 
     
     type clientsOutput{
         companyName:String,
@@ -99,6 +100,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
         
     }
@@ -110,6 +112,7 @@ let startupPortfolioSchema = `
         isQuantityTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -118,6 +121,7 @@ let startupPortfolioSchema = `
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+         logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -129,6 +133,7 @@ let startupPortfolioSchema = `
         isNamePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+         logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -136,7 +141,8 @@ let startupPortfolioSchema = `
         type:String,
         isTypePrivate:Boolean,
         description:String,
-        isDescriptionPrivate:Boolean
+        isDescriptionPrivate:Boolean,
+         logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -179,6 +185,7 @@ let startupPortfolioSchema = `
           isYearPrivate:Boolean
           description:String
           isDescriptionPrivate:Boolean
+          logo:imagesTypeSchema,
           makePrivate:Boolean
     }
 
@@ -214,9 +221,13 @@ let startupPortfolioSchema = `
         legalIssue          : legalIssueOutput
     }
     
+    input logo{
+      fileName : String,
+      fileUrl:String
+    }
+    
     input startupManagement{
        title :String
-       logo : String
        isTitlePrivate : Boolean
        firstName : String
        isFirstNamePrivate : Boolean
@@ -248,11 +259,9 @@ let startupPortfolioSchema = `
        isLinkedInUrlPrivate : Boolean
        about : String
        isAboutPrivate:Boolean
+       logo:logo
     }
-    input logo{
-      fileName : String,
-      fileUrl:String
-    }
+  
     input clients{
         companyName:String,
         isCompanyNamePrivate:Boolean,
@@ -284,6 +293,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -294,6 +304,7 @@ let startupPortfolioSchema = `
         isQuantityTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
+        logo:logo,
         makePrivate:Boolean
     }
     
@@ -302,6 +313,7 @@ let startupPortfolioSchema = `
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -315,6 +327,7 @@ let startupPortfolioSchema = `
         isInvestorImagePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -322,7 +335,8 @@ let startupPortfolioSchema = `
         type:String,
         isTypePrivate:Boolean,
         description:String,
-        isDescriptionPrivate:Boolean
+        isDescriptionPrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -372,6 +386,7 @@ let startupPortfolioSchema = `
           description:String
           isDescriptionPrivate:Boolean
           makePrivate:Boolean
+          logo : logo
     }
 
     input memberships{

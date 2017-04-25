@@ -73,7 +73,12 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
             }
 
           }else {
-            startupPortfolio[key] = updateFor[key];
+            if(_.isObject(updateFor[key])){
+
+              startupPortfolio[key] = [updateFor[key]];
+            }else{
+              startupPortfolio[key] = updateFor[key];
+            }
           }
         }
 

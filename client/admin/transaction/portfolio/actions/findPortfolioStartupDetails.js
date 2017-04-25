@@ -238,3 +238,69 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
   // return data
   return id
 }
+export async function fetchStartupPortfolioMemberships(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioMemberships(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioMemberships;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
+}
+export async function fetchStartupPortfolioCompliances(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioCompliances(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioCompliances;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
+}
+export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioLicenses(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioLicenses;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
+}

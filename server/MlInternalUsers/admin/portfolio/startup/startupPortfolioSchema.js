@@ -184,18 +184,17 @@ let startupPortfolioSchema = `
 
     type membershipsOutput{
         description:String, 
-        isIntellectualPrivate :Boolean
+        isDescriptionPrivate :Boolean
     }
     
     type compliancesOutput{
-        description:String,
-        isLookingForPrivate:Boolean
+        description:String, 
+        isDescriptionPrivate :Boolean
     }
     
     type licensesOutput{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
+        description:String, 
+        isDescriptionPrivate :Boolean
     }
    type chartsOutput{
         fileType:String,
@@ -373,18 +372,17 @@ let startupPortfolioSchema = `
 
     input memberships{
         description:String, 
-        isIntellectualPrivate :Boolean
+        isDescriptionPrivate :Boolean
     }
     
     input compliances{
-        description:String,
-        isLookingForPrivate:Boolean
+         description:String, 
+        isDescriptionPrivate :Boolean
     }
     
     input licenses{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
+         description:String, 
+        isDescriptionPrivate :Boolean
     }
    input charts{
         fileType:String,
@@ -414,6 +412,9 @@ let startupPortfolioSchema = `
     
     type Query{
         fetchStartupPortfolioAboutUs(portfoliodetailsId:String!):startupPortfolioAboutUsOutput
+        fetchStartupPortfolioMemberships(portfoliodetailsId:String!):membershipsOutput
+        fetchStartupPortfolioCompliances(portfoliodetailsId:String!):compliancesOutput
+        fetchStartupPortfolioLicenses(portfoliodetailsId:String!):licensesOutput
         fetchStartupPortfolioManagement(portfoliodetailsId:String!):[startupManagementOutput]
         fetchStartupPortfolioInvestor(portfoliodetailsId:String!):[investorOutput]
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]

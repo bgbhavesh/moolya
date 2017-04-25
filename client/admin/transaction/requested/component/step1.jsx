@@ -159,25 +159,20 @@ export default class Step1 extends React.Component{
     }
     }
     const response = await updateRegistrationActionHandler(Details);
-   this.props.refetchRegistrationAndTemplates();
+    //this.props.refetchRegistrationAndTemplates();
+   return response;
  }
 
-  updateRegistration(){
-    const resp=this.updateregistrationInfo();
-    toastr.success("Update Successful");
-    return resp;
-  }
-
-  /*async updateRegistration(){
+  async updateRegistration(){
     const response= await this.updateregistrationInfo();
-    console.log(response);
     if(response.success){
       this.props.refetchRegistrationAndTemplates();
+      toastr.success("Update Successful");
     }else{
       toastr.error(response.result);
     }
     return response;
-  }*/
+  }
 
   render(){
     let MlActionConfig = [

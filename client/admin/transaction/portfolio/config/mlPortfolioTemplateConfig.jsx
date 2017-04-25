@@ -4,6 +4,8 @@ import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
 import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
+import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
+
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
@@ -46,9 +48,10 @@ const mlStartupViewExternalUserPortfolioTemplateConfig={
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
   stepName:'Portfolio',
-  // component:IdeatorCompanyHardReg
+  component:MlViewStartupPortfolioTemplate
 };
 
 mlRegistrationTemplates.setTemplate(mlIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlStartupEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlStartupViewExternalUserPortfolioTemplateConfig);

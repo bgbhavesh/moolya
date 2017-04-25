@@ -8,6 +8,8 @@ export async function findTransactionRequestActionHandler(transactionTypeDetails
       query($transactionType:String){
   fetchTransactions(transactionType:$transactionType) {
           _id
+          userId
+          requestId
           transactionTypeName
           transactionTypeId
           requestTypeName

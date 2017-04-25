@@ -20,7 +20,11 @@ let BackEndUser = `
         isChapterAdmin :Boolean,
         email: String,
         InternalUprofile: internalUserprofile,
-        profileImage:String
+        profileImage:String,
+        numericalFormat: String,
+        currencyTypes: String,
+        dateOfBirth: String,
+        genderType: String
     }
     
      type internalUserprofile{
@@ -135,7 +139,11 @@ let BackEndUser = `
         globalAssignment:Boolean,
         isActive:Boolean,
         userProfiles:[userprofiles],
-        profileImage:String
+        profileImage:String,
+         numericalFormat: String,
+        currencyTypes: String,
+        dateOfBirth: String,
+        genderType: String
         
     }
 
@@ -177,7 +185,11 @@ let BackEndUser = `
         isChapterAdmin    : Boolean,
         InternalUprofile  : InternalUprofile,
         externalUserProfile:up
-        profileImage:String
+        profileImage:String,
+        numericalFormat: String,
+        currencyTypes: String,
+        dateOfBirth: String,
+        genderType: String
     }
     
     input userObject{
@@ -193,6 +205,12 @@ let BackEndUser = `
       lastName: String,
       userName: String
     }
+    
+    input settingsAttributesObject{
+      currencyTypes: String,
+      numericalFormat: String
+    }
+    
     
     type dep{
         department:String,
@@ -233,6 +251,76 @@ let BackEndUser = `
     lng:Float
     }
     
+     type ContactInfoSchema{
+      numberType        : String
+      numberTypeName        : String
+      countryCode           : String
+      contactNumber       : String
+        
+    }
+    
+     type EmailInfoSchema{
+      emailIdType        : String
+      emailIdTypeName        : String
+      emailId           : String
+     }
+     
+     type AddressInfoSchema{
+        addressType        : String
+        addressTypeName        : String
+        name             : String
+        phoneNumber      :  String
+        addressFlat      :  String
+        addressLocality      :  String
+        addressLandmark      :  String
+        addressArea      :  String
+        addressCity      :  String
+        addressState      :  String
+        addressCountry : String
+        addressPinCode : String
+     }
+     
+     input ContactInfo{
+      numberType        : String
+      numberTypeName        : String
+      countryCode           : String
+      contactNumber       : String
+    }
+    
+    input EmailInfo{
+       emailIdType        : String
+       emailIdTypeName        : String
+       emailId           : String
+    }
+    
+    input AddressInfo{
+      addressType       : String
+      addressTypeName  : String
+      name             : String
+      phoneNumber      :  String
+      addressFlat      :  String
+      addressLocality      :  String
+      addressLandmark      :  String
+      addressArea      :  String
+      addressCity      :  String
+      addressState      :  String
+      addressCountry : String
+      addressPinCode : String
+    }
+    
+    input addressBook{
+       addressInfo:[AddressInfo],
+       emailInfo : [EmailInfo],
+       contactInfo:[ContactInfo]
+    }
+    
+    type addressBookSchema{
+       addressInfo     : [AddressInfoSchema]
+       emailInfo       : [EmailInfoSchema]
+       contactInfo     : [ContactInfoSchema]
+    }
+    
+   
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
@@ -241,6 +329,8 @@ let BackEndUser = `
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
         updateDataEntry(userId: String, moduleName: String, actionName: String, attributes:attributesObject):response
+        updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
+        updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
     }
     
     type Query{
@@ -257,6 +347,7 @@ let BackEndUser = `
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser:mapCenterCords
+        fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
     }
 `
 

@@ -700,3 +700,48 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
   resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
   return resp
 }
+
+
+MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => {
+  // let user = Meteor.users.findOne({_id: args.userId});
+  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let resp;
+  if(user){
+    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
+    resp = mlDBController.update('users', args.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
+  }
+  if(resp){
+    resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
+    return resp
+  }
+  resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
+  return resp
+}
+
+
+MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, info) => {
+  let id = " "
+  //let registrationDetails = mlDBController.findOne('users', {_id: args.userId}, context) || {};
+  if (args && args.addressBook) {
+    if (args.type == "CONTACTTYPE") {
+      id = mlDBController.update('users', context.userId, {"profile.contactInfo": args.addressBook.contactInfo}, {$set: true}, context)
+    } else if (args.type == "ADDRESSTYPE") {
+      id = mlDBController.update('users', context.userId, {"profile.addressInfo": args.addressBook.addressInfo}, {$set: true}, context)
+    } else if (args.type == "EMAILTYPE") {
+      id = mlDBController.update('users', context.userId, {"profile.emailInfo": args.addressBook.emailInfo}, {$set: true}, context)
+    }
+    if (id) {
+      let code = 200;
+      let insertedData = users.findOne(id) || {};
+      let result = {registrationId: id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  }
+}
+
+MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
+       let rest = null;
+        let user = mlDBController.findOne('users', {_id: args.userId}, context);
+        return user.profile;
+}

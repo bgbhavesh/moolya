@@ -202,7 +202,7 @@ export default class MlMyProfile extends React.Component{
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => FlowRouter.go('/admin/dashboard/clusters')
       }
     ];
     const showLoader=this.state.loading;

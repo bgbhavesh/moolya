@@ -27,8 +27,11 @@ let transactionsSchema = `
         subDepartmentId     : String
     }
     type Transactions{
+       _id                      : String
       transactionTypeName       : String
       transactionTypeId         : String
+      requestId                 : String
+      userId                    : String
       requestTypeName           : String
       requestTypeId             : String
       requestDescription        : String
@@ -67,6 +70,8 @@ let transactionsSchema = `
     input TransactionsInput{
       transactionTypeName       : String
       transactionTypeId         : String
+      requestId                 : String
+      userId                    : String
       requestTypeName           : String
       requestTypeId             : String
       requestDescription        : String
@@ -91,11 +96,11 @@ let transactionsSchema = `
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput):response
-      createRegistrationTransaction(params:assignmentParams):response
+      createRegistrationTransaction(params:assignmentParams,transactionType:String):response
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]
-      fetchTransactions(transactionType:String):[Transactions]
+      fetchTransactions(transactionType:String,):[Transactions]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);

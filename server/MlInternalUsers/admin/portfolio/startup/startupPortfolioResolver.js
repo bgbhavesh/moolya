@@ -34,11 +34,20 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
         for (key in updateFor) {
           if (startupPortfolio.hasOwnProperty(key))
           {
-            if(_.isArray(startupPortfolio[key])){
+            if(_.isArray(startupPortfolio[key]) && _.isArray(updateFor[key])){
               if(startupPortfolio[key].length != updateFor[key].length){
-                  let newObj = _.last(updateFor[key])
+                var diff = (updateFor[key].length)-(startupPortfolio[key].length);
+                for (i = diff; i > 0; i--){
+                  let idx = updateFor[key].length-i;
+                  let newObj = updateFor[key][idx];
                   startupPortfolio[key].push(newObj)
-              }else{
+                }
+                  // let newObj = _.last(updateFor[key])
+                  // startupPortfolio[key].push(newObj)
+              }else if(startupPortfolio[key].length == updateFor[key].length){
+                _.mergeWith(startupPortfolio[key], updateFor[key])
+              }
+              if(args.indexArray && args.indexArray.length>0){
                 _.each(args.indexArray, function (index) {
                   _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
                     if (_.isArray(objValue)) {
@@ -47,8 +56,15 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
                   })
                 })
               }
-
-            } else{
+            }else if(_.isArray(startupPortfolio[key]) && _.isObject(updateFor[key])){
+              if(args.indexArray && args.indexArray.length>0){
+                _.each(args.indexArray, function (index) {
+                  _.extend(startupPortfolio[key][index], updateFor[key])
+                })
+              }else{
+                startupPortfolio[key].push(updateFor[key])
+              }
+            }else{
               _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
                 if (_.isArray(objValue)) {
                   return objValue.concat(srcValue);
@@ -56,9 +72,13 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
               });
             }
 
-          }
-          else {
-            startupPortfolio[key] = updateFor[key];
+          }else {
+            if(_.isObject(updateFor[key])){
+
+              startupPortfolio[key] = [updateFor[key]];
+            }else{
+              startupPortfolio[key] = updateFor[key];
+            }
           }
         }
 
@@ -143,4 +163,34 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAwards'] = (obj, args, context,
   }
 
   return [];
+}
+MlResolver.MlQueryResolver['fetchStartupPortfolioMemberships'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('memberships')) {
+      return portfolio['memberships'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchStartupPortfolioCompliances'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('compliances')) {
+      return portfolio['compliances'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('licenses')) {
+      return portfolio['licenses'];
+    }
+  }
+
+  return {};
 }

@@ -20,6 +20,7 @@ export default class MlStartupEditTemplate extends React.Component{
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);
     this.getLookingForDetails.bind(this);
+    this.getStartupMCL.bind(this)
   }
 
   getChildContext(){
@@ -51,7 +52,7 @@ export default class MlStartupEditTemplate extends React.Component{
       // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       // {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlIdeatorDetails key="7" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupMCL key="8" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupMCL key="8" getStartupMCL={this.getStartupMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
 
 
@@ -107,6 +108,20 @@ export default class MlStartupEditTemplate extends React.Component{
     data['lookingFor'] = details;
     this.setState({startupPortfolio : data})
     this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, indexArray);
+  }
+  getStartupMCL(details){
+    let data = this.state.startupPortfolio;
+    if(details.memberships){
+      data['memberships'] = details.memberships;
+    }
+    if(details.compliances){
+      data['compliances'] = details.compliances;
+    }
+    if(details.licenses){
+      data['licenses'] = details.licenses;
+    }
+    this.setState({startupPortfolio : data})
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, []);
   }
 
   componentWillMount()

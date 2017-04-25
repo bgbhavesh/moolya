@@ -139,7 +139,13 @@ export default class Company extends React.Component{
     }
     //this.props.getRegistrationDetails(Details);
     const response = await updateRegistrationActionHandler(Details);
-    toastr.success("Saved Successfully");
+    if(response.success){
+      toastr.success("Saved Successfully");
+      this.props.getRegistrationDetails();
+    }else{
+      toastr.error(response.result);
+    }
+    //toastr.success("Saved Successfully");
     return response;
   }
   updateRegistration(){
@@ -281,6 +287,7 @@ export default class Company extends React.Component{
               </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Looking For" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedLookingFor} queryType={"graphql"} query={lookinforquery}  queryOptions={lookingOption} onSelect={that.optionsBySelectLookingFor.bind(that)} isDynamic={true}/>
+                <br/><br/><br/><br/><br/><br/><br/><br/>
               </div>
             </form>
           </div>

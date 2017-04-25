@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -11,14 +11,8 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupPortfolioAwards} from '../../../actions/findPortfolioStartupDetails'
+
 var Select = require('react-select');
-var options = [
-  { value: '1', label: '1' },
-  { value: '2', label: '2' }
-];
-function logChange(val) {
-  console.log("Selected: " + val);
-}
 
 
 export default class MlStartupAwards extends React.Component{
@@ -56,9 +50,18 @@ export default class MlStartupAwards extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchStartupPortfolioAwards(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false, startupInvestor: response, startupAwardsList: response});
+    // const response = await fetchStartupPortfolioAwards(portfoliodetailsId);
+    // if (response) {
+    //   this.setState({loading: false, startupInvestor: response, startupAwardsList: response});
+    // }
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.awardsRecognition)
+    if(empty){
+      const response = await fetchStartupPortfolioAwards(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, startupInvestor: response, startupAwardsList: response});
+      }
+    }else{
+      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.awardsRecognition, startupAwardsList: that.context.startupPortfolio.awardsRecognition});
     }
   }
   addInvestor(){
@@ -73,10 +76,14 @@ export default class MlStartupAwards extends React.Component{
   }
   onSaveAction(e){
     this.setState({startupAwardsList:this.state.startupInvestor})
+    this.setState({popoverOpen : false})
   }
   onSelect(index, e){
     let details = this.state.startupInvestor[index]
     details = _.omit(details, "__typename");
+    if(details && details.logo){
+      delete details.logo['__typename'];
+    }
     this.setState({index:index});
     this.setState({data:details})
     this.setState({selectedObject : index})
@@ -151,7 +158,10 @@ export default class MlStartupAwards extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
+      newItem = _.omit(item, "__typename");
+      if(item && item.logo){
+        delete item.logo['__typename'];
+      }
       arr.push(newItem)
     })
     startupInvestor = arr;
@@ -160,6 +170,24 @@ export default class MlStartupAwards extends React.Component{
     let indexArray = this.state.indexArray;
     this.props.getAwardsDetails(startupInvestor,indexArray);
   }
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+  onFileUploadCallBack(name,fileName, resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+
+      }
+    }
+  }
+
 
   render(){
     let query=gql`query{
@@ -198,8 +226,8 @@ export default class MlStartupAwards extends React.Component{
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                          <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src="/images/meteor-logo.png"/></div>
-                          <h3>{details.description}</h3>
+                          <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                          <h3>{details.description?details.description:""}</h3>
                         </div>
                       </a>
                     </div>)
@@ -237,6 +265,13 @@ export default class MlStartupAwards extends React.Component{
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
                       </div>
                       <div className="form-group">
+                        <div className="fileUpload mlUpload_btn">
+                          <span>Upload Logo</span>
+                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                        </div>
+                      </div>
+                      <div className="clearfix"></div>
+                      <div className="form-group">
                         <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                       </div>
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
@@ -259,3 +294,6 @@ export default class MlStartupAwards extends React.Component{
     )
   }
 }
+MlStartupAwards.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

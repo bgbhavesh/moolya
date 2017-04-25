@@ -221,14 +221,14 @@ class MlEditDocumentMapping extends React.Component{
     let clusterquery=gql`  query{
   data:fetchActiveClusters{label:countryName,value:_id}
 }`;
-    let chapterquery=gql`query($clusters:[String]){  
-        data:fetchActiveClusterChapters(clusters:$clusters) {
+    let chapterquery=gql`query($clusters:[String],$displayAllOption:Boolean){  
+        data:fetchActiveClusterChapters(clusters:$clusters,displayAllOption:$displayAllOption) {
           value:_id
           label:chapterName
         }  
     }`;
-    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
+    let subChapterquery=gql`query($chapters:[String],$clusters:[String],$displayAllOption:Boolean){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters,displayAllOption:$displayAllOption) {
           value:_id
           label:subChapterName
         }  
@@ -252,8 +252,8 @@ class MlEditDocumentMapping extends React.Component{
   }  
 }`;
 
-    let chapterOption={options: { variables: {clusters:this.state.clusters}}};
-    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
+    let chapterOption={options: { variables: {clusters:this.state.clusters,displayAllOption:true}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters,displayAllOption:true}}};
 
     const showLoader=this.state.loading;
     return (

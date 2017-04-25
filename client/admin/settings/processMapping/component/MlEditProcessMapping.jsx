@@ -296,8 +296,8 @@ class MlEditProcessMapping extends React.Component{
           label:chapterName
         }  
     }`;
-    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){  
-        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
+    let subChapterquery=gql`query($chapters:[String],$clusters:[String],$displayAllOption:Boolean){  
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters,displayAllOption:$displayAllOption) {
           value:_id
           label:subChapterName
         }  

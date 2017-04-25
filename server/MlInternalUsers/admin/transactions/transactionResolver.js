@@ -1,6 +1,6 @@
 import MlResolver from "../mlAdminResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
-
+import mlTransactionsListRepo from './mlTransactionsListRepo'
 
 MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) => {
 
@@ -13,6 +13,8 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
   args.transaction.requestTypeName=requestDetails.requestName;
   args.transaction.transactionTypeName=requestDetails.transactionType;
   args.transaction.transactionTypeId=requestDetails.transactionId;
+  args.transaction.userId=context.userId;
+  orderNumberGenService.assignTransationRequest(args.transaction)
   let transactionDetails=args.transaction
   let id = mlDBController.insert('MlTransactions', args.transaction, context)
   if(id){
@@ -25,7 +27,7 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
 
 MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
     let transaction={};
-  let transact = MlTransactionTypes.findOne({"_id":"registration"})|| {};
+  let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
   transaction.transactionTypeName=transact.transactionName;
   transaction.transactionTypeId=transact._id;
   //find hierarchy
@@ -68,14 +70,14 @@ MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, con
   }
 }
 
-/*MlResolver.MlQueryResolver['fetchTransactions']=(obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchTransactions']=(obj, args, context, info) => {
   if (args.transactionType) {
     //todo: conditions based on record id for steps like registration,portfolio
     //resolve userType:internal/external and send with response
-    let transactionType=args.process;
+    let transactionType=args.transactionType;
     let userId = context.userId;
-    let transactions=mlTemplateAssignmentRepo.fetchTransactions(transactionType,userId);
+    let transactions=mlTransactionsListRepo.fetchTransactions(transactionType,userId);
     return transactions;
   }
   return null;
-}*/
+}

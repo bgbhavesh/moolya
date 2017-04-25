@@ -7,6 +7,10 @@ import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+import {updateSettings} from '../actions/addSettingsAction';
+import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction'
+
+
 
 //import ContactDetails from '../../transaction/requested/component/contactDetails';
 
@@ -15,11 +19,22 @@ export default class MyProfileSettings extends React.Component{
     super(props);
     this.state = {
       currencySymbol: " ",
-      measurementSystem: " "
+      measurementSystem: " ",
+      currencyTypes: " ",
+      numericalFormat:" "
     }
     this.optionsBySelectCurrencySymbol.bind(this);
     this.optionsBySelectMeasurementSystem.bind(this);
+    this.dataSaving.bind(this);
+    this.onSave.bind(this);
+    this.getValue.bind(this);
   }
+
+  componentWillMount(){
+    const resp=this.getValue();
+    return resp;
+  }
+
   componentDidMount()
   {
     $(function() {
@@ -59,6 +74,7 @@ export default class MyProfileSettings extends React.Component{
 
   }
 
+
   optionsBySelectCurrencySymbol(val){
     this.setState({currencySymbol:val})
   }
@@ -67,6 +83,32 @@ export default class MyProfileSettings extends React.Component{
     this.setState({measurementSystem:data.value})
   }
 
+ async onSave(){
+
+    this.dataSaving();
+  }
+
+  async getValue() {
+    let userType = Meteor.userId();
+    let response = await findBackendUserActionHandler(userType);
+    console.log(response);
+    this.setState({measurementSystem : response.profile.numericalFormat,
+      currencySymbol:response.profile.currencyTypes,
+    });
+  }
+
+  async dataSaving(){
+
+    let Details = {
+      currencySymbol : this.state.currencySymbol,
+      measurementSystem :this.state.measurementSystem,
+      userId : Meteor.userId()
+    }
+    const dataresponse = await updateSettings(Details);
+    console.log(dataresponse);
+    toastr.success("Update Successful")
+    return dataresponse;
+  }
 
   render(){
 
@@ -74,15 +116,22 @@ export default class MyProfileSettings extends React.Component{
       {
         showAction: true,
         actionName: 'save',
-        handler: null
+        handler: async(event) => this.onSave()
       },
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => FlowRouter.go('/admin/myprofile/AddressBook')
       }
     ];
-
+    //
+    // let languagequery =gql`
+    //
+    // `;
+    //
+    // let timezonequery =gql`
+    //
+    // `;
 
 
     let currencyquery=gql` query{  
@@ -111,22 +160,24 @@ export default class MyProfileSettings extends React.Component{
             ><form>
               <div className="col-md-6 nopadding-left">
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false}  placeholder={"Type Of Currency"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={currencyquery}  isDynamic={true} id={'currencyquery'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)} />
+                  <Moolyaselect multiSelect={false}  placeholder={"Type Of Currency"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={currencyquery}  isDynamic={true} id={'currencyquery'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)}  />
                   {/*<FontAwesome name='inr' className="password_icon"/>*/}
                 </div>
                 <Select
                   name="form-field-name"  options={measurementType} placeholder={"Numerical Format"}
                   value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}
-                  className="float-label"/>
+                  className="float-label" />
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Language" className="form-control float-label" id=""/>
-                  <FontAwesome name='language' className="password_icon"/>
+                  <Select
+                    name="form-field-name" placeholder={"Language"}
+                    className="float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Time Zone" className="form-control float-label" id=""/>
-                  <FontAwesome name='clock-o' className="password_icon"/>
+                  <Select
+                    name="form-field-name"   placeholder={"Time Zone"}
+                    className="float-label"/>
                 </div>
               </div>
             </form>

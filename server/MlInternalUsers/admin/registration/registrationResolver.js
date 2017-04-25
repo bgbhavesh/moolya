@@ -1,6 +1,6 @@
 import MlResolver from "../mlAdminResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
-
+import MlRegistrationPreCondition from './registrationPreConditions';
 
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -70,15 +70,9 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-    //validate community availability in the cluster
-    let reginfo =args.registrationDetails||{};
-    let countryId = reginfo.countryId;
-    let commId = reginfo.registrationType;
-    let cluster =  mlDBController.findOne('MlClusters', {countryId: countryId}, context) || {};
-    let community = mlDBController.findOne('MlCommunity',{communityDefCode:commId,clusterId:cluster._id,isActive:true},context)||{};
-
-    let updatedResponse
-    if(community._id) {
+    var updatedResponse;
+    var validationCheck=null;
+    var result=null;
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
@@ -96,6 +90,9 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
             subChapterId: details.subChapterId,
             communityDefCode: details.registrationType
           }, context) || {};
+
+        validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,details);
+        if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
         details.communityId = communityDetails._id;
         //details.communityName=communityDetails.communityName;
@@ -115,11 +112,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         updatedResponse = mlDBController.update('MlRegistration', id, {
           registrationInfo: details,
+          "registrationDetails.firstName": details.firstName,
+          "registrationDetails.lastName": details.lastName,
           "registrationDetails.identityType": details.identityType,
           "registrationDetails.userType": details.userType
         }, {$set: true}, context)
 
-        let userProfile = {
+        var userProfile = {
           registrationId: id,
           countryName: '',
           countryId: details.countryId,
@@ -158,15 +157,14 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         }
 
         // let existingUser = Meteor.users.findOne({"username":userObject.username});
-        let existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
-        let updateCount = 0;
-        let userId = null;
+        var existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
+        var updateCount = 0;
+        var userId = null;
         if (existingUser) {
-
           // let result = Meteor.users.update({username:userObject.username,'profile.externalUserProfile' : {
           //   $elemMatch: {'registrationId': id}}}, {$set: {"profile.externalUserProfile.$":userProfile}});
-
-          let result = mlDBController.update('users', {
+           userId=existingUser._id;
+           result = mlDBController.update('users', {
             username: userObject.username, 'profile.externalUserProfile': {
               $elemMatch: {'registrationId': id}
             }
@@ -185,24 +183,24 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         if (updateCount === 1 || userId) {
           let code = 200;
-          let result = {username: userObject.username};
+           result = {username: userObject.username};
           // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
           mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
-          let response = new MlRespPayload().successPayload(result, code);
-          return response
+          updatedResponse = new MlRespPayload().successPayload(result, code);
+          return updatedResponse;
         }
 
         // MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
       } else {
-        // updatedResponse = MlRegistration.update(id, {$set:  {registrationDetails: args.details}});
-        updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context)
-      }
-    }else{
-      let code = 409;
-      let response = new MlRespPayload().errorPayload("Community not available for cluster", code);
-      return response;
+        validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id);
+        if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+        updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context);
     }
-    return updatedResponse
+
+    let code = 200;
+     result = {id: id};
+    updatedResponse = new MlRespPayload().successPayload(result, code);
+    return updatedResponse;
   }
 }
 
@@ -314,6 +312,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
       registrationData.emailId = regRecord.registrationInfo.userName;
       registrationData.industry = regRecord.registrationInfo.industry;
+      registrationData.profession = regRecord.registrationInfo.profession;
+
 
        try{
           MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);

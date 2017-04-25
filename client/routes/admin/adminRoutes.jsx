@@ -286,10 +286,10 @@ adminSection.route('/transactions/portfolio/editRequests/:id/:communityType', {
   }
 });
 
-adminSection.route('/transactions/portfolio/viewPortfolio/:id', {
+adminSection.route('/transactions/portfolio/viewPortfolio/:id/:communityType', {
   name: 'transaction_portfolio_viewPortfolio',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id}/>})
+    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }
 });
 
@@ -320,7 +320,6 @@ adminSection.route('/templates/assignTemplate/:id', {
 adminSection.route('/portfolio/tabcomponent', {
     action(params){
         mount(AdminLayout,{adminContent:<MlIdeatorPortfolioTemplate />})
-
     }
 });
 

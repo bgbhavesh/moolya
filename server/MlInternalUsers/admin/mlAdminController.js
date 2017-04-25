@@ -41,6 +41,7 @@ const defaultServerConfig = {
   registrationAPIPath:'/registrations',
   countries:'/countries',
   cities:'/cities',
+  couponValidate:'/coupons',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -176,18 +177,28 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                           let file = inner[key1]
                                           if(typeof file == 'object'){
                                               for (key2 in file){
-                                                 file[key2].fileUrl = resp;
+                                                if(key2 == "fileUrl"){
+                                                  file.fileUrl = resp;
+                                                }else{
+                                                  file[key2].fileUrl = resp;
+                                                }
                                               }
                                           }
                                       }
                                   }
                               }
+                              console.log(clientPortfolio);
                               switch (details.communityType){
                                   case 'Ideators':
                                       portfolio = {portfolio:{ideatorPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                                   case 'Startups':
+                                    if(data.indexArray){
+                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId,indexArray:data.indexArray}
+                                    }else{
                                       portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                    }
+
                                   break;
                               }
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
@@ -373,6 +384,64 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
             }
             console.log(cities);
             res.send(cities);
+          }
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
+  if(config.couponValidate){
+    console.log("couponValidate Invoked..!!");
+    graphQLServer.options('/coupons', cors());
+
+    graphQLServer.post(config.couponValidate, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
+    {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      console.log(req.body);
+      console.log("-----------");
+      console.log(req.headers);
+      console.log("-----------");
+      console.log(req.body.data);
+      console.log("-----------");
+      if(req)
+      {
+        console.log("coupon validation processing started..!!");
+        let data = req.body.data;
+        let apiKey = req.header("apiKey");
+         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let resp;
+          if(data) {
+            resp = MlPromocodes.findOne({code:data.code});
+            if(resp){
+              let currentDate = new Date();
+              if(resp.validityFrom <= currentDate && currentDate <= resp.validityTo){
+                let code = 200;
+                let result = {message:"valid promo applied"}
+                let response = new MlRespPayload().successPayload(result, code);
+                console.log(response);
+                res.send(response);
+              }else{
+                let code = 401;
+                let result = {message:"invalid promo code applied"}
+                let response = new MlRespPayload().errorPayload(result, code);
+                console.log(response);
+                res.send(response);
+              }
+            }
+            //res.send(cities);
           }
         }else{
           let code = 401;

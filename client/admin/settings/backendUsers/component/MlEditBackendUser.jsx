@@ -505,16 +505,16 @@ class MlEditBackendUser extends React.Component{
                   <br className="brclear"/>
                   {that.state.userProfiles.map(function (userProfiles, idx) {
                     return(
-                    <div key={idx} className="panel panel-default">
-                    <div className="panel-heading">Assigned Cluster Details</div>
-                    <div className="panel-body">
-
-                      <div className="form-group">
-                      <input type="text" ref="cluster"  placeholder="Cluster" defaultValue={userProfiles.clusterName}  className="form-control float-label" id="" disabled="true"/>
-                      </div>
+                    <div>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
-                          <div key={RId}>
+                          <div key={RId} className="panel panel-default">
+                            <div className="panel-heading">Assigned Cluster Details</div>
+                            <div className="panel-body">
+
+                              <div className="form-group">
+                                <input type="text" ref="cluster"  placeholder="Cluster" defaultValue={userProfiles.clusterName}  className="form-control float-label" id="" disabled="true"/>
+                              </div>
                             <div className="form-group">
                               <input type="text" ref="chapter" defaultValue={(userRoles.chapterId=='all')?userRoles.chapterId:userRoles.chapterName} placeholder="Chapter"
                                      className="form-control float-label" id="" disabled="true"/>
@@ -528,14 +528,15 @@ class MlEditBackendUser extends React.Component{
                             <div className="form-group">
                               <input type="text" ref="role" defaultValue={userRoles.roleName}   placeholder="Role" className="form-control float-label" id="" disabled="true"/>
                             </div>
+                              <div className="form-group">
+                                <div className="input_types"><input  ref="isDefault" checked={userProfiles.isDefault} onChange={that.onMakeDefultChange.bind(that,idx)}  id="checkbox1" type="checkbox" name="isDefault" value="1" /><label htmlFor="checkbox1"><span></span>Make Default</label></div>
+                              </div>
+                            </div>
                           </div>
+
                         )
                       })
                       }
-                      <div className="form-group">
-                        <div className="input_types"><input  ref="isDefault" checked={userProfiles.isDefault} onChange={that.onMakeDefultChange.bind(that,idx)}  id="checkbox1" type="checkbox" name="isDefault" value="1" /><label htmlFor="checkbox1"><span></span>Make Default</label></div>
-                      </div>
-                    </div>
                     </div>
 
                     )

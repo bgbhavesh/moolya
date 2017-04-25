@@ -55,7 +55,7 @@ MlResolver.MlQueryResolver['FindProfession'] = (obj, args, context, info) => {
     var id= args._id;
     // let response= MlProfessions.findOne({"_id":id});
     let response= mlDBController.findOne("MlProfessions", {_id:id}, context);
-    response.push({"professionName" : "All","_id" : "all"});
+    //response.push({"professionName" : "All","_id" : "all"});
     return response;
   }
 

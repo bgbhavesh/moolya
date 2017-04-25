@@ -9,8 +9,6 @@ import formHandler from '../../../../commons/containers/MlFormHandler'
 import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {findProcessActionHandler} from '../actions/findProcessAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-
-
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlAssignDocument from './MlAssignDocument'
@@ -308,7 +306,7 @@ console.log(this.state.industries);
 
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
     let chapterOption={options: { variables: {states:this.state.states,clusters:this.state.clusters}}};
-    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters,displayAllOption:true}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
     let userTypeOption={options: { variables: {communityId:this.state.communities}}};
     const showLoader=this.state.loading;

@@ -6,6 +6,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import {addDocumentMappingActionHandler} from '../actions/addDocumentMappingAction'
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 // import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
@@ -213,7 +214,7 @@ class MlAddDocumentMapping extends React.Component{
                       <input type="text"  ref="documentId" placeholder="Document Id" className="form-control float-label" id=""/>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <input type="text"  ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                     </div>
 
@@ -242,7 +243,7 @@ class MlAddDocumentMapping extends React.Component{
                         <div className="form-group">
                           <input type="text"  ref="remark" placeholder="Remark" className="form-control float-label" id=""/>
                         </div>
-                        <div className="form-group switch_wrap inline_switch">
+                        <div className="form-group switch_wrap inline_switch mandatory">
                           <label className="">Status</label>
                           <label className="switch">
                             <input type="checkbox" ref="status"/>
@@ -270,7 +271,7 @@ class MlAddDocumentMapping extends React.Component{
             <div className="form-group">
               <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
             </div>
-            <div className="form-group">
+            <div className="form-group mandatory">
               <input type="text"  ref="allowableSize" placeholder="Allowable Size" className="form-control float-label" id=""/>
             </div>
             <div className="form-group">

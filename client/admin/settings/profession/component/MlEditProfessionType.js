@@ -9,6 +9,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findProfessionActionHandler} from '../actions/findProfessionTypeAction'
 import {updateProfessionTypeActionHandler} from '../actions/updateProfessionTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditProfessionType extends React.Component{
   constructor(props) {
     super(props);
@@ -61,18 +62,23 @@ class MlEditProfessionType extends React.Component{
     this.onIndustrySelect();
   }
   async  updateProfessionType() {
-    let ProfessionType = {
-      id: this.refs.id.value,
-      professionName: this.refs.professionName.value,
-      professionDisplayName: this.refs.professionDisplayName.value,
-      industryId: this.state.selectedIndustry,
-      industryName: '',
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let ProfessionType = {
+        id: this.refs.id.value,
+        professionName: this.refs.professionName.value,
+        professionDisplayName: this.refs.professionDisplayName.value,
+        industryId: this.state.selectedIndustry,
+        industryName: '',
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await updateProfessionTypeActionHandler(ProfessionType)
+      toastr.success("Edited Successfully");
+      return response;
     }
-    const response = await updateProfessionTypeActionHandler(ProfessionType)
-    return response;
-
   }
 
   onStatusChange(e){
@@ -121,10 +127,10 @@ class MlEditProfessionType extends React.Component{
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                     <input type="text" ref="professionName" placeholder="Profession Name" defaultValue={this.state.data&&this.state.data.professionName}
-                           className="form-control float-label"/>
+                           className="form-control float-label" data-required={true} data-errMsg="Name is required" />
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>
@@ -135,9 +141,9 @@ class MlEditProfessionType extends React.Component{
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="professionDisplayName" placeholder="Display Name"
-                           className="form-control float-label" defaultValue={this.state.data&&this.state.data.professionDisplayName}/>
+                           className="form-control float-label" defaultValue={this.state.data&&this.state.data.professionDisplayName} data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} placeholder="Select Industry" className="form-control float-label" valueKey={'value'}

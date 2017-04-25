@@ -11,6 +11,7 @@ import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 
 export default class Individual extends React.Component{
   constructor(props){
@@ -111,35 +112,42 @@ export default class Individual extends React.Component{
   }
 */
   async  updateregistration() {
-    let Details=null;
-    Details = {
-        registrationId      : this.props.registrationId,
-        details:{
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+
+      let Details = null;
+      Details = {
+        registrationId: this.props.registrationId,
+        details: {
           //identityType      : this.state.identity,
-         // userType          : this.state.selectedUserType,
-          title             : this.state.title,
-          firstName         : this.refs.firstName.value,
-          middleName        : this.refs.middleName.value,
-          lastName          : this.refs.lastName.value,
-          displayName       : this.refs.displayName.value,
-          dateOfBirth       : this.state.dateOfBirth,
-          gender            : this.state.gender,
-          citizenships      : this.state.citizenships,
-          qualification     : this.refs.qualification.value,
-          employmentStatus  : this.state.employmentStatus,
-          professionalTag   : this.refs.professionalTag.value,
-          industry          : this.state.selectedTypeOfIndustry,
-          profession        : this.state.profession,
-          employerName      : this.refs.employerName.value,
-          employerWebsite   : this.refs.employerWebsite.value,
-          employmentDate    : this.state.employmentDate
+          // userType          : this.state.selectedUserType,
+          title: this.state.title,
+          firstName: this.refs.firstName.value,
+          middleName: this.refs.middleName.value,
+          lastName: this.refs.lastName.value,
+          displayName: this.refs.displayName.value,
+          dateOfBirth: this.state.dateOfBirth,
+          gender: this.state.gender,
+          citizenships: this.state.citizenships,
+          qualification: this.refs.qualification.value,
+          employmentStatus: this.state.employmentStatus,
+          professionalTag: this.refs.professionalTag.value,
+          industry: this.state.selectedTypeOfIndustry,
+          profession: this.state.profession,
+          employerName: this.refs.employerName.value,
+          employerWebsite: this.refs.employerWebsite.value,
+          employmentDate: this.state.employmentDate
         }
+      }
+        //this.props.getRegistrationDetails();
+        const response = await updateRegistrationActionHandler(Details);
+      this.props.getRegistrationDetails();
+      return response;
     }
-    //this.props.getRegistrationDetails();
-    const response = await updateRegistrationActionHandler(Details);
-    this.props.getRegistrationDetails();
-    return response;
-  }
+    }
+
   updateRegistration(){
     const resp=this.updateregistration();
     return resp;
@@ -253,23 +261,23 @@ export default class Individual extends React.Component{
                           <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                         </div>*/}
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true} data-required={true} data-errMsg="Title is required"/>
 
                         </div>
-                        <div className="form-group">
-                          <input type="text" ref="firstName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} placeholder="First Name" className="form-control float-label" id=""/>
+                        <div className="form-group mandatory">
+                          <input type="text" ref="firstName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} placeholder="First Name" className="form-control float-label" id="" data-required={true} data-errMsg="First Name is required"/>
                         </div>
                         <div className="form-group">
                           <input type="text" ref="middleName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.middleName} placeholder="Middle Name" className="form-control float-label" id=""/>
                         </div>
-                        <div className="form-group">
-                          <input type="text" ref="lastName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} placeholder="Last Name" className="form-control float-label" id=""/>
+                        <div className="form-group mandatory">
+                          <input type="text" ref="lastName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} placeholder="Last Name" className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required"/>
                         </div>
-                        <div className="form-group">
-                          <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
+                        <div className="form-group mandatory">
+                          <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                         </div>
-                        <div className="form-group">
-                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
+                        <div className="form-group mandatory">
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} data-required={true} data-errMssg="Date Of Birth is required"/>
                           <FontAwesome name="calendar" className="password_icon"/>
                         </div>
                         <div className="form-group">

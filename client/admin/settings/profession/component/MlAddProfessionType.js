@@ -8,6 +8,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addProfessionActionHandler} from '../actions/addProfessionTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddProfession extends React.Component {
   constructor(props) {
     super(props);
@@ -43,17 +44,23 @@ class MlAddProfession extends React.Component {
   };
 
   async  createProfession() {
-    let ProfessionDetails = {
-      professionName: this.refs.professionName.value,
-      professionDisplayName: this.refs.professionDisplayName.value,
-      industryId: this.state.selectedIndustry,
-      industryName: '',
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let ProfessionDetails = {
+        professionName: this.refs.professionName.value,
+        professionDisplayName: this.refs.professionDisplayName.value,
+        industryId: this.state.selectedIndustry,
+        industryName: '',
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
 
-    const response = await addProfessionActionHandler(ProfessionDetails)
-    return response;
+      const response = await addProfessionActionHandler(ProfessionDetails)
+      toastr.success("Profession created");
+      return response;
+    }
   }
   componentDidMount()  {
     OnToggleSwitch(false,true);
@@ -96,9 +103,9 @@ class MlAddProfession extends React.Component {
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text" ref="professionName" placeholder="Profession Name"
-                       className="form-control float-label"/>
+                       className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
               </div>
               <div className="form-group">
                 <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
@@ -109,9 +116,9 @@ class MlAddProfession extends React.Component {
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text" ref="professionDisplayName" placeholder="Display Name"
-                       className="form-control float-label" id=""/>
+                       className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
               </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select Industry" className="form-control float-label" valueKey={'value'}

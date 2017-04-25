@@ -11,14 +11,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {findStartupInvestorDetailsActionHandler} from '../../../actions/findPortfolioStartupDetails'
-var Select = require('react-select');
-var options = [
-  { value: '1', label: '1' },
-  { value: '2', label: '2' }
-];
-function logChange(val) {
-  console.log("Selected: " + val);
-}
+
 
 
 export default class MlStartupInvestor extends React.Component{
@@ -73,6 +66,9 @@ export default class MlStartupInvestor extends React.Component{
   onSelect(index, e){
     let details = this.state.startupInvestor[index]
     details = _.omit(details, "__typename");
+    if(details && details.logo){
+      delete details.logo['__typename'];
+    }
     this.setState({index:index});
     this.setState({data:details})
     this.setState({selectedObject : index})
@@ -84,6 +80,7 @@ export default class MlStartupInvestor extends React.Component{
     indexArray = _.uniq(indexArray);
     this.setState({indexArray: indexArray})
   }
+
 
   onLockChange(field, e){
     let details = this.state.data||{};
@@ -135,6 +132,10 @@ export default class MlStartupInvestor extends React.Component{
       this.sendDataToParent()
     })
   }
+  onSaveAction(e){
+    this.setState({startupInvestorList:this.state.startupInvestor})
+    this.setState({popoverOpen : false})
+  }
   sendDataToParent(){
     let data = this.state.data;
     let startupInvestor1 = this.state.startupInvestor;
@@ -148,6 +149,9 @@ export default class MlStartupInvestor extends React.Component{
         }
       }
       newItem = _.omit(item, "__typename")
+      if(item && item.logo){
+        delete item.logo['__typename'];
+      }
       arr.push(newItem)
     })
     startupInvestor = arr;
@@ -155,6 +159,23 @@ export default class MlStartupInvestor extends React.Component{
     this.setState({startupInvestor:startupInvestor})
     let indexArray = this.state.indexArray;
     this.props.getInvestorDetails(startupInvestor,indexArray);
+  }
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+  onFileUploadCallBack(name,fileName, resp){
+    if(resp){
+      let result = JSON.parse(resp);
+      if(result.success){
+        this.setState({startupAssetsList:this.state.startupAssets})
+      }
+    }
   }
 
   render(){
@@ -194,7 +215,7 @@ export default class MlStartupInvestor extends React.Component{
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
-                          <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src="/images/meteor-logo.png"/></div>
+                          <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                           <h3>{details.description}</h3>
                         </div>
                       </a>
@@ -218,13 +239,6 @@ export default class MlStartupInvestor extends React.Component{
                         <input type="text" name="name" placeholder="Name" className="form-control float-label" id="" defaultValue={this.state.data.name}  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate}  onClick={this.onLockChange.bind(this, "isNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isNamePrivate}/>
                       </div>
-
-                      <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
-                          <span>Upload Logo</span>
-                          <input type="file" className="upload" />
-                        </div>
-                      </div>
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                       labelKey={'label'} queryType={"graphql"} query={query}
@@ -241,10 +255,17 @@ export default class MlStartupInvestor extends React.Component{
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
                       </div>
                       <div className="form-group">
+                        <div className="fileUpload mlUpload_btn">
+                          <span>Upload Logo</span>
+                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                        </div>
+                      </div>
+                      <div className="clearfix"></div>
+                      <div className="form-group">
                         <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                       </div>
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="#" className="save_btn">Save</a>
+                        <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                       </div>
                     </div>
                   </div></div>

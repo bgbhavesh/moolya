@@ -339,12 +339,12 @@ validateinternalUserLoginAttempt=(user)=>{
               chapterActive = true
             }
 
-            let defaultSubChapter = MlSubChapters.findOne({"$and":[{_id:role.chapterId}, {isActive:true}]})
+            let defaultSubChapter = MlSubChapters.findOne({"$and":[{_id:role.subChapterId}, {isActive:true}]})
             if(defaultSubChapter || role.subChapterId == "all"){
               subChapterActive = true
             }
 
-            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{_id:role.chapterId}, {isActive:true}]})
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{_id:role.communityId}, {isActive:true}]})
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }

@@ -9,7 +9,6 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioManagement(portfoliodetailsId: $portfoliodetailsId) {
                title
-               logo
                isTitlePrivate
                firstName
                isFirstNamePrivate
@@ -41,6 +40,10 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
                isLinkedInUrlPrivate
                about 
                isAboutPrivate
+                logo{
+                  fileName
+                  fileUrl
+                }
             }
           }
 
@@ -77,6 +80,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                   companyName
                   isCompanyNamePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                   makePrivate
                 }
                 serviceProducts{
@@ -95,6 +102,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isQuantityTypePrivate
                   isDescriptionPrivate
                   makePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                 }
                 branches{
                   name
@@ -117,6 +128,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isCountryPrivate
                   addressImage
                   makePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                 }
                 technologies{
                   technology
@@ -124,6 +139,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   description
                   isDescriptionPrivate
                   makePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                 }
                 legalIssue{
                   description
@@ -169,6 +188,10 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
                
                 isInvestmentAmountPrivate
                 isDescriptionPrivate
+                logo{
+                    fileName
+                    fileUrl
+                  }
                 makePrivate
             }
           }
@@ -195,6 +218,10 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
                 isTypePrivate
                 description
                 isDescriptionPrivate
+                logo{
+                    fileName
+                    fileUrl
+                  }
                 makePrivate
             }
           }
@@ -223,6 +250,10 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
                   isYearPrivate
                   description
                   isDescriptionPrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                   makePrivate
             }
           }
@@ -237,4 +268,70 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
   // let data = _.omit(id,'__typename')
   // return data
   return id
+}
+export async function fetchStartupPortfolioMemberships(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioMemberships(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioMemberships;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
+}
+export async function fetchStartupPortfolioCompliances(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioCompliances(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioCompliances;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
+}
+export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioLicenses(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioLicenses;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
 }

@@ -27,9 +27,12 @@ let startupPortfolioSchema = `
       id:String
       menu:[PortfolioMenu]
     }
+    type imagesTypeSchema{
+        fileUrl   : String,
+        fileName  : String
+    }
     type startupManagementOutput{
        title :String
-       logo : String
        isTitlePrivate : Boolean
        firstName : String
        isFirstNamePrivate : Boolean
@@ -61,17 +64,15 @@ let startupPortfolioSchema = `
        isLinkedInUrlPrivate : Boolean
        about : String
        isAboutPrivate:Boolean
+       logo:imagesTypeSchema,
     }
     
-    type imagesTypeSchema{
-        fileUrl   : String,
-        fileName  : String
-    }
+ 
     
     type clientsOutput{
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        logo:String
+        logo:imagesTypeSchema,
         description:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean
@@ -99,6 +100,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
         
     }
@@ -110,6 +112,7 @@ let startupPortfolioSchema = `
         isQuantityTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -118,6 +121,7 @@ let startupPortfolioSchema = `
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+         logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -129,6 +133,7 @@ let startupPortfolioSchema = `
         isNamePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+         logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -136,7 +141,8 @@ let startupPortfolioSchema = `
         type:String,
         isTypePrivate:Boolean,
         description:String,
-        isDescriptionPrivate:Boolean
+        isDescriptionPrivate:Boolean,
+         logo:imagesTypeSchema,
         makePrivate:Boolean
     }
     
@@ -179,23 +185,23 @@ let startupPortfolioSchema = `
           isYearPrivate:Boolean
           description:String
           isDescriptionPrivate:Boolean
+          logo:imagesTypeSchema,
           makePrivate:Boolean
     }
 
     type membershipsOutput{
         description:String, 
-        isIntellectualPrivate :Boolean
+        isDescriptionPrivate :Boolean
     }
     
     type compliancesOutput{
-        description:String,
-        isLookingForPrivate:Boolean
+        description:String, 
+        isDescriptionPrivate :Boolean
     }
     
     type licensesOutput{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
+        description:String, 
+        isDescriptionPrivate :Boolean
     }
    type chartsOutput{
         fileType:String,
@@ -214,9 +220,13 @@ let startupPortfolioSchema = `
         legalIssue          : legalIssueOutput
     }
     
+    input logo{
+      fileName : String,
+      fileUrl:String
+    }
+    
     input startupManagement{
        title :String
-       logo : String
        isTitlePrivate : Boolean
        firstName : String
        isFirstNamePrivate : Boolean
@@ -248,12 +258,13 @@ let startupPortfolioSchema = `
        isLinkedInUrlPrivate : Boolean
        about : String
        isAboutPrivate:Boolean
+       logo:logo
     }
-    
+  
     input clients{
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        logo:String
+        logo:logo,
         description:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean
@@ -281,6 +292,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -291,6 +303,7 @@ let startupPortfolioSchema = `
         isQuantityTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
+        logo:logo,
         makePrivate:Boolean
     }
     
@@ -299,6 +312,7 @@ let startupPortfolioSchema = `
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -312,6 +326,7 @@ let startupPortfolioSchema = `
         isInvestorImagePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -319,7 +334,8 @@ let startupPortfolioSchema = `
         type:String,
         isTypePrivate:Boolean,
         description:String,
-        isDescriptionPrivate:Boolean
+        isDescriptionPrivate:Boolean,
+          logo:logo,
         makePrivate:Boolean
     }
     
@@ -369,22 +385,22 @@ let startupPortfolioSchema = `
           description:String
           isDescriptionPrivate:Boolean
           makePrivate:Boolean
+          logo : logo
     }
 
     input memberships{
         description:String, 
-        isIntellectualPrivate :Boolean
+        isDescriptionPrivate :Boolean
     }
     
     input compliances{
-        description:String,
-        isLookingForPrivate:Boolean
+         description:String, 
+        isDescriptionPrivate :Boolean
     }
     
     input licenses{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
+         description:String, 
+        isDescriptionPrivate :Boolean
     }
    input charts{
         fileType:String,
@@ -414,6 +430,9 @@ let startupPortfolioSchema = `
     
     type Query{
         fetchStartupPortfolioAboutUs(portfoliodetailsId:String!):startupPortfolioAboutUsOutput
+        fetchStartupPortfolioMemberships(portfoliodetailsId:String!):membershipsOutput
+        fetchStartupPortfolioCompliances(portfoliodetailsId:String!):compliancesOutput
+        fetchStartupPortfolioLicenses(portfoliodetailsId:String!):licensesOutput
         fetchStartupPortfolioManagement(portfoliodetailsId:String!):[startupManagementOutput]
         fetchStartupPortfolioInvestor(portfoliodetailsId:String!):[investorOutput]
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]

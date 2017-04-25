@@ -3,22 +3,23 @@ import {render} from 'react-dom';
 
 export default class MlDetailsNotesComponent extends React.Component {
   render() {
+    let that=this;
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
           <li className="active">
-            <a  href="#1a" data-toggle="tab">Details</a>
+            <a  href={`#details${that.props.id}`} data-toggle="tab">Details</a>
           </li>
-          <li><a href="#2a" data-toggle="tab">Notes</a>
+          <li><a href={`#notes${that.props.id}`} data-toggle="tab">Notes</a>
           </li>
         </ul>
 
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id="1a">
+          <div className="tab-pane active" id={`details${that.props.id}`}>
             <div className="row">
               <div className="col-md-9">
                 <div className="form-group">
-                  <input type="text" placeholder="Requested for" defaultValue="New user" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Requested for" defaultValue={that.props.transaction.transactionTypeName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Device name" defaultValue="HP-Laptop" className="form-control float-label" id=""/>
@@ -38,7 +39,7 @@ export default class MlDetailsNotesComponent extends React.Component {
 
             </div>
           </div>
-          <div className="tab-pane" id="2a">
+          <div className="tab-pane" id={`notes${that.props.id}`}>
             <div className="row">
               <div className="col-md-8 nopadding">
                 <div className="col-md-6">

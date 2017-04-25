@@ -167,7 +167,7 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
                     <br className="brclear"/>
                     <div className="form-group">
-                      <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industryDisplayName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industry} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate" onClick={this.onClick.bind(this, "isIndustryPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
                     </div>
 

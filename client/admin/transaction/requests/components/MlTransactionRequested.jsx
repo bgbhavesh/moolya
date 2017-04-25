@@ -26,8 +26,11 @@ export default class MlTransactionRequested extends Component {
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          transactionCreatedDate: requestDetails[i].transactionCreatedDate,
-          requestTypeId: requestDetails[i].requestTypeId,
+          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
+          requestDescription:requestDetails[i].requestDescription,
+          requestTypeName:requestDetails[i].requestTypeName,
+          requestId: requestDetails[i].requestId,
+          userId: requestDetails[i].userId,
           transactionTypeName: requestDetails[i].transactionTypeName,
           status:'pending',
           transactionId:requestDetails[i]._id
@@ -50,9 +53,6 @@ export default class MlTransactionRequested extends Component {
   }
   creatRequestType(){
       this.setState({createRequest:true});
-   /* return (
-      <CreateRequestComponent openPopUp={true}/>
-    )*/
   }
 
   render() {
@@ -73,10 +73,6 @@ export default class MlTransactionRequested extends Component {
       clickToSelect: true,  // click to select, default is false
       clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
     }
-    function dateFormatter (data){
-     /* let createdDateTime=data&&data.state.requetsInfo&&data.state.requetsInfo;
-      return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;*/
-    }
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -96,8 +92,8 @@ export default class MlTransactionRequested extends Component {
                              pagination
             >
               <TableHeaderColumn dataField="transactionId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
-              <TableHeaderColumn dataField="transactionCreatedDate" customComponent={dateFormatter(this)}>Date&Time</TableHeaderColumn>
-              <TableHeaderColumn dataField="requestTypeId">RequestId</TableHeaderColumn>
+              <TableHeaderColumn dataField="transactionCreatedDate" >Date&Time</TableHeaderColumn>
+              <TableHeaderColumn dataField="requestId">RequestId</TableHeaderColumn>
               <TableHeaderColumn dataField="transactionTypeName">Type</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             </BootstrapTable>

@@ -10,6 +10,7 @@ import Moolyaselect from  '../../../../../../../commons/components/select/Moolya
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
+import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 
 
 export default class MlStartupAssets extends React.Component{
@@ -61,6 +62,9 @@ export default class MlStartupAssets extends React.Component{
   onSelectAsset(index, e){
     let assetDetails = this.state.startupAssets[index]
     assetDetails = _.omit(assetDetails, "__typename");
+    if(assetDetails && assetDetails.logo){
+      delete assetDetails.logo['__typename'];
+    }
     this.setState({arrIndex:index});
     this.setState({data:assetDetails})
     this.setState({selectedAsset : index})
@@ -145,6 +149,9 @@ export default class MlStartupAssets extends React.Component{
         }
       }
       newItem = _.omit(item, "__typename")
+      if(item && item.logo){
+        delete item.logo['__typename'];
+      }
       assetsArr.push(newItem)
     })
     startupAssets = assetsArr;
@@ -152,6 +159,23 @@ export default class MlStartupAssets extends React.Component{
     this.setState({startupAssets:startupAssets})
     let indexArray = this.state.indexArray;
     this.props.getStartupAssets(startupAssets,indexArray);
+  }
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+  onFileUploadCallBack(name,fileName, resp){
+    if(resp){
+      let result = JSON.parse(resp);
+      if(result.success){
+        this.setState({startupAssetsList:this.state.startupAssets})
+      }
+    }
   }
   render(){
     let assetsQuery=gql`query{
@@ -190,8 +214,8 @@ export default class MlStartupAssets extends React.Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl" onClick={that.onDeleteAsset.bind(that, idx)}><FontAwesome name='times'/></div>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onSelectAsset.bind(that, idx)}><FontAwesome name='laptop'/></div>
-                        <h3>{details.description}<span className="assets-list">{details.quantity}</span></h3>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onSelectAsset.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <h3>{details.description?details.description:""}<span className="assets-list">{details.quantity?details.quantity:""}</span></h3>
                       </div>
                     </a>
                   </div>)
@@ -226,7 +250,13 @@ export default class MlStartupAssets extends React.Component{
                       <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
-
+                    <div className="form-group">
+                      <div className="fileUpload mlUpload_btn">
+                        <span>Upload Logo</span>
+                        <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
                     <div className="form-group">
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>

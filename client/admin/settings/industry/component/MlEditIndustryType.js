@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findIndustryActionHandler} from '../actions/findIndustryTypeAction'
 import {updateIndustryTypeActionHandler} from '../actions/updateIndustryTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditIndustryType extends React.Component{
   constructor(props) {
     super(props);
@@ -54,16 +55,22 @@ class MlEditIndustryType extends React.Component{
     this.setState({loading:false,data:response});
   }
   async  updateIndustryType() {
-    let IndustryType = {
-      id: this.refs.id.value,
-      industryName: this.refs.industryName.value,
-      industryDisplayName: this.refs.industryDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
-    const response = await updateIndustryTypeActionHandler(IndustryType)
-    return response;
 
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let IndustryType = {
+        id: this.refs.id.value,
+        industryName: this.refs.industryName.value,
+        industryDisplayName: this.refs.industryDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await updateIndustryTypeActionHandler(IndustryType)
+      toastr.success("Edited Successfully");
+      return response;
+    }
   }
 
   onStatusChange(e){
@@ -107,9 +114,9 @@ class MlEditIndustryType extends React.Component{
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="industryName" placeholder="Name" defaultValue={this.state.data&&this.state.data.industryName} className="form-control float-label" id=""/>
+                    <input type="text" ref="industryName" placeholder="Name" defaultValue={this.state.data&&this.state.data.industryName} className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
 
                   </div>
                   <div className="form-group">
@@ -122,8 +129,8 @@ class MlEditIndustryType extends React.Component{
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
-                    <input type="text" ref="industryDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.industryDisplayName} className="form-control float-label" id=""/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="industryDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.industryDisplayName} className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

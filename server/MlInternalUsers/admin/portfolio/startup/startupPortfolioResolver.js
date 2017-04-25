@@ -108,8 +108,8 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["branches"]=portfolio.branches;
     startAboutUsArray["technologies"]=portfolio.technologies;
     startAboutUsArray["legalIssue"]=portfolio.legalIssue;
-
-    startAboutUsArray["assets"]=portfolio.assets
+    startAboutUsArray["rating"]=portfolio.rating;
+    startAboutUsArray["assets"]=portfolio.assets;
     if(startAboutUsArray){
       return startAboutUsArray
     }

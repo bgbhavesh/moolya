@@ -14,12 +14,12 @@ MlResolver.MlMutationResolver['createTechnology'] = (obj, args, context, info) =
         return response;
       }
       else{
-        let response = MlRespPayload.errorPayload("Error in Creating an Asset", 400);
+        let response = new MlRespPayload().errorPayload("Error in Creating an Asset", 400);
         return response;
       }
     }
     catch (e){
-      let response = MlRespPayload.errorPayload(e.message, 400);
+      let response = new  MlRespPayload().errorPayload(e.message, 400);
       return response;
     }
 
@@ -35,12 +35,12 @@ MlResolver.MlMutationResolver['updateSelectedTechnology'] = (obj, args, context,
         return response;
       }
       else{
-        let response = new MlRespPayload.errorPayload("Error in Creating an Asset", 400);
+        let response = new MlRespPayload().errorPayload("Error in Creating an Asset", 400);
         return response;
       }
     }
     catch (e){
-      let response = new MlRespPayload.errorPayload(e.message, 400);
+      let response = new MlRespPayload().errorPayload(e.message, 400);
       return response;
     }
   }

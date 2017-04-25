@@ -5,6 +5,7 @@ MlModuleCollectionMap['MlChapters'] = 'CHAPTER';
 MlModuleCollectionMap['MlCities'] = 'CITIES';
 MlModuleCollectionMap['MlClusters'] = 'CLUSTER';
 MlModuleCollectionMap['MlIndustries'] = 'INDUSTRY';
+MlModuleCollectionMap['MlAwards'] = 'AWARDS';
 MlModuleCollectionMap['MlCommunity'] = 'COMMUNITY';
 MlModuleCollectionMap['MlCommunityAccess'] = 'COMMUNITYACCESS';
 MlModuleCollectionMap['MlConversations'] = 'CONVERSATIONS';

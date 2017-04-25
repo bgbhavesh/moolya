@@ -110,6 +110,9 @@ import MlTechnologiesList from '../../admin/settings/technologies/component/MlTe
 import MlAddTechnology from '../../admin/settings/technologies/component/MlAddTechnology'
 import MlEditTechnology from '../../admin/settings/technologies/component/MlEditTechnology'
 
+import MlAwardTypeList from '../../admin/settings/awards/component/MlAwardTypeList'
+import MlAddAwardType from '../../admin/settings/awards/component/MlAddAwardType'
+import MlEditAwardType from '../../admin/settings/awards/component/MlEditAwardType'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -970,5 +973,24 @@ adminSection.route('/settings/editRoleType/:id', {
     action(params){
         mount(AdminLayout,{adminContent:< MlEditRoleType  config={params.id}/>})
     }
+});
+
+adminSection.route('/settings/awardList', {
+  name: 'settings_AwardTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAwardTypeList/>})
+  }
+});
+adminSection.route('/settings/addAward', {
+  name: 'settings_AddAwardType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddAwardType />})
+  }
+});
+adminSection.route('/settings/editAward/:id', {
+  name: 'settings_EditAwardType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAwardType config={params.id} />})
+  }
 });
 //  @End

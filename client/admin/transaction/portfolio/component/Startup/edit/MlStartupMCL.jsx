@@ -125,9 +125,19 @@ export default class MlStartupMCL extends React.Component{
   }
   sendDataToParent(){
     let data = this.state.data;
-    for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined) {
-        delete data[propName];
+    for (var propName in data.compliances) {
+      if (data['compliances'][propName] === null || data['compliances'][propName] === undefined) {
+        delete data['compliances'][propName];
+      }
+    }
+    for (var propName in data.licenses) {
+      if (data['licenses'][propName] === null || data['licenses'][propName] === undefined) {
+        delete data['licenses'][propName];
+      }
+    }
+    for (var propName in data.memberships) {
+      if (data['memberships'][propName] === null || data['memberships'][propName] === undefined) {
+        delete data['memberships'][propName];
       }
     }
     this.props.getStartupMCL(data)

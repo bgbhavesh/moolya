@@ -119,7 +119,6 @@ export default class MlStartupLookingFor extends React.Component{
   }
 
   onOptionSelected(selectedIndex,handler,selectedObj){
-
     let details =this.state.data;
     details=_.omit(details,["type"]);
     details=_.extend(details,{["type"]:selectedIndex});
@@ -127,8 +126,8 @@ export default class MlStartupLookingFor extends React.Component{
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()
     })
-
   }
+
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -138,6 +137,7 @@ export default class MlStartupLookingFor extends React.Component{
       this.sendDataToParent()
     })
   }
+
   sendDataToParent(){
     let data = this.state.data;
     let startupInvestor1 = this.state.startupInvestor;
@@ -159,6 +159,7 @@ export default class MlStartupLookingFor extends React.Component{
     let indexArray = this.state.indexArray;
     this.props.getLookingForDetails(startupInvestor,indexArray);
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -168,6 +169,7 @@ export default class MlStartupLookingFor extends React.Component{
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{lookingFor:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
+
   onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp);
@@ -216,20 +218,14 @@ export default class MlStartupLookingFor extends React.Component{
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                           <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-
                           <h3>{details.description}</h3>
                         </div>
                       </a>
                     </div>)
                   })}
-
-
-
                 </div>
               </div>
-
             </ScrollArea>
-
             <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
               {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
               <PopoverContent>
@@ -265,14 +261,8 @@ export default class MlStartupLookingFor extends React.Component{
                 </div>
               </PopoverContent>
             </Popover>
-
-
-
-
           </div>
         </div>
-
-
       </div>
     )
   }

@@ -249,13 +249,14 @@ class MlAddDateAndTime extends React.Component{
                   <div className="form-group">
                     <Moolyaselect multiSelect={false}  placeholder={"First Day in Week"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.firstDayOfWeek} queryType={"graphql"} query={weekDaysquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectFirstDayOfWeek.bind(this)} />
                   </div>
-                  <div className="form-group switch_wrap inline_switch">
-                    <label>24</label>
-                    <label className="switch">
+                  <div className="form-group switch_wrap switch_names">
+                    <span className="state_label acLabel">24 hours</span>
+                    <label className="switch nocolor-switch">
                       <input type="checkbox" ref="status" checked={this.state.hoursFormat} onChange={this.onHoursFormatChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
-                    <label>12</label>
+
+                    <span className="state_label">12 hours</span>
                   </div>
                   <br className="brclear"/>
                 </form>

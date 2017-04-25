@@ -7,7 +7,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditDocumentFormat extends React.Component{
   constructor(props) {
     super(props);
@@ -58,18 +58,23 @@ class MlEditDocumentFormat extends React.Component{
   }
 
   async  updateDocument() {
-    let Details = {
-      _id: this.refs.id.value,
-      docFormatName: this.refs.name.value,
-      docFormatDisplayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.status.checked,
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let Details = {
+        _id: this.refs.id.value,
+        docFormatName: this.refs.name.value,
+        docFormatDisplayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.status.checked,
+      }
+      const response = await updateDocumentFormatActionHandler(Details);
+      toastr.success("Edited Successfully");
+      return response;
+
     }
-    const response = await updateDocumentFormatActionHandler(Details);
-    return response;
-
   }
-
   onStatusChange(e){
     const data=this.state.data;
     if(e.currentTarget.checked){
@@ -111,9 +116,9 @@ class MlEditDocumentFormat extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data._id} hidden="true"/>
-                  <input type="text" ref="name" placeholder="Name" defaultValue={this.state.data&&this.state.data.docFormatName} className="form-control float-label" id=""/>
+                  <input type="text" ref="name" placeholder="Name" defaultValue={this.state.data&&this.state.data.docFormatName} className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
                 </div>
                 <div className="form-group">
                   <textarea ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label" id=""></textarea>
@@ -125,8 +130,8 @@ class MlEditDocumentFormat extends React.Component{
             <div className="form_bg">
 
                 <form>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docFormatDisplayName} className="form-control float-label" id=""/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docFormatDisplayName} className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addSpecificationActionHandler} from '../actions/addSpecificationsTypeAction'
 let FontAwesome = require('react-fontawesome');
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddSpecification extends React.Component{
   constructor(props) {
     super(props);
@@ -36,15 +37,21 @@ class MlAddSpecification extends React.Component{
   };
 
   async  createSpecification() {
-    let SpecificationDetails = {
-      specificationName: this.refs.specificationName.value,
-      specificationDisplayName: this.refs.specificationDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
-    const response = await addSpecificationActionHandler(SpecificationDetails)
-    return response;
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let SpecificationDetails = {
+        specificationName: this.refs.specificationName.value,
+        specificationDisplayName: this.refs.specificationDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await addSpecificationActionHandler(SpecificationDetails)
+      toastr.success("Specification created");
+      return response;
 
+    }
   }
   render(){
     let MlActionConfig = [
@@ -75,8 +82,8 @@ class MlAddSpecification extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-              <div className="form-group">
-                <input type="text" ref="specificationName" placeholder="Specification Name" className="form-control float-label"/>
+              <div className="form-group  mandatory">
+                <input type="text" ref="specificationName" placeholder="Specification Name" className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
               </div>
               <div className="form-group">
                 <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
@@ -87,8 +94,8 @@ class MlAddSpecification extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-              <div className="form-group">
-                <input type="text" ref="specificationDisplayName" placeholder="Display Name" className="form-control float-label"/>
+              <div className="form-group  mandatory">
+                <input type="text" ref="specificationDisplayName" placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
               </div>
               <div className="form-group switch_wrap inline_switch">
                 <label>Status</label>

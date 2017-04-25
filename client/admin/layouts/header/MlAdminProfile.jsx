@@ -43,7 +43,6 @@ export default class  MlAdminProfile extends Component {
     let userType = Meteor.userId();
     let response = await findBackendUserActionHandler(userType);
     // let profilePicResponse = await addProfilePicAction(Details);
-    console.log(response);
     this.setState({firstName : response.profile.InternalUprofile.moolyaProfile.displayName,
       profilePic:response.profile.profileImage
     });

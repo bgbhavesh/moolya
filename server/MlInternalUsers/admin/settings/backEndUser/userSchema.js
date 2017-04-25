@@ -194,6 +194,12 @@ let BackEndUser = `
       userName: String
     }
     
+    input settingsAttributesObject{
+      currencyTypes: String,
+      numericalFormat: String
+    }
+    
+    
     type dep{
         department:String,
         departmentName:String,
@@ -241,6 +247,7 @@ let BackEndUser = `
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
         updateDataEntry(userId: String, moduleName: String, actionName: String, attributes:attributesObject):response
+        updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
     }
     
     type Query{

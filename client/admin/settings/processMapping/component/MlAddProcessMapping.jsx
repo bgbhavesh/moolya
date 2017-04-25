@@ -230,15 +230,15 @@ class MlAddProcessMapping extends React.Component{
           label:chapterName
         }
     }`;
-    let subChapterquery=gql`query($chapters:[String],$clusters:[String]){
-        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
+    let subChapterquery=gql`query($chapters:[String],$clusters:[String],$displayAllOption:Boolean){
+        data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters,displayAllOption:$displayAllOption) {
           value:_id
           label:subChapterName
         }
     }`;
     let stateOption={options: { variables: {clusters:this.state.clusters}}};
     let chapterOption={options: { variables: {states:this.state.states,clusters:this.state.clusters}}};
-    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters}}};
+    let subChapterOption={options: { variables: {chapters:this.state.chapters,clusters:this.state.clusters,displayAllOption:true}}};
     let professionOption={options: { variables: {industry:this.state.industries}}};
     let userTypeOption={options: { variables: {communityId:this.state.communities}}};
    return (

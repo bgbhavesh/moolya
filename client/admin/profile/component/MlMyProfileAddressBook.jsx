@@ -4,8 +4,17 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
 import ContactDetails from '../../transaction/requested/component/contactDetails';
+import findRegistrationActionHandler from '../../transaction/requested/actions/findRegistration'
 
 export default class MyProfileAddressBook extends React.Component{
+  constructor(props){
+    super(props);
+    // this. state = {
+    //   registrationDetails: {}
+    // }
+    // this.findRegistration.bind(this);
+    // this.findRegistrationActionHandler.bind(this);
+  }
   componentDidMount()
   {
     $(function() {
@@ -43,6 +52,36 @@ export default class MyProfileAddressBook extends React.Component{
 
 
   }
+  async getValue() {
+    let userType = Meteor.userId();
+    let response = await findBackendUserActionHandler(userType);
+    console.log(response);
+    this.setState({loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
+      middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
+      lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
+      userName: response.profile.InternalUprofile.moolyaProfile.displayName,
+      uploadedProfilePic:response.profile.profileImage
+    });
+  }
+
+  componentWillMount(){
+    const resp=this.getValue();
+    return resp;
+  }
+
+  // async componentWillMount() {
+  //   const resp=await this.findRegistration();
+  //   return resp;
+  // }
+  //
+  // async findRegistration() {
+  //   let userId = Meteor.userId();
+  //   const response = await findRegistrationActionHandler(userId);
+  //   this.setState({loading: false, registrationDetails: response.registrationInfo.contactInfo});
+  //   console.log(response);
+  //   return response;
+  // }
+
   render(){
     return (
       <div className="admin_main_wrap">
@@ -60,7 +99,7 @@ export default class MyProfileAddressBook extends React.Component{
                 <div className="col-lg-6">
                   <div className="panel panel-default new_profile_tabs">
                     <div className="panel-heading"> Contact Number </div>
-                    <ContactDetails/>
+                    <ContactDetails />
                   </div>
 
 

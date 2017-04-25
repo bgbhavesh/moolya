@@ -17,7 +17,7 @@ export const appSection = FlowRouter.group({
 
 appSection.route('/', {
     triggersEnter: [function(context, redirect) {
-        console.log('running /admin trigger');
-        //todo: route based on context-Internal User or External User
+        console.log('running /app trigger');
+        // redirect("/app/dashboard");
     }]
 })

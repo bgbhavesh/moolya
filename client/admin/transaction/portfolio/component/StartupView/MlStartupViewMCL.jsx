@@ -32,6 +32,9 @@ export default class MlStartupViewAboutUs extends React.Component {
   componentDidMount(){
     this.initalizeAnnotaor()
     this.fetchAnnotations();
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+
   }
   componentWillMount(){
     this.fetchPortfolioStartupDetails();
@@ -94,7 +97,7 @@ export default class MlStartupViewAboutUs extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"startupAboutUs", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"startupMCL", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -105,7 +108,7 @@ export default class MlStartupViewAboutUs extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "startupAboutUs");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "startupMCL");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -131,7 +134,7 @@ export default class MlStartupViewAboutUs extends React.Component {
 
     return (
       <div className="admin_main_wrap">
-        <div className="admin_padding_wrap portfolio-main-wrap">
+        <div className="admin_padding_wrap portfolio-main-wrap" id="annotatorContent">
           <h2>MCL</h2>
           <div className="main_wrap_scroll" id="annotatorContent">
             <ScrollArea
@@ -145,7 +148,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Membership </div>
                   <div className="panel-body ">
 
-                    <p>{this.state.memberships&&this.state.memberships.description?this.state.memberships.description:""} </p>
+                    {this.state.memberships&&this.state.memberships.description?this.state.memberships.description:""}
 
                   </div>
                 </div>
@@ -160,7 +163,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
 
-                    <p>{this.state.compliances&&this.state.compliances.description?this.state.compliances.description:""}</p>
+                    {this.state.compliances&&this.state.compliances.description?this.state.compliances.description:""}
 
                   </div>
                 </div>
@@ -169,7 +172,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Licenses </div>
                   <div className="panel-body ">
 
-                    <p>{this.state.licenses&&this.state.licenses.description?this.state.licenses.description:""}</p>
+                    {this.state.licenses&&this.state.licenses.description?this.state.licenses.description:""}
 
                   </div>
                 </div>

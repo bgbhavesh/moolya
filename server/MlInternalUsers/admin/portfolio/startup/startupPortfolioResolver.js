@@ -35,7 +35,7 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
           if (startupPortfolio.hasOwnProperty(key))
           {
             if(_.isArray(startupPortfolio[key])){
-                if(startupPortfolio[key].length != updateFor[key].length){
+                if(startupPortfolio[key].length < updateFor[key].length){
                     var diff = (updateFor[key].length)-(startupPortfolio[key].length);
                     for (i = diff; i > 0; i--){
                         let idx = updateFor[key].length-i;
@@ -43,7 +43,14 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
                         startupPortfolio[key].push(newObj)
                     }
                 }else if(startupPortfolio[key].length == updateFor[key].length && (args.indexArray.length==0)){
+
+                  if(args.isFileUpload){
+                    let newObj = updateFor[key][0];
+                    startupPortfolio[key].push(newObj)
+                  }else{
                     _.mergeWith(startupPortfolio[key], updateFor[key])
+                  }
+
                 }
                 if(args.indexArray && args.indexArray.length>0){
                     _.each(args.indexArray, function (index) {

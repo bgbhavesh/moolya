@@ -11,6 +11,8 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import Datetime from "react-datetime";
@@ -33,11 +35,7 @@ class MlAddBackendUser extends React.Component {
       genderSelectFemale: " ",
       genderSelectOthers: " ",
       genderSelect:" "
-      /* selectedCluster:'',
-       selectedChapter:'',
-       selectedDepartment:'',
-       selectedSubDepartment:'',
-       selectedRole:''*/
+
     }
     this.addEventHandler.bind(this);
     this.createBackendUser.bind(this);
@@ -45,14 +43,6 @@ class MlAddBackendUser extends React.Component {
     this.onBackendUserSelect.bind(this);
     this.onFoundationDateSelection.bind(this);
     this.onGenderSelect = this.onGenderSelect.bind(this);
-    //this.updateBackend.bind(this);
-    // this.onGenderSelect.bind(this);
-    // this.storeToBackend.bind(this);
-    /* this.onClusterSelect.bind(this);
-     this.onChapterSelect.bind(this);
-     this.onDepartmentSelect.bind(this);
-     this.onSubDepartmentSelect.bind(this);
-     this.onROleSelect.bind(this);*/
     return this;
   }
 
@@ -102,6 +92,7 @@ class MlAddBackendUser extends React.Component {
  }
 
   async  createBackendUser() {
+  //  this.updateBackend();
     let firstName= this.refs.firstName.value;
     let lastName= this.refs.lastName.value;
     let displayName= this.refs.displayName.value;
@@ -127,78 +118,55 @@ class MlAddBackendUser extends React.Component {
     }
     else if (confirmPassword != password) {
 
-      let ret = mlFieldValidations(this.refs)
-      if (ret) {
-        toastr.error(ret);
-      }
-//
-//     if(!firstName){
-//       toastr.error("First Name is required");
-//     }
-//     else if(!lastName){
-//       toastr.error("Last Name is required");
-//     }
-//     else if(!displayName){
-//       toastr.error("Display Name is required");
-//     }
-//     else if (!email) {
-//       toastr.error("Need to set a username or email");
-//     }
-//     else if(!password){
-//       toastr.error("Password is required");
-//     }
-//     else if (confirmPassword != password) {
-//
-//       toastr.error("Confirm Password does not match with Password")
-//
-//     } else if(!departments){
-//
-//       toastr.error("Assign Department is required");
-//
-//     }
-//    else if(!subdepartments){
-//
-//   toastr.error("Sub Department is required");
-//
-// }
-      else {
-        let moolyaProfile = {
-          firstName: this.refs.firstName.value,
-          middleName: this.refs.middleName.value,
-          lastName: this.refs.lastName.value,
-          userType: this.state.selectedBackendUserType,
-          subChapter: this.state.selectedSubChapter,
-          roleType: this.state.selectedBackendUser,
-          assignedDepartment: this.state.mlAssignDepartmentDetails,
-          displayName: this.refs.displayName.value,
-          email: this.refs.email.value,
-          contact: this.state.mlAssignContactDetails,
-          globalAssignment: this.refs.globalAssignment.checked,
-          isActive: this.refs.deActive.checked,
-          userProfiles: []
-        }
-        let InternalUprofile = {
-          moolyaProfile: moolyaProfile
-        }
-        let profile = {
-          isInternaluser: true,
-          isExternaluser: false,
-          email: this.refs.email.value,
-          isActive: this.refs.deActive.checked,
-          InternalUprofile: InternalUprofile,
-          genderType: this.state.genderSelect,
-          dateOfBirth: this.state.foundationDate
-        }
-        let userObject = {
-          username: moolyaProfile.email,
-          password: this.refs.password.value,
-          profile: profile
-        }
+      toastr.error("Confirm Password does not match with Password")
 
-        const response = await addBackendUserActionHandler(userObject)
-        console.log(response);
-        return response;
+    } else if(!departments){
+
+      toastr.error("Assign Department is required");
+
+    }
+   else if(!subdepartments){
+
+  toastr.error("Sub Department is required");
+
+}
+    else {
+      let moolyaProfile = {
+        firstName: this.refs.firstName.value,
+        middleName: this.refs.middleName.value,
+        lastName: this.refs.lastName.value,
+        userType: this.state.selectedBackendUserType,
+        subChapter: this.state.selectedSubChapter,
+        roleType: this.state.selectedBackendUser,
+        assignedDepartment: this.state.mlAssignDepartmentDetails,
+        displayName: this.refs.displayName.value,
+        email: this.refs.email.value,
+        contact: this.state.mlAssignContactDetails,
+        globalAssignment: this.refs.globalAssignment.checked,
+        isActive: this.refs.deActive.checked,
+        userProfiles: []
       }
+      let InternalUprofile = {
+        moolyaProfile: moolyaProfile
+      }
+      let profile = {
+        isInternaluser: true,
+        isExternaluser: false,
+        email: this.refs.email.value,
+        isActive:this.refs.deActive.checked,
+        InternalUprofile: InternalUprofile,
+        genderType:this.state.genderSelect,
+        dateOfBirth: this.state.foundationDate
+      }
+      let userObject = {
+        username: moolyaProfile.email,
+        password: this.refs.password.value,
+        profile: profile
+      }
+
+      const response = await addBackendUserActionHandler(userObject)
+      console.log(response);
+      return response;
     }
 
    /* let userroles=[{
@@ -448,4 +416,5 @@ class MlAddBackendUser extends React.Component {
     )
   }
 };
+
 export default MlAddBackendUser = formHandler()(MlAddBackendUser);

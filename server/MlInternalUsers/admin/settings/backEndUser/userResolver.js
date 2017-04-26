@@ -721,10 +721,15 @@ MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => 
 
 MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, info) => {
   let id = " "
-  //let registrationDetails = mlDBController.findOne('users', {_id: args.userId}, context) || {};
+  let user = mlDBController.findOne('users', {_id: context.userId}, context) || {};
   if (args && args.addressBook) {
     if (args.type == "CONTACTTYPE") {
-      id = mlDBController.update('users', context.userId, {"profile.contactInfo": args.addressBook.contactInfo}, {$set: true}, context)
+        let contactTypes = []
+        contactTypes = user.profile.contactinfo;
+        if(contactTypes){
+          contactTypes.push(args.addressBook.contactInfo[0])
+        }
+      id = mlDBController.update('users', context.userId, {"profile.contactInfo": contactTypes}, {$set: true}, context)
     } else if (args.type == "ADDRESSTYPE") {
       id = mlDBController.update('users', context.userId, {"profile.addressInfo": args.addressBook.addressInfo}, {$set: true}, context)
     } else if (args.type == "EMAILTYPE") {

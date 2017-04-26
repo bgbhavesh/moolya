@@ -13,18 +13,20 @@ export default class ContactDetails extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      loading : true,
       selectedNumberTypeValue : null,
       selectedContactTab: null,
       selectedNumberTypeLabel: null,
       contactNumberObject:{numberType : "",numberTypeName: "",countryCode: "",contactNumber: ""},
       contactNumberArray : this.props.registrationInfo.contactInfo|| [],
       activeTab : "active"
-
-
     }
     this.findRegistration.bind(this);
     return this;
   }
+/*  componentDidMount(){
+    this.findRegistration.bind(this);
+  }*/
 
   componentWillMount(){
     this.findRegistration()
@@ -35,7 +37,7 @@ export default class ContactDetails extends React.Component{
     if (index !== -1) {
       // do your stuff here
       let updatedComment = update(this.state.contactNumberArray[index], {
-        numberTypeName : {$set: selObject.label},
+        numberTypeName : {$set: selObject.label},/**/
         numberType :   {$set: did},
         countryCode : {$set: this.refs["countryCode"+index].value},
         contactNumber : {$set: this.refs["contactNumber"+index].value}});
@@ -207,6 +209,7 @@ export default class ContactDetails extends React.Component{
               </div>
             </div>
             {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key) {
+              let test = that.state.contactNumberArray;
               return(<div className="tab-pane" id={'numberType'+key} key={key} >
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"

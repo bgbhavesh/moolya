@@ -4,8 +4,8 @@ import MlRespPayload from '../../../../commons/mlPayload'
 var extendify = require('extendify');
 var _ = require('lodash')
 
-let applyDiff   = require('deep-diff').applyDiff,
-  observableDiff  = require('deep-diff').observableDiff
+let applyDiff = require('deep-diff').applyDiff,
+  observableDiff = require('deep-diff').observableDiff
 
 MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, info) => {
   try {
@@ -20,47 +20,50 @@ MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, i
         })
       }
     }
-  }catch(e) {
+  } catch (e) {
     console.log("Error: In creating Startup portfolio");
   }
 }
-MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, info) =>
-{
-  if(args.portfoliodetailsId){
+MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
     try {
       let startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
       let updateFor = args.portfolio.startupPortfolio;
       if (startupPortfolio) {
         for (key in updateFor) {
-          if (startupPortfolio.hasOwnProperty(key))
-          {
-            if(_.isArray(startupPortfolio[key])){
-                if(startupPortfolio[key].length < updateFor[key].length){
-                    var diff = (updateFor[key].length)-(startupPortfolio[key].length);
-                    for (i = diff; i > 0; i--){
-                        let idx = updateFor[key].length-i;
-                        let newObj = updateFor[key][idx];
-                        startupPortfolio[key].push(newObj)
+          if (startupPortfolio.hasOwnProperty(key)) {
+            if (_.isArray(startupPortfolio[key])) {
+              if (startupPortfolio[key].length < updateFor[key].length) {
+                var diff = (updateFor[key].length) - (startupPortfolio[key].length);
+                for (i = diff; i > 0; i--) {
+                  let idx = updateFor[key].length - i;
+                  let newObj = updateFor[key][idx];
+                  startupPortfolio[key].push(newObj)
+                }
+              } else if (startupPortfolio[key].length == updateFor[key].length && (args.indexArray.length == 0)) {
+
+                if (args.isFileUpload) {
+                  let newObj = updateFor[key][0];
+                  startupPortfolio[key].push(newObj)
+                } else {
+                  _.mergeWith(startupPortfolio[key], updateFor[key])
+                }
+
+              } else {
+                if (args.isFileUpload) {
+                  let newObj = updateFor[key][0];
+                  startupPortfolio[key].push(newObj)
+                }
+              }
+              if (args.indexArray && args.indexArray.length > 0) {
+                _.each(args.indexArray, function (index) {
+                  _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
+                    if (_.isArray(objValue)) {
+                      return objValue.concat(srcValue);
                     }
-                }else if(startupPortfolio[key].length == updateFor[key].length && (args.indexArray.length==0)){
-
-                  if(args.isFileUpload){
-                    let newObj = updateFor[key][0];
-                    startupPortfolio[key].push(newObj)
-                  }else{
-                    _.mergeWith(startupPortfolio[key], updateFor[key])
-                  }
-
-                }
-                if(args.indexArray && args.indexArray.length>0){
-                    _.each(args.indexArray, function (index) {
-                        _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
-                            if (_.isArray(objValue)) {
-                              return objValue.concat(srcValue);
-                            }
-                        })
-                    })
-                }
+                  })
+                })
+              }
             }
             // else if(_.isArray(startupPortfolio[key]) && _.isObject(updateFor[key])){
             //   if(args.indexArray && args.indexArray.length>0){
@@ -71,15 +74,15 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
             //     startupPortfolio[key].push(updateFor[key])
             //   }
             // }
-            else{
-                _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
-                    if (_.isArray(objValue)) {
-                      return objValue.concat(srcValue);
-                    }
-                });
+            else {
+              _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
+                if (_.isArray(objValue)) {
+                  return objValue.concat(srcValue);
+                }
+              });
             }
 
-          }else {
+          } else {
             // if(updateFor[key].logo){
             //   startupPortfolio[key] = [updateFor[key]];
             // }else if(updateFor[key]){
@@ -97,7 +100,7 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
         }
       }
     }
-    catch (e){
+    catch (e) {
       let code = 400;
       let response = new MlRespPayload().errorPayload(e.message, code);
       return response;
@@ -107,7 +110,7 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
 
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioManagement'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('management')) {
       return portfolio['management'];
@@ -118,19 +121,19 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioManagement'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let startAboutUsArray = {}
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    startAboutUsArray["aboutUs"]=portfolio.aboutUs;
-    startAboutUsArray["clients"]=portfolio.clients;
-    startAboutUsArray["serviceProducts"]=portfolio.serviceProducts;
-    startAboutUsArray["information"]=portfolio.information;
-    startAboutUsArray["branches"]=portfolio.branches;
-    startAboutUsArray["technologies"]=portfolio.technologies;
-    startAboutUsArray["legalIssue"]=portfolio.legalIssue;
-    startAboutUsArray["rating"]=portfolio.rating;
-    startAboutUsArray["assets"]=portfolio.assets;
-    if(startAboutUsArray){
+    startAboutUsArray["aboutUs"] = portfolio.aboutUs;
+    startAboutUsArray["clients"] = portfolio.clients;
+    startAboutUsArray["serviceProducts"] = portfolio.serviceProducts;
+    startAboutUsArray["information"] = portfolio.information;
+    startAboutUsArray["branches"] = portfolio.branches;
+    startAboutUsArray["technologies"] = portfolio.technologies;
+    startAboutUsArray["legalIssue"] = portfolio.legalIssue;
+    startAboutUsArray["rating"] = portfolio.rating;
+    startAboutUsArray["assets"] = portfolio.assets;
+    if (startAboutUsArray) {
       return startAboutUsArray
     }
 
@@ -141,7 +144,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
 }
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioInvestor'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('investor')) {
       return portfolio['investor'];
@@ -151,7 +154,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioInvestor'] = (obj, args, contex
   return [];
 }
 MlResolver.MlQueryResolver['fetchStartupPortfolioLookingFor'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('lookingFor')) {
       return portfolio['lookingFor'];
@@ -162,7 +165,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLookingFor'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioAwards'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
       return portfolio['awardsRecognition'];
@@ -172,7 +175,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAwards'] = (obj, args, context,
   return [];
 }
 MlResolver.MlQueryResolver['fetchStartupPortfolioMemberships'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('memberships')) {
       return portfolio['memberships'];
@@ -182,7 +185,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioMemberships'] = (obj, args, con
   return {};
 }
 MlResolver.MlQueryResolver['fetchStartupPortfolioCompliances'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('compliances')) {
       return portfolio['compliances'];
@@ -192,7 +195,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioCompliances'] = (obj, args, con
   return {};
 }
 MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
+  if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('licenses')) {
       return portfolio['licenses'];

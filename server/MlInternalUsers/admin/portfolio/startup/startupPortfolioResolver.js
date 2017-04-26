@@ -42,7 +42,7 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
                 }
               } else if (startupPortfolio[key].length == updateFor[key].length && (args.indexArray.length == 0)) {
 
-                if (args.isFileUpload) {
+                if (args.isFileUpload && (args.indexArray.length == 0)) {
                   let newObj = updateFor[key][0];
                   startupPortfolio[key].push(newObj)
                 } else {
@@ -50,18 +50,27 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
                 }
 
               } else {
-                if (args.isFileUpload) {
+                if (args.isFileUpload && (args.indexArray.length == 0)) {
                   let newObj = updateFor[key][0];
                   startupPortfolio[key].push(newObj)
                 }
               }
               if (args.indexArray && args.indexArray.length > 0) {
                 _.each(args.indexArray, function (index) {
-                  _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
-                    if (_.isArray(objValue)) {
-                      return objValue.concat(srcValue);
-                    }
-                  })
+                  if(args.isFileUpload ){
+                    _.mergeWith(startupPortfolio[key][index], updateFor[key][0], function (objValue, srcValue) {
+                      if (_.isArray(objValue)) {
+                        return objValue.concat(srcValue);
+                      }
+                    })
+                  }else{
+                    _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
+                      if (_.isArray(objValue)) {
+                        return objValue.concat(srcValue);
+                      }
+                    })
+                  }
+
                 })
               }
             }

@@ -256,7 +256,8 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
-                  award
+                  awardId
+                  index
                   isAwardPrivate
                   year
                   isYearPrivate

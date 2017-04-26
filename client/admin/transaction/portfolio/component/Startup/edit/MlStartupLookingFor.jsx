@@ -115,7 +115,7 @@ export default class MlStartupLookingFor extends React.Component{
     })
   }
 
-  onOptionSelected(selectedIndex,handler,selectedObj){
+  onOptionSelected(selectedIndex){
     let details =this.state.data;
     details=_.omit(details,["typeId"]);
     details=_.extend(details,{["typeId"]:selectedIndex});   //{["type"]:selectedObj.label},
@@ -165,7 +165,7 @@ export default class MlStartupLookingFor extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{lookingFor:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{lookingFor:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
 
@@ -173,6 +173,7 @@ export default class MlStartupLookingFor extends React.Component{
     if(resp){
       let result = JSON.parse(resp);
       if(result.success){
+        this.setState({loading:true})
         this.fetchOnlyImages();
       }
     }
@@ -181,9 +182,13 @@ export default class MlStartupLookingFor extends React.Component{
   async fetchOnlyImages(){
     const response = await fetchStartupPortfolioLookingFor(this.props.portfolioDetailsId);
     if (response) {
-      let dataDetails =this.state.data  //handle client view of uploads
-      // dataDetails['audienceImages'] = response.audienceImages
-      // this.setState({loading: false, data: dataDetails});
+      let thisState=this.state.index;
+      let dataDetails =this.state.startupLookingFor
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      let curUpload=response[thisState]
+      specificData['logo']= curUpload['logo']
+      this.setState({loading: false, startupLookingFor:cloneBackUp });   //startupLookingForList : cloneBackUp,
     }
   }
 
@@ -194,12 +199,13 @@ export default class MlStartupLookingFor extends React.Component{
           value:_id
         }
       }`;
-
+    const showLoader = this.state.loading;
     let lookingOption={options: { variables: {communityCode:"STU"}}};
     let that = this;
     let startupLookingForList = that.state.startupLookingForList || [];
     return (
       <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Looking For</h2>
           <div className="requested_input main_wrap_scroll">
@@ -271,7 +277,7 @@ export default class MlStartupLookingFor extends React.Component{
               </PopoverContent>
             </Popover>
           </div>
-        </div>
+        </div>)}
       </div>
     )
   }

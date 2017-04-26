@@ -79,31 +79,37 @@ export default class MlHierarchyDetails extends React.Component {
   async  updateunassignedRoles() {
     let roles = []
     let hierarchyInfo=this.state.unassignedRoles.teamStructureAssignment;
-    for (let i = 0; i < hierarchyInfo.length; i++) {
-      let json = {
-        id: hierarchyInfo[i].roleId,
-        isHierarchyAssigned:hierarchyInfo[i].isAssigned
+    if(hierarchyInfo){
+      for (let i = 0; i < hierarchyInfo.length; i++) {
+        let json = {
+          id: hierarchyInfo[i].roleId,
+          isHierarchyAssigned:hierarchyInfo[i].isAssigned
+        }
+        roles.push(json)
       }
-      roles.push(json)
+      const response = await updateRolesActionHandler(roles);
+      return response;
     }
-    const response = await updateRolesActionHandler(roles);
-    return response;
+
   }
   async  updateassignRoles() {
     let roles = []
-    let hierarchyInfo=this.state.unassignedRoles.teamStructureAssignment;
-    for (let i = 0; i < hierarchyInfo.length; i++) {
-      let json = {
-        id: hierarchyInfo[i].roleId,
-        isHierarchyAssigned:hierarchyInfo[i].isAssigned
+    let hierarchyInfo=this.state.assignedRoles.teamStructureAssignment;
+    if(hierarchyInfo){
+      for (let i = 0; i < hierarchyInfo.length; i++) {
+        let json = {
+          id: hierarchyInfo[i].roleId,
+          isHierarchyAssigned:hierarchyInfo[i].isAssigned
+        }
+        roles.push(json)
       }
-      roles.push(json)
+      const response = await updateRolesActionHandler(roles);
+      return response;
     }
-    const response = await updateRolesActionHandler(roles);
-    return response;
+
   }
   async  updatehierarchyAssignments() {
-    let finalApproval = null;
+    let finalApproval = null,hierarchyInfo = null;
     if(this.state.finalApproval&&this.state.finalApproval.isChecked){
       finalApproval = {
         department          : this.state.finalApproval.department,
@@ -111,22 +117,24 @@ export default class MlHierarchyDetails extends React.Component {
         role                : this.state.finalApproval.role,
         isChecked           : this.state.finalApproval.isChecked
       };
+      hierarchyInfo={
+        parentDepartment    : this.state.finalApproval.parentDepartment,
+        parentSubDepartment : this.state.finalApproval.parentSubDepartment,
+        clusterId           : this.props.clusterId,
+        teamStructureAssignment :this.state.unassignedRoles.teamStructureAssignment, //_.union(this.state.unassignedRoles.teamStructureAssignment,this.state.assignedRoles.teamStructureAssignment),
+        finalApproval         : finalApproval
+      }
+      console.log(hierarchyInfo);
+      const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
+      return response;
     }
     /*else{
       finalApproval = {
         isChecked           : this.state.finalApproval.isChecked
       };
     }*/
-    let hierarchyInfo={
-      parentDepartment    : this.state.finalApproval.parentDepartment,
-      parentSubDepartment : this.state.finalApproval.parentSubDepartment,
-      clusterId           : this.props.clusterId,
-      teamStructureAssignment :this.state.unassignedRoles.teamStructureAssignment, //_.union(this.state.unassignedRoles.teamStructureAssignment,this.state.assignedRoles.teamStructureAssignment),
-      finalApproval         : finalApproval
-    }
-    console.log(hierarchyInfo);
-    const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
-    return response;
+
+
   }
 
 /*  async  updatFinalRole() {

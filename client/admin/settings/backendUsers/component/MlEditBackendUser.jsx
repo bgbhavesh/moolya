@@ -18,6 +18,7 @@ let Select = require('react-select');
 import Datetime from "react-datetime";
 import moment from "moment";
 import {MlMyProfile} from '../../../profile/component/MlMyprofile'
+import {updateDataEntry} from '../../../profile/actions/addProfilePicAction'
 
 
 
@@ -47,7 +48,12 @@ class MlEditBackendUser extends React.Component{
       selectedSubChapter:'',
       showPasswordFields:false,
       pageLable:"Edit Backend User",
-      foundationDate:" "
+      foundationDate:" ",
+      genderSelect:" ",
+      dateofbirth: " ",
+      genderStateMale: " ",
+      genderStateFemale: " ",
+      genderStateOthers: " "
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -56,7 +62,9 @@ class MlEditBackendUser extends React.Component{
     this.onGlobalStatusChanged = this.onGlobalStatusChanged.bind(this);
     this.onisActiveChanged= this.onisActiveChanged.bind(this);
     this.onMakeDefultChange=this.onMakeDefultChange.bind(this);
-    this.onFoundationDateSelection.bind(this);
+    this.ondateOfBirthSelection.bind(this);
+    this.genderSelect = this.genderSelect.bind(this);
+    //this.getGender.bind(this);
     return this;
   }
   componentDidMount()
@@ -75,6 +83,21 @@ class MlEditBackendUser extends React.Component{
       $('input').attr('disabled', 'disabled');
     }
   }
+
+  async genderSelect(e){
+    this.setState({genderSelect: e.target.value})
+  }
+
+  async updateBackend(){
+    let Details = {
+      userId: Meteor.userId(),
+      gender:this.state.genderSelect,
+      dateofbirth: this.state.dateofbirth
+    }
+    const response = await updateDataEntry(Details);
+    return response;
+ }
+
 
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -95,6 +118,8 @@ class MlEditBackendUser extends React.Component{
   };
 
   componentWillMount() {
+
+   // this.getValue();
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
       this.setState({pageLable:"Backend User Details"})
@@ -102,6 +127,20 @@ class MlEditBackendUser extends React.Component{
     const resp=this.findBackendUser();
     return resp;
   }
+
+  // async getGender() {
+  //   if(this.state.genderSelect === "Male"){
+  //     this.setState({genderStateMale: "checked"})
+  //   }
+  //   else if(this.state.genderSelect === "Female"){
+  //     this.setState({genderStateFemale: "checked"})
+  //   }
+  //   else{
+  //     this.setState({genderStateOthers: "checked"})
+  //   }
+  // }
+
+
 
   async findBackendUser(){
     let userTypeId=this.props.config;
@@ -114,12 +153,13 @@ class MlEditBackendUser extends React.Component{
      this.setState({deActive:this.state.data.profile.isActive})
      this.setState({isActive:this.state.data.profile.InternalUprofile.moolyaProfile.isActive})
      this.setState({globalStatus:this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment})
+     this.setState({loading:false ,genderSelect : response.profile.genderType, dateofbirth:response.profile.dateOfBirth});
      let clusterId="",chapterId='',subChapterId='',communityId=''
      let dataDetails=this.state.data
        if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
        let userProfiles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"]
          let userProfilesDetails=[]
-
+          ;
          for(let i=0;i<userProfiles.length;i++){
            let userRolesDetails=[]
            let userRole=userProfiles[i].userRoles
@@ -155,12 +195,26 @@ class MlEditBackendUser extends React.Component{
            userProfilesDetails.push(json)
          }
        this.setState({'userProfiles':userProfilesDetails});
-
-       }else{
+         this.getGender();
 
        }
+       else{
+
+       }
+
+     if(this.state.genderSelect === "Male"){
+       this.setState({genderStateMale: true,genderStateFemale:false,genderStateOthers:false })
+     }
+     else if(this.state.genderSelect === "Female"){
+       this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
+     }
+     else{
+       this.setState({genderStateOthers: true, genderStateFemale: false, genderStateMale: false})
+     }
+   }
+
     }
-  }
+
 
 
 
@@ -208,6 +262,7 @@ class MlEditBackendUser extends React.Component{
   }
 
   async  updateBackendUser() {
+    this.updateBackend();
     let dataDetails=this.state.data
     let userprofiles=[]
     if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
@@ -311,10 +366,10 @@ class MlEditBackendUser extends React.Component{
 
   }
 
-  onFoundationDateSelection(event) {
+  ondateOfBirthSelection(event) {
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
-      this.setState({loading: false, foundationDate: value});
+      this.setState({loading: false, dateofbirth: value});
     }
   }
 
@@ -466,7 +521,7 @@ class MlEditBackendUser extends React.Component{
                   </div>
 
                     <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.foundationDate} onChange={this.onFoundationDateSelection.bind(this)}/>
+                      <Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateofbirth} onChange={this.ondateOfBirthSelection.bind(this)}/>
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
 
@@ -475,13 +530,13 @@ class MlEditBackendUser extends React.Component{
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="1" /><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="Male" onChange={this.genderSelect} checked={this.state.genderStateMale} /><label htmlFor="radio1" ><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="2"/><label htmlFor="radio2"><span><span></span></span>Female</label>
+                          <input id="radio2" type="radio" name="radio" value="Female" onChange={this.genderSelect} checked={this.state.genderStateFemale} /><label htmlFor="radio2" ><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="2"/><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="Others" onChange={this.genderSelect} checked={this.state.genderStateOthers} /><label htmlFor="radio3" ><span><span></span></span>Others</label>
                       </div>
                     </div>
                     <div className="clearfix"></div>

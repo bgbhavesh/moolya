@@ -28,7 +28,7 @@ export default class Step3 extends React.Component{
     return this;
   }
     componentWillMount(){
-      this.setState({contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}]})
+     // this.setState({contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}]})
       // this.setState({'registrationDetails':this.props.registrationData});
       const resp = this.getContents();
       return resp;

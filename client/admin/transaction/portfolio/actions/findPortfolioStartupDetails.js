@@ -55,8 +55,8 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
   })
   console.log(result)
   const id = result.data.fetchStartupPortfolioManagement;
-  let managementArray = []
-  managementArray=_.map(managementArray, function (row) {return _.omit(row, ['__typename'])});
+  let managementArray = [];
+  managementArray=_.map(id, function (row) {return _.omit(row, ['__typename'])});
   // let data = _.omit(id,'__typename')
   // return data
   return managementArray;

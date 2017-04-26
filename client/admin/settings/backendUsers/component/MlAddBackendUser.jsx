@@ -11,7 +11,6 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import Datetime from "react-datetime";
@@ -30,7 +29,10 @@ class MlAddBackendUser extends React.Component {
       selectedSubChapter: '',
       pwdErrorMsg: '',
       foundationDate: " ",
-      genderSelect: null
+      genderSelectMale: " ",
+      genderSelectFemale: " ",
+      genderSelectOthers: " ",
+      genderSelect:" "
       /* selectedCluster:'',
        selectedChapter:'',
        selectedDepartment:'',
@@ -42,7 +44,8 @@ class MlAddBackendUser extends React.Component {
     this.onBackendUserTypeSelect.bind(this);
     this.onBackendUserSelect.bind(this);
     this.onFoundationDateSelection.bind(this);
-    this.onGenderSelect.bind(this);
+    this.onGenderSelect = this.onGenderSelect.bind(this);
+    //this.updateBackend.bind(this);
     // this.onGenderSelect.bind(this);
     // this.storeToBackend.bind(this);
     /* this.onClusterSelect.bind(this);
@@ -92,28 +95,11 @@ class MlAddBackendUser extends React.Component {
     }
   };
 
- async onGenderSelect(e){
-    this.setState({genderSelect:e.target.value})
-  }
- //
- //  async DOBSelect(e){
- //    this.setState({foundationDate:e.target.value})
- //  }
-
- //
- // async  storeToBackend(){
- //   let Details = {
- //     genderSelect : this.state.genderSelect,
- //     foundationDate :this.state.foundationDate,
- //     userId : Meteor.userId()
- //   }
- //   const dataresponse = await addBackendUserActionHandler(Details);
- //   console.log(dataresponse);
- //   toastr.success("Update Successful")
- //   return dataresponse;
- // }
-
-
+ async onGenderSelect(e) {
+   let genderName = e.target.value;
+   if(genderName)
+   this.setState({loading: false, genderSelect:genderName})
+ }
 
   async  createBackendUser() {
     let firstName= this.refs.firstName.value;
@@ -124,11 +110,27 @@ class MlAddBackendUser extends React.Component {
     let confirmPassword = this.refs.confirmPassword.value;
     let departments=this.state.mlAssignDepartmentDetails[0].department;
     let subdepartments=this.state.mlAssignDepartmentDetails[0].subDepartment;
-
-    let ret = mlFieldValidations(this.refs)
-    if(ret){
-        toastr.error(ret);
+    if(!firstName){
+      toastr.error("First Name is required");
     }
+    else if(!lastName){
+      toastr.error("Last Name is required");
+    }
+    else if(!displayName){
+      toastr.error("Display Name is required");
+    }
+    else if (!email) {
+      toastr.error("Need to set a username or email");
+    }
+    else if(!password){
+      toastr.error("Password is required");
+    }
+    else if (confirmPassword != password) {
+
+      let ret = mlFieldValidations(this.refs)
+      if (ret) {
+        toastr.error(ret);
+      }
 //
 //     if(!firstName){
 //       toastr.error("First Name is required");
@@ -159,41 +161,44 @@ class MlAddBackendUser extends React.Component {
 //   toastr.error("Sub Department is required");
 //
 // }
-    else {
-      let moolyaProfile = {
-        firstName: this.refs.firstName.value,
-        middleName: this.refs.middleName.value,
-        lastName: this.refs.lastName.value,
-        userType: this.state.selectedBackendUserType,
-        subChapter: this.state.selectedSubChapter,
-        roleType: this.state.selectedBackendUser,
-        assignedDepartment: this.state.mlAssignDepartmentDetails,
-        displayName: this.refs.displayName.value,
-        email: this.refs.email.value,
-        contact: this.state.mlAssignContactDetails,
-        globalAssignment: this.refs.globalAssignment.checked,
-        isActive: this.refs.deActive.checked,
-        userProfiles: []
-      }
-      let InternalUprofile = {
-        moolyaProfile: moolyaProfile
-      }
-      let profile = {
-        isInternaluser: true,
-        isExternaluser: false,
-        email: this.refs.email.value,
-        isActive:this.refs.deActive.checked,
-        InternalUprofile: InternalUprofile
-      }
-      let userObject = {
-        username: moolyaProfile.email,
-        password: this.refs.password.value,
-        profile: profile
-      }
+      else {
+        let moolyaProfile = {
+          firstName: this.refs.firstName.value,
+          middleName: this.refs.middleName.value,
+          lastName: this.refs.lastName.value,
+          userType: this.state.selectedBackendUserType,
+          subChapter: this.state.selectedSubChapter,
+          roleType: this.state.selectedBackendUser,
+          assignedDepartment: this.state.mlAssignDepartmentDetails,
+          displayName: this.refs.displayName.value,
+          email: this.refs.email.value,
+          contact: this.state.mlAssignContactDetails,
+          globalAssignment: this.refs.globalAssignment.checked,
+          isActive: this.refs.deActive.checked,
+          userProfiles: []
+        }
+        let InternalUprofile = {
+          moolyaProfile: moolyaProfile
+        }
+        let profile = {
+          isInternaluser: true,
+          isExternaluser: false,
+          email: this.refs.email.value,
+          isActive: this.refs.deActive.checked,
+          InternalUprofile: InternalUprofile,
+          genderType: this.state.genderSelect,
+          dateOfBirth: this.state.foundationDate
+        }
+        let userObject = {
+          username: moolyaProfile.email,
+          password: this.refs.password.value,
+          profile: profile
+        }
 
-      const response = await addBackendUserActionHandler(userObject)
-      console.log(response);
-      return response;
+        const response = await addBackendUserActionHandler(userObject)
+        console.log(response);
+        return response;
+      }
     }
 
    /* let userroles=[{
@@ -295,6 +300,7 @@ class MlAddBackendUser extends React.Component {
   data:fetchActiveSubChapters{label:subChapterName,value:_id}
 }
 `;
+
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -371,13 +377,13 @@ class MlAddBackendUser extends React.Component {
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="1" onChange={this.onGenderSelect.bind(this)}/><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="Male" onChange={this.onGenderSelect}/><label htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="2"  onChange={this.onGenderSelect.bind(this)}/><label htmlFor="radio2"><span><span></span></span>Female</label>
+                        <input id="radio2" type="radio" name="radio" value="Female" onChange={this.onGenderSelect}/><label htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="3"  onChange={this.onGenderSelect.bind(this)}/><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="Others" onChange={this.onGenderSelect}/><label htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
                     <div className="clearfix"></div>

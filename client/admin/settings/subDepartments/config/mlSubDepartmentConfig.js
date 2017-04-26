@@ -58,7 +58,7 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "subDepartmentName", title: "Name",dataSort:true},
+    {dataField: "subDepartmentName", title: "Sub Department Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
     {dataField: "departmentAliasName", title: "Department Name",dataSort:true},
     {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},

@@ -103,7 +103,7 @@ let transactionsSchema = `
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]
-      fetchTransactions(transactionType:String,status:String):[Transactions]
+      fetchTransactions(transactionType:String,status:[String]):[Transactions]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);

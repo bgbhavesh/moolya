@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import {findBackendUserActionHandler} from '../actions/findUserAction'
 let Select = require('react-select');
+import  {updateStusForTransactionActionHandler} from '../actions/updateStatusTransactionAction'
 export default class MlDetailsNotesComponent extends React.Component {
   constructor(props){
     super(props);
@@ -22,8 +23,22 @@ export default class MlDetailsNotesComponent extends React.Component {
       return resp;
     }
   }
-  onStatusSelect(val){
+ async  onStatusSelect(val){
     this.setState({"status":val.value})
+   let status=val.value
+   let transactionId=this.props.id
+   let response = await updateStusForTransactionActionHandler(transactionId,status);
+    if(response){
+      toastr.success("transaction status changed successfully")
+      if(status=="Approved"){
+        FlowRouter.go("/admin/transactions/approvedList");
+      }
+     else{
+        FlowRouter.go("/admin/transactions/requestedList");
+      }
+    }else{
+      toastr.error(response.error)
+    }
   }
   async findBackendUser() {
     let userTypeId = this.props.transaction.userId

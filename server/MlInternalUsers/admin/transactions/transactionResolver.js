@@ -71,8 +71,10 @@ MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, con
     subDepartment       : roleDetails.subDepartmentName,
     subDepartmentId     : roleDetails.subDepartmentId,
   }
+  transaction.userId=args.params.user
+  transaction.status="Pending"
   transaction.allocation = allocation;
-
+  orderNumberGenService.assignTransationRequest(transaction)
   let id = mlDBController.insert('MlTransactions',transaction, context)
   if(id){
     let code = 200;

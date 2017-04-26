@@ -30,6 +30,8 @@ export default class MlStartupTab extends React.Component{
       });
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
+      $('.last-item').addClass('menunone');
+      $('.RRT__panel').addClass('nomargintop');
       $('.horizon-swiper').horizonSwiper();
     },300);
   }

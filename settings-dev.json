@@ -4,7 +4,7 @@
       "HierarchyCount": 10,
       "emailConfig":{
         "username": "raksanconsulting",
-        "key": "IMRne62ShKE6Q8zU0NJBsQ"
+        "key": "Nf3ELmF-BNk7yKEqI7Ma8w"
       },
      "smsConfig":{
        "isWhiteListEnabled":true
@@ -22,6 +22,8 @@
           "bucketName":"moolya-users/",
           "adminBucketKey":"moolya-admin-users"
         }
-      }
+      },
+     "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
+     "isEmailDomainCheckEnabled":true
   }
 }

@@ -37,7 +37,8 @@ export async function getContactDetails(userId) {
       userId:userId,
       moduleName:"PROFILE",
       actionName:"GET"
-    }
+    },
+    forceFetch:true
   })
 
   const id = result.data.fetchAddressBookInfo;

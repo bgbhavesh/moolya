@@ -721,19 +721,28 @@ MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => 
 
 MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, info) => {
   let id = " "
-  //let registrationDetails = mlDBController.findOne('users', {_id: args.userId}, context) || {};
+  let user = mlDBController.findOne('users', {_id: context.userId}, context) || {};
   if (args && args.addressBook) {
     if (args.type == "CONTACTTYPE") {
-      id = mlDBController.update('users', context.userId, {"profile.contactInfo": args.addressBook.contactInfo}, {$set: true}, context)
+        let contactTypes = []
+        contactTypes = user.profile.contactInfo?user.profile.contactInfo:[];
+        contactTypes.push(args.addressBook.contactInfo[0]);
+      id = mlDBController.update('users', context.userId, {"profile.contactInfo": contactTypes}, {$set: true}, context)
     } else if (args.type == "ADDRESSTYPE") {
-      id = mlDBController.update('users', context.userId, {"profile.addressInfo": args.addressBook.addressInfo}, {$set: true}, context)
+        let addressTypes = []
+        addressTypes = user.profile.addressInfo?user.profile.addressInfo:[];
+        addressTypes.push(args.addressBook.addressInfo[0]);
+      id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
     } else if (args.type == "EMAILTYPE") {
-      id = mlDBController.update('users', context.userId, {"profile.emailInfo": args.addressBook.emailInfo}, {$set: true}, context)
+        let emailTypes = []
+        emailTypes = user.profile.emailInfo?user.profile.emailInfo:[];
+        emailTypes.push(args.addressBook.emailInfo[0]);
+      id = mlDBController.update('users', context.userId, {"profile.emailInfo": emailTypes}, {$set: true}, context)
     }
     if (id) {
       let code = 200;
-      let insertedData = users.findOne(id) || {};
-      let result = {registrationId: id}
+      //let insertedData = users.findOne(id) || {};
+      let result = {update: id}
       let response = new MlRespPayload().successPayload(result, code);
       return response
     }

@@ -190,9 +190,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                   break;
                                   case 'Startups':
                                     if(data.indexArray){
-                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId,indexArray:data.indexArray}
+                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId,indexArray:data.indexArray, isFileUpload:true}
                                     }else{
-                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId, isFileUpload:true}
                                     }
 
                                   break;

@@ -37,3 +37,4 @@ npm-container
 apollo
 aldeed:schema-index
 dburles:mongo-collection-instances
+email

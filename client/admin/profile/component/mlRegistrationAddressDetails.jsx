@@ -8,6 +8,8 @@ import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
 import {updateContactDetails} from '../actions/addAddressBookAction'
 import {getContactDetails} from '../actions/getAddressBookAction'
+import gql from 'graphql-tag';
+
 
 export default class AddressDetails extends React.Component{
   constructor(props){
@@ -183,6 +185,9 @@ export default class AddressDetails extends React.Component{
 
     }
   }
+  componentWillMount(){
+    this.findRegistration()
+  }
 
   async findRegistration(){
 
@@ -200,13 +205,15 @@ export default class AddressDetails extends React.Component{
   render(){
 
     let that=this;
-    // let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
-    //  data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
-    //  label
-    //  value
-    //  }
-    //  }
-    //  `;
+    let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+
+    let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
 
     return (
       <div className="panel-body">
@@ -234,7 +241,7 @@ export default class AddressDetails extends React.Component{
               <div className={"tab-pane"+this.state.activeTab} id="1a">
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={'address'}
-                                placeholder="Select Address Type"
+                                placeholder="Select Address Type" query={addressTypeQuery} queryOptions={addressTypeOption}
                                 className="form-control float-label" selectedValue={this.state.selectedValue}
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} onSelect={this.optionsBySelectAddressType.bind(this)}
                                 isDynamic={true}/>
@@ -337,7 +344,7 @@ export default class AddressDetails extends React.Component{
                   </div>
 
                   <div className="ml_icon_btn">
-                    {/*<a href="#" className="save_btn">Save</a>*/}
+                    <a href="#" className="save_btn">Save</a>
                     <a href="#" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>

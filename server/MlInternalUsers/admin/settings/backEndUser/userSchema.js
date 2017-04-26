@@ -203,7 +203,9 @@ let BackEndUser = `
       firstName: String, 
       middleName:String, 
       lastName: String,
-      userName: String
+      userName: String,
+      genderType: String,
+      dateOfBirth: String
     }
     
     input settingsAttributesObject{

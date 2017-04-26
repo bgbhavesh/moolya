@@ -22,7 +22,9 @@ export async function updateDataEntry(Details) {
       "firstName": Details.firstName,
       "middleName": Details.middleName,
       "lastName":  Details.lastName,
-      "userName": Details.userName
+      "userName": Details.userName,
+      "genderType":Details.gender,
+      "dateOfBirth": Details.dateofbirth
       }
     }
   })

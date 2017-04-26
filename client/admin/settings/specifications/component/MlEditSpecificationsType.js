@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findSpecificationActionHandler} from '../actions/findSpecificationsTypeAction'
 import {updateSpecificationTypeActionHandler} from '../actions/updateSpecificationsTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditSpecificationType extends React.Component{
   constructor(props) {
     super(props);
@@ -53,16 +54,22 @@ class MlEditSpecificationType extends React.Component{
     this.setState({loading:false,data:response});
   }
   async  updateSpecificationType() {
-    let SpecificationType = {
-      id: this.refs.id.value,
-      specificationName: this.refs.specificationName.value,
-      specificationDisplayName: this.refs.specificationDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
-    const response = await updateSpecificationTypeActionHandler(SpecificationType)
-    return response;
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let SpecificationType = {
+        id: this.refs.id.value,
+        specificationName: this.refs.specificationName.value,
+        specificationDisplayName: this.refs.specificationDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await updateSpecificationTypeActionHandler(SpecificationType)
+      toastr.success("Edited Successfully");
+      return response;
 
+    }
   }
 
   onStatusChange(e){
@@ -106,9 +113,9 @@ class MlEditSpecificationType extends React.Component{
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="specificationName" placeholder="Name" defaultValue={this.state.data&&this.state.data.specificationName} className="form-control float-label" id=""/>
+                    <input type="text" ref="specificationName" placeholder="Name" defaultValue={this.state.data&&this.state.data.specificationName} className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
 
                   </div>
                   <div className="form-group">
@@ -120,8 +127,8 @@ class MlEditSpecificationType extends React.Component{
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
-                    <input type="text" ref="specificationDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.specificationDisplayName} className="form-control float-label" id=""/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="specificationDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.specificationDisplayName} className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

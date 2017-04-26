@@ -59,7 +59,8 @@ export default class MlStartupBranches extends React.Component{
   }
 
   onSelect(index, e){
-    let details = this.state.startupBranches[index]
+    let cloneArray = _.cloneDeep(this.state.startupBranches);
+    let details = cloneArray[index];
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
@@ -106,8 +107,8 @@ export default class MlStartupBranches extends React.Component{
   onOptionSelected(selectedIndex,handler,selectedObj){
 
     let details =this.state.data;
-    details=_.omit(details,["addressType"]);
-    details=_.extend(details,{["addressType"]:selectedIndex});
+    details=_.omit(details,["addressType"],["addressTypeId"]);
+    details=_.extend(details,{["addressType"]:selectedObj.label},{["addressTypeId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()

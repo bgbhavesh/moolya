@@ -55,9 +55,11 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
   })
   console.log(result)
   const id = result.data.fetchStartupPortfolioManagement;
+  let managementArray = []
+  managementArray=_.map(managementArray, function (row) {return _.omit(row, ['__typename'])});
   // let data = _.omit(id,'__typename')
   // return data
-  return id
+  return managementArray;
 }
 
 export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
@@ -79,6 +81,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   description
                   isDescriptionPrivate
                   companyName
+                  companyId
                   isCompanyNamePrivate
                   logo{
                     fileName
@@ -96,6 +99,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 }
                 assets{
                   assetType
+                  assetTypeId
                   quantity
                   description
                   isAssetTypePrivate
@@ -135,6 +139,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 }
                 technologies{
                   technology
+                  technologyId
                   isTechnologyPrivate
                   description
                   isDescriptionPrivate
@@ -147,6 +152,9 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 legalIssue{
                   description
                   isDescriptionPrivate
+                }
+                rating{
+                  rating
                 }
             }
           }
@@ -169,6 +177,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   aboutUsArray["technologies"]=_.map(data.technologies, function (row) {return _.omit(row, ['__typename'])});
   aboutUsArray["legalIssue"]=_.omit(data.legalIssue,'__typename');
   aboutUsArray["assets"]=_.map(data.assets, function (row) {return _.omit(row, ['__typename'])});
+  aboutUsArray["rating"]=_.omit(data.rating,'__typename');
 
   return aboutUsArray
 }

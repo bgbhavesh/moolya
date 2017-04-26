@@ -79,7 +79,9 @@ export default class MlStartupAwards extends React.Component{
     this.setState({popoverOpen : false})
   }
   onSelect(index, e){
-    let details = this.state.startupInvestor[index]
+
+    let cloneArray = _.cloneDeep(this.state.startupInvestor);
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
@@ -129,8 +131,8 @@ export default class MlStartupAwards extends React.Component{
   onOptionSelected(selectedIndex,handler,selectedObj){
 
     let details =this.state.data;
-    details=_.omit(details,["award"]);
-    details=_.extend(details,{["award"]:selectedIndex});
+    details=_.omit(details,["award"],["awardId"]);
+    details=_.extend(details,{["award"]:selectedObj.label},{["awardId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()
@@ -191,8 +193,8 @@ export default class MlStartupAwards extends React.Component{
 
   render(){
     let query=gql`query{
-      data:fetchTechnologies {
-        label:displayName
+      data:fetchActiveAwards {
+        label:awardDisplayName
         value:_id
       }
     }`;

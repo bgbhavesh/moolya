@@ -3,11 +3,15 @@ import {client} from '../../../core/apolloConnection';
 
 export async function findTransactionRequestActionHandler(transactionTypeDetails) {
   let transactionType = transactionTypeDetails
+  let status=["WIP","Pending"]
   const result = await client.query({
     query: gql`
-      query($transactionType:String){
-  fetchTransactions(transactionType:$transactionType) {
+      query($transactionType:String,$status:[String]){
+  fetchTransactions(transactionType:$transactionType,status:$status) {
           _id
+          userId
+          status
+          requestId
           transactionTypeName
           transactionTypeId
           requestTypeName
@@ -22,7 +26,8 @@ export async function findTransactionRequestActionHandler(transactionTypeDetails
       }
     `,
     variables: {
-  transactionType
+  transactionType,
+  status
     },
     forceFetch: true
   })

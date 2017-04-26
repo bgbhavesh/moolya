@@ -73,13 +73,12 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
             }
 
           }else {
-            if(_.isObject(updateFor[key])){
-
+            if(updateFor[key].logo){
               startupPortfolio[key] = [updateFor[key]];
-            }else{
+            }else if(updateFor[key]){
               startupPortfolio[key] = updateFor[key];
             }
-          }
+            }
         }
 
         let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio}, {upsert: true})
@@ -121,8 +120,8 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["branches"]=portfolio.branches;
     startAboutUsArray["technologies"]=portfolio.technologies;
     startAboutUsArray["legalIssue"]=portfolio.legalIssue;
-
-    startAboutUsArray["assets"]=portfolio.assets
+    startAboutUsArray["rating"]=portfolio.rating;
+    startAboutUsArray["assets"]=portfolio.assets;
     if(startAboutUsArray){
       return startAboutUsArray
     }

@@ -64,7 +64,8 @@ export default class MlStartupInvestor extends React.Component{
     }
   }
   onSelect(index, e){
-    let details = this.state.startupInvestor[index]
+    let cloneArray = _.cloneDeep(this.state.startupInvestor);
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
@@ -115,8 +116,8 @@ export default class MlStartupInvestor extends React.Component{
   onOptionSelected(selectedIndex,handler,selectedObj){
 
     let details =this.state.data;
-    details=_.omit(details,["fundingType"]);
-    details=_.extend(details,{["fundingType"]:selectedIndex});
+    details=_.omit(details,["fundingType"],["fundingTypeId"]);
+    details=_.extend(details,{["fundingType"]:selectedObj.label},{["fundingTypeId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()

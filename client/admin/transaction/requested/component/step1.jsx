@@ -11,7 +11,7 @@ import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [
@@ -129,49 +129,55 @@ export default class Step1 extends React.Component{
 
 
  async updateregistrationInfo() {
-    let Details = {
-      registrationId : this.props.registrationId,
-      registrationDetail:{
-        registrationId : this.state.registrationId,
-      firstName       :  this.refs.firstName.value,
-      lastName        :  this.refs.lastName.value,
-      countryId     :  this.state.country,
-      contactNumber   :  this.refs.contactNumber.value,
-      email           :  this.refs.email.value,
-      cityId          :  this.state.selectedCity,
-      registrationType:  this.state.registrationType,
-      userName        :  this.refs.userName.value,
-      password        :  this.refs.password.value,
-      accountType     :  this.state.subscription,
-      institutionAssociation    :   this.state.institutionAssociation,
-      companyname     :  this.refs.companyName.value,
-      companyUrl      :  this.refs.companyUrl.value,
-      remarks         :  this.refs.remarks.value,
-      referralType    :  this.state.refered,
-      clusterId       :  this.state.cluster,
-      chapterId       :  this.state.chapter,
-      communityName  :  this.state.coummunityName,
-      identityType      : this.state.identityType,
-      userType          : this.state.userType,
-        industry       :this.state.selectedTypeOfIndustry,
-        profession:     this.state.profession
+   let ret = mlFieldValidations(this.refs)
+   if (ret) {
+     toastr.error(ret);
+   } else {
 
-    }
-    }
-    const response = await updateRegistrationActionHandler(Details);
-    //this.props.refetchRegistrationAndTemplates();
-   return response;
+     let Details = {
+       registrationId: this.props.registrationId,
+       registrationDetail: {
+         registrationId: this.state.registrationId,
+         firstName: this.refs.firstName.value,
+         lastName: this.refs.lastName.value,
+         countryId: this.state.country,
+         contactNumber: this.refs.contactNumber.value,
+         email: this.refs.email.value,
+         cityId: this.state.selectedCity,
+         registrationType: this.state.registrationType,
+         userName: this.refs.userName.value,
+         password: this.refs.password.value,
+         accountType: this.state.subscription,
+         institutionAssociation: this.state.institutionAssociation,
+         companyname: this.refs.companyName.value,
+         companyUrl: this.refs.companyUrl.value,
+         remarks: this.refs.remarks.value,
+         referralType: this.state.refered,
+         clusterId: this.state.cluster,
+         chapterId: this.state.chapter,
+         communityName: this.state.coummunityName,
+         identityType: this.state.identityType,
+         userType: this.state.userType,
+         industry: this.state.selectedTypeOfIndustry,
+         profession: this.state.profession
+
+       }
+     }
+     const response = await updateRegistrationActionHandler(Details);
+     //return response;
+   }
  }
 
   async updateRegistration(){
     const response= await this.updateregistrationInfo();
+    console.log(response);
     if(response.success){
       this.props.refetchRegistrationAndTemplates();
-      toastr.success("Update Successful");
     }else{
       toastr.error(response.result);
+      return response;
     }
-    return response;
+
   }
 
   render(){
@@ -290,20 +296,20 @@ export default class Step1 extends React.Component{
                 <div className="form-group">
                   <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group">
-                  <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" />
+                <div className="form-group mandatory">
+                  <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" data-required={true} data-errMsg="First Name is required" />
                 </div>
-                <div className="form-group">
-                  <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required"/>
                 </div>
                 <div className="form-group">
                 <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} />
                 </div>
-                <div className="form-group">
-                  <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id="" data-required={true} data-errMsg="Contact Number is required"/>
                 </div>
-                <div className="form-group">
-                  <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true"/>
+                <div className="form-group mandatory">
+                  <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>
@@ -392,8 +398,8 @@ export default class Step1 extends React.Component{
                 <div className="form-group">
                   <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group">
-                  <Select name="form-field-name" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
+                <div className="form-group mandatory">
+                  <Select name="form-field-name" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required"/>
                 </div>
 
                 <div className="panel panel-default">

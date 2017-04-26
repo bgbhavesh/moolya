@@ -12,6 +12,7 @@ import {findDocumentMappingActionHandler} from '../actions/findDocumentMappingAc
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 let Select = require('react-select');
 
 class MlEditDocumentMapping extends React.Component{
@@ -112,26 +113,31 @@ class MlEditDocumentMapping extends React.Component{
 
   }
   async  updateDocument() {
-    let Details = {
-      documentId : this.refs.documentId.value,
-      documentDisplayName  : this.refs.displayName.value,
-      allowableFormat : this.state.allowableFormat,
-      clusters    : this.state.clusters,
-      chapters    : this.state.chapters,
-      subChapters : this.state.subChapters,
-      validity    : this.refs.validity.value,
-      inputLength      : this.refs.length.value,
-      remarks      : this.refs.remark.value,
-      documentName   : this.refs.documentName.value,
-      kycCategory  : this.state.kycCategory,
-      documentType   : this.state.documentType,
-      allowableMaxSize  : this.refs.allowableSize.value,
-      issuingAuthority   : this.refs.issuingAuthority.value,
-      isActive    : this.refs.status.checked,
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let Details = {
+        documentId: this.refs.documentId.value,
+        documentDisplayName: this.refs.displayName.value,
+        allowableFormat: this.state.allowableFormat,
+        clusters: this.state.clusters,
+        chapters: this.state.chapters,
+        subChapters: this.state.subChapters,
+        validity: this.refs.validity.value,
+        inputLength: this.refs.length.value,
+        remarks: this.refs.remark.value,
+        documentName: this.refs.documentName.value,
+        kycCategory: this.state.kycCategory,
+        documentType: this.state.documentType,
+        allowableMaxSize: this.refs.allowableSize.value,
+        issuingAuthority: this.refs.issuingAuthority.value,
+        isActive: this.refs.status.checked,
+      }
+      let id = this.refs.documentId.value;
+      const response = await updateDocumentMappingActionHandler(id, Details)
+      return response;
     }
-    let id   = this.refs.documentId.value;
-    const response = await updateDocumentMappingActionHandler(id,Details)
-    return response;
   }
   optionsBySelectAllowableFormats(val){
    /* let allowableFormat=this.state.allowableFormat
@@ -277,8 +283,8 @@ class MlEditDocumentMapping extends React.Component{
                           <input type="text"  ref="documentId" defaultValue={this.state.data&&this.state.data.documentId} placeholder="Document Id" className="form-control float-label" id="" disabled="disabled"/>
                         </div>
 
-                        <div className="form-group">
-                          <input type="text"  ref="displayName" defaultValue={this.state.data&&this.state.data.documentDisplayName} placeholder="Display Name" className="form-control float-label" id=""/>
+                        <div className="form-group mandatory">
+                          <input type="text"  ref="displayName" defaultValue={this.state.data&&this.state.data.documentDisplayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                         </div>
 
 
@@ -322,8 +328,8 @@ class MlEditDocumentMapping extends React.Component{
               <div className="col-md-6 nopadding-right"  >
                 <div className="form_bg">
                   <form>
-                <div className="form-group">
-                  <input type="text"  ref="documentName" defaultValue={this.state.data&&this.state.data.documentName} placeholder="Name" className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text"  ref="documentName" defaultValue={this.state.data&&this.state.data.documentName} placeholder="Name" className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
                 </div>
 
                   <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />

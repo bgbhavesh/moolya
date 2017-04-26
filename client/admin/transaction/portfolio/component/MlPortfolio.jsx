@@ -215,7 +215,7 @@ class MlPortfolio extends React.Component{
            Launch Popover
            </Button>*/}
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
-            <PopoverTitle>Popover Title</PopoverTitle>
+            <PopoverTitle>Portfolio Annotations</PopoverTitle>
             <PopoverContent>
               <div className="ml_annotations">
                 <div className="comments-container cus_scroll large_popover">

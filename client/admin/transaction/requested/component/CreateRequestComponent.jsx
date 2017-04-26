@@ -30,7 +30,8 @@ export default class CreateRequestComponent extends Component {
       transactionStatus:{
         code: 1,
         description:"requested"
-      }
+      },
+      status:"Pending"
     }
     const response = await addReqgistrationRequestInfo(transaction);
     if(response.success){

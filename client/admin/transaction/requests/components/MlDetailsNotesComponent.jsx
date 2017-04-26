@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import {findBackendUserActionHandler} from '../actions/findUserAction'
+let Select = require('react-select');
 export default class MlDetailsNotesComponent extends React.Component {
   constructor(props){
     super(props);
@@ -8,16 +9,21 @@ export default class MlDetailsNotesComponent extends React.Component {
       role:'',
       departmentName:'',
       subDepartmentName:'',
-      profileImage:''
+      profileImage:'',
+      status:null
     }
     return this;
   }
   componentWillReceiveProps(newProps){
     let userId=newProps.transaction.userId
+    this.setState({"status":newProps.transaction.status})
     if(userId){
       const resp=this.findBackendUser()
       return resp;
     }
+  }
+  onStatusSelect(val){
+    this.setState({"status":val.value})
   }
   async findBackendUser() {
     let userTypeId = this.props.transaction.userId
@@ -62,6 +68,10 @@ export default class MlDetailsNotesComponent extends React.Component {
   }
   render() {
     let that=this;
+    let statusOptions = [
+      {value: 'WIP', label: 'WIP' , clearableValue: true},
+      {value: 'Approved', label: 'Approved',clearableValue: true}
+    ];
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
@@ -98,10 +108,13 @@ export default class MlDetailsNotesComponent extends React.Component {
                   <div className="form-group">
                     <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id=""/>
                   </div>
-                  <div className="ml_btn">
-                    {/*<a href="#" className="save_btn">View</a>*/}
-                    <a href="#" className="cancel_btn">Actions</a>
+                  <div className="form-group">
+                    <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status}  onChange={that.onStatusSelect.bind(that)} />
                   </div>
+                 {/* <div className="ml_btn">
+                    /!*<a href="#" className="save_btn">View</a>*!/
+                    <a href="#" className="cancel_btn">Actions</a>
+                  </div>*/}
                 </div>
               </div>
               <div className="col-md-3 text-center">

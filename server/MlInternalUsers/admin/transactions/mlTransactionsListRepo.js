@@ -10,7 +10,7 @@ class MlTransactionsListRepo{
       return MlTransactionsListRepo.instance;
   }
 
-  fetchTransactions(transactionType,userId) {
+  fetchTransactions(transactionType,userId,status) {
     let transasctions = [];
 
     //find user default profile and all its associated roles
@@ -23,7 +23,7 @@ class MlTransactionsListRepo{
 
     //check platform admin return all transactions
     if(roles[0].roleName=='platformadmin' && roles[0].hierarchyLevel==4){
-      let transactions =  mlDBController.find('MlTransactions',{}).fetch()
+      let transactions =  mlDBController.find('MlTransactions',{status:status}).fetch()
       return transactions;
     }
 

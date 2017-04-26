@@ -65,13 +65,7 @@ export default class MlAssignHierarchy extends React.Component {
     let clusterId = this.props.clusterId;
     const response = await findFinalApprovalRoleActionHandler(departmnetId,subDepartmentId,clusterId);
     if(response){
-      let json = {
-        id: response._id,
-        department: response.department,
-        subDepartment: response.subDepartment,
-        role: response.role
-      }
-      this.setState({loading:false,finalApproval:json})
+      this.setState({loading:false,finalApproval:response.finalApproval})
     }
     return response
   }

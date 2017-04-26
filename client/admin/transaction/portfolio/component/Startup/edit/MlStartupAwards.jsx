@@ -79,16 +79,14 @@ export default class MlStartupAwards extends React.Component{
     this.setState({popoverOpen : false})
   }
   onSelect(index, e){
-    let details = this.state.startupInvestor[index]
+
+    let cloneArray = _.cloneDeep(this.state.startupInvestor);
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({index:index});
-    this.setState({data:details})
-    this.setState({selectedObject : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedVal" : details.fundingType});
+    this.setState({index:index,data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen),"selectedVal" : details.awardId});
     let indexes = this.state.indexArray;
     let indexArray = _.cloneDeep(indexes)
     indexArray.push(index);
@@ -129,8 +127,8 @@ export default class MlStartupAwards extends React.Component{
   onOptionSelected(selectedIndex,handler,selectedObj){
 
     let details =this.state.data;
-    details=_.omit(details,["award"]);
-    details=_.extend(details,{["award"]:selectedIndex});
+    details=_.omit(details,["awardId"]);
+    details=_.extend(details,{["awardId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()
@@ -176,7 +174,7 @@ export default class MlStartupAwards extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){
@@ -191,8 +189,8 @@ export default class MlStartupAwards extends React.Component{
 
   render(){
     let query=gql`query{
-      data:fetchTechnologies {
-        label:displayName
+      data:fetchActiveAwards {
+        label:awardDisplayName
         value:_id
       }
     }`;

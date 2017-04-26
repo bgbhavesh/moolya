@@ -22,7 +22,7 @@ class MlEditRoleType extends React.Component{
   }
 
   componentDidUpdate() {
-    OnToggleSwitch(false,true);
+    OnToggleSwitch(true,true);
     initalizeFloatLabel();
   }
 

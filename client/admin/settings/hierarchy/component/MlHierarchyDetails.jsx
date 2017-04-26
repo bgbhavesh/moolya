@@ -27,7 +27,7 @@ export default class MlHierarchyDetails extends React.Component {
     return this;
   }
 
-  getAssignRoleDetails(details){updateFinalApprovalActionHandler
+  getAssignRoleDetails(details){
     console.log(details);
     this.setState({'assignedRoles':details})
   }

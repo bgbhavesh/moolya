@@ -6,7 +6,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddKycCategory extends React.Component{
   constructor(props) {
     super(props);
@@ -39,21 +39,26 @@ class MlAddKycCategory extends React.Component{
   };
 
   async  createKycCategory() {
-    let Details = {
-      docCategoryName: this.refs.docCategoryName.value,
-      docCategoryDisplayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.documentTypeStatus.checked,
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let Details = {
+        docCategoryName: this.refs.docCategoryName.value,
+        docCategoryDisplayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.documentTypeStatus.checked,
+      }
+      const response = await addKycCategoryActionHandler(Details);
+      toastr.success("KYC created");
+      return response;
     }
-    const response = await addKycCategoryActionHandler(Details);
-    return response;
+
+    // getSubDepartmentAvailability(details){
+    //   console.log("details->"+details);
+    //   this.setState({'subdepartmentAvailability':details})
+    // }
   }
-
-  // getSubDepartmentAvailability(details){
-  //   console.log("details->"+details);
-  //   this.setState({'subdepartmentAvailability':details})
-  // }
-
   render(){
     let MlActionConfig = [
       // {
@@ -83,8 +88,8 @@ class MlAddKycCategory extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-                <div className="form-group">
-                  <input type="text" ref="docCategoryName" placeholder="Name" className="form-control float-label" id=""/>
+                <div className="form-group mandatory ">
+                  <input type="text" ref="docCategoryName" placeholder="Name" className="form-control float-label" id="" data-required={true} data-errMsg=" Name is Required"/>
                 </div>
                 <div className="form-group">
                   <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
@@ -96,8 +101,8 @@ class MlAddKycCategory extends React.Component{
             <div className="form_bg">
 
                 <form>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""data-required={true} data-errMsg="  Display Name is Required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

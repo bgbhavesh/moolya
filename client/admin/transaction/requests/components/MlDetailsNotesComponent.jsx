@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import {findBackendUserActionHandler} from '../actions/findUserAction'
+let Select = require('react-select');
+import  {updateStusForTransactionActionHandler} from '../actions/updateStatusTransactionAction'
 export default class MlDetailsNotesComponent extends React.Component {
   constructor(props){
     super(props);
@@ -8,15 +10,34 @@ export default class MlDetailsNotesComponent extends React.Component {
       role:'',
       departmentName:'',
       subDepartmentName:'',
-      profileImage:''
+      profileImage:'',
+      status:null
     }
     return this;
   }
   componentWillReceiveProps(newProps){
     let userId=newProps.transaction.userId
+    this.setState({"status":newProps.transaction.status})
     if(userId){
       const resp=this.findBackendUser()
       return resp;
+    }
+  }
+ async  onStatusSelect(val){
+    this.setState({"status":val.value})
+   let status=val.value
+   let transactionId=this.props.id
+   let response = await updateStusForTransactionActionHandler(transactionId,status);
+    if(response){
+      toastr.success("transaction status changed successfully")
+      if(status=="Approved"){
+        FlowRouter.go("/admin/transactions/approvedList");
+      }
+     else{
+        FlowRouter.go("/admin/transactions/requestedList");
+      }
+    }else{
+      toastr.error(response.error)
     }
   }
   async findBackendUser() {
@@ -28,10 +49,33 @@ export default class MlDetailsNotesComponent extends React.Component {
       if(userDetails.profile.isInternaluser){
           let userInternalProfile=userDetails.profile.InternalUprofile.moolyaProfile.userProfiles
         if(userInternalProfile){
-            let userRoles=userInternalProfile[0].userRoles[0]
-          this.setState({"role":userRoles.roleName})
-          this.setState({"departmentName":userRoles.departmentName})
-          this.setState({"subDepartmentName":userRoles.subDepartmentName})
+          let roleIds=[]
+          let hirarichyLevel=[]
+          userInternalProfile.map(function (doc,index) {
+            if(doc.isDefault) {
+              let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+              userRoles.map(function (doc, index) {
+                hirarichyLevel.push(doc.hierarchyLevel)
+
+              });
+              hirarichyLevel.sort(function (a, b) {
+                return b - a
+              });
+              for (let i = 0; i < userRoles.length; i++) {
+                if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
+                  roleIds.push(userRoles[i]);
+                  break
+                }
+              }
+            }
+          });
+
+          if(roleIds.length==1){
+            this.setState({"role":roleIds[0].roleName})
+            this.setState({"departmentName":roleIds[0].departmentName})
+            this.setState({"subDepartmentName":roleIds[0].subDepartmentName})
+          }
+
         }
         this.setState({profileImage:userDetails.profile.profileImage})
       }
@@ -39,6 +83,10 @@ export default class MlDetailsNotesComponent extends React.Component {
   }
   render() {
     let that=this;
+    let statusOptions = [
+      {value: 'WIP', label: 'WIP' , clearableValue: true},
+      {value: 'Approved', label: 'Approved',clearableValue: true}
+    ];
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
@@ -75,10 +123,13 @@ export default class MlDetailsNotesComponent extends React.Component {
                   <div className="form-group">
                     <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id=""/>
                   </div>
-                  <div className="ml_btn">
-                    {/*<a href="#" className="save_btn">View</a>*/}
-                    <a href="#" className="cancel_btn">Actions</a>
+                  <div className="form-group">
+                    <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status}  onChange={that.onStatusSelect.bind(that)} />
                   </div>
+                 {/* <div className="ml_btn">
+                    /!*<a href="#" className="save_btn">View</a>*!/
+                    <a href="#" className="cancel_btn">Actions</a>
+                  </div>*/}
                 </div>
               </div>
               <div className="col-md-3 text-center">

@@ -11,8 +11,6 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
-import {updateDataEntry} from '../../../profile/actions/addProfilePicAction'
-
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import Datetime from "react-datetime";
@@ -71,6 +69,12 @@ class MlAddBackendUser extends React.Component {
   }
 
 
+  /*componentWillMount(){
+    let response = mlFieldValidations();
+    return response;
+  }
+*/
+
   async addEventHandler() {
     const resp = await this.createBackendUser();
     return resp;
@@ -85,9 +89,7 @@ class MlAddBackendUser extends React.Component {
       if (response.success) {
         FlowRouter.go("/admin/settings/backendUserList");
       }
-      else {
-        toastr.error(response.result);
-      }
+
     }else {
       console.log(response)
     }
@@ -100,7 +102,6 @@ class MlAddBackendUser extends React.Component {
  }
 
   async  createBackendUser() {
-  //  this.updateBackend();
     let firstName= this.refs.firstName.value;
     let lastName= this.refs.lastName.value;
     let displayName= this.refs.displayName.value;
@@ -126,55 +127,78 @@ class MlAddBackendUser extends React.Component {
     }
     else if (confirmPassword != password) {
 
-      toastr.error("Confirm Password does not match with Password")
-
-    } else if(!departments){
-
-      toastr.error("Assign Department is required");
-
-    }
-   else if(!subdepartments){
-
-  toastr.error("Sub Department is required");
-
-}
-    else {
-      let moolyaProfile = {
-        firstName: this.refs.firstName.value,
-        middleName: this.refs.middleName.value,
-        lastName: this.refs.lastName.value,
-        userType: this.state.selectedBackendUserType,
-        subChapter: this.state.selectedSubChapter,
-        roleType: this.state.selectedBackendUser,
-        assignedDepartment: this.state.mlAssignDepartmentDetails,
-        displayName: this.refs.displayName.value,
-        email: this.refs.email.value,
-        contact: this.state.mlAssignContactDetails,
-        globalAssignment: this.refs.globalAssignment.checked,
-        isActive: this.refs.deActive.checked,
-        userProfiles: []
+      let ret = mlFieldValidations(this.refs)
+      if (ret) {
+        toastr.error(ret);
       }
-      let InternalUprofile = {
-        moolyaProfile: moolyaProfile
-      }
-      let profile = {
-        isInternaluser: true,
-        isExternaluser: false,
-        email: this.refs.email.value,
-        isActive:this.refs.deActive.checked,
-        InternalUprofile: InternalUprofile,
-        genderType:this.state.genderSelect,
-        dateOfBirth: this.state.foundationDate
-      }
-      let userObject = {
-        username: moolyaProfile.email,
-        password: this.refs.password.value,
-        profile: profile
-      }
+//
+//     if(!firstName){
+//       toastr.error("First Name is required");
+//     }
+//     else if(!lastName){
+//       toastr.error("Last Name is required");
+//     }
+//     else if(!displayName){
+//       toastr.error("Display Name is required");
+//     }
+//     else if (!email) {
+//       toastr.error("Need to set a username or email");
+//     }
+//     else if(!password){
+//       toastr.error("Password is required");
+//     }
+//     else if (confirmPassword != password) {
+//
+//       toastr.error("Confirm Password does not match with Password")
+//
+//     } else if(!departments){
+//
+//       toastr.error("Assign Department is required");
+//
+//     }
+//    else if(!subdepartments){
+//
+//   toastr.error("Sub Department is required");
+//
+// }
+      else {
+        let moolyaProfile = {
+          firstName: this.refs.firstName.value,
+          middleName: this.refs.middleName.value,
+          lastName: this.refs.lastName.value,
+          userType: this.state.selectedBackendUserType,
+          subChapter: this.state.selectedSubChapter,
+          roleType: this.state.selectedBackendUser,
+          assignedDepartment: this.state.mlAssignDepartmentDetails,
+          displayName: this.refs.displayName.value,
+          email: this.refs.email.value,
+          contact: this.state.mlAssignContactDetails,
+          globalAssignment: this.refs.globalAssignment.checked,
+          isActive: this.refs.deActive.checked,
+          userProfiles: []
+        }
+        let InternalUprofile = {
+          moolyaProfile: moolyaProfile
+        }
+        let profile = {
+          isInternaluser: true,
+          isExternaluser: false,
+          email: this.refs.email.value,
+          isActive: this.refs.deActive.checked,
+          InternalUprofile: InternalUprofile,
+          genderType: this.state.genderSelect,
+          dateOfBirth: this.state.foundationDate
+        }
+        let userObject = {
+          username: moolyaProfile.email,
+          password: this.refs.password.value,
+          profile: profile
+        }
 
-      const response = await addBackendUserActionHandler(userObject)
-      console.log(response);
-      return response;
+        const response = await addBackendUserActionHandler(userObject)
+        console.log(response);
+        return response;
+      }
     }
 
    /* let userroles=[{
@@ -291,13 +315,13 @@ class MlAddBackendUser extends React.Component {
                 <form>
                 <div className="form_bg">
                     <div className="form-group mandatory">
-                      <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" id="" data-required={true} data-errMsg="First Name is Required"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="middleName" placeholder="Middle Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is Required"/>
                     </div>
                     <div className="form-group">
                       <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)} />
@@ -337,10 +361,10 @@ class MlAddBackendUser extends React.Component {
                   <form>
 
                     <div className="form-group mandatory">
-                      <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is Required"/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="email" placeholder="Email id" className="form-control float-label" id=""/>
+                      <input type="text" ref="email" placeholder="Email id" className="form-control float-label" id="" data-required={true} data-errMsg="Email  is Required"/>
                     </div>
 
                     <div className="form-group">

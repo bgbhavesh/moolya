@@ -70,6 +70,7 @@ let startupPortfolioSchema = `
  
     
     type clientsOutput{
+        companyId:String,
         companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:imagesTypeSchema,
@@ -80,6 +81,7 @@ let startupPortfolioSchema = `
     
     type branchesOutput{
         addressType:String,
+        addressTypeId:String,
         name:String,
         isNamePrivate:Boolean,
         phoneNumber:String,
@@ -107,6 +109,7 @@ let startupPortfolioSchema = `
     
     type assetsOutput{
         assetType:String,
+        assetTypeId:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,
@@ -118,6 +121,7 @@ let startupPortfolioSchema = `
     
     type technologiesOutput{
         technology:String,
+        technologyId:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
@@ -128,6 +132,7 @@ let startupPortfolioSchema = `
     type investorOutput{
         name:String,
         fundingType:String,
+        fundingTypeId:String,
         investmentAmount:String,
         description:String,
         isNamePrivate:Boolean,
@@ -139,6 +144,7 @@ let startupPortfolioSchema = `
     
     type lookingForOutput{
         type:String,
+        typeId:String,
         isTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
@@ -180,6 +186,7 @@ let startupPortfolioSchema = `
     
     type awardsRecognitionOutput{
           award:String
+          awardId:String
           isAwardPrivate:Boolean
           year:String
           isYearPrivate:Boolean
@@ -208,6 +215,9 @@ let startupPortfolioSchema = `
         portfolioId:String,
         isActive:Boolean
     }
+    type ratingOutput{
+        rating:String
+    }
     type startupPortfolioAboutUsOutput{
         portfolioDetailsId  : String
         aboutUs             : aboutUsOutput
@@ -218,6 +228,7 @@ let startupPortfolioSchema = `
         branches            : [branchesOutput]
         clients             : [clientsOutput]
         legalIssue          : legalIssueOutput
+        rating              : ratingOutput
     }
     
     input logo{
@@ -262,6 +273,7 @@ let startupPortfolioSchema = `
     }
   
     input clients{
+        companyId:String,
         companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:logo,
@@ -272,6 +284,7 @@ let startupPortfolioSchema = `
     
     input branches{
         addressType:String,
+        addressTypeId:String,
         name:String,
         isNamePrivate:Boolean,
         phoneNumber:String,
@@ -298,6 +311,7 @@ let startupPortfolioSchema = `
     
     input assets{
         assetType:String,
+        assetTypeId:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,
@@ -309,6 +323,7 @@ let startupPortfolioSchema = `
     
     input technologies{
         technology:String,
+        technologyId:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
@@ -319,6 +334,7 @@ let startupPortfolioSchema = `
     input investor{
         name:String,
         fundingType:String,
+        fundingTypeId:String,
         investmentAmount:String,
         investorImage:String,
         description:String,
@@ -332,6 +348,7 @@ let startupPortfolioSchema = `
     
     input lookingFor{
         type:String,
+        typeId:String,
         isTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
@@ -361,12 +378,7 @@ let startupPortfolioSchema = `
      }
      
     input rating{
-        problemStatement    : String,
-        isProblemPrivate    : Boolean,
-        problemImage        : [imageFilesInputSchema],
-        solutionStatement   : String,
-        isSolutionPrivate   : Boolean,
-        solutionImage       : [imageFilesInputSchema]
+        rating:String
     }
     
     input aboutUs{
@@ -379,6 +391,7 @@ let startupPortfolioSchema = `
     
     input awardsRecognition{
           award:String
+          awardId:String
           isAwardPrivate:Boolean
           year:String
           isYearPrivate:Boolean

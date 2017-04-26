@@ -64,7 +64,8 @@ export default class MlStartupInvestor extends React.Component{
     }
   }
   onSelect(index, e){
-    let details = this.state.startupInvestor[index]
+    let cloneArray = _.cloneDeep(this.state.startupInvestor);
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
@@ -115,8 +116,8 @@ export default class MlStartupInvestor extends React.Component{
   onOptionSelected(selectedIndex,handler,selectedObj){
 
     let details =this.state.data;
-    details=_.omit(details,["fundingType"]);
-    details=_.extend(details,{["fundingType"]:selectedIndex});
+    details=_.omit(details,["fundingType"],["fundingTypeId"]);
+    details=_.extend(details,{["fundingType"]:selectedObj.label},{["fundingTypeId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()
@@ -166,7 +167,7 @@ export default class MlStartupInvestor extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){

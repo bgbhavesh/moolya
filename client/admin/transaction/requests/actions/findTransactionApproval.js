@@ -3,10 +3,10 @@ import {client} from '../../../core/apolloConnection';
 
 export async function findTransactionApprovalActionHandler(transactionTypeDetails) {
   let transactionType = transactionTypeDetails
-  let status="Approved"
+  let status=["Approved"]
   const result = await client.query({
     query: gql`
-      query($transactionType:String,$status:String){
+      query($transactionType:String,$status:[String]){
   fetchTransactions(transactionType:$transactionType,status:$status) {
           _id
           userId

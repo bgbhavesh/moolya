@@ -223,7 +223,7 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
-                type,
+                typeId,
                 isTypePrivate
                 description
                 isDescriptionPrivate

@@ -23,7 +23,7 @@ class MlTransactionsListRepo{
 
     //check platform admin return all transactions
     if(roles[0].roleName=='platformadmin' && roles[0].hierarchyLevel==4){
-      let transactions =  mlDBController.find('MlTransactions',{status:status}).fetch()
+      let transactions =  mlDBController.find('MlTransactions',{status:{$in: status}}).fetch()
       return transactions;
     }
 

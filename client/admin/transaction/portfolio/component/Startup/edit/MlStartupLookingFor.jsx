@@ -20,7 +20,7 @@ export default class MlStartupLookingFor extends React.Component{
     this.state={
       loading: true,
       data:{},
-      startupInvestor: [],
+      startupLookingFor: [],
       popoverOpen:false,
       index:"",
       startupLookingForList:[],
@@ -48,39 +48,33 @@ export default class MlStartupLookingFor extends React.Component{
   }
   async fetchPortfolioDetails() {
     let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.lookingFor)
     if(empty){
-      const response = await fetchStartupPortfolioLookingFor(portfoliodetailsId);
+      const response = await fetchStartupPortfolioLookingFor(portfolioDetailsId);
       if (response) {
-          this.setState({loading: false, startupInvestor: response, startupLookingForList:response});
+          this.setState({loading: false, startupLookingFor: response, startupLookingForList:response});
       }
     }else{
-      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.lookingFor, startupLookingForList: that.context.startupPortfolio.lookingFor});
+      this.setState({loading: false, startupLookingFor: that.context.startupPortfolio.lookingFor, startupLookingForList: that.context.startupPortfolio.lookingFor});
     }
   }
-  addInvestor(){
-    this.setState({selectedObject : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
-    if(this.state.startupInvestor){
-      this.setState({index:this.state.startupInvestor.length})
+  addLookingFor(){
+    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
+    if(this.state.startupLookingFor){
+      this.setState({index: this.state.startupLookingFor.length})
     }else{
       this.setState({index:0})
     }
   }
-  onSelect(index, e){
-    let cloneArray = _.cloneDeep(this.state.startupInvestor);
+  onTileClick(index, e){
+    let cloneArray = _.cloneDeep(this.state.startupLookingFor);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({index:index});
-    this.setState({data:details})
-    this.setState({selectedObject : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedVal" : details.fundingType});
+    this.setState({index:index, data:details, selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.typeId});
     let indexes = this.state.indexArray;
     let indexArray = _.cloneDeep(indexes)
     indexArray.push(index);
@@ -88,8 +82,7 @@ export default class MlStartupLookingFor extends React.Component{
     this.setState({indexArray: indexArray})
   }
   onSaveAction(e){
-    this.setState({startupLookingForList:this.state.startupInvestor})
-    this.setState({popoverOpen : false})
+    this.setState({startupLookingForList:this.state.startupLookingFor, popoverOpen : false})
   }
 
   onLockChange(field, e){
@@ -124,8 +117,8 @@ export default class MlStartupLookingFor extends React.Component{
 
   onOptionSelected(selectedIndex,handler,selectedObj){
     let details =this.state.data;
-    details=_.omit(details,["type"],["typeId"]);
-    details=_.extend(details,{["type"]:selectedObj.label},{["typeId"]:selectedIndex});
+    details=_.omit(details,["typeId"]);
+    details=_.extend(details,{["typeId"]:selectedIndex});   //{["type"]:selectedObj.label},
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
       this.sendDataToParent()
@@ -144,11 +137,11 @@ export default class MlStartupLookingFor extends React.Component{
 
   sendDataToParent(){
     let data = this.state.data;
-    let startupInvestor1 = this.state.startupInvestor;
-    let startupInvestor = _.cloneDeep(startupInvestor1);
-    startupInvestor[this.state.index] = data;
+    let startupLookingFor1 = this.state.startupLookingFor;
+    let startupLookingFor = _.cloneDeep(startupLookingFor1);
+    startupLookingFor[this.state.index] = data;
     let arr = [];
-    _.each(startupInvestor, function (item) {
+    _.each(startupLookingFor, function (item) {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
@@ -160,11 +153,10 @@ export default class MlStartupLookingFor extends React.Component{
       }
       arr.push(newItem)
     })
-    startupInvestor = arr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
-    this.setState({startupInvestor:startupInvestor})
+    startupLookingFor = arr;
+    this.setState({startupLookingFor:startupLookingFor})
     let indexArray = this.state.indexArray;
-    this.props.getLookingForDetails(startupInvestor,indexArray);
+    this.props.getLookingForDetails(startupLookingFor, indexArray);
   }
 
   onLogoFileUpload(e){
@@ -174,15 +166,24 @@ export default class MlStartupLookingFor extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{lookingFor:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
 
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(resp){
     if(resp){
       let result = JSON.parse(resp);
       if(result.success){
-        this.setState({startupAssetsList:this.state.startupAssets})
+        this.fetchOnlyImages();
       }
+    }
+  }
+
+  async fetchOnlyImages(){
+    const response = await fetchStartupPortfolioLookingFor(this.props.portfolioDetailsId);
+    if (response) {
+      let dataDetails =this.state.data  //handle client view of uploads
+      // dataDetails['audienceImages'] = response.audienceImages
+      // this.setState({loading: false, data: dataDetails});
     }
   }
 
@@ -193,6 +194,7 @@ export default class MlStartupLookingFor extends React.Component{
           value:_id
         }
       }`;
+
     let lookingOption={options: { variables: {communityCode:"STU"}}};
     let that = this;
     let startupLookingForList = that.state.startupLookingForList || [];
@@ -212,9 +214,9 @@ export default class MlStartupLookingFor extends React.Component{
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
                     <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover" >
-                      <div className="list_block notrans" onClick={this.addInvestor.bind(this)}>
+                      <div className="list_block notrans" onClick={this.addLookingFor.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                        <h3 onClick={this.addInvestor.bind(this)}>Add New Looking For</h3>
+                        <h3 onClick={this.addLookingFor.bind(this)}>Add New Looking For</h3>
                       </div>
                     </a>
                   </div>
@@ -224,7 +226,7 @@ export default class MlStartupLookingFor extends React.Component{
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                          <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                           <h3>{details.description}</h3>
                         </div>
                       </a>

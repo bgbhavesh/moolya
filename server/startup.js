@@ -6,7 +6,7 @@ import s3Client from './commons/mlS3'
 import MlAuthorization from './mlAuthorization/mlAuthorization'
 import MlDBController from './commons/mlDBController'
 import MlAuditLog from './commons/mlAuditLog'
-
+import MlEmailNotification from './mlNotifications/mlEmailNotifications/mlEMailNotification'
 Meteor.startup(function ()
 {
     // console.log("Insider SSL start!!!!");
@@ -25,6 +25,7 @@ Meteor.startup(function ()
     mlAuthorization = new MlAuthorization();
     mlDBController = new MlDBController();
     mlAuditLog = new MlAuditLog();
+    MlEmailNotification.testEmail();
 })
 
 //Copied from SSL package..

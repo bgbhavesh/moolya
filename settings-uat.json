@@ -25,6 +25,8 @@
         "urlExpirationTime":4000
       }
     },
-    "graphql_proxy_url":"http://localhost:8090/graphql"
+    "graphql_proxy_url":"http://localhost:8090/graphql",
+    "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
+    "isEmailDomainCheckEnabled":true
   }
 }

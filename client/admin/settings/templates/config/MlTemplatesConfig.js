@@ -1,6 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+
 const mltemplatesConfig=new MlViewer.View({
   name:"templatesTable",
   module:"templates",//Module name for filter.

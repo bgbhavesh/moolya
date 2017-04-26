@@ -11,6 +11,8 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
+import {updateDataEntry} from '../../../profile/actions/addProfilePicAction'
+
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import Datetime from "react-datetime";
@@ -29,7 +31,10 @@ class MlAddBackendUser extends React.Component {
       selectedSubChapter: '',
       pwdErrorMsg: '',
       foundationDate: " ",
-      genderSelect: null
+      genderSelectMale: " ",
+      genderSelectFemale: " ",
+      genderSelectOthers: " ",
+      genderSelect:" "
       /* selectedCluster:'',
        selectedChapter:'',
        selectedDepartment:'',
@@ -41,7 +46,8 @@ class MlAddBackendUser extends React.Component {
     this.onBackendUserTypeSelect.bind(this);
     this.onBackendUserSelect.bind(this);
     this.onFoundationDateSelection.bind(this);
-    this.onGenderSelect.bind(this);
+    this.onGenderSelect = this.onGenderSelect.bind(this);
+    //this.updateBackend.bind(this);
     // this.onGenderSelect.bind(this);
     // this.storeToBackend.bind(this);
     /* this.onClusterSelect.bind(this);
@@ -87,30 +93,14 @@ class MlAddBackendUser extends React.Component {
     }
   };
 
- async onGenderSelect(e){
-    this.setState({genderSelect:e.target.value})
-  }
- //
- //  async DOBSelect(e){
- //    this.setState({foundationDate:e.target.value})
- //  }
-
- //
- // async  storeToBackend(){
- //   let Details = {
- //     genderSelect : this.state.genderSelect,
- //     foundationDate :this.state.foundationDate,
- //     userId : Meteor.userId()
- //   }
- //   const dataresponse = await addBackendUserActionHandler(Details);
- //   console.log(dataresponse);
- //   toastr.success("Update Successful")
- //   return dataresponse;
- // }
-
-
+ async onGenderSelect(e) {
+   let genderName = e.target.value;
+   if(genderName)
+   this.setState({loading: false, genderSelect:genderName})
+ }
 
   async  createBackendUser() {
+  //  this.updateBackend();
     let firstName= this.refs.firstName.value;
     let lastName= this.refs.lastName.value;
     let displayName= this.refs.displayName.value;
@@ -172,7 +162,9 @@ class MlAddBackendUser extends React.Component {
         isExternaluser: false,
         email: this.refs.email.value,
         isActive:this.refs.deActive.checked,
-        InternalUprofile: InternalUprofile
+        InternalUprofile: InternalUprofile,
+        genderType:this.state.genderSelect,
+        dateOfBirth: this.state.foundationDate
       }
       let userObject = {
         username: moolyaProfile.email,
@@ -361,13 +353,13 @@ class MlAddBackendUser extends React.Component {
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="1" onChange={this.onGenderSelect.bind(this)}/><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="Male" onChange={this.onGenderSelect}/><label htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="2"  onChange={this.onGenderSelect.bind(this)}/><label htmlFor="radio2"><span><span></span></span>Female</label>
+                        <input id="radio2" type="radio" name="radio" value="Female" onChange={this.onGenderSelect}/><label htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="3"  onChange={this.onGenderSelect.bind(this)}/><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="Others" onChange={this.onGenderSelect}/><label htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
                     <div className="clearfix"></div>

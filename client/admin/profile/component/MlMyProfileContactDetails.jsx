@@ -26,8 +26,8 @@ export default class ContactDetails extends React.Component{
     return this;
   }
 
-  componentDidMount(){
-    this.findRegistration.bind(this);
+  componentWillMount(){
+    this.findRegistration()
   }
   componentWillUpdate(nextProps, nextState) {
   }
@@ -189,7 +189,7 @@ export default class ContactDetails extends React.Component{
             <div className={"tab-pane"+this.state.activeTab} id="contactA">
               <div className="form-group">
                 <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType" query={numberTypeQuery}
-                              queryoption={numberTypeOption} className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}
+                              queryOptions={numberTypeOption} className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}
                               valueKey={'value'} labelKey={'label'} queryType={"graphql"}
                               onSelect={this.optionsBySelectNumberType.bind(this)}
                               isDynamic={true}/>

@@ -34,6 +34,9 @@ export default class EmailDetails extends React.Component{
   componentDidMount(){
     this.findRegistration.bind(this);
   }
+  componentWillMount(){
+    this.findRegistration()
+  }
 
   async findRegistration(){
     let registrationId= Meteor.userId();

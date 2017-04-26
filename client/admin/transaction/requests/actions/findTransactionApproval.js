@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findTransactionRequestActionHandler(transactionTypeDetails) {
+export async function findTransactionApprovalActionHandler(transactionTypeDetails) {
   let transactionType = transactionTypeDetails
-  let status=["WIP","Pending"]
+  let status=["Approved"]
   const result = await client.query({
     query: gql`
       query($transactionType:String,$status:[String]){
@@ -26,8 +26,8 @@ export async function findTransactionRequestActionHandler(transactionTypeDetails
       }
     `,
     variables: {
-  transactionType,
-  status
+      transactionType,
+      status
     },
     forceFetch: true
   })

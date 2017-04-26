@@ -32,7 +32,7 @@ export default class MlTransactionRequested extends Component {
           requestId: requestDetails[i].requestId,
           userId: requestDetails[i].userId,
           transactionTypeName: requestDetails[i].transactionTypeName,
-          status:'pending',
+          status:requestDetails[i].status,
           transactionId:requestDetails[i]._id
         }
         requestInfo.push(json)

@@ -176,13 +176,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                       for (key1 in inner){
                                           let file = inner[key1]
                                           if(typeof file == 'object'){
-                                              for (key2 in file){
-                                                if(key2 == "fileUrl"){
-                                                  file.fileUrl = resp;
-                                                }else{
-                                                  file[key2].fileUrl = resp;
-                                                }
-                                              }
+                                            for (key2 in file){
+                                              file[key2].fileUrl = resp;
+                                            }
                                           }
                                       }
                                   }

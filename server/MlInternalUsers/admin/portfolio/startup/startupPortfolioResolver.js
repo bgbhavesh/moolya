@@ -34,51 +34,52 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
         for (key in updateFor) {
           if (startupPortfolio.hasOwnProperty(key))
           {
-            if(_.isArray(startupPortfolio[key]) && _.isArray(updateFor[key])){
-              if(startupPortfolio[key].length != updateFor[key].length){
-                var diff = (updateFor[key].length)-(startupPortfolio[key].length);
-                for (i = diff; i > 0; i--){
-                  let idx = updateFor[key].length-i;
-                  let newObj = updateFor[key][idx];
-                  startupPortfolio[key].push(newObj)
+            if(_.isArray(startupPortfolio[key])){
+                if(startupPortfolio[key].length != updateFor[key].length){
+                    var diff = (updateFor[key].length)-(startupPortfolio[key].length);
+                    for (i = diff; i > 0; i--){
+                        let idx = updateFor[key].length-i;
+                        let newObj = updateFor[key][idx];
+                        startupPortfolio[key].push(newObj)
+                    }
+                }else if(startupPortfolio[key].length == updateFor[key].length && (args.indexArray.length==0)){
+                    _.mergeWith(startupPortfolio[key], updateFor[key])
                 }
-                  // let newObj = _.last(updateFor[key])
-                  // startupPortfolio[key].push(newObj)
-              }else if(startupPortfolio[key].length == updateFor[key].length){
-                _.mergeWith(startupPortfolio[key], updateFor[key])
-              }
-              if(args.indexArray && args.indexArray.length>0){
-                _.each(args.indexArray, function (index) {
-                  _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
+                if(args.indexArray && args.indexArray.length>0){
+                    _.each(args.indexArray, function (index) {
+                        _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
+                            if (_.isArray(objValue)) {
+                              return objValue.concat(srcValue);
+                            }
+                        })
+                    })
+                }
+            }
+            // else if(_.isArray(startupPortfolio[key]) && _.isObject(updateFor[key])){
+            //   if(args.indexArray && args.indexArray.length>0){
+            //     _.each(args.indexArray, function (index) {
+            //       _.extend(startupPortfolio[key][index], updateFor[key])
+            //     })
+            //   }else{
+            //     startupPortfolio[key].push(updateFor[key])
+            //   }
+            // }
+            else{
+                _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
                     if (_.isArray(objValue)) {
                       return objValue.concat(srcValue);
                     }
-                  })
-                })
-              }
-            }else if(_.isArray(startupPortfolio[key]) && _.isObject(updateFor[key])){
-              if(args.indexArray && args.indexArray.length>0){
-                _.each(args.indexArray, function (index) {
-                  _.extend(startupPortfolio[key][index], updateFor[key])
-                })
-              }else{
-                startupPortfolio[key].push(updateFor[key])
-              }
-            }else{
-              _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
-                if (_.isArray(objValue)) {
-                  return objValue.concat(srcValue);
-                }
-              });
+                });
             }
 
           }else {
-            if(updateFor[key].logo){
-              startupPortfolio[key] = [updateFor[key]];
-            }else if(updateFor[key]){
-              startupPortfolio[key] = updateFor[key];
-            }
-            }
+            // if(updateFor[key].logo){
+            //   startupPortfolio[key] = [updateFor[key]];
+            // }else if(updateFor[key]){
+            //   startupPortfolio[key] = updateFor[key];
+            // }
+            startupPortfolio[key] = updateFor[key];
+          }
         }
 
         let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio}, {upsert: true})

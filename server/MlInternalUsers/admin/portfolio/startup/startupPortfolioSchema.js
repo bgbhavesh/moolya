@@ -221,6 +221,7 @@ let startupPortfolioSchema = `
     type startupPortfolioAboutUsOutput{
         portfolioDetailsId  : String
         aboutUs             : aboutUsOutput
+        rating              : ratingOutput
         serviceProducts     : serviceProductsOutput
         information         : informationOutput
         technologies        : [technologiesOutput]

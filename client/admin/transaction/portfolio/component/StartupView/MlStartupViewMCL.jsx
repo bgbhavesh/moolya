@@ -145,7 +145,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Membership </div>
                   <div className="panel-body ">
 
-                    <p>{this.state.data&&this.state.data.memberships&&this.state.data.memberships.description?this.state.data.memberships.description:""} </p>
+                    <p>{this.state.memberships&&this.state.memberships.description?this.state.memberships.description:""} </p>
 
                   </div>
                 </div>
@@ -160,7 +160,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
 
-                    <p>{this.state.data&&this.state.data.compliances&&this.state.data.compliances.description?this.state.data.compliances.description:""}</p>
+                    <p>{this.state.compliances&&this.state.compliances.description?this.state.compliances.description:""}</p>
 
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Licenses </div>
                   <div className="panel-body ">
 
-                    <p>{this.state.data&&this.state.data.licenses&&this.state.data.licenses.description?this.state.data.licenses.description:""}</p>
+                    <p>{this.state.licenses&&this.state.licenses.description?this.state.licenses.description:""}</p>
 
                   </div>
                 </div>

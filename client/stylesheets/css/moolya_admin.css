@@ -1070,11 +1070,11 @@ button:focus{outline: 0;}
 /*media quaries started*/
 @media (max-width:1024px){
 ol.progtrckr li{ margin-bottom: 40px}}
-@media (min-width:992px) {
-  .main_wrap_scroll {
-    height: auto !important;
-  }
-}
+/*@media (min-width:992px) {*/
+  /*.main_wrap_scroll {*/
+    /*height: auto !important;*/
+  /*}*/
+/*}*/
 @media (min-width:992px) and (max-width:1024px) {.login_top{top: 200px !important;} .login_block{top: 238px !important;}.login_block_in{top: 3px !important;}}
 @media (max-width:991px) {.left_wrap, .scrollarea.left_wrap {
   height: auto !important;

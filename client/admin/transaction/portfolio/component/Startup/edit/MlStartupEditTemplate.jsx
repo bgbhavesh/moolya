@@ -61,7 +61,6 @@ export default class MlStartupEditTemplate extends React.Component{
   }
 
   getAboutus(details,tabName,indexArray){
-
     let data = this.state.startupPortfolio;
     data[tabName] = details;
     this.props.getPortfolioDetails({startupPortfolio : data},indexArray);

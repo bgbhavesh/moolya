@@ -193,7 +193,8 @@ let startupPortfolioSchema = `
           description:String
           isDescriptionPrivate:Boolean
           logo:imagesTypeSchema,
-          makePrivate:Boolean
+          makePrivate:Boolean,
+          index: Int
     }
 
     type membershipsOutput{
@@ -398,7 +399,8 @@ let startupPortfolioSchema = `
           description:String
           isDescriptionPrivate:Boolean
           makePrivate:Boolean
-          logo : logo
+          logo : logo,
+          index: Int
     }
 
     input memberships{

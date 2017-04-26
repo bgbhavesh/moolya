@@ -77,6 +77,9 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                   annotatorId
                 }
+                rating{
+                  rating
+                }
                 clients{
                   description
                   isDescriptionPrivate

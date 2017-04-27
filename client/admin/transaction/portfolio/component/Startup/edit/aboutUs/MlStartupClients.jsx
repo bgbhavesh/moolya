@@ -126,28 +126,7 @@ export default class MlStartupClients extends React.Component{
     })
   }
   sendDataToParent(){
- /*   let data = this.state.data;
-    let startupClients1 = this.state.startupClients;
-    let startupClients = _.cloneDeep(startupClients1);
-    startupClients[this.state.index] = data;
-    let arr = [];
-    _.each(startupClients, function (item) {
-      for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined) {
-          delete item[propName];
-        }
-      }
-      newItem = _.omit(item, "__typename")
-      if(item && item.logo){
-        delete item.logo['__typename'];
-      }
-      arr.push(newItem)
-    })
-    startupClients = arr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
-    this.setState({startupClients:startupClients})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupClients(startupClients,indexArray);*/
+
     let data = this.state.data;
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);

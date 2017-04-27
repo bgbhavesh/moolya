@@ -465,7 +465,7 @@ let startupPortfolioSchema = `
     
     type Mutation{
         createStartupPortfolio(portfolio:startupPortfolio):response
-        updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio, indexArray:[String]):response
+        updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio):response
     }
 `
 

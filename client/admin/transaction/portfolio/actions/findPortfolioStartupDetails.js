@@ -91,6 +91,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileUrl
                   }
                   makePrivate
+                  index
                 }
                 serviceProducts{
                   description

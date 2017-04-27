@@ -971,6 +971,7 @@ button:focus{outline: 0;}
 
 
 .list_block .fa.fa-lock {position: absolute;left:4px;top:2px; font-size: 18px; color: #ee4847}
+.list_block .fa.fa-unlock {position: absolute;left:4px;top:2px; font-size: 18px; color: #ee4847}
 
 .inputfile{width:.1px;height:.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1}
 .inputfile + label{max-width:100%;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;display:inline-block;overflow:hidden;padding:.625rem 1.25rem}

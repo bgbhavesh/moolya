@@ -65,6 +65,7 @@ let startupPortfolioSchema = `
        about : String
        isAboutPrivate:Boolean
        logo:imagesTypeSchema,
+       index: Int
     }
     
  
@@ -120,7 +121,8 @@ let startupPortfolioSchema = `
     }
     
     type technologiesOutput{
-       technologyId:String,
+        technology:String,
+        technologyId:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
@@ -138,8 +140,9 @@ let startupPortfolioSchema = `
         isNamePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-         logo:imagesTypeSchema,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
+        index: Int
     }
     
     type lookingForOutput{
@@ -148,8 +151,9 @@ let startupPortfolioSchema = `
         isTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
-         logo:imagesTypeSchema,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
+        index: Int
     }
     
 
@@ -272,6 +276,7 @@ let startupPortfolioSchema = `
        about : String
        isAboutPrivate:Boolean
        logo:logo
+       index: Int
     }
   
     input clients{
@@ -344,8 +349,9 @@ let startupPortfolioSchema = `
         isInvestorImagePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean
+        index: Int
     }
     
     input lookingFor{
@@ -354,8 +360,9 @@ let startupPortfolioSchema = `
         isTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean
+        index: Int
     }
     
 

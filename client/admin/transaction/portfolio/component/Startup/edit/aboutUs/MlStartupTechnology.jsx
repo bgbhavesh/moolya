@@ -20,7 +20,8 @@ export default class MlStartupTechnology extends React.Component{
       data:{},
       startupTechnologies:this.props.technologyDetails || [],
       popoverOpen:false,
-      index:"",
+      /*index:"",*/
+      selectedIndex:-1,
       startupTechnologiesList:this.props.technologyDetails || [],
       indexArray:[],
       selectedVal:null,
@@ -45,32 +46,25 @@ export default class MlStartupTechnology extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupTechnologiesList:this.state.startupTechnologies})
-    this.setState({popoverOpen : false})
+    this.setState({startupTechnologiesList:this.state.startupTechnologies,popoverOpen : false})
   }
   addTechnology(){
-    this.setState({selectedObject : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
+    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupTechnologies){
-      this.setState({index:this.state.startupTechnologies.length})
+      this.setState({selectedIndex:this.state.startupTechnologies.length})
     }else{
-      this.setState({index:0})
+      this.setState({selectedIndex:0})
     }
   }
 
   onSelect(index, e){
     let cloneArray = _.cloneDeep(this.state.startupTechnologies);
-    let details = cloneArray[index];
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({index:index});
-    this.setState({data:details})
-    this.setState({selectedObject : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedVal" : details.technology});
+    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.technologyId});
     let indexes = this.state.indexArray;
     let indexArray = _.cloneDeep(indexes)
     indexArray.push(index);
@@ -108,13 +102,21 @@ export default class MlStartupTechnology extends React.Component{
     })
   }
 
-  onOptionSelected(selectedIndex,handler,selectedObj){
-
+  onOptionSelected(selectedTechnology){
+/*
     let details =this.state.data;
     details=_.omit(details,["technology"],["technologyId"]);
     details=_.extend(details,{["technology"]:selectedObj.label},{["technologyId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
+      this.sendDataToParent()
+    })*/
+
+    let details =this.state.data;
+    details=_.omit(details,["technologyId"]);
+    details=_.extend(details,{["technologyId"]: selectedTechnology});
+    this.setState({data:details}, function () {
+      this.setState({"selectedVal" : selectedTechnology})
       this.sendDataToParent()
     })
 
@@ -131,27 +133,26 @@ export default class MlStartupTechnology extends React.Component{
   }
   sendDataToParent(){
     let data = this.state.data;
-    let startupTechnologies1 = this.state.startupTechnologies;
-    let startupTechnologies = _.cloneDeep(startupTechnologies1);
-    startupTechnologies[this.state.index] = data;
+    let technologies = this.state.startupTechnologies;
+    let startupTechnologies = _.cloneDeep(technologies);
+    data.index = this.state.selectedIndex;
+    startupTechnologies[this.state.selectedIndex] = data;
     let arr = [];
-    _.each(startupTechnologies, function (item) {
+    _.each(startupTechnologies, function (item)
+    {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
-      if(item && item.logo){
-        delete item.logo['__typename'];
-      }
-      arr.push(newItem)
+      newItem = _.omit(item, "__typename");
+      let updateItem = _.omit(newItem, 'logo');
+      arr.push(updateItem)
     })
     startupTechnologies = arr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupTechnologies:startupTechnologies})
     let indexArray = this.state.indexArray;
-    this.props.getStartupTechnology(startupTechnologies,indexArray);
+    this.props.getStartupTechnology(startupTechnologies, indexArray);
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -159,14 +160,13 @@ export default class MlStartupTechnology extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{technologies:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{technologies:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-
       }
     }
   }

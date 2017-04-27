@@ -96,7 +96,7 @@ class MlAddUserType extends React.Component{
                                 selectedValue={this.state.communityCode}
                                 query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)}/>
                   <div className="form-group">
-                    <input type="text" ref="userTypeName" placeholder="User Type Name" className="form-control float-label"/>
+                    <input type="text" ref="userTypeName" placeholder="User Category Name" className="form-control float-label"/>
                   </div>
                   <div className="form-group">
                     <textarea  ref="userTypeDesc" placeholder="About" className="form-control float-label"></textarea>

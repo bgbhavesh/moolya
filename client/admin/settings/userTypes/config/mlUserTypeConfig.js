@@ -13,7 +13,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "userTypeName", title: "User Type Name",dataSort:true},
+    {dataField: "userTypeName", title: "User Category Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
     {dataField: "communityName", title: "Community Name",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
@@ -28,7 +28,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
         if(data && data.id){
           FlowRouter.go("/admin/settings/editUserType/"+data.id);
         } else{
-          toastr.error("Please select a User Type");
+          toastr.error("Please select a User Category");
         }
       }
     },

@@ -18,6 +18,7 @@ class MlEditCommunityFormComponent extends React.Component {
       clusters: [],
       chapters: [],
       subchapters: [],
+      showOnMap:false,
     }
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
@@ -102,6 +103,9 @@ class MlEditCommunityFormComponent extends React.Component {
       if (this.state.data.subchapters) {
         this.setState({subchapters: this.state.data.subchapters});
       }
+      if(this.state.data.showOnMap){
+        this.setState({showOnMap:this.state.data.showOnMap})
+      }
     }
   }
 
@@ -109,7 +113,7 @@ class MlEditCommunityFormComponent extends React.Component {
     let communityDetails = {
       displayName: this.refs.displayName.value,
       aboutCommunity: this.refs.about.value,
-      showOnMap: this.refs.showOnMap.checked,
+      showOnMap: this.state.showOnMap,
       isActive: this.refs.status.checked
     }
     let data = {
@@ -158,7 +162,14 @@ class MlEditCommunityFormComponent extends React.Component {
       this.setState({"data": {"isActive": false}});
     }
   }
-
+  onShowMapChange(element){
+    const data = this.state.data;
+    if (element.currentTarget.checked) {
+      this.setState( {"showOnMap": true});
+    } else {
+      this.setState({"showOnMap": false});
+    }
+  }
   render() {
     let MlActionConfig = [
       {
@@ -241,7 +252,7 @@ class MlEditCommunityFormComponent extends React.Component {
                     <label>Show on map</label>
                     <label className="switch">
                       <input type="checkbox" ref="showOnMap"
-                             defaultValue={this.state.data && this.state.data.showOnMap}/>
+                             checked={this.state.showOnMap} onChange={this.onShowMapChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
                   </div>

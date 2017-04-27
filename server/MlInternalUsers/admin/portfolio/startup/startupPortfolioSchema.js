@@ -65,22 +65,22 @@ let startupPortfolioSchema = `
        about : String
        isAboutPrivate:Boolean
        logo:imagesTypeSchema,
+       index: Int
     }
     
  
     
     type clientsOutput{
         companyId:String,
-        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:imagesTypeSchema,
         description:String,
         isDescriptionPrivate:Boolean,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
     }
     
     type branchesOutput{
-        addressType:String,
         addressTypeId:String,
         name:String,
         isNamePrivate:Boolean,
@@ -103,12 +103,12 @@ let startupPortfolioSchema = `
         addressImage : String,
         isAddressImagePrivate:Boolean,
         logo:imagesTypeSchema,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
         
     }
     
     type assetsOutput{
-        assetType:String,
         assetTypeId:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
@@ -116,7 +116,8 @@ let startupPortfolioSchema = `
         description:String,
         isDescriptionPrivate:Boolean,
         logo:imagesTypeSchema,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
     }
     
     type technologiesOutput{
@@ -126,7 +127,8 @@ let startupPortfolioSchema = `
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
          logo:imagesTypeSchema,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
     }
     
     type investorOutput{
@@ -138,8 +140,9 @@ let startupPortfolioSchema = `
         isNamePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-         logo:imagesTypeSchema,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
+        index: Int
     }
     
     type lookingForOutput{
@@ -148,8 +151,9 @@ let startupPortfolioSchema = `
         isTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
-         logo:imagesTypeSchema,
+        logo:imagesTypeSchema,
         makePrivate:Boolean
+        index: Int
     }
     
 
@@ -272,20 +276,20 @@ let startupPortfolioSchema = `
        about : String
        isAboutPrivate:Boolean
        logo:logo
+       index: Int
     }
   
     input clients{
         companyId:String,
-        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:logo,
         description:String,
         isDescriptionPrivate:Boolean,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
     }
     
     input branches{
-        addressType:String,
         addressTypeId:String,
         name:String,
         isNamePrivate:Boolean,
@@ -308,11 +312,11 @@ let startupPortfolioSchema = `
         addressImage : String,
         isAddressImagePrivate:Boolean,
           logo:logo,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
     }
     
     input assets{
-        assetType:String,
         assetTypeId:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
@@ -320,17 +324,18 @@ let startupPortfolioSchema = `
         description:String,
         isDescriptionPrivate:Boolean,
         logo:logo,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
     }
     
     input technologies{
-        technology:String,
-        technologyId:String,
+       technologyId:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
           logo:logo,
-        makePrivate:Boolean
+        makePrivate:Boolean,
+        index:Int
     }
     
     input investor{
@@ -344,8 +349,9 @@ let startupPortfolioSchema = `
         isInvestorImagePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean
+        index: Int
     }
     
     input lookingFor{
@@ -354,8 +360,9 @@ let startupPortfolioSchema = `
         isTypePrivate:Boolean,
         description:String,
         isDescriptionPrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean
+        index: Int
     }
     
 
@@ -458,7 +465,7 @@ let startupPortfolioSchema = `
     
     type Mutation{
         createStartupPortfolio(portfolio:startupPortfolio):response
-        updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio, indexArray:[String]):response
+        updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio):response
     }
 `
 

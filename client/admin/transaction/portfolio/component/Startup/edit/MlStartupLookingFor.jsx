@@ -25,7 +25,7 @@ export default class MlStartupLookingFor extends React.Component{
       // index:"",
       selectedIndex:-1,
       startupLookingForList:[],
-      indexArray:[],
+      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -78,11 +78,11 @@ export default class MlStartupLookingFor extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details, selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.typeId});
-    let indexes = this.state.indexArray;    //index:index
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    // let indexes = this.state.indexArray;    //index:index
+    // let indexArray = _.cloneDeep(indexes)
+    // indexArray.push(index);
+    // indexArray = _.uniq(indexArray);
+    // this.setState({indexArray: indexArray})
   }
   onSaveAction(e){
     this.setState({startupLookingForList:this.state.startupLookingFor, popoverOpen : false})
@@ -118,12 +118,12 @@ export default class MlStartupLookingFor extends React.Component{
     })
   }
 
-  onOptionSelected(selectedIndex){
+  onOptionSelected(selectedId){
     let details =this.state.data;
     details=_.omit(details,["typeId"]);
-    details=_.extend(details,{["typeId"]:selectedIndex});   //{["type"]:selectedObj.label},
+    details=_.extend(details,{["typeId"]:selectedId});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedIndex})
+      this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
   }
@@ -142,6 +142,7 @@ export default class MlStartupLookingFor extends React.Component{
     let data = this.state.data;
     let startupLookingFor1 = this.state.startupLookingFor;
     let startupLookingFor = _.cloneDeep(startupLookingFor1);
+    data.index = this.state.selectedIndex;
     startupLookingFor[this.state.selectedIndex] = data;                 //startupLookingFor[this.state.index] = data;
     let arr = [];
     _.each(startupLookingFor, function (item) {
@@ -158,8 +159,8 @@ export default class MlStartupLookingFor extends React.Component{
     })
     startupLookingFor = arr;
     this.setState({startupLookingFor:startupLookingFor})
-    let indexArray = this.state.indexArray;
-    this.props.getLookingForDetails(startupLookingFor, indexArray);
+    // let indexArray = this.state.indexArray;
+    this.props.getLookingForDetails(startupLookingFor);    //indexArray
   }
 
   onLogoFileUpload(e){
@@ -189,9 +190,14 @@ export default class MlStartupLookingFor extends React.Component{
       let dataDetails =this.state.startupLookingFor
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
-      let curUpload=response[thisState]
-      specificData['logo']= curUpload['logo']
-      this.setState({loading: false, startupLookingFor:cloneBackUp });   //startupLookingForList : cloneBackUp,
+      if(specificData){
+        let curUpload=response[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupLookingFor:cloneBackUp });   //startupLookingForList : cloneBackUp,
+      }else{
+        this.setState({loading: false})
+      }
+
     }
   }
 

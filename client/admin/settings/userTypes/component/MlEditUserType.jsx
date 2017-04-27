@@ -122,7 +122,7 @@ class MlEditUserType extends React.Component{
 
                 <div className="form-group">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  <input type="text" ref="userTypeName" placeholder="UserType Name" defaultValue={this.state.data&&this.state.data.userTypeName} className="form-control float-label"/>
+                  <input type="text" ref="userTypeName" placeholder="User Category Name" defaultValue={this.state.data&&this.state.data.userTypeName} className="form-control float-label"/>
                 </div>
                 <div className="form-group">
                   <textarea  ref="userTypeDesc" placeholder="About" defaultValue={this.state.data&&this.state.data.userTypeDesc}className="form-control float-label"></textarea>

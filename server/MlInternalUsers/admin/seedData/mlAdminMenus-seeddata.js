@@ -1752,6 +1752,44 @@ if(Meteor.isServer){
                 "image": ""
               }]
           },
+          {
+            "link" : "/admin/settings/fundingTypeList",
+            "name" : "Funding Type",
+            "uniqueId" : "settings_FundingType",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addFundingType",
+              "name": "Add Funding Type",
+              "uniqueId": "settings_AddFundingType",
+              "subMenuMappingId":"settings_FundingType",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": true,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/fundingTypeList",
+                "name": "List Funding Types",
+                "uniqueId": "settings_FundingTypeList",
+                "subMenuMappingId":"settings_FundingType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editFundingType",
+                "name": "Edit Funding Type",
+                "uniqueId": "settings_EditFundingType",
+                "subMenuMappingId":"settings_FundingType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
 
           {
             "link" : "/admin/settings/processList",

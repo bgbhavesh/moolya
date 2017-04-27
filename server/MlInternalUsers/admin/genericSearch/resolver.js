@@ -565,6 +565,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTechnologies.find(query,findOptions).fetch();
     totalRecords=MlTechnologies.find(query,findOptions).count();
   }
+  if(args.module=="FundingType"){
+    data= MlFundingTypes.find(query,findOptions).fetch();
+    totalRecords=MlFundingTypes.find(query,findOptions).count();
+  }
 
   if(args.module=="EmployeeType"){
     data= MlGlobalSettings.find(query,findOptions).fetch();
@@ -787,6 +791,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
 
     if(data.technologyName){
       return 'Technologies'
+    }
+    if(data.fundingTypeName){
+      return 'FundingType'
     }
 
     if(data.processId){

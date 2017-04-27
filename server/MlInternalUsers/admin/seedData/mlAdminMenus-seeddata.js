@@ -457,7 +457,19 @@ if(Meteor.isServer){
         "name" : "templates",
         "isLink" : true,
         "isMenu" : true,
-        "uniqueId" : "services"
+        "uniqueId" : "templates",
+        "subMenu": [
+          {
+            "link": "/admin/templates/templateList",
+            "name": "Template List",
+            "uniqueId": "templates_List",
+            "subMenuMappingId":"",
+            "subMenusId":"templates",
+            "isLink": true,
+            "isMenu": false,
+            "image": ""
+          }
+        ]
       },
       {
         "image" : "/images/cluster_icon.png",

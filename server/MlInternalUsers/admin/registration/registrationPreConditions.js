@@ -15,6 +15,9 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
          subChapterId=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.subChapterId:null;
     }
 
+    if(registrationType&&registrationType==="BRW"){
+      return {'isValid':true};
+    }
     // {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]}
 
     communityDetails = mlDBController.findOne('MlCommunityAccess', {"$and":[{subChapterId: subChapterId, communityDefCode:registrationType, "isActive":true}]}, context);

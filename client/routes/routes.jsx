@@ -9,8 +9,13 @@ let userId = Meteor.userId();
 
 FlowRouter.route('/', {
   action: function() {
-    //TODO: write a controller to control the route based on logged in user(Internal/External)
-    FlowRouter.go("/admin");
+    let user = Meteor.user();
+    if(user && user.profile && user.profile.isExternaluser){
+        FlowRouter.go("/app");
+    }else if(user && user.profile && user.profile.isInternaluser){
+        FlowRouter.go("/admin");
+    }
+
   },
   triggersEnter: [function(context, redirect) {
     console.log('running / trigger');

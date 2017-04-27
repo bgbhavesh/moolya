@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import {ApolloProvider} from 'react-apollo';
-import Menu from './Menu';
-import Theme from './Theme';
+import Menu from '../../../admin/core/components/Menu';
+import Theme from '../../../admin/core/components/Theme';
 export default class MlAppContextProvider extends Component {
 
   constructor(props,c){

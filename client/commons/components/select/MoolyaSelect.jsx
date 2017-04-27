@@ -141,6 +141,7 @@ export default class MoolyaSelect extends Component {
     // }
     return(
       <div className="form-group">
+        <span className="placeHolder active">{placeholder}</span>
         {/*{executeQuery&&<QueryExecutor />}*/}
         {<Select  multi={this.props.multiSelect} disabled={this.props.disabled} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch} onChange={this.onchangeOption}/>}
       </div>

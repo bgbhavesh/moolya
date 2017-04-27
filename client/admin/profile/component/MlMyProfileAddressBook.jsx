@@ -16,6 +16,7 @@ export default class Step3 extends React.Component{
   constructor(props){
     super(props);
     this.state={
+      loading : true,
       selectedValue : null,
       contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}],
       registerId : " ",
@@ -28,19 +29,24 @@ export default class Step3 extends React.Component{
     return this;
   }
     componentWillMount(){
-      this.setState({contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}]})
+      //this.setState({contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}]})
       // this.setState({'registrationDetails':this.props.registrationData});
-      const resp = this.getContents();
-      return resp;
-
+      const response = this.getContents();
+      return response;
   }
 
+
+  async getRegistrationContactDetails(details){
+    const userId = Meteor.userId();
+    const response=await getContactDetails(userId);
+    this.setState({'registrationDetails':response})
+  }
 
   async getContents(){
       const userId = Meteor.userId();
       let response = await getContactDetails (userId);
-      this.setState({registrationDetails:response});
-      return response;
+      this.setState({loading:false,registrationDetails:response});
+      //return response;
   }
 
   componentDidMount()
@@ -79,20 +85,20 @@ export default class Step3 extends React.Component{
     >
     <div className="row">
     <div className="col-lg-6 ">
-
+      {/*registrationDetails={this.getRegistrationContactDetails(this)}*/}
           <form>
             <div className="panel panel-default new_profile_tabs">
               <div className="panel-heading">
                 Contact Number
               </div>
 
-              <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.state.clusterId}/>
+              <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
             </div>
             <div className="panel panel-default new_profile_tabs">
               <div className="panel-heading">
                 Email ID
               </div>
-              <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.state.clusterId}/>
+              <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
             </div>
           </form>
 
@@ -107,7 +113,7 @@ export default class Step3 extends React.Component{
       <div className="panel-heading">
       Address
       </div>
-      <AddressDetails registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.state.clusterId}/>
+      <AddressDetails registerId={this.state.registerId}  registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
   </div>
     </form>
 

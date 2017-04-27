@@ -1,7 +1,7 @@
 import MlResolver from "../mlAdminResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import MlRegistrationPreCondition from './registrationPreConditions';
-
+import MlAccounts from '../../../commons/mlAccounts'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
@@ -12,6 +12,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if(!args.registration.registrationType){
     let code = 409;
     let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!",code);
+    return response;
+  }else if(!args.registration.userName){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
     return response;
   }
 
@@ -24,9 +28,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.subChapterId=subChapterDetails._id;
 
   orderNumberGenService.assignRegistrationId(args.registration, args.registration.registrationType)
-
+  var emails=[{address:args.registration.userName,verified:false}];
   // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending"}, context)
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails}, context)
   if(id){
     let code = 200;
     let result = {registrationId : id}
@@ -45,8 +49,12 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return response
   }
   else if (args.registration) {
-    // response = MlRegistration.insert({registrationInfo: args.registration});
-    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration}, context)
+    let user = mlDBController.findOne('users', {"profile.email":'systemadmin@moolya.com'}, context) || {};
+    context.userId = user._id;
+    context.browser = 'Registration API'
+    context.url="https://moolya.in"
+    var emails=[{address:args.registration.userName,verified:false}];
+    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration,emails:emails}, context)
     if(response){
       let code = 200;
       let result = {message: "Registration Successful",registrationId: response}
@@ -578,4 +586,58 @@ MlResolver.MlMutationResolver['updateRegistrationGeneralInfo'] = (obj, args, con
   }
 
 
+}
+
+
+MlResolver.MlMutationResolver['sendEmailVerificationForRegistration'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    let regDetails=mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || null;
+    const userId=regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.userId?regDetails.registrationInfo.userId:null;
+    if ( userId ) {
+      let result=MlResolver.MlMutationResolver['sendEmailVerification'](obj, {userId:userId}, context, info);
+      return result;
+    }else{
+      //Error- unable to find User
+    }
+  }
+}
+
+
+
+MlResolver.MlMutationResolver['sendEmailVerificationForRegistration'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    //let regDetails=mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || null;
+   // const userId=regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.userId?regDetails.registrationInfo.userId:null;
+    //if ( userId ) {
+      let result=MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:args.registrationId}, context, info);
+      return result;
+   // }else{
+      //Error- unable to find User
+   // }
+  }
+}
+
+MlResolver.MlMutationResolver['sendEmailVerification'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.registrationId) {
+    return MlAccounts.sendVerificationEmail(args.registrationId,{emailContentType:"html",subject:"Email Verification"});
+  }
+}
+
+
+MlResolver.MlMutationResolver['sendSmsVerification'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.userId) {
+
+  }
+}
+
+
+MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.token) {
+    return MlAccounts.verifyEmail(args.token);
+  }
 }

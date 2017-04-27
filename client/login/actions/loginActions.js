@@ -11,7 +11,11 @@ export let loginActionHandler = {
                 callback(result.reason)
             }
             else if(result && result.profile && result.profile.isInternaluser == true){
-              FlowRouter.redirect("/admin");
+                FlowRouter.redirect("/admin");
+            }
+
+            else if(result && result.profile && result.profile.isExternaluser == true){
+                FlowRouter.redirect("/app");
             }
 
             else if(result && result.profile && result.profile.isExternalUser == true){

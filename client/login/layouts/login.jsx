@@ -52,22 +52,6 @@ MlLoginContent = React.createClass({
   render() {
     return (
       <div>
-        {/*<div className="container">
-         <div className="row">
-         <div className="col-sm-6 col-md-4 col-md-offset-4">
-         <h1 className="text-center login-title">Sign in to continue</h1>
-         </div>
-         <div className="account-wall">
-         <form className="form-signin" onChange={this.onValueChange}>
-         <input name="userName" ref="username" type="email" className="form-control" placeholder="Email" required="true" autoFocus/>
-         <span ref="userName">{this.state.userNameErr}</span>
-         <input name="Password" ref="password" type="password" className="form-control" placeholder="Password" required />
-         <span ref="Password">{this.state.passwordErr}</span>
-         <button className="btn btn-lg btn-primary btn-block" type="button" onClick={this.loginSubmit}>Sign in</button>
-         </form>
-         </div>
-         </div>
-         </div>*/}
         <div>
           <div className="login_bg" style={{textAlign: "center"}}>
             <video poster="" id="bgvid" autoPlay muted loop playsInline>

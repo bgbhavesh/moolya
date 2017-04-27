@@ -20,8 +20,8 @@ export default class MlStartupAboutUs extends React.Component{
   selectedTab(field,e){
    this.setState({aboutStartup : true})
   }
-  getPortfolioStartupAboutUsDetails(details,tabName,indexArray){
-    this.props.getAboutus(details,tabName,indexArray);
+  getPortfolioStartupAboutUsDetails(details,tabName){
+    this.props.getAboutus(details,tabName);
   }
   componentWillMount(){
     this.fetchPortfolioDetails();

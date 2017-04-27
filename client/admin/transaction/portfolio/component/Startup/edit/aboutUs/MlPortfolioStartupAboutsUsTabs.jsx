@@ -30,6 +30,8 @@ export default class MlStartupTab extends React.Component{
       });
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
+      $('.last-item').addClass('menunone');
+      $('.RRT__panel').addClass('nomargintop');
       $('.horizon-swiper').horizonSwiper();
     },300);
   }
@@ -56,17 +58,17 @@ export default class MlStartupTab extends React.Component{
     this.setState({portfolioStartupAboutUs : data})
     this.props.getPortfolioStartupAboutUsDetails(data,"aboutUs");
   }
-  getStartupAssets(details,indexArray){
+  getStartupAssets(details){
     let data = this.state.portfolioStartupAssets;
     data = details;
     this.setState({portfolioStartupAssets : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"assets",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"assets");
   }
-  getStartupClients(details,indexArray){
+  getStartupClients(details){
     let data = this.state.portfolioStartupClients;
     data = details;
     this.setState({portfolioStartupClients : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"clients",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"clients");
   }
   getStartupServiceProducts(details){
     let data = this.state.portfolioStartupSP;
@@ -80,17 +82,17 @@ export default class MlStartupTab extends React.Component{
     this.setState({portfolioStartupInfo : data})
     this.props.getPortfolioStartupAboutUsDetails(data,"information");
   }
-  getStartupBranches(details,indexArray){
+  getStartupBranches(details){
     let data = this.state.portfolioStartupBranches;
     data = details;
     this.setState({portfolioStartupBranches : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"branches",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"branches");
   }
-  getStartupTechnology(details,indexArray){
+  getStartupTechnology(details){
     let data = this.state.portfolioStartupTechnologies;
     data = details;
     this.setState({portfolioStartupTechnologies : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"technologies",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"technologies");
   }
   getStartupLegalIssue(details){
     let data = this.state.portfolioStartupLegal;

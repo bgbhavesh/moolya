@@ -19,8 +19,9 @@ export default class MlStartupManagement extends React.Component{
       data:{},
       startupManagement:[],
       startupManagementList:[],
-      indexArray:[],
-      arrIndex:"",
+      // indexArray:[],
+      selectedIndex:-1,
+      // arrIndex:"",
       managementIndex:""
     }
     this.onClick.bind(this);
@@ -50,9 +51,9 @@ export default class MlStartupManagement extends React.Component{
   addManagement(){
     this.setState({loading:true})
     if(this.state.startupManagement){
-      this.setState({arrIndex:this.state.startupManagement.length})
+      this.setState({selectedIndex:this.state.startupManagement.length})
     }else{
-      this.setState({arrIndex:0})
+      this.setState({selectedIndex:0})
     }
     this.setState({data:{}}, function () {
       this.setState({loading:false}, function () {
@@ -66,17 +67,17 @@ export default class MlStartupManagement extends React.Component{
     this.setState({loading:true})
     let managmentDetails = this.state.startupManagement[index]
     managmentDetails = _.omit(managmentDetails, "__typename");
-    this.setState({arrIndex:index});
+    this.setState({selectedIndex:index});
     this.setState({data:managmentDetails}, function () {
       this.setState({loading:false}, function () {
           $('#management-form').slideDown();
       })
     })
-    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    // let indexes = this.state.indexArray;
+    // let indexArray = _.cloneDeep(indexes)
+    // indexArray.push(index);
+    // indexArray = _.uniq(indexArray);
+    // this.setState({indexArray: indexArray})
   }
 
   onClick(field,e){
@@ -121,7 +122,8 @@ export default class MlStartupManagement extends React.Component{
     let data = this.state.data;
     let startupManagement1 = this.state.startupManagement;
     let startupManagement = _.cloneDeep(startupManagement1);
-    startupManagement[this.state.arrIndex] = data;
+    data.index = this.state.selectedIndex;
+    startupManagement[this.state.selectedIndex] = data;
     let managementArr = [];
     _.each(startupManagement, function (item) {
         for (var propName in item) {
@@ -135,8 +137,8 @@ export default class MlStartupManagement extends React.Component{
     startupManagement = managementArr;
     // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupManagement:startupManagement})
-    let indexArray = this.state.indexArray;
-    this.props.getManagementDetails(startupManagement, indexArray)
+    // let indexArray = this.state.indexArray;
+    this.props.getManagementDetails(startupManagement)
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -144,17 +146,35 @@ export default class MlStartupManagement extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{management:{logo:{fileUrl:'', fileName : fileName}}},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{management:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-
+        // this.setState({loading:true})
+        // this.fetchOnlyImages();
       }
     }
   }
+
+  // async fetchOnlyImages(){
+  //   const response = await findStartupManagementActionHandler(this.props.portfolioDetailsId);
+  //   if (response) {
+  //     let thisState=this.state.selectedIndex;
+  //     let dataDetails =this.state.startupAwards
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     let specificData = cloneBackUp[thisState];
+  //     if(specificData){
+  //       let curUpload=response[thisState]
+  //       specificData['logo']= curUpload['logo']
+  //       this.setState({loading: false, startupManagement:cloneBackUp });
+  //     }else {
+  //       this.setState({loading: false})
+  //     }
+  //   }
+  // }
 
   render(){
     let that = this;

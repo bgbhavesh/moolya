@@ -8,6 +8,7 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
+var Rating = require('react-rating');
 
 
 export default class MlStartupViewAboutUs extends React.Component {
@@ -24,9 +25,14 @@ export default class MlStartupViewAboutUs extends React.Component {
   componentDidMount(){
     this.initalizeAnnotaor()
     this.fetchAnnotations();
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+
   }
   componentWillMount(){
     this.fetchPortfolioStartupDetails();
+
+
   }
   async fetchPortfolioStartupDetails() {
     let that = this;
@@ -106,12 +112,11 @@ export default class MlStartupViewAboutUs extends React.Component {
   render(){
     let clientsArray = this.state.startupAboutUsList.clients || [];
     return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
+      <div>
           <h2>About</h2>
-          <div className="main_wrap_scroll"  id="annotatorContent">
-            <ScrollArea speed={0.8} className="main_wrap_scroll"smoothScrolling={true} default={true} >
-              <div className="col-lg-12 col-sm-12">
+          <div className="main_wrap_scroll" id="annotatorContent" >
+            <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true} >
+              <div className="col-lg-12 col-sm-12" >
                 <div className="row">
 
                   <div className="panel panel-default panel-form-view">
@@ -120,7 +125,12 @@ export default class MlStartupViewAboutUs extends React.Component {
                       <h4>About us</h4>
                       <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.aboutUs&&this.state.startupAboutUsList.aboutUs.description}.</p>
                       <h4>Rating</h4>
-                      <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections .</p>
+                      <p><Rating
+                        empty="fa fa-star-o empty"
+                        full="fa fa-star fill"
+                        fractions={2}
+                        initialRate={this.state.startupAboutUsList&&this.state.startupAboutUsList.rating&&this.state.startupAboutUsList.rating}
+                      /></p>
                       {/*<h4>Clients</h4>
 
                       {clientsArray.map(function (details, idx) {
@@ -145,7 +155,7 @@ export default class MlStartupViewAboutUs extends React.Component {
         </div>
 
 
-      </div>
+
     )
   }
 }

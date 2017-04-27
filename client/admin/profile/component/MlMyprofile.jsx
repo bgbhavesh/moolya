@@ -29,22 +29,28 @@ export default class MlMyProfile extends React.Component{
       registrationDetails: {},
       selectedBackendUser: " ",
       profilePic: " ",
-      foundationDate: null
+      foundationDate: null,
+      genderStateMale: " ",
+      genderStateFemale: " ",
+      genderStateOthers: " ",
+      dateOfBirth:" ",
+      genderSelect:" "
       // Details:{
       //   firstName: " ",
       //   middleName:" ",
       //   lastName: " "
       // }
     };
-    this.getValue = this.getValue.bind(this);
+    this.getValue.bind(this);
     this.onFileUploadCallBack.bind(this);
     this.storeImage.bind(this);
     this.onFoundationDateSelection.bind(this);
-    this.firstNameUpdation.bind(this);
-    this.middleNameUpdation.bind(this);
-    this.lastNameUpdation.bind(this);
+   this.firstNameUpdation =  this.firstNameUpdation.bind(this);
+    this.middleNameUpdation= this.middleNameUpdation.bind(this);
+    this.lastNameUpdation=this.lastNameUpdation.bind(this);
     this.displayNameUpdation.bind(this);
     this.updateProfile.bind(this);
+    this.genderSelect = this.genderSelect.bind(this);
     //this.fileUpdation.bind(this);
    // this.firstNameUpdation.bind(this);
     return this;
@@ -147,17 +153,36 @@ export default class MlMyProfile extends React.Component{
       middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
       lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
       userName: response.profile.InternalUprofile.moolyaProfile.displayName,
-      uploadedProfilePic:response.profile.profileImage
+      uploadedProfilePic:response.profile.profileImage,
+      genderSelect:response.profile.genderType,
+      dateOfBirth: response.profile.dateOfBirth
     });
+    this.genderSelect();
   }
 
   componentWillMount(){
-    const resp=this.getValue();
+    const resp= this.getValue();
     return resp;
   }
   componentDidUpdate(){
     initalizeFloatLabel();
   }
+
+
+  async genderSelect(){
+    //this.setState({genderSelect: e.target.value})
+    if(this.state.genderSelect === "Male"){
+      this.setState({genderStateMale: true,genderStateFemale:false,genderStateOthers:false })
+    }
+    else if(this.state.genderSelect === "Female"){
+      this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
+    }
+    else{
+      this.setState({genderStateOthers:
+        true, genderStateFemale: false, genderStateMale: false})
+    }
+  }
+
 
   async handleSuccess() {
     this.resetBackendUers();
@@ -258,21 +283,20 @@ export default class MlMyProfile extends React.Component{
                       <FontAwesome name='eye' className="password_icon"/>
                     </div>
                     <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.foundationDate} onChange={this.onFoundationDateSelection.bind(this)}/>
-                      <FontAwesome name="calendar" className="password_icon"/>
+                      <input type="text"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={this.state.dateOfBirth} disabled="true" />
                     </div>
                     <div className="form-group">
                       <div className="input_types">
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="1" defaultChecked="checked"/><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="Male"   checked={this.state.genderStateMale} /><label htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="2"/><label htmlFor="radio2"><span><span></span></span>Female</label>
+                        <input id="radio2" type="radio" name="radio" value="Female"  checked={this.state.genderStateFemale} /><label htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="2"/><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="Others"  checked={this.state.genderStateOthers} /><label htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
                     </div>
                   </form>

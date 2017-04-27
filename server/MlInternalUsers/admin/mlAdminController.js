@@ -176,13 +176,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                       for (key1 in inner){
                                           let file = inner[key1]
                                           if(typeof file == 'object'){
-                                              for (key2 in file){
-                                                if(key2 == "fileUrl"){
-                                                  file.fileUrl = resp;
-                                                }else{
-                                                  file[key2].fileUrl = resp;
-                                                }
-                                              }
+                                            for (key2 in file){
+                                              file[key2].fileUrl = resp;
+                                            }
                                           }
                                       }
                                   }
@@ -193,12 +189,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                       portfolio = {portfolio:{ideatorPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                                   case 'Startups':
-                                    if(data.indexArray){
-                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId,indexArray:data.indexArray}
-                                    }else{
-                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
-                                    }
-
+                                    portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                               }
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)

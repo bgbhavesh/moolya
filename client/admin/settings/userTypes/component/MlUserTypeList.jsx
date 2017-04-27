@@ -11,7 +11,7 @@ export default class MlUserTypeList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>User Type List</h2>
+          <h2>User Category List</h2>
 
           <MlTableViewContainer {...mlUserTypeTableConfig}/>
 

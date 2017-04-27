@@ -1,14 +1,14 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function updatePortfolioActionHandler(details, indexArray) {
+export async function updatePortfolioActionHandler(details) {
   let portfoliodetailsId  = details.portfolioId;
   let portfolio = details.portfolio;
 
   const result = await client.mutate({
       mutation: gql`
-          mutation  ($portfoliodetailsId: String, $portfolio:portfolio, $indexArray:[String]){
-              updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio, indexArray:$indexArray){
+          mutation  ($portfoliodetailsId: String, $portfolio:portfolio){
+              updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio){
                   success,
                   code,
                   result
@@ -18,7 +18,6 @@ export async function updatePortfolioActionHandler(details, indexArray) {
     variables: {
         portfoliodetailsId,
         portfolio,
-        indexArray:indexArray
     }
   })
   const id = result.data.updatePortfolio;

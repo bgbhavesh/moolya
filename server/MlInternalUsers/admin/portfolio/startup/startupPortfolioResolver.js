@@ -1,12 +1,8 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-// import MlUtils from '../../../../commons/mlUtils'
 
 var extendify = require('extendify');
 var _ = require('lodash')
-
-// let applyDiff = require('deep-diff').applyDiff,
-  // observableDiff = require('deep-diff').observableDiff
 
 MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, info) => {
   try {

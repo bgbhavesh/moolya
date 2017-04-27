@@ -59,22 +59,21 @@ const query = gql`fragment subMenu on Menu{
               }
 
               query LeftNavQuery($name: String!) {
-        data:FetchMenu(name: $name){
-            name
-            menu{
-              ...subMenu
-                 subMenu{
-                  ...subMenu
-                    subMenu{
+                data:fetchExternalUserMenu(name: $name){
+                    name
+                    menu{
                       ...subMenu
-                          subMenu{
-                             ...subMenu
-                                 }
+                         subMenu{
+                          ...subMenu
+                            subMenu{
+                              ...subMenu
+                                  subMenu{
+                                     ...subMenu
+                                         }
+                                   }
+                              }
                            }
-                      }
-                   }
-            }
-
+                    }
       }`
 
 

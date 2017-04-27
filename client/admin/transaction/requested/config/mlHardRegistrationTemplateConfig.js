@@ -17,7 +17,7 @@ import InstitutionHardReg from "../component/InstitutionHardReg";
 const mlIdeatorCompanyHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Ideator-Company",
   templateCode:"HRTIDECMP",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -28,7 +28,7 @@ const mlIdeatorCompanyHardRegistrationExternalUserTemplateConfig={
 const mlIdeatorIndividualHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Ideator-Individual",
   templateCode:"HRTIDEINV",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -39,7 +39,7 @@ const mlIdeatorIndividualHardRegistrationExternalUserTemplateConfig={
 const mlFunderCompanyHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Funder-Company",
   templateCode:"HRTFUNCMP",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -50,7 +50,7 @@ const mlFunderCompanyHardRegistrationExternalUserTemplateConfig={
 const mlFunderIndividualHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Funder-Individual",
   templateCode:"HRTFUNINV",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -61,7 +61,7 @@ const mlFunderIndividualHardRegistrationExternalUserTemplateConfig={
 const mlServiceProviderCompanyHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-ServiceProvider-Company",
   templateCode:"HRTSPSCMP",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -72,7 +72,7 @@ const mlServiceProviderCompanyHardRegistrationExternalUserTemplateConfig={
 const mlServiceProviderIndividualHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-ServiceProvider-Individual",
   templateCode:"HRTSPSINV",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -83,7 +83,7 @@ const mlServiceProviderIndividualHardRegistrationExternalUserTemplateConfig={
 const mlCompanyHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Company",
   templateCode:"HRTCMP",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -94,7 +94,7 @@ const mlCompanyHardRegistrationExternalUserTemplateConfig={
 const mlStartupHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Startup-Company",
   templateCode:"HRTSTU",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',
@@ -106,7 +106,7 @@ const mlStartupHardRegistrationExternalUserTemplateConfig={
 const mlInstitutionHardRegistrationExternalUserTemplateConfig={
   templateName:"Hard-Reg-Institution",
   templateCode:"HRTINS",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'HARD',

@@ -38,7 +38,7 @@ MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
           }catch(e){
             throw new Error("Error while creating Cluster "+e);
           }
-        }));
+        }),{key:Meteor.settings.private.googleApiKey});
     }
 }
 

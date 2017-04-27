@@ -1,19 +1,17 @@
 import React from 'react';
-import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
-import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
-class ActiveProcessFormatter extends React.Component {
+import {updateTemplateActionHandler} from '../actions/updateTemplateAction'
+class ActiveFormater extends React.Component {
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
     return this;
   }
+
   componentDidMount() {
     if(this.props.data.isActive){
       this.refs.status.checked = true
     }
-  }
-  componentDidUpdate(){
-    OnToggleSwitch(true,true);
+
   }
   async onChange(data) {
     if (this.refs.status.checked == true) {
@@ -23,27 +21,15 @@ class ActiveProcessFormatter extends React.Component {
       this.refs.status.checked = false;
       this.setState({"data": {"isActive": false}});
     }
-
-    let ProcessDetails = {
-      processId   : data.processId,
-      process     : data.process,
-      communities : data.communities,
-      userTypes   : data.userTypes,
-      identity    : data.identity,
-      industries  : data.industries,
-      professions : data.professions,
-      clusters    : data.clusters,
-      states      : data.states,
-      chapters    : data.chapters,
-      subChapters : data.subChapters,
-      isActive    : this.refs.status.checked,
-      documents   : data.assignDocument
-    }
-let id=data.id
-   let response = await updateProcessActionHandler(id,ProcessDetails);
+    let isActive=this.refs.status.checked;
+    let templateCode=this.props.data.templateCode;
+    let templateId=this.props.templateId
+    let stepCode=this.props.stepCode
+    let subprocessId=this.props.subProcessConfig
+ let response = await updateTemplateActionHandler(templateId,templateCode,isActive);
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/documents/clusterList");
+        FlowRouter.go("/admin/settings/stepDetails/"+subprocessId+"/"+templateId+"/"+stepCode);
       else
         toastr.error(response.result);
     }
@@ -57,4 +43,4 @@ let id=data.id
   }
 };
 
-export default ActiveProcessFormatter;
+export default ActiveFormater;

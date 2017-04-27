@@ -19,7 +19,7 @@ export const gMap = ({
   return (
     <GoogleMap
       options={options}
-      bootstrapURLKeys={{key: "AIzaSyDnlajbJKYdilDs22Rvso9blSOj8KuL8-A"}}
+      bootstrapURLKeys={{key: Meteor.settings.public.googleApiKey}}
       hoverDistance={hoverDistance}
       center={center}
       zoom={zoom}

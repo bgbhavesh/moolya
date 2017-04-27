@@ -59,7 +59,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
           let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
           return response
         }
-      }));
+      }),{key:Meteor.settings.private.googleApiKey});
     }
 }
 

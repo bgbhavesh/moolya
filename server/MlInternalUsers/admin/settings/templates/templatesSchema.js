@@ -20,11 +20,15 @@ let Template = `
             isActive                    : Boolean
             createdDate                 : String
             templateDescription         : String
+            templateImage               : String
     }    
     type Query{
             findStepAssignedTemplates(id: String,stepCode:String):TemplateDetails
             findTemplates(id:String,stepCode:String):TemplateDetails
             findTemplatesSelect(id:String,stepName:String):[template]
+    }
+     type Mutation{
+            updateStepAssignedTemplate(id: String,templateCode:String,isActive:Boolean):response
     }
 `
 

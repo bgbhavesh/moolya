@@ -230,8 +230,7 @@ export default class MlStartupAwards extends React.Component{
               speed={0.8}
               className="main_wrap_scroll"
               smoothScrolling={true}
-              default={true}
-            >
+              default={true}>
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">

@@ -23,7 +23,7 @@ export default class MlStartupClients extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       startupClientsList:this.props.clientsDetails || [],
-      indexArray:[],
+      /*indexArray:[],*/
       selectedVal:null,
       selectedObject:"default"
     }
@@ -64,11 +64,11 @@ export default class MlStartupClients extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
-    let indexes = this.state.indexArray;
+  /*  let indexes = this.state.indexArray;
     let indexArray = _.cloneDeep(indexes)
     indexArray.push(index);
     indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    this.setState({indexArray: indexArray})*/
   }
 
   onLockChange(field, e){
@@ -126,7 +126,28 @@ export default class MlStartupClients extends React.Component{
     })
   }
   sendDataToParent(){
-
+ /*   let data = this.state.data;
+    let startupClients1 = this.state.startupClients;
+    let startupClients = _.cloneDeep(startupClients1);
+    startupClients[this.state.index] = data;
+    let arr = [];
+    _.each(startupClients, function (item) {
+      for (var propName in item) {
+        if (item[propName] === null || item[propName] === undefined) {
+          delete item[propName];
+        }
+      }
+      newItem = _.omit(item, "__typename")
+      if(item && item.logo){
+        delete item.logo['__typename'];
+      }
+      arr.push(newItem)
+    })
+    startupClients = arr;
+    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
+    this.setState({startupClients:startupClients})
+    let indexArray = this.state.indexArray;
+    this.props.getStartupClients(startupClients,indexArray);*/
     let data = this.state.data;
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);
@@ -146,8 +167,8 @@ export default class MlStartupClients extends React.Component{
     })
     startupClients = arr;
     this.setState({startupClients:startupClients})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupClients(startupClients, indexArray);
+   /* let indexArray = this.state.indexArray;*/
+    this.props.getStartupClients(startupClients);
   }
 /*  onSaveAction(e){
     this.setState({startupClientsList:this.state.startupClients});

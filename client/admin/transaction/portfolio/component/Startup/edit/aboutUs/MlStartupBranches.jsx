@@ -10,12 +10,13 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
+import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
 
 export default class MlStartupBranches extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
-      loading: true,
+      loading: false,
       data:{},
       startupBranches:this.props.branchDetails || [],
       popoverOpen:false,
@@ -55,7 +56,7 @@ export default class MlStartupBranches extends React.Component{
     }
   }
 
-  onSelect(index, e){
+  onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.startupBranches);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
@@ -63,12 +64,8 @@ export default class MlStartupBranches extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId});
-/*    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})*/
   }
+
   onLockChange(field, e){
     let details = this.state.data||{};
     let key = e.target.id;
@@ -98,14 +95,6 @@ export default class MlStartupBranches extends React.Component{
     })
   }
   onOptionSelected(selectedBranch){
-
-   /* let details =this.state.data;
-    details=_.omit(details,["addressType"],["addressTypeId"]);
-    details=_.extend(details,{["addressType"]:selectedObj.label},{["addressTypeId"]:selectedIndex});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedIndex})
-      this.sendDataToParent()
-    })*/
     let details =this.state.data;
     details=_.omit(details,["addressTypeId"]);
     details=_.extend(details,{["addressTypeId"]: selectedBranch});
@@ -113,7 +102,6 @@ export default class MlStartupBranches extends React.Component{
       this.setState({"selectedVal" : selectedBranch})
       this.sendDataToParent()
     })
-
   }
 
   handleBlur(e){
@@ -126,28 +114,6 @@ export default class MlStartupBranches extends React.Component{
     })
   }
   sendDataToParent(){
-   /* let data = this.state.data;
-    let startupBranches1 = this.state.startupBranches;
-    let startupBranches = _.cloneDeep(startupBranches1);
-    startupBranches[this.state.index] = data;
-    let arr = [];
-    _.each(startupBranches, function (item) {
-      for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined) {
-          delete item[propName];
-        }
-      }
-      newItem = _.omit(item, "__typename");
-      if(item && item.logo){
-        delete item.logo['__typename'];
-      }
-      arr.push(newItem)
-    })
-    startupBranches = arr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
-    this.setState({startupBranches:startupBranches})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupBranches(startupBranches,indexArray);*/
     let data = this.state.data;
     let branches = this.state.startupBranches;
     let startupBranches = _.cloneDeep(branches);
@@ -167,7 +133,6 @@ export default class MlStartupBranches extends React.Component{
     })
     startupBranches = arr;
     this.setState({startupBranches:startupBranches})
-    /*let indexArray = this.state.indexArray;*/
     this.props.getStartupBranches(startupBranches);
   }
   onLogoFileUpload(e){
@@ -183,9 +148,30 @@ export default class MlStartupBranches extends React.Component{
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
+
+        this.setState({loading:true})
+        this.fetchOnlyImages();
       }
     }
   }
+
+  async fetchOnlyImages(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupBranches
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response.branches[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupBranches:cloneBackUp });
+      }else {
+        this.setState({loading: false})
+      }
+    }
+  }
+
   render(){
     let branchesQuery=gql`query{
       data:fetchAssets {
@@ -194,10 +180,12 @@ export default class MlStartupBranches extends React.Component{
       }
     }`;
     let that = this;
+    const showLoader = that.state.loading;
     let branchesArray = that.state.startupBranchesList || [];
     return (
       <div>
         <h2>Branches</h2>
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="requested_input main_wrap_scroll">
 
           <ScrollArea
@@ -217,21 +205,19 @@ export default class MlStartupBranches extends React.Component{
                   </a>
                 </div>
                 {branchesArray.map(function (details, idx) {
-                  return(<div className="col-lg-2 col-md-3 col-sm-3">
+                  return(<div className="col-lg-2 col-md-3 col-sm-3" id={idx}>
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                         <h3>{details.name?details.name:""}</h3>
                       </div>
                     </a>
                   </div>)
                 })}
-
               </div>
             </div>
-
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
             {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
@@ -246,8 +232,6 @@ export default class MlStartupBranches extends React.Component{
                   >
                     <div className="row">
                       <div className="col-md-12">
-
-
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                         labelKey={'label'} queryType={"graphql"} query={branchesQuery}
@@ -255,7 +239,6 @@ export default class MlStartupBranches extends React.Component{
                                         onSelect={this.onOptionSelected.bind(this)}
                                         selectedValue={this.state.selectedVal}/>
                         </div>
-
                         <div className="form-group">
                           <input type="text" name="name" placeholder="Name" className="form-control float-label" id="" defaultValue={this.state.data.name}  onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate} onClick={this.onLockChange.bind(this, "isNamePrivate")}/>
@@ -324,19 +307,10 @@ export default class MlStartupBranches extends React.Component{
                     </div>
                   </ScrollArea>
                 </div>
-
-
               </div>
             </PopoverContent>
           </Popover>
-
-
-
-
-
-        </div>
-
-
+        </div>)}
       </div>
     )
   }

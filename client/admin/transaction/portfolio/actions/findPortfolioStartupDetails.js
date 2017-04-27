@@ -44,6 +44,7 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
                   fileName
                   fileUrl
                 }
+                index
             }
           }
 

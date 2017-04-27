@@ -153,3 +153,35 @@ MlResolver.MlQueryResolver['findTemplatesSelect'] = (obj, args, context, info) =
   }
 }
 
+MlResolver.MlMutationResolver['updateTemplateAssignment'] = (obj, args, context, info) => {
+  if (args.id) {
+    let template = MlTemplateAssignment.findOne({_id: args.id});
+    if (template.isSystemDefined) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Cannot edit system defined Template Assignment", code);
+      return response;
+    }
+    else if (template) {
+      let resp = MlTemplateAssignment.update({_id: args.id}, {$set: args.template}, {upsert: true})
+      if (resp) {
+        let code = 200;
+        let result = {template: resp}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }
+    }
+  }
+}
+MlResolver.MlMutationResolver['updateStepAssignedTemplate'] = (obj, args, context, info) => {
+if (args.id) {
+  var id= args.id;
+  let response= MlTemplates.update({_id:id,'templates': {$elemMatch: {'templateCode': args.templateCode}}},{$set:{"templates.$.isActive": args.isActive}})
+  if(response){
+    let code = 200;
+    let result = {template: response}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+
+}
+}

@@ -202,7 +202,7 @@ adminSection.route('/settings/addSubDepartment', {
   }
 });
 adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
-  name: '',
+  name: 'settings',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} stepCode={params.stepCode}/>})
   }

@@ -269,9 +269,9 @@ export default class MlStartupAwards extends React.Component{
                                       selectedValue={this.state.selectedVal}/>
                       </div>
                       <div className="form-group">
-                        {/*<Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"*/}
-                                  {/*inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year}*/}
-                                  {/*closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>*/}
+                        <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                  inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year?this.state.data.year:" "}
+                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                       </div>
                       <div className="form-group">
                         <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>

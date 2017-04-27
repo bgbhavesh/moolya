@@ -320,6 +320,246 @@ if(Meteor.isServer){
         "isMenu" : true
       },
       {
+        "image" : "/images/cluster_icon.png",
+        "link" : "/admin/transactions/requestedList",
+        "name" : "transaction",
+        "uniqueId"   :"transaction",
+        "isLink" : true,
+        "isMenu" : true,
+        "subMenu":[
+          {
+            "link" : "/admin/transactions/requestedList",
+            "name" : "Requests",
+            "uniqueId" : "transaction_Requestes",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/transactions/requestedList",
+                "name": "List Requests",
+                "uniqueId": "transaction_RequestList",
+                "subMenuMappingId":"transaction_Requestes",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/transactions/editRequests",
+                "name": "Edit Requestes",
+                "uniqueId": "transaction_EditRequests",
+                "subMenuMappingId":"transaction_Requestes",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/transactions/approvedList",
+            "name" : "Approvals",
+            "uniqueId" : "transaction_Approved",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/transactions/approvedList",
+                "name": "List Requests",
+                "uniqueId": "transaction_ApprovedList",
+                "subMenuMappingId":"transaction_Approved",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/transactions/editRequests",
+                "name": "Edit Requests",
+                "uniqueId": "transaction_EditApproved",
+                "subMenuMappingId":"transaction_Approved",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/transactions/registrationRequested",
+            "name" : "Registration",
+            "uniqueId" : "transaction_Registration",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenusId":"transaction",
+            "subMenuMappingId":"transaction_Registration",
+            "subMenu":[
+              {
+                "link" : "/admin/transactions/registrationRequested",
+                "name" : "Requested",
+                "uniqueId" : "transaction_registration_requested",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                "subMenuMappingId":"transaction_registration_requested",
+                "subMenu":[
+                  {
+                    "link" : "/admin/transactions/registrationRequested",
+                    "name" : "Request List",
+                    "uniqueId" : "transaction_registration_requested_list",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "subMenusId":"transaction_Registration",
+                    "subMenuMappingId":"transaction_registration_requested_list"
+                  },
+                  {
+                    "link" : "/admin/transactions/registrationRequested/edit",
+                    "name" : "Backend Users",
+                    "uniqueId" : "transaction_registration_requested_edit",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"transaction_Registration",
+                    //"subMenuMappingId":"transaction_registration_requested_edit"
+                  }
+                ]
+              },
+              {
+                "link" : "/admin/transactions/registrationApprovedList",
+                "name" : "Approved",
+                "uniqueId" : "transaction_registration_approved",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                "subMenuMappingId":"transaction_registration_approved"
+              },
+
+              {
+                "link" : "/admin/transactions/createRegistration",
+                "name" : "Create",
+                "uniqueId" : "transaction_registration_create",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                //"subMenuMappingId":"transaction_registration_create"
+              }
+            ]
+          },
+          {
+            "link" : "/admin/transactions/portfolio/requestedPortfolioList",
+            "name" : "Portfolio",
+            "uniqueId" : "portfolio",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenusId":"transaction",
+            "subMenuMappingId":"portfolio",
+            "subMenu":[
+              {
+                "link" : "/admin/transactions/portfolio/requestedPortfolioList",
+                "name" : "Requested",
+                "uniqueId" : "portfolio_requested",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio",
+                "subMenuMappingId":"portfolio_requested",
+                "subMenu":[
+                  {
+                    "image" : "/images/cluster_icon.png",
+                    "link" : "/admin/transactions/portfolio/requestedPortfolioList/ideatorDetails",
+                    "name" : "Detail",
+                    "uniqueId"   :"transaction_portfolio_EditRequests",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "hideSubMenu":true,
+                    "subMenusId":"portfolio_requested",
+                  },
+                  {
+                    "image" : "/images/cluster_icon.png",
+                    "link" : "/admin/transactions/portfolio/requestedPortfolioList/ideatorDetails",
+                    "name" : "Detail",
+                    "uniqueId"   :"transaction_portfolio_viewPortfolio",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "hideSubMenu":true,
+                    "subMenusId":"portfolio_requested",
+                  }
+                ]
+              },
+              {
+                "link" : "/admin/transactions/portfolio/approvedPortfolioList",
+                "name" : "Approved",
+                "uniqueId" : "portfolio_approved",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio",
+                "subMenuMappingId":"portfolio_approved"
+              },
+
+              {
+                "link" : "/admin/transactions/portfolio/createPortfolio",
+                "name" : "Create",
+                "uniqueId" : "portfolio_create",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio",
+                //"subMenuMappingId":"transaction_registration_create"
+              },
+              {
+                "link" : "/admin/transactions/portfolio/history",
+                "name" : "History",
+                "uniqueId" : "portfolio_history",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio",
+                //"subMenuMappingId":"transaction_registration_create"
+              },
+              {
+                "link" : "/admin/transactions/portfolio/requestedPortfolioList/edit",
+                "name" : "Edit",
+                "uniqueId" : "transaction_portfolio_requested_edit",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio"
+              },
+
+              {
+                "link" : "/admin/transactions/portfolio/editRequests",
+                "name" : "Edit",
+                "uniqueId" : "transaction_portfolio_EditRequests",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio"
+              },
+              {
+                "link" : "/admin/transactions/portfolio/viewPortfolio",
+                "name" : "Edit",
+                "uniqueId" : "transaction_portfolio_viewPortfolio",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"portfolio"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "image" : "/images/settings_icon.png",
         "link" : "/admin/settings/regionalsList",
         "name" : "settings",

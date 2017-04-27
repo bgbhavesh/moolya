@@ -24,6 +24,7 @@ let Menu = `
     }
     type Query {
         FetchMenu(image: String, link: String, name: String, id: String, isLink: Boolean, isMenu: Boolean): MlMenu
+        fetchExternalUserMenu(image: String, link: String, name: String, id: String, isLink: Boolean, isMenu: Boolean): MlMenu
     }
 `
 

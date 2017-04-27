@@ -25,7 +25,6 @@ Meteor.startup(function ()
     mlAuthorization = new MlAuthorization();
     mlDBController = new MlDBController();
     mlAuditLog = new MlAuditLog();
-    MlEmailNotification.testEmail();
 })
 
 //Copied from SSL package..

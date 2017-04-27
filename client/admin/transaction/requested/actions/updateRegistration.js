@@ -96,3 +96,46 @@ export async function updateRegistrationInfoDetails(registrationDetails,type,reg
   return id
 }
 
+export async function emailVerificationActionHandler(registrationId){
+
+  const result = await client.mutate({
+    mutation: gql`
+    mutation($registrationId: String){  
+        sendEmailVerificationForRegistration(
+          registrationId:$registrationId,
+        ) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      registrationId:registrationId
+    }
+  })
+  const resp = result.data.sendEmailVerificationForRegistration;
+  return resp;
+}
+
+export async function smsVerificationActionHandler(registrationId){
+
+  const result = await client.mutate({
+    mutation: gql`
+    mutation($registrationId: String){  
+        sendSmsVerificationForRegistration(
+          registrationId:$registrationId,
+        ) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      registrationId:registrationId
+    }
+  })
+  const resp = result.data.sendSmsVerificationForRegistration;
+  return resp;
+}

@@ -244,9 +244,12 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id="" onChange={this.enteredUserName.bind(this)}/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
-                  <br/><br/><br/><br/><br/>
-                </div>
+                  <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
+                </div><div className="tab-content clearfix"></div>
+                {/*<div className="form-group">*/}
+                  {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
+                  {/*<br/><br/><br/><br/><br/>*/}
+                {/*</div>*/}
                {/* <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>
                   <div className="panel-body">
@@ -284,9 +287,7 @@ export default class MlCreateRegistration extends React.Component{
 
 
               <form>
-                <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
-                </div>
+
                 <div className="form-group">
                   <input type="text" placeholder="User name" ref="userName"  value={this.state.userName} className="form-control float-label" id="" disabled="disabled"/>
                 </div>

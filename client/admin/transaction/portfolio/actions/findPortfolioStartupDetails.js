@@ -192,12 +192,10 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioInvestor(portfoliodetailsId: $portfoliodetailsId) {
                 name
-                fundingType
+                fundingTypeId
                 investmentAmount
-                
                 description
                 isNamePrivate
-               
                 isInvestmentAmountPrivate
                 isDescriptionPrivate
                 logo{
@@ -205,6 +203,7 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
                     fileUrl
                   }
                 makePrivate
+                index
             }
           }
 
@@ -234,6 +233,7 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                index
                 makePrivate
             }
           }
@@ -256,7 +256,8 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
-                  award
+                  awardId
+                  index
                   isAwardPrivate
                   year
                   isYearPrivate

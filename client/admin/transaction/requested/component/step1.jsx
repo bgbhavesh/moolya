@@ -7,7 +7,7 @@ var Select = require('react-select');
 import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
 import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import {updateRegistrationActionHandler} from '../actions/updateRegistration'
+import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerificationActionHandler} from '../actions/updateRegistration'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
@@ -164,7 +164,7 @@ export default class Step1 extends React.Component{
        }
      }
      const response = await updateRegistrationActionHandler(Details);
-     //return response;
+     return response;
    }
  }
 
@@ -175,8 +175,30 @@ export default class Step1 extends React.Component{
       this.props.refetchRegistrationAndTemplates();
     }else{
       toastr.error(response.result);
-      return response;
     }
+    return response;
+  }
+
+  async sendEmailVerification(){
+    const response= await emailVerificationActionHandler(this.props.registrationId);
+    if(response.success){
+      toastr.success("Email Verification Send");
+    }else{
+      // toastr.error(response.result);
+    }
+    return response;
+
+  }
+
+
+  async sendSmsVerification(){
+    const response= await smsVerificationActionHandler(this.props.registrationId);
+    if(response.success){
+      toastr.success("Sms Otp Verification Send");
+    }else{
+      // toastr.error(response.result);
+    }
+    return response;
 
   }
 
@@ -312,44 +334,47 @@ export default class Step1 extends React.Component{
                   <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>
+                  <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
                 </div>
+                {/*<div className="form-group">*/}
+                  {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
+                {/*</div>*/}
                 <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>
                   <div className="panel-body">
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
                     <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} />
 
-                    {canSelectIdentity&&
-                    <div className="ml_tabs">
-                      <ul  className="nav nav-pills">
+                        {canSelectIdentity&&
+                        <div className="ml_tabs">
+                          <ul  className="nav nav-pills">
 
-                        {identityTypez.map((i)=>{
+                            {identityTypez.map((i)=>{
 
-                           return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
+                              return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
                                 <a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>
-                           </li>);
-                        })}
-                       {/* <li className={this.state.identityType==="Individual"?"active":""}>
-                          <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
-                        </li>
-                        <li className={this.state.identityType==="Company"?"active":""}>
-                          <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
-                        </li>*/}
-                      </ul>
-                    </div>
-                    }
+                              </li>);
+                            })}
+                            {/* <li className={this.state.identityType==="Individual"?"active":""}>
+                             <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
+                             </li>
+                             <li className={this.state.identityType==="Company"?"active":""}>
+                             <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
+                             </li>*/}
+                          </ul>
+                        </div>
+                        }
 
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
-                    </div>
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
-                    </div>
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true}/>
+                        <div className="form-group">
+                          <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                        </div>
+                        <div className="form-group">
+                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
+                        </div>
+                        <div className="form-group">
+                          <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true}/>
 
-                    </div>
+                        </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Source" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.source}  className="form-control float-label" id="" disabled="true"/>
@@ -374,9 +399,7 @@ export default class Step1 extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-                <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
-                </div>
+
                 <div className="form-group">
                   <input type="text" placeholder="User Name" ref="userName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.userName}  className="form-control float-label" id="" disabled="true"/>
                 </div>
@@ -402,17 +425,17 @@ export default class Step1 extends React.Component{
                   <Select name="form-field-name" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required"/>
                 </div>
 
-                <div className="panel panel-default">
-                                  <div className="panel-heading">Process Status</div>
-                                  <div className="panel-body button-with-icon">
-                              <button type="button" className="btn btn-labeled btn-success" >
-                                  <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
-                                  <button type="button" className="btn btn-labeled btn-success" >
-                                  <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
-                                  {/*<button type="button" className="btn btn-labeled btn-success" >
-                                  <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*/}
-                                                   </div>
-                 </div>
+                    <div className="panel panel-default">
+                      <div className="panel-heading">Process Status</div>
+                      <div className="panel-body button-with-icon">
+                        <button type="button" className="btn btn-labeled btn-success"  >
+                          <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
+                        <button type="button" className="btn btn-labeled btn-success" onClick={this.sendEmailVerification.bind(this)}>
+                          <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
+                        {/*<button type="button" className="btn btn-labeled btn-success" >
+                         <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*/}
+                      </div>
+                    </div>
 
               </form>
             </div>

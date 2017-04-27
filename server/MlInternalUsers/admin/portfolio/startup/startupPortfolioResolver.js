@@ -1,11 +1,12 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
+// import MlUtils from '../../../../commons/mlUtils'
 
 var extendify = require('extendify');
 var _ = require('lodash')
 
-let applyDiff = require('deep-diff').applyDiff,
-  observableDiff = require('deep-diff').observableDiff
+// let applyDiff = require('deep-diff').applyDiff,
+  // observableDiff = require('deep-diff').observableDiff
 
 MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, info) => {
   try {
@@ -25,95 +26,49 @@ MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, i
   }
 }
 MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    try {
-      let startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-      let updateFor = args.portfolio.startupPortfolio;
-      if (startupPortfolio) {
-        for (key in updateFor) {
-          if (startupPortfolio.hasOwnProperty(key)) {
-            if (_.isArray(startupPortfolio[key])) {
-              if (startupPortfolio[key].length < updateFor[key].length) {
-                var diff = (updateFor[key].length) - (startupPortfolio[key].length);
-                for (i = diff; i > 0; i--) {
-                  let idx = updateFor[key].length - i;
-                  let newObj = updateFor[key][idx];
-                  startupPortfolio[key].push(newObj)
-                }
-              } else if (startupPortfolio[key].length == updateFor[key].length && (args.indexArray.length == 0)) {
-
-                if (args.isFileUpload && (args.indexArray.length == 0)) {
-                  let newObj = updateFor[key][0];
-                  startupPortfolio[key].push(newObj)
-                } else {
-                  _.mergeWith(startupPortfolio[key], updateFor[key])
-                }
-
-              } else {
-                if (args.isFileUpload && (args.indexArray.length == 0)) {
-                  let newObj = updateFor[key][0];
-                  startupPortfolio[key].push(newObj)
-                }
-              }
-              if (args.indexArray && args.indexArray.length > 0) {
-                _.each(args.indexArray, function (index) {
-                  if(args.isFileUpload ){
-                    _.mergeWith(startupPortfolio[key][index], updateFor[key][0], function (objValue, srcValue) {
-                      if (_.isArray(objValue)) {
-                        return objValue.concat(srcValue);
+  if (args.portfoliodetailsId)
+  {
+      try {
+          let startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+          let updateFor = args.portfolio.startupPortfolio;
+          if (startupPortfolio){
+              for (key in updateFor) {
+                  if (startupPortfolio.hasOwnProperty(key)){
+                      if(_.isArray(updateFor[key]) && _.isArray(startupPortfolio[key])){
+                          startupPortfolio[key] = updateArrayofObjects(updateFor[key], startupPortfolio[key])
                       }
-                    })
-                  }else{
-                    _.mergeWith(startupPortfolio[key][index], updateFor[key][index], function (objValue, srcValue) {
-                      if (_.isArray(objValue)) {
-                        return objValue.concat(srcValue);
+                      else if(_.isObject(updateFor[key]) && _.isObject(startupPortfolio[key]))
+                      {
+                          _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
+                              if (_.isArray(objValue)) {
+                                  return objValue.concat(srcValue);
+                              }
+                          });
                       }
-                    })
                   }
-
-                })
+                  else{
+                      startupPortfolio[key] = updateFor[key]
+                  }
               }
-            }
-            // else if(_.isArray(startupPortfolio[key]) && _.isObject(updateFor[key])){
-            //   if(args.indexArray && args.indexArray.length>0){
-            //     _.each(args.indexArray, function (index) {
-            //       _.extend(startupPortfolio[key][index], updateFor[key])
-            //     })
-            //   }else{
-            //     startupPortfolio[key].push(updateFor[key])
-            //   }
-            // }
-            else {
-              _.mergeWith(startupPortfolio[key], updateFor[key], function (objValue, srcValue) {
-                if (_.isArray(objValue)) {
-                  return objValue.concat(srcValue);
-                }
-              });
-            }
 
-          } else {
-            // if(updateFor[key].logo){
-            //   startupPortfolio[key] = [updateFor[key]];
-            // }else if(updateFor[key]){
-            //   startupPortfolio[key] = updateFor[key];
-            // }
-            startupPortfolio[key] = updateFor[key];
+              let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio})
+              if (ret) {
+                let code = 200;
+                let response = new MlRespPayload().successPayload("Updated Successfully", code);
+                return response;
+              }
           }
-        }
-
-        let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio}, {upsert: true})
-        if (ret) {
-          let code = 200;
-          let response = new MlRespPayload().successPayload("Updated Successfully", code);
-          return response;
-        }
+          else{
+              let code = 400;
+              let response = new MlRespPayload().errorPayload("Invalid Portfolio Request", code);
+              return response;
+          }
       }
-    }
-    catch (e) {
-      let code = 400;
-      let response = new MlRespPayload().errorPayload(e.message, code);
-      return response;
-    }
+      catch (e) {
+        let code = 400;
+        let response = new MlRespPayload().errorPayload(e.message, code);
+        return response;
+      }
   }
 }
 
@@ -212,4 +167,21 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, contex
   }
 
   return {};
+}
+
+updateArrayofObjects = (updateFor, source) =>{
+  if(_.isArray(updateFor) && _.isArray(source)){
+    _.each(updateFor, function (obj) {
+      let isObj = _.find(source, {index:obj.index})
+      let itemIndex = _.findIndex(source, {index:obj.index})
+      if(isObj &&  itemIndex >= 0){
+        _.mergeWith(source[itemIndex], obj)
+      }
+      else{
+        source.push(obj)
+      }
+    })
+  }
+
+  return source;
 }

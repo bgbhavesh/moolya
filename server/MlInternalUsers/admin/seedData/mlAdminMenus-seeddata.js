@@ -789,11 +789,22 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/templatesList",
             "name" : "Templates",
-            "uniqueId" : "settings_templatesList",
+            "uniqueId" : "settings_templates",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
-            subMenu:[]
+            subMenu:[
+              {
+                "link": "/admin/settings/templatesList",
+                "name": "List Templates",
+                "uniqueId": "settings_templatesList",
+                "subMenuMappingId":"settings_templates",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+            ]
           },
           {
             "image" : "/images/cluster_icon.png",

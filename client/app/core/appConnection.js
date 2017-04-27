@@ -9,7 +9,7 @@ import {ApolloClient,createNetworkInterface, createBatchingNetworkInterface} fro
 import { ApolloProvider } from 'react-apollo';
 
 const defaultNetworkInterfaceConfig = {
-  uri: Meteor.absoluteUrl('app'),
+  uri: Meteor.absoluteUrl('graphql'),
   opts: {},
   useMeteorAccounts: true,
   batchingInterface: false

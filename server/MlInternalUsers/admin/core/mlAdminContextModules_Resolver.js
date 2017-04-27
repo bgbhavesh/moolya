@@ -76,6 +76,9 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "AUDIT_LOG":
       let auditParams=args.context;
       result=CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context);
+    case "hierarchySubChapters":
+      result=CoreModulesRepo.MlHierarchySubChapterRepo(args.context,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};

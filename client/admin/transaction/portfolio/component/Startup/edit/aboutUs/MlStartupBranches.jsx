@@ -148,7 +148,6 @@ export default class MlStartupBranches extends React.Component{
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-
         this.setState({loading:true})
         this.fetchOnlyImages();
       }

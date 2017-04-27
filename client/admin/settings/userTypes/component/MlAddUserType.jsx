@@ -87,7 +87,7 @@ class MlAddUserType extends React.Component{
     return (
       <div className="admin_main_wrap">
           <div className="admin_padding_wrap">
-            <h2>Add User Type</h2>
+            <h2>Add User Category</h2>
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>

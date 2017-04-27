@@ -1037,7 +1037,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/userTypeList",
-            "name" : "User Types",
+            "name" : "User Categories",
             "uniqueId" : "settings_userTypes",
             "isLink" : true,
             "isMenu" : true,

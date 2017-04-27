@@ -189,11 +189,9 @@ export default class MlStartupInvestor extends React.Component{
     let that = this;
     let investorsArray = that.state.startupInvestorList || [];
     return (
-      <div className="admin_main_wrap">
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Investor</h2>
           <div className="requested_input main_wrap_scroll">
-
             <ScrollArea
               speed={0.8}
               className="main_wrap_scroll"
@@ -222,9 +220,6 @@ export default class MlStartupInvestor extends React.Component{
                       </a>
                     </div>)
                   })}
-
-
-
                 </div>
               </div>
 
@@ -273,15 +268,8 @@ export default class MlStartupInvestor extends React.Component{
                 </div>
               </PopoverContent>
             </Popover>
-
-
-
-
           </div>
         </div>
-
-
-      </div>
     )
   }
 }

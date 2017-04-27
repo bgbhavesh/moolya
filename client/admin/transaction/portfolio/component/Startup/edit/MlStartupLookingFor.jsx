@@ -22,7 +22,8 @@ export default class MlStartupLookingFor extends React.Component{
       data:{},
       startupLookingFor: [],
       popoverOpen:false,
-      index:"",
+      // index:"",
+      selectedIndex:-1,
       startupLookingForList:[],
       indexArray:[],
       selectedVal:null,
@@ -62,9 +63,11 @@ export default class MlStartupLookingFor extends React.Component{
   addLookingFor(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupLookingFor){
-      this.setState({index: this.state.startupLookingFor.length})
+      // this.setState({index: this.state.startupLookingFor.length})
+      this.setState({selectedIndex: this.state.startupLookingFor.length})
     }else{
-      this.setState({index:0})
+      // this.setState({index:0})
+      this.setState({selectedIndex:0})
     }
   }
   onTileClick(index, e){
@@ -74,8 +77,8 @@ export default class MlStartupLookingFor extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({index:index, data:details, selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.typeId});
-    let indexes = this.state.indexArray;
+    this.setState({selectedIndex:index, data:details, selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.typeId});
+    let indexes = this.state.indexArray;    //index:index
     let indexArray = _.cloneDeep(indexes)
     indexArray.push(index);
     indexArray = _.uniq(indexArray);
@@ -139,7 +142,7 @@ export default class MlStartupLookingFor extends React.Component{
     let data = this.state.data;
     let startupLookingFor1 = this.state.startupLookingFor;
     let startupLookingFor = _.cloneDeep(startupLookingFor1);
-    startupLookingFor[this.state.index] = data;
+    startupLookingFor[this.state.selectedIndex] = data;                 //startupLookingFor[this.state.index] = data;
     let arr = [];
     _.each(startupLookingFor, function (item) {
       for (var propName in item) {
@@ -165,7 +168,7 @@ export default class MlStartupLookingFor extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{lookingFor:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{lookingFor:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};    //indexArray:this.state.indexArray
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
 
@@ -182,7 +185,7 @@ export default class MlStartupLookingFor extends React.Component{
   async fetchOnlyImages(){
     const response = await fetchStartupPortfolioLookingFor(this.props.portfolioDetailsId);
     if (response) {
-      let thisState=this.state.index;
+      let thisState=this.state.selectedIndex;                         // let thisState=this.state.index;
       let dataDetails =this.state.startupLookingFor
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];

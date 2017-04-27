@@ -79,7 +79,7 @@ class MlPortfolio extends React.Component{
 
   async fetchEditPortfolioTemplate(pId) {
     let userType = this.context.userType;
-    const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType});
+    const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:'external'});
     this.setState({editComponent:reg&&reg.component?reg.component:null});
   }
 

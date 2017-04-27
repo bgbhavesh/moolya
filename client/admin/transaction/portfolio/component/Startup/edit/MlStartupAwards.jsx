@@ -180,10 +180,30 @@ export default class MlStartupAwards extends React.Component{
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{awardsRecognition:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
+
   onFileUploadCallBack(resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
+        this.setState({loading:true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+
+  async fetchOnlyImages(){
+    const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupAwards
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupAwards:cloneBackUp });
+      }else {
+        this.setState({loading: false})
       }
     }
   }
@@ -197,9 +217,11 @@ export default class MlStartupAwards extends React.Component{
       }
     }`;
     let that = this;
+    const showLoader = that.state.loading;
     let startupAwardsList = that.state.startupAwardsList || [];
     return (
       <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Awards</h2>
           <div className="requested_input main_wrap_scroll">
@@ -275,7 +297,7 @@ export default class MlStartupAwards extends React.Component{
               </PopoverContent>
             </Popover>
           </div>
-        </div>
+        </div>)}
       </div>
     )
   }

@@ -21,9 +21,9 @@ export default class MlStartupClients extends React.Component{
       data:{},
       startupClients:this.props.clientsDetails || [],
       popoverOpen:false,
-      index:"",
+      selectedIndex:-1,
       startupClientsList:this.props.clientsDetails || [],
-      indexArray:[],
+      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -52,9 +52,9 @@ export default class MlStartupClients extends React.Component{
     this.setState({popoverOpen : !(this.state.popoverOpen)})
     this.setState({data : {}})
     if(this.state.startupClients){
-      this.setState({index:this.state.startupClients.length})
+      this.setState({selectedIndex:this.state.startupClients.length})
     }else{
-      this.setState({index:0})
+      this.setState({selectedIndex:0})
     }
   }
 
@@ -65,17 +65,13 @@ export default class MlStartupClients extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({index:index});
-    this.setState({data:details})
-    this.setState({selectedObject : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedVal" : details.companyName});
-    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-
-    this.setState({indexArray: indexArray})
+    this.setState({selectedIndex:index,data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen),"selectedVal" : details.companyName});
+    // let indexes = this.state.indexArray;
+    // let indexArray = _.cloneDeep(indexes)
+    // indexArray.push(index);
+    // indexArray = _.uniq(indexArray);
+    //
+    // this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -137,7 +133,8 @@ export default class MlStartupClients extends React.Component{
     let data = this.state.data;
     let startupClients1 = this.state.startupClients;
     let startupClients = _.cloneDeep(startupClients1);
-    startupClients[this.state.index] = data;
+    data.index = this.state.selectedIndex;
+    startupClients[this.state.selectedIndex] = data;
     let arr = [];
     _.each(startupClients, function (item) {
       for (var propName in item) {
@@ -154,8 +151,8 @@ export default class MlStartupClients extends React.Component{
     startupClients = arr;
     // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupClients:startupClients})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupClients(startupClients,indexArray);
+    // let indexArray = this.state.indexArray;
+    this.props.getStartupClients(startupClients);
   }
   onSaveAction(e){
     this.setState({startupClientsList:this.state.startupClients});
@@ -170,7 +167,7 @@ export default class MlStartupClients extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{clients:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{clients:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex }]}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){

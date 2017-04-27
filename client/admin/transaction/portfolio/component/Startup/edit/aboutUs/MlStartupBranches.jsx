@@ -21,7 +21,7 @@ export default class MlStartupBranches extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       startupBranchesList:this.props.branchDetails || [],
-      // indexArray:[],
+     /* indexArray:[],*/
       selectedVal:null,
       selectedObject:"default"
     }
@@ -44,13 +44,10 @@ export default class MlStartupBranches extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupBranchesList:this.state.startupBranches})
-    this.setState({popoverOpen : false})
+    this.setState({startupBranchesList:this.state.startupBranches,popoverOpen : false})
   }
   addBranch(){
-    this.setState({selectedObject : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
+    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupBranches){
       this.setState({selectedIndex:this.state.startupBranches.length})
     }else{
@@ -60,17 +57,17 @@ export default class MlStartupBranches extends React.Component{
 
   onSelect(index, e){
     let cloneArray = _.cloneDeep(this.state.startupBranches);
-    let details = cloneArray[index];
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index,data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen),"selectedVal" : details.addressType});
-    // let indexes = this.state.indexArray;
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
+    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId});
+/*    let indexes = this.state.indexArray;
+    let indexArray = _.cloneDeep(indexes)
+    indexArray.push(index);
+    indexArray = _.uniq(indexArray);
+    this.setState({indexArray: indexArray})*/
   }
   onLockChange(field, e){
     let details = this.state.data||{};
@@ -100,13 +97,20 @@ export default class MlStartupBranches extends React.Component{
       this.sendDataToParent()
     })
   }
-  onOptionSelected(selectedIndex,handler,selectedObj){
+  onOptionSelected(selectedBranch){
 
-    let details =this.state.data;
+   /* let details =this.state.data;
     details=_.omit(details,["addressType"],["addressTypeId"]);
     details=_.extend(details,{["addressType"]:selectedObj.label},{["addressTypeId"]:selectedIndex});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedIndex})
+      this.sendDataToParent()
+    })*/
+    let details =this.state.data;
+    details=_.omit(details,["addressTypeId"]);
+    details=_.extend(details,{["addressTypeId"]: selectedBranch});
+    this.setState({data:details}, function () {
+      this.setState({"selectedVal" : selectedBranch})
       this.sendDataToParent()
     })
 
@@ -122,11 +126,10 @@ export default class MlStartupBranches extends React.Component{
     })
   }
   sendDataToParent(){
-    let data = this.state.data;
+   /* let data = this.state.data;
     let startupBranches1 = this.state.startupBranches;
     let startupBranches = _.cloneDeep(startupBranches1);
-    data.index = this.state.selectedIndex;
-    startupBranches[this.state.selectedIndex] = data;
+    startupBranches[this.state.index] = data;
     let arr = [];
     _.each(startupBranches, function (item) {
       for (var propName in item) {
@@ -143,7 +146,28 @@ export default class MlStartupBranches extends React.Component{
     startupBranches = arr;
     // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupBranches:startupBranches})
-    // let indexArray = this.state.indexArray;
+    let indexArray = this.state.indexArray;
+    this.props.getStartupBranches(startupBranches,indexArray);*/
+    let data = this.state.data;
+    let branches = this.state.startupBranches;
+    let startupBranches = _.cloneDeep(branches);
+    data.index = this.state.selectedIndex;
+    startupBranches[this.state.selectedIndex] = data;
+    let arr = [];
+    _.each(startupBranches, function (item)
+    {
+      for (var propName in item) {
+        if (item[propName] === null || item[propName] === undefined) {
+          delete item[propName];
+        }
+      }
+      newItem = _.omit(item, "__typename");
+      let updateItem = _.omit(newItem, 'logo');
+      arr.push(updateItem)
+    })
+    startupBranches = arr;
+    this.setState({startupBranches:startupBranches})
+    /*let indexArray = this.state.indexArray;*/
     this.props.getStartupBranches(startupBranches);
   }
   onLogoFileUpload(e){
@@ -153,17 +177,15 @@ export default class MlStartupBranches extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{branches:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-
       }
     }
   }
-
   render(){
     let branchesQuery=gql`query{
       data:fetchAssets {

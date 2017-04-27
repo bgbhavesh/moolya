@@ -72,17 +72,15 @@ let startupPortfolioSchema = `
     
     type clientsOutput{
         companyId:String,
-        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:imagesTypeSchema,
         description:String,
         isDescriptionPrivate:Boolean,
-        makePrivate:Boolean
-        index: Int
+        makePrivate:Boolean,
+        index:Int
     }
     
     type branchesOutput{
-        addressType:String,
         addressTypeId:String,
         name:String,
         isNamePrivate:Boolean,
@@ -105,12 +103,12 @@ let startupPortfolioSchema = `
         addressImage : String,
         isAddressImagePrivate:Boolean,
         logo:imagesTypeSchema,
-        makePrivate:Boolean
-        index: Int
+        makePrivate:Boolean,
+        index:Int
+        
     }
     
     type assetsOutput{
-        assetType:String,
         assetTypeId:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
@@ -118,8 +116,8 @@ let startupPortfolioSchema = `
         description:String,
         isDescriptionPrivate:Boolean,
         logo:imagesTypeSchema,
-        makePrivate:Boolean
-        index: Int
+        makePrivate:Boolean,
+        index:Int
     }
     
     type technologiesOutput{
@@ -128,9 +126,9 @@ let startupPortfolioSchema = `
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-        logo:imagesTypeSchema,
-        makePrivate:Boolean
-        index: Int
+         logo:imagesTypeSchema,
+        makePrivate:Boolean,
+        index:Int
     }
     
     type investorOutput{
@@ -283,17 +281,15 @@ let startupPortfolioSchema = `
   
     input clients{
         companyId:String,
-        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:logo,
         description:String,
         isDescriptionPrivate:Boolean,
-        makePrivate:Boolean
-        index: Int
+        makePrivate:Boolean,
+        index:Int
     }
     
     input branches{
-        addressType:String,
         addressTypeId:String,
         name:String,
         isNamePrivate:Boolean,
@@ -315,13 +311,12 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
-        logo:logo,
-        makePrivate:Boolean
-        index: Int
+          logo:logo,
+        makePrivate:Boolean,
+        index:Int
     }
     
     input assets{
-        assetType:String,
         assetTypeId:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
@@ -329,19 +324,18 @@ let startupPortfolioSchema = `
         description:String,
         isDescriptionPrivate:Boolean,
         logo:logo,
-        makePrivate:Boolean
-        index: Int
+        makePrivate:Boolean,
+        index:Int
     }
     
     input technologies{
-        technology:String,
-        technologyId:String,
+       technologyId:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-         logo:logo,
-        makePrivate:Boolean
-        index: Int
+          logo:logo,
+        makePrivate:Boolean,
+        index:Int
     }
     
     input investor{

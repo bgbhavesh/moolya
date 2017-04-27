@@ -23,7 +23,6 @@ export default class MlStartupAssets extends React.Component{
       startupAssetsList:this.props.assetsDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      // indexArray:[],
       selectedAssetType:null,
       selectedAsset:"default"
     }
@@ -46,13 +45,18 @@ export default class MlStartupAssets extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupAssetsList:this.state.startupAssets})
-    this.setState({popoverOpen : false})
+    this.setState({startupAssetsList:this.state.startupAssets,popoverOpen : false})
   }
   addAsset(){
-    this.setState({})
-    this.setState({})
-    this.setState({selectedAsset : "default",popoverOpen : !(this.state.popoverOpen), data : {}})
+    /*this.setState({selectedAsset : "default"})
+    this.setState({popoverOpen : !(this.state.popoverOpen)})
+    this.setState({data : {}})
+    if(this.state.startupAssets){
+      this.setState({arrIndex:this.state.startupAssets.length})
+    }else{
+      this.setState({arrIndex:0})
+    }*/
+    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupAssets){
       this.setState({selectedIndex:this.state.startupAssets.length})
     }else{
@@ -61,17 +65,17 @@ export default class MlStartupAssets extends React.Component{
   }
   onSelectAsset(index, e){
     let cloneArray = _.cloneDeep(this.state.startupAssets);
-    let assetDetails = cloneArray[index];
-    assetDetails = _.omit(assetDetails, "__typename");
-    if(assetDetails && assetDetails.logo){
-      delete assetDetails.logo['__typename'];
+    let details = cloneArray[index]
+    details = _.omit(details, "__typename");
+    if(details && details.logo){
+      delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index,data:assetDetails,selectedAsset : index,popoverOpen : !(this.state.popoverOpen),"selectedAssetType" : assetDetails.assetType});
-    // let indexes = this.state.indexArray;
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
+    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.assetTypeId});
+   /* let indexes = this.state.indexArray;
+    let indexArray = _.cloneDeep(indexes)
+    indexArray.push(index);
+    indexArray = _.uniq(indexArray);
+    this.setState({indexArray: indexArray})*/
   }
 
   onLockChange(field, e){
@@ -122,39 +126,39 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
-  assetTypeOptionSelected(selectedIndex,handler,selectedObj){
+  assetTypeOptionSelected(selectedAsset){
 
     let details =this.state.data;
-    details=_.omit(details,["assetType"],["assetTypeId"]);
-    details=_.extend(details,{["assetType"]:selectedObj.label},{["assetTypeId"]:selectedIndex});
+    details=_.omit(details,["assetTypeId"]);
+    details=_.extend(details,{["assetTypeId"]: selectedAsset});
     this.setState({data:details}, function () {
-      this.setState({"selectedAssetType" : selectedIndex})
+      this.setState({"selectedVal" : selectedAsset})
       this.sendDataToParent()
     })
 
+
   }
   sendDataToParent(){
-     let data = this.state.data;
-    let startupAssets1 = this.state.startupAssets;
-    let startupAssets = _.cloneDeep(startupAssets1);
+    let data = this.state.data;
+    let assets = this.state.startupAssets;
+    let startupAssets = _.cloneDeep(assets);
     data.index = this.state.selectedIndex;
     startupAssets[this.state.selectedIndex] = data;
-    let assetsArr = [];
-    _.each(startupAssets, function (item) {
+    let arr = [];
+    _.each(startupAssets, function (item)
+    {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
-      if(item && item.logo){
-        delete item.logo['__typename'];
-      }
-      assetsArr.push(newItem)
+      newItem = _.omit(item, "__typename");
+      let updateItem = _.omit(newItem, 'logo');
+      arr.push(updateItem)
     })
-    startupAssets = assetsArr;
+    startupAssets = arr;
     this.setState({startupAssets:startupAssets})
-    // let indexArray = this.state.indexArray;
+    //let indexArray = this.state.indexArray;
     this.props.getStartupAssets(startupAssets);
   }
   onLogoFileUpload(e){
@@ -164,34 +168,15 @@ export default class MlStartupAssets extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(resp){
     if(resp){
-      let result = JSON.parse(resp);
+      let result = JSON.parse(resp)
       if(result.success){
-        // this.setState({loading:true})
-        // this.fetchOnlyImages();
-        this.setState({startupAssetsList:this.state.startupAssets})
       }
     }
   }
-  // async fetchOnlyImages(){
-  //   const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
-  //   if (response) {
-  //     let thisState=this.state.selectedIndex;
-  //     let dataDetails =this.state.startupAssets
-  //     let cloneBackUp = _.cloneDeep(dataDetails);
-  //     let specificData = cloneBackUp[thisState];
-  //     if(specificData){
-  //       let curUpload=response[thisState]
-  //       specificData['logo']= curUpload['logo']
-  //       this.setState({loading: false, startupAssets:cloneBackUp });
-  //     }else {
-  //       this.setState({loading: false})
-  //     }
-  //   }
-  // }
   render(){
     let assetsQuery=gql`query{
       data:fetchAssets {
@@ -252,7 +237,7 @@ export default class MlStartupAssets extends React.Component{
                                     labelKey={'label'} queryType={"graphql"} query={assetsQuery}
                                     isDynamic={true}
                                     onSelect={this.assetTypeOptionSelected.bind(this)}
-                                    selectedValue={this.state.selectedAssetType}/>
+                                    selectedValue={this.state.selectedVal}/>
                     </div>
 
                     <div className="form-group">

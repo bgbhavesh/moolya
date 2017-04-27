@@ -47,7 +47,7 @@ export default class MlStartupEditTemplate extends React.Component{
 
       {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupManagement key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupInvestor key="3" getInvestorDetails={this.getInvestor.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupData key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -60,23 +60,23 @@ export default class MlStartupEditTemplate extends React.Component{
     return tabs;
   }
 
-  getAboutus(details,tabName,indexArray){
+  getAboutus(details,tabName){
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio : data},indexArray);
+    this.props.getPortfolioDetails({startupPortfolio : data});
   }
 
-  getManagementDetails(details, indexArray){
+  getManagementDetails(details){
     let data = this.state.startupPortfolio;
     if(data && !data.management){
       data['management']=[];
     }
     data['management'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, indexArray);
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }
 
-  getInvestor(details,indexArray){
+  getInvestorDetails(details){
 
     let data = this.state.startupPortfolio;
     if(data && !data.investor){
@@ -84,10 +84,10 @@ export default class MlStartupEditTemplate extends React.Component{
     }
     data['investor'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, indexArray);
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }
 
-  getAwardsDetails(details,indexArray){
+  getAwardsDetails(details){
 
     let data = this.state.startupPortfolio;
     if(data && !data.awardsRecognition){
@@ -95,10 +95,10 @@ export default class MlStartupEditTemplate extends React.Component{
     }
     data['awardsRecognition'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, indexArray);
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }
 
-  getLookingForDetails(details,indexArray){
+  getLookingForDetails(details){
 
     let data = this.state.startupPortfolio;
     if(data && !data.lookingFor){
@@ -106,7 +106,7 @@ export default class MlStartupEditTemplate extends React.Component{
     }
     data['lookingFor'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, indexArray);
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }
   getStartupMCL(details){
     let data = this.state.startupPortfolio;

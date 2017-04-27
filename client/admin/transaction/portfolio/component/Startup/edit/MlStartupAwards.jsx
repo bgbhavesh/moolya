@@ -23,7 +23,7 @@ export default class MlStartupAwards extends React.Component{
       // index:"",
       selectedIndex:-1,
       startupAwardsList:[],
-      indexArray:[],
+      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -80,11 +80,11 @@ export default class MlStartupAwards extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    // let indexes = this.state.indexArray;
+    // let indexArray = _.cloneDeep(indexes)
+    // indexArray.push(index);
+    // indexArray = _.uniq(indexArray);
+    // this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -167,8 +167,8 @@ export default class MlStartupAwards extends React.Component{
     })
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
-    let indexArray = this.state.indexArray;
-    this.props.getAwardsDetails(startupAwards, indexArray);
+    // let indexArray = this.state.indexArray;
+    this.props.getAwardsDetails(startupAwards);    //indexArray
   }
 
   onLogoFileUpload(e){
@@ -269,9 +269,9 @@ export default class MlStartupAwards extends React.Component{
                                       selectedValue={this.state.selectedVal}/>
                       </div>
                       <div className="form-group">
-                        {/*<Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"*/}
-                                  {/*inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year}*/}
-                                  {/*closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>*/}
+                        <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                  inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year?this.state.data.year:" "}
+                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                       </div>
                       <div className="form-group">
                         <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>

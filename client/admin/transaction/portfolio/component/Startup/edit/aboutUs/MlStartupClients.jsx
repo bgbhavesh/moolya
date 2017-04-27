@@ -10,14 +10,14 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-
+import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
 
 
 export default class MlStartupClients extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
-      loading: true,
+      loading: false,
       data:{},
       startupClients:this.props.clientsDetails || [],
       popoverOpen:false,
@@ -64,11 +64,6 @@ export default class MlStartupClients extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
-  /*  let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})*/
   }
 
   onLockChange(field, e){
@@ -104,13 +99,12 @@ export default class MlStartupClients extends React.Component{
     })
   }
 
-  onOptionSelected(selectedClient){
-
+  onOptionSelected(selectedId){
     let details =this.state.data;
     details=_.omit(details,["companyId"]);
-    details=_.extend(details,{["companyId"]: selectedClient});
+    details=_.extend(details,{["companyId"]: selectedId});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedClient})
+      this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
 
@@ -125,29 +119,8 @@ export default class MlStartupClients extends React.Component{
       this.sendDataToParent()
     })
   }
+
   sendDataToParent(){
- /*   let data = this.state.data;
-    let startupClients1 = this.state.startupClients;
-    let startupClients = _.cloneDeep(startupClients1);
-    startupClients[this.state.index] = data;
-    let arr = [];
-    _.each(startupClients, function (item) {
-      for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined) {
-          delete item[propName];
-        }
-      }
-      newItem = _.omit(item, "__typename")
-      if(item && item.logo){
-        delete item.logo['__typename'];
-      }
-      arr.push(newItem)
-    })
-    startupClients = arr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
-    this.setState({startupClients:startupClients})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupClients(startupClients,indexArray);*/
     let data = this.state.data;
     let clients = this.state.startupClients;
     let startupClients = _.cloneDeep(clients);
@@ -167,16 +140,9 @@ export default class MlStartupClients extends React.Component{
     })
     startupClients = arr;
     this.setState({startupClients:startupClients})
-   /* let indexArray = this.state.indexArray;*/
     this.props.getStartupClients(startupClients);
   }
-/*  onSaveAction(e){
-    this.setState({startupClientsList:this.state.startupClients});
-    this.setState({data:this.state.startupClients}, function () {
-      this.sendDataToParent()
-    })
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-  }*/
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -186,14 +152,33 @@ export default class MlStartupClients extends React.Component{
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{clients:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
+
   onFileUploadCallBack(resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
+        this.setState({loading:true})
+        this.fetchOnlyImages();
       }
     }
   }
 
+  async fetchOnlyImages(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupClients
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response.clients[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupClients:cloneBackUp });
+      }else {
+        this.setState({loading: false})
+      }
+    }
+  }
 
   render(){
     let query=gql`query{
@@ -203,13 +188,13 @@ export default class MlStartupClients extends React.Component{
       }
     }`;
     let that = this;
+    const showLoader = that.state.loading;
     let clientsArray = that.state.startupClientsList || [];
     return(
       <div>
-
         <h2>Clients</h2>
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="requested_input main_wrap_scroll">
-
           <ScrollArea
             speed={0.8}
             className="main_wrap_scroll"
@@ -227,21 +212,20 @@ export default class MlStartupClients extends React.Component{
                   </a>
                 </div>
                 {clientsArray.map(function (details, idx) {
-                  return(<div className="col-lg-2 col-md-3 col-sm-3">
+                  return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                        <h3>{details.description} <span className="assets-list">50</span></h3>
+                        {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
+                        <h3>{details.description} </h3>
                       </div>
                     </a>
                   </div>)
                 })}
-
               </div>
             </div>
-
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject}  toggle={this.toggle}>
             {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
@@ -279,14 +263,7 @@ export default class MlStartupClients extends React.Component{
               </div>
             </PopoverContent>
           </Popover>
-
-
-
-
-
-        </div>
-
-
+        </div>)}
       </div>
     )
   }

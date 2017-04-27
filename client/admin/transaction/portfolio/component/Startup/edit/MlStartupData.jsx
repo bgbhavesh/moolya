@@ -24,7 +24,7 @@ export default class MlStartupData extends React.Component{
   }
   render(){
     return (
-      <div className="admin_main_wrap">
+      <div>
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Data</h2>
           <div className="main_wrap_scroll">

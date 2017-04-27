@@ -204,7 +204,7 @@ export default class MlStartupLookingFor extends React.Component{
     let that = this;
     let startupLookingForList = that.state.startupLookingForList || [];
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Looking For</h2>

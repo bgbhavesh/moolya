@@ -199,7 +199,6 @@ export default class MlStartupAwards extends React.Component{
     let that = this;
     let startupAwardsList = that.state.startupAwardsList || [];
     return (
-      <div className="admin_main_wrap">
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Awards</h2>
           <div className="requested_input main_wrap_scroll">
@@ -208,8 +207,7 @@ export default class MlStartupAwards extends React.Component{
               speed={0.8}
               className="main_wrap_scroll"
               smoothScrolling={true}
-              default={true}
-            >
+              default={true}>
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
@@ -276,7 +274,6 @@ export default class MlStartupAwards extends React.Component{
             </Popover>
           </div>
         </div>
-      </div>
     )
   }
 }

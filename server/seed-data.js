@@ -344,7 +344,7 @@ validateinternalUserLoginAttempt=(user)=>{
               subChapterActive = true
             }
 
-            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{_id:role.communityId}, {isActive:true}]})
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityId}, {isActive:true}]})
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }

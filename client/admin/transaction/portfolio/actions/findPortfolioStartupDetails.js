@@ -91,6 +91,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileUrl
                   }
                   makePrivate
+                  index
                 }
                 serviceProducts{
                   description
@@ -113,6 +114,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                  index
                 }
                 branches{
                   name
@@ -139,6 +141,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                  index
                 }
                 technologies{
                   technology
@@ -151,6 +154,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                  index
                 }
                 legalIssue{
                   description

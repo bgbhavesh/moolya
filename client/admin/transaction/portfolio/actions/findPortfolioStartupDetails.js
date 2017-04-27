@@ -44,6 +44,7 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
                   fileName
                   fileUrl
                 }
+                index
             }
           }
 
@@ -81,9 +82,9 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   rating
                 }
                 clients{
+                  index
                   description
                   isDescriptionPrivate
-                  companyName
                   companyId
                   isCompanyNamePrivate
                   logo{
@@ -102,7 +103,6 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                 }
                 assets{
-                  assetType
                   assetTypeId
                   quantity
                   description
@@ -117,6 +117,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 branches{
+                  addressTypeId
                   name
                   isNamePrivate
                   phoneNumber
@@ -144,7 +145,6 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 technologies{
-                  technology
                   technologyId
                   isTechnologyPrivate
                   description

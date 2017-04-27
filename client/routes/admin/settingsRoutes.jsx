@@ -110,6 +110,10 @@ import MlTechnologiesList from '../../admin/settings/technologies/component/MlTe
 import MlAddTechnology from '../../admin/settings/technologies/component/MlAddTechnology'
 import MlEditTechnology from '../../admin/settings/technologies/component/MlEditTechnology'
 
+import MlFundingTypeList from '../../admin/settings/fundingType/component/MlFundingTypeList'
+import MlAddFundingType from '../../admin/settings/fundingType/component/MlAddFundingType'
+import MlEditFundingType from '../../admin/settings/fundingType/component/MlEditFundingType'
+
 import MlAwardTypeList from '../../admin/settings/awards/component/MlAwardTypeList'
 import MlAddAwardType from '../../admin/settings/awards/component/MlAddAwardType'
 import MlEditAwardType from '../../admin/settings/awards/component/MlEditAwardType'
@@ -698,6 +702,25 @@ adminSection.route('/settings/edittechnology/:id', {
   name: 'settings_Edittechnology',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditTechnology config={params.id} />})
+  }
+});
+
+adminSection.route('/settings/fundingTypeList', {
+  name: 'settings_FundingTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlFundingTypeList/>})
+  }
+});
+adminSection.route('/settings/addFundingType', {
+  name: 'settings_AddFundingType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddFundingType />})
+  }
+});
+adminSection.route('/settings/editFundingType/:id', {
+  name: 'settings_EditFundingType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditFundingType config={params.id} />})
   }
 });
 

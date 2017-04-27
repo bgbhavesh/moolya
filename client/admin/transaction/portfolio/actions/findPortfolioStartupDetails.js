@@ -85,6 +85,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   description
                   isDescriptionPrivate
                   companyId
+                  companyName
                   isCompanyNamePrivate
                   logo{
                     fileName
@@ -103,6 +104,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 }
                 assets{
                   assetTypeId
+                  assetName
                   quantity
                   description
                   isAssetTypePrivate
@@ -144,6 +146,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 technologies{
+                  technologyName
                   technologyId
                   isTechnologyPrivate
                   description

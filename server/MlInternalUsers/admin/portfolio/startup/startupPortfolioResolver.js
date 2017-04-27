@@ -97,14 +97,40 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["legalIssue"] = portfolio.legalIssue;
     startAboutUsArray["rating"] = portfolio.rating;
     startAboutUsArray["assets"] = portfolio.assets;
+
+    if(startAboutUsArray && startAboutUsArray.clients){
+      startAboutUsArray.clients.map(function(client,index) {
+        let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
+        if(startAboutUsArray.clients[index]){
+          startAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
+        }
+      })
+    }
+    if(startAboutUsArray && startAboutUsArray.assets){
+      startAboutUsArray.assets.map(function(asset,index) {
+        if(startAboutUsArray.assets[index]){
+          let assetData = MlAssets.findOne({"_id":asset.assetTypeId}) || "";
+          startAboutUsArray.assets[index].assetName = assetData.displayName || "";
+        }
+
+      })
+    }
+    if(startAboutUsArray && startAboutUsArray.technologies){
+      startAboutUsArray.technologies.map(function(technology,index) {
+        if(startAboutUsArray.technologies[index]){
+          let technologyData = MlTechnologies.findOne({"_id":technology.technologyId}) || "";
+          startAboutUsArray.technologies[index].technologyName = technologyData.displayName || "";
+        }
+
+      })
+    }
     if (startAboutUsArray) {
       return startAboutUsArray
     }
 
-
   }
 
-  return [];
+  return {};
 }
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioInvestor'] = (obj, args, context, info) => {

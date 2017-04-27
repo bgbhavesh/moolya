@@ -77,7 +77,8 @@ let startupPortfolioSchema = `
         description:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
-        index:Int
+        index:Int,
+        companyName : String
     }
     
     type branchesOutput{
@@ -110,6 +111,7 @@ let startupPortfolioSchema = `
     
     type assetsOutput{
         assetTypeId:String,
+        assetName:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,
@@ -118,15 +120,16 @@ let startupPortfolioSchema = `
         logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
+        
     }
     
     type technologiesOutput{
-        technology:String,
+        technologyName:String,
         technologyId:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-         logo:imagesTypeSchema,
+        logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
     }

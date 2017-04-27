@@ -9,8 +9,8 @@ import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
 var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
-   let user=Meteor.users.findOne(context.userId);
-    return user&&user.profile&&user.profile.isInternaluser?"external":"internal";
+    let user=Meteor.users.findOne(context.userId);
+    return user&&user.profile&&user.profile.isInternaluser?"internal":"external";
 }
 
 MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {

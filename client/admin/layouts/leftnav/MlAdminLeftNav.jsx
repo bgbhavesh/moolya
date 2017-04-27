@@ -32,8 +32,6 @@ export default class MlAdminLeftNav extends Component {
       $('.admin_menu ul li').not($(this).parents('li')).removeClass('active_menu');
       return false;
     });
-
-
   }
 
   onClickItem(e) {
@@ -66,8 +64,6 @@ export default class MlAdminLeftNav extends Component {
       }
     }
 
-    //localStorage.setItem("leftNavSubMenu", JSON.stringify(menu));
-
     let navOptions = menu.map(function (dataItem) {
       let activeClass
       if (parentKey == dataItem.uniqueId) {
@@ -95,14 +91,12 @@ export default class MlAdminLeftNav extends Component {
         >
           <ul>
             {navOptions }
-
             <li className="menu_item">
               <div className="menu_item menu_item_in"></div>
             </li>
           </ul>
         </ScrollArea>
       </div>
-
     )
   }
 

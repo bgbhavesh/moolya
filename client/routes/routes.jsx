@@ -6,11 +6,16 @@ import {mount} from 'react-mounter';
 import loginActions,{loginActionHandler} from '../login/actions/loginActions';
 
 let userId = Meteor.userId();
+let user = Meteor.user();
 
 FlowRouter.route('/', {
   action: function() {
-    //TODO: write a controller to control the route based on logged in user(Internal/External)
-    FlowRouter.go("/admin");
+    if(user && user.profile && user.profile.isExternaluser){
+        FlowRouter.go("/app");
+    }else if(user && user.profile && user.profile.isExternaluser){
+        FlowRouter.go("/admin");
+    }
+
   },
   triggersEnter: [function(context, redirect) {
     console.log('running / trigger');

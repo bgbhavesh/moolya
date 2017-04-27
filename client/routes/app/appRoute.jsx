@@ -1,6 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import {mount} from 'react-mounter';
+import AppLayout from '../../app/layouts/appLayout'
+import MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 
 
 export const appSection = FlowRouter.group({
@@ -17,7 +20,16 @@ export const appSection = FlowRouter.group({
 
 appSection.route('/', {
     triggersEnter: [function(context, redirect) {
-        console.log('running /admin trigger');
-        //todo: route based on context-Internal User or External User
+        console.log('running /app trigger');
+        redirect("/app/dashboard");
     }]
 })
+
+appSection.route('/dashboard', {
+  name: 'myprofile',
+  action(){
+    mount(AppLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MlMyProfile/>})
+  }
+});
+
+

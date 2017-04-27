@@ -22,8 +22,8 @@ export default class MlStartupAssets extends React.Component{
       startupAssets:this.props.assetsDetails || [],
       startupAssetsList:this.props.assetsDetails || [],
       popoverOpen:false,
-      arrIndex:"",
-      indexArray:[],
+      selectedIndex:-1,
+      // indexArray:[],
       selectedAssetType:null,
       selectedAsset:"default"
     }
@@ -50,13 +50,13 @@ export default class MlStartupAssets extends React.Component{
     this.setState({popoverOpen : false})
   }
   addAsset(){
-    this.setState({selectedAsset : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
+    this.setState({})
+    this.setState({})
+    this.setState({selectedAsset : "default",popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupAssets){
-      this.setState({arrIndex:this.state.startupAssets.length})
+      this.setState({selectedIndex:this.state.startupAssets.length})
     }else{
-      this.setState({arrIndex:0})
+      this.setState({selectedIndex:0})
     }
   }
   onSelectAsset(index, e){
@@ -66,16 +66,12 @@ export default class MlStartupAssets extends React.Component{
     if(assetDetails && assetDetails.logo){
       delete assetDetails.logo['__typename'];
     }
-    this.setState({arrIndex:index});
-    this.setState({data:assetDetails})
-    this.setState({selectedAsset : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedAssetType" : assetDetails.assetType});
-    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    this.setState({selectedIndex:index,data:assetDetails,selectedAsset : index,popoverOpen : !(this.state.popoverOpen),"selectedAssetType" : assetDetails.assetType});
+    // let indexes = this.state.indexArray;
+    // let indexArray = _.cloneDeep(indexes)
+    // indexArray.push(index);
+    // indexArray = _.uniq(indexArray);
+    // this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -141,7 +137,8 @@ export default class MlStartupAssets extends React.Component{
      let data = this.state.data;
     let startupAssets1 = this.state.startupAssets;
     let startupAssets = _.cloneDeep(startupAssets1);
-    startupAssets[this.state.arrIndex] = data;
+    data.index = this.state.selectedIndex;
+    startupAssets[this.state.selectedIndex] = data;
     let assetsArr = [];
     _.each(startupAssets, function (item) {
       for (var propName in item) {
@@ -156,10 +153,9 @@ export default class MlStartupAssets extends React.Component{
       assetsArr.push(newItem)
     })
     startupAssets = assetsArr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupAssets:startupAssets})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupAssets(startupAssets,indexArray);
+    // let indexArray = this.state.indexArray;
+    this.props.getStartupAssets(startupAssets);
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -167,17 +163,35 @@ export default class MlStartupAssets extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp);
       if(result.success){
+        // this.setState({loading:true})
+        // this.fetchOnlyImages();
         this.setState({startupAssetsList:this.state.startupAssets})
       }
     }
   }
+  // async fetchOnlyImages(){
+  //   const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
+  //   if (response) {
+  //     let thisState=this.state.selectedIndex;
+  //     let dataDetails =this.state.startupAssets
+  //     let cloneBackUp = _.cloneDeep(dataDetails);
+  //     let specificData = cloneBackUp[thisState];
+  //     if(specificData){
+  //       let curUpload=response[thisState]
+  //       specificData['logo']= curUpload['logo']
+  //       this.setState({loading: false, startupAssets:cloneBackUp });
+  //     }else {
+  //       this.setState({loading: false})
+  //     }
+  //   }
+  // }
   render(){
     let assetsQuery=gql`query{
       data:fetchAssets {

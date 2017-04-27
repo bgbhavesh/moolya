@@ -91,6 +91,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileUrl
                   }
                   makePrivate
+                  index
                 }
                 serviceProducts{
                   description
@@ -113,6 +114,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                  index
                 }
                 branches{
                   name
@@ -139,6 +141,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                  index
                 }
                 technologies{
                   technology
@@ -151,6 +154,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                  index
                 }
                 legalIssue{
                   description
@@ -192,12 +196,10 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioInvestor(portfoliodetailsId: $portfoliodetailsId) {
                 name
-                fundingType
+                fundingTypeId
                 investmentAmount
-                
                 description
                 isNamePrivate
-               
                 isInvestmentAmountPrivate
                 isDescriptionPrivate
                 logo{
@@ -205,6 +207,7 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
                     fileUrl
                   }
                 makePrivate
+                index
             }
           }
 
@@ -234,6 +237,7 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
                     fileName
                     fileUrl
                   }
+                index
                 makePrivate
             }
           }

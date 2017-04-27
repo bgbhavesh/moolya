@@ -2,16 +2,16 @@ export let loginContainer = {
     login(username, password, callback){
         Meteor.loginWithPassword({username:username},password, function (result)
         {
-          if(result && result.error){
-                 callback(result);
+            if(result && result.error){
+                callback(result);
             }
              else{
                 var user = Meteor.user();
-                 if(user && user.profile && user.profile.isInternaluser){
-                    callback(user);
-               }
+                 if(user && user.profile){
+                      callback(user);
+                 }
              }
-         })
+        })
     },
 
     logout(callback){

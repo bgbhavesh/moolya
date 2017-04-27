@@ -1,7 +1,8 @@
 {
   "public": {
     "graphqlUrl": "http://qa.moolya.in:2306/graphql",
-    "graphqlPort":8090
+    "graphqlPort":8090,
+    "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4"
   },
   "private": {
     "subChapterName":"Moolya",
@@ -28,5 +29,6 @@
     "graphql_proxy_url":"http://localhost:8090/graphql"
   },
   "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
+  "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
   "isEmailDomainCheckEnabled":true
 }

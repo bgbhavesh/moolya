@@ -10,7 +10,7 @@ import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStart
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
   templateCode:"PFTIDEEDT",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
@@ -21,7 +21,7 @@ const mlIdeatorEditExternalUserPortfolioTemplateConfig={
 const mlIdeatorViewExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-View",
   templateCode:"PFTIDEVIW",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
@@ -32,7 +32,7 @@ const mlIdeatorViewExternalUserPortfolioTemplateConfig={
 const mlStartupEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Startup-Edit",
   templateCode:"PFSTUEDT",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
@@ -43,7 +43,7 @@ const mlStartupEditExternalUserPortfolioTemplateConfig={
 const mlStartupViewExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Startup-View",
   templateCode:"PFSTUVIW",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',

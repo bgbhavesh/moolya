@@ -25,28 +25,6 @@ const MlEmailNotification= class MlEmailNotification {
     }
   }
 
-  static testEmail(){
-    try {
-      let to="mohammed.mohasin@raksan.in";
-      let msg= "Use as One Time Password (OTP) to activate your Moolya account. ";
-
-      var mail_body = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
-        'Use as One Time Password (OTP) to activate your Moolya account.'+
-        '</div></body></html>';
-      Meteor.setTimeout(function () {
-        mlEmail.sendHtml({
-          from:fromEmail,
-          to: to,
-          subject: "One Time Password (OTP) to activate your moolya account",
-          html: mail_body
-        });
-      }, 2 * 1000);
-
-    } catch (e) {
-      console.log("mlUserRegistrationOtp:Error while sending the OTP Email Notification"+e);
-    }
-  }
-
 }
 
 export default MlEmailNotification;

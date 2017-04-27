@@ -4,6 +4,7 @@
 
 import MlResolver from '../mlAdminResolverDef'
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
+import MlUserContext from '../../../MlExternalUsers/mlUserContext'
 
 
 MlResolver.MlQueryResolver['FetchMenu'] = (_,{name},context) =>{
@@ -12,4 +13,9 @@ MlResolver.MlQueryResolver['FetchMenu'] = (_,{name},context) =>{
   let menu=new MlAdminUserContext().getDefaultMenu(context.userId);
 
   return MlMenus.findOne({name:menu});
+}
+
+MlResolver.MlQueryResolver['fetchExternalUserMenu'] = ( _, {name}, context) =>{
+    let menu = new MlUserContext().getDefaultMenu(context.userId);
+    return MlMenus.findOne({name:menu});
 }

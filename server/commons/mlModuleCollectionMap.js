@@ -38,6 +38,7 @@ MlModuleCollectionMap['MlDocumentFormats'] = 'DOCUMENTFORMAT';
 MlModuleCollectionMap['MlDocumentTypes'] = 'DOCUMENTTYPE';
 MlModuleCollectionMap['MlEntity'] = 'ENTITY';
 MlModuleCollectionMap['MlLookingFor'] = 'LOOKINGFOR';
+MlModuleCollectionMap['MlFundingTypes'] = 'FUNDINGTYPE';
 // MlModuleCollectionMap['MlProcess'] = 'PROCESS';
 MlModuleCollectionMap['MlProfessions'] = 'PROFESSION';
 MlModuleCollectionMap['MlSpecifications'] = 'SPECIFICATION';

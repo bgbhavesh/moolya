@@ -24,6 +24,10 @@ export default class MlAppHeader extends Component {
             'placement' : 'bottom',
             'content' : $(".ml_app_notification").html()
         });
+        // if(WinWidth > 768){
+        //     $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});
+        // }
+
     }
 
     render(){
@@ -35,6 +39,19 @@ export default class MlAppHeader extends Component {
                     <a href="/app/appDashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
                     <a id="notification" data-placement="top" data-class="large_popover" href="#" className="pull-right notification ripple"> <div className="noti_count">2</div><FontAwesome name='bell-o'/></a>
                     <a href="#" className="pull-right header_search"><FontAwesome name='search'/></a>
+                    <div style={{'display':'none'}} className="ml_app_notification">
+                        <ul className="unstyled">
+                            <li>
+                                <a href="#">Messaggio di notifica un po più lungo del normale</a>
+                            </li>
+                            <li>
+                                <a href="#">Messaggio di notifica 2 un po più lungo del normale</a>
+                            </li>
+                            <li>
+                                <a href="#">Messaggio di notifica un po più lungo del normale</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div className="ml_app_profile" role="navigation">
                     <h1 id="NavLbl" className=""></h1>

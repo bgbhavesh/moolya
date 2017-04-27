@@ -20,7 +20,7 @@ export default class AppLayout extends Component{
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                 </MetaTags>
                 <ApolloProvider client={appClient}>
-                    <div className="moolya_admin">
+                    <div className="moolya_app">
                         <MlAppLayout {...this.props}/>
                     </div>
                 </ApolloProvider>

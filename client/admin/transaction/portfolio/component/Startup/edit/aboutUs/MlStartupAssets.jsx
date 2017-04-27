@@ -5,25 +5,24 @@ import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
+import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
 
 
 export default class MlStartupAssets extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
-      loading: true,
+      loading: false,
       data:{},
       startupAssets:this.props.assetsDetails || [],
       startupAssetsList:this.props.assetsDetails || [],
       popoverOpen:false,
-      arrIndex:"",
-      indexArray:[],
+      selectedIndex:-1,
       selectedAssetType:null,
       selectedAsset:"default"
     }
@@ -46,36 +45,26 @@ export default class MlStartupAssets extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupAssetsList:this.state.startupAssets})
-    this.setState({popoverOpen : false})
+    this.setState({startupAssetsList:this.state.startupAssets,popoverOpen : false})
   }
+
   addAsset(){
-    this.setState({selectedAsset : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
+    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupAssets){
-      this.setState({arrIndex:this.state.startupAssets.length})
+      this.setState({selectedIndex:this.state.startupAssets.length})
     }else{
-      this.setState({arrIndex:0})
+      this.setState({selectedIndex:0})
     }
   }
+
   onSelectAsset(index, e){
     let cloneArray = _.cloneDeep(this.state.startupAssets);
-    let assetDetails = cloneArray[index];
-    assetDetails = _.omit(assetDetails, "__typename");
-    if(assetDetails && assetDetails.logo){
-      delete assetDetails.logo['__typename'];
+    let details = cloneArray[index]
+    details = _.omit(details, "__typename");
+    if(details && details.logo){
+      delete details.logo['__typename'];
     }
-    this.setState({arrIndex:index});
-    this.setState({data:assetDetails})
-    this.setState({selectedAsset : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedAssetType" : assetDetails.assetType});
-    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.assetTypeId});
   }
 
   onLockChange(field, e){
@@ -92,6 +81,7 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
+
   onStatusChangeNotify(e)
   {
     let updatedData = this.state.data||{};
@@ -126,55 +116,71 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
-  assetTypeOptionSelected(selectedIndex,handler,selectedObj){
-
+  assetTypeOptionSelected(selectedId){
     let details =this.state.data;
-    details=_.omit(details,["assetType"],["assetTypeId"]);
-    details=_.extend(details,{["assetType"]:selectedObj.label},{["assetTypeId"]:selectedIndex});
+    details=_.omit(details,["assetTypeId"]);
+    details=_.extend(details,{["assetTypeId"]: selectedId});
     this.setState({data:details}, function () {
-      this.setState({"selectedAssetType" : selectedIndex})
+      this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
-
   }
+
   sendDataToParent(){
-     let data = this.state.data;
-    let startupAssets1 = this.state.startupAssets;
-    let startupAssets = _.cloneDeep(startupAssets1);
-    startupAssets[this.state.arrIndex] = data;
-    let assetsArr = [];
-    _.each(startupAssets, function (item) {
+    let data = this.state.data;
+    let assets = this.state.startupAssets;
+    let startupAssets = _.cloneDeep(assets);
+    data.index = this.state.selectedIndex;
+    startupAssets[this.state.selectedIndex] = data;
+    let arr = [];
+    _.each(startupAssets, function (item)
+    {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
-      if(item && item.logo){
-        delete item.logo['__typename'];
-      }
-      assetsArr.push(newItem)
+      newItem = _.omit(item, "__typename");
+      let updateItem = _.omit(newItem, 'logo');
+      arr.push(updateItem)
     })
-    startupAssets = assetsArr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
+    startupAssets = arr;
     this.setState({startupAssets:startupAssets})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupAssets(startupAssets,indexArray);
+    this.props.getStartupAssets(startupAssets);
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(resp){
     if(resp){
-      let result = JSON.parse(resp);
+      let result = JSON.parse(resp)
       if(result.success){
-        this.setState({startupAssetsList:this.state.startupAssets})
+        this.setState({loading:true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+
+  async fetchOnlyImages(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupAssets
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response.assets[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupAssets:cloneBackUp });
+      }else {
+        this.setState({loading: false})
       }
     }
   }
@@ -186,11 +192,12 @@ export default class MlStartupAssets extends React.Component{
       }
     }`;
     let that = this;
+    const showLoader = that.state.loading;
     let assetsArray = that.state.startupAssetsList || [];
     return(
       <div>
-
         <h2>Assets</h2>
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="requested_input main_wrap_scroll">
 
           <ScrollArea
@@ -226,7 +233,6 @@ export default class MlStartupAssets extends React.Component{
 
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedAsset} toggle={this.toggle}>
-           {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
             <PopoverContent>
               <div  className="ml_create_client">
                 <div className="medium-popover"><div className="row">
@@ -238,7 +244,7 @@ export default class MlStartupAssets extends React.Component{
                                     labelKey={'label'} queryType={"graphql"} query={assetsQuery}
                                     isDynamic={true}
                                     onSelect={this.assetTypeOptionSelected.bind(this)}
-                                    selectedValue={this.state.selectedAssetType}/>
+                                    selectedValue={this.state.selectedVal}/>
                     </div>
 
                     <div className="form-group">
@@ -269,14 +275,7 @@ export default class MlStartupAssets extends React.Component{
               </div>
             </PopoverContent>
           </Popover>
-
-
-
-
-
-        </div>
-
-
+        </div>)}
       </div>
     )
   }

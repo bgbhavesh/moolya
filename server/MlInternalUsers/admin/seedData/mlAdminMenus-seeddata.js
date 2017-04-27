@@ -457,7 +457,19 @@ if(Meteor.isServer){
         "name" : "templates",
         "isLink" : true,
         "isMenu" : true,
-        "uniqueId" : "services"
+        "uniqueId" : "templates",
+        "subMenu": [
+          {
+            "link": "/admin/templates/templateList",
+            "name": "Template List",
+            "uniqueId": "templates_List",
+            "subMenuMappingId":"",
+            "subMenusId":"templates",
+            "isLink": true,
+            "isMenu": false,
+            "image": ""
+          }
+        ]
       },
       {
         "image" : "/images/cluster_icon.png",
@@ -789,11 +801,22 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/templatesList",
             "name" : "Templates",
-            "uniqueId" : "settings_templatesList",
+            "uniqueId" : "settings_templates",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
-            subMenu:[]
+            subMenu:[
+              {
+                "link": "/admin/settings/templatesList",
+                "name": "List Templates",
+                "uniqueId": "settings_templatesList",
+                "subMenuMappingId":"settings_templates",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+            ]
           },
           {
             "image" : "/images/cluster_icon.png",
@@ -1014,7 +1037,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/settings/userTypeList",
-            "name" : "User Types",
+            "name" : "User Categories",
             "uniqueId" : "settings_userTypes",
             "isLink" : true,
             "isMenu" : true,
@@ -1723,6 +1746,44 @@ if(Meteor.isServer){
                 "name": "Edit Technology",
                 "uniqueId": "settings_Edittechnology",
                 "subMenuMappingId":"settings_technologies",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
+            "link" : "/admin/settings/fundingTypeList",
+            "name" : "Funding Type",
+            "uniqueId" : "settings_FundingType",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addFundingType",
+              "name": "Add Funding Type",
+              "uniqueId": "settings_AddFundingType",
+              "subMenuMappingId":"settings_FundingType",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": true,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/fundingTypeList",
+                "name": "List Funding Types",
+                "uniqueId": "settings_FundingTypeList",
+                "subMenuMappingId":"settings_FundingType",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editFundingType",
+                "name": "Edit Funding Type",
+                "uniqueId": "settings_EditFundingType",
+                "subMenuMappingId":"settings_FundingType",
                 "subMenusId":"settings",
                 "isLink": true,
                 "isMenu": true,

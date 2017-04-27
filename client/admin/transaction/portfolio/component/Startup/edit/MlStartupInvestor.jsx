@@ -22,9 +22,9 @@ export default class MlStartupInvestor extends React.Component{
       data:{},
       startupInvestor: [],
       popoverOpen:false,
-      index:"",
+      // index:"",
+      selectedIndex:-1,
       startupInvestorList:[],
-      indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -47,8 +47,8 @@ export default class MlStartupInvestor extends React.Component{
   }
   async fetchPortfolioDetails() {
     let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findStartupInvestorDetailsActionHandler(portfoliodetailsId);
+    let portfolioDetailsId=that.props.portfolioDetailsId;
+    const response = await findStartupInvestorDetailsActionHandler(portfolioDetailsId);
     if (response) {
       this.setState({loading: false, startupInvestor: response, startupInvestorList: response});
     }
@@ -58,28 +58,26 @@ export default class MlStartupInvestor extends React.Component{
     this.setState({popoverOpen : !(this.state.popoverOpen)})
     this.setState({data : {}})
     if(this.state.startupInvestor){
-      this.setState({index:this.state.startupInvestor.length})
+      // this.setState({index:this.state.startupInvestor.length})
+      this.setState({selectedIndex:this.state.startupInvestor.length})
     }else{
-      this.setState({index:0})
+      // this.setState({index:0})
+      this.setState({selectedIndex:0})
     }
   }
-  onSelect(index, e){
+  onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.startupInvestor);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({index:index});
-    this.setState({data:details})
-    this.setState({selectedObject : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedVal" : details.fundingType});
-    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    this.setState({selectedIndex: index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen),"selectedVal" : details.fundingTypeId});
+    // let indexes = this.state.indexArray;    //index:index,
+    // let indexArray = _.cloneDeep(indexes)
+    // indexArray.push(index);
+    // indexArray = _.uniq(indexArray);
+    // this.setState({indexArray: indexArray})
   }
 
 
@@ -113,13 +111,12 @@ export default class MlStartupInvestor extends React.Component{
     })
   }
 
-  onOptionSelected(selectedIndex,handler,selectedObj){
-
+  onOptionSelected(selectedId){
     let details =this.state.data;
-    details=_.omit(details,["fundingType"],["fundingTypeId"]);
-    details=_.extend(details,{["fundingType"]:selectedObj.label},{["fundingTypeId"]:selectedIndex});
+    details=_.omit(details,["fundingTypeId"]);
+    details=_.extend(details,{["fundingTypeId"]:selectedId});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedIndex})
+      this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
 
@@ -134,14 +131,15 @@ export default class MlStartupInvestor extends React.Component{
     })
   }
   onSaveAction(e){
-    this.setState({startupInvestorList:this.state.startupInvestor})
-    this.setState({popoverOpen : false})
+    this.setState({startupInvestorList:this.state.startupInvestor, popoverOpen : false})
   }
+
   sendDataToParent(){
     let data = this.state.data;
     let startupInvestor1 = this.state.startupInvestor;
     let startupInvestor = _.cloneDeep(startupInvestor1);
-    startupInvestor[this.state.index] = data;
+    data.index = this.state.selectedIndex;
+    startupInvestor[this.state.selectedIndex] = data;    //startupInvestor[this.state.index] = data;
     let arr = [];
     _.each(startupInvestor, function (item) {
       for (var propName in item) {
@@ -156,10 +154,9 @@ export default class MlStartupInvestor extends React.Component{
       arr.push(newItem)
     })
     startupInvestor = arr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupInvestor:startupInvestor})
-    let indexArray = this.state.indexArray;
-    this.props.getInvestorDetails(startupInvestor,indexArray);
+    // let indexArray = this.state.indexArray;
+    this.props.getInvestorDetails(startupInvestor);
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -167,33 +164,52 @@ export default class MlStartupInvestor extends React.Component{
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:[{logo:{fileUrl:'', fileName : fileName}}]},indexArray:this.state.indexArray};
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){
     if(resp){
       let result = JSON.parse(resp);
       if(result.success){
-        this.setState({startupAssetsList:this.state.startupAssets})
+        this.setState({loading:true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+
+  async fetchOnlyImages(){
+    const response = await findStartupInvestorDetailsActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupInvestor
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupInvestor:cloneBackUp });
+      }else {
+        this.setState({loading: false})
       }
     }
   }
 
   render(){
     let query=gql`query{
-      data:fetchTechnologies {
+      data:fetchFundingTypes {
         label:displayName
         value:_id
       }
     }`;
     let that = this;
+    const showLoader = that.state.loading;
     let investorsArray = that.state.startupInvestorList || [];
     return (
       <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Investor</h2>
           <div className="requested_input main_wrap_scroll">
-
             <ScrollArea
               speed={0.8}
               className="main_wrap_scroll"
@@ -211,20 +227,17 @@ export default class MlStartupInvestor extends React.Component{
                     </a>
                   </div>
                   {investorsArray.map(function (details, idx) {
-                    return(<div className="col-lg-2 col-md-3 col-sm-3">
+                    return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a href="#" id={"create_client"+idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
-                          <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                           <h3>{details.description}</h3>
                         </div>
                       </a>
                     </div>)
                   })}
-
-
-
                 </div>
               </div>
 
@@ -273,14 +286,8 @@ export default class MlStartupInvestor extends React.Component{
                 </div>
               </PopoverContent>
             </Popover>
-
-
-
-
           </div>
-        </div>
-
-
+        </div>)}
       </div>
     )
   }

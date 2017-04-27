@@ -18,7 +18,7 @@ class MlPortfolio extends React.Component{
   constructor(props){
     super(props)
     this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false,
-      annotationData: {},commentsData:[], popoverOpen: false, saveButton:false, indexArray:[]}
+      annotationData: {},commentsData:[], popoverOpen: false, saveButton:false}
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -78,15 +78,14 @@ class MlPortfolio extends React.Component{
   }
 
   async fetchEditPortfolioTemplate(pId) {
-    let userType = this.context.userType;
-    const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType});
-    this.setState({editComponent:reg&&reg.component?reg.component:null});
+      let userType = this.context.userType;
+      const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:"external"});
+      this.setState({editComponent:reg&&reg.component?reg.component:null});
   }
 
   async fetchViewPortfolioTemplate(id) {
-    //const reg= await fetchTemplateHandler({process:"Portfolio",subProcess:"Portfolio", stepCode:"Portfolio", recordId:""});
     let userType = this.context.userType;
-    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:userType});
+    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:"external"});
     this.setState({editComponent:reg&&reg.component?reg.component:null});
   }
 
@@ -127,8 +126,8 @@ class MlPortfolio extends React.Component{
     }
   }
 
-  getPortfolioDetails(details, indexArray){
-    this.setState({portfolio:details, indexArray:indexArray});
+  getPortfolioDetails(details){
+    this.setState({portfolio:details});
   }
 
   async updatePortfolioDetails() {
@@ -136,8 +135,7 @@ class MlPortfolio extends React.Component{
       portfolioId :this.props.config,
       portfolio :this.state.portfolio
     }
-    let indexArray = this.state.indexArray;
-    const response = await updatePortfolioActionHandler(jsonData, indexArray)
+    const response = await updatePortfolioActionHandler(jsonData)
     return response;
   }
 
@@ -208,12 +206,7 @@ class MlPortfolio extends React.Component{
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div>
           </div>)}
-
         <div className="overlay"></div>
-        <div>
-          {/*<Button id="Popover1">
-           Launch Popover
-           </Button>*/}
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
             <PopoverTitle>Portfolio Annotations</PopoverTitle>
             <PopoverContent>
@@ -274,7 +267,6 @@ class MlPortfolio extends React.Component{
               <div className="overlay"></div>
             </PopoverContent>
           </Popover>
-        </div>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )

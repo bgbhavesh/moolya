@@ -149,7 +149,7 @@ let startupPortfolioSchema = `
     }
     
     type lookingForOutput{
-        type:String,
+        lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
         description:String,
@@ -192,7 +192,7 @@ let startupPortfolioSchema = `
     }
     
     type awardsRecognitionOutput{
-          award:String
+          awardName:String
           awardId:String
           isAwardPrivate:Boolean
           year:String

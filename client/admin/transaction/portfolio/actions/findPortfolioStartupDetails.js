@@ -232,6 +232,7 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
+                lookingForName,
                 typeId,
                 isTypePrivate
                 description
@@ -264,6 +265,7 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
                   awardId
+                  awardName
                   index
                   isAwardPrivate
                   year

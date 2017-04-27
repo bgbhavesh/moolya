@@ -114,7 +114,7 @@ export default class MlStartupViewTechnologies extends React.Component {
                   <div className="team-block">
                     <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
                     <h3>
-                      {details.technologyName} <br />
+                      {details.technologyName&&details.technologyName} <br />
                     </h3>
                   </div>
                 </div>)

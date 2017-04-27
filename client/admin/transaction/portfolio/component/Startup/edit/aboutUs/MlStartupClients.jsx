@@ -219,7 +219,7 @@ export default class MlStartupClients extends React.Component{
                         <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                         {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
-                        <h3>{details.description} </h3>
+                        <h3>{details.companyName?details.companyName:""} </h3>
                       </div>
                     </a>
                   </div>)

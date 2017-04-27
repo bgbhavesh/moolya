@@ -143,6 +143,15 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLookingFor'] = (obj, args, cont
   if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('lookingFor')) {
+      if(portfolio && portfolio['lookingFor']){
+        portfolio.lookingFor.map(function(lookingFor,index) {
+          if(portfolio.lookingFor[index]){
+            let lookingForData = MlLookingFor.findOne({"_id" : lookingFor.typeId}) || {};
+            portfolio.lookingFor[index].lookingForName = lookingForData.lookingForDisplayName || "";
+          }
+
+        })
+      }
       return portfolio['lookingFor'];
     }
   }
@@ -154,6 +163,15 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAwards'] = (obj, args, context,
   if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
+      if(portfolio && portfolio['awardsRecognition']){
+        portfolio.awardsRecognition.map(function(awards,index) {
+          if(portfolio.awardsRecognition[index]){
+            let awardData = MlAwards.findOne({"_id" : awards.awardId}) || {};
+            portfolio.awardsRecognition[index].awardName = awardData.awardDisplayName || "";
+          }
+
+        })
+      }
       return portfolio['awardsRecognition'];
     }
   }

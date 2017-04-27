@@ -118,12 +118,12 @@ export default class MlStartupLookingFor extends React.Component{
     })
   }
 
-  onOptionSelected(selectedIndex){
+  onOptionSelected(selectedId){
     let details =this.state.data;
     details=_.omit(details,["typeId"]);
-    details=_.extend(details,{["typeId"]:selectedIndex});   //{["type"]:selectedObj.label},
+    details=_.extend(details,{["typeId"]:selectedId});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedIndex})
+      this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
   }
@@ -142,6 +142,7 @@ export default class MlStartupLookingFor extends React.Component{
     let data = this.state.data;
     let startupLookingFor1 = this.state.startupLookingFor;
     let startupLookingFor = _.cloneDeep(startupLookingFor1);
+    data.index = this.state.selectedIndex;
     startupLookingFor[this.state.selectedIndex] = data;                 //startupLookingFor[this.state.index] = data;
     let arr = [];
     _.each(startupLookingFor, function (item) {

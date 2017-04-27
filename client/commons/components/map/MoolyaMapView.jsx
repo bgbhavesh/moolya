@@ -16,10 +16,10 @@ export default class MoolyaMapView extends Component {
     super(props);
   }
   async componentWillMount() {
-
-    let hasCenter=this.props.fetchCenter||false;
+    let that = this;
+    let hasCenter=that.props.fetchCenter||false;
     if(hasCenter){
-      let center= await this.props.fetchCenterHandler();
+      let center= await that.props.fetchCenterHandler(that.props);
       this.setState({center:center||defaultCenter,zoom:1});
      }else{
       this.setState({

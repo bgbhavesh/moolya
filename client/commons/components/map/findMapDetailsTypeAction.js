@@ -23,16 +23,21 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
   return totalResult
 }
 
-export async function fetchDefaultCenterOfUser() {
+export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
+  let did=ModuleTypeDetails
   let result = await client.query({
     query: gql`
-        query{
-         data:fetchMapCenterCordsForUser{
+        query($module: String, $id: String){
+         data:fetchMapCenterCordsForUser(module: $module, id: $id){
           lat
           lng
       }
     }
     `,
+    variables: {
+      id:did.id,
+      module:did.moduleName
+    },
     forceFetch:true
   });
   result=result&&result.data&&result.data.data?result.data.data:null;

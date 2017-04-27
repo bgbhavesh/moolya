@@ -5,7 +5,7 @@ export async function addFundingType(fundingTypeObj)
 {
   const result = await client.mutate({
     mutation: gql`
-            mutation($fundingType:fundingType){
+            mutation($fundingType:fundingTypeInput){
                 createFundingType(fundingType:$fundingType){
                     result,
                     success,

@@ -7,7 +7,7 @@ export async function findFundingTypeActionHandler(fid) {
     query: gql`
           query  ($fundingTypeId: String){
               fetchFundingType(fundingTypeId:$fundingTypeId){
-                  technologyName,
+                  fundingTypeName,
                   displayName,
                   about,
                   icon,

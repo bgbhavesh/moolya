@@ -58,7 +58,14 @@ if(identity === "Individual"){
 if(identity === "Company"){
   this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
   $('#indi').hide();
+
 }
+  if(identity === null){
+    this.setState({defaultIdentityCompany: false, defaultIdentityIndividual:false})
+    i = 0;
+
+  }
+
 
 }
 

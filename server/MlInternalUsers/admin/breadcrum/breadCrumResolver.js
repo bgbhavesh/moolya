@@ -2,7 +2,7 @@
  * Created by mohammed.mohasin on 09/03/2017.
  */
 
-import MlResolver from '../mlAdminResolverDef'
+import MlResolver from '../../../commons/mlResolverDef'
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
 
 

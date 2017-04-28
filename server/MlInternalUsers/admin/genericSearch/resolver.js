@@ -1,4 +1,4 @@
-import MlResolver from '../mlAdminResolverDef'
+import MlResolver from '../../../commons/mlResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
 
 let mergeQueries=function(userFilter,serverFilter){

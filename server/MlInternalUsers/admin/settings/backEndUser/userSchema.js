@@ -2,7 +2,7 @@
  * Created by muralidhar on 14/02/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../mlAdminSchemaDef'
+import MlSchemaDef from '../../../../commons/mlSchemaDef'
 let BackEndUser = `
 
     type BackendUsers{

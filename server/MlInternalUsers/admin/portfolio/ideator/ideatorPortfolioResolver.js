@@ -1,7 +1,7 @@
 /**
  * Created by venkatasrinag on 3/4/17.
  */
-import MlResolver from '../../mlAdminResolverDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 var extendify = require('extendify');

@@ -1,7 +1,7 @@
 /**
  * Created by venkatasrinag on 6/4/17.
  */
-import MlResolver from "../mlAdminResolverDef";
+import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import _ from "lodash";
 

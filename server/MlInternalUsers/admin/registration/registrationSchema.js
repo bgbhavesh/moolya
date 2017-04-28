@@ -1,5 +1,5 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef';
+import MlSchemaDef from '../../../commons/mlSchemaDef';
 
 let registrationSchema = `        
     
@@ -168,7 +168,7 @@ let registrationSchema = `
         deviceNumber    :   String,
         ipAddress       :   String,
         ipLocation      :   String,  
-        registrationDate:   Date,
+        registrationDate:   String,
         userId          :   String,
         registrationStatus        :   String,
         assignedUser    :   String,
@@ -227,7 +227,7 @@ let registrationSchema = `
         deviceNumber    :   String,
         ipAddress       :   String,
         ipLocation      :   String,  
-        registrationDate:   Date,
+        registrationDate:   String,
         userId          :   String,
         registrationStatus        :   String,
         assignedUser    :   String,
@@ -405,10 +405,16 @@ let registrationSchema = `
          RemoveFileFromDocuments(fileId:String,docTypeId:String,documentId:String,moduleName:String!,actionName:String!, registrationId:String!):response
          ApprovedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
          RejectedStatusForUser(moduleName:String!,actionName:String!, registrationId:String!):response
+         sendEmailVerificationForRegistration(registrationId:String):response
+         sendSmsVerificationForRegistration(registrationId:String):response
+         sendEmailVerification(userId:String):response
+         sendSmsVerification(userId:String):response
+         verifyEmail(token:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
         findRegistrationInfo(registrationId:String):RegistrationResponse
     }
+    
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);

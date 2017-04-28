@@ -48,7 +48,7 @@ import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader
 import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio'
 import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
 import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
-
+import MlTransactionApprovals from '../../admin/transaction/requests/components/MlTransactionApprovals'
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
   FlowRouter._askedToWait = true;
@@ -186,7 +186,7 @@ adminSection.route('/transactions/requestedList', {
 adminSection.route('/transactions/approvedList', {
   name: 'transaction_ApprovedList',
   action(){
-    mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
+    mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
   }
 });
 
@@ -286,10 +286,10 @@ adminSection.route('/transactions/portfolio/editRequests/:id/:communityType', {
   }
 });
 
-adminSection.route('/transactions/portfolio/viewPortfolio/:id', {
+adminSection.route('/transactions/portfolio/viewPortfolio/:id/:communityType', {
   name: 'transaction_portfolio_viewPortfolio',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id}/>})
+    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }
 });
 

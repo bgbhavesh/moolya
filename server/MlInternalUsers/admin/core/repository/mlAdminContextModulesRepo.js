@@ -49,7 +49,6 @@ export default CoreModulesRepo={
     return {totalRecords:totalRecords,data:data};
   },
   MlChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
-    //TODO:User Data Context Query
     let query=contextQuery;
     //User selection filter.
     let clusterId=requestParams&&requestParams.clusterId&&requestParams.clusterId!='all'?requestParams.clusterId:null;
@@ -62,7 +61,6 @@ export default CoreModulesRepo={
       if(_.indexOf(contextQuery._id, "all") < 0) {
         query = {_id: {$in: contextQuery._id}}
       }
-      // query = mergeQueries(query, contextQuery);
     }
 
     let citiesId=[];
@@ -73,7 +71,6 @@ export default CoreModulesRepo={
       citiesId.push(city._id);
     })
     let Chapters = MlChapters.find(query,fieldsProj).fetch();
-    // let Chapters = mlDBController.find('MlChapters', query, context, fieldsProj).fetch();
     citiesId.map(function (id){
       Chapters.map(function(chapter){
         if(chapter.cityId == id){
@@ -83,14 +80,10 @@ export default CoreModulesRepo={
     })
     const data = activeChapters;
     const totalRecords=MlChapters.find(query,fieldsProj).count();
-    // const totalRecords = mlDBController.find('MlChapters', query, context, fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
   },
   MlSubChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
-    //TODO:User Data Context Query
-    //Filter as applied by user.
-    // let contextQuery=contextQuery||{};
     let query=contextQuery;
     //User selection filter.
     let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
@@ -101,17 +94,11 @@ export default CoreModulesRepo={
           query = mergeQueries(query,contextQuery);
       }
     }
-    // else{ //added to handle subchapter for hierarchy
-    //   query={"clusterId":clusterId};
-    //   query = mergeQueries(query,contextQuery);
-    // }
 
     // if(contextQuery && contextQuery._id && contextQuery._id.length > 0)
     //   query = { _id: {$in : contextQuery._id}}
 
     const data= MlSubChapters.find(query,fieldsProj).fetch();
-    // const data = mlDBController.find('MlSubChapters', query, context, fieldsProj).fetch();
-    // const totalRecords=MlChapters.find(query,fieldsProj).count();
     const totalRecords = mlDBController.find('MlChapters', query, context, fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
@@ -174,4 +161,17 @@ export default CoreModulesRepo={
     return {totalRecords:totalRecords,data:data};
 
   },
+
+  MlHierarchySubChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
+    let query={};
+    //User selection filter.
+    let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
+    if(clusterId){
+      query={"clusterId":clusterId};
+    }
+    const data = mlDBController.find('MlSubChapters', query, context, fieldsProj).fetch();
+    const totalRecords = mlDBController.find('MlSubChapters', query, context, fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
+
+  }
 }

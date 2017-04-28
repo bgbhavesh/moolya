@@ -18,7 +18,7 @@ export default class MlStartupTab extends React.Component{
     super(props)
     this.state =  {tabs: [], portfolioStartupAboutUs:{}, portfolioStartupAssets:[],portfolioStartupClients:[],
                     portfolioStartupSP:{}, portfolioStartupInfo:{},portfolioStartupBranches:[],
-                    portfolioStartupTechnologies:[],portfolioStartupLegal:{}};
+                    portfolioStartupTechnologies:[],portfolioStartupLegal:{}, portfolioStartupRating:{}};
   }
 
   componentDidMount(){
@@ -30,6 +30,8 @@ export default class MlStartupTab extends React.Component{
       });
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
+      $('.last-item').addClass('menunone');
+      $('.RRT__panel').addClass('nomargintop');
       $('.horizon-swiper').horizonSwiper();
     },300);
   }
@@ -37,7 +39,7 @@ export default class MlStartupTab extends React.Component{
   getTabComponents(){
     let tabs = [
       {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlStartupAboutUs  key="1"  getStartupAboutUs={this.getStartupAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.aboutUs}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlStartupRating key="2"  portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.rating}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlStartupRating key="2" getStartupRating={this.getStartupRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.rating}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlStartupClients key="3" getStartupClients={this.getStartupClients.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} clientsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.clients}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlStartupSP key="4"  getStartupSP={this.getStartupServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.serviceProducts}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Information", component:<MlStartupInformation  key="5" getStartupInfo={this.getStartupInfo.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} informationDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.information}/>},
@@ -56,17 +58,17 @@ export default class MlStartupTab extends React.Component{
     this.setState({portfolioStartupAboutUs : data})
     this.props.getPortfolioStartupAboutUsDetails(data,"aboutUs");
   }
-  getStartupAssets(details,indexArray){
+  getStartupAssets(details){
     let data = this.state.portfolioStartupAssets;
     data = details;
     this.setState({portfolioStartupAssets : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"assets",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"assets");
   }
-  getStartupClients(details,indexArray){
+  getStartupClients(details){
     let data = this.state.portfolioStartupClients;
     data = details;
     this.setState({portfolioStartupClients : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"clients",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"clients");
   }
   getStartupServiceProducts(details){
     let data = this.state.portfolioStartupSP;
@@ -80,23 +82,29 @@ export default class MlStartupTab extends React.Component{
     this.setState({portfolioStartupInfo : data})
     this.props.getPortfolioStartupAboutUsDetails(data,"information");
   }
-  getStartupBranches(details,indexArray){
+  getStartupBranches(details){
     let data = this.state.portfolioStartupBranches;
     data = details;
     this.setState({portfolioStartupBranches : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"branches",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"branches");
   }
-  getStartupTechnology(details,indexArray){
+  getStartupTechnology(details){
     let data = this.state.portfolioStartupTechnologies;
     data = details;
     this.setState({portfolioStartupTechnologies : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"technologies",indexArray);
+    this.props.getPortfolioStartupAboutUsDetails(data,"technologies");
   }
   getStartupLegalIssue(details){
     let data = this.state.portfolioStartupLegal;
     data = details;
     this.setState({portfolioStartupLegal : data})
     this.props.getPortfolioStartupAboutUsDetails(data,"legalIssue");
+  }
+  getStartupRating(details){
+    let data = this.state.portfolioStartupRating;
+    data = details;
+    this.setState({portfolioStartupRating : data})
+    this.props.getPortfolioStartupAboutUsDetails(data,"rating");
   }
 
   componentWillMount()

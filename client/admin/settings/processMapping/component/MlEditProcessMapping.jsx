@@ -9,8 +9,6 @@ import formHandler from '../../../../commons/containers/MlFormHandler'
 import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {findProcessActionHandler} from '../actions/findProcessAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-
-
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import MlAssignDocument from './MlAssignDocument'
@@ -364,22 +362,6 @@ console.log(this.state.industries);
                       <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={professionquery}   queryOptions={professionOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
                     </div>
 
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
-                    </div>
-
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={statesQuery} queryOptions={stateOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
-                    </div>
-
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
-                    </div>
-
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
-                    </div>
-
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Over All Status</label>
                       <label className="switch">
@@ -398,7 +380,20 @@ console.log(this.state.industries);
           <div className="col-md-6 nopadding-right"  >
             <div className="form_bg" >
               <div className="left_wrap">
+                <form>
+                  <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
 
+
+
+                  <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={statesQuery}  queryOptions={stateOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
+
+
+
+                  <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+
+                  <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+
+                </form>
                 <ScrollArea
                   speed={0.8}
                   className="left_wrap"

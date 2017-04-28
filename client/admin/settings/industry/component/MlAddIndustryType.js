@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addIndustryActionHandler} from '../actions/addIndustryTypeAction'
 let FontAwesome = require('react-fontawesome');
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddIndustry extends React.Component{
   constructor(props) {
     super(props);
@@ -36,15 +37,20 @@ class MlAddIndustry extends React.Component{
   };
 
   async  createIndustry() {
-    let IndustryDetails = {
-      industryName: this.refs.industryName.value,
-      industryDisplayName: this.refs.industryDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let IndustryDetails = {
+        industryName: this.refs.industryName.value,
+        industryDisplayName: this.refs.industryDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await addIndustryActionHandler(IndustryDetails)
+      toastr.success("Industry created");
+      return response;
     }
-    const response = await addIndustryActionHandler(IndustryDetails)
-    return response;
-
   }
   render(){
     let MlActionConfig = [
@@ -75,10 +81,10 @@ class MlAddIndustry extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-              <div className="form-group">
-                <input type="text" ref="industryName" placeholder="Industry Name" className="form-control float-label"/>
+              <div className="form-group  mandatory">
+                <input type="text" ref="industryName" placeholder="Industry Name" className="form-control float-label"data-required={true} data-errMsg="Name is required"/>
               </div>
-              <div className="form-group">
+              <div className="form-group ">
                 <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
               </div>
               </form>
@@ -87,8 +93,8 @@ class MlAddIndustry extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-              <div className="form-group">
-                <input type="text" ref="industryDisplayName" placeholder="Display Name" className="form-control float-label"/>
+              <div className="form-group  mandatory">
+                <input type="text" ref="industryDisplayName" placeholder="Display Name" className="form-control float-label"data-required={true} data-errMsg="Display Name is required"/>
               </div>
               <div className="form-group switch_wrap inline_switch">
                 <label>Status</label>

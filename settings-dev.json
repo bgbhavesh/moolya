@@ -1,10 +1,15 @@
 {
+  "public": {
+    "graphqlUrl": "http://qa.moolya.in:2306/graphql",
+    "graphqlPort":8090,
+    "googleApiKey": "AIzaSyDnlajbJKYdilDs22Rvso9blSOj8KuL8-A"
+  },
   "private": {
       "subChapterName":"Moolya",
       "HierarchyCount": 10,
       "emailConfig":{
         "username": "raksanconsulting",
-        "key": "IMRne62ShKE6Q8zU0NJBsQ"
+        "key": "Nf3ELmF-BNk7yKEqI7Ma8w"
       },
      "smsConfig":{
        "isWhiteListEnabled":true
@@ -22,6 +27,10 @@
           "bucketName":"moolya-users/",
           "adminBucketKey":"moolya-admin-users"
         }
-      }
+      },
+     "googleApiKey": "AIzaSyDnlajbJKYdilDs22Rvso9blSOj8KuL8-A",
+    "smtpMailUrl":"smtp://qasmtp%40moolya.in:Moolya123@smtp.moolya.in:25",
+    "fromEmailAddr":"qasmtp@moolya.in",
+    "isEmailDomainCheckEnabled":true
   }
 }

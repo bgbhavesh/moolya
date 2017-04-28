@@ -4,25 +4,25 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
+import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+var FontAwesome = require('react-fontawesome');
 
 
 export default class MlStartupTechnology extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
-      loading: true,
+      loading: false,
       data:{},
       startupTechnologies:this.props.technologyDetails || [],
       popoverOpen:false,
-      index:"",
+      selectedIndex:-1,
       startupTechnologiesList:this.props.technologyDetails || [],
-      indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -45,33 +45,25 @@ export default class MlStartupTechnology extends React.Component{
     }
   }
   onSaveAction(e){
-    this.setState({startupTechnologiesList:this.state.startupTechnologies})
-    this.setState({popoverOpen : false})
+    this.setState({startupTechnologiesList:this.state.startupTechnologies,popoverOpen : false})
   }
   addTechnology(){
-    this.setState({selectedObject : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
+    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupTechnologies){
-      this.setState({index:this.state.startupTechnologies.length})
+      this.setState({selectedIndex:this.state.startupTechnologies.length})
     }else{
-      this.setState({index:0})
+      this.setState({selectedIndex:0})
     }
   }
 
-  onSelect(index, e){
-    let details = this.state.startupTechnologies[index]
+  onTileClick(index, e){
+    let cloneArray = _.cloneDeep(this.state.startupTechnologies);
+    let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    this.setState({index:index});
-    this.setState({data:details})
-    this.setState({selectedObject : index})
-    this.setState({popoverOpen : !(this.state.popoverOpen)});
-    this.setState({"selectedVal" : details.technology});
-    let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})
+    if(details && details.logo){
+      delete details.logo['__typename'];
+    }
+    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.technologyId});
   }
 
   onLockChange(field, e){
@@ -104,13 +96,12 @@ export default class MlStartupTechnology extends React.Component{
     })
   }
 
-  onOptionSelected(selectedIndex,handler,selectedObj){
-
+  onOptionSelected(selectedId){
     let details =this.state.data;
-    details=_.omit(details,["technology"]);
-    details=_.extend(details,{["technology"]:selectedIndex});
+    details=_.omit(details,["technologyId"]);
+    details=_.extend(details,{["technologyId"]: selectedId});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedIndex})
+      this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
 
@@ -127,25 +118,63 @@ export default class MlStartupTechnology extends React.Component{
   }
   sendDataToParent(){
     let data = this.state.data;
-    let startupTechnologies1 = this.state.startupTechnologies;
-    let startupTechnologies = _.cloneDeep(startupTechnologies1);
-    startupTechnologies[this.state.index] = data;
+    let technologies = this.state.startupTechnologies;
+    let startupTechnologies = _.cloneDeep(technologies);
+    data.index = this.state.selectedIndex;
+    startupTechnologies[this.state.selectedIndex] = data;
     let arr = [];
-    _.each(startupTechnologies, function (item) {
+    _.each(startupTechnologies, function (item)
+    {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
-      arr.push(newItem)
+      newItem = _.omit(item, "__typename");
+      let updateItem = _.omit(newItem, 'logo');
+      arr.push(updateItem)
     })
     startupTechnologies = arr;
-    // startupManagement=_.extend(startupManagement[this.state.arrIndex],data);
     this.setState({startupTechnologies:startupTechnologies})
-    let indexArray = this.state.indexArray;
-    this.props.getStartupTechnology(startupTechnologies,indexArray);
+    /*let indexArray = this.state.indexArray;*/
+    this.props.getStartupTechnology(startupTechnologies);
   }
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{technologies:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+  }
+  onFileUploadCallBack(resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+        this.setState({loading:true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+
+  async fetchOnlyImages(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupTechnologies
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response.technologies[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupTechnologies:cloneBackUp });
+      }else {
+        this.setState({loading: false})
+      }
+    }
+  }
+
   render(){
     let query=gql`query{
       data:fetchTechnologies {
@@ -154,12 +183,13 @@ export default class MlStartupTechnology extends React.Component{
       }
     }`;
     let that = this;
+    const showLoader = that.state.loading;
     let technologiesArray = that.state.startupTechnologiesList || [];
     return (
       <div>
         <h2>Technology</h2>
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="requested_input main_wrap_scroll">
-
           <ScrollArea
             speed={0.8}
             className="main_wrap_scroll"
@@ -178,31 +208,27 @@ export default class MlStartupTechnology extends React.Component{
                 </div>
 
                 {technologiesArray.map(function (details, idx) {
-                  return(<div className="col-lg-2 col-md-3 col-sm-3">
+                  return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
-                        <div className="hex_outer" onClick={that.onSelect.bind(that, idx)}><img src="/images/meteor-logo.png"/></div>
-                        <h3>{details.description}</h3>
+                        <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+
+                        <h3>{details.technologyName?details.technologyName:" "}</h3>
                       </div>
                     </a>
                   </div>)
                 })}
-
               </div>
             </div>
-
           </ScrollArea>
-
           <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
             {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
             <PopoverContent>
               <div className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
-
-
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                     labelKey={'label'} queryType={"graphql"} query={query}
@@ -218,6 +244,14 @@ export default class MlStartupTechnology extends React.Component{
                     </div>
 
                     <div className="form-group">
+                      <div className="fileUpload mlUpload_btn">
+                        <span>Upload Logo</span>
+                        <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
+
+                    <div className="form-group">
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
@@ -228,13 +262,7 @@ export default class MlStartupTechnology extends React.Component{
               </div>
             </PopoverContent>
           </Popover>
-
-
-
-
-        </div>
-
-
+        </div>)}
       </div>
     )
   }

@@ -9,7 +9,6 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioManagement(portfoliodetailsId: $portfoliodetailsId) {
                title
-               logo
                isTitlePrivate
                firstName
                isFirstNamePrivate
@@ -41,6 +40,11 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
                isLinkedInUrlPrivate
                about 
                isAboutPrivate
+                logo{
+                  fileName
+                  fileUrl
+                }
+                index
             }
           }
 
@@ -52,9 +56,11 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
   })
   console.log(result)
   const id = result.data.fetchStartupPortfolioManagement;
+  let managementArray = [];
+  managementArray=_.map(id, function (row) {return _.omit(row, ['__typename'])});
   // let data = _.omit(id,'__typename')
   // return data
-  return id
+  return managementArray;
 }
 
 export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
@@ -72,12 +78,20 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                   annotatorId
                 }
+                rating{
+                  rating
+                }
                 clients{
-                  description
-                  isDescriptionPrivate
                   companyName
                   isCompanyNamePrivate
+                  description
+                  isDescriptionPrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                   makePrivate
+                  index
                 }
                 serviceProducts{
                   description
@@ -88,15 +102,22 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                 }
                 assets{
-                  assetType
+                  assetTypeId
+                  assetName
                   quantity
                   description
                   isAssetTypePrivate
                   isQuantityTypePrivate
                   isDescriptionPrivate
                   makePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
+                  index
                 }
                 branches{
+                  addressTypeId
                   name
                   isNamePrivate
                   phoneNumber
@@ -117,17 +138,31 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isCountryPrivate
                   addressImage
                   makePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
+                  index
                 }
                 technologies{
-                  technology
+                  technologyName
+                  technologyId
                   isTechnologyPrivate
                   description
                   isDescriptionPrivate
                   makePrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
+                  index
                 }
                 legalIssue{
                   description
                   isDescriptionPrivate
+                }
+                rating{
+                  rating
                 }
             }
           }
@@ -150,6 +185,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   aboutUsArray["technologies"]=_.map(data.technologies, function (row) {return _.omit(row, ['__typename'])});
   aboutUsArray["legalIssue"]=_.omit(data.legalIssue,'__typename');
   aboutUsArray["assets"]=_.map(data.assets, function (row) {return _.omit(row, ['__typename'])});
+  aboutUsArray["rating"]=_.omit(data.rating,'__typename');
 
   return aboutUsArray
 }
@@ -161,15 +197,18 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioInvestor(portfoliodetailsId: $portfoliodetailsId) {
                 name
-                fundingType
+                fundingTypeId
                 investmentAmount
-                
                 description
                 isNamePrivate
-               
                 isInvestmentAmountPrivate
                 isDescriptionPrivate
+                logo{
+                    fileName
+                    fileUrl
+                  }
                 makePrivate
+                index
             }
           }
 
@@ -191,10 +230,16 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
-                type,
+                lookingForName,
+                typeId,
                 isTypePrivate
                 description
                 isDescriptionPrivate
+                logo{
+                    fileName
+                    fileUrl
+                  }
+                index
                 makePrivate
             }
           }
@@ -217,12 +262,17 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
-                  award
+                  awardId
+                  index
                   isAwardPrivate
                   year
                   isYearPrivate
                   description
                   isDescriptionPrivate
+                  logo{
+                    fileName
+                    fileUrl
+                  }
                   makePrivate
             }
           }
@@ -237,4 +287,70 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
   // let data = _.omit(id,'__typename')
   // return data
   return id
+}
+export async function fetchStartupPortfolioMemberships(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioMemberships(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioMemberships;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
+}
+export async function fetchStartupPortfolioCompliances(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioCompliances(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioCompliances;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
+}
+export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioLicenses(portfoliodetailsId: $portfoliodetailsId) {
+                  description
+                  isDescriptionPrivate
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchStartupPortfolioLicenses;
+  let data = _.omit(id,'__typename')
+  return data
+  // return id
 }

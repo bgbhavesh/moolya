@@ -1,5 +1,5 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef'
+import MlSchemaDef from '../../../commons/mlSchemaDef'
 let Menu = `
     type Menu{
       image: String
@@ -24,6 +24,7 @@ let Menu = `
     }
     type Query {
         FetchMenu(image: String, link: String, name: String, id: String, isLink: Boolean, isMenu: Boolean): MlMenu
+        fetchExternalUserMenu(image: String, link: String, name: String, id: String, isLink: Boolean, isMenu: Boolean): MlMenu
     }
 `
 

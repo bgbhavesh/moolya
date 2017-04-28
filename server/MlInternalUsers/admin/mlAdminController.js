@@ -12,9 +12,9 @@ import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
 
-import getContext from './mlAuthContext'
-import MlResolver from './mlAdminResolverDef';
-import MlSchemaDef from './mlAdminSchemaDef';
+import getContext from '../../commons/mlAuthContext'
+import MlResolver from '../../commons/mlResolverDef';
+import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
@@ -176,19 +176,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                       for (key1 in inner){
                                           let file = inner[key1]
                                           if(typeof file == 'object'){
-                                              for (key2 in file){
-                                                 file[key2].fileUrl = resp;
-                                              }
+                                            for (key2 in file){
+                                              file[key2].fileUrl = resp;
+                                            }
                                           }
                                       }
                                   }
                               }
+                              console.log(clientPortfolio);
                               switch (details.communityType){
                                   case 'Ideators':
                                       portfolio = {portfolio:{ideatorPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                                   case 'Startups':
-                                      portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                    portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
                               }
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)

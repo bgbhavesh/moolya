@@ -1,5 +1,5 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../mlAdminSchemaDef'
+import MlSchemaDef from '../../../../commons/mlSchemaDef'
 let TemplateAssignment = `        
     type SubProcess{
             _id             : String
@@ -36,6 +36,8 @@ let TemplateAssignment = `
             assignedTemplates         : [template]    
             createdBy                 : String      
             createdDate               : String  
+            modifiedBy                : String      
+            modifiedDate              : String
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String
@@ -69,6 +71,8 @@ let TemplateAssignment = `
             assignedTemplates         : [stepInput]    
             createdBy                 : String      
             createdDate               : String  
+            modifiedBy                : String      
+            modifiedDate              : String 
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String

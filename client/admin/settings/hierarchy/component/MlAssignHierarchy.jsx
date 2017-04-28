@@ -12,7 +12,7 @@ var FontAwesome = require('react-fontawesome');
 import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
 import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
 import {findFinalApprovalRoleActionHandler} from '../actions/findFinalApprovalRoleAction'
-
+import _ from 'lodash'
 var assignedParent = [
   {
     value: 'cluster',    label: 'cluster'
@@ -65,13 +65,7 @@ export default class MlAssignHierarchy extends React.Component {
     let clusterId = this.props.clusterId;
     const response = await findFinalApprovalRoleActionHandler(departmnetId,subDepartmentId,clusterId);
     if(response){
-      let json = {
-        id: response._id,
-        department: response.department,
-        subDepartment: response.subDepartment,
-        role: response.role
-      }
-      this.setState({loading:false,finalApproval:json})
+      this.setState({loading:false,finalApproval:response.finalApproval})
     }
     return response
   }
@@ -136,7 +130,8 @@ export default class MlAssignHierarchy extends React.Component {
       this.props.getUnAssignRoleDetails(roles)
   }
   optionsBySelectAssignedParentNode(index, value){
-      let roles=this.state.assignedRoles
+    let roles = _.cloneDeep(this.state.assignedRoles);
+    //  let roles=this.state.assignedRoles
       roles.teamStructureAssignment[index].assignedLevel = value.value
       if( value.value=="unassign"){
         roles.teamStructureAssignment[index].isAssigned = false

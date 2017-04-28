@@ -51,7 +51,7 @@ export default class MlRequestedList extends Component {
           <h2>Requested List</h2>
       {/*    <button id="createRegistrationRequest"></button>*/}
           <MlTableViewContainer {...mlUserTypeTableConfig} forceFetch={false}/>
-          {showAssignComponent&&<MlAssignComponent />}
+          {showAssignComponent&&<MlAssignComponent transactionType={"registration"}/>}
           {showCreateComponent&&<CreateRequestComponent openPopUp={true}/>}
         </div>
 

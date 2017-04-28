@@ -1,4 +1,4 @@
-import MlResolver from '../mlAdminResolverDef'
+import MlResolver from '../../../commons/mlResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
 
 let mergeQueries=function(userFilter,serverFilter){
@@ -362,6 +362,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlIndustries.find(query,findOptions).fetch();
     totalRecords=MlIndustries.find(query, findOptions).count();
   }
+  if(args.module=="award"){
+    data= MlAwards.find(query,findOptions).fetch();
+    totalRecords=MlAwards.find(query, findOptions).count();
+  }
   if(args.module=="specification"){
     data= MlSpecifications.find(query,findOptions).fetch();
     totalRecords=MlSpecifications.find(query,findOptions).count();
@@ -561,6 +565,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTechnologies.find(query,findOptions).fetch();
     totalRecords=MlTechnologies.find(query,findOptions).count();
   }
+  if(args.module=="FundingType"){
+    data= MlFundingTypes.find(query,findOptions).fetch();
+    totalRecords=MlFundingTypes.find(query,findOptions).count();
+  }
 
   if(args.module=="EmployeeType"){
     data= MlGlobalSettings.find(query,findOptions).fetch();
@@ -755,6 +763,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.industryName){
       return 'Industry'
     }
+    if(data.awardName){
+      return 'Award'
+    }
     if(data.specificationName){
       return 'Specification'
     }
@@ -780,6 +791,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
 
     if(data.technologyName){
       return 'Technologies'
+    }
+    if(data.fundingTypeName){
+      return 'FundingType'
     }
 
     if(data.processId){

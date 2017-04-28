@@ -11,9 +11,12 @@ import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
 import MlContactFormComponent from './MlContactFormComponent'
 import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
-
+import Datetime from "react-datetime";
+import moment from "moment";
 
 class MlAddBackendUser extends React.Component {
   constructor(props) {
@@ -27,21 +30,19 @@ class MlAddBackendUser extends React.Component {
       selectedBackendUser: 'Internal User',
       selectedSubChapter: '',
       pwdErrorMsg: '',
-      /* selectedCluster:'',
-       selectedChapter:'',
-       selectedDepartment:'',
-       selectedSubDepartment:'',
-       selectedRole:''*/
+      foundationDate: " ",
+      genderSelectMale: " ",
+      genderSelectFemale: " ",
+      genderSelectOthers: " ",
+      genderSelect:" "
+
     }
     this.addEventHandler.bind(this);
     this.createBackendUser.bind(this);
     this.onBackendUserTypeSelect.bind(this);
-    this.onBackendUserSelect.bind(this)
-    /* this.onClusterSelect.bind(this);
-     this.onChapterSelect.bind(this);
-     this.onDepartmentSelect.bind(this);
-     this.onSubDepartmentSelect.bind(this);
-     this.onROleSelect.bind(this);*/
+    this.onBackendUserSelect.bind(this);
+    this.onFoundationDateSelection.bind(this);
+    this.onGenderSelect = this.onGenderSelect.bind(this);
     return this;
   }
 
@@ -50,6 +51,19 @@ class MlAddBackendUser extends React.Component {
     OnToggleSwitch(false,true);
     passwordVisibilityHandler();
   }
+  onFoundationDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, foundationDate: value});
+    }
+  }
+
+
+  /*componentWillMount(){
+    let response = mlFieldValidations();
+    return response;
+  }
+*/
 
   async addEventHandler() {
     const resp = await this.createBackendUser();
@@ -65,15 +79,20 @@ class MlAddBackendUser extends React.Component {
       if (response.success) {
         FlowRouter.go("/admin/settings/backendUserList");
       }
-      else {
-        toastr.error(response.result);
-      }
+
     }else {
       console.log(response)
     }
   };
 
+ async onGenderSelect(e) {
+   let genderName = e.target.value;
+   if(genderName)
+   this.setState({loading: false, genderSelect:genderName})
+ }
+
   async  createBackendUser() {
+  //  this.updateBackend();
     let firstName= this.refs.firstName.value;
     let lastName= this.refs.lastName.value;
     let displayName= this.refs.displayName.value;
@@ -135,7 +154,9 @@ class MlAddBackendUser extends React.Component {
         isExternaluser: false,
         email: this.refs.email.value,
         isActive:this.refs.deActive.checked,
-        InternalUprofile: InternalUprofile
+        InternalUprofile: InternalUprofile,
+        genderType:this.state.genderSelect,
+        dateOfBirth: this.state.foundationDate
       }
       let userObject = {
         username: moolyaProfile.email,
@@ -144,6 +165,7 @@ class MlAddBackendUser extends React.Component {
       }
 
       const response = await addBackendUserActionHandler(userObject)
+      console.log(response);
       return response;
     }
 
@@ -261,13 +283,13 @@ class MlAddBackendUser extends React.Component {
                 <form>
                 <div className="form_bg">
                     <div className="form-group mandatory">
-                      <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" id="" data-required={true} data-errMsg="First Name is Required"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="middleName" placeholder="Middle Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is Required"/>
                     </div>
                     <div className="form-group">
                       <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)} />
@@ -307,11 +329,32 @@ class MlAddBackendUser extends React.Component {
                   <form>
 
                     <div className="form-group mandatory">
-                      <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                      <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is Required"/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="email" placeholder="Email id" className="form-control float-label" id=""/>
+                      <input type="text" ref="email" placeholder="Email id" className="form-control float-label" id="" data-required={true} data-errMsg="Email  is Required"/>
                     </div>
+
+                    <div className="form-group">
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.foundationDate} onChange={this.onFoundationDateSelection.bind(this)}/>
+                      <FontAwesome name="calendar" className="password_icon"/>
+                    </div>
+
+                      <div className="form-group">
+                        <div className="input_types">
+                          <label>Gender : </label>
+                        </div>
+                        <div className="input_types">
+                          <input id="radio1" type="radio" name="radio" value="Male" onChange={this.onGenderSelect}/><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        </div>
+                        <div className="input_types">
+                          <input id="radio2" type="radio" name="radio" value="Female" onChange={this.onGenderSelect}/><label htmlFor="radio2"><span><span></span></span>Female</label>
+                        </div>
+                        <div className="input_types">
+                          <input id="radio3" type="radio" name="radio" value="Others" onChange={this.onGenderSelect}/><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        </div>
+                      </div>
+                    <div className="clearfix"></div>
                     <MlContactFormComponent getAssignedContacts={this.getAssignedContacts.bind(this)}/>
 
                     <div className="form-group switch_wrap inline_switch">
@@ -373,4 +416,5 @@ class MlAddBackendUser extends React.Component {
     )
   }
 };
+
 export default MlAddBackendUser = formHandler()(MlAddBackendUser);

@@ -1,5 +1,5 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef'
+import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 let communitySchema = `
     type Community{
@@ -8,7 +8,7 @@ let communitySchema = `
         displayName:String,
         code:String,
         communityImageLink:String,
-        showOnMap:String,
+        showOnMap:Boolean,
         aboutCommunity:String,
         isActive:Boolean,
         clusters:[String],
@@ -24,7 +24,7 @@ let communitySchema = `
         displayName:String,
         code:String,
         communityImageLink:String,
-        showOnMap:String,
+        showOnMap:Boolean,
         aboutCommunity:String,
         isActive:Boolean,
         clusters:[String],

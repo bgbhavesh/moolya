@@ -1,7 +1,7 @@
 /**
  * Created by venkatsrinag on 21/4/17.
  */
-import MlResolver from '../../mlAdminResolverDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 
@@ -14,12 +14,12 @@ MlResolver.MlMutationResolver['createTechnology'] = (obj, args, context, info) =
         return response;
       }
       else{
-        let response = MlRespPayload.errorPayload("Error in Creating an Asset", 400);
+        let response = new MlRespPayload().errorPayload("Error in Creating an Asset", 400);
         return response;
       }
     }
     catch (e){
-      let response = MlRespPayload.errorPayload(e.message, 400);
+      let response = new  MlRespPayload().errorPayload(e.message, 400);
       return response;
     }
 
@@ -35,12 +35,12 @@ MlResolver.MlMutationResolver['updateSelectedTechnology'] = (obj, args, context,
         return response;
       }
       else{
-        let response = new MlRespPayload.errorPayload("Error in Creating an Asset", 400);
+        let response = new MlRespPayload().errorPayload("Error in Creating an Asset", 400);
         return response;
       }
     }
     catch (e){
-      let response = new MlRespPayload.errorPayload(e.message, 400);
+      let response = new MlRespPayload().errorPayload(e.message, 400);
       return response;
     }
   }

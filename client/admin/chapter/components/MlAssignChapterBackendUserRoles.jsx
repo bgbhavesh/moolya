@@ -262,7 +262,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       if (item.departmentName == 'operations')
         operationsIndex = say
     })
-    let specificRoles = roleDetails[operationsIndex].roles
+    let specificRoles;
+    if(operationsIndex){
+      specificRoles = roleDetails[operationsIndex].roles
+    }
     let index = _.find(specificRoles, {
       roleName: 'chapteradmin' || 'subChapteradmin',
       clusterId: this.props.clusterId,

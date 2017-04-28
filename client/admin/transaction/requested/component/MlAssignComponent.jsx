@@ -74,11 +74,12 @@ export default class MlAssignComponent extends Component {
       "role": this.state.selectedRole,
       "user": this.state.selectedUser
     }
-    const response = await assignUserForTransactionAction(params);
+    let transactionType=this.props.transactionType
+    const response = await assignUserForTransactionAction(params,transactionType);
     if(response){
       this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
-      toastr.error("User Assigned to transaction successfully");
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      toastr.success("User Assigned to transaction successfully");
+      FlowRouter.go("/admin/transactions/requestedList");
     }else{
       toastr.error(response.result);
       this.setState({show:false})

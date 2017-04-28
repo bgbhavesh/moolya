@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 6/4/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef';
+import MlSchemaDef from '../../../commons/mlSchemaDef';
 
 
 let portfolioSchema = `
@@ -81,7 +81,7 @@ let portfolioSchema = `
     
     type Mutation{
           createPortfolioRequest(portfoliodetails:portfoliodetails):response
-          updatePortfolio(portfoliodetailsId:String, portfolio:portfolio, indexArray:[String]):response
+          updatePortfolio(portfoliodetailsId:String, portfolio:portfolio):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

@@ -4,11 +4,13 @@ import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
 import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
+import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
+
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
   templateCode:"PFTIDEEDT",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
@@ -19,7 +21,7 @@ const mlIdeatorEditExternalUserPortfolioTemplateConfig={
 const mlIdeatorViewExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-View",
   templateCode:"PFTIDEVIW",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
@@ -30,7 +32,7 @@ const mlIdeatorViewExternalUserPortfolioTemplateConfig={
 const mlStartupEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Startup-Edit",
   templateCode:"PFSTUEDT",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
@@ -41,14 +43,15 @@ const mlStartupEditExternalUserPortfolioTemplateConfig={
 const mlStartupViewExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Startup-View",
   templateCode:"PFSTUVIW",
-  userType:'external',
+  userType:'internal',
   process:'Registration',
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
   stepName:'Portfolio',
-  // component:IdeatorCompanyHardReg
+  component:MlViewStartupPortfolioTemplate
 };
 
 mlRegistrationTemplates.setTemplate(mlIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlStartupEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlStartupViewExternalUserPortfolioTemplateConfig);

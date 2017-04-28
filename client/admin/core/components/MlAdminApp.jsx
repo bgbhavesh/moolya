@@ -5,7 +5,7 @@ import {client} from '../apolloConnection';
 import {ApolloProvider} from 'react-apollo';
 import  MlAdminHeader from '../../layouts/header/MlAdminHeader'
 import MlAdminLeftNav from '../../layouts/leftnav/MlAdminLeftNav'
-import MlAppContextProvider from './MlAppContextProvider';
+import MlAppContextProvider from '../../../commons/components/appContext/MlAppContextProvider';
 import { graphql,compose } from 'react-apollo';
 import gql from 'graphql-tag'
 

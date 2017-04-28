@@ -1,7 +1,7 @@
 /**
  * Created by muralidhar on 14/02/17.
  */
-import MlResolver from '../../mlAdminResolverDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import passwordUtil from '../../../../commons/passwordUtil'
 import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
@@ -9,20 +9,26 @@ import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
 var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
-   let user=Meteor.users.findOne(context.userId);
-    return user&&user.profile&&user.profile.isInternaluser?"external":"internal";
+    let user=Meteor.users.findOne(context.userId);
+    return user&&user.profile&&user.profile.isInternaluser?"internal":"external";
 }
 
 MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {
   //Resolve the context of the User and hierarchy
   //todo: check internal /external user
+  var clusterId=args.id||null;
+
+  if(!clusterId){
   let userProfile=new MlAdminUserContext().userProfileDetails(context.userId);
   if(userProfile&&userProfile.defaultProfileHierarchyRefId&&userProfile.defaultProfileHierarchyRefId!==null) {
-      let clusterDetails = MlClusters.findOne(userProfile.defaultProfileHierarchyRefId);
-         if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
-               return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
-         }
+    clusterId=userProfile.defaultProfileHierarchyRefId;
     }
+  }
+
+  let clusterDetails = MlClusters.findOne(clusterId);
+  if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
+    return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
+  }
 }
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
@@ -691,7 +697,7 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
   let resp;
   if(user){
     // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
-    resp = mlDBController.update('users', args.userId,{"profile.profileImage":args.attributes.profileImage,"profile.InternalUprofile.moolyaProfile.firstName":args.attributes.firstName,"profile.InternalUprofile.moolyaProfile.middleName":args.attributes.middleName, "profile.InternalUprofile.moolyaProfile.lastName":args.attributes.lastName,  "profile.InternalUprofile.moolyaProfile.displayName": args.attributes.userName},{$set:true}, context)
+    resp = mlDBController.update('users', args.userId,{"profile.profileImage":args.attributes.profileImage,"profile.InternalUprofile.moolyaProfile.firstName":args.attributes.firstName,"profile.InternalUprofile.moolyaProfile.middleName":args.attributes.middleName, "profile.InternalUprofile.moolyaProfile.lastName":args.attributes.lastName,  "profile.InternalUprofile.moolyaProfile.displayName": args.attributes.userName, "profile.genderType": args.attributes.genderType, "profile.dateOfBirth": args.attributes.dateOfBirth},{$set:true}, context)
   }
   if(resp){
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
@@ -716,4 +722,41 @@ MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => 
   }
   resp = new MlRespPayload().errorPayload("Unable to save Profile", 400);
   return resp
+}
+
+
+MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, info) => {
+  let id = " "
+  let user = mlDBController.findOne('users', {_id: context.userId}, context) || {};
+  if (args && args.addressBook) {
+    if (args.type == "CONTACTTYPE") {
+        let contactTypes = []
+        contactTypes = user.profile.contactInfo?user.profile.contactInfo:[];
+        contactTypes.push(args.addressBook.contactInfo[0]);
+      id = mlDBController.update('users', context.userId, {"profile.contactInfo": contactTypes}, {$set: true}, context)
+    } else if (args.type == "ADDRESSTYPE") {
+        let addressTypes = []
+        addressTypes = user.profile.addressInfo?user.profile.addressInfo:[];
+        addressTypes.push(args.addressBook.addressInfo[0]);
+      id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
+    } else if (args.type == "EMAILTYPE") {
+        let emailTypes = []
+        emailTypes = user.profile.emailInfo?user.profile.emailInfo:[];
+        emailTypes.push(args.addressBook.emailInfo[0]);
+      id = mlDBController.update('users', context.userId, {"profile.emailInfo": emailTypes}, {$set: true}, context)
+    }
+    if (id) {
+      let code = 200;
+      //let insertedData = users.findOne(id) || {};
+      let result = {update: id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  }
+}
+
+MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
+       let rest = null;
+        let user = mlDBController.findOne('users', {_id: args.userId}, context);
+        return user.profile;
 }

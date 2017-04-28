@@ -20,8 +20,8 @@ export default class MlStartupAboutUs extends React.Component{
   selectedTab(field,e){
    this.setState({aboutStartup : true})
   }
-  getPortfolioStartupAboutUsDetails(details,tabName,indexArray){
-    this.props.getAboutus(details,tabName,indexArray);
+  getPortfolioStartupAboutUsDetails(details,tabName){
+    this.props.getAboutus(details,tabName);
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -52,7 +52,7 @@ export default class MlStartupAboutUs extends React.Component{
         </div>
         <div className="col-md-6 col-sm-6 nopadding-right">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading">Rating <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu"/></div>
+            <div className="panel-heading">Rating <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu" onClick={this.selectedTab.bind(this)}/></div>
             <div className="panel-body">
               Rating
             </div>
@@ -60,7 +60,7 @@ export default class MlStartupAboutUs extends React.Component{
           <div className="clearfix"></div>
           <div className="col-md-6 col-sm-6 nopadding-left">
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Clients <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu"/></div>
+              <div className="panel-heading">Clients <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu" onClick={this.selectedTab.bind(this)}/></div>
               <div className="panel-body text-center panel-body-scroll">
                 <img src="/images/logo.png"/>
                 <img src="/images/idea_hub_logo.png"/>
@@ -68,14 +68,14 @@ export default class MlStartupAboutUs extends React.Component{
               </div>
             </div></div>
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
-              <div className="panel-heading">Service & Products <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu"/></div>
+              <div className="panel-heading">Service & Products <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu" onClick={this.selectedTab.bind(this)}/></div>
               <div className="panel-body panel-body-scroll">
                 <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.description}</p>
               </div>
             </div></div>
           </div>
           <div className="col-md-6 col-sm-6 nopadding"><div className="panel panel-default panel-form-view">
-            <div className="panel-heading">Information <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu"/></div>
+            <div className="panel-heading">Information <FontAwesome name='ellipsis-h' className="pull-right ellipsis-menu" onClick={this.selectedTab.bind(this)}/></div>
             <div className="panel-body">
               <ul className="list-info">
                 <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.description}</li>

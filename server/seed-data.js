@@ -184,7 +184,7 @@ if(!userObj){
 
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(role){
-  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:"", departmentName:"", subDepartmentId:"", subDepartmentName:""}]
+  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:dep._id, departmentName:dep.departmentName, subDepartmentId:subDep._id, subDepartmentName:subDep.subDepartmentName}]
   var userProfiles = [{
     clusterId:"all",
     userRoles:userRoles,
@@ -192,8 +192,43 @@ if(role){
   }]
   Meteor.users.update({_id:platformAdminId}, {$set:{"profile.InternalUprofile.moolyaProfile.userProfiles":userProfiles}})
 }
-
 /*********************************** Default Moolya Admin Creation <End> **********************************************/
+/*********************************** Default Moolya System Admin Creation <Start> ********************************************/
+
+var systemAdminProfile = {
+  profile:{
+    isInternaluser : true,
+    isExternaluser : false,
+    email: 'systemadmin@moolya.com',
+    isActive:true,
+    InternalUprofile:{
+      moolyaProfile:{
+        assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
+        email:"systemadmin@moolya.com",
+        phoneNumber:"9999999999",
+        userProfiles:[],
+        isActive:true,
+        firstName:'System',
+        lastName:'Admin',
+        displayName: 'System Admin'
+      }
+    },
+    isSystemDefined: true
+  },
+  username: 'systemadmin@moolya.com',
+  password: adminPassword
+};
+
+var systemAdminUser = Meteor.users.findOne({username: "systemadmin@moolya.com"});
+if(!systemAdminUser){
+  console.log("No Admin found, hence inserting a default Moolya System Admin: ",systemAdminProfile);
+  Accounts.createUser(systemAdminProfile);
+}else{
+  Accounts.setPassword(systemAdminUser._id, adminPassword);
+  console.log("System Admin password set from settings file");
+}
+
+/*********************************** Default Moolya System Admin Creation <End> **********************************************/
 
 
 // db.users.insert({
@@ -339,12 +374,12 @@ validateinternalUserLoginAttempt=(user)=>{
               chapterActive = true
             }
 
-            let defaultSubChapter = MlSubChapters.findOne({"$and":[{_id:role.chapterId}, {isActive:true}]})
+            let defaultSubChapter = MlSubChapters.findOne({"$and":[{_id:role.subChapterId}, {isActive:true}]})
             if(defaultSubChapter || role.subChapterId == "all"){
               subChapterActive = true
             }
 
-            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{_id:role.chapterId}, {isActive:true}]})
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityId}, {isActive:true}]})
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }

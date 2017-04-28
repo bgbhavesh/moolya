@@ -1,4 +1,4 @@
-import MlResolver from "../mlAdminResolverDef";
+import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import mlTransactionsListRepo from './mlTransactionsListRepo'
 
@@ -6,13 +6,15 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
 
   if(!args.transaction.requestTypeId){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!",code);
+    let response = new MlRespPayload().errorPayload("Request Type is mandatory!!!!",code);
     return response;
   }
   let requestDetails = MlRequestType.findOne({"_id":args.transaction.requestTypeId})|| {};
   args.transaction.requestTypeName=requestDetails.requestName;
   args.transaction.transactionTypeName=requestDetails.transactionType;
   args.transaction.transactionTypeId=requestDetails.transactionId;
+  args.transaction.userId=context.userId;
+  orderNumberGenService.assignTransationRequest(args.transaction)
   let transactionDetails=args.transaction
   let id = mlDBController.insert('MlTransactions', args.transaction, context)
   if(id){
@@ -23,9 +25,21 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
   }
 }
 
+MlResolver.MlMutationResolver['updateTransactionStatus'] = (obj, args, context, info) => {
+
+  let id = mlDBController.update('MlTransactions', {_id:args.transactionId},{status: args.status},  {$set: true},context)
+  if(id){
+    let code = 200;
+    let result = {transactionId : id}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+}
+
+
 MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
     let transaction={};
-  let transact = MlTransactionTypes.findOne({"_id":"registration"})|| {};
+  let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
   transaction.transactionTypeName=transact.transactionName;
   transaction.transactionTypeId=transact._id;
   //find hierarchy
@@ -57,8 +71,10 @@ MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, con
     subDepartment       : roleDetails.subDepartmentName,
     subDepartmentId     : roleDetails.subDepartmentId,
   }
+  transaction.userId=args.params.user
+  transaction.status="Pending"
   transaction.allocation = allocation;
-
+  orderNumberGenService.assignTransationRequest(transaction)
   let id = mlDBController.insert('MlTransactions',transaction, context)
   if(id){
     let code = 200;
@@ -73,8 +89,9 @@ MlResolver.MlQueryResolver['fetchTransactions']=(obj, args, context, info) => {
     //todo: conditions based on record id for steps like registration,portfolio
     //resolve userType:internal/external and send with response
     let transactionType=args.transactionType;
+    let status=args.status
     let userId = context.userId;
-    let transactions=mlTransactionsListRepo.fetchTransactions(transactionType,userId);
+    let transactions=mlTransactionsListRepo.fetchTransactions(transactionType,userId,status);
     return transactions;
   }
   return null;

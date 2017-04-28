@@ -15,7 +15,10 @@ import {resetPasswordActionHandler} from '../actions/resetPasswordAction'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
+import Datetime from "react-datetime";
+import moment from "moment";
 import {MlMyProfile} from '../../../profile/component/MlMyprofile'
+import {updateDataEntry} from '../../../profile/actions/addProfilePicAction'
 
 
 
@@ -44,7 +47,13 @@ class MlEditBackendUser extends React.Component{
       globalStatus:null,
       selectedSubChapter:'',
       showPasswordFields:false,
-      pageLable:"Edit Backend User"
+      pageLable:"Edit Backend User",
+      foundationDate:" ",
+      genderSelect:" ",
+      dateOfBirth: " ",
+      genderStateMale: " ",
+      genderStateFemale: " ",
+      genderStateOthers: " "
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -52,7 +61,10 @@ class MlEditBackendUser extends React.Component{
     this.onBackendUserSelect.bind(this);
     this.onGlobalStatusChanged = this.onGlobalStatusChanged.bind(this);
     this.onisActiveChanged= this.onisActiveChanged.bind(this);
-    this.onMakeDefultChange=this.onMakeDefultChange.bind(this)
+    this.onMakeDefultChange=this.onMakeDefultChange.bind(this);
+  //  this.ondateOfBirthSelection.bind(this);
+    this.genderSelect = this.genderSelect.bind(this);
+    this.getGender.bind(this);
     return this;
   }
   componentDidMount()
@@ -71,6 +83,21 @@ class MlEditBackendUser extends React.Component{
       $('input').attr('disabled', 'disabled');
     }
   }
+
+    genderSelect(e){
+    this.setState({genderSelect: e.target.value})
+  }
+
+ //  async updateBackend(){
+ //    let Details = {
+ //      userId: ,
+ //      gender:this.state.genderSelect,
+ //      dateofbirth: this.state.dateofbirth
+ //    }
+ //    const response = await updateDataEntry(Details);
+ //    return response;
+ // }
+
 
   async addEventHandler() {
     const resp=await this.createBackendUser();
@@ -91,6 +118,8 @@ class MlEditBackendUser extends React.Component{
   };
 
   componentWillMount() {
+
+   // this.getValue();
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
       this.setState({pageLable:"Backend User Details"})
@@ -99,7 +128,21 @@ class MlEditBackendUser extends React.Component{
     return resp;
   }
 
-  async findBackendUser(){
+  async getGender() {
+    if(this.state.genderSelect === "Male"){
+      this.setState({genderStateMale: true, genderStateFemale: false, genderStateOthers:false})
+    }
+    else if(this.state.genderSelect === "Female"){
+      this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
+    }
+    else{
+      this.setState({genderStateOthers: true, genderStateFemale: false, genderStateMale: false})
+    }
+  }
+
+
+
+  async   findBackendUser(){
     let userTypeId=this.props.config;
     const response = await findBackendUserActionHandler(userTypeId);
     this.setState({loading:false,data:response});
@@ -110,12 +153,13 @@ class MlEditBackendUser extends React.Component{
      this.setState({deActive:this.state.data.profile.isActive})
      this.setState({isActive:this.state.data.profile.InternalUprofile.moolyaProfile.isActive})
      this.setState({globalStatus:this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment})
+     this.setState({genderSelect : response.profile.genderType, dateOfBirth:response.profile.dateOfBirth});
      let clusterId="",chapterId='',subChapterId='',communityId=''
      let dataDetails=this.state.data
        if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
        let userProfiles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"]
          let userProfilesDetails=[]
-
+          ;
          for(let i=0;i<userProfiles.length;i++){
            let userRolesDetails=[]
            let userRole=userProfiles[i].userRoles
@@ -152,11 +196,16 @@ class MlEditBackendUser extends React.Component{
          }
        this.setState({'userProfiles':userProfilesDetails});
 
-       }else{
 
        }
+       // else{
+       //
+       // }
+     this.getGender();
+   }
+
     }
-  }
+
 
 
 
@@ -178,6 +227,7 @@ class MlEditBackendUser extends React.Component{
     }
   }
   onMakeDefultChange(id,event){
+    //this.updateBackendUser();
       let userProfilesDetails=this.state.userProfiles
     if(event.currentTarget.checked){
         let decision = false;
@@ -204,6 +254,7 @@ class MlEditBackendUser extends React.Component{
   }
 
   async  updateBackendUser() {
+   // this.updateBackend();
     let dataDetails=this.state.data
     let userprofiles=[]
     if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
@@ -264,7 +315,9 @@ class MlEditBackendUser extends React.Component{
       isExternaluser: false,
       email: this.refs.email.value,
       isActive:this.refs.deActive.checked,
-      InternalUprofile: InternalUprofile
+      InternalUprofile: InternalUprofile,
+      genderType:this.state.genderSelect,
+      dateOfBirth: this.state.dateOfBirth
     }
     let userObject={
       username: moolyaProfile.email,
@@ -306,6 +359,13 @@ class MlEditBackendUser extends React.Component{
     }
 
   }
+
+  // ondateOfBirthSelection(event) {
+  //   if (event._d) {
+  //     let value = moment(event._d).format('DD-MM-YYYY');
+  //     this.setState({loading: false, dateofbirth: value});
+  //   }
+  // }
 
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
@@ -454,6 +514,27 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="email" placeholder="Email id" defaultValue={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.email} className="form-control float-label" id="" disabled="disabled"/>
                   </div>
 
+                    <div className="form-group">
+                      {/*<Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} defaultValue={this.state.dateofbirth} onChange={this.ondateOfBirthSelection.bind(this)}/>*/}
+                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={that.state.data&&that.state.data.profile.dateOfBirth} disabled="disabled" />
+                      <FontAwesome name="calendar" className="password_icon"/>
+
+                    </div>
+                    <div className="form-group">
+                      <div className="input_types">
+                        <label>Gender : </label>
+                      </div>
+                      <div className="input_types">
+                        <input id="radio1" type="radio" name="radio" value="Male" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateMale} /><label htmlFor="radio1" ><span><span></span></span>Male</label>
+                      </div>
+                      <div className="input_types">
+                          <input id="radio2" type="radio" name="radio" value="Female" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateFemale} /><label htmlFor="radio2" ><span><span></span></span>Female</label>
+                      </div>
+                      <div className="input_types">
+                        <input id="radio3" type="radio" name="radio" value="Others" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateOthers} /><label htmlFor="radio3" ><span><span></span></span>Others</label>
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
                   <MlContactFormComponent getAssignedContacts={that.getAssignedContacts.bind(that)} contacts={that.state.data && that.state.data.profile.InternalUprofile.moolyaProfile.contact}/>
 
                   <div className="form-group switch_wrap inline_switch">

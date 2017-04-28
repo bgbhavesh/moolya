@@ -28,6 +28,8 @@ export default class MlStartupAboutUs extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
@@ -106,6 +108,7 @@ export default class MlStartupAboutUs extends React.Component{
 
     return(
       <div className="requested_input">
+        <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true} >
         <div className="col-lg-12">
           <div className="row">
             <h2>
@@ -154,6 +157,7 @@ export default class MlStartupAboutUs extends React.Component{
             </div>
 
           </div> </div>
+        </ScrollArea>
       </div>
 
 

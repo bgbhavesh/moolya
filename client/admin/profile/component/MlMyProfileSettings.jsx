@@ -8,6 +8,8 @@ import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import {updateSettings} from '../actions/addSettingsAction';
+import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction'
+
 
 
 //import ContactDetails from '../../transaction/requested/component/contactDetails';
@@ -17,13 +19,22 @@ export default class MyProfileSettings extends React.Component{
     super(props);
     this.state = {
       currencySymbol: " ",
-      measurementSystem: " "
+      measurementSystem: " ",
+      currencyTypes: " ",
+      numericalFormat:" "
     }
     this.optionsBySelectCurrencySymbol.bind(this);
     this.optionsBySelectMeasurementSystem.bind(this);
     this.dataSaving.bind(this);
     this.onSave.bind(this);
+    this.getValue.bind(this);
   }
+
+  componentWillMount(){
+    const resp=this.getValue();
+    return resp;
+  }
+
   componentDidMount()
   {
     $(function() {
@@ -63,6 +74,7 @@ export default class MyProfileSettings extends React.Component{
 
   }
 
+
   optionsBySelectCurrencySymbol(val){
     this.setState({currencySymbol:val})
   }
@@ -76,6 +88,14 @@ export default class MyProfileSettings extends React.Component{
     this.dataSaving();
   }
 
+  async getValue() {
+    let userType = Meteor.userId();
+    let response = await findBackendUserActionHandler(userType);
+    console.log(response);
+    this.setState({measurementSystem : response.profile.numericalFormat,
+      currencySymbol:response.profile.currencyTypes,
+    });
+  }
 
   async dataSaving(){
 
@@ -140,13 +160,13 @@ export default class MyProfileSettings extends React.Component{
             ><form>
               <div className="col-md-6 nopadding-left">
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false}  placeholder={"Type Of Currency"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={currencyquery}  isDynamic={true} id={'currencyquery'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)} />
+                  <Moolyaselect multiSelect={false}  placeholder={"Type Of Currency"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={currencyquery}  isDynamic={true} id={'currencyquery'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)}  />
                   {/*<FontAwesome name='inr' className="password_icon"/>*/}
                 </div>
                 <Select
                   name="form-field-name"  options={measurementType} placeholder={"Numerical Format"}
                   value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}
-                  className="float-label"/>
+                  className="float-label" />
               </div>
               <div className="col-md-6">
                 <div className="form-group">

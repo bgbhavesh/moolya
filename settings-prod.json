@@ -1,4 +1,9 @@
 {
+  "public":{
+  "graphqlUrl": "http://prod.moolya.in/graphql",
+  "graphqlPort":8090,
+  "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4"
+  },
   "private": {
       "subChapterName":"Moolya",
       "HierarchyCount": 10,
@@ -22,6 +27,10 @@
           "bucketName":"moolya-users/",
           "adminBucketKey":"moolya-admin-users"
         }
-      }
+      },
+    "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
+    "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
+    "fromEmailAddr":"noreply@moolya.in",
+    "isEmailDomainCheckEnabled":true
   }
 }

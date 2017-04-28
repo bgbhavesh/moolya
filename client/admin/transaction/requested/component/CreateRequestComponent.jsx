@@ -30,17 +30,18 @@ export default class CreateRequestComponent extends Component {
       transactionStatus:{
         code: 1,
         description:"requested"
-      }
+      },
+      status:"Pending"
     }
     const response = await addReqgistrationRequestInfo(transaction);
     if(response.success){
       this.setState({show:false,requestType:null})
+      FlowRouter.go("/admin/transactions/requestedList");
       toastr.success("Request is created successfully");
-      FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error(response.result);
       this.setState({show:false})
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.go("/admin/transactions/requestedList");
     }
   }
 

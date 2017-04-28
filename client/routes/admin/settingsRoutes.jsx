@@ -110,6 +110,13 @@ import MlTechnologiesList from '../../admin/settings/technologies/component/MlTe
 import MlAddTechnology from '../../admin/settings/technologies/component/MlAddTechnology'
 import MlEditTechnology from '../../admin/settings/technologies/component/MlEditTechnology'
 
+import MlFundingTypeList from '../../admin/settings/fundingType/component/MlFundingTypeList'
+import MlAddFundingType from '../../admin/settings/fundingType/component/MlAddFundingType'
+import MlEditFundingType from '../../admin/settings/fundingType/component/MlEditFundingType'
+
+import MlAwardTypeList from '../../admin/settings/awards/component/MlAwardTypeList'
+import MlAddAwardType from '../../admin/settings/awards/component/MlAddAwardType'
+import MlEditAwardType from '../../admin/settings/awards/component/MlEditAwardType'
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -199,9 +206,9 @@ adminSection.route('/settings/addSubDepartment', {
   }
 });
 adminSection.route('/settings/stepDetails/:subProcessId/:templateId/:stepCode', {
-  name: '',
+  name: 'settings',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} stepCode={params.stepCode}/>})
+    mount(AdminLayout,{headerContent:<MlAdminTemplatesHeader subProcessConfig={params.subProcessId} templateId={params.templateId}  />,adminContent:<MlStepDetails templateId={params.templateId} subProcessConfig={params.subProcessId} stepCode={params.stepCode}/>})
   }
 });
 /*
@@ -698,6 +705,25 @@ adminSection.route('/settings/edittechnology/:id', {
   }
 });
 
+adminSection.route('/settings/fundingTypeList', {
+  name: 'settings_FundingTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlFundingTypeList/>})
+  }
+});
+adminSection.route('/settings/addFundingType', {
+  name: 'settings_AddFundingType',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddFundingType />})
+  }
+});
+adminSection.route('/settings/editFundingType/:id', {
+  name: 'settings_EditFundingType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditFundingType config={params.id} />})
+  }
+});
+
 
 
 
@@ -970,5 +996,24 @@ adminSection.route('/settings/editRoleType/:id', {
     action(params){
         mount(AdminLayout,{adminContent:< MlEditRoleType  config={params.id}/>})
     }
+});
+
+adminSection.route('/settings/awardList', {
+  name: 'settings_AwardTypeList',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAwardTypeList/>})
+  }
+});
+adminSection.route('/settings/addAward', {
+  name: 'settings_AddAwardType',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddAwardType />})
+  }
+});
+adminSection.route('/settings/editAward/:id', {
+  name: 'settings_EditAwardType',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditAwardType config={params.id} />})
+  }
 });
 //  @End

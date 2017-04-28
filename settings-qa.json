@@ -29,7 +29,7 @@
     "graphql_proxy_url":"http://localhost:8090/graphql"
   },
   "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
-  "smtpMailUrl":"smtp://qasmtp@moolya.in:Moolya123@smtp.moolya.in:25",
+  "smtpMailUrl":"smtp://qasmtp%40moolya.in:Moolya123@smtp.moolya.in:25",
   "fromEmailAddr":"qasmtp@moolya.in",
   "isEmailDomainCheckEnabled":true
 }

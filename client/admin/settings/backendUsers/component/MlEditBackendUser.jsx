@@ -227,6 +227,7 @@ class MlEditBackendUser extends React.Component{
     }
   }
   onMakeDefultChange(id,event){
+    //this.updateBackendUser();
       let userProfilesDetails=this.state.userProfiles
     if(event.currentTarget.checked){
         let decision = false;
@@ -314,9 +315,9 @@ class MlEditBackendUser extends React.Component{
       isExternaluser: false,
       email: this.refs.email.value,
       isActive:this.refs.deActive.checked,
-      InternalUprofile: InternalUprofile
-      // genderType:this.state.genderSelect,
-      // dateOfBirth: this.state.dateOfBirth
+      InternalUprofile: InternalUprofile,
+      genderType:this.state.genderSelect,
+      dateOfBirth: this.state.dateOfBirth
     }
     let userObject={
       username: moolyaProfile.email,

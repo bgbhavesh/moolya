@@ -12,7 +12,7 @@ import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
 
-import getContext from './mlAuthContext'
+import getContext from '../../commons/mlAuthContext'
 import MlResolver from '../../commons/mlResolverDef';
 import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';

@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import dashboardRoutes from '../actions/routesActionHandler';
-export default class MlClusterList extends Component {
+export default class MlBrowserDashboard extends Component {
 
-  constructor(props){ 
+  constructor(props){
     super(props);
-     this.state={ 
+    this.state={
       v : false,
-     } 
-    return this; 
+    }
+    return this;
   }
 
   render(){
@@ -22,10 +21,7 @@ export default class MlClusterList extends Component {
           <h3>{prop.displayName}</h3>
         </div>
       </div>
-  );
-
+    );
     return (<div className="row">{list}</div>);
-
   }
 }
-

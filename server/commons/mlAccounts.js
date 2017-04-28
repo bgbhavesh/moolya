@@ -74,6 +74,8 @@ export default MlAccounts=class MlAccounts {
       },2 * 1000);
     };
 
+    return {userId: user._id};
+
   }; // Take token from sendVerificationEmail, mark the email as verified
 
 
@@ -156,7 +158,7 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      msg= "Use "+otpNum+" as One Time Password (OTP) to reset your moolya account password. Do not share this OTP to anyone for security reasons.";
+      msg= "Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.";
     }
 
     //send SMS
@@ -223,7 +225,7 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      msg= "Use "+otpNum+" as One Time Password (OTP) to reset your moolya account password. Do not share this OTP to anyone for security reasons.";
+      msg= "Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.";
     }
     //send SMS
     if(mobileNumber){

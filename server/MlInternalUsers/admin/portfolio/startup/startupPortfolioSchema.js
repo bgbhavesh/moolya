@@ -71,13 +71,14 @@ let startupPortfolioSchema = `
  
     
     type clientsOutput{
-        companyId:String,
+        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:imagesTypeSchema,
         description:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
-        index:Int
+        index:Int,
+        companyName : String
     }
     
     type branchesOutput{
@@ -110,6 +111,7 @@ let startupPortfolioSchema = `
     
     type assetsOutput{
         assetTypeId:String,
+        assetName:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,
@@ -118,15 +120,16 @@ let startupPortfolioSchema = `
         logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
+        
     }
     
     type technologiesOutput{
-        technology:String,
+        technologyName:String,
         technologyId:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-         logo:imagesTypeSchema,
+        logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
     }
@@ -146,7 +149,7 @@ let startupPortfolioSchema = `
     }
     
     type lookingForOutput{
-        type:String,
+        lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
         description:String,
@@ -189,7 +192,7 @@ let startupPortfolioSchema = `
     }
     
     type awardsRecognitionOutput{
-          award:String
+          awardName:String
           awardId:String
           isAwardPrivate:Boolean
           year:String
@@ -280,7 +283,7 @@ let startupPortfolioSchema = `
     }
   
     input clients{
-        companyId:String,
+        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:logo,
         description:String,

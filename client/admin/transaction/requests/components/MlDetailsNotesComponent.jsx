@@ -11,6 +11,7 @@ export default class MlDetailsNotesComponent extends React.Component {
       departmentName:'',
       subDepartmentName:'',
       profileImage:'',
+      firstName: " ",
       status:null
     }
     return this;
@@ -44,7 +45,7 @@ export default class MlDetailsNotesComponent extends React.Component {
     let userTypeId = this.props.transaction.userId
     const response = await findBackendUserActionHandler(userTypeId);
     if(response){
-      this.setState({userDetais:response})
+      this.setState({userDetais:response, role:response.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleName, firstName:response.profile.InternalUprofile.moolyaProfile.firstName})
         let userDetails=this.state.userDetais
       if(userDetails.profile.isInternaluser){
           let userInternalProfile=userDetails.profile.InternalUprofile.moolyaProfile.userProfiles
@@ -136,7 +137,7 @@ export default class MlDetailsNotesComponent extends React.Component {
                 <div className="profile_block">
                   <img src={that.state.profileImage} />
                   <span>
-                  Miland<br />Hyderabad,India
+                  {that.state.firstName}<br />{that.state.role}
                 </span>
                 </div>
               </div>
@@ -154,7 +155,7 @@ export default class MlDetailsNotesComponent extends React.Component {
                 <div className="profile_block">
                   <img src={that.state.profileImage} />
                   <span>
-                  Miland<br />Hyderabad,India
+                    {that.state.firstName}<br />{that.state.role}
                 </span>
                 </div>
               </div>

@@ -348,7 +348,7 @@ let BackEndUser = `
         fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String): SearchResp
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
-        fetchMapCenterCordsForUser:mapCenterCords
+        fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
         fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
     }
 `

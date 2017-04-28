@@ -6,7 +6,7 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
 
   if(!args.transaction.requestTypeId){
     let code = 409;
-    let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!",code);
+    let response = new MlRespPayload().errorPayload("Request Type is mandatory!!!!",code);
     return response;
   }
   let requestDetails = MlRequestType.findOne({"_id":args.transaction.requestTypeId})|| {};

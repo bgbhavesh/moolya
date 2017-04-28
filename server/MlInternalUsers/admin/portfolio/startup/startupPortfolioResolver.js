@@ -1,12 +1,8 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
-// import MlUtils from '../../../../commons/mlUtils'
 
 var extendify = require('extendify');
 var _ = require('lodash')
-
-// let applyDiff = require('deep-diff').applyDiff,
-  // observableDiff = require('deep-diff').observableDiff
 
 MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, info) => {
   try {
@@ -97,14 +93,40 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["legalIssue"] = portfolio.legalIssue;
     startAboutUsArray["rating"] = portfolio.rating;
     startAboutUsArray["assets"] = portfolio.assets;
+
+    if(startAboutUsArray && startAboutUsArray.clients){
+      startAboutUsArray.clients.map(function(client,index) {
+        let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
+        if(startAboutUsArray.clients[index]){
+          startAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
+        }
+      })
+    }
+    if(startAboutUsArray && startAboutUsArray.assets){
+      startAboutUsArray.assets.map(function(asset,index) {
+        if(startAboutUsArray.assets[index]){
+          let assetData = MlAssets.findOne({"_id":asset.assetTypeId}) || "";
+          startAboutUsArray.assets[index].assetName = assetData.displayName || "";
+        }
+
+      })
+    }
+    if(startAboutUsArray && startAboutUsArray.technologies){
+      startAboutUsArray.technologies.map(function(technology,index) {
+        if(startAboutUsArray.technologies[index]){
+          let technologyData = MlTechnologies.findOne({"_id":technology.technologyId}) || "";
+          startAboutUsArray.technologies[index].technologyName = technologyData.displayName || "";
+        }
+
+      })
+    }
     if (startAboutUsArray) {
       return startAboutUsArray
     }
 
-
   }
 
-  return [];
+  return {};
 }
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioInvestor'] = (obj, args, context, info) => {
@@ -121,6 +143,15 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLookingFor'] = (obj, args, cont
   if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('lookingFor')) {
+      if(portfolio && portfolio['lookingFor']){
+        portfolio.lookingFor.map(function(lookingFor,index) {
+          if(portfolio.lookingFor[index]){
+            let lookingForData = MlLookingFor.findOne({"_id" : lookingFor.typeId}) || {};
+            portfolio.lookingFor[index].lookingForName = lookingForData.lookingForDisplayName || "";
+          }
+
+        })
+      }
       return portfolio['lookingFor'];
     }
   }
@@ -132,6 +163,15 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAwards'] = (obj, args, context,
   if (args.portfoliodetailsId) {
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
+      if(portfolio && portfolio['awardsRecognition']){
+        portfolio.awardsRecognition.map(function(awards,index) {
+          if(portfolio.awardsRecognition[index]){
+            let awardData = MlAwards.findOne({"_id" : awards.awardId}) || {};
+            portfolio.awardsRecognition[index].awardName = awardData.awardDisplayName || "";
+          }
+
+        })
+      }
       return portfolio['awardsRecognition'];
     }
   }

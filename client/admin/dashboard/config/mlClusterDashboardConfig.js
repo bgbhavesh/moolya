@@ -46,9 +46,10 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:false,
   fetchCenter:true,
-  fetchCenterHandler:async function(){
-          let center=await maphandler.fetchDefaultCenterOfUser();
-          return center;
+  fetchCenterHandler:async function(reqParams){
+    let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams&&reqParams.params&&reqParams.params.clusterId?reqParams.params.clusterId:null};
+    let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
+    return center;
   },
   viewComponent:<MlMapViewContainer />,
   actionConfiguration:[

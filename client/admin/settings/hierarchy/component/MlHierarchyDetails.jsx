@@ -22,7 +22,8 @@ export default class MlHierarchyDetails extends React.Component {
       hierarchyInfo:[{departmentId:'',departmentName:'',subDepartmentId:'',subDepartmentName:'',isMoolya:''}],
       unassignedRoles:[],
       assignedRoles:[],
-      finalApproval:null
+      finalApproval:null,
+      isExpanded:false
     }
     return this;
   }
@@ -126,36 +127,10 @@ export default class MlHierarchyDetails extends React.Component {
       }
       console.log(hierarchyInfo);
       const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
+      this.state.isExpanded=true
       return response;
     }
-    /*else{
-      finalApproval = {
-        isChecked           : this.state.finalApproval.isChecked
-      };
-    }*/
-
-
   }
-
-/*  async  updatFinalRole() {
-    let role = {
-      id                  : this.state.finalApproval.id,
-      parentDepartment    : this.state.finalApproval.parentDepartment,
-      parentSubDepartment : this.state.finalApproval.parentSubDepartment,
-      department          : this.state.finalApproval.department,
-      subDepartment       : this.state.finalApproval.subDepartment,
-      role                : this.state.finalApproval.role,
-      clusterId           : this.props.clusterId
-    }
-    const response = await updateFinalApprovalActionHandler(role);
-    return response;
-  }*/
-
-
-  /*isExpandableRow(row) {
-    if (row.departmentId!=undefined) return true;
-    else return false;
-  }*/
 
   isExpandableRow() {
     return true;
@@ -188,15 +163,16 @@ export default class MlHierarchyDetails extends React.Component {
     const assigned = this.updateunassignedRoles();
     const upAssigned = this.updateassignRoles();
     const hierarchyAssignment = this.updatehierarchyAssignments();
-
-    toastr.success("Update Successful");
+    if(this.state.isExpanded){
+      toastr.success("Update Successful");
+    }
     return assigned;
   }
   render() {
 
     let MlActionConfig = [
       {
-        actionName: 'edit',
+        actionName: 'save',
         showAction: true,
         handler: this.updateHierarchy.bind(this)
       }

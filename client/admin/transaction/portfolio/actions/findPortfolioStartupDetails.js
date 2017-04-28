@@ -44,6 +44,7 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
                   fileName
                   fileUrl
                 }
+                index
             }
           }
 
@@ -81,11 +82,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   rating
                 }
                 clients{
-                  index
+                  companyName
+                  isCompanyNamePrivate
                   description
                   isDescriptionPrivate
-                  companyId
-                  isCompanyNamePrivate
                   logo{
                     fileName
                     fileUrl
@@ -103,6 +103,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 }
                 assets{
                   assetTypeId
+                  assetName
                   quantity
                   description
                   isAssetTypePrivate
@@ -144,6 +145,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 technologies{
+                  technologyName
                   technologyId
                   isTechnologyPrivate
                   description
@@ -228,6 +230,7 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
+                lookingForName,
                 typeId,
                 isTypePrivate
                 description

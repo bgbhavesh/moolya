@@ -5,19 +5,19 @@ import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
+import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
 
 
 export default class MlStartupAssets extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
-      loading: true,
+      loading: false,
       data:{},
       startupAssets:this.props.assetsDetails || [],
       startupAssetsList:this.props.assetsDetails || [],
@@ -47,15 +47,8 @@ export default class MlStartupAssets extends React.Component{
   onSaveAction(e){
     this.setState({startupAssetsList:this.state.startupAssets,popoverOpen : false})
   }
+
   addAsset(){
-    /*this.setState({selectedAsset : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
-    if(this.state.startupAssets){
-      this.setState({arrIndex:this.state.startupAssets.length})
-    }else{
-      this.setState({arrIndex:0})
-    }*/
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupAssets){
       this.setState({selectedIndex:this.state.startupAssets.length})
@@ -63,6 +56,7 @@ export default class MlStartupAssets extends React.Component{
       this.setState({selectedIndex:0})
     }
   }
+
   onSelectAsset(index, e){
     let cloneArray = _.cloneDeep(this.state.startupAssets);
     let details = cloneArray[index]
@@ -71,11 +65,6 @@ export default class MlStartupAssets extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.assetTypeId});
-   /* let indexes = this.state.indexArray;
-    let indexArray = _.cloneDeep(indexes)
-    indexArray.push(index);
-    indexArray = _.uniq(indexArray);
-    this.setState({indexArray: indexArray})*/
   }
 
   onLockChange(field, e){
@@ -92,6 +81,7 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
+
   onStatusChangeNotify(e)
   {
     let updatedData = this.state.data||{};
@@ -126,18 +116,16 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
-  assetTypeOptionSelected(selectedAsset){
-
+  assetTypeOptionSelected(selectedId){
     let details =this.state.data;
     details=_.omit(details,["assetTypeId"]);
-    details=_.extend(details,{["assetTypeId"]: selectedAsset});
+    details=_.extend(details,{["assetTypeId"]: selectedId});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedAsset})
+      this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
     })
-
-
   }
+
   sendDataToParent(){
     let data = this.state.data;
     let assets = this.state.startupAssets;
@@ -158,9 +146,9 @@ export default class MlStartupAssets extends React.Component{
     })
     startupAssets = arr;
     this.setState({startupAssets:startupAssets})
-    //let indexArray = this.state.indexArray;
     this.props.getStartupAssets(startupAssets);
   }
+
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -174,6 +162,25 @@ export default class MlStartupAssets extends React.Component{
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
+        this.setState({loading:true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+
+  async fetchOnlyImages(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupAssets
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response.assets[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupAssets:cloneBackUp });
+      }else {
+        this.setState({loading: false})
       }
     }
   }
@@ -185,11 +192,12 @@ export default class MlStartupAssets extends React.Component{
       }
     }`;
     let that = this;
+    const showLoader = that.state.loading;
     let assetsArray = that.state.startupAssetsList || [];
     return(
       <div>
-
         <h2>Assets</h2>
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="requested_input main_wrap_scroll">
 
           <ScrollArea
@@ -215,7 +223,7 @@ export default class MlStartupAssets extends React.Component{
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl" onClick={that.onDeleteAsset.bind(that, idx)}><FontAwesome name='times'/></div>
                         <div className="hex_outer portfolio-font-icons" onClick={that.onSelectAsset.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                        <h3>{details.description?details.description:""}<span className="assets-list">{details.quantity?details.quantity:""}</span></h3>
+                        <h3>{details.assetName?details.assetName:""}<span className="assets-list">{details.quantity?details.quantity:""}</span></h3>
                       </div>
                     </a>
                   </div>)
@@ -225,7 +233,6 @@ export default class MlStartupAssets extends React.Component{
 
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedAsset} toggle={this.toggle}>
-           {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
             <PopoverContent>
               <div  className="ml_create_client">
                 <div className="medium-popover"><div className="row">
@@ -268,14 +275,7 @@ export default class MlStartupAssets extends React.Component{
               </div>
             </PopoverContent>
           </Popover>
-
-
-
-
-
-        </div>
-
-
+        </div>)}
       </div>
     )
   }

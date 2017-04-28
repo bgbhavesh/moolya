@@ -11,7 +11,6 @@ class ActiveProcessFormatter extends React.Component {
     if(this.props.data.isActive){
       this.refs.status.checked = true
     }
-    OnToggleSwitch(true,true);
   }
   componentDidUpdate(){
     OnToggleSwitch(true,true);

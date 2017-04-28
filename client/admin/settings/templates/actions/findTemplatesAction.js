@@ -16,6 +16,7 @@ export async function findStepTemplatesActionHandler(templateId,code) {
           templateName
           isActive
           createdDate
+          templateImage
         } 
       }
       }

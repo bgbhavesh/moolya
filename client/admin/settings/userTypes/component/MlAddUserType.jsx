@@ -8,11 +8,12 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {createUserTypeActionHandler} from '../actions/createUsertypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-class MlAddUserType extends React.Component{
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation'
+class MlAddUserType extends React.Component {
   constructor(props) {
     super(props);
-    this.state={
-      communityCode:''
+    this.state = {
+      communityCode: ''
     }
     this.addEventHandler.bind(this);
     this.createUserType.bind(this)
@@ -21,15 +22,14 @@ class MlAddUserType extends React.Component{
   }
 
   onCommunitySelect(val, callback, selObject) {
-    this.setState({communityCode: val, communityName : selObject.label})
+    this.setState({communityCode: val, communityName: selObject.label})
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     initalizeFloatLabel();
-    OnToggleSwitch(true,true);
+    OnToggleSwitch(true, true);
     var WinHeight = $(window).height();
-    $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
+    $('.admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
   }
 
   async addEventHandler() {
@@ -42,8 +42,8 @@ class MlAddUserType extends React.Component{
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
+    if (response) {
+      if (response.success)
         FlowRouter.go("/admin/settings/UserTypeList");
       else
         toastr.error(response.result);
@@ -59,9 +59,19 @@ class MlAddUserType extends React.Component{
       communityName: this.state.communityName,
       isActive: this.refs.isActive.checked
     }
-    const response = await createUserTypeActionHandler(UserTypeDetails)
-    return response;
-  }
+    console.log(this.state.communityCode);
+    let errorValidation = this.state.communityCode;
+    if (this.state.communityCode === " " ) {
+        toastr.error("Community is required");
+      }
+      else {
+        const response = await createUserTypeActionHandler(UserTypeDetails)
+        return response;
+      }
+    }
+
+    v
+
 
   render(){
     let query = gql` query{
@@ -91,10 +101,11 @@ class MlAddUserType extends React.Component{
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                  <Moolyaselect ref="Community " multiSelect={false} className="form-control float-label" valueKey={'value'}
                                 labelKey={'label'} queryType={"graphql"} placeholder="Select Community"
-                                selectedValue={this.state.communityCode}
-                                query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)}/>
+                                selectedValue={this.state.communityCode} onBlur={this.validation.bind(this)}
+                                query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)} data-required={true} data-errMsg="Name is required"/>
+
                   <div className="form-group">
                     <input type="text" ref="userTypeName" placeholder="User Category Name" className="form-control float-label"/>
                   </div>

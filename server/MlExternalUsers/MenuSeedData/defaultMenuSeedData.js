@@ -8,7 +8,7 @@ if(Meteor.isServer){
         "menu" : [
             {
                 "image":"ml ml-dashboard",
-                "link": "",
+                "link": "/app/dashboard",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Dashboard",
@@ -16,7 +16,7 @@ if(Meteor.isServer){
             },
             {
                 "image":"ml ml-ideator",
-                "link": "",
+                "link": "/app/ideator",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Ideator",
@@ -24,7 +24,7 @@ if(Meteor.isServer){
             },
             {
                 "image":"ml ml-startup",
-                "link": "",
+                "link": "/app/startup",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Startup",
@@ -33,7 +33,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-funder",
-                "link": "",
+                "link": "funder",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Funder",
@@ -42,7 +42,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-provider",
-                "link": "",
+                "link": "provider",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Provider",
@@ -51,7 +51,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-company",
-                "link": "",
+                "link": "company",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Company",
@@ -60,7 +60,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-institutions",
-                "link": "",
+                "link": "/app/institutions",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Institutions",
@@ -69,7 +69,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-chat",
-                "link": "",
+                "link": "/app/conversations",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Conversations",
@@ -78,7 +78,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-subscribe",
-                "link": "",
+                "link": "/app/subscriptions",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Subscriptions",
@@ -87,7 +87,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-news",
-                "link": "",
+                "link": "/app/news",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "News",

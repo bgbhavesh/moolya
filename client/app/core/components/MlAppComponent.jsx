@@ -36,6 +36,7 @@ class MlAppComponent extends Component{
                 <MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>
                     <MlAppHeader/>
                     <MlAppLeftNav/>
+                    {props.appContent}
                 </MlAppContextProvider>
             );
         }

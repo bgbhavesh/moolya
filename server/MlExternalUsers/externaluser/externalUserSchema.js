@@ -55,7 +55,7 @@ let externalUser = `
     }
     
     type Query{
-        fetchIdeatorUsers:[externalUser]
+        fetchIdeatorUsers:response
     }
 `
 

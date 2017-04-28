@@ -24,7 +24,8 @@ export default class MlStartupAssets extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       selectedAssetType:null,
-      selectedAsset:"default"
+      // selectedAsset:"default"
+      selectedObject:"default"
     }
     this.handleBlur.bind(this);
     return this;
@@ -57,7 +58,7 @@ export default class MlStartupAssets extends React.Component{
     }
   }
 
-  onSelectAsset(index, e){
+  onTileClick(index, e){
     let cloneArray = _.cloneDeep(this.state.startupAssets);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
@@ -222,8 +223,8 @@ export default class MlStartupAssets extends React.Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="cluster_status inactive_cl" onClick={that.onDeleteAsset.bind(that, idx)}><FontAwesome name='times'/></div>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onSelectAsset.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                        <h3>{details.assetName?details.assetName:""}<span className="assets-list">{details.quantity?details.quantity:""}</span></h3>
+                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        <h3>{details.description?details.description:""}<span className="assets-list">{details.quantity?details.quantity:"0"}</span></h3>
                       </div>
                     </a>
                   </div>)
@@ -232,13 +233,11 @@ export default class MlStartupAssets extends React.Component{
             </div>
 
           </ScrollArea>
-          <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedAsset} toggle={this.toggle}>
+          <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
             <PopoverContent>
               <div  className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
-
-
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                     labelKey={'label'} queryType={"graphql"} query={assetsQuery}

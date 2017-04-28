@@ -1,5 +1,5 @@
 var noData = "not mentioned";
-var fromEmail = "noreply@moolya.in";
+var fromEmail = Meteor.settings.private.fromEmailAddr;
 const MlEmailNotification= class MlEmailNotification {
 
   static  mlUserRegistrationOtp(otpNum,regId) {

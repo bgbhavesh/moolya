@@ -2,11 +2,12 @@
 /**
  * Created by mohammed.mohasin on 26/04/17.
  */
-var fromEmail = "noreply@moolya.in";
+import mlSms from './mlSms';
+var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
 
   static verifyEmailLink(token){
-    return Meteor.absoluteUrl('#/verify-email/' + token);
+    return Meteor.absoluteUrl('verify-email/' + token);
   }
 
 
@@ -14,6 +15,7 @@ export default MlAccounts=class MlAccounts {
       var greeting = user&&user.name ? "Hello " + user.name + "," : "Hello,";                  // 3
       return greeting + "\n\n"+message+" simply click the link below.\n\n" + url + "\n\nThanks.\n";              // 5
     };                                                                                                                   // 13
+
 
 
   static sendVerificationEmail(regId,emailOptions,address,customEmailComponent){
@@ -107,6 +109,139 @@ export default MlAccounts=class MlAccounts {
       };
   }
 
+  static sendVerificationSmsOtp(regId,numbr,customEmailComponent){
+
+    var regDetails = mlDBController.findOne('MlRegistration',{_id:regId});
+
+    if(!regDetails){
+      throw new Error(403, "Mobile Number entered  is not registered");
+    }
+
+    var otp = null;
+    var mobileNumber=numbr;
+    var countryCode=(regDetails.registrationInfo||{}).countryId;
+    var msg=null;
+    if(!numbr){
+      mobileNumber=(regDetails.registrationInfo||{}).contactNumber;
+    }
+
+    var otps = regDetails.otps || [];
+
+    if(otps){
+      for(var i =0; i<otps.length; i++){
+        var otpRec = otps[i];
+        if(otpRec.verified === false){
+          if(new Date() - otpRec.time.getTime() < 60*60*1000){
+            otp = otpRec.num;
+            otpRec.resendTime = new Date();
+            break;
+          }
+        }
+      }
+    }else{
+      var otpNumber = Math.floor(1000 + Math.random() * 9000)+"";
+      otps = [{num: otpNumber, time: new Date(), verified: false}];
+      otp=otpNumber;
+    }
+
+    var otpNum = otp || Math.floor(1000 + Math.random() * 9000)+"";
+    if(otp){
+      //DO WE NEED TO UPDATE THE TIME?
+    }else{
+      otps.push({num:otpNum, time: new Date(), verified: false});
+    }
+
+    MlRegistration.update({_id: regId},{$set:{"otps": otps}});
+
+    if (typeof customEmailComponent === 'function') {
+      msg = customEmailComponent(regDetails,otpNum);
+    }else{
+      msg= "Use "+otpNum+" as One Time Password (OTP) to reset your moolya account password. Do not share this OTP to anyone for security reasons.";
+    }
+
+    //send SMS
+    if(mobileNumber){
+
+      Meteor.setTimeout(function() {
+
+        mlSms.send(countryCode,mobileNumber,msg);
+      }, 1 * 1000);
+
+    }
+
+    // before passing to template, update user object with new token
+    var resp={};
+    resp.mobileNumber=mobileNumber;
+    resp.otp=otp;
+    return resp;
+  }
+
+  static resendVerificationSmsOtp(numbr,customEmailComponent){
+
+    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":numbr});
+
+    if(!regDetails){
+      throw new Error(403, "Mobile Number entered is not registered");
+    }
+
+    let to=(regDetails.registrationInfo||{}).contactNumber;
+    let countryCode=(regDetails.registrationInfo||{}).countryId;
+
+    if(!to){
+      throw new Error(403, "Mobile Number entered is not registered");
+    }
+    var otp = null;
+    var mobileNumber=to;
+    var msg=null;
+    var otps = regDetails.otps;
+    if(otps){
+      for(var i =0; i<otps.length; i++){
+        var otpRec =otps[i];
+        if(otpRec.verified === false){
+          if(new Date() - otpRec.time.getTime() < 15*60*1000){
+            otp = otpRec.num;
+            otpRec.resendTime = new Date();
+            break;
+          }
+        }
+      }
+
+    }else{
+      var otpNumber = Math.floor(1000 + Math.random() * 9000)+"";
+      otps = [{num: otpNumber, time: new Date(), verified: false}];
+      otp=otpNumber;
+    }
+
+    var otpNum = otp || Math.floor(1000 + Math.random() * 9000)+"";
+    if(otp){
+      //DO WE NEED TO UPDATE THE TIME?
+    }else{
+      otps.push({num:otpNum, time: new Date(), verified: false});
+    }
+    MlRegistration.update({"registrationInfo.contactNumber":numbr},{$set:{"otps":otps}});
+    //send SMS
+    if (typeof customEmailComponent === 'function') {
+      msg = customEmailComponent(regDetails,otpNum);
+    }else{
+      msg= "Use "+otpNum+" as One Time Password (OTP) to reset your moolya account password. Do not share this OTP to anyone for security reasons.";
+    }
+    //send SMS
+    if(mobileNumber){
+
+      Meteor.setTimeout(function() {
+
+        mlSms.send(countryCode,to,"OTP sent for reset password: "+otpNum);
+      }, 1 * 1000);
+
+    }
+
+    // before passing to template, update user object with new token
+    var resp={};
+    resp.mobileNumber=mobileNumber;
+    resp.otp=otp;
+    return resp;
+
+  }
 
 }
 

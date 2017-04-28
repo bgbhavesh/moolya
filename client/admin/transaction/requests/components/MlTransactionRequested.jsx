@@ -21,6 +21,7 @@ export default class MlTransactionRequested extends Component {
     const resp=this.findRequestDetails();
     return resp;
   }
+
     async findRequestDetails(){
       let requestDetails = await findTransactionRequestActionHandler('All');
       let requestInfo = []
@@ -86,6 +87,7 @@ export default class MlTransactionRequested extends Component {
             >
             <BootstrapTable  data={ this.state.requetsInfo }
                              options={ options }
+                             hover={true}
                              expandableRow={ this.isExpandableRow }
                              expandComponent={ this.expandComponent.bind(this) }
                              selectRow={ selectRow }
@@ -94,7 +96,7 @@ export default class MlTransactionRequested extends Component {
               <TableHeaderColumn dataField="transactionId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
               <TableHeaderColumn dataField="transactionCreatedDate" >Date&Time</TableHeaderColumn>
               <TableHeaderColumn dataField="requestId">RequestId</TableHeaderColumn>
-              <TableHeaderColumn dataField="transactionTypeName">Type</TableHeaderColumn>
+              <TableHeaderColumn dataField="requestTypeName">Type</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             </BootstrapTable>
             </ScrollArea>

@@ -76,7 +76,7 @@ export default class MlTransactionApprovals extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Requests</h2>
+          <h2>Approvals</h2>
           <div className="main_wrap_scroll">
             <ScrollArea
               speed={0.8}
@@ -86,6 +86,7 @@ export default class MlTransactionApprovals extends Component {
             >
               <BootstrapTable  data={ this.state.requetsInfo }
                                options={ options }
+                               hover={true}
                                expandableRow={ this.isExpandableRow }
                                expandComponent={ this.expandComponent.bind(this) }
                                selectRow={ selectRow }
@@ -93,8 +94,8 @@ export default class MlTransactionApprovals extends Component {
               >
                 <TableHeaderColumn dataField="transactionId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
                 <TableHeaderColumn dataField="transactionCreatedDate" >Date&Time</TableHeaderColumn>
-                <TableHeaderColumn dataField="requestId">RequestId</TableHeaderColumn>
-                <TableHeaderColumn dataField="transactionTypeName">Type</TableHeaderColumn>
+                <TableHeaderColumn dataField="requestId">ApprovalId</TableHeaderColumn>
+                <TableHeaderColumn dataField="requestTypeName">Type</TableHeaderColumn>
                 <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
               </BootstrapTable>
             </ScrollArea>

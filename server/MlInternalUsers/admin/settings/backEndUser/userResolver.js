@@ -16,13 +16,19 @@ MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, in
 MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {
   //Resolve the context of the User and hierarchy
   //todo: check internal /external user
+  var clusterId=args.id||null;
+
+  if(!clusterId){
   let userProfile=new MlAdminUserContext().userProfileDetails(context.userId);
   if(userProfile&&userProfile.defaultProfileHierarchyRefId&&userProfile.defaultProfileHierarchyRefId!==null) {
-      let clusterDetails = MlClusters.findOne(userProfile.defaultProfileHierarchyRefId);
-         if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
-               return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
-         }
+    clusterId=userProfile.defaultProfileHierarchyRefId;
     }
+  }
+
+  let clusterDetails = MlClusters.findOne(clusterId);
+  if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
+    return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
+  }
 }
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {

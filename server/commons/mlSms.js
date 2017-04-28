@@ -5,7 +5,7 @@
 
 import Dinstar  from  'dinstar-sms-api';
 //FIXME: this is just for the Pilot and Dry runs, to be made live once in Production
-var whiteList = ["8801521564","9985786859"];
+var whiteList = ["8801521564","9985786859","9999104696","8374448883","7036158859","9490353380","8019650414","7416466589","8748947339"];
 
 var smsOptions = {
   username:"rsadmin",
@@ -55,6 +55,8 @@ class MlSms{
       if(number&&countryPhoneNumberCode){
          let to=countryPhoneNumberCode.trim()+number.trim();
          this.sendSMS(to,msg);
+      }else{
+        console.log("Failed to send Sms as number/country code is invalid");
       }
     }
 }

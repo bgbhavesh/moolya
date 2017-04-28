@@ -1,6 +1,7 @@
 import MlResolver from '../../mlAdminResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
+import MlEmailNotification from '../../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 // MlResolver.MlMutationResolver['CreateSubDepartment'] = (obj, args, context, info) =>{
 //         // TODO : Authorization
@@ -58,6 +59,10 @@ MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info
     // let id = MlSubDepartments.insert({...args.subDepartment});
     let id = mlDBController.insert('MlSubDepartments', args.subDepartment, context)
     if(id){
+      let departmentId = null;
+      MlEmailNotification.subDepartmentVerficationEmail(id,departmentId,context);
+    }
+    if(id){
         let code = 200;
         let result = {subDepartmentId: id}
         let response = new MlRespPayload().successPayload(result, code);
@@ -102,6 +107,10 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
       }else {
         // let resp = MlSubDepartments.update({_id: args.subDepartmentId}, {$set: args.subDepartment}, {upsert: true})
         let resp = mlDBController.update('MlSubDepartments', args.subDepartmentId, args.subDepartment, {$set:true}, context)
+        if(resp){
+          let departmentId = null;
+          MlEmailNotification.subDepartmentVerficationEmail( args.subDepartmentId,departmentId,context);
+        }
         if (resp) {
           let code = 200;
           let result = {cluster: resp}
@@ -119,6 +128,10 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
       subDepartment.subDepatmentAvailable = args.depatmentAvailable;
       // let resp = MlSubDepartments.update({departmentId: args.departmentId}, {$set: subDepartment}, {upsert: true})
       let resp = mlDBController.update('MlSubDepartments', {departmentId: args.departmentId}, subDepartment, {$set:true}, context)
+      if(resp){
+        let subDepartmentId = null;
+        MlEmailNotification.subDepartmentVerficationEmail( subDepartmentId,args.departmentId,context);
+      }
       if (resp) {
         let code = 200;
         let result = {cluster: resp}

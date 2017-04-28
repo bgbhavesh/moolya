@@ -5,6 +5,7 @@
 
 
 //TODO: Remove the dependency of Meteor Email Package and use NodeMailer(npm) package.
+var from=Meteor.settings.private.fromEmailAddr;
 Meteor.startup(function () {
   process.env.MAIL_URL = Meteor.settings.private.smtpMailUrl;
 });
@@ -27,7 +28,7 @@ Meteor.startup(function () {
 
     _createEmailJSON(email) {
       return {
-        "from": email.from || "noreply@moolya.in",
+        "from": email.from || from,
         "to": email.to,
         "subject": email.subject,
         "text": email.text
@@ -36,7 +37,7 @@ Meteor.startup(function () {
 
     _createEmailHTML(email) {
       return {
-        "from": email.from || "noreply@moolya.in",
+        "from": email.from || from,
         "to": email.to,
         "subject": email.subject,
         "html": email.html
@@ -45,7 +46,7 @@ Meteor.startup(function () {
 
     _createEmailAttachment(email) {
       var emailConfig = {
-        "from": email.from || "noreply@moolya.in",
+        "from": email.from || from,
         "to": email.to,
         "subject": email.subject,
         attachments: [{contents: email.content, contentType: email.contentType, fileName: email.fileName}]

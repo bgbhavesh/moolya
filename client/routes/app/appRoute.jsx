@@ -2,9 +2,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import {mount} from 'react-mounter';
 import AppLayout from '../../app/layouts/appLayout'
-import MlMyProfile from '../../admin/profile/component/MlMyprofile'
-import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
-
+import MlMapViewContainer from "../../admin/core/containers/MlMapViewContainer"
+import MoolyaMapView from "../../commons/components/map/MoolyaMapView"
+import MlViews from "../../admin/core/components/MlViews";
+import {mlBrowserDashboardMapConfig} from '../../app/dashboard/config/mlBrowserDashboardConfig'
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -26,10 +27,22 @@ appSection.route('/', {
 })
 
 appSection.route('/dashboard', {
-  name: 'myprofile',
+  name: 'dashboard',
   action(){
-    mount(AppLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MlMyProfile/>})
+    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlBrowserDashboardMapConfig}/>})
   }
 });
 
+appSection.route('/ideator', {
+  name: 'ideator',
+  action(){
+    mount(AppLayout,{appContent:<div>Ideator</div>})
+  }
+});
 
+appSection.route('/startup', {
+  name: 'startup',
+  action(){
+    mount(AppLayout,{appContent:<div>Startup</div>})
+  }
+});

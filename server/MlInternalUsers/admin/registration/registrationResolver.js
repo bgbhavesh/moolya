@@ -627,6 +627,8 @@ MlResolver.MlMutationResolver['sendSmsVerificationForRegistration'] = (obj, args
 MlResolver.MlMutationResolver['sendEmailVerificationForRegistration'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
+    console.log("Email Url: "+ Meteor.settings.private.smtpMailUrl);
+    console.log(encodeURIComponent("qasmtp@moolya.in"));
     //let regDetails=mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || null;
    // const userId=regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.userId?regDetails.registrationInfo.userId:null;
     //if ( userId ) {

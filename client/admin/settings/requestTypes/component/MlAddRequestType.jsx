@@ -110,7 +110,9 @@ class MlAddRequestType extends React.Component{
                 <div className="form-group">
                   <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
                 </div>
-
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true}/>
+                </div>
 
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
@@ -119,9 +121,7 @@ class MlAddRequestType extends React.Component{
                     <div className="slider"></div>
                   </label>
                 </div>
-                <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true}/>
-                </div>
+
               </form>
             </div>
           </div>

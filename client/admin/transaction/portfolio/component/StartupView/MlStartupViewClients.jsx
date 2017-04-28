@@ -139,7 +139,7 @@ export default class MlStartupViewClients extends React.Component {
                   <div className="team-block">
                     <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
                     <h3>
-                      {details.companyName} <br />
+                      {details.companyName&&details.companyName} <br />
                     </h3>
                   </div>
                 </div>)

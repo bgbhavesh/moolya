@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 
 const mlClusterSubChaptersListConfig=new MlViewer.View({
   name:"clusterChapterList",
-  module:"chapter",
+  module:"hierarchySubChapters",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
   throttleRefresh:true,
@@ -18,7 +18,7 @@ const mlClusterSubChaptersListConfig=new MlViewer.View({
   viewComponent:<MlClusterSubChaptersListHierarchy />,
   graphQlQuery:gql`
               query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-              data:ContextSpecSearch(module:"subChapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+              data:ContextSpecSearch(module:"hierarchySubChapters",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
                     totalRecords
                     data{
                      ...on SubChapter{

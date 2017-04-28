@@ -107,7 +107,7 @@ export default class MlStartupViewManagement extends React.Component {
 
   render(){
     let that = this;
-    let managementArray = that.state.statstartupManagementList || [];
+    let managementArray = that.state.startupManagementList || [];
     return (
 
         <div id="annotatorContent">

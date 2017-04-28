@@ -248,7 +248,7 @@ export default class MlStartupAwards extends React.Component{
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                           <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                          <h3>{details.description?details.description:""}</h3>
+                          <h3>{details.awardName?details.awardName:""}</h3>
                         </div>
                       </a>
                     </div>)

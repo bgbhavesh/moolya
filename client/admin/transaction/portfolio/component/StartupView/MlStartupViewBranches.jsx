@@ -115,7 +115,7 @@ export default class MlStartupViewBranches extends React.Component {
                   <div className="team-block">
                     <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
                     <h3>
-                      {details.name} <br />
+                      {details.name&&details.name} <br />
                     </h3>
                   </div>
                 </div>)

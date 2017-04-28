@@ -115,7 +115,7 @@ export default class MlStartupViewLookingFor extends React.Component {
                 <div className="team-block">
                   <img src={details.logo&&details.logo.fileUrl} className="team_img" />
                   <h3>
-                    {details.lookingFor}
+                    {details.lookingForName&&details.lookingForName}
                   </h3>
                 </div>
               </div>)

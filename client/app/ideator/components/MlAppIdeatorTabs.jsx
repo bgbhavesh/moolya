@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import Tabs from 'react-responsive-tabs';
+import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import MlAppIdeatorDetails from './MlAppIdeatorDetails';
 import MlAppIdeatorIdeas from './MlAppIdeatorIdeas';
 import MlAppIdeatorProblemsSolutions from './MlAppIdeatorProblemsSolutions';
@@ -16,86 +16,111 @@ import MlAppIdeatorLookingFor from './MlAppIdeatorLookingFor'
 
 
 export default class MlAppIdeatorTabs extends React.Component{
-  componentDidMount()
-  {
-    $(function() {
-      $('.float-label').jvFloat();
+constructor(props){
+  super(props)
+  this.state =  {tabs: [], ideatorPortfolio:{}};
+  // this.getIdeatorDetails.bind(this);
+  // this.getProblemSolution.bind(this)
+  // this.getChildContext.bind(this)
+}
+
+// getChildContext(){
+//   return {
+//     ideatorPortfolio: this.state.ideatorPortfolio
+//   }
+// }
+
+componentDidMount(){
+  setTimeout(function(){
+    $('div[role="tab"]').each(function( index ) {
+      var test = $(this).text();
+      $(this).empty();
+      $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
     });
+    $('.RRT__tabs').addClass('horizon-swiper');
+    $('.RRT__tab').addClass('horizon-item');
+    $('.horizon-swiper').horizonSwiper();
+  },300);
+}
 
-    $('.switch input').change(function() {
-      if ($(this).is(':checked')) {
-        $(this).parent('.switch').addClass('on');
-      }else{
-        $(this).parent('.switch').removeClass('on');
-      }
-    });
+getTabComponents(){
+  let tabs = [
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator", component:<MlAppIdeatorDetails key="1"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlAppIdeatorIdeas key="2"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component: <MlAppIdeatorProblemsSolutions key="3"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience", component:<MlAppIdeatorAudience key="4"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component: <MlAppIdeatorLibrary key="5"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Planning", component:<MlAppIdeatorStrategyAndProblems key="6"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Planning and Trademark", component:<MlAppIdeatorIntellectual key="7"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For", component:<MlAppIdeatorLookingFor key="8"/>}
+  ]
+  return tabs;
+}
 
-    setTimeout(function(){
-      $('div[role="tab"]').each(function( index ) {
-        var test = $(this).text();
-        $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
-      });
-      $('.RRT__tabs').addClass('horizon-swiper');
-      $('.RRT__tab').addClass('horizon-item');
-      /*$('.RRT__container').addClass('swiper-container').addClass('swiper-menu');
-       var mySwiper = new Swiper('.swiper-container', {
-       speed: 400,
-       slidesPerView:'auto'
-       });.addClass('swiper-slide')*/
-      $('.horizon-swiper').horizonSwiper();
-    },300);
+// getIdeatorDetails(details){
+//   let data = this.state.ideatorPortfolio;
+//   data['portfolioIdeatorDetails']=details;
+//   this.setState({ideatorPortfolio : data})
+//   // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
+//   // this.setState({ideatorDetails:details})
+//   this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+// }
+// getIdeas(details) {
+//   let data = this.state.ideatorPortfolio;
+//   data['ideas']=details;
+//   this.setState({ideatorPortfolio : data})
+//   this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+// }
+// getProblemSolution(details) {
+//   let data = this.state.ideatorPortfolio;
+//   data['problemSolution']=details;
+//   this.setState({ideatorPortfolio : data})
+//   this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+// }
+// getStrategyAndPlanning(details) {
+//   let data = this.state.ideatorPortfolio;
+//   data['strategyAndPlanning']=details;
+//   this.setState({ideatorPortfolio : data})
+//   this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+// }
+// getIntellectualPlanning(details) {
+//   let data = this.state.ideatorPortfolio;
+//   data['intellectualPlanning']=details;
+//   this.setState({ideatorPortfolio : data})
+//   this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+// }
+// getAudience(details) {
+//   let data = this.state.ideatorPortfolio;
+//   data['audience']=details;
+//   this.setState({ideatorPortfolio : data})
+//   this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+// }
+// getLookingFor(details) {
+//   let data = this.state.ideatorPortfolio;
+//   data['lookingFor']=details;
+//   this.setState({ideatorPortfolio : data})
+//   this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+// }
 
+componentWillMount()
+{
+  let tabs = this.getTabComponents();
+  function getTabs() {
+    return tabs.map(tab => ({
+      tabClassName: 'moolya_btn', // Optional
+      panelClassName: 'panel1', // Optional
+      title: tab.title,
+      getContent: () => tab.component
+    }));
   }
+  this.setState({tabs:getTabs() ||[]});
+}
 
-  render(){
-
-    let MlTabs = [
-      {name: 'Ideator', tabContent: <MlAppIdeatorDetails/>},
-      {name: 'Ideas', tabContent:<MlAppIdeatorIdeas/>},
-      {name: 'Problems and Solutions', tabContent: <MlAppIdeatorProblemsSolutions/>},
-      {name: 'Audience', tabContent: <MlAppIdeatorAudience/>},
-      {name: 'Library', tabContent: <MlAppIdeatorLibrary/>},
-      {name: 'Strategy and Planing', tabContent: <MlAppIdeatorStrategyAndProblems/>},
-      {name: 'Intellectual Planing and Trademark', tabContent: <MlAppIdeatorIntellectual/>},
-      {name: 'Looking For', tabContent: <MlAppIdeatorLookingFor/>}
-
-    ];
-
-    function getTabs() {
-      return MlTabs.map(MlTab => ({
-        tabClassName: 'moolya_btn', // Optional
-        panelClassName: 'panel1', // Optional
-        title: MlTab.name,
-        getContent: () => MlTab.tabContent,
-      }));
-    }
-
-    const App = () => <Tabs items={getTabs()} />;
-    return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
-          <div className="main_wrap_scroll">
-
-            <App/>
-
-
-          </div>
-          <span className="actions_switch show_act"></span>
-
-          <div className="bottom_actions_block show_block">
-            <div className="hex_btn"><a data-toggle="tooltip" title="Edit" data-placement="top" href="#" className="hex_btn hex_btn_in"> <span className="ml ml-edit"></span></a></div>
-            <div className="hex_btn"><a data-toggle="tooltip" title="Make Public" data-placement="top" href="#" className="hex_btn hex_btn_in"> <FontAwesome name='bullhorn'/></a></div>
-            <div className="hex_btn"><a data-toggle="tooltip" title="Timeline" data-placement="top" href="#" className="hex_btn hex_btn_in"> <FontAwesome name='list-ul'/></a></div>
-            <div className="hex_btn"><a data-toggle="tooltip" title="Cancel" data-placement="top" href="#" className="hex_btn hex_btn_in"> <span className="ml ml-delete"></span></a></div>
-            <div className="hex_btn"><a data-toggle="tooltip" title="Save" data-placement="top" href="#" className="hex_btn hex_btn_in"> <span className="ml ml-save"></span></a></div>
-            <div className="hex_btn"><a data-toggle="tooltip" title="Assign" data-placement="top" href="#" className="hex_btn hex_btn_in"> <span className="ml ml-assign"></span></a></div>
-            <div className="hex_btn"><a data-toggle="tooltip" title="Annotate" data-placement="top" href="#" className="hex_btn hex_btn_in"> <span className="ml ml-annotate"></span></a></div>
-            <div className="hex_btn"><a data-toggle="tooltip" title="Go Live" data-placement="top" href="#" className="hex_btn hex_btn_in"> <FontAwesome name='rocket'/></a></div>
-
-          </div>
-        </div>
-      </div>
-    )
-  }
-};
+render(){
+  let tabs = this.state.tabs;
+  return <MlTabComponent tabs={tabs}/>
+}
+}
+// MlAppIdeatorTabs.childContextTypes = {
+//   ideatorPortfolio: PropTypes.object,
+// };

@@ -48,7 +48,7 @@ export default class MlAppIdeatorIdeas extends React.Component{
           <div className="panel-body nopadding">
             <div className="upload-file-wrap">
               <input type="file" name="fileinput[]" id="fileinput1" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange="loadFile(event)" multiple />
-              <label htmlForfor="fileinput1">
+              <label htmlFor="fileinput1">
                 <figure>
                   <i className="fa fa-upload" aria-hidden="true"></i>
                 </figure>

@@ -1,7 +1,8 @@
-import MlResolver from '../mlAdminResolverDef'
+import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import MlAuthorization from '../../../mlAuthorization/mlAuthorization'
 import geocoder from 'geocoder'
+import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 
 MlResolver.MlMutationResolver['createCluster'] = (obj, args, context, info) => {
@@ -80,6 +81,13 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
       }
         // let resp = MlClusters.update({_id:args.clusterId}, {$set:cluster}, {upsert:true})
       let resp = mlDBController.update('MlClusters', args.clusterId, cluster, {$set:true}, context)
+      if(resp){
+          if(cluster && cluster.isEmailNotified){
+            if(args.clusterId){
+              MlEmailNotification.clusterVerficationEmail(args.clusterId,context);
+            }
+          }
+      }
       if(resp){
             let code = 200;
             let result = {cluster: resp}

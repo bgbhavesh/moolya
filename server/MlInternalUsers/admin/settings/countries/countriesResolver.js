@@ -1,5 +1,5 @@
 
-import MlResolver from '../../mlAdminResolverDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 import {createcluster} from '../../clusters/clusterResolver'
 import MlRespPayload from '../../../../commons/mlPayload'
 

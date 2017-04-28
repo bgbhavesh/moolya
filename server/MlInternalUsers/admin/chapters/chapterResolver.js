@@ -1,6 +1,7 @@
-import MlResolver from '../mlAdminResolverDef'
+import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import geocoder from 'geocoder'
+import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
     let chapter = args.chapter;
@@ -251,6 +252,13 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         }
         // let resp = MlSubChapters.update({_id:args.subChapterId}, {$set:subChapter})
         let resp = mlDBController.update('MlSubChapters', args.subChapterId, subChapter, {$set:true}, context)
+        if(resp){
+          if(subChapter && subChapter.isEmailNotified){
+            if(args.subChapterId){
+              MlEmailNotification.chapterVerficationEmail(args.subChapterId,context);
+            }
+          }
+        }
         if(resp){
           if(args.subChapterDetails && args.subChapterDetails.chapterId){
             MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)

@@ -2,7 +2,7 @@
  * Created by vishwadeep.kapoor on 07/04/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../admin/mlAdminSchemaDef'
+import MlSchemaDef from '../../../commons/mlSchemaDef'
 let AuditLogSchema = ` 
       type AuditLogs{
             _id: String

@@ -11,6 +11,7 @@ body{font-family: 'DINPro-Regular';font-size:15px;background:#fff url(/images/bg
 input, textarea{font-family: 'DINPro-Regular';font-size:15px;color:#000;}
 input:focus, textarea:focus{outline:0px;}
 h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;letter-spacing:0.5;}
+.mart20{ margin-top: 20px;}
 .moolya_admin .admin_header{height: 113px;background: #1a1b1b;border-bottom: 2px solid #ddd;border-top: 2px solid #ef4747;}
 .moolya_admin .admin_header .header_top{height: 53px;text-align: center;}
 .moolya_admin .admin_header .header_top .fa-home{color: #ffe144;font-size: 26px; margin: 5px 0 0 10px;}

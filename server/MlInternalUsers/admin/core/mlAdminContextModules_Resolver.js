@@ -1,4 +1,4 @@
-import MlResolver from '../mlAdminResolverDef'
+import MlResolver from '../../../commons/mlResolverDef'
 import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
 import MlAdminContextQueryConstructor from './repository/mlAdminContextQueryConstructor';
 import getQuery from "../genericSearch/queryConstructor";

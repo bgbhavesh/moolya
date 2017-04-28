@@ -70,7 +70,7 @@ export default class MlStartupLegal extends React.Component{
       <div className="requested_input">
         <div className="col-lg-12">
           <div className="row">
-            <h2>Service & Products</h2>
+            <h2>Legal Issue</h2>
             <div className="panel panel-default panel-form">
 
               <div className="panel-body">

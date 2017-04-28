@@ -9,8 +9,6 @@ var from=Meteor.settings.private.fromEmailAddr;
 Meteor.startup(function () {
   //console.log(encodeURIComponent("qasmtp@moolya.in"));
   process.env.MAIL_URL = Meteor.settings.private.smtpMailUrl;
-  console.log("Email Url: "+ Meteor.settings.private.smtpMailUrl);
-  console.log(encodeURIComponent("qasmtp@moolya.in"));
 });
 
   class SmtpEmail{

@@ -1,9 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import MlPortfolioIdeatorBasicDetailsView from '../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioIdeatorBasicDetailsView'
 import MlPortfolioIdeatorProblemsAndSolutionsView from '../../../admin/transaction/portfolio/component/IdeatorView/MlProblemsAndSolutionsView'
@@ -12,6 +10,8 @@ import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
+import AppActionButtons from '../components/appActionButtons'
+import TopIconsList from '../components/topIconsList'
 
 
 export default class MlAppIdeatorTabs extends React.Component{
@@ -21,7 +21,7 @@ constructor(props){
   // this.getIdeatorDetails.bind(this);
   // this.getProblemSolution.bind(this)
   // this.getChildContext.bind(this)
-  this.getSelectedAnnotation.bind(this);
+  // this.getSelectedAnnotation.bind(this);
 }
 
 // getChildContext(){
@@ -42,7 +42,8 @@ componentDidMount(){
     $('.horizon-swiper').horizonSwiper();
   },300);
 }
-  // getSelectedAnnotation(selAnnotation){
+  //
+  // (selAnnotation){
   //   if(!this.state.popoverOpen){
   //     this.toggle();
   //     $('.comment-input-box').slideToggle();
@@ -58,13 +59,13 @@ componentDidMount(){
 
 getTabComponents(){
   let tabs = [
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={""}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={""}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={""}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={""}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="5"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={""}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="5"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={""}/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},    //this.props.portfolioDetailsId}
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},   //id will be dyanmic
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId="pJzb7tDXnmtjEpL66" />},                            //id will be dyanmic
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId="pJzb7tDXnmtjEpL66" />},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="4"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="5"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="6"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},
   ]
   return tabs;
 }
@@ -85,7 +86,19 @@ componentWillMount()
 
 render(){
   let tabs = this.state.tabs;
-  return <MlTabComponent tabs={tabs}/>
+  return (
+    <div className="app_main_wrap">
+      <div className="app_padding_wrap">
+        <div className="col-md-12">
+          <TopIconsList/>
+          <MlTabComponent tabs={tabs}/>
+        </div>
+        <AppActionButtons/>
+        <br className="brclear"/>
+      </div>
+    </div>
+  )
+  // return <MlTabComponent tabs={tabs}/>
 }
 }
 // MlAppIdeatorTabs.childContextTypes = {

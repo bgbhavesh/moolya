@@ -29,8 +29,8 @@
         }
       },
      "googleApiKey": "AIzaSyDnlajbJKYdilDs22Rvso9blSOj8KuL8-A",
-     "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
-     "fromEmailAddr":"qatest@moolya.in",
-     "isEmailDomainCheckEnabled":true
+    "smtpMailUrl":"smtp://qasmtp@moolya.in:Moolya123@smtp.moolya.in:25",
+    "fromEmailAddr":"qasmtp@moolya.in",
+    "isEmailDomainCheckEnabled":true
   }
 }

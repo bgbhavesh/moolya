@@ -28,8 +28,8 @@
     },
     "graphql_proxy_url":"http://localhost:8090/graphql"
   },
-  "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
   "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
-  "fromEmailAddr":"qatest@moolya.in",
+  "smtpMailUrl":"smtp://qasmtp@moolya.in:Moolya123@smtp.moolya.in:25",
+  "fromEmailAddr":"qasmtp@moolya.in",
   "isEmailDomainCheckEnabled":true
 }

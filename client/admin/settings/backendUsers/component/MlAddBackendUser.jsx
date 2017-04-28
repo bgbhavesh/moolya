@@ -340,20 +340,20 @@ class MlAddBackendUser extends React.Component {
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
 
-                    <div className="form-group">
-                      <div className="input_types">
-                        <label>Gender : </label>
+                      <div className="form-group">
+                        <div className="input_types">
+                          <label>Gender : </label>
+                        </div>
+                        <div className="input_types">
+                          <input id="radio1" type="radio" name="radio" value="Male" onChange={this.onGenderSelect}/><label htmlFor="radio1"><span><span></span></span>Male</label>
+                        </div>
+                        <div className="input_types">
+                          <input id="radio2" type="radio" name="radio" value="Female" onChange={this.onGenderSelect}/><label htmlFor="radio2"><span><span></span></span>Female</label>
+                        </div>
+                        <div className="input_types">
+                          <input id="radio3" type="radio" name="radio" value="Others" onChange={this.onGenderSelect}/><label htmlFor="radio3"><span><span></span></span>Others</label>
+                        </div>
                       </div>
-                      <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="Male" onChange={this.onGenderSelect}/><label htmlFor="radio1"><span><span></span></span>Male</label>
-                      </div>
-                      <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="Female" onChange={this.onGenderSelect}/><label htmlFor="radio2"><span><span></span></span>Female</label>
-                      </div>
-                      <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="Others" onChange={this.onGenderSelect}/><label htmlFor="radio3"><span><span></span></span>Others</label>
-                      </div>
-                    </div>
                     <div className="clearfix"></div>
                     <MlContactFormComponent getAssignedContacts={this.getAssignedContacts.bind(this)}/>
 

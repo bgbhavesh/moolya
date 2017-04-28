@@ -161,4 +161,17 @@ export default CoreModulesRepo={
     return {totalRecords:totalRecords,data:data};
 
   },
+
+  MlHierarchySubChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
+    let query={};
+    //User selection filter.
+    let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
+    if(clusterId){
+      query={"clusterId":clusterId};
+    }
+    const data = mlDBController.find('MlSubChapters', query, context, fieldsProj).fetch();
+    const totalRecords = mlDBController.find('MlSubChapters', query, context, fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
+
+  }
 }

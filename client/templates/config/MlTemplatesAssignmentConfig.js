@@ -1,6 +1,26 @@
 import {MlViewer,MlViewerTypes} from "/lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+
+function creatorDateFormatter (data){
+  if(data&&data.data&&data.data.createdDate){
+    let createdDateTime = data&&data.data&&data.data.createdDate?data.data.createdDate:'';
+    return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>
+  }else{
+    return <div></div>;
+  }
+}
+
+function modifiedDateFormatter (data){
+  if(data&&data.data&&data.data.modifiedDate){
+    let modifiedDateTime = data&&data.data&&data.data.createdDate?data.data.createdDate:'';
+    return <div>{moment(modifiedDateTime).format('MM-DD-YYYY, HH:MM')}</div>
+  }else{
+    return <div></div>;
+  }
+}
+
 const mltemplatesassignmetConfig=new MlViewer.View({
   name:"templatesTable",
   module:"templateAssignment",//Module name for filter.
@@ -13,14 +33,16 @@ const mltemplatesassignmetConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "createdDate", title: "created Date",dataSort:true},
+    {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter},
     {dataField: "templateProcessName", title: "Process",dataSort:true},
     {dataField: "templateSubProcessName", title: "Sub Process",dataSort:true},
     {dataField: "templateclusterName", title: "Cluster",dataSort:true},
     {dataField: "templatechapterName", title: "Chapter",dataSort:true},
     {dataField: "templatesubChapterName", title: "Sub Chapter",dataSort:true},
     {dataField: "templatecommunityName", title: "Community",dataSort:true},
-    {dataField: "createdBy", title: "Created By",dataSort:true}
+    {dataField: "createdBy", title: "Created By", dataSort:true},
+    {dataField: "modifiedBy", title: "Modified By", dataSort:true},
+    {dataField: "modifiedDate", title: "Modified Date", customComponent: modifiedDateFormatter},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -61,6 +83,8 @@ const mltemplatesassignmetConfig=new MlViewer.View({
                               templatechapterName    
                               templatesubChapterName  
                               templatecommunityName  
+                              modifiedBy
+                              modifiedDate
                           }
                       }
               }

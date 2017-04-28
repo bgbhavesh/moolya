@@ -428,7 +428,7 @@ export default class Step1 extends React.Component{
                     <div className="panel panel-default">
                       <div className="panel-heading">Process Status</div>
                       <div className="panel-body button-with-icon">
-                        <button type="button" className="btn btn-labeled btn-success"  >
+                        <button type="button" className="btn btn-labeled btn-success"  onClick={this.sendSmsVerification.bind(this)} >
                           <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
                         <button type="button" className="btn btn-labeled btn-success" onClick={this.sendEmailVerification.bind(this)}>
                           <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>

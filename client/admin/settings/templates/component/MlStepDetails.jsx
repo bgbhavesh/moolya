@@ -2,7 +2,10 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {findStepTemplatesActionHandler} from '../actions/findTemplatesAction'
+import FontAwesome from 'react-fontawesome'
+import ActiveFormater from './ActiveFormater'
 import _ from 'underscore'
+import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 export default class MlStepDetails extends Component {
     constructor(props){
       super(props);
@@ -14,8 +17,8 @@ export default class MlStepDetails extends Component {
       return this;
     }
 
-  componentDidMount() {
-
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
   }
   componentWillMount(){
     const processResp=this.findDocument();
@@ -31,23 +34,30 @@ export default class MlStepDetails extends Component {
       let documentDetails=[]
       for(let i=0;i<assignedTemplates.length;i++){
         let json = {
-          Id:assignedTemplates[i]._id,
+          templateCode:assignedTemplates[i].templateCode,
           date: assignedTemplates[i].createdDate,
           templateName: assignedTemplates[i].templateName,
-          view: 'Yes'
+          isActive:assignedTemplates[i].isActive,
+          view: 'Yes',
+          templateImage:assignedTemplates[i].templateImage
         }
         documentDetails.push(json);
       }
       this.setState({"templateInfo":documentDetails})
     }
   }
-
+  showTemplateImage(row){
+    window.open(row.templateImage)
+  }
   showEyeButton(cell, row){
     return    (<div>
-      <a className="list-group-item" >
-        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
-      </a>
+
+        <FontAwesome  onClick={this.showTemplateImage.bind(this,row)} name='eye fa-4x"'/>
+
     </div>);
+  }
+  SwitchBtn(cell, row){
+    return <ActiveFormater data={row} subProcessConfig={this.props.subProcessConfig} stepCode={this.props.stepCode} templateId={this.props.templateId}/>;
   }
 
   render() {
@@ -55,7 +65,7 @@ export default class MlStepDetails extends Component {
       expandRowBgColor: 'rgb(242, 255, 163)'
     };
     const selectRow = {
-      mode: 'checkbox',
+      mode: 'radio',
       bgColor: '#feeebf',
       clickToSelect: true,  // click to select, default is false
       clickToExpand: true   // click to expand row, default is false// click to expand row, default is false
@@ -71,7 +81,8 @@ export default class MlStepDetails extends Component {
             <TableHeaderColumn  dataField="Id" hidden={true}>Id</TableHeaderColumn>
             <TableHeaderColumn  dataField="date">Date</TableHeaderColumn>
             <TableHeaderColumn  isKey={true}  dataField="templateName">Template Name</TableHeaderColumn>
-            <TableHeaderColumn  dataField="view" >View</TableHeaderColumn>
+            <TableHeaderColumn  dataField="view"  dataFormat={this.showEyeButton.bind(this)}>View</TableHeaderColumn>
+            <TableHeaderColumn  dataField="isActive"  dataFormat={this.SwitchBtn.bind(this)}>Status</TableHeaderColumn>
           </BootstrapTable>
         </div>
       </div>

@@ -94,7 +94,6 @@ class MlEditAssignTemplate extends React.Component{
     if(response){
       const steps=await this.findSteps(subProcessId);
       this.setState({steps:steps||[]});
-      console.log(this.state.steps);
       let stepDetails=[];
       stepDetails= steps;
       let stepName=''
@@ -103,7 +102,6 @@ class MlEditAssignTemplate extends React.Component{
       }
       const templates=await this.findTemplates(subProcessId,stepName);
       this.setState({templateInfo:templates||[]})
-      console.log(this.state.templateInfo);
       this.setState({
         loading           : false,
         process           : response.templateprocess,
@@ -158,9 +156,7 @@ class MlEditAssignTemplate extends React.Component{
     }
   }
   async findSteps(subProcessId) {
-    //let subProcessId = this.state.subProcess
     const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
-    console.log(response)
     if(response){
       let steps = response.steps||[];
       return steps;
@@ -170,7 +166,6 @@ class MlEditAssignTemplate extends React.Component{
 
 
   async findTemplates(subProcessId,stepName) {
-    console.log(subProcessId+"--"+stepName)
     const response = await findTemplatesActionHandler(subProcessId,stepName);
     console.log(response);
     let templates=[];
@@ -190,10 +185,8 @@ class MlEditAssignTemplate extends React.Component{
     this.setState({subProcessName:selObject.label})
     const templates=await this.findTemplates(value);
     this.setState({templateInfo:templates||[]})
-    console.log(this.state.templateInfo);
     const steps=await this.findSteps();
     this.setState({steps:steps||[]});
-    console.log(this.state.steps);
   }
 
   optionsBySelectUserType(val){
@@ -229,7 +222,6 @@ class MlEditAssignTemplate extends React.Component{
     console.log("switch tab step"+stepName)
     const templates=await this.findTemplates(this.state.subProcess,stepName);
     this.setState({templateInfo:templates||[]})
-    console.log(this.state.templateInfo);
   }
 
   render(){
@@ -359,7 +351,7 @@ class MlEditAssignTemplate extends React.Component{
                             <div className="tab-content clearfix">
                               {that.state.templateInfo.map(function(options,key) {
                                 return(
-                                  <div className="tab-pane active" id={'template'+key} >
+                                  <div className="tab-pane active" id={'template'+key} key={key}>
                                     <div className="list-group nomargin-bottom">
                                       <a className="list-group-item" key={key} id={"template"}>{options.templateName}
                                         <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>

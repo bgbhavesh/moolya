@@ -36,8 +36,8 @@ export default class CreateRequestComponent extends Component {
     const response = await addReqgistrationRequestInfo(transaction);
     if(response.success){
       this.setState({show:false,requestType:null})
-      toastr.success("Request is created successfully");
       FlowRouter.go("/admin/transactions/requestedList");
+      toastr.success("Request is created successfully");
     }else{
       toastr.error(response.result);
       this.setState({show:false})

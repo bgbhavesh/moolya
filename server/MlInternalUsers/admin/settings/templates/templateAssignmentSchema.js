@@ -36,6 +36,8 @@ let TemplateAssignment = `
             assignedTemplates         : [template]    
             createdBy                 : String      
             createdDate               : String  
+            modifiedBy                : String      
+            modifiedDate              : String
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String
@@ -69,6 +71,8 @@ let TemplateAssignment = `
             assignedTemplates         : [stepInput]    
             createdBy                 : String      
             createdDate               : String  
+            modifiedBy                : String      
+            modifiedDate              : String 
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String

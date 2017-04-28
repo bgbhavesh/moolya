@@ -147,7 +147,7 @@ if(identity === "Company"){
     this.setState({profession:val})
   }
 
-  checkIdentity(event) {
+  checkIdentityIndividual(event) {
       this.setState({identityType: event.target.name});
       i++;
       $('#comp').hide();
@@ -159,7 +159,7 @@ if(identity === "Company"){
       }}
 
 
-  checkIdentity1(event) {
+  checkIdentityCompany(event) {
     this.setState({identityType: event.target.name});
     i++;
     $('#indi').hide();
@@ -232,7 +232,7 @@ if(identity === "Company"){
   async sendEmailVerification(){
     const response= await emailVerificationActionHandler(this.props.registrationId);
     if(response.success){
-      toastr.success("Email Verification Send");
+      toastr.success("email verification link send successfully");
     }else{
       // toastr.error(response.result);
     }
@@ -244,7 +244,7 @@ if(identity === "Company"){
   async sendSmsVerification(){
     const response= await smsVerificationActionHandler(this.props.registrationId);
     if(response.success){
-      toastr.success("Sms Otp Verification Send");
+      toastr.success("otp verification code send successfully");
     }else{
       // toastr.error(response.result);
     }
@@ -419,11 +419,11 @@ if(identity === "Company"){
 
                       <div   id="indi" className="input_types">
 
-                        <input  type="checkbox"   name="Individual" value="Individual" onChange={that.checkIdentity.bind(that)} defaultChecked={this.state.defaultIdentityIndividual}/><label htmlFor="radio1"><span><span></span></span>Individual</label>
+                        <input  type="checkbox"   name="Individual" value="Individual" onChange={that.checkIdentityIndividual.bind(that)} defaultChecked={this.state.defaultIdentityIndividual}/><label htmlFor="radio1"><span><span></span></span>Individual</label>
                           {/*<a  href="#3a" data-toggle="tab" name="Individual" >&nbsp;</a>*/}
                       </div>
                       <div id="comp" className="input_types">
-                        <input  type="checkbox"  name="Company" value="Company" onChange={that.checkIdentity1.bind(that)} defaultChecked={this.state.defaultIdentityCompany}  /><label htmlFor="radio2"><span><span></span></span>Company</label>
+                        <input  type="checkbox"  name="Company" value="Company" onChange={that.checkIdentityCompany.bind(that)} defaultChecked={this.state.defaultIdentityCompany}  /><label htmlFor="radio2"><span><span></span></span>Company</label>
                           {/*<a href="#4a" data-toggle="tab" name="Company" >&nbsp;</a>*/}
                       </div>
                     </div>

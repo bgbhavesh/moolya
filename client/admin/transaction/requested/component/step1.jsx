@@ -232,7 +232,7 @@ if(identity === "Company"){
   async sendEmailVerification(){
     const response= await emailVerificationActionHandler(this.props.registrationId);
     if(response.success){
-      toastr.success("Email Verification Send");
+      toastr.success("email verification link send successfully");
     }else{
       // toastr.error(response.result);
     }
@@ -244,7 +244,7 @@ if(identity === "Company"){
   async sendSmsVerification(){
     const response= await smsVerificationActionHandler(this.props.registrationId);
     if(response.success){
-      toastr.success("Sms Otp Verification Send");
+      toastr.success("otp verification code send successfully");
     }else{
       // toastr.error(response.result);
     }

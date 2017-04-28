@@ -604,7 +604,13 @@ MlResolver.MlMutationResolver['sendSmsVerificationForRegistration'] = (obj, args
    // const userId=regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.userId?regDetails.registrationInfo.userId:null;
    // if ( userId ) {
       let result=MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:args.registrationId}, context, info);
-      return result;
+      //return result;
+      if(result){
+        let code = 200;
+        let result = {registrationId : args.registrationId}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+     }
   //  }else{
       //Error- unable to find User
   //  }
@@ -620,7 +626,13 @@ MlResolver.MlMutationResolver['sendEmailVerificationForRegistration'] = (obj, ar
    // const userId=regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.userId?regDetails.registrationInfo.userId:null;
     //if ( userId ) {
       let result=MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:args.registrationId}, context, info);
-      return result;
+      if(result){
+        let code = 200;
+        let result = {registrationId : args.registrationId}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }
+
    // }else{
       //Error- unable to find User
    // }

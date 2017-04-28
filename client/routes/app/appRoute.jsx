@@ -7,6 +7,7 @@ import MoolyaMapView from "../../commons/components/map/MoolyaMapView"
 import MlViews from "../../admin/core/components/MlViews";
 import {mlBrowserDashboardMapConfig} from '../../app/dashboard/config/mlBrowserDashboardConfig'
 import MlAppIdeatorLanding from '../../../client/app/ideator/components/MlAppIdeatorLanding'
+import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeatorLanding'
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 
 export const appSection = FlowRouter.group({
@@ -40,6 +41,25 @@ appSection.route('/ideator', {
   action(){
     mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
     // mount(AppLayout,{appContent:<div>Ideator</div>})
+  }
+});
+
+
+// appSection.route('/ideator/viewPortfolio/:id/:communityType', {
+appSection.route('/ideator/viewPortfolio/', {
+  name: 'ideator_portfolio_view',
+  action(params){
+    mount(AppLayout,{adminContent:<MlAppIdeatorTabs viewMode={true}/>})
+    // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
+  }
+});
+
+// appSection.route('/ideator/editPortfolio/:id/:communityType', {
+appSection.route('/ideator/editPortfolio/', {
+  appSection: 'ideator_portfolio_edit',
+  action(params){
+    // mount(AppLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
+    mount(AppLayout,{adminContent:<MlAppIdeatorTabs viewMode={false}/>})
   }
 });
 

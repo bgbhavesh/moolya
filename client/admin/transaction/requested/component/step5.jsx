@@ -75,7 +75,7 @@ export default class Step5 extends React.Component {
       toastr.success("Selected Documents Approved Successfully")
     }
     else{
-      toastr.success("please select kyc documents")
+      toastr.error("please select kyc documents")
     }
   }
 
@@ -113,7 +113,7 @@ export default class Step5 extends React.Component {
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
     }else{
-      toastr.success("please select kyc documents")
+      toastr.error("please select kyc documents")
     }
 
   }
@@ -140,7 +140,7 @@ export default class Step5 extends React.Component {
       this.props.getRegistrationKYCDetails();
       toastr.success("Selected Documents Rejected Successfully")
     }else{
-      toastr.success("please select kyc documents")
+      toastr.error("please select kyc documents")
     }
   }
 

@@ -18,6 +18,7 @@ var options3 = [
     {value: 'Yes', label: 'Yes'},
     {value: 'No', label: 'No'}
 ];
+var i = 1;
 
 export default class Step1 extends React.Component{
   constructor(props){
@@ -39,20 +40,36 @@ export default class Step1 extends React.Component{
       userType:null,
       identityTypesData:[],
       selectedTypeOfIndustry:'',
-      profession:null
+      profession:null,
+      defaultIdentityIndividual: " ",
+      defaultIdentityCompany:" "
     }
 
     this.fetchIdentityTypesMaster.bind(this);
     this.updateregistrationInfo.bind(this);
+    this.settingIdentity.bind(this);
 
-    return this;
+      return this;
   }
+async settingIdentity(identity){
+if(identity === "Individual"){
+  this.setState({defaultIdentityIndividual:true, defaultIdentityCompany: false})
+}
+if(identity === "Company"){
+  this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
+  $('#indi').hide();
+}
+
+}
+
 
   async fetchIdentityTypesMaster() {
     const response = await fetchIdentityTypes(this.props.config);
     this.setState({identityTypesData: response});
+    console.log(this.state.identityTypesData);
+   // this.IdentityCheckbox();
     return response;
-  } profession
+  }
 
   componentWillMount() {
     this.fetchIdentityTypesMaster();
@@ -73,7 +90,9 @@ export default class Step1 extends React.Component{
       userType:details.userType,
       selectedTypeOfIndustry:details.industry,
       profession:details.profession
-      })
+      });
+    this.settingIdentity(details.identityType);
+
   }
 
   componentDidMount()
@@ -81,6 +100,17 @@ export default class Step1 extends React.Component{
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
     initalizeFloatLabel();
+    if(this.state.defaultIdentityIndividual === true){
+      $('#comp').hide();
+
+    }
+    if(this.state.defaultIdentityCompany === true){
+      $('#indi').hide();
+
+    }
+
+
+
     //this.props.getRegistrationDetails(this.state)
   }
   optionsBySelectCountry(value){
@@ -117,11 +147,31 @@ export default class Step1 extends React.Component{
     this.setState({profession:val})
   }
 
+  checkIdentity(event) {
+      this.setState({identityType: event.target.name});
+      i++;
+      $('#comp').hide();
+      if (i > 1){
+        i = 0;
+        this.setState({identityType: " "});
+        $('#indi').show();
+        $('#comp').show();
+      }}
 
-  checkIdentity(event){
-    console.log(event.target.name)
-    this.setState({identityType:event.target.name})
+
+  checkIdentity1(event) {
+    this.setState({identityType: event.target.name});
+    i++;
+    $('#indi').hide();
+    if (i > 1){
+      i = 0;
+      this.setState({identityType: " "});
+      $('#indi').show();
+      $('#comp').show();
+    }
   }
+
+
 
   optionsBySelectUserType(value){
     this.setState({userType:value})
@@ -345,27 +395,40 @@ export default class Step1 extends React.Component{
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} />
                     <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} />
 
-                        {canSelectIdentity&&
-                        <div className="ml_tabs">
-                          <ul  className="nav nav-pills">
+                        {/*{canSelectIdentity&&*/}
+                        {/*<div className="ml_tabs">*/}
+                          {/*<ul  className="nav nav-pills">*/}
 
-                            {identityTypez.map((i)=>{
+                            {/*{identityTypez.map((i)=>{*/}
 
-                              return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
-                                <a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>
-                              </li>);
-                            })}
-                            {/* <li className={this.state.identityType==="Individual"?"active":""}>
-                             <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
-                             </li>
-                             <li className={this.state.identityType==="Company"?"active":""}>
-                             <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
-                             </li>*/}
-                          </ul>
-                        </div>
-                        }
+                              {/*return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>*/}
+                                {/*<a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>*/}
+                              {/*</li>);*/}
+                            {/*})}*/}
+                            {/*/!* <li className={this.state.identityType==="Individual"?"active":""}>*/}
+                             {/*<a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>*/}
+                             {/*</li>*/}
+                             {/*<li className={this.state.identityType==="Company"?"active":""}>*/}
+                             {/*<a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>*/}
+                             {/*</li>*!/*/}
+                          {/*</ul>*/}
+                        {/*</div>*/}
+                        {/*}*/}
 
-                        <div className="form-group">
+                    <div className="form-group">
+
+                      <div   id="indi" className="input_types">
+
+                        <input  type="checkbox"   name="Individual" value="Individual" onChange={that.checkIdentity.bind(that)} defaultChecked={this.state.defaultIdentityIndividual}/><label htmlFor="radio1"><span><span></span></span>Individual</label>
+                          {/*<a  href="#3a" data-toggle="tab" name="Individual" >&nbsp;</a>*/}
+                      </div>
+                      <div id="comp" className="input_types">
+                        <input  type="checkbox"  name="Company" value="Company" onChange={that.checkIdentity1.bind(that)} defaultChecked={this.state.defaultIdentityCompany}  /><label htmlFor="radio2"><span><span></span></span>Company</label>
+                          {/*<a href="#4a" data-toggle="tab" name="Company" >&nbsp;</a>*/}
+                      </div>
+                    </div>
+                    <div className="clearfix"></div>
+                        <div className="form-group mart20">
                           <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
                         </div>
                         <div className="form-group">

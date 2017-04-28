@@ -92,7 +92,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
-
+        //get the registrtion Details
+       let registerDetails= mlDBController.findOne('MlRegistration', id, context) || {};
+       let registrationInfo=registerDetails.registrationInfo;
+       if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.communityName!=details.communityName)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
+         let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
+       }
         // let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
         let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: details.chapterId}, context) || {};
 
@@ -132,7 +137,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           "registrationDetails.lastName": details.lastName,
           "registrationDetails.identityType": details.identityType,
           "registrationDetails.userType": details.userType
-        }, {$set: true}, context)
+        },{$set: true}, context)
 
         var userProfile = {
           registrationId: id,
@@ -520,7 +525,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         // )
         id = mlDBController.update('MlRegistration', {
           _id: args.registrationId,
-          kycDocuments: {$exists: false}
+          kycDocuments: {$exists: true}
         }, {'kycDocuments': args.registration.kycDocuments}, {$push: true}, context)
       }else{
         // id = MlRegistration.update(
@@ -622,6 +627,8 @@ MlResolver.MlMutationResolver['sendSmsVerificationForRegistration'] = (obj, args
 MlResolver.MlMutationResolver['sendEmailVerificationForRegistration'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
+    console.log("Email Url: "+ Meteor.settings.private.smtpMailUrl);
+    console.log(encodeURIComponent("qasmtp@moolya.in"));
     //let regDetails=mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || null;
    // const userId=regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.userId?regDetails.registrationInfo.userId:null;
     //if ( userId ) {

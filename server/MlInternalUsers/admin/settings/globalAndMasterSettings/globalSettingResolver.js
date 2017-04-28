@@ -1,7 +1,7 @@
 /**
  * Created by mohammed.mohasin on 04/03/17.
  */
-import MlResolver from '../../mlAdminResolverDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 import MlGlobalSettingRepo from './repository/mlGlobalSettingRepo';
 
 MlResolver.MlQueryResolver['fetchGlobalSettings'] = (obj, args, context, info) => {

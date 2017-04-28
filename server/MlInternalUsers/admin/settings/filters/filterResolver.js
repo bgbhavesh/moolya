@@ -1,7 +1,7 @@
 /**
  * Created by muralidhar on 14/02/17.
  */
-import MlResolver from '../../mlAdminResolverDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 

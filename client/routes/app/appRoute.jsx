@@ -6,6 +6,8 @@ import MlMapViewContainer from "../../admin/core/containers/MlMapViewContainer"
 import MoolyaMapView from "../../commons/components/map/MoolyaMapView"
 import MlViews from "../../admin/core/components/MlViews";
 import {mlBrowserDashboardMapConfig} from '../../app/dashboard/config/mlBrowserDashboardConfig'
+import MlAppIdeatorLanding from '../../../client/app/ideator/components/MlAppIdeatorLanding'
+import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -36,13 +38,15 @@ appSection.route('/dashboard', {
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
-    mount(AppLayout,{appContent:<div>Ideator</div>})
+    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
+    // mount(AppLayout,{appContent:<div>Ideator</div>})
   }
 });
 
 appSection.route('/startup', {
   name: 'startup',
   action(){
-    mount(AppLayout,{appContent:<div>Startup</div>})
+    mount(AppLayout,{appContent:< MlAppStartupLanding/>})
+    // mount(AppLayout,{appContent:<div>Startup</div>})
   }
 });

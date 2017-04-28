@@ -16,8 +16,8 @@ class MlAddUserType extends React.Component {
       communityCode: ''
     }
     this.addEventHandler.bind(this);
-    this.createUserType.bind(this)
-    this.onCommunitySelect.bind(this)
+    this.createUserType.bind(this);
+    this.onCommunitySelect.bind(this);
     return this;
   }
 
@@ -51,6 +51,16 @@ class MlAddUserType extends React.Component {
   };
 
   async createUserType() {
+    try {
+      if (!(this.state.communityCode)) {
+        throw error;
+      }
+    }
+  catch(error){
+if(error)
+  toastr.error("Please Enter The Community");
+    return false;
+  }
     let UserTypeDetails = {
       userTypeName: this.refs.userTypeName.value,
       displayName: this.refs.displayName.value,
@@ -59,18 +69,23 @@ class MlAddUserType extends React.Component {
       communityName: this.state.communityName,
       isActive: this.refs.isActive.checked
     }
-    console.log(this.state.communityCode);
-    let errorValidation = this.state.communityCode;
-    if (this.state.communityCode === " " ) {
-        toastr.error("Community is required");
-      }
-      else {
         const response = await createUserTypeActionHandler(UserTypeDetails)
+
         return response;
-      }
+
     }
 
-    v
+   // async validation()
+   //  {
+   //    console.log(this.state.communityCode);
+   //    if (!(this.state.communityCode)) {
+   //      toastr.error("Please Enter The Community");
+   //      throw new Error("Please Enter The Community");
+   //    }
+   //
+   //  }
+   //  }
+
 
 
   render(){
@@ -98,12 +113,12 @@ class MlAddUserType extends React.Component {
       <div className="admin_main_wrap">
           <div className="admin_padding_wrap">
             <h2>Add User Category</h2>
-            <div className="col-md-6 nopadding-left">
+              <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
                   <Moolyaselect ref="Community " multiSelect={false} className="form-control float-label" valueKey={'value'}
                                 labelKey={'label'} queryType={"graphql"} placeholder="Select Community"
-                                selectedValue={this.state.communityCode} onBlur={this.validation.bind(this)}
+                                selectedValue={this.state.communityCode}
                                 query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)} data-required={true} data-errMsg="Name is required"/>
 
                   <div className="form-group">

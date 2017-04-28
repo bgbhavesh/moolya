@@ -28,13 +28,33 @@ export default class MlAppLeftNav extends Component {
             $('.overlay').fadeToggle( );
             $(this).toggleClass('open');
         });
+        $(document).on('click', '.menu_in a', function(e){
+          //e.preventDefault();
+          $(this).parents('li').addClass('active_menu');
+          $('.admin_menu ul li').not($(this).parents('li')).removeClass('active_menu');
+          return false;
+        });
 
         if(WinWidth > 768){
-          $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});
+          // $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});
         }
     }
 
     render(){
+        function find(uniqueId, menus) {
+            var i = 0, found;
+            for (; i < menus.length; i++) {
+                if (menus[i].uniqueId === uniqueId) {
+                    var res = menus[i].uniqueId
+                    return res;
+                } else if (_.isArray(menus[i].subMenu)) {
+                    found = find(uniqueId, menus[i].subMenu)
+                    if (found) {
+                        return menus[i].uniqueId
+                    }
+                }
+            }
+        }
         let path = FlowRouter.current().route.name;
         let data = this.context.menu||{};
         let menu = data.menu || [];
@@ -45,7 +65,7 @@ export default class MlAppLeftNav extends Component {
                 activeClass = 'active_menu'
             }
             return (
-                <li className={`menu_item `} key={dataItem.uniqueId}>
+                <li className={`menu_item ${activeClass}`} key={dataItem.uniqueId}>
                     <a href={dataItem.link} id={dataItem.uniqueId}>
                         <div className={"menu_in"}>
                             <span className={dataItem.image}></span>
@@ -61,9 +81,7 @@ export default class MlAppLeftNav extends Component {
             <div className="app_menu">
                 <ul>
                     {navOptions }
-                    <li className="menu_item">
-                        <div className="menu_item menu_item_in"></div>
-                  </li>
+                    <li className="menu_item"></li>
                 </ul>
             </div>
         )

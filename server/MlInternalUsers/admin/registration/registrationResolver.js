@@ -34,7 +34,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if(id){
 
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
-    MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
+   // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
 
     //send email and otp;
     let code = 200;
@@ -62,7 +62,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration,emails:emails}, context)
     if(response){
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:response}, context, info);
-      MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
+     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
 
       let code = 200;
       let result = {message: "Registration Successful",registrationId: response}

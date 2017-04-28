@@ -82,11 +82,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   rating
                 }
                 clients{
-                  index
+                  companyName
+                  isCompanyNamePrivate
                   description
                   isDescriptionPrivate
-                  companyId
-                  isCompanyNamePrivate
                   logo{
                     fileName
                     fileUrl

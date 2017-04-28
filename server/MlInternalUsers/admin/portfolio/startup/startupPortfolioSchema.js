@@ -71,7 +71,7 @@ let startupPortfolioSchema = `
  
     
     type clientsOutput{
-        companyId:String,
+        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:imagesTypeSchema,
         description:String,
@@ -280,7 +280,7 @@ let startupPortfolioSchema = `
     }
   
     input clients{
-        companyId:String,
+        companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:logo,
         description:String,

@@ -99,16 +99,16 @@ export default class MlStartupClients extends React.Component{
     })
   }
 
-  onOptionSelected(selectedId){
-    let details =this.state.data;
-    details=_.omit(details,["companyId"]);
-    details=_.extend(details,{["companyId"]: selectedId});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId})
-      this.sendDataToParent()
-    })
-
-  }
+  // onOptionSelected(selectedId){
+  //   let details =this.state.data;
+  //   details=_.omit(details,["companyId"]);
+  //   details=_.extend(details,{["companyId"]: selectedId});
+  //   this.setState({data:details}, function () {
+  //     this.setState({"selectedVal" : selectedId})
+  //     this.sendDataToParent()
+  //   })
+  //
+  // }
 
   handleBlur(e){
     let details =this.state.data;
@@ -181,12 +181,12 @@ export default class MlStartupClients extends React.Component{
   }
 
   render(){
-    let query=gql`query{
-      data:fetchStageOfCompany {
-        label:stageOfCompanyDisplayName
-        value:_id
-      }
-    }`;
+    // let query=gql`query{
+    //   data:fetchStageOfCompany {
+    //     label:stageOfCompanyDisplayName
+    //     value:_id
+    //   }
+    // }`;
     let that = this;
     const showLoader = that.state.loading;
     let clientsArray = that.state.startupClientsList || [];
@@ -228,17 +228,20 @@ export default class MlStartupClients extends React.Component{
             </div>
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject}  toggle={this.toggle}>
-            {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+             <PopoverTitle>Add New Client</PopoverTitle>
             <PopoverContent>
               <div className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={query}
-                                    isDynamic={true}
-                                    onSelect={this.onOptionSelected.bind(this)}
-                                    selectedValue={this.state.selectedVal}/>
+                      {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}*/}
+                                    {/*labelKey={'label'} queryType={"graphql"} query={query}*/}
+                                    {/*isDynamic={true}*/}
+                                    {/*onSelect={this.onOptionSelected.bind(this)}*/}
+                                    {/*selectedValue={this.state.selectedVal}/>*/}
+                      <input type="text" name="companyName" placeholder="Company Name" className="form-control float-label" defaultValue={this.state.data.companyName} onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
+                      <input type="checkbox" className="lock_input" id="isCompanyNamePrivate" checked={this.state.data.isCompanyNamePrivate}/>
                     </div>
                     <div className="form-group">
                       <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>

@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 9/2/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef'
+import MlSchemaDef from '../../../commons/mlSchemaDef'
 let actions = `
     type Query {
         fetchActions: String

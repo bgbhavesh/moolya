@@ -1,4 +1,4 @@
-import MlResolver from '../../mlAdminResolverDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 
 MlResolver.MlMutationResolver['createRegional'] = (obj, args, context, info) => {

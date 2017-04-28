@@ -1,5 +1,6 @@
-import MlResolver from "../../mlAdminResolverDef";
+import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
+import MlEmailNotification from '../../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -67,6 +68,9 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
 
   // let id = MlDepartments.insert({...args.department});
   let id = mlDBController.insert('MlDepartments', args.department, context)
+  if(id){
+      MlEmailNotification.departmentVerficationEmail(id,context);
+  }
   if (id) {
     let code = 200;
     let result = {clusterid: id}
@@ -113,6 +117,9 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
             moduleName: "SUBDEPARTMENT",
             actionName: "UPDATE"
           }, context, info)
+
+            MlEmailNotification.departmentVerficationEmail( args.departmentId,context);
+
           let code = 200;
           let result = {cluster: resp}
           let response = new MlRespPayload().successPayload(result, code);

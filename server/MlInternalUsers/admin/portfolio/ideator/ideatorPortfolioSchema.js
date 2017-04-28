@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 3/4/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../mlAdminSchemaDef';
+import MlSchemaDef from '../../../../commons/mlSchemaDef';
 
 let ideatorPortfolioSchema = `
 

@@ -12,9 +12,9 @@ import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
 
-import getContext from './mlAuthContext'
-import MlResolver from './mlAdminResolverDef';
-import MlSchemaDef from './mlAdminSchemaDef';
+import getContext from '../../commons/mlAuthContext'
+import MlResolver from '../../commons/mlResolverDef';
+import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';

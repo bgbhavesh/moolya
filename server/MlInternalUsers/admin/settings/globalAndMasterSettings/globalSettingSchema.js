@@ -2,7 +2,7 @@
  * Created by mohammed.mohasin on 04/03/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../mlAdminSchemaDef'
+import MlSchemaDef from '../../../../commons/mlSchemaDef'
 let GlobalSettingsSchema = `
    enum GLOBAL_SETTINGS_TYPE {
             DATEANDTIME,NUMERICAL,REGIONAL

@@ -1,5 +1,5 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../mlAdminSchemaDef'
+import MlSchemaDef from '../../../commons/mlSchemaDef'
 let chapterSchema = `
     type Chapter{
         _id:String,

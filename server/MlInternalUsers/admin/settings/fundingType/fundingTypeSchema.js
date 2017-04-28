@@ -2,7 +2,7 @@
  * Created by rajatshekhar on 27/4/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../mlAdminSchemaDef'
+import MlSchemaDef from '../../../../commons/mlSchemaDef'
 
 
 let FundingTypesSchema = `

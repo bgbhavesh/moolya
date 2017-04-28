@@ -1,5 +1,5 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../mlAdminSchemaDef'
+import MlSchemaDef from '../../../../commons/mlSchemaDef'
 let Tax = `        
     type Tax{
       taxName :String

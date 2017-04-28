@@ -82,12 +82,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   rating
                 }
                 clients{
-                  index
-                  description
-                  isDescriptionPrivate
-                  companyId
                   companyName
                   isCompanyNamePrivate
+                  description
+                  isDescriptionPrivate
                   logo{
                     fileName
                     fileUrl
@@ -265,7 +263,6 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
                   awardId
-                  awardName
                   index
                   isAwardPrivate
                   year

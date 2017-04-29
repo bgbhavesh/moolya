@@ -663,6 +663,14 @@ MlResolver.MlMutationResolver['sendSmsVerification'] = (obj, args, context, info
 }
 
 
+MlResolver.MlMutationResolver['resendSmsVerification'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.mobileNumber) {
+    return MlAccounts.resendVerificationSmsOtp(args.mobileNumber);
+  }
+}
+
+
 MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.token) {

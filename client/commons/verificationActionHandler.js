@@ -44,3 +44,24 @@ export async function verifyMobileNumberHandler(mobileNumber,otp){
   //console.log(result);
   return result&&result.data&&result.data.verifyMobileNumber?result.data.verifyMobileNumber:{};
 }
+
+export async function resendSmsOtpHandler(mobileNumber){
+  const result = await client.mutate({
+    mutation: gql`
+    mutation($mobileNumber:String){
+        resendSmsVerification(
+          mobileNumber :$mobileNumber
+        ){
+            success,
+            code,
+            result
+         } 
+      }
+    `,
+    variables: {
+      mobileNumber:mobileNumber
+    }
+  });
+  //console.log(result);
+  return result&&result.data&&result.data.resendSmsVerification?result.data.resendSmsVerification:{};
+}

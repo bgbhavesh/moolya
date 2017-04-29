@@ -409,6 +409,7 @@ let registrationSchema = `
          sendSmsVerificationForRegistration(registrationId:String):response
          sendEmailVerification(userId:String):response
          sendSmsVerification(userId:String):response
+         resendSmsVerification(mobileNumber:String):response
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
     }

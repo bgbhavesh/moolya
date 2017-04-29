@@ -167,6 +167,11 @@ export default class MyProfileSettings extends React.Component{
                   name="form-field-name"  options={measurementType} placeholder={"Numerical Format"}
                   value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}
                   className="float-label" />
+                <br className="brclear"/>
+                <br className="brclear"/>
+                <br className="brclear"/>
+                <br className="brclear"/>
+
               </div>
               <div className="col-md-6">
                 <div className="form-group">

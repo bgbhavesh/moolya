@@ -41,6 +41,7 @@ const defaultServerConfig = {
   registrationAPIPath:'/registrations',
   countries:'/countries',
   cities:'/cities',
+  communities:'/communities',
   couponValidate:'/coupons',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
@@ -228,15 +229,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   if(config.registrationAPIPath){
-    console.log("RegistrationAPI Invoked..!!");
-
-  /*  graphQLServer.use(function(req, res, next) {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-      next();
-    });*/
     graphQLServer.options('/registrations', cors());
-
     graphQLServer.post(config.registrationAPIPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
     {
       res.header("Access-Control-Allow-Origin", "*");
@@ -286,9 +279,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }))
   }
  if(config.countries){
-    console.log("Countries Invoked..!!");
-    graphQLServer.options('/countries', cors());
-
+  graphQLServer.options('/countries', cors());
   graphQLServer.get(config.countries, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
   {
     res.header("Access-Control-Allow-Origin", "*");
@@ -304,7 +295,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     console.log("-----------");
     if(req)
     {
-      console.log("Processing started..!!");
       let data = req.body.data;
       let apiKey = req.header("apiKey");
       if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
@@ -340,7 +330,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   if(config.cities){
     console.log("Countries Invoked..!!");
     graphQLServer.options('/cities', cors());
-
     graphQLServer.post(config.cities, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
     {
       res.header("Access-Control-Allow-Origin", "*");
@@ -356,7 +345,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       console.log("-----------");
       if(req)
       {
-        console.log("Processing started..!!");
         let data = req.body.data;
         let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
@@ -390,10 +378,58 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }))
   }
 
-  if(config.couponValidate){
-    console.log("couponValidate Invoked..!!");
-    graphQLServer.options('/coupons', cors());
+  if(config.communities){
+    graphQLServer.options('/communities', cors());
+    graphQLServer.post(config.communities, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
+    {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      console.log(req.body);
+      console.log("-----------");
+      console.log(req.headers);
+      console.log("-----------");
+      console.log(req.body.data);
+      console.log("-----------");
+      if(req)
+      {
+        let data = req.body.data;
+        let apiKey = req.header("apiKey");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          if(data) {
+            let communities = [];
+            response = MlResolver.MlQueryResolver['fetchCommunityDefinitionAPI'](null, null, context, null);
+            if(response){
+              response.map(function (community, key){
+                let json={
+                  id:community.code,
+                  name:community.name
+                }
+                communities.push(json)
+              })
+            }
+            console.log(communities);
+            res.send(communities);
+          }
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
 
+  if(config.couponValidate){
+    graphQLServer.options('/coupons', cors());
     graphQLServer.post(config.couponValidate, bodyParser.json(), Meteor.bindEnvironment(function (req, res)
     {
       res.header("Access-Control-Allow-Origin", "*");

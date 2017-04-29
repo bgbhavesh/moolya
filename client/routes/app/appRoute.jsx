@@ -46,10 +46,10 @@ appSection.route('/ideator', {
 
 
 // appSection.route('/ideator/viewPortfolio/:id/:communityType', {
-appSection.route('/ideator/viewPortfolio/', {
+appSection.route('/ideator/:id/', {
   name: 'ideator_portfolio_view',
   action(params){
-    mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true}/>})
+    mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }
 });

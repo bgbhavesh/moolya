@@ -672,14 +672,15 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
       let code = 200;
       //check for mobile verification
       var mobileNumber=null;
-      if(result.recordId){
-        var reg=mlDBController.findOne('MlRegistration', {'_id':result.recordId},context);
+      var recordId=result.recordId;
+      if(recordId){
+        var reg=mlDBController.findOne('MlRegistration', {'_id':recordId},context);
         if(reg&&reg.registrationInfo&&reg.registrationInfo.contactNumber){
           mobileNumber=reg.registrationInfo.contactNumber;
         }
       }
-      let result = {email:result.email,emailVerified:true,mobileNumber:mobileNumber,mobileNumberVerified:false};
-      let response = new MlRespPayload().successPayload(result, code);
+      let succResp = {email:result.email,emailVerified:true,mobileNumber:mobileNumber,mobileNumberVerified:false};
+      let response = new MlRespPayload().successPayload(succResp, code);
       return response;
     }
   }

@@ -10,8 +10,8 @@ import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
-import AppActionButtons from '../components/appActionButtons'
-import TopIconsList from '../components/topIconsList'
+import AppActionButtons from '../../commons/components/appActionButtons'
+import TopIconsList from '../../commons/components/topIconsList'
 import 'react-responsive-tabs/styles.css'
 
 
@@ -36,16 +36,16 @@ constructor(props){
 // }
 
 componentDidMount(){
-  setTimeout(function(){
-    $('div[role="tab"]').each(function( index ) {
-      var test = $(this).text();
-      $(this).empty();
-      $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
-    });
-    $('.RRT__tabs').addClass('horizon-swiper');
-    $('.RRT__tab').addClass('horizon-item');
-    $('.horizon-swiper').horizonSwiper();
-  },300);
+  // setTimeout(function(){
+  //   $('div[role="tab"]').each(function( index ) {
+  //     var test = $(this).text();
+  //     $(this).empty();
+  //     $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
+  //   });
+  //   $('.RRT__tabs').addClass('horizon-swiper');
+  //   $('.RRT__tab').addClass('horizon-item');
+  //   $('.horizon-swiper').horizonSwiper();
+  // },300);
 }
   //
   // (selAnnotation){
@@ -80,7 +80,7 @@ componentWillMount()
   let tabs = this.getTabComponents();
   function getTabs() {
     return tabs.map(tab => ({
-      tabClassName: 'moolya_btn', // Optional
+      tabClassName: 'horizon-item', // Optional
       panelClassName: 'panel1', // Optional
       title: tab.title,
       getContent: () => tab.component

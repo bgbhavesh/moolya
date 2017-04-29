@@ -11,7 +11,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {updateRolesActionHandler} from '../actions/updateRolesAction'
 import {updateHierarchyAssignmentsActionHandler} from '../actions/updateFinalApprovalAction'
-
+import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 
 export default class MlHierarchyDetails extends React.Component {
 
@@ -27,7 +27,9 @@ export default class MlHierarchyDetails extends React.Component {
     }
     return this;
   }
-
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+  }
   getAssignRoleDetails(details){
     console.log(details);
     this.setState({'assignedRoles':details})
@@ -69,7 +71,7 @@ export default class MlHierarchyDetails extends React.Component {
           subDepartmentId:response[i].subDepartmentId,
           subDepartmentName:response[i].subDepartmentName,
           isMoolya:response[i].isMoolya,
-          isActive:response[i].isActive==true?"Active":"In-Active"
+          isActive:response[i].isActive
         }
         hierarchyInfo.push(json)
       }
@@ -168,6 +170,18 @@ export default class MlHierarchyDetails extends React.Component {
     }
     return assigned;
   }
+  SwitchBtn(cell,row){
+    let activeDetails=false
+    if(row.isActive!=null){
+      activeDetails=true
+    }
+    return(
+      <div>
+    {activeDetails?(<div className="form-group switch_wrap"><label className="switch"><input type="checkbox" ref="status" id="status" checked={row.isActive}/><div className="slider"></div></label></div>):''}
+      </div>
+    )
+
+  }
   render() {
 
     let MlActionConfig = [
@@ -203,6 +217,7 @@ export default class MlHierarchyDetails extends React.Component {
                                expandableRow={ this.isExpandableRow }
                                expandComponent={ this.expandComponent.bind(this) }
                               selectRow={selectRow}
+                              hover={true}
                                pagination
                                search
               >
@@ -211,7 +226,7 @@ export default class MlHierarchyDetails extends React.Component {
                 <TableHeaderColumn dataField="isMoolya" hidden={true}>isMoolya</TableHeaderColumn>
                 <TableHeaderColumn dataField="departmentName">Department</TableHeaderColumn>
                 <TableHeaderColumn dataField="subDepartmentName">Sub-Department</TableHeaderColumn>
-                <TableHeaderColumn dataField="isActive">Status</TableHeaderColumn>
+                <TableHeaderColumn dataField="isActive" dataFormat={this.SwitchBtn.bind(this)}>Status</TableHeaderColumn>
               </BootstrapTable>
 
             </ScrollArea>

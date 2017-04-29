@@ -81,33 +81,29 @@ export default MlAccounts=class MlAccounts {
 
   static verifyEmail(token) {
        //var user = Meteor.users.findOne({'services.email.verificationTokens.token': token});
-    var user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token},context);
-      if (!user) throw new Meteor.Error(403, "Verify email link expired");
+    var user=mlDBController.findOne('MlRegistration', {'services.email.verificationTokens.token': token},{});
+      if (!user)  return {email:null, error: true,reason:"Verify email link expired", code:403};//throw new Error(403, "Verify email link expired");
 
       var tokenRecord = _.find(user.services.email.verificationTokens, function (t) {
         return t.token == token;
       });
 
       if (!tokenRecord) return {
-        userId: user._id,
-        error: new Meteor.Error(403, "Verify email link expired")
-      };
+        email: null, error: true, reason:"Verify email link expired", code:403};
 
       var emailsRecord = _.find(user.emails, function (e) {
         return e.address == tokenRecord.address;
       });
 
-      if (!emailsRecord) return {
-        userId: user._id,
-        error: new Meteor.Error(403, "Verify email link is for unknown address")
-      }; // By including the address in the query, we can use 'emails.$' in the
+      if (!emailsRecord) return {userId: user._id,error: true, reason: "Verify email link is for unknown address",code:403};
+      // By including the address in the query, we can use 'emails.$' in the
          // modifier to get a reference to the specific object in the emails
          // array.
          MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
                              $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
 
       return {
-        userId: user._id
+        email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false
       };
   }
 

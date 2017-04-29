@@ -629,8 +629,6 @@ MlResolver.MlMutationResolver['sendSmsVerificationForRegistration'] = (obj, args
 MlResolver.MlMutationResolver['sendEmailVerificationForRegistration'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-    console.log("Email Url: "+ Meteor.settings.private.smtpMailUrl);
-    console.log(encodeURIComponent("qasmtp@moolya.in"));
     //let regDetails=mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || null;
    // const userId=regDetails&&regDetails.registrationInfo&&regDetails.registrationInfo.userId?regDetails.registrationInfo.userId:null;
     //if ( userId ) {
@@ -667,6 +665,25 @@ MlResolver.MlMutationResolver['sendSmsVerification'] = (obj, args, context, info
 MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.token) {
-    return MlAccounts.verifyEmail(args.token);
+    const result= MlAccounts.verifyEmail(args.token);
+    if(result&&result.error){
+      let code = 403;
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      let code = 200;
+      //check for mobile verification
+      var mobileNumber=null;
+      var recordId=result.recordId;
+      if(recordId){
+        var reg=mlDBController.findOne('MlRegistration', {'_id':recordId},context);
+        if(reg&&reg.registrationInfo&&reg.registrationInfo.contactNumber){
+          mobileNumber=reg.registrationInfo.contactNumber;
+        }
+      }
+      let succResp = {email:result.email,emailVerified:true,mobileNumber:mobileNumber,mobileNumberVerified:false};
+      let response = new MlRespPayload().successPayload(succResp, code);
+      return response;
+    }
   }
 }

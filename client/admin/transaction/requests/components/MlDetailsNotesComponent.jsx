@@ -11,17 +11,24 @@ export default class MlDetailsNotesComponent extends React.Component {
       departmentName:'',
       subDepartmentName:'',
       profileImage:'',
-      status:null
+      firstName: " ",
+      status:null,
+      dispalyStatus:false
     }
     return this;
   }
   componentWillReceiveProps(newProps){
+    let type=newProps.type;
+    if(type=="approval"){
+      this.setState({"dispalyStatus":true})
+    }
     let userId=newProps.transaction.userId
     this.setState({"status":newProps.transaction.status})
     if(userId){
       const resp=this.findBackendUser()
       return resp;
     }
+
   }
  async  onStatusSelect(val){
     this.setState({"status":val.value})
@@ -44,7 +51,7 @@ export default class MlDetailsNotesComponent extends React.Component {
     let userTypeId = this.props.transaction.userId
     const response = await findBackendUserActionHandler(userTypeId);
     if(response){
-      this.setState({userDetais:response})
+      this.setState({userDetais:response, role:response.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleName, firstName:response.profile.InternalUprofile.moolyaProfile.firstName})
         let userDetails=this.state.userDetais
       if(userDetails.profile.isInternaluser){
           let userInternalProfile=userDetails.profile.InternalUprofile.moolyaProfile.userProfiles
@@ -124,7 +131,7 @@ export default class MlDetailsNotesComponent extends React.Component {
                     <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status}  onChange={that.onStatusSelect.bind(that)} />
+                    <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status} disabled={that.state.dispalyStatus} onChange={that.onStatusSelect.bind(that)} />
                   </div>
                  {/* <div className="ml_btn">
                     /!*<a href="#" className="save_btn">View</a>*!/
@@ -136,7 +143,7 @@ export default class MlDetailsNotesComponent extends React.Component {
                 <div className="profile_block">
                   <img src={that.state.profileImage} />
                   <span>
-                  Miland<br />Hyderabad,India
+                  {that.state.firstName}<br />{that.state.role}
                 </span>
                 </div>
               </div>
@@ -154,7 +161,7 @@ export default class MlDetailsNotesComponent extends React.Component {
                 <div className="profile_block">
                   <img src={that.state.profileImage} />
                   <span>
-                  Miland<br />Hyderabad,India
+                    {that.state.firstName}<br />{that.state.role}
                 </span>
                 </div>
               </div>

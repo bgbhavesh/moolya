@@ -245,7 +245,14 @@ export default class MlCreateRegistration extends React.Component{
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
-                </div><div className="tab-content clearfix"></div>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+
+                </div>
+
                 {/*<div className="form-group">*/}
                   {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
                   {/*<br/><br/><br/><br/><br/>*/}
@@ -311,6 +318,16 @@ export default class MlCreateRegistration extends React.Component{
                 </div>
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
+
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+                  <br className="brclear"/>
+
+
+
                 </div>
                 {/*<div className="panel panel-default">
                   <div className="panel-heading">Process Status</div>

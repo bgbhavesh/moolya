@@ -27,7 +27,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
 
-  orderNumberGenService.assignRegistrationId(args.registration, args.registration.registrationType)
+  orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
   // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails}, context)
@@ -45,29 +45,31 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 }
 
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
-  let response
-  let validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.countryId":args.registration.countryId},{"registrationInfo.registrationType":args.registration.registrationType}]})
+  var response=null;
+  var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.countryId":args.registration.countryId},{"registrationInfo.registrationType":args.registration.registrationType}]})
   if(validate){
     let code = 400;
     let result = {message: "Registration Exist"}
-    let response = new MlRespPayload().errorPayload(result, code);
-    return response
+    let errResp = new MlRespPayload().errorPayload(result, code);
+    return errResp;
   }
   else if (args.registration) {
     let user = mlDBController.findOne('users', {"profile.email":'systemadmin@moolya.com'}, context) || {};
     context.userId = user._id;
     context.browser = 'Registration API'
     context.url="https://moolya.in"
+    args.registration.userName = args.registration.email;
     var emails=[{address:args.registration.userName,verified:false}];
-    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration,emails:emails}, context)
+    orderNumberGenService.assignRegistrationId(args.registration);
+    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails}, context)
     if(response){
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:response}, context, info);
      // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
 
       let code = 200;
-      let result = {message: "Registration Successful",registrationId: response}
-      let response = new MlRespPayload().successPayload(result, code);
-      return response
+      let result = {message: "Registration Successful",registrationId: args.registration.registrationId}
+      let succResp = new MlRespPayload().successPayload(result, code);
+      return succResp;
     }
   }
   return response
@@ -327,7 +329,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       industryId    : regRecord.registrationInfo.industry,
       professionId  : regRecord.registrationInfo.profession,
      }
-     orderNumberGenService.assignPortfolioId(portfolioDetails, portfolioDetails.communityCode)
+     orderNumberGenService.assignPortfolioId(portfolioDetails)
 
       let registrationData = regRecord.registrationDetails;
       registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
@@ -647,7 +649,7 @@ MlResolver.MlMutationResolver['sendEmailVerificationForRegistration'] = (obj, ar
 MlResolver.MlMutationResolver['sendEmailVerification'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-    return MlAccounts.sendVerificationEmail(args.registrationId,{emailContentType:"html",subject:"Email Verification"});
+    return MlAccounts.sendVerificationEmail(args.registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
   }
 }
 
@@ -673,10 +675,17 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
       //check for mobile verification
       var mobileNumber=null;
       var recordId=result.recordId;
+
+      //requirement by venu
       if(recordId){
         var reg=mlDBController.findOne('MlRegistration', {'_id':recordId},context);
         if(reg&&reg.registrationInfo&&reg.registrationInfo.contactNumber){
           mobileNumber=reg.registrationInfo.contactNumber;
+           try{
+               MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:recordId}, context, info);
+             }catch(e){
+                console.log(e);
+             }
         }
       }
       let succResp = {email:result.email,emailVerified:true,mobileNumber:mobileNumber,mobileNumberVerified:false};

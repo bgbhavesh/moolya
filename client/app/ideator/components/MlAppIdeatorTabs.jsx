@@ -12,6 +12,7 @@ import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfol
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
 import AppActionButtons from '../components/appActionButtons'
 import TopIconsList from '../components/topIconsList'
+import 'react-responsive-tabs/styles.css'
 
 
 export default class MlAppIdeatorTabs extends React.Component{

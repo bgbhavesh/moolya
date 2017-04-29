@@ -9,18 +9,24 @@ export default class AppActionButtons extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.toggle = this.toggle.bind(this);
     this.state = {
-      actionButtons:[],
-      popoverOpen: false
+      // popoverOpen_pop_connect: false
     };
+    this.actionClick.bind(this);
+    return this;
   }
 
-  toggle(index,e) {
+  actionClick(value, e) {
+    let icon = "popoverOpen_"+value;
     this.setState({
-      selectedActionButton:index,
-      popoverOpen: !this.state.popoverOpen
+      [icon]: !(this.state[icon])
+    });
+  }
+
+  cancelClick(value, e){
+    let icon = "popoverOpen_"+value;
+    this.setState({
+      [icon]: false
     });
   }
 
@@ -36,61 +42,6 @@ export default class AppActionButtons extends React.Component {
     //   $('.action-buttons').hide(200);
     //   $('.related-buttons').toggle();
     // });
-  }
-  componentWillMount(){
-    let actionButtonsList=[
-      {
-        liTitle: "Connect",
-        icon:"flaticon-ml-handshake"
-      },
-      {
-        liTitle:"Favorites",
-        icon:"flaticon-ml-shapes"
-      },
-      {
-        liTitle:"Inquiry",
-        icon:"flaticon-ml-support"
-      },
-      {
-          liTitle:"Review",
-          icon:"flaticon-ml-note",
-      },
-      {
-          liTitle:"Wishlist",
-          icon:"flaticon-ml-interface"
-      },
-      {
-          liTitle:"Upload",
-          icon:"flaticon-ml-cloud-computing",
-      },
-      {
-          liTitle:"Download",
-          icon:"flaticon-ml-cloud-computing-1"
-      },
-      {
-        liTitle:"Share",
-          icon:"flaticon-ml-share-arrow"
-      },
-      {
-        liTitle:"Compare",
-          icon:"flaticon-ml-share-files",
-      },
-      {
-        liTitle:"Conversation",
-        icon:"flaticon-ml-chat"
-      },
-      {
-        liTitle:"Collaborate",
-          icon:"flaticon-ml-networking"
-      },
-      {
-        liTitle:"Feedback",
-        icon:"flaticon-ml-note-1"
-
-      }
-
-    ]
-    this.setState({actionButtons:actionButtonsList})
   }
 
   render() {
@@ -127,12 +78,23 @@ export default class AppActionButtons extends React.Component {
 
               <div className="action_buttons">
                 <ul>
-                  {this.state.actionButtons.map(function (button,idx) {
-                   return (
-                     <li><a href="#" id={"pop_connect"+idx} onClick={this.toggle.bind(this, idx)}><span
-                       className={`ml ${button.icon}`}></span><br />{button.liTitle}</a></li>
-                   )
-                  })}
+                  <li><a href="#" id="pop_connect" onClick={this.actionClick.bind(this, "pop_connect")}><span
+                    className="ml flaticon-ml-handshake"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-shapes"></span><br />Favorites</a></li>
+                  <li><a href="#" id="pop_inquiry" onClick={this.actionClick.bind(this, "pop_inquiry")}><span
+                    className="ml flaticon-ml-support"></span><br />Inquiry</a></li>
+                  <li><a href="#" id="pop_review" onClick={this.actionClick.bind(this, "pop_review")}><span
+                    className="ml flaticon-ml-note"></span><br />Review</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-interface"></span><br />Wishlist</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-cloud-computing"></span><br />Upload</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-cloud-computing-1"></span><br />Download</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-share-arrow"></span><br />Share</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-share-files"></span><br />Compare</a></li>
+                  <li><a href="#" id="pop_conersation" onClick={this.actionClick.bind(this, "pop_conersation")}><span
+                    className="ml flaticon-ml-chat"></span><br />Conversation</a></li>
+                  <li><a href="#" id="pop_collaborate" onClick={this.actionClick.bind(this, "pop_collaborate")}><span
+                    className="ml flaticon-ml-networking"></span><br />Collaborate</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-note-1"></span><br />Feedback</a></li>
                 </ul>
 
               </div>
@@ -141,19 +103,19 @@ export default class AppActionButtons extends React.Component {
           </div>
         </div>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen} target={"pop_collaborate"+this.state.selectedActionButton}
-                 toggle={this.toggle.bind(this)}>
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_collaborate} target="pop_collaborate"
+                 toggle={this.toggle}>
           <PopoverTitle>Collaborate</PopoverTitle>
           <PopoverContent>Do you want to collaborate ?
             <div className="ml_btn">
               <a href="#" className="save_btn">Yes</a>
-              <a href="#" className="cancel_btn">No</a>
+              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_collaborate')}>No</a>
             </div>
           </PopoverContent>
         </Popover>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen} target="pop_review"
-                 toggle={this.toggle.bind(this)}>
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_review} target="pop_review"
+                 toggle={this.toggle}>
           <PopoverTitle>Reviews</PopoverTitle>
           <PopoverContent>
             <ul className="review_pop">
@@ -199,20 +161,20 @@ export default class AppActionButtons extends React.Component {
           </PopoverContent>
         </Popover>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen} target="pop_connect"
-                 toggle={this.toggle.bind(this)}>
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_connect} target="pop_connect"
+                 toggle={this.toggle}>
           <PopoverTitle>Connect</PopoverTitle>
           <PopoverContent>
             Do you want to connect ?
             <div className="ml_btn">
               <a href="#" className="save_btn">Connect</a>
-              <a href="#" className="cancel_btn">Cancel</a>
+              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_connect')}>Cancel</a>
             </div>
           </PopoverContent>
         </Popover>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen} target="pop_conersation"
-                 toggle={this.toggle.bind(this)}>
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_conersation} target="pop_conersation"
+                 toggle={this.toggle}>
           <PopoverTitle>Connect</PopoverTitle>
           <PopoverContent>
             <ul className="list_style">
@@ -257,13 +219,13 @@ export default class AppActionButtons extends React.Component {
         </Popover>
 
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen} target="pop_inquiry"
-                 toggle={this.toggle.bind(this)}>
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_inquiry} target="pop_inquiry"
+                 toggle={this.toggle}>
           <PopoverTitle>Inquiry</PopoverTitle>
           <PopoverContent>
             <div className="form-group">
               <input type="text" placeholder="To" defaultValue="admin@moolya.in"
-                     className="form-control float-label" id=""/>
+                     className="form-control float-label"/>
             </div>
             <div className="form-group">
               <input type="text" placeholder="Subject" defaultValue="Inquiry" className="form-control float-label"/>
@@ -273,7 +235,7 @@ export default class AppActionButtons extends React.Component {
             </div>
             <div className="ml_btn">
               <a href="#" className="save_btn">Send</a>
-              <a href="#" className="cancel_btn">Cancel</a>
+              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_inquiry')}>Cancel</a>
             </div>
           </PopoverContent>
         </Popover>

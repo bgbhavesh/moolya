@@ -25,7 +25,7 @@ export default MlAccounts=class MlAccounts {
     // Make sure the user exists, and address is one of their addresses.
     // var user = Meteor.users.findOne(regId);
     var userId=regId;
-    var user=mlDBController.findOne('MlRegistration', {_id:regId},context);
+    var user=mlDBController.findOne('MlRegistration', {_id:regId},emailOptions.context||{});
     if (!user) throw new Error("Can't find user"); // pick the first unverified address if we weren't passed an address.
     //
     if (!address) {

@@ -9,7 +9,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-
+import 'react-responsive-tabs/styles.css'
 export default class MlPortfolioIdeatorAudienceView extends React.Component {
   constructor(props) {
     super(props);

@@ -8,6 +8,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+import 'react-responsive-tabs/styles.css'
 
 
 export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{

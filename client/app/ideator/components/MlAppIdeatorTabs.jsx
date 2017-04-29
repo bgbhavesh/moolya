@@ -10,8 +10,8 @@ import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
-import AppActionButtons from '../components/appActionButtons'
-import TopIconsList from '../components/topIconsList'
+import AppActionButtons from '../../commons/components/appActionButtons'
+import TopIconsList from '../../commons/components/topIconsList'
 import 'react-responsive-tabs/styles.css'
 
 

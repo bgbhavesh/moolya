@@ -2,7 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 var FontAwesome = require('react-fontawesome');
-import StarRatings from '../components/starRatings';
+import StarRatings from '../../ideator/components/starRatings';
 
 
 export default class AppActionButtons extends React.Component {

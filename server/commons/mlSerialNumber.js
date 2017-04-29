@@ -33,14 +33,14 @@ orderNumberGenService = (function(){
   }
 
   return {
-    assignRegistrationId:function(registration, communityCode){
-      registration.registrationId="ML-RE-"+communityCode+"-"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),6);
+    assignRegistrationId:function(registration){
+      registration.registrationId="ML-RE-"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),8);
     },
-    assignPortfolioId:function(portfolio, communityCode){
-      portfolio.portfolioId="ML-PF-"+communityCode+"-"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),6);
+    assignPortfolioId:function(portfolio){
+      portfolio.portfolioId="ML-PF-"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),8);
     },
     assignTransationRequest:function(transaction){
-      transaction.requestId="ML-REQ-"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),6);
+      transaction.requestId="ML-TR-"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);
     }
   }})();
 

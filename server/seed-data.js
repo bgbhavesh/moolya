@@ -72,7 +72,8 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:clusterPer},
                     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
+                    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
                   ]
     let role = {
       roleName:"clusteradmin",
@@ -92,7 +93,8 @@ if(!chapterAdmin){
   let modules = [
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"chapteradmin",
@@ -112,7 +114,8 @@ if(!subchapterAdmin){
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"subchapteradmin",

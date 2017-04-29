@@ -315,18 +315,31 @@ Accounts.validateLoginAttempt(function (user)
 
     let isValid=false;
 
-    if(user && user.user && user.user.profile && !user.user.profile.isActive){
-        user.allowed = false
-        throw new Meteor.Error(403, "User account is inactive!");
-    }
+    // if(user && user.user && user.user.profile && !user.user.profile.isActive){
+    //     user.allowed = false
+    //     throw new Meteor.Error(403, "User account is inactive!");
+    // }
 
+    if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
+      return validateExternalUserLoginAttempt(user)
+    }
     else if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
+        if(user && user.user && user.user.profile && !user.user.profile.isActive){               //temporary moving here for external user
+          user.allowed = false
+          throw new Meteor.Error(403, "User account is inactive!");
+        }
         return validateinternalUserLoginAttempt(user)
     }
 
 
     return true;
 })
+
+validateExternalUserLoginAttempt=(user)=>{
+  let userExternal = user.user.profile.isExternaluser
+  return userExternal
+}
+
 
 validateinternalUserLoginAttempt=(user)=>{
     let userProfiles = user.user.profile.InternalUprofile && user.user.profile.InternalUprofile.moolyaProfile && user.user.profile.InternalUprofile.moolyaProfile.userProfiles;

@@ -760,3 +760,20 @@ MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) 
         let user = mlDBController.findOne('users', {_id: args.userId}, context);
         return user.profile;
 }
+
+MlResolver.MlQueryResolver['FindUserOnToken'] = (obj, args, context, info) => {
+  const hashedToken = Accounts._hashLoginToken(args.token)
+  const user = Meteor.users.findOne({'services.resume.loginTokens.hashedToken':hashedToken})    //
+  if(user){
+    let code = 200;
+    let result = user.profile.isExternaluser
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }else{
+    let code = 401;
+    let result = "Not a valid User token"
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response
+  }
+
+}

@@ -14,27 +14,38 @@ const mlBrowserDashboardMapConfig = new MlViewer.View({
     pagination:false,
     fetchCenter:false,
     viewComponent:<MlMapViewContainer />,
-    graphQlQuery:gql`
-       query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
-          data:ContextSpecSearch(module:"chapter",context:$context,searchSpec:$searchSpec){
-            totalRecords
-            data{
-             ...on Chapter{
-                 _id
-                 desc:displayName
-                 text:chapterName
-                 lat:latitude
-                 lng:longitude
-                 isActive:isActive
-                 status:status {
-                   code
-                   description
-                 }
-                 }
-             }
-          }
-       }
+    graphQlQuery:gql`       
+       query{
+          data:fetchActiveAwards {
+        label:awardDisplayName
+        value:_id
+      }
+    }
     `
+    //above query is tempory for removing error from server for checking herarirchy
 })
 
 export {mlBrowserDashboardMapConfig};
+
+
+
+
+//    query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
+//       data:ContextSpecSearch(module:"chapter",context:$context,searchSpec:$searchSpec){
+//         totalRecords
+//         data{
+//          ...on Chapter{
+//              _id
+//              desc:displayName
+//              text:chapterName
+//              lat:latitude
+//              lng:longitude
+//              isActive:isActive
+//              status:status {
+//                code
+//                description
+//              }
+//              }
+//          }
+//       }
+//    }

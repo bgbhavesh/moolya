@@ -467,7 +467,32 @@ if(Meteor.isServer){
             "subMenusId":"templates",
             "isLink": true,
             "isMenu": false,
-            "image": ""
+            "image": "",
+            "subMenu":[
+              {
+                "link": "/templates/assignTemplate/:id",
+                "name": "Edit Template",
+                "uniqueId": "templates_assignment_edit",
+                "subMenuMappingId":"",
+                "subMenusId":"templates",
+                "isLink": true,
+                "isMenu": false,
+                "image": "",
+                "subMenu":[
+                  {
+                    "link": "/templates/assignTemplate/",
+                    "name": " Assign Template",
+                    "uniqueId": "templates_assignment",
+                    "subMenuMappingId":"",
+                    "subMenusId":"templates",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  }
+
+                ]
+              },
+            ]
           }
         ]
       },

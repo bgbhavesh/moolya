@@ -19,5 +19,5 @@ export async function verifyEmailHandler(token){
     }
   });
   //console.log(result);
-  return result;
+  return result&&result.data&&result.data.verifyEmail?result.data.verifyEmail:{};
 }

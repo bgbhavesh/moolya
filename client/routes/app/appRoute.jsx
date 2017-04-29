@@ -9,6 +9,7 @@ import {mlBrowserDashboardMapConfig} from '../../app/dashboard/config/mlBrowserD
 import MlAppIdeatorLanding from '../../../client/app/ideator/components/MlAppIdeatorLanding'
 import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeatorTabs'
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
+import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -67,6 +68,13 @@ appSection.route('/startup', {
   name: 'startup',
   action(){
     mount(AppLayout,{appContent:< MlAppStartupLanding/>})
+    // mount(AppLayout,{appContent:<div>Startup</div>})
+  }
+});
+appSection.route('/startup/:id', {
+  name: 'startup',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
     // mount(AppLayout,{appContent:<div>Startup</div>})
   }
 });

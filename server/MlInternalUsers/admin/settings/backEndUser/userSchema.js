@@ -350,6 +350,7 @@ let BackEndUser = `
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
         fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
+        FindUserOnToken(token: String):response
     }
 `
 

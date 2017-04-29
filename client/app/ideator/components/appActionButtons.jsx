@@ -12,6 +12,7 @@ export default class AppActionButtons extends React.Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
+      actionButtons:[],
       popoverOpen: false
     };
   }
@@ -37,7 +38,7 @@ export default class AppActionButtons extends React.Component {
     // });
   }
   componentWillMount(){
-    actionButtonsList=[
+    let actionButtonsList=[
       {
         liTitle: "Connect",
         icon:"flaticon-ml-handshake"

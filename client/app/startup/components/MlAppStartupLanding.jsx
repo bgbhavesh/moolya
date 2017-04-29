@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
+import startupListRoutes from '../actions/startupListRoutes'
 
 export default class MlAppStartupLanding extends React.Component{
   constructor(props){
@@ -81,7 +82,7 @@ export default class MlAppStartupLanding extends React.Component{
             <div className="row">
               {this.state.startup.map(function (startup, idx) {
                 return(<div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
-                  <a href="/app/startupDetails">
+                  <a href={startupListRoutes.startupDetailsRoute(startup._id, "startup")}>
                     <div className="company_block">
                       <div className="premium"><span>premium</span></div>
                       <div className="company_header">

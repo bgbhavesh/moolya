@@ -144,6 +144,7 @@ export default class Individual extends React.Component{
         //this.props.getRegistrationDetails();
         const response = await updateRegistrationActionHandler(Details);
       this.props.getRegistrationDetails();
+      toastr.success("Saved Successfully");
       return response;
     }
     }
@@ -279,10 +280,12 @@ export default class Individual extends React.Component{
                         <div className="form-group mandatory">
                           <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} data-required={true} data-errMssg="Date Of Birth is required"/>
                           <FontAwesome name="calendar" className="password_icon"/>
+                          <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>
                         </div>
+                      <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
 
                       </div>
 

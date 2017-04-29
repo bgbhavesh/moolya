@@ -12,12 +12,17 @@ import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfol
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
 import AppActionButtons from '../components/appActionButtons'
 import TopIconsList from '../components/topIconsList'
+import 'react-responsive-tabs/styles.css'
 
 
 export default class MlAppIdeatorTabs extends React.Component{
 constructor(props){
   super(props)
-  this.state =  {tabs: [], ideatorPortfolio:{}};
+  this.state =  {
+    tabs: [],
+    ideatorPortfolio:{},
+    ideatorId:this.props.config
+  };
   // this.getIdeatorDetails.bind(this);
   // this.getProblemSolution.bind(this)
   // this.getChildContext.bind(this)
@@ -59,13 +64,13 @@ componentDidMount(){
 
 getTabComponents(){
   let tabs = [
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},    //this.props.portfolioDetailsId}
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},   //id will be dyanmic
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId="pJzb7tDXnmtjEpL66" />},                            //id will be dyanmic
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId="pJzb7tDXnmtjEpL66" />},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="4"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="5"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="6"  portfolioDetailsId="pJzb7tDXnmtjEpL66"/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.state.ideatorId}/>},   //id will be dyanmic
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.state.ideatorId} />},                            //id will be dyanmic
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId={this.state.ideatorId} />},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="4"  portfolioDetailsId={this.state.ideatorId}/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="5"  portfolioDetailsId={this.state.ideatorId}/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="6"  portfolioDetailsId={this.state.ideatorId}/>},
   ]
   return tabs;
 }

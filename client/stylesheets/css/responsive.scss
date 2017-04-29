@@ -1,0 +1,54 @@
+$mlRed:#ef4647;
+$mlYellow:#ffe144;
+$mlBlue:#273545;
+$mlGray:#B9C5CC;
+$mlWhite:#ffffff;
+$mlBlack:#000000;
+$menuTrans:all 0.5s linear;
+@media only screen and ( min-width: 768px )  and ( max-width: 900px ) {
+	.app_header{
+		.fa-home{display: none;}
+	    .mobile_menu_trigger{
+	      display: block;
+	    }
+	}
+	.moolya_app{
+		.app_menu{height: 962px; display: block; position: fixed; z-index: 2; width: 0px;left:0px;background-color:$mlBlue;transition:$menuTrans;overflow: hidden;white-space: nowrap;}
+		.profile_pic_in_menu{background-color: $mlRed;position:fixed;top: 0px;width:0px;height:62px;text-align:center;overflow:hidden;transition:$menuTrans;display:inherit;left: 0px;
+		img{margin-top: 14px;}
+		}
+		.app_menu.show_menu, .app_menu.show_menu .profile_pic_in_menu{width: 300px;}
+		.app_menu:after{width: 100%;height:100%; background-image:url(/images/menu_bg.jpg);background-size:cover;position:absolute;top:0px;content: "";opacity: 0.6;}
+		.app_main_wrap{width: 100%;}
+		.app_menu ul{padding: 20px 0px 0px 0px;}
+		.app_menu ul .menu_item.active_menu{background-color: rgba(0,0,0,0.4);}
+		.app_menu ul .menu_item{display: block;width:100%;text-align: left;height:auto;background:transparent;padding: 5px 5px 5px 18px;margin-top:14px;
+			a{color: $mlWhite}
+		}
+		.app_menu ul .menu_item br{display: none;}
+		.app_menu ul .menu_item:after{display: none;}
+		.app_menu ul .menu_item:before{display: none;}
+		.app_menu ul .menu_item .menu_in{position: relative;transform: none;left: inherit;color:$mlWhite;}
+		.app_menu ul .menu_item .menu_in .ml{font-size: 30px;}
+		.app_menu ul .menu_item .menu_in b.menu_title {font-weight: normal; position: relative; top: -6px; left: 15px;font-size:16px;}
+		.app_menu ul li.menu_item:last-child{display: none;}
+	}
+
+}
+@media only screen and ( max-width: 768px ){
+  .moolya_app .app_main_wrap{overflow: auto;}
+  .moolya_app .RRT__tab{margin-right: 0px;}
+  .moolya_app .RRT__tab{margin-top: 2px;border-radius: 4px;}
+  .moolya_app .RRT__tab--selected{border-radius: 4px 4px 0px 0px;}
+}
+@media only screen and ( min-width: 768px ){
+	.moolya_app{
+		.RRT__panel{padding: 10px 0px 0px 0px;border:0px;}
+	}
+}
+@media only screen and ( max-width: 991px ){
+	.nopadding-right,  .nopadding-left{
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    }
+}

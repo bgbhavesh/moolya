@@ -228,7 +228,7 @@ export default MlAccounts=class MlAccounts {
 
       Meteor.setTimeout(function() {
 
-        mlSms.send(countryCode,to,"OTP sent for reset password: "+otpNum);
+        mlSms.send(countryCode,to,msg);
       }, 1 * 1000);
 
     }

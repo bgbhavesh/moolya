@@ -95,7 +95,7 @@ export default class MlContactFormComponent extends React.Component {
                 { idx>0&& (<div className="pull-right block_action" onClick={that.RemoveAssignContactForm.bind(that,idx)}><img src="/images/remove.png"/></div>)}
               </div>
               <div className="panel-body">
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.contactNumberType} placeholder="Select Conatct Number Type" queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectNumberType.bind(that,idx)} />
+                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.contactNumberType} placeholder="Select Contact Number Type" queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectNumberType.bind(that,idx)} />
                   <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={contactForm.countryCode} placeholder="Select Country Code" queryType={"graphql"} query={query}  isDynamic={true}  onSelect={that.optionsBySelectCountryCode.bind(that,idx)} />
                 <div className="form-group">
                   <input type="text" className="form-control float-label" defaultValue={contactForm.number} placeholder="Enter Number" onBlur={that.onChangeContactNumber.bind(that,idx)} />

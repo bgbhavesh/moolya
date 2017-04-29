@@ -189,7 +189,7 @@ export default class Individual extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/transactions/requestedList")
+          FlowRouter.go("/admin/transactions/registrationRequested")
         }
       }
     ]

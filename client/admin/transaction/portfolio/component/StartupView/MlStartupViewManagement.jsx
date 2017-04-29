@@ -115,7 +115,7 @@ export default class MlStartupViewManagement extends React.Component {
           <div className="col-lg-12">
             <div className="row">
               {managementArray && managementArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+                return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
                 <div className="team-block">
                   <img src={details.logo&&details.logo.fileUrl} className="team_img" />
                   <h3>

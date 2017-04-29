@@ -32,13 +32,13 @@ h1{
   line-height: 42px;
   text-align: center;
   border-top: 3px solid #ef4647; }
-.app_header a {
-  color: #ef4647;
-  font-size: 23px;
-  margin-right: 5px; }
-.app_header img {
-  width: 100px;
-  margin-top: -4px; }
+  .app_header a {
+    color: #ef4647;
+    font-size: 23px;
+    margin-right: 5px; }
+  .app_header img {
+    width: 100px;
+    margin-top: -4px; }
 
 .moolya_app .app_menu {
   width: 94px;

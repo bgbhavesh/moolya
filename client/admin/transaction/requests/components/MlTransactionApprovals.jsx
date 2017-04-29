@@ -48,7 +48,7 @@ export default class MlTransactionApprovals extends Component {
 
   expandComponent(row) {
     return (
-      <MlDetailsNotesComponent id={ row.transactionId } transaction={row}/>
+      <MlDetailsNotesComponent id={ row.transactionId } transaction={row} type={"approval"}/>
     )
   }
   creatRequestType(){

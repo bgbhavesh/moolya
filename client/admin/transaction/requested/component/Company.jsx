@@ -169,7 +169,7 @@ export default class Company extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/transactions/requestedList")
+          FlowRouter.go("/admin/transactions/registrationRequested")
         }
       }
     ]

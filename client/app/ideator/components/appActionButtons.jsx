@@ -17,18 +17,37 @@ export default class AppActionButtons extends React.Component {
   }
 
   actionClick(value, e) {
+    // $('.overlay').toggle();
     let icon = "popoverOpen_"+value;
     this.setState({
       [icon]: !(this.state[icon])
-    });
+    }
+      //, function () {
+      // if(this.state[icon]){
+      //   $('.overlay').show();
+      // }else{
+      //   $('.overlay').hide();
+      // }
+    // }
+    );
   }
 
   cancelClick(value, e){
+    // $('.overlay').hide();
     let icon = "popoverOpen_"+value;
     this.setState({
       [icon]: false
     });
+
   }
+  // componentWillUpdate(nextProps, nextState){
+  //   let state = this.state
+  //     for (var propName in nextState) {
+  //       if (nextState[propName] != state[propName]) {
+  //         this.setState({propName: false})
+  //       }
+  //     }
+  // }
 
 
   componentDidMount() {

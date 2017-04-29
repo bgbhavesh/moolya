@@ -110,7 +110,7 @@ export default class MlDetailsNotesComponent extends React.Component {
               <div className="col-md-9 nopadding">
                 <div className="col-md-6">
                   <div className="form-group">
-                    <input type="text" placeholder="Approval for" defaultValue={that.props.transaction.requestTypeName} className="form-control float-label" id=""/>
+                    <input type="text" placeholder="Approval for" defaultValue={that.props.transaction.requestTypeName} className="form-control float-label" id="" readOnly="true"/>
                   </div>
                   <div className="form-group col-md-6 nopadding-left">
                     <input type="text" placeholder="Department" value={that.state.departmentName} className="form-control float-label" id=""/>
@@ -125,10 +125,10 @@ export default class MlDetailsNotesComponent extends React.Component {
                 </div>
                 <div className="col-md-6">
                   <div className="form-group">
-                    <input type="text" placeholder="Device name" defaultValue="" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="Device name" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
                   </div>
                   <div className="form-group">
                     <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status} disabled={that.state.dispalyStatus} onChange={that.onStatusSelect.bind(that)} />

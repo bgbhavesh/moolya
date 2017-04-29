@@ -23,6 +23,13 @@ export default class AppActionButtons extends React.Component {
     });
   }
 
+  cancelClick(value, e){
+    let icon = "popoverOpen_"+value;
+    this.setState({
+      [icon]: false
+    });
+  }
+
 
   componentDidMount() {
     // $('.actions-button').click(function () {
@@ -102,7 +109,7 @@ export default class AppActionButtons extends React.Component {
           <PopoverContent>Do you want to collaborate ?
             <div className="ml_btn">
               <a href="#" className="save_btn">Yes</a>
-              <a href="#" className="cancel_btn">No</a>
+              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_collaborate')}>No</a>
             </div>
           </PopoverContent>
         </Popover>
@@ -161,7 +168,7 @@ export default class AppActionButtons extends React.Component {
             Do you want to connect ?
             <div className="ml_btn">
               <a href="#" className="save_btn">Connect</a>
-              <a href="#" className="cancel_btn">Cancel</a>
+              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_connect')}>Cancel</a>
             </div>
           </PopoverContent>
         </Popover>
@@ -218,7 +225,7 @@ export default class AppActionButtons extends React.Component {
           <PopoverContent>
             <div className="form-group">
               <input type="text" placeholder="To" defaultValue="admin@moolya.in"
-                     className="form-control float-label" id=""/>
+                     className="form-control float-label"/>
             </div>
             <div className="form-group">
               <input type="text" placeholder="Subject" defaultValue="Inquiry" className="form-control float-label"/>
@@ -228,7 +235,7 @@ export default class AppActionButtons extends React.Component {
             </div>
             <div className="ml_btn">
               <a href="#" className="save_btn">Send</a>
-              <a href="#" className="cancel_btn">Cancel</a>
+              <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_inquiry')}>Cancel</a>
             </div>
           </PopoverContent>
         </Popover>

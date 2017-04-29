@@ -410,6 +410,7 @@ let registrationSchema = `
          sendEmailVerification(userId:String):response
          sendSmsVerification(userId:String):response
          verifyEmail(token:String):response
+         verifyMobileNumber(mobileNumber:String,otp:Int):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

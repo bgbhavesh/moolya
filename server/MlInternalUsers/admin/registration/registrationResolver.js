@@ -695,3 +695,19 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
     }
   }
 }
+
+MlResolver.MlMutationResolver['verifyMobileNumber'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.mobileNumber&&args.otp) {
+    const result= MlAccounts.verifyMobileNumberOtp(args.mobileNumber,args.otp);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      let succResp = {mobileNumber:args.mobileNumber,mobileNumberVerified:true};
+     return new MlRespPayload().successPayload(succResp, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Mobile Number/Otp is mandatory",403);
+  }
+}

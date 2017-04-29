@@ -241,5 +241,63 @@ export default MlAccounts=class MlAccounts {
 
   }
 
+  static verifyMobileNumberOtp(mobileNumber, otp){
+
+    var regDetails = mlDBController.findOne('MlRegistration',{"registrationInfo.contactNumber":mobileNumber});
+
+    if(!regDetails){
+      //throw new Error(403, "Mobile Number entered is not registered");
+      return {mobileNumber:mobileNumber, error: true,reason:"Mobile Number entered is not registered", code:403};
+    }
+
+
+    if( regDetails.otps && regDetails.otps.length > 0){
+      var otpFound = false;
+      var otpVerified=false;
+      var otpExpired=false;
+      for(var i =0; i<regDetails.otps.length; i++){
+        var otpRec = regDetails.otps[i];
+
+        //Commented as it was validating old otp for reset pwd
+        if(otpRec.verified === true){
+          otpFound = true;
+          otpVerified=true;
+          break;
+        }
+        let otpNum=otpRec.num;
+        if(otpNum&&Number(otpNum) === otp && otpRec.verified === false){
+          var otpTime = 15;//todo: configure it as the settings
+          if(new Date() - otpRec.time.getTime() > (otpTime*60*10000 || 5*60*10000)){
+            //throw new Error(403, "OTP "+otp+" has expired, generate new one with resend option");
+            otpExpired=true;
+            break;
+          }
+          otpRec.verified = true;
+          var updatedCount=MlRegistration.update({_id:regDetails._id},{$set:{"otps":regDetails.otps}});
+          otpFound = true;
+          break;
+        }
+      }
+
+      if(otpVerified){
+        return {mobileNumber:mobileNumber, error: true,reason:"Mobile Number entered has already been verified", code:403};
+      }else if(otpExpired){
+        return {mobileNumber:mobileNumber, error: true,reason:"OTP "+otp+" has expired, generate new one with resend option", code:403};
+      }else if(!otpFound){
+        return {mobileNumber:mobileNumber, error: true,reason:"OTP is Invalid, enter a correct one or try resend option", code:403};
+      }else{
+        return {mobileNumber:mobileNumber,recordId:regDetails._id, error: false,reason:"Mobile Number has been verified.", code:200};
+        //These commented lines are to generate token for user to login when the user verifies his mobile/email
+        // var stampedLoginToken = Accounts._generateStampedLoginToken();
+        // Accounts._insertLoginToken(user._id, stampedLoginToken);
+        //return stampedLoginToken;
+      }
+
+    }else{
+      //throw new Error(403, "Invalid otp,Please provide a valid otp to verify your number");
+      return {mobileNumber:mobileNumber, error: true,reason:"Invalid otp,Please provide a valid otp to verify your number", code:403};
+    }
+  }
+
 }
 

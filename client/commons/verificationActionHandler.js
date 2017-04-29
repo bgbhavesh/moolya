@@ -21,3 +21,26 @@ export async function verifyEmailHandler(token){
   //console.log(result);
   return result&&result.data&&result.data.verifyEmail?result.data.verifyEmail:{};
 }
+
+export async function verifyMobileNumberHandler(mobileNumber,otp){
+  const result = await client.mutate({
+    mutation: gql`
+    mutation($mobileNumber:String,$otp:Int){
+        verifyMobileNumber(
+          mobileNumber :$mobileNumber,
+          otp:$otp
+        ){
+            success,
+            code,
+            result
+         } 
+      }
+    `,
+    variables: {
+      mobileNumber:mobileNumber,
+      otp:otp
+    }
+  });
+  //console.log(result);
+  return result&&result.data&&result.data.verifyMobileNumber?result.data.verifyMobileNumber:{};
+}

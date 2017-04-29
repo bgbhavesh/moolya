@@ -479,7 +479,6 @@ transition: none;
 .ideators_list .ideators_list_block .premium span {font-size: 10px; font-weight: bold; color: #FFF; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); -webkit-transform: rotate(45deg); width: 100px; display: block; background: #ef4647; box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1); position: absolute; top: 19px; right: -21px; text-shadow: none}
 .ideators_list .ideators_list_block .premium span::before {content: ""; position: absolute; left: 0px; top: 100%; z-index: -1; border-left: 3px solid #a21e1f; border-right: 3px solid transparent; border-bottom: 3px solid transparent; border-top: 3px solid #a21e1f; }
 .ideators_list .ideators_list_block .premium span::after {content: ""; position: absolute; right: 0px; top: 100%; z-index: -1; border-left: 3px solid transparent; border-right: 3px solid #a21e1f; border-bottom: 3px solid transparent; border-top: 3px solid #a21e1f; }
-
 .ideators_list .ideators_list_block .regular {position: absolute; right: -5px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right;
         span {font-size: 10px; font-weight: bold; color: #000; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); -webkit-transform: rotate(45deg); width: 100px; display: block; background: #ffc20e; box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1); position: absolute; top: 19px; right: -21px; text-shadow: none;
           &:before{
@@ -490,7 +489,6 @@ transition: none;
           }
         }
     }
-
 .ideators_list .ideators_list_block h3{padding: 10px 45px; font-size: 20px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; margin-bottom: 0px;}
 .ideators_list .ideators_list_block .list_icon{font-size: 22px; color: #fff; border-top: #34404e solid 1px; padding: 12px 0px 0px; font-weight: normal;}
 .ideators_list .ideators_list_block .list_icon .ml{background: #B9C5CC; border-radius: 50%; padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee;font-size: 42px;display: inline-block;border: 2px solid #161e27;}
@@ -501,6 +499,30 @@ transition: none;
 .ideators_list a:focus{text-decoration: none;}
 .ideators_list a:active{text-decoration: none;}
 
+.funders_list .funders_list_block{height: 223px; background-color: #273545; box-shadow: 0px 0px 5px #888; border-radius: 10px; text-align: center; position: relative; margin-bottom: 15px; text-shadow: none;}
+.funders_list .funders_list_block .premium { position: absolute; right: -5px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right; }
+.funders_list .funders_list_block .premium span {font-size: 10px; font-weight: bold; color: #FFF; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); -webkit-transform: rotate(45deg); width: 100px; display: block; background: #ef4647; box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1); position: absolute; top: 19px; right: -21px; text-shadow: none}
+.funders_list .funders_list_block .premium span::before {content: ""; position: absolute; left: 0px; top: 100%; z-index: -1; border-left: 3px solid #a21e1f; border-right: 3px solid transparent; border-bottom: 3px solid transparent; border-top: 3px solid #a21e1f; }
+.funders_list .funders_list_block .premium span::after {content: ""; position: absolute; right: 0px; top: 100%; z-index: -1; border-left: 3px solid transparent; border-right: 3px solid #a21e1f; border-bottom: 3px solid transparent; border-top: 3px solid #a21e1f; }
+.funders_list .funders_list_block .regular {position: absolute; right: -5px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right;
+        span {font-size: 10px; font-weight: bold; color: #000; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); -webkit-transform: rotate(45deg); width: 100px; display: block; background: #ffc20e; box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1); position: absolute; top: 19px; right: -21px; text-shadow: none;
+          &:before{
+            content: ""; position: absolute; left: 0px; top: 100%; z-index: -1; border-left: 3px solid #ad840d; border-right: 3px solid transparent; border-bottom: 3px solid transparent; border-top: 3px solid #ad840d;
+          }
+          &:after{
+            content: ""; position: absolute; right: 0px; top: 100%; z-index: -1; border-left: 3px solid transparent; border-right: 3px solid #ad840d; border-bottom: 3px solid transparent; border-top: 3px solid #ad840d;
+          }
+        }
+    }
+.funders_list .funders_list_block h3{padding: 10px 45px; font-size: 20px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; margin-bottom: 0px;}
+.funders_list .funders_list_block .list_icon{font-size: 22px; color: #fff; border-top: #34404e solid 1px; padding: 12px 0px 0px; font-weight: normal;}
+.funders_list .funders_list_block .list_icon .ml{background: #B9C5CC; border-radius: 50%; padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee;font-size: 70px;display: inline-block;border: 2px solid #161e27;}
+.funders_list .funders_list_block p{color: #fff;}
+.block_footer{position: absolute; text-align: center; width: 100%; bottom: 0; background: #212d3c; padding: 10px 0px; border-top: #34404e solid 1px;border-radius: 0px 0px 10px 10px;}
+.block_footer span{color: #fff; text-shadow: none; font-weight: normal; font-size: 21px; padding: 5px 0px;}
+.funders_list a:hover{text-decoration: none;}
+.funders_list a:focus{text-decoration: none;}
+.funders_list a:active{text-decoration: none;}
 
 .rating {text-align: center; position: relative; width: 50%; margin: 0 auto;}
 .ratinghidden {opacity: 0; }
@@ -584,16 +606,16 @@ transition: none;
 
 
 
-.top_block_scroller{
+.top_block_scroller{  
   li{width: 100px; float: left; margin-right: 10px;
     h3{
-      font-size: 10px;
+      font-size: 9px;
     }
     .team-block{
       border-radius:10px;
     }
     .team_img{
-      width: 60%;height: 60%;
+      width: 60%;height: 60%; 
     }
   }
   li.active{
@@ -609,7 +631,7 @@ transition: none;
 
 /* Scrollbar */
 .scrollbar {margin: 0 0 1em 0; height: 2px; background: #ccc; line-height: 0;
-  .handle {width: 100px; height: 100%; background: #292a33; cursor: pointer;
+  .handle {width: 100px; height: 100%; background: #292a33; cursor: pointer; 
     .mousearea {position: absolute; top: -9px; left: 0; width: 100%; height: 20px; }
   }
 
@@ -617,7 +639,7 @@ transition: none;
 
 /* Pages */
 .pages {list-style: none; margin: 20px 0; padding: 0; text-align: center;
-li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent: -999px; border-radius: 10px; cursor: pointer; overflow: hidden; background: #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent: -999px; border-radius: 10px; cursor: pointer; overflow: hidden; background: #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); 
   &:hover { background: #aaa;}
 }
  }
@@ -706,30 +728,30 @@ bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;
 .save_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlBlue transparent transparent;top: 0px;}
 
 }
-.email-bg{background-image: url(/images/email_bg.jpg); background-position:fixed; background-repeat:no-repeat; background-size:cover; position:fixed; width: 100%; height: 100%; padding-top:10%; text-shadow:none;text-align:center;}
+.email-bg{background-image: url(/images/email_bg.jpg); background-position:fixed; background-repeat:no-repeat; background-size:cover; position:fixed; width: 100%; height: 100%; padding-top:7%; text-shadow:none;text-align:center;}
 .email-body{
   font-size: 16px;
-  h2{color:$mlBlue;padding:0;border:none;margin:0;font-size:42px;font-weight:bold;}
+  h2{color:$mlBlue;padding:0;border:none;margin:15px 0;font-size:42px;font-weight:bold;}
   .form-control{
     &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: $mlWhite;
+      color: $mlBlue;
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+      color: $mlBlue;
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+      color: $mlBlue;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+      color: $mlBlue;
+    }
   }
-  &::-moz-placeholder { /* Firefox 19+ */
-    color: $mlWhite;
-  }
-  &:-ms-input-placeholder { /* IE 10+ */
-    color: $mlWhite;
-  }
-  &:-moz-placeholder { /* Firefox 18- */
-    color: $mlWhite;
-  }
-  }
-  .form-control.sendotp{width: 65%;float: left; }
+  .form-control.sendotp{width: 65%; font-size: 22px;  margin: 0 auto; text-align: center; border-bottom: none; background: $mlRed; color: #fff; border-radius: 5px; }
   .form-group.sendotp{
-    width:50%;margin:0 auto;
+    width:80%;margin:0 auto;
     .resendotp{float:right;text-decoration:underline;color:$mlWhite;font-size:12px;}
   }
-.save_btn{display: inline-block; background: $mlRed; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px;  margin: 5px 6px 0px 21px;color: $mlWhite;text-shadow: none;text-align: center;}
+.save_btn{display: inline-block; background: $mlRed; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px;  margin: 5px 0px 0px 0px;color: $mlWhite;text-shadow: none;text-align: center;}
 .save_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent $mlRed;top: 0px;}
 .save_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
 

@@ -673,10 +673,17 @@ MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) => {
       //check for mobile verification
       var mobileNumber=null;
       var recordId=result.recordId;
+
+      //requirement by venu
       if(recordId){
         var reg=mlDBController.findOne('MlRegistration', {'_id':recordId},context);
         if(reg&&reg.registrationInfo&&reg.registrationInfo.contactNumber){
           mobileNumber=reg.registrationInfo.contactNumber;
+           try{
+               MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:recordId}, context, info);
+             }catch(e){
+                console.log(e);
+             }
         }
       }
       let succResp = {email:result.email,emailVerified:true,mobileNumber:mobileNumber,mobileNumberVerified:false};

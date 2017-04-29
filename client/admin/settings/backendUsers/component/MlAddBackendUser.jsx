@@ -335,8 +335,8 @@ class MlAddBackendUser extends React.Component {
                       <input type="text" ref="email" placeholder="Email id" className="form-control float-label" id="" data-required={true} data-errMsg="Email  is Required"/>
                     </div>
 
-                    <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.foundationDate} onChange={this.onFoundationDateSelection.bind(this)}/>
+                    <div className="form-group mandatory">
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onFoundationDateSelection.bind(this)}/>
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
 

@@ -43,7 +43,7 @@ if(!subDepartment) {
   };
   MlSubDepartments.insert(subDepartment);
 }
-/*********************************** Default Department/SubDepartment Creation <END> **********************************************/
+/*********************************** Default Department/SubDepartment Creation <END> *****************************https://raksanconsulting.atlassian.net/browse/MOOLYA-1023*****************/
 
 /*********************************** Default Moolya Roles Creation <Start> **********************************************/
 let dep = MlDepartments.findOne({"departmentName":"operations"});

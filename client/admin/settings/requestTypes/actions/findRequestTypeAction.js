@@ -12,6 +12,7 @@ export async function findRequestTypeActionHandler(requestTypeId) {
         displayName
         isActive
         requestDesc
+        transactionType
       }
       }
     `,

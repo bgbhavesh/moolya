@@ -6,7 +6,8 @@ export async function updateRequestTypeActionHandler(RequestTypeDetails) {
   let requestName = RequestTypeDetails.requestName;
   let displayName = RequestTypeDetails.displayName;
   let requestDesc = RequestTypeDetails.requestDesc;
-  let isActive = RequestTypeDetails.isActive
+  let isActive = RequestTypeDetails.isActive;
+  let transactionType = RequestTypeDetails.transactionType;
   const result = await client.mutate({
     mutation: gql`
     mutation  ($_id:String,$requestName: String, $displayName: String, $requestDesc: String,$isActive: Boolean, $moduleName:String, $actionName:String){
@@ -31,6 +32,7 @@ export async function updateRequestTypeActionHandler(RequestTypeDetails) {
       displayName,
       requestDesc,
       isActive,
+      transactionType,
       moduleName:"REQUEST",
       actionName:"UPDATE"
     }

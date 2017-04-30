@@ -358,7 +358,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                       id:city._id,
                       name:city.name
                     }
-                    cities.push(json)
+                    let c = _.find(cities, {name:json.name});
+                    if(c){
+                      //do nothing
+                    }else{
+                      cities.push(json)
+                    }
                 })
             }
             console.log(cities);

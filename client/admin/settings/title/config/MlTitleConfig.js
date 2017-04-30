@@ -37,7 +37,10 @@ const mlTitleTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addTitle")
+        if(data&&data.id){FlowRouter.go("/admin/settings/titleList")}
+        else {
+          FlowRouter.go("/admin/settings/addTitle")
+        }
       }
     },
     // {

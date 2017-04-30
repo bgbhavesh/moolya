@@ -88,7 +88,7 @@ getTabComponents(){
     {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<AppIdeatorAudience key="3"  portfolioDetailsId={this.state.ideatorId} />},                            //id will be dyanmic
     {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<AppIdeatorLibrary key="4"  portfolioDetailsId={this.state.ideatorId} />},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<AppIdeatorSnP key="4"  portfolioDetailsId={this.state.ideatorId}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<AppIdeatorPnT key="5"  portfolioDetailsId={this.state.ideatorId}/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Planning and Trademark" , component:<AppIdeatorPnT key="5"  portfolioDetailsId={this.state.ideatorId}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<AppIdeatorLookingFor key="6"  portfolioDetailsId={this.state.ideatorId}/>},
   ]
   return tabs;

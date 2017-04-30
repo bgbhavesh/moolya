@@ -164,15 +164,11 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      /*msg= "\n\nThank you for registering with moolya!\n\n"+
+      msg= "\n\nThank you for registering with moolya!\n\n"+
       "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
-      "\n\nTeam moolya\n";*/
-      msg = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
-          '<br>Thank you for registering with moolya!'+
-        '<br>Use'+otpNum+'as One Time Password (OTP) to activate your Moolya account.'+
-          '<br>Regards,<br>Team moolya'+
-        '</div></body></html>'
+      "\n\nTeam moolya\n";
+
     }
 
     //send SMS

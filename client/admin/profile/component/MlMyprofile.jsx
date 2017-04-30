@@ -303,6 +303,8 @@ export default class MlMyProfile extends React.Component{
                     </div>
                     <div className="form-group">
                       <input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label" defaultValue={this.state.dateOfBirth} disabled="true" />
+                      <FontAwesome name='calendar' className="password_icon" />
+
                     </div>
                     <div className="form-group">
                       <div className="input_types">

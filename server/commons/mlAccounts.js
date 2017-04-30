@@ -18,15 +18,21 @@ export default MlAccounts=class MlAccounts {
     };                                                                                                                   // 13
 */
   static greet(message,user, url) {                                                                                        // 2
-    var greeting = user&&user.name ? "Dear " + user.name + "," : "Dear,";                  // 3
-    return greeting + "\n\nGreetings and thank you for creating an account with moolya!\n\n" +
-      "\n\nThere is just one more step before you can explore infinite possibilities with moolya: you need to activate your moolya account. To activate your account, click on the following link or copy and paste the link into your browser's address bar\n"
+   /* var greeting = user&&user.name ? "Dear " + user.name + "," : "Dear,";                  // 3
+    return greeting + "Greetings and thank you for creating an account with moolya!<br>" +
+      "There is just one more step before you can explore infinite possibilities with moolya: you need to activate your moolya account. To activate your account, click on the following link or copy and paste the link into your browser's address bar<br>"
       "\n\nLink:"+url+
       "\n\nAfter you activate your account, you can complete your profile. You will receive occasional emails from us about new information or other updates.\n" +
       "\n\nIf you need our help, write to us at startup@moolya.in or give us a call +91-40-6551 8300.\n" +
       "\n\nHave an empowering day!" +
       "\n\nRegards,\n" +
-      "\n\nTeam moolya\n";              // 5
+      "\n\nTeam moolya\n";*/
+
+    // 5
+    var username = user&&user.name ? user.name : " ";
+    var greeting = "<html><body ><div>" +"Dear" + username +"<br>Greetings and thank you for creating an account with moolya!<br>There is just one more step before you can explore infinite possibilities with moolya: you need to activate your moolya account. To activate your account, click on the following link or copy and paste the link into your browser's address bar<br>"
+                    "<br>Link:"+url+"<br>After you activate your account, you can complete your profile. You will receive occasional emails from us about new information or other updates.<br>If you need our help, write to us at startup@moolya.in or give us a call +91-40-6551 8300.<br>Have an empowering day!<br>Regards,<br>Team moolya."+"</div></body></html>";
+    return greeting
   };                                                                                                                   // 13
 
 
@@ -170,10 +176,15 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      msg= "\n\nThank you for registering with moolya!\n\n"+
+      /*msg= "\n\nThank you for registering with moolya!\n\n"+
       "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
-      "\n\nTeam moolya\n";
+      "\n\nTeam moolya\n";*/
+      msg = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
+          '<br>Thank you for registering with moolya!'+
+        '<br>Use'+otpNum+'as One Time Password (OTP) to activate your Moolya account.'+
+          '<br>Regards,<br>Team moolya'+
+        '</div></body></html>'
     }
 
     //send SMS

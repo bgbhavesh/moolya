@@ -249,6 +249,10 @@ export default class MlMyProfile extends React.Component{
     ];
     const showLoader=this.state.loading;
     let isExternaluser = Meteor.user().profile.isExternaluser;
+    let profilePic = this.state.uploadedProfilePic;
+    if(!profilePic || profilePic == " "){
+      profilePic ="/images/img2.png"
+    }
     return (
       <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
@@ -281,7 +285,7 @@ export default class MlMyProfile extends React.Component{
                         }
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.uploadedProfilePic}/>
+                        <img src={profilePic}/>
                       </div>
                     </div>
                   </form>
@@ -328,7 +332,9 @@ export default class MlMyProfile extends React.Component{
           </div>
         </div>)}
         <span className="actions_switch"></span>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        {isExternaluser ? <div></div> :
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        }
       </div>
     )
   }

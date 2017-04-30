@@ -146,7 +146,7 @@ export default class MyProfileSettings extends React.Component{
       {value: 'Metric System', label: 'Metric System'},
     ]
 
-
+    let isExternaluser = Meteor.user().profile.isExternaluser;
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -201,8 +201,9 @@ export default class MyProfileSettings extends React.Component{
           {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>*/}
           {/*<div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>*/}
         {/*</div>*/}
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
-
+        {isExternaluser ? <div></div> :
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        }
       </div>
     )
   }

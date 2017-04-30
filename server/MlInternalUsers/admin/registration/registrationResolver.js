@@ -2,6 +2,7 @@ import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import MlRegistrationPreCondition from './registrationPreConditions';
 import MlAccounts from '../../../commons/mlAccounts'
+import mlRegistrationRepo from './mlRegistrationRepo';
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
@@ -92,11 +93,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     var updatedResponse;
     var validationCheck=null;
     var result=null;
+    var registerDetails=null;
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
         //get the registrtion Details
-       let registerDetails= mlDBController.findOne('MlRegistration', id, context) || {};
+        registerDetails= mlDBController.findOne('MlRegistration', id, context) || {};
        let registrationInfo=registerDetails.registrationInfo;
        if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.communityName!=details.communityName)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
@@ -171,6 +173,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           isInternaluser: false,
           isExternaluser: true,
           email: details.email,
+          mobileNumber:details.contactNumber,
           isActive   : false,
           firstName  :details.firstName,
           lastName   : details.lastName,
@@ -180,49 +183,53 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         let userObject = {
           username: details.email,
           password: details.password,
-          profile: profile
+          profile: profile,
+          emails:registerDetails&&registerDetails.emails?registerDetails.emails:[]
         }
 
-        // let existingUser = Meteor.users.findOne({"username":userObject.username});
         var existingUser = mlDBController.findOne('users', {"username": userObject.username}, context)
         var updateCount = 0;
         var userId = null;
+
         if (existingUser) {
-          // let result = Meteor.users.update({username:userObject.username,'profile.externalUserProfile' : {
-          //   $elemMatch: {'registrationId': id}}}, {$set: {"profile.externalUserProfile.$":userProfile}});
-           userId=existingUser._id;
-           result = mlDBController.update('users', {
-            username: userObject.username, 'profile.externalUserProfile': {
-              $elemMatch: {'registrationId': id}
-            }
-          }, {"profile.externalUserProfile.$": userProfile}, {$set: true}, context)
+              //check if the registration profile(community based) exists for user and can be updated
+               userId=existingUser._id;
+               result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfile':{$elemMatch: {'registrationId': id}}},
+                                                       {"profile.externalUserProfile.$": userProfile}, {$set: true}, context)
 
-          if (result != 1) {
-            // updateCount= Meteor.users.update({username:userObject.username},{'$push':{'profile.externalUserProfile':userProfile}},{upsert:false});
-            updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfile': userProfile}, {$push: true}, context)
-          } else {
-            updateCount = 1;
-          }
+              //if registration profile item doesn't exist,then update the profile
+              if (result != 1) {
+                updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfile': userProfile}, {$push: true}, context);
+              } else {
+                updateCount = 1;
+              }
+              //Email & MobileNumber verification updates to user
+              mlRegistrationRepo.updateUserVerificationDetails(id,'all',context);
         } else {
-          // userId = Accounts.createUser(userObject);
-          userId = mlDBController.insert('users', userObject, context)
+               userId = mlDBController.insert('users', userObject, context)
+              if(userId){
+                 //Email & MobileNumber verification updates to user
+                   mlDBController.update('users', {username: userObject.username},
+                                                  {$set: {'services.email':registerDetails&&registerDetails.services?registerDetails.services.email:{},
+                                                          'emails':userObject.emails}},{'blackbox': true}, context);
+               }
         }
 
-        if (updateCount === 1 || userId) {
-          let code = 200;
-           result = {username: userObject.username};
-          // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
-          mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
-          updatedResponse = new MlRespPayload().successPayload(result, code);
-          return updatedResponse;
-        }
+          if (updateCount === 1 || userId) {
+              let code = 200;
+               result = {username: userObject.username};
+              // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
+              mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
+              updatedResponse = new MlRespPayload().successPayload(result, code);
+              return updatedResponse;
+          }
 
-        // MlResolver.MlMutationResolver['createUser'](obj, {user:userObject,moduleName:"USERS",actionName:"CREATE"}, context, info);
-      } else {
-        validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id);
-        if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
-        updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context);
-    }
+
+      }else {
+            validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id);
+             if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+                  updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context);
+      }
 
     let code = 200;
      result = {id: id};

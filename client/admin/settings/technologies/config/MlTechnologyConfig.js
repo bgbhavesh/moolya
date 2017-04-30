@@ -40,7 +40,11 @@ const mlTechnologiesTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addTechnology")
+        if(data&&data.id){
+          FlowRouter.go("/admin/settings/technologiesList")
+        }else {
+          FlowRouter.go("/admin/settings/addTechnology")
+        }
       }
     },
     // {

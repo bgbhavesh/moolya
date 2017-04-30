@@ -66,7 +66,10 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addDocumentMapping")
+        if(data&&data.id){FlowRouter.go("/admin/settings/documentMappingList")}
+        else {
+          FlowRouter.go("/admin/settings/addDocumentMapping")
+        }
       }
     },
     // {

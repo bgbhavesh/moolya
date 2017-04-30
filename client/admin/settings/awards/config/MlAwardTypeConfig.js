@@ -38,7 +38,11 @@ const mlAwardTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addAward")
+        if(data&&data.id){
+          FlowRouter.go("/admin/settings/awardList")
+        }else {
+          FlowRouter.go("/admin/settings/addAward")
+        }
       }
     },
     // {

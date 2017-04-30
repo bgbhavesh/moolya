@@ -39,8 +39,11 @@ const mlAssetsTableConfig=new MlViewer.View({
     {
       showAction: true,
       actionName: 'add',
-      handler: (data)=>{
+      handler: (data)=>{ if(data&&data.id){
+        FlowRouter.go("/admin/settings/assetsList")
+      }else {
         FlowRouter.go("/admin/settings/addAssets")
+      }
       }
     },
     // {

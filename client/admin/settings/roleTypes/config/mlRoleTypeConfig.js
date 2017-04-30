@@ -116,7 +116,10 @@ const mlRoleTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/createRole")
+        if(data&&data.id){FlowRouter.go("/admin/settings/rolesList")}
+        else {
+          FlowRouter.go("/admin/settings/createRole")
+        }
       }
     }
   ],

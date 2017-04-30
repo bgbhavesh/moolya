@@ -66,7 +66,7 @@ class MlAddTaxType extends React.Component{
 
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Create TaxType</h2>
+          <h2>Create Tax Type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>

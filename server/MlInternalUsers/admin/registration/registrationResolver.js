@@ -62,7 +62,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     args.registration.userName = args.registration.email;
     var emails=[{address:args.registration.userName,verified:false}];
     orderNumberGenService.assignRegistrationId(args.registration);
-    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails}, context)
+    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails,registrationDetails:{identityType:args.registration.identityType}}, context)
     if(response){
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:response}, context, info);
      // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);

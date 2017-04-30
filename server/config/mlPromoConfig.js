@@ -1,6 +1,6 @@
 let promoCodes = [
-  {_id:'moolya1',code:"moolya1",description:"moolya1","isActive":true,"validityFrom":new Date(Date.UTC(2017,1,2)),"validityTo":new Date(Date.UTC(2017,4,2))},
-  {_id:'moolya2',code:"moolya2",description:"moolya2","isActive":true,"validityFrom":new Date(Date.UTC(2017,1,2)),"validityTo":new Date(Date.UTC(2017,6,2))},
+  {_id:'TIE100',code:"TIE100",description:"TIE100","isActive":true,"validityFrom":new Date(Date.UTC(2017,3,29)),"validityTo":new Date(Date.UTC(2017,6,31))},
+  {_id:'TCD100',code:"TCD100",description:"TCD100","isActive":true,"validityFrom":new Date(Date.UTC(2017,3,29)),"validityTo":new Date(Date.UTC(2017,6,31))},
 ];
 Meteor.startup(function () {
   for(var i = 0; i < promoCodes.length; i++){

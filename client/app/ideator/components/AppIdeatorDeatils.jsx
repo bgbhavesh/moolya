@@ -102,7 +102,7 @@ export default class AppIdeatorDeatils extends React.Component{
 
                   <div className="form-group steps_pic_upload">
                     <div className="previewImg ProfileImg">
-                      <img src="/images/p_6.jpg"/>
+                      <img src="/images/p_23.jpg"/>
                     </div>
                   </div>
                   <br className="brclear"/>

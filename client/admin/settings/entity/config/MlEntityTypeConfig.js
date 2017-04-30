@@ -38,7 +38,11 @@ const mlEntityTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addEntity")
+        if(data && data.id){
+          FlowRouter.go("/admin/settings/entityList");
+        } else {
+          FlowRouter.go("/admin/settings/addEntity")
+        }
       }
     },
     // {

@@ -37,8 +37,13 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
     {
       showAction: true,
       actionName: 'add',
-      handler: (data)=>{
-        FlowRouter.go("/admin/settings/addIndustry")
+      handler: (data)=> {
+        if (data && data.id) {
+          FlowRouter.go("/admin/settings/industryList")
+        }
+        else {
+          FlowRouter.go("/admin/settings/addIndustry")
+        }
       }
     },
     // {

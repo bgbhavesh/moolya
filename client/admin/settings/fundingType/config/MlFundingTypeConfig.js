@@ -40,7 +40,11 @@ const mlFundingTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addFundingType")
+        if(data&&data.id){
+          FlowRouter.go("/admin/settings/fundingTypeList")
+        }else {
+          FlowRouter.go("/admin/settings/addFundingType")
+        }
       }
     },
     // {

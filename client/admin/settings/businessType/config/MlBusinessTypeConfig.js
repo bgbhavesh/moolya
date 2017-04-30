@@ -38,7 +38,11 @@ const mlBusinessTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addBusiness")
+        if(data && data.id){
+          FlowRouter.go("/admin/settings/businessList");
+        } else {
+          FlowRouter.go("/admin/settings/addBusiness")
+        }
       }
     },
     // {

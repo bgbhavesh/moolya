@@ -97,7 +97,11 @@ const mlProcessTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addProcess")
+        if(data&&data.id){
+          FlowRouter.go("/admin/settings/processList")
+        }else {
+          FlowRouter.go("/admin/settings/addProcess")
+        }
       }
     },
     // {

@@ -38,8 +38,12 @@ const mlCitizenshipTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
+        if(data && data.id){
+          FlowRouter.go("/admin/settings/citizenshipList");
+        } else {
         FlowRouter.go("/admin/settings/addCitizenship")
-      }
+      }}
+
     },
     // {
     //   showAction: true,

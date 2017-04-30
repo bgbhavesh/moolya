@@ -6,16 +6,21 @@ var FontAwesome = require('react-fontawesome');
 export default class Pagination extends Component {
   constructor(props) {
     super(props);
-    this.goToPage.bind(this)
+    this.state = {
+      value:" "
+    }
+  this.goToPage.bind(this)
     this.onSlideChange.bind(this)
     this.pageSkip.bind(this);
     this.pageCount.bind(this)
     this.sendCurPageToParent.bind(this)
+    this.toggleOnClick.bind(this)
     return this;
   }
 
   componentDidMount() {
     let totalRecords=this.props.totalRecords
+    console.log(this.props.totalRecords)
     let pages = totalRecords/10;     //divide by dynamic limit
     let pagesMax = parseInt(pages)+1
     let pagesMin = 1;
@@ -60,11 +65,12 @@ export default class Pagination extends Component {
         }
         event.preventDefault();
       }
-
+this.goToPage.bind(ui.value);
+//       this.goToPage.bind(this);
       $('.pagination .pageNumber span').text(ui.value);
       $('.pagination .pageInput').val(ui.value);
       console.log(ui.value)
-      // this.sendCurPageToParent.bind(ui.value)
+
 
     }).on('slidechange', function (event, ui) {
       $('.pagination .pageNumber')
@@ -79,11 +85,20 @@ export default class Pagination extends Component {
         "aria-valuetext": "Page " + ui.value
       });
       console.log(ui.value)
-      // this.sendCurPageToParent.bind(ui.value)
+      this.goToPage.bind(ui.value);
+
+      // this.goToPage.bind(ui.value);
+      // this.sendCurPageToParent(ui.value)
     });
     this.sliderPips(pagesMin, pagesMax);
     this.sliderLabel();
   }
+
+  // componentWillUpdate(){
+  //   let a = this.state.value;
+  //   sendCurPageToParent(a);
+  //
+  // }
 
   sliderPips(min, max){
       let pips = max - min;
@@ -146,6 +161,7 @@ export default class Pagination extends Component {
   // }
 
   onSlideChange(e) {
+    this.setState({value:e.target.value})
     console.log('Slide is perform');
   }
   sendCurPageToParent(curPage) {
@@ -167,13 +183,16 @@ export default class Pagination extends Component {
               <FontAwesome name='chevron-down'/>
             </a>
           </div>
-          <div className="pageSlider long" onChange={that.onSlideChange.bind(that)}></div>
+          <a href="#">
+          <div className="pageSlider long">
+          </div>
+          </a>
           <form className="pageForm" action="#">
             <label className="pageLabel" htmlFor="pageInput">
               Page number you'd like to go to. (Max of 30)
             </label>
             <a className="pagePrev pageSkip" name="prePage" onClick={that.pageSkip.bind(that)}>Previous Page</a>
-            <input id="pageInput" className="pageInput" type="text" maxLength="3" placeholder="#" ref="pageInput"/>
+            <input id="pageInput" className="pageInput" type="text" maxLength="3" placeholder="#" ref="pageInput" onBlur={that.onSlideChange.bind(that)}/>
             <a className="pageNext pageSkip" name="nextPage" onClick={that.pageSkip.bind(that)}>Next Page</a>
             <button className="pageButton" title="Go to chosen page" onClick={that.goToPage.bind(that)}>
               <FontAwesome name='hand-pointer-o'/>

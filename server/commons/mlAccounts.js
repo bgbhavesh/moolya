@@ -11,10 +11,25 @@ export default MlAccounts=class MlAccounts {
   }
 
 
+/*
   static greet(message,user, url) {                                                                                        // 2
       var greeting = user&&user.name ? "Hello " + user.name + "," : "Hello,";                  // 3
       return greeting + "\n\n"+message+" simply click the link below.\n\n" + url + "\n\nThanks.\n";              // 5
     };                                                                                                                   // 13
+*/
+  static greet(message,user, url) {                                                                                        // 2
+    var greeting = user&&user.name ? "Dear " + user.name + "," : "Dear,";                  // 3
+    return greeting + "\n\nGreetings and thank you for creating an account with moolya!\n\n" +
+      "\n\nThere is just one more step before you can explore infinite possibilities with moolya: you need to activate your moolya account. To activate your account, click on the following link or copy and paste the link into your browser's address bar\n"
+      "\n\nLink:"+url+
+      "\n\nAfter you activate your account, you can complete your profile. You will receive occasional emails from us about new information or other updates.\n" +
+      "\n\nIf you need our help, write to us at startup@moolya.in or give us a call +91-40-6551 8300.\n" +
+      "\n\nHave an empowering day!" +
+      "\n\nRegards,\n" +
+      "\n\nTeam moolya\n";              // 5
+  };                                                                                                                   // 13
+
+
 
 
 
@@ -62,6 +77,7 @@ export default MlAccounts=class MlAccounts {
 
     emailOptions.from=fromEmail;
     emailOptions.to=address;
+    emailOptions.subject="Welcome to moolya India!";
     if (emailOptions&&emailOptions.emailContentType==="html") {
       emailOptions.html=emailContent;
       Meteor.setTimeout(function () {
@@ -154,7 +170,10 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      msg= "Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.";
+      msg= "\n\nThank you for registering with moolya!\n\n"+
+      "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
+      "\n\nRegards,\n" +
+      "\n\nTeam moolya\n";
     }
 
     //send SMS

@@ -171,7 +171,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           isInternaluser: false,
           isExternaluser: true,
           email: details.email,
-          isActive: false,
+          isActive   : false,
+          firstName  :details.firstName,
+          lastName   : details.lastName,
+          displayName :details.firstName+' '+ details.lastName,
           externalUserProfile: [userProfile]
         }
         let userObject = {

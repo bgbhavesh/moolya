@@ -11,6 +11,13 @@ import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeato
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
 
+// import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
+// import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
+//
+// import MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
+import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
+
 export const appSection = FlowRouter.group({
   prefix: "/app",
   name: 'app',
@@ -37,6 +44,27 @@ appSection.route('/dashboard', {
   }
 });
 
+appSection.route('/myprofile/personalInfo', {
+  name: 'myprofile',
+  action(){
+    mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppProfileTabs/>})
+  }
+});
+
+// appSection.route('/myprofile/AddressBook', {
+//   name: 'myprofile',
+//   action(){
+//     mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MyProfileAddressBook/>})
+//   }
+// });
+//
+// appSection.route('/myprofile/Settings', {
+//   name: 'myprofile',
+//   action(){
+//     mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MyProfileSettings/>})
+//   }
+// });
+
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
@@ -56,13 +84,13 @@ appSection.route('/ideator/:id/', {
 });
 
 // appSection.route('/ideator/editPortfolio/:id/:communityType', {
-// appSection.route('/ideator/editPortfolio/', {
-//   appSection: 'ideator_portfolio_edit',
-//   action(params){
-//     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
-//     mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={false}/>})
-//   }
-// });
+appSection.route('/ideator/editPortfolio/', {
+  appSection: 'ideator_portfolio_edit',
+  action(params){
+    // mount(AppLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
+    mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={false}/>})
+  }
+});
 
 appSection.route('/startup', {
   name: 'startup',

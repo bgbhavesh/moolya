@@ -34,90 +34,59 @@ export default class AppStartupClients extends React.Component{
   }
   render(){
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap portfolio-main-wrap">
-          <div className="col-md-12">
-            {/*<TopIconsList/>*/}
-            <div className="top_block_scroller" id="forcecentered">
-              <ul>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_20.jpg" className="team_img" />
-                    <h3>
-                      Co-Founder & CEO <br /><b>Aakrit Vaish</b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_21.jpg" className="team_img" />
-                    <h3>
-                      Co-Founder & CTO <br /><b>Swapan Rajdev </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_22.jpg" className="team_img" />
-                    <h3>
-                      VP, Product <br /><b>Apurva Mudgal </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_23.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Miten Sampat </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_24.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Dhaval </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_25.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Amith </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_26.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Animesh </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_27.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Pavan </b>
-                    </h3>
-                  </div>
-                </li>
+      <div className="col-lg-12 nopadding">
+        <h2>Clients</h2>
+        <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
 
-              </ul>
-            </div>
-            <div className="investement-view-content">
-
-              <div className="clearfix"></div>
-
-
-            </div>
+          <div className="team-block">
+            <img src="/images/p_27.jpg" className="team_img" />
+            <h3>
+              Zomato <br /><b>Series A</b>
+            </h3>
           </div>
-          {/*<AppActionButtons/>*/}
 
-          <br className="brclear"/>
         </div>
+        <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+          <div className="team-block">
+            <img src="/images/p_26.jpg" className="team_img" />
+            <h3>
+              Cuemath <br /><b>Series B</b>
+            </h3>
+          </div>
+        </div>
+        <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+          <div className="team-block">
+            <img src="/images/p_25.jpg" className="team_img" />
+            <h3>
+              LeadSquared <br /><b>Venture</b>
+            </h3>
+          </div>
+        </div>
+        <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+          <div className="team-block">
+            <img src="/images/p_24.jpg" className="team_img" />
+            <h3>
+              DoneThing <br /><b>Seed</b>
+            </h3>
+          </div>
+        </div>
+        <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+          <div className="team-block">
+            <img src="/images/p_23.jpg" className="team_img" />
+            <h3>
+              Naval Ravikant <br /><b>Seed</b>
+            </h3>
+          </div>
+        </div>
+        <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+          <div className="team-block">
+            <img src="/images/p_22.jpg" className="team_img" />
+            <h3>
+              Sanjay Jesrani <br /><b>Seed</b>
+            </h3>
+          </div>
+        </div>
+
       </div>
     )
   }

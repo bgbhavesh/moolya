@@ -118,7 +118,7 @@ export default class AppStartupData extends React.Component{
                 Anual Report <span className="see-more pull-right"><a href=""><FontAwesome name='lock'/></a>&nbsp;&nbsp;&nbsp;<a href=""><FontAwesome name='trash-o'/></a></span>
               </div>
               <div className="panel-body">
-                <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/data_data_annual2.jpg"/></div>
+                <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/data_annual2.jpg"/></div>
                 <div className="thumbnail"><FontAwesome name='lock'/></div>
                 <div className="thumbnail"><FontAwesome name='lock'/></div>
               </div>

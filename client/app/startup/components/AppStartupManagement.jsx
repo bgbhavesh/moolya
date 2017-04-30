@@ -34,82 +34,91 @@ export default class AppStartupManagement extends React.Component{
   }
   render(){
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap portfolio-main-wrap">
-          <div className="col-md-12">
-            {/*<TopIconsList/>*/}
-            <div className="top_block_scroller" id="forcecentered">
-              <ul>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_20.jpg" className="team_img" />
-                    <h3>
-                      Co-Founder & CEO <br /><b>Aakrit Vaish</b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_21.jpg" className="team_img" />
-                    <h3>
-                      Co-Founder & CTO <br /><b>Swapan Rajdev </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_22.jpg" className="team_img" />
-                    <h3>
-                      VP, Product <br /><b>Apurva Mudgal </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_23.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Miten Sampat </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_24.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Dhaval </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_25.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Amith </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_26.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Animesh </b>
-                    </h3>
-                  </div>
-                </li>
-                <li>
-                  <div className="team-block">
-                    <img src="/images/p_27.jpg" className="team_img" />
-                    <h3>
-                      Advisor <br /><b>Pavan </b>
-                    </h3>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          {/*<AppActionButtons/>*/}
+      <div className="col-lg-12 nopadding">
+        <h2>Management</h2>
+        <div className="row">
 
-          <br className="brclear"/>
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_20.jpg" className="team_img" />
+                <h3>
+                  Aakrit Vaish <br /><b>Co-Founder & CEO</b>
+                </h3>
+              </div>
+            </a>
+          </div>
+
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_21.jpg" className="team_img" />
+                <h3>
+                  Swapan Rajdev <br /><b>Co-Founder & CTO</b>
+                </h3>
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_22.jpg" className="team_img" />
+                <h3>
+                  Apurva Mudgal <br /><b>VP, Product</b>
+                </h3>
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_23.jpg" className="team_img" />
+                <h3>
+                  Miten Sampat <br /><b>Advisor</b>
+                </h3>
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_24.jpg" className="team_img" />
+                <h3>
+                  Dhaval <br /><b>Advisor</b>
+                </h3>
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_25.jpg" className="team_img" />
+                <h3>
+                  Amith <br /><b>Advisor</b>
+                </h3>
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_26.jpg" className="team_img" />
+                <h3>
+                  Animesh <br /><b>Advisor</b>
+                </h3>
+              </div>
+            </a>
+          </div>
+          <div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
+            <a href="/app/startupManagementViewDetails">
+              <div className="team-block">
+                <img src="/images/p_27.jpg" className="team_img" />
+                <h3>
+                  Pavan <br /><b>Advisor</b>
+                </h3>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     )

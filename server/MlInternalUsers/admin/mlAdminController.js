@@ -366,7 +366,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                     }
                 })
             }
-            console.log(cities);
+            //console.log(cities);
             res.send(cities);
           }
         }else{

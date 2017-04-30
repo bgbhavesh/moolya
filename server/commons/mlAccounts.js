@@ -171,7 +171,7 @@ export default MlAccounts=class MlAccounts {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
       msg= "\n\nThank you for registering with moolya!\n\n"+
-      "Use "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons."+
+      "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
       "\n\nTeam moolya\n";
     }

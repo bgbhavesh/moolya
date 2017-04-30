@@ -6,6 +6,7 @@ import MlTabComponent from "../../../commons/components/tabcomponent/MlTabCompon
 import MyProfileAddressBook from '../../../admin/profile/component/MlMyProfileAddressBook'
 import MyProfileSettings from '../../../admin/profile/component/MlMyProfileSettings'
 import MlMyProfile from '../../../admin/profile/component/MlMyprofile'
+import AppActionButtons from '../../commons/components/appActionButtons'
 import 'react-responsive-tabs/styles.css'
 
 
@@ -52,6 +53,7 @@ render(){
         <div className="col-md-12">
           <MlTabComponent tabs={tabs}/>
         </div>
+        <AppActionButtons/>
         <br className="brclear"/>
       </div>
     </div>

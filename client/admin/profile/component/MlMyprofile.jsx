@@ -328,7 +328,9 @@ export default class MlMyProfile extends React.Component{
           </div>
         </div>)}
         <span className="actions_switch"></span>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        {isExternaluser ? <div></div> :
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        }
       </div>
     )
   }

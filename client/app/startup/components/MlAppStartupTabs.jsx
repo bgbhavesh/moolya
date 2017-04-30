@@ -17,6 +17,9 @@ import MlStartupViewClients from '../../../admin/transaction/portfolio/component
 import MlStartupViewTechnologies from '../../../admin/transaction/portfolio/component/StartupView/MlStartupViewTechnologies';
 import MlStartupViewAssets from '../../../admin/transaction/portfolio/component/StartupView/MlStartupViewAssets'
 
+
+
+//temporary static routes added
 import AppStartupAboutUs from './AppStartupAboutUs'
 import AppStartupManagement from './AppStartupManagement'
 import AppStartupClients from './AppStartupClients'

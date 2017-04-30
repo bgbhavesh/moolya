@@ -59,7 +59,7 @@ export default class MlAppHeader extends Component {
         <div className="ml_app_profile" role="navigation">
           <h1 id="NavLbl" className=""></h1>
           <ol>
-            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/app/AppMyProfile"><img
+            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/app/myprofile/personalInfo"><img
               className="profile-img" src="/images/1.png"/></a></li>
             <li data-toggle="tooltip" title="Log as" data-placement="right"><a href="#"><img className="profile-img"
                                                                                              src="/images/2.png"/></a>

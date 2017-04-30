@@ -149,16 +149,30 @@ export default class MlMyProfile extends React.Component{
 
   async getValue() {
     let userType = Meteor.userId();
-    let response = await findBackendUserActionHandler(userType);
-    console.log(response);
-    this.setState({loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
-      middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
-      lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
-      userName: response.profile.InternalUprofile.moolyaProfile.displayName,
-      uploadedProfilePic:response.profile.profileImage,
-      genderSelect:response.profile.genderType,
-      dateOfBirth: response.profile.dateOfBirth
-    });
+    let user = Meteor.user();
+    let isExternal = user.profile.isExternaluser;
+    if(isExternal){
+      this.setState({
+        loading: false, firstName: user.profile.firstName,
+        middleName: user.profile.middleName,
+        lastName: user.profile.lastName,
+        userName: user.profile.displayName,
+        // uploadedProfilePic: response.profile.profileImage,
+        genderSelect: "Male", //response.profile.genderType
+        // dateOfBirth: response.profile.dateOfBirth
+      });
+    }else{
+      let response = await findBackendUserActionHandler(userType);
+      console.log(response);
+      this.setState({loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
+        middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
+        lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
+        userName: response.profile.InternalUprofile.moolyaProfile.displayName,
+        uploadedProfilePic:response.profile.profileImage,
+        genderSelect:response.profile.genderType,
+        dateOfBirth: response.profile.dateOfBirth
+      });
+    }
     this.genderSelect();
   }
 
@@ -181,7 +195,8 @@ export default class MlMyProfile extends React.Component{
     }
     else{
       this.setState({genderStateOthers:
-        true, genderStateFemale: false, genderStateMale: false})
+        // true, genderStateFemale: false, genderStateMale: false}) // Changes made for 30th April App Demo
+        false, genderStateFemale: false, genderStateMale: true})
     }
   }
 

@@ -11,7 +11,7 @@ export default class MlEmployeeTypesList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>EmployeeTypes</h2>
+          <h2>Employee Types</h2>
 
           <MlTableViewContainer {...mlEmployeeTypeTableConfig}/>
 

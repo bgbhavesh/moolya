@@ -12,6 +12,16 @@ import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfol
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
 import AppActionButtons from '../../commons/components/appActionButtons'
 import TopIconsList from '../../commons/components/topIconsList'
+
+import AppIdeatorIdeas from './AppIdeatorIdeas'
+import AppIdeatorDeatils from './AppIdeatorDeatils'
+import AppIdeatorPnS from './AppIdeatorPnS'
+import AppIdeatorAudience from './AppIdeatorAudience'
+import AppIdeatorLibrary from './AppIdeatorLibrary'
+import AppIdeatorSnP from './AppIdeatorSnP'
+import AppIdeatorPnT from './AppIdeatorIPnT'
+import AppIdeatorLookingFor from './AppIdeatorLookingFor'
+
 import 'react-responsive-tabs/styles.css'
 
 
@@ -64,13 +74,22 @@ componentDidMount(){
 
 getTabComponents(){
   let tabs = [
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.state.ideatorId}/>},   //id will be dyanmic
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.state.ideatorId} />},                            //id will be dyanmic
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId={this.state.ideatorId} />},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="4"  portfolioDetailsId={this.state.ideatorId}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="5"  portfolioDetailsId={this.state.ideatorId}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="6"  portfolioDetailsId={this.state.ideatorId}/>},
+    // {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
+    // {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.state.ideatorId}/>},   //id will be dyanmic
+    // {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.state.ideatorId} />},                            //id will be dyanmic
+    // {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId={this.state.ideatorId} />},
+    // {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="4"  portfolioDetailsId={this.state.ideatorId}/>},
+    // {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="5"  portfolioDetailsId={this.state.ideatorId}/>},
+    // {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="6"  portfolioDetailsId={this.state.ideatorId}/>},
+
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas" , component:<AppIdeatorIdeas key="0"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<AppIdeatorDeatils key="1"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<AppIdeatorPnS key="2"  portfolioDetailsId={this.state.ideatorId}/>},   //id will be dyanmic
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<AppIdeatorAudience key="3"  portfolioDetailsId={this.state.ideatorId} />},                            //id will be dyanmic
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<AppIdeatorLibrary key="4"  portfolioDetailsId={this.state.ideatorId} />},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<AppIdeatorSnP key="4"  portfolioDetailsId={this.state.ideatorId}/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Planning and Trademark" , component:<AppIdeatorPnT key="5"  portfolioDetailsId={this.state.ideatorId}/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<AppIdeatorLookingFor key="6"  portfolioDetailsId={this.state.ideatorId}/>},
   ]
   return tabs;
 }

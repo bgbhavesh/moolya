@@ -56,13 +56,13 @@ appSection.route('/ideator/:id/', {
 });
 
 // appSection.route('/ideator/editPortfolio/:id/:communityType', {
-// appSection.route('/ideator/editPortfolio/', {
-//   appSection: 'ideator_portfolio_edit',
-//   action(params){
-//     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
-//     mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={false}/>})
-//   }
-// });
+appSection.route('/ideator/editPortfolio/', {
+  appSection: 'ideator_portfolio_edit',
+  action(params){
+    // mount(AppLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
+    mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={false}/>})
+  }
+});
 
 appSection.route('/startup', {
   name: 'startup',

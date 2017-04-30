@@ -39,7 +39,11 @@ const mlLookingForTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addLookingFor")
+        if(data&&data.id){
+          FlowRouter.go("/admin/settings/lookingForList")
+        }else {
+          FlowRouter.go("/admin/settings/addLookingFor")
+        }
       }
     },
     // {

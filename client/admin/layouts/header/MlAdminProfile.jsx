@@ -24,10 +24,19 @@ export default class  MlAdminProfile extends Component {
     $('.ml_profile h1').click(function(){
       $(this).parent('.ml_profile').toggleClass('profile_open');
     });
+
+    $('[data-toggle="tooltip"]').tooltip({
+      container:'mooly_admin',
+      trigger: 'hover'
+    });
   }
+
   logoutUser(){
     logout();
   }
+
+
+
   handleClick(){
     const userDefaultObj = getAdminUserContext();
     if (userDefaultObj.hierarchyCode == 'PLATFORM')

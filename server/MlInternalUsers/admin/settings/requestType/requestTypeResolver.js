@@ -26,12 +26,7 @@ MlResolver.MlMutationResolver['CreateRequestType'] = (obj, args, context, info) 
 };
 
 MlResolver.MlMutationResolver['UpdateRequestType'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
+
 
   if (!args.requestName) {
     let code = 401;

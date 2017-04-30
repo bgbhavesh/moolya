@@ -57,7 +57,7 @@ export default class MlAppHeader extends Component {
           </div>
         </div>
         <div className="ml_app_profile" role="navigation">
-          <h1 id="NavLbl" className="" style={{'background':'url(/images/img2.png) center -5px'}}></h1>
+          <h1 id="NavLbl" className="" style={{'backgroundImage':'url(/images/img2.png)'}}></h1>
           <ol>
             <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/app/myprofile/personalInfo"><img
               className="profile-img" src="/images/1.png"/></a></li>

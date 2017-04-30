@@ -37,7 +37,10 @@ const mlTaxTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addTaxType")
+          if(data&&data.id){FlowRouter.go("/admin/settings/taxTypeList")}
+          else {
+          FlowRouter.go("/admin/settings/addTaxType")
+        }
       }
     },
     // {

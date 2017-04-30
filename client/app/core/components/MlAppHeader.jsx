@@ -35,29 +35,29 @@ export default class MlAppHeader extends Component {
       <div>
         <div className="overlay"></div>
         <div className="app_header">
-          <a href="#" className="pull-left"><FontAwesome name='home'/></a>
+          <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/appDashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
           <a id="notification" data-placement="top" data-class="large_popover" href="#"
              className="pull-right notification ripple">
-            <div className="noti_count">2</div>
+            <div className="noti_count">1</div>
             <FontAwesome name='bell-o'/></a>
           <a href="#" className="pull-right header_search"><FontAwesome name='search'/></a>
           <div style={{'display': 'none'}} className="ml_app_notification">
             <ul className="unstyled">
               <li>
-                <a href="#">Messaggio di notifica un po più lungo del normale</a>
+                <a href="#">Thanks for the registration</a>
               </li>
-              <li>
-                <a href="#">Messaggio di notifica 2 un po più lungo del normale</a>
-              </li>
-              <li>
-                <a href="#">Messaggio di notifica un po più lungo del normale</a>
-              </li>
+              {/*<li>*/}
+                {/*<a href="#">Messaggio di notifica 2 un po più lungo del normale</a>*/}
+              {/*</li>*/}
+              {/*<li>*/}
+                {/*<a href="#">Messaggio di notifica un po più lungo del normale</a>*/}
+              {/*</li>*/}
             </ul>
           </div>
         </div>
         <div className="ml_app_profile" role="navigation">
-          <h1 id="NavLbl" className=""></h1>
+          <h1 id="NavLbl" className="" style={{'background':'url(/images/img2.png) center -5px'}}></h1>
           <ol>
             <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/app/AppMyProfile"><img
               className="profile-img" src="/images/1.png"/></a></li>

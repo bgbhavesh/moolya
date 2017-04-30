@@ -72,7 +72,7 @@ $menuTrans:all 0.5s linear;
   .app_padding_wrap{padding: 20px 0px 0px 0px;}
 }
 .moolya_app{
-  .profile-img {margin-top: -26px;width: 24px;margin-left: 2px;}
+  .profile-img {width: 24px;margin-left: 2px;}    //margin-top: -26px;
   .ml_app_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
   .ml_app_profile:focus{outline: 0px;}
   .ml_app_profile.profile_open {background-color: $mlBlue;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 4;}
@@ -606,7 +606,7 @@ transition: none;
 
 
 
-.top_block_scroller{  
+.top_block_scroller{
   li{width: 100px; float: left; margin-right: 10px;
     h3{
       font-size: 9px;
@@ -615,7 +615,7 @@ transition: none;
       border-radius:10px;
     }
     .team_img{
-      width: 60%;height: 60%; 
+      width: 60%;height: 60%;
     }
   }
   li.active{
@@ -631,7 +631,7 @@ transition: none;
 
 /* Scrollbar */
 .scrollbar {margin: 0 0 1em 0; height: 2px; background: #ccc; line-height: 0;
-  .handle {width: 100px; height: 100%; background: #292a33; cursor: pointer; 
+  .handle {width: 100px; height: 100%; background: #292a33; cursor: pointer;
     .mousearea {position: absolute; top: -9px; left: 0; width: 100%; height: 20px; }
   }
 
@@ -639,7 +639,7 @@ transition: none;
 
 /* Pages */
 .pages {list-style: none; margin: 20px 0; padding: 0; text-align: center;
-li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent: -999px; border-radius: 10px; cursor: pointer; overflow: hidden; background: #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2); 
+li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent: -999px; border-radius: 10px; cursor: pointer; overflow: hidden; background: #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
   &:hover { background: #aaa;}
 }
  }

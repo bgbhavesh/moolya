@@ -17,6 +17,7 @@ import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartu
 // import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
+import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -40,7 +41,8 @@ appSection.route('/', {
 appSection.route('/dashboard', {
   name: 'dashboard',
   action(){
-    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlBrowserDashboardMapConfig}/>})
+    // mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlBrowserDashboardMapConfig}/>})
+    mount(AppLayout,{appContent:<MlAppDashboard/>})
   }
 });
 

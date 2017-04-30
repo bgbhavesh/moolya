@@ -10,18 +10,22 @@ export default MlAccounts=class MlAccounts {
     return Meteor.absoluteUrl('verify-email/' + token);
   }
 
-
-  static greet(message,user, url) {                                                                                        // 2
+  /*static greet(message,user, url) {                                                                                        // 2
       var greeting = user&&user.name ? "Hello " + user.name + "," : "Hello,";                  // 3
       return greeting + "\n\n"+message+" simply click the link below.\n\n" + url + "\n\nThanks.\n";              // 5
-    };                                                                                                                   // 13
-/*
-  static greet(message,user, url) {                                                                                        // 2
-    var username = user&&user.name ? user.name : " ";
-    var greeting = "<html><body ><div style='max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000'>" +"Dear" + username +"<br>Greetings and thank you for creating an account with moolya!<br>There is just one more step before you can explore infinite possibilities with moolya: you need to activate your moolya account. To activate your account, click on the following link or copy and paste the link into your browser's address bar<br>Link:"+ url +"<br>After you activate your account, you can complete your profile. You will receive occasional emails from us about new information or other updates.<br>If you need our help, write to us at startup@moolya.in or give us a call +91-40-6551 8300.<br>Have an empowering day!<br>Regards,<br>Team moolya."+"</div></body></html>";
+    };  */                                                                                                                 // 13
+
+  static greet(message,user, url) {
+    var greeting='<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
+      'Dear ' + (user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName+',':"")+'<br/><br/> Greetings and thank you for creating an account with moolya! <br/><br/>'+
+      'There is just one more step before you can explore infinite possibilities with moolya: you need to activate your moolya account. <br/><br/>' +
+      'To activate your account, click on the following link or copy and paste the link into your browser\'s address bar <br/><br/>' +
+      'Link: '+ url +'  <br/><br/>'+
+      'If you need our help, write to us at startup@moolya.in or give us a call +91-40-6551 8300.' +'<br/><br/>'+
+      'Have an empowering day!<br/><br/>Regards,<br/>Team moolya.'+
+      '</div></body></html>';
     return greeting
-  };                                                                                                                   // 13
-*/
+  };
 
 
 
@@ -164,15 +168,11 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      /*msg= "\n\nThank you for registering with moolya!\n\n"+
+      msg= "\n\nThank you for registering with moolya!\n\n"+
       "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
-      "\n\nTeam moolya\n";*/
-      msg = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
-          '<br>Thank you for registering with moolya!'+
-        '<br>Use'+otpNum+'as One Time Password (OTP) to activate your Moolya account.'+
-          '<br>Regards,<br>Team moolya'+
-        '</div></body></html>'
+      "\n\nTeam moolya\n";
+
     }
 
     //send SMS

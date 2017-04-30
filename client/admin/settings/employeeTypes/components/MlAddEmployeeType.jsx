@@ -71,7 +71,7 @@ class MlAddEmployeeType extends React.Component{
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Create Employee type</h2>
+          <h2>Create Employee Type</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>

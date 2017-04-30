@@ -248,7 +248,7 @@ export default class MlMyProfile extends React.Component{
       }
     ];
     const showLoader=this.state.loading;
-
+    let isExternaluser = Meteor.user().profile.isExternaluser;
     return (
       <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
@@ -276,7 +276,9 @@ export default class MlMyProfile extends React.Component{
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
-                        <input type="file" className="upload" id="profilePic"/>
+                        {isExternaluser ? <div></div> :
+                          <input type="file" className="upload" id="profilePic"/>
+                        }
                       </div>
                       <div className="previewImg ProfileImg">
                         <img src={this.state.uploadedProfilePic}/>

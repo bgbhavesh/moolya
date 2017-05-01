@@ -627,38 +627,115 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlGlobalSettings.find(query,findOptions).count();
   }
   if(args.module=="registrationInfo"){
-    data= MlRegistration.find(query,findOptions).fetch();
-    let result=[];
-    data.map(function (doc,index) {
-      if(doc.status!='Approved'){
-        let object ;
-        object = doc.registrationInfo;
-        object._id = doc._id;
-        object.registrationStatus =doc.status;
-        result.push(object);
+    let userID=context.userId,hirarichyLevel=[],clusterIds=[]
+    //get user details iterate through profiles match with role and get clusterId
+    let user = mlDBController.findOne('users', {_id: userID}, context)
+    let userProfiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
+    userProfiles.map(function (doc,index) {
+      if(doc.isDefault) {
+        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+        userRoles.map(function (doc, index) {
+          hirarichyLevel.push(doc.hierarchyLevel)
+
+        });
+        hirarichyLevel.sort(function (a, b) {
+          return b - a
+        });
+        for (let i = 0; i < userRoles.length; i++) {
+          if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
+            clusterIds.push(userRoles[i].clusterId);
+            break
+          }
+        }
       }
     });
-    let serverQuery ={$or: [{status:"Rejected"}, {status: "Pending"}]}
-    let queryCount = mergeQueries(query,serverQuery);
-    data = result;
-    totalRecords=MlRegistration.find(queryCount,findOptions).count();
+    if(clusterIds.length>=1){
+      let result=[];
+      data= MlRegistration.find(query,findOptions).fetch();
+      if(clusterIds[0]=="all"){
+        data.map(function (doc,index) {
+          if(doc.status!='Approved'){
+            let object ;
+            object = doc.registrationInfo;
+            object._id = doc._id;
+            object.registrationStatus =doc.status;
+            result.push(object);
+          }
+        });
+      }else{
+        data.map(function (doc,index) {
+          if(doc.status!='Approved'&&doc.registrationInfo.clusterId==clusterIds[0]){
+            let object ;
+            object = doc.registrationInfo;
+            object._id = doc._id;
+            object.registrationStatus =doc.status;
+            result.push(object);
+          }
+        });
+      }
+      let serverQuery ={$or: [{status:"Rejected"}, {status: "Pending"}]}
+      let queryCount = mergeQueries(query,serverQuery);
+      data = result;
+      totalRecords=MlRegistration.find(queryCount,findOptions).count();
+    }
+
+
   }
   if(args.module=="registrationApprovedInfo"){
-    data= MlRegistration.find(query,findOptions).fetch();
-    let result=[];
-    data.map(function (doc,index) {
-      if(doc.status=='Approved'){
-        let object ;
-        object = doc.registrationInfo;
-        object._id = doc._id;
-        object.registrationStatus =doc.status;
-        result.push(object);
+    let userID=context.userId,hirarichyLevel=[],clusterIds=[]
+    //get user details iterate through profiles match with role and get clusterId
+    let user = mlDBController.findOne('users', {_id: userID}, context)
+    let userProfiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
+    userProfiles.map(function (doc,index) {
+      if(doc.isDefault) {
+        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+        userRoles.map(function (doc, index) {
+          hirarichyLevel.push(doc.hierarchyLevel)
+
+        });
+        hirarichyLevel.sort(function (a, b) {
+          return b - a
+        });
+        for (let i = 0; i < userRoles.length; i++) {
+          if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
+            clusterIds.push(userRoles[i].clusterId);
+            break
+          }
+        }
       }
     });
-    let serverQuery = {status:'Approved'}
-    let queryCount = mergeQueries(query,serverQuery);
-    data = result;
-    totalRecords = MlRegistration.find(queryCount,findOptions).count();
+    if(clusterIds.length>=1){
+
+      data= MlRegistration.find(query,findOptions).fetch();
+      let result=[];
+      if(clusterIds[0]=="all"){
+        data.map(function (doc,index) {
+          if(doc.status=='Approved'){
+            let object ;
+            object = doc.registrationInfo;
+            object._id = doc._id;
+            object.registrationStatus =doc.status;
+            result.push(object);
+          }
+        });
+      }else{
+        data.map(function (doc,index) {
+          if(doc.status=='Approved'&&doc.registrationInfo.clusterId==clusterIds[0]){
+            let object ;
+            object = doc.registrationInfo;
+            object._id = doc._id;
+            object.registrationStatus =doc.status;
+            result.push(object);
+          }
+        });
+      }
+
+      let serverQuery = {status:'Approved'}
+      let queryCount = mergeQueries(query,serverQuery);
+      data = result;
+      totalRecords = MlRegistration.find(queryCount,findOptions).count();
+    }
+
   }
 
   if(args.module == "Portfoliodetails"){

@@ -175,20 +175,6 @@ export default class MlAssignHierarchy extends React.Component {
     const response = await findAssignedRolesActionHandler(departmnetId,subDepartmentId,type);
     if(response){
       let teamAssignment=response.teamStructureAssignment
-     /* for(let i=0;i<teamAssignment.length;i++) {
-        if (teamAssignment.isAssigned ==true) {
-          let json = {
-              roleId: response[i].teamStructureAssignment._id,
-              roleName: response[i].teamStructureAssignment.roleName,
-              displayName: response[i].teamStructureAssignment.displayName,
-              roleType: "Internal User",
-              isAssigned: response[i].teamStructureAssignment.isAssigned,
-              assignedLevel: response[i].teamStructureAssignment.assignedLevel ? response[i].teamStructureAssignment.assignedLevel : '',
-              reportingRole: response[i].teamStructureAssignment.reportingRole ? response[i].teamStructureAssignment.reportingRole : ''
-          }
-          roleDetails.push(json);
-        }
-      }*/
       this.setState({loading:false,assignedRoles:{id : response._id,teamStructureAssignment:teamAssignment}})
     }
     return response;
@@ -233,8 +219,8 @@ export default class MlAssignHierarchy extends React.Component {
         label:subDepartmentName
       }
     }`
-    let reportingRolequery=gql`query($departmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String){
-      data:fetchRolesForHierarchy(departmentId:$departmentId, clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode) {
+    let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String){
+      data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode) {
         value:_id
         label:roleName
       }
@@ -275,7 +261,7 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel-body">
             {that.state.unAssignedRoles.teamStructureAssignment.map(function (roles,id) {
               let parentDepartment = that.props.departmentInfo;
-              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
               return(
             <div className="row" key={roles.roleId}>
@@ -328,7 +314,8 @@ export default class MlAssignHierarchy extends React.Component {
                 (<div className="panel-body">
                 {that.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
                   let parentDepartment = that.props.departmentInfo;
-                  let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                  let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                  //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                   return(
                     <div className="row" key={roles.roleId}>
@@ -380,7 +367,8 @@ export default class MlAssignHierarchy extends React.Component {
                 <div className="panel-body">
                   {this.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
                     let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
 
@@ -432,7 +420,8 @@ export default class MlAssignHierarchy extends React.Component {
                 (<div className="panel-body">
                   {this.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
                     let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
                       <div className="row" key={roles.roleId}>

@@ -129,7 +129,7 @@ export default class MlHierarchyDetails extends React.Component {
       }
       console.log(hierarchyInfo);
       const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
-      this.state.isExpanded=true
+      //this.state.isExpanded=true
       return response;
     }
   }
@@ -165,9 +165,9 @@ export default class MlHierarchyDetails extends React.Component {
     const assigned = this.updateunassignedRoles();
     const upAssigned = this.updateassignRoles();
     const hierarchyAssignment = this.updatehierarchyAssignments();
-    if(this.state.isExpanded){
+    //if(this.state.isExpanded){
       toastr.success("Update Successful");
-    }
+    //}
     return assigned;
   }
   SwitchBtn(cell,row){

@@ -36,7 +36,7 @@ export default class MlAppHeader extends Component {
         <div className="overlay"></div>
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
-          <a href="/app/appDashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
+          <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
           <a id="notification" data-placement="top" data-class="large_popover" href="#"
              className="pull-right notification ripple">
             <div className="noti_count">1</div>

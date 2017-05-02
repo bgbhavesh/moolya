@@ -19,12 +19,15 @@ import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
+import MlAppIdeatorAddIdea from '../../app/ideator/components/MlAppIdeatorAddIdea'
 
 
 //profile
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
+import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 
 
+import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 export const appSection = FlowRouter.group({
   prefix: "/app",
   name: 'app',
@@ -73,6 +76,13 @@ appSection.route('/portfolio', {
   }
 });
 
+appSection.route('/settings', {
+  name: 'settings',
+  action(){
+    mount(AppLayout,{appContent:<MlProfileSettings/>, isProfileMenu:true})
+  }
+});
+
 appSection.route('/myProfile/registerAs', {
     name: 'registeras',
     action(){
@@ -84,6 +94,18 @@ appSection.route('/ideator', {
   name: 'ideator',
   action(){
       mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
+  }
+});
+appSection.route('/portfolio/view', {
+  name: 'portfolio',
+  action(){
+    mount(AppLayout,{appContent:< MlAppIdeatorTabs/>, isProfileMenu:true})
+  }
+});
+appSection.route('/portfolio/addIdea', {
+  name: 'portfolio',
+  action(){
+    mount(AppLayout,{appContent:< MlAppIdeatorAddIdea/>, isProfileMenu:true})
   }
 });
 
@@ -120,3 +142,11 @@ appSection.route('/startup/:id', {
     // mount(AppLayout,{appContent:<div>Startup</div>})
   }
 });
+
+appSection.route('/register/:id', {
+  name: 'registeras',
+  action(params){
+    mount(AppLayout,{appContent:<RegistrationWizard config={params.id}/>})
+  }
+});
+

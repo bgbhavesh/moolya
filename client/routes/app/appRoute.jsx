@@ -13,7 +13,7 @@ import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartu
 
 import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
 
-import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
+// import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
 // import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
 import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
@@ -24,6 +24,7 @@ import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
 //profile
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
 import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
+import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
 
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
@@ -64,7 +65,8 @@ appSection.route('/myProfile', {
 appSection.route('/addressBook', {
   name: 'addressBook',
   action(){
-    mount(AppLayout,{appContent:<MyProfileAddressBook/>, isProfileMenu:true})
+    // mount(AppLayout,{appContent:<MyProfileAddressBook/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:<MlAppProfileAddressBook/>, isProfileMenu:true})
   }
 });
 

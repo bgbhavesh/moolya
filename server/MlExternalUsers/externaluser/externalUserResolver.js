@@ -43,7 +43,7 @@
 //                             communityName:"",
 //                             communityType:"",
 //                             isDefault:true,
-//                             isProfileActive:true,
+//                             isActive:true,
 //                             accountType:""
 //                         }
 //                     ]

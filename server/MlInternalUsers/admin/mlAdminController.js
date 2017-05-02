@@ -202,7 +202,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
             case "PROFILE":{
               imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
               imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                MlResolver.MlMutationResolver['createRegistration'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
+                // MlResolver.MlMutationResolver['createRegistration'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
+                MlResolver.MlMutationResolver['uploadUserImage'](null, {userId:data.userId, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
               });
               break;
             }

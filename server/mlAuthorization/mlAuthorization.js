@@ -96,6 +96,9 @@ class MlAuthorization
                 // }
             }
         }
+        else if(user && user.profile && user.profile.isExternaluser == true){
+          return true
+      }
         return ret;
     }
 

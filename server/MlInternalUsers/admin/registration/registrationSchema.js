@@ -416,6 +416,7 @@ let registrationSchema = `
     type Query{
         findRegistration(registrationId:String):Registration
         findRegistrationInfo(registrationId:String):RegistrationResponse
+        findRegistrationInfoForUser:RegistrationResponse
     }
     
 `

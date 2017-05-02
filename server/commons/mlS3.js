@@ -2,9 +2,9 @@
  * Created by venkatasrinag on 6/1/17.
  */
 'use strict';
-let AWS = Meteor.npmRequire('aws-sdk');
+let AWS = require('aws-sdk');
 let awsConfig = require('aws-config');
-let fs = Meteor.npmRequire('fs')
+let fs = require('fs')
 
 Meteor.startup(function () {
 

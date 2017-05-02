@@ -5,7 +5,9 @@ import { render } from 'react-dom';
 import {fetchCommunitiesHandler} from '../actions/fetchCommunitiesActionHandler'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
+import {fetchUserDetailsHandler} from '../actions/fetchUserDetails'
 let Select = require('react-select');
+import {createRegistrationInfo} from  '../../../admin/transaction/requested/actions/createRegistrationInfo'
 export default class MlAppCommunitiesList extends Component {
     constructor(props){
         super(props);
@@ -28,10 +30,23 @@ export default class MlAppCommunitiesList extends Component {
 
     componentDidMount(){
         this.fetchCommunities();
+        this.fetchUserDetails();
     }
+      async fetchUserDetails(){
+            let response=await fetchUserDetailsHandler()
+        if(response){
+            let registrationInfo=response.registrationInfo
+          this.setState({firstName:registrationInfo.firstName});
+          this.setState({lastName:registrationInfo.lastName});
+          this.setState({contactNumber:registrationInfo.contactNumber});
+          this.setState({email:registrationInfo.email});
+          this.setState({userName:registrationInfo.userName})
+        }
+      }
 
-    setSelectedCommunity(selCommunity, e){
+    setSelectedCommunity(selCommunity,idx, e){
         this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})
+      this.setState({identity:null,registrationType:null,country:null,selectedCity:null})
     }
 
     toggle() {
@@ -39,7 +54,31 @@ export default class MlAppCommunitiesList extends Component {
     }
   cancel(){
       this.toggle()
-    FlowRouter.go("app/myProfile/registerAs");
+    FlowRouter.go("/app/myProfile/registerAs");
+  }
+  async registerAs(){
+    let registrationInfo={
+      userName:this.state.userName,
+      firstName:this.state.firstName,
+      lastName:this.state.lastName,
+      contactNumber:this.state.contactNumber,
+      email:this.state.email,
+      registrationType:this.state.selectedCommunity,
+      identityType:this.state.identity,
+      countryId:this.state.country,
+      cityId:this.state.selectedCity
+    }
+    const response = await createRegistrationInfo(registrationInfo);
+    if(response.success){
+      let registrtionId=response.result
+     let registrtion= JSON.parse(registrtionId)
+      toastr.success("user registered successfully");
+      FlowRouter.go("/app/register/"+registrtion.registrationId);
+    }else{
+      this.toggle()
+      toastr.error(response.result);
+      FlowRouter.go("/app/myProfile/registerAs");
+    }
   }
 
     async fetchCommunities() {
@@ -62,7 +101,7 @@ export default class MlAppCommunitiesList extends Component {
   }
   optionBySelectRegistrationType(value, calback, selObject){
     this.setState({registrationType:value});
-    this.setState({identityType:null});
+   // this.setState({identityType:null});
     this.setState({coummunityName:selObject.label})
   }
   optionsBySelectIdentity(val){
@@ -78,6 +117,7 @@ export default class MlAppCommunitiesList extends Component {
     this.setState({profession:val})
   }
     render(){
+
             let countryQuery = gql`query{
        data:fetchCountries {
           value:_id
@@ -129,7 +169,7 @@ export default class MlAppCommunitiesList extends Component {
             <div className="col-lg-2 col-md-4 col-sm-4" key={prop.code}>
                 <div className="list_block">
                     {/*<div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}></div>*/}
-                        <a href="" onClick={this.setSelectedCommunity.bind(this, idx)} id={"selCommunity"+idx}>
+                        <a href="" onClick={this.setSelectedCommunity.bind(this, prop.code,idx)} id={"selCommunity"+prop.code}>
                             <div className={"hex_outer"}>
                                 <span className={prop.communityImageLink}></span>
                             </div>
@@ -148,17 +188,17 @@ export default class MlAppCommunitiesList extends Component {
                   <PopoverTitle>Register As </PopoverTitle>
                     <PopoverContent>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} onSelect={this.optionBySelectRegistrationType.bind(this)}/>
+                        <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCommunity} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} onSelect={this.optionBySelectRegistrationType.bind(this)} disabled={true}/>
                       </div>
                       <div className="form-group">
                         <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
                       </div>
                       <div className="col-md-6 nopadding-left">
                         <div className="form-group ">
-                          <input type="text" ref="firstName" placeholder="First Name" className="form-control float-label" disabled="true" />
+                          <input type="text" ref="firstName" value={this.state.firstName} placeholder="First Name" className="form-control float-label" disabled="true" />
                         </div>
                         <div className="form-group ">
-                          <input type="text" ref="contactNumber" placeholder="Contact number" className="form-control float-label" id="" disabled="true"/>
+                          <input type="text" ref="contactNumber" value={this.state.lastName} placeholder="Contact number" className="form-control float-label" id="" disabled="true"/>
                         </div>
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}   />
@@ -167,10 +207,10 @@ export default class MlAppCommunitiesList extends Component {
                       </div>
                       <div className="col-md-6 nopadding-right">
                         <div className="form-group ">
-                          <input type="text" ref="lastName" placeholder="Last Name"className="form-control float-label" id="" disabled="true"/>
+                          <input type="text" ref="lastName" value={this.state.contactNumber} placeholder="Last Name"className="form-control float-label" id="" disabled="true"/>
                         </div>
                         <div className="form-group ">
-                          <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id="" disabled="true" />
+                          <input type="text" ref="email"   value={this.state.email} placeholder="Email ID" className="form-control float-label" id="" disabled="true" />
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} placeholder="Your City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
@@ -187,7 +227,7 @@ export default class MlAppCommunitiesList extends Component {
                       </div>*/}
                       </div>
                       <div className="assign-popup">
-                        <a data-toggle="tooltip" title="Save" data-placement="top"  className="hex_btn hex_btn_in">
+                        <a data-toggle="tooltip" title="Save" data-placement="top"  className="hex_btn hex_btn_in" onClick={this.registerAs.bind(this)}>
                           <span className="ml ml-save"></span>
                         </a>
                         <a data-toggle="tooltip" title="Cancel" data-placement="top" href=""  className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)} >

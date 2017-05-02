@@ -8,15 +8,47 @@ export async function findAddressBookActionHandler() {
   const result = await appClient.query({
     query: gql`
     query{
-        FindAddressBook{
-            success,
-            code,
-            result
-       }
+      findAddressBook {
+        clusterId
+        registrationId
+        profileId
+        emailInfo {
+          emailId
+          emailIdType
+          emailIdTypeName
+        }
+        addressInfo {
+          addressType
+          addressTypeName
+          name
+          phoneNumber
+          addressFlat
+          addressLocality
+          addressLandmark
+          addressArea
+          addressCity
+          addressState
+          addressCountry
+          addressPinCode
+        }
+        contactInfo {
+          numberType
+          numberTypeName
+          countryCode
+          contactNumber
+        }
       }
+    }
     `,
     forceFetch:true
   })
-  const id = result.data.FindAddressBook;
+  const id = result.data.findAddressBook;
   return id
 }
+// {
+//   findAddressBook{
+//   success,
+//     code,
+//     result
+// }
+// }

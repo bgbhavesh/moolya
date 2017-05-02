@@ -32,7 +32,12 @@ export default class MlAppProfileAddressBook extends React.Component {
 
   async findAddressBook(){
     const response = await findAddressBookActionHandler();
-    this.setState({loading:false,data:response});
+    if(response){
+      this.setState({loading:false,emailInfo:response.emailInfo, addressInfo:response.addressInfo, contactInfo:response.contactInfo});
+    }else {
+      this.setState({loading:false})
+    }
+
   }
 
   componentDidMount() {

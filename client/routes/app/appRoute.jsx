@@ -20,7 +20,7 @@ import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCo
 import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
-
+import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 export const appSection = FlowRouter.group({
   prefix: "/app",
   name: 'app',
@@ -116,3 +116,11 @@ appSection.route('/startup/:id', {
     // mount(AppLayout,{appContent:<div>Startup</div>})
   }
 });
+
+appSection.route('/register/:id', {
+  name: 'registeras',
+  action(params){
+    mount(AppLayout,{appContent:<RegistrationWizard config={params.id}/>})
+  }
+});
+

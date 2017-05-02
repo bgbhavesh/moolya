@@ -208,7 +208,7 @@ export default class MlStartupBranches extends React.Component{
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
+                        {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                         <h3>{details.name?details.name:""}</h3>
                       </div>

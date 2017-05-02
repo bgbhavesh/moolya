@@ -23,6 +23,7 @@ import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
 
 //profile
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
+import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 
 
 export const appSection = FlowRouter.group({
@@ -70,6 +71,13 @@ appSection.route('/portfolio', {
   name: 'portfolio',
   action(){
     mount(AppLayout,{appContent:<MlPortfolioLanding/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/settings', {
+  name: 'settings',
+  action(){
+    mount(AppLayout,{appContent:<MlProfileSettings/>, isProfileMenu:true})
   }
 });
 

@@ -59,6 +59,7 @@ export default class MlAppHeader extends Component {
         <div className="ml_app_profile" role="navigation">
           <h1 id="NavLbl" className="" style={{'backgroundImage':'url(/images/img2.png)'}}></h1>
           <ol>
+            <li><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
             <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/app/myprofile/personalInfo"><img
               className="profile-img" src="/images/1.png"/></a></li>
             <li data-toggle="tooltip" title="Log as" data-placement="right"><a href="#"><img className="profile-img"
@@ -66,6 +67,10 @@ export default class MlAppHeader extends Component {
             </li>
             <li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchProfile"><img
               className="profile-img" src="/images/3.png"/></a></li>
+
+            <li data-toggle="tooltip" title="Register As" data-placement="right"><a href="/app/myProfile/registerAs"><img
+              className="profile-img" src="/images/2.png"/></a></li>
+
             <li data-toggle="tooltip" title="Themes" data-placement="top"><a href="#"><img className="profile-img"
                                                                                            src="/images/4.png"/></a>
             </li>

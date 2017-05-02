@@ -194,12 +194,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         if (existingUser) {
               //check if the registration profile(community based) exists for user and can be updated
                userId=existingUser._id;
-               result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfile':{$elemMatch: {'registrationId': id}}},
-                                                       {"profile.externalUserProfile.$": userProfile}, {$set: true}, context)
+               result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfiles':{$elemMatch: {'registrationId': id}}},
+                                                       {"profile.externalUserProfiles.$": userProfile}, {$set: true}, context)
 
               //if registration profile item doesn't exist,then update the profile
               if (result != 1) {
-                updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfile': userProfile}, {$push: true}, context);
+                updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfiles': userProfile}, {$push: true}, context);
               } else {
                 updateCount = 1;
               }

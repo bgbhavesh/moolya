@@ -320,12 +320,13 @@ Accounts.validateLoginAttempt(function (user)
     //     throw new Meteor.Error(403, "User account is inactive!");
     // }
 
-    if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
-      let isAllowed= validateExternalUserLoginAttempt(user);
-      if(!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
-      return true;
-    }
-    else if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
+    // if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
+    //   let isAllowed= validateExternalUserLoginAttempt(user);
+    //   if(!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
+    //   return true;
+    // }
+    // else
+    if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
         if(user && user.user && user.user.profile && !user.user.profile.isActive){               //temporary moving here for external user
           user.allowed = false
           throw new Meteor.Error(403, "User account is inactive!");

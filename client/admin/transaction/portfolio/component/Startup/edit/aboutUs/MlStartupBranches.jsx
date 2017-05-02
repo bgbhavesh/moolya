@@ -63,7 +63,7 @@ export default class MlStartupBranches extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId});
+    this.setState({selectedIndex:index, data:details,selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId});
   }
 
   onLockChange(field, e){

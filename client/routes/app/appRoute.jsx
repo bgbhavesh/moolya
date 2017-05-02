@@ -11,6 +11,8 @@ import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeato
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
 
+import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
+
 // import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
 // import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
 //
@@ -52,6 +54,13 @@ appSection.route('/myprofile/personalInfo', {
     mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppProfileTabs/>})
   }
 });
+
+appSection.route('/myProfile/registerAs', {
+    name: 'registeras',
+    action(){
+        mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppCommunitiesList/>})
+    }
+})
 
 // appSection.route('/myprofile/AddressBook', {
 //   name: 'myprofile',

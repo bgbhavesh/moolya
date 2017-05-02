@@ -13,7 +13,7 @@ class MlUserContext{
         check(userId, String)
         var user = Meteor.users.findOne({_id:userId});
         if(user && user.profile && user.profile.isExternaluser == true){
-            let user_profiles = user.profile.externalUserProfile.userProfiles;
+            let user_profiles = user.profile.externalUserProfiles;
             default_User_Profile = _.find(user_profiles, {'isDefault': true });
         }
         return default_User_Profile;

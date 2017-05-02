@@ -269,6 +269,25 @@ let ideatorPortfolioSchema = `
       createdAt:String
     }
     
+    type Idea{
+        userId:String,
+        portfolioId:String,
+        title:String,
+        isIdeaTitlePrivate:Boolean,
+        description:String,
+        isIdeaPrivate:Boolean,
+        isActive:Boolean
+    }
+    
+    input idea{
+        userId:String,
+        title:String,
+        isIdeaTitlePrivate:Boolean,
+        description:String,
+        isIdeaPrivate:Boolean,
+        isActive:Boolean
+    }
+    
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
         fetchIdeatorPortfolioIdeas(portfoliodetailsId:String!):ideasObject
@@ -282,6 +301,7 @@ let ideatorPortfolioSchema = `
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
         fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
+        fetchIdeas(userId:String):[Idea]
     }
     
     type Mutation{
@@ -292,6 +312,8 @@ let ideatorPortfolioSchema = `
         updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
+        createIdea(idea:idea):response
+        updateIdea(idea:idea):response
     }
 `
 

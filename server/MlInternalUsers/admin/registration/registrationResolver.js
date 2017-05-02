@@ -324,8 +324,12 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
         if(temp==1){
          // updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
            updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Approved"}, {$set: true}, context)
+
         }
 
+    if(updatedResponse===1){
+        mlRegistrationRepo.updateExternalProfileInfo(args.registrationId,'all',context);
+    }
 
     //Portfolio Request Generation
     if(updatedResponse===1){

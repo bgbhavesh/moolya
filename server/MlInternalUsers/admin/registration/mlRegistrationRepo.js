@@ -75,6 +75,33 @@ class MlRegistrationRepo{
 
 }
 
+  updateExternalProfileInfo(regId,type,context){
+    var  regDetails= mlDBController.findOne('MlRegistration',regId, context) || {};
+    var updatedCount=0;
+    if(regDetails){
+      orderNumberGenService.generateProfileId(regDetails)
+      var info = {
+        clusterId          : regDetails.clusterId,
+        registrationId     : regDetails.registrationId,
+        profileId          : regDetails.profileId,
+        socialLinksInfo    : regDetails.socialLinksInfo,
+        addressInfo        : regDetails.addressInfo,
+        emailInfo          : regDetails.emailInfo,
+        contactInfo        : regDetails.contactInfo,
+        kycDocuments       : regDetails.kycDocuments
+      }
+      let user = mlDBController.findOne('users', {"profile.externalUserProfiles.registrationId": {"$in": [regId]}}, context);
+      let profileInfo = [];
+      if(user.profile.externalUserAdditionalInfo){
+        profileInfo.push(user.profile.externalUserAdditionalInfo)
+        profileInfo.push(info)
+      }else{
+        profileInfo.push(info)
+      }
+      let resp = mlDBController.update('users', user.userId, {"profile.externalUserAdditionalInfo": profileInfo}, {$set:true}, context)
+    }
+  }
+
 }
 const mlRegistrationRepo = new MlRegistrationRepo();
 Object.freeze(mlRegistrationRepo);

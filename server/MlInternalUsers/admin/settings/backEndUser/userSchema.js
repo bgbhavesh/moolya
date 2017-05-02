@@ -168,7 +168,7 @@ let BackEndUser = `
         communityName     : String,
         communityType     : String,
         isDefault         : Boolean,
-        isProfileActive   : Boolean,
+        isActive          : Boolean,
         accountType       : String,
         optional          : Boolean
     }

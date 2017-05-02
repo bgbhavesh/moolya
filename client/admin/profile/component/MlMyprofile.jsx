@@ -91,57 +91,48 @@ export default class MlMyProfile extends React.Component{
   }
 
   onFileUploadCallBack(resp) {
-    if (resp) {
-      console.log(resp);
-      this.setState({"uploadedProfilePic": resp});
-      var temp = $.parseJSON(this.state.uploadedProfilePic).result;
-      this.setState({"uploadedProfilePic":temp});
-      console.log(temp);
-     // toastr.success("Update Successful");
-      this.storeImage();
-      return temp;
-
-    }
+      if (resp) {
+          console.log(resp);
+          this.setState({"uploadedProfilePic": resp});
+          var temp = $.parseJSON(this.state.uploadedProfilePic).result;
+          this.setState({"uploadedProfilePic":temp});
+          console.log(temp);
+          this.storeImage();
+          return temp;
+      }
   }
 
-  // async fileUpdation(Details){
-  //   let userId = Meteor.userId();
-  //   const response = await updateDataEntry(Details,userId);
-  //   toastr.success("Update Successful");
-  //   return response;
-  //
-  // }
-  //
   async firstNameUpdation(e) {
-    this.setState({firstName: e.target.value})
+      this.setState({firstName: e.target.value})
   }
 
   async middleNameUpdation(e) {
-    this.setState({middleName: e.target.value})
+      this.setState({middleName: e.target.value})
   }
 
   async lastNameUpdation(e) {
-    this.setState({lastName: e.target.value})
+      this.setState({lastName: e.target.value})
   }
 
   async displayNameUpdation(e) {
-    this.setState({userName: e.target.value})
+      this.setState({userName: e.target.value})
   }
 
 
 
   async storeImage() {
   let Details = {
-    profileImage : this.state.uploadedProfilePic,
-    firstName :this.state.firstName,
-    middleName : this.state.middleName,
-    lastName : this.state.lastName,
-    userName: this.state.userName,
-    genderType:this.state.genderSelect,
-    dateOfBirth:this.refs.dob.value,
-    userId : Meteor.userId()
+      profileImage : this.state.uploadedProfilePic,
+      firstName :this.state.firstName,
+      middleName : this.state.middleName,
+      lastName : this.state.lastName,
+      userName: this.state.userName,
+      genderType:this.state.genderSelect,
+      dateOfBirth:this.refs.dob.value,
+      userId : Meteor.userId()
   }
-    const dataresponse = await updateDataEntry(Details);
+
+  const dataresponse = await updateDataEntry(Details);
   console.log(dataresponse);
     toastr.success("Update Successful")
     return dataresponse;

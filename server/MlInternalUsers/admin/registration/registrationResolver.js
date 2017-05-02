@@ -163,7 +163,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           communityDefName: details.communityDefName,
           communityType: '',
           isDefault: false,
-          isProfileActive: false,
+          isActive: false,
           accountType: details.accountType,
           optional: false,
           userType: details.userType || null,

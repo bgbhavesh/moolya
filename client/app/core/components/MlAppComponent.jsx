@@ -12,15 +12,28 @@ import { withApollo } from 'react-apollo';
 class MlAppComponent extends Component{
     constructor(props, c){
         super(props, c)
+
         this.state = {loading:true, theme: null, language:null, menu:null, userType:null}
         this.fetchMenu.bind(this)
     }
 
     componentDidMount(){
-        this.fetchMenu()
+        let isProfileMenu = this.props.isProfileMenu || false;
+        this.fetchMenu(isProfileMenu)
     }
 
-    async fetchMenu(){
+    componentWillReceiveProps(nextProps, nextState) {
+        let isProfileMenu = nextProps.isProfileMenu || false;
+        this.fetchMenu(isProfileMenu)
+    }
+
+    async fetchMenu(isProfileMenu){
+        let query = "";
+        if(isProfileMenu)
+            query = profileMenuQuery
+        else
+            query = defaultQuery;
+
         const menuData = await appClient.query({forceFetch:true,query: query, variables: {name:'mlDefaultMenu'}});
         const userType = await appClient.query({forceFetch:true,query:gql`query{data:fetchUserTypeFromProfile}`});
         this.setState({loading:false,userType:userType&&userType.data&&userType.data.data?userType.data.data:null,menu:menuData&&menuData.data&&menuData.data.data?menuData.data.data.menu:[]});
@@ -44,7 +57,7 @@ class MlAppComponent extends Component{
     }
 }
 
-const query = gql`fragment subMenu on Menu{
+const defaultQuery = gql`fragment subMenu on Menu{
                   uniqueId
                   isLink
                   isMenu
@@ -77,6 +90,37 @@ const query = gql`fragment subMenu on Menu{
                     }
       }`
 
+const profileMenuQuery = gql`fragment subMenu on Menu{
+                  uniqueId
+                  isLink
+                  isMenu
+                  isDisabled
+                  name
+                  image
+                  link
+                  dynamicLink
+                  subMenuMappingId
+                  subMenusId
+                  hideSubMenu
+                  showInBreadCrum
+              }
 
+              query LeftNavQuery($name: String!) {
+                data:fetchExternalUserProfileMenu(name: $name){
+                    name
+                    menu{
+                      ...subMenu
+                         subMenu{
+                          ...subMenu
+                            subMenu{
+                              ...subMenu
+                                  subMenu{
+                                     ...subMenu
+                                         }
+                                   }
+                              }
+                           }
+                    }
+      }`
 
 export default  MlAppLayout = MlAppComponent;

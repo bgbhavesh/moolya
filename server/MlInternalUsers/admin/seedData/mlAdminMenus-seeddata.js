@@ -497,7 +497,7 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/cluster_icon.png",
+        "image" : "/images/transactions-icon.png",
         "link" : "/admin/transactions/requestedList",
         "name" : "transaction",
         "uniqueId"   :"transaction",

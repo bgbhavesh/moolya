@@ -4,6 +4,7 @@ import MlRegistrationPreCondition from './registrationPreConditions';
 import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
+  var validationCheck=null;
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -19,6 +20,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
     return response;
   }
+  validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+
 
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
   let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
@@ -163,7 +167,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           communityDefName: details.communityDefName,
           communityType: '',
           isDefault: false,
-          isProfileActive: false,
+          isActive: false,
           accountType: details.accountType,
           optional: false,
           userType: details.userType || null,

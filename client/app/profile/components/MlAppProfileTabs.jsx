@@ -58,6 +58,5 @@ render(){
       </div>
     </div>
   )
-  // return <MlTabComponent tabs={tabs}/>
 }
 }

@@ -10,6 +10,13 @@ import 'react-responsive-tabs/styles.css'
 
 
 export default class MlAppIdeatorIdeas extends React.Component{
+  constructor(props, context){
+    super(props);
+    this.state= {
+      loading: false,
+    }
+    return this;
+  }
   componentDidMount()
   {
     var swiper = new Swiper('.ideas_swiper', {
@@ -53,6 +60,15 @@ export default class MlAppIdeatorIdeas extends React.Component{
     ]
     this.setState({userIdeas:userIdeas})
   }
+
+  // onVisibilityChange(c, e){
+  //   if(c == "public"){
+  //     this.setState({isIdeaPrivate:false})
+  //   }else{
+  //     this.setState({isIdeaPrivate:true})
+  //   }
+  // }
+
   render(){
     return (
       <div className="admin_padding_wrap">
@@ -104,8 +120,8 @@ export default class MlAppIdeatorIdeas extends React.Component{
                             <p>{idea.description}</p>
 
                             <a href="/app/portfolio/view" className="mlUpload_btn pull-left">View</a>
-                            <a href="#" className="mlUpload_btn pull-left">Make Public</a>
-                            <a href="#" className="mlUpload_btn pull-left">Make Private</a>
+                            <a href="#" className="mlUpload_btn pull-left" >Make Public</a>
+                            <a href="#" className="mlUpload_btn pull-left" >Make Private</a>
                             <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
                           </div>
                         </div>

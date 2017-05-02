@@ -36,7 +36,7 @@ export default class MlAppIdeatorAddIdea extends React.Component{
             <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
               <a href="#" >
                 <div className="list_block notrans">
-                  <FontAwesome name='lock'/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
                   {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                   <div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>
                   <h3>Ideas</h3>
@@ -46,12 +46,12 @@ export default class MlAppIdeatorAddIdea extends React.Component{
             <div className="form_bg col-lg-8 col-lg-offset-2">
               <form>
                 <div className="form-group">
-                  <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" name="title"/>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasTitlePrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
+                  <input type="text" placeholder="Title" ref="title" className="form-control float-label" id="cluster_name" name="title"/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
                 </div>
                 <div className="form-group">
-                  <textarea placeholder="Describe..." className="form-control" id="cl_about" name="description" ></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" />
+                  <textarea placeholder="Describe..." className="form-control" ref="description" id="cl_about" name="description" ></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaDescriptionPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" />
                 </div>
               </form>
             </div>

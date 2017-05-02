@@ -286,7 +286,7 @@ export default class MlMyProfile extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Display Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
+                      <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
                       <input type="password" placeholder="Password" className="form-control float-label" id=""/>

@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import { render } from 'react-dom';
+import MlAppIdeatorIdeas from '../../ideator/components/MlAppIdeatorIdeas'
 
 export default class MlPortfolioLanding extends Component {
   constructor(props){
@@ -12,8 +13,27 @@ export default class MlPortfolioLanding extends Component {
   }
 
   render(){
+    let user = Meteor.user();
+    let userCommunity =  ""
+    _.each(user.profile.externalUserProfile, function (profile) {
+      if(profile.isDefault){
+        userCommunity = profile.communityDefName
+      }
+    })
+    // let template;
+    // if(userCommunity=="Ideators"){
+    //   template = <MlIdeatorIdeas/>
+    // }else if(userCommunity=="Startups"){
+    //   template = <MlIdeatorIdeas/>
+    // }
       return(
-          <div></div>
+        <div className="admin_main_wrap">
+          {(userCommunity=="Ideators")?
+            <MlAppIdeatorIdeas/>
+            :
+            <MlAppIdeatorIdeas/>
+          }
+        </div>
       )
   }
 }

@@ -19,6 +19,7 @@ import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
+import MlAppIdeatorAddIdea from '../../app/ideator/components/MlAppIdeatorAddIdea'
 
 
 //profile
@@ -95,6 +96,18 @@ appSection.route('/ideator', {
   name: 'ideator',
   action(){
       mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
+  }
+});
+appSection.route('/portfolio/view', {
+  name: 'portfolio',
+  action(){
+    mount(AppLayout,{appContent:< MlAppIdeatorTabs/>, isProfileMenu:true})
+  }
+});
+appSection.route('/portfolio/addIdea', {
+  name: 'portfolio',
+  action(){
+    mount(AppLayout,{appContent:< MlAppIdeatorAddIdea/>, isProfileMenu:true})
   }
 });
 

@@ -97,16 +97,16 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
-  onDeleteAsset(index,e){
-    let assetDetails = this.state.startupAssets[index];
-    assetDetails = _.omit(assetDetails, "__typename");
-    if(index != -1) {
-      assetDetails.splice(index, 1);
-    }
-    this.setState({data:assetDetails}, function () {
-      this.sendDataToParent()
-    })
-  }
+  // onDeleteAsset(index,e){
+  //   let assetDetails = this.state.startupAssets[index];
+  //   assetDetails = _.omit(assetDetails, "__typename");
+  //   if(index != -1) {
+  //     assetDetails.splice(index, 1);
+  //   }
+  //   this.setState({data:assetDetails}, function () {
+  //     this.sendDataToParent()
+  //   })
+  // }
 
   handleBlur(e){
     let details =this.state.data;
@@ -222,7 +222,7 @@ export default class MlStartupAssets extends React.Component{
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="cluster_status inactive_cl" onClick={that.onDeleteAsset.bind(that, idx)}><FontAwesome name='times'/></div>
+                        {/*<div className="cluster_status inactive_cl" onClick={that.onDeleteAsset.bind(that, idx)}><FontAwesome name='times'/></div>*/}
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                         <h3>{details.description?details.description:""}<span className="assets-list">{details.quantity?details.quantity:"0"}</span></h3>
                       </div>

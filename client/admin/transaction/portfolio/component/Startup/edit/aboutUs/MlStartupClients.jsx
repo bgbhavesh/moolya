@@ -216,7 +216,6 @@ export default class MlStartupClients extends React.Component{
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
                         {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
                         <h3>{details.companyName?details.companyName:""} </h3>

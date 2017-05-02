@@ -60,7 +60,7 @@ export default class MlAppHeader extends Component {
           <h1 id="NavLbl" className="" style={{'backgroundImage':'url(/images/img2.png)'}}></h1>
           <ol>
             <li><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
-            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/app/myprofile/personalInfo"><img
+            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/app/myprofile"><img
               className="profile-img" src="/images/1.png"/></a></li>
             <li data-toggle="tooltip" title="Log as" data-placement="right"><a href="#"><img className="profile-img"
                                                                                              src="/images/2.png"/></a>

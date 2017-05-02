@@ -48,10 +48,10 @@ appSection.route('/dashboard', {
   }
 });
 
-appSection.route('/myprofile/personalInfo', {
-  name: 'myprofile',
+appSection.route('/myProfile', {
+  name: 'myProfile',
   action(){
-    mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppProfileTabs/>})
+      mount(AppLayout,{appContent:<div>Srinag</div>, isProfileMenu:true})
   }
 });
 
@@ -79,8 +79,7 @@ appSection.route('/myProfile/registerAs', {
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
-    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
-    // mount(AppLayout,{appContent:<div>Ideator</div>})
+      mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
   }
 });
 

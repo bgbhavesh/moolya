@@ -34,7 +34,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.countryId":registration.countryId},{"registrationInfo.registrationType":registration.registrationType}]})
     if(validate){
       let code = 409;
-      let message = {message: "Registration Exist"}
+      let message ="Registration Exist"
       let errResp = new MlRespPayload().errorPayload(message, code);
       return {'isValid':false,'validationResponse':errResp};
     }

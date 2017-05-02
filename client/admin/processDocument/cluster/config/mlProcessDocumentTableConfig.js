@@ -99,6 +99,7 @@ const mlProcessTableConfig=new MlViewer.View({
           for(let i=0;i<documents.length;i++){
             if(documents[i].isActive){
 
+              // FlowRouter.go("/admin/documents/"+data.id+"/"+documents[i].type);
               FlowRouter.go("/admin/documents/"+data.id+"/"+documents[i].category+"/"+documents[i].type);
               i=documents.length;
             }

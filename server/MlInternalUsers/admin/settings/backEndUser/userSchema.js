@@ -282,6 +282,12 @@ let BackEndUser = `
         addressPinCode : String
      }
      
+       type SocialLinkInfoSchema{
+        socialLinkTypeName    : String
+        socialLinkType        : String
+        socialLinkUrl         : String
+     }
+     
      input ContactInfo{
       numberType        : String
       numberTypeName        : String
@@ -310,16 +316,93 @@ let BackEndUser = `
       addressPinCode : String
     }
     
+    input SocialLinkInfo{
+       socialLinkTypeName    : String
+       socialLinkType        : String
+       socialLinkUrl         : String
+    }
+   
+    
     input addressBook{
        addressInfo:[AddressInfo],
        emailInfo : [EmailInfo],
        contactInfo:[ContactInfo]
     }
     
+    
+    
     type addressBookSchema{
        addressInfo     : [AddressInfoSchema]
        emailInfo       : [EmailInfoSchema]
        contactInfo     : [ContactInfoSchema]
+    }
+    
+    input docFilesInput{
+       fileId:String,
+       fileUrl: String,
+       fileName:String,
+       fileSize: String
+     
+     }
+    
+    input KycDocumentInfo{
+      docTypeName: String,
+      docTypeId: String,
+      kycCategoryId:String,
+      kycCategoryName: String,
+      documentId:String,
+      documentDisplayName:String,
+      documentName:String,
+      isMandatory:Boolean,
+      isActive:Boolean,
+      allowableFormat:[String],
+      allowableMaxSize:String,
+      docFiles:[docFilesInput],
+      status: String
+    }
+    
+     type docFilesInputSchema{
+       fileId:String,
+       fileUrl: String,
+       fileName:String,
+       fileSize: String
+     }
+      type kycDocumentInfoSchema{
+        docTypeName: String,
+        docTypeId: String,
+        kycCategoryId:String,
+        kycCategoryName: String,
+        documentId:String,
+        documentDisplayName:String,
+        documentName:String,
+        isMandatory:Boolean,
+         isActive:Boolean,
+        allowableFormat:[String],
+        allowableMaxSize:String,
+        docFiles:[docFilesInputSchema],
+        status: String
+      }
+    
+    type externalUserAdditionalInfoSchema{
+       cluster            : String
+       registrationId     : String
+       profileId          : String
+       addressInfo        : [AddressInfoSchema]
+       emailInfo          : [EmailInfoSchema]
+       contactInfo        : [ContactInfoSchema]
+       socialLinkInfo     : [SocialLinkInfoSchema]
+       kycDocuments       : [kycDocumentInfoSchema]   
+    }
+    
+    input externalUserAdditionalInfo{
+        cluster            : String
+        registrationId     : String
+        profileId          : String
+        socialLinksInfo    : [SocialLinkInfo]
+        addressInfo        : [AddressInfo]
+        emailInfo          : [EmailInfo]
+        contactInfo        : [ContactInfo]
+        kycDocuments       : [KycDocumentInfo]
     }
     
    

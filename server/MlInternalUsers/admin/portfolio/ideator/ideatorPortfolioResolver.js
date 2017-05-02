@@ -97,7 +97,6 @@ MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['updateAnnotation'] = (obj, args, context, info) => {
-
 }
 
 MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
@@ -295,4 +294,15 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioRequests'] = (obj, args, contex
 
 MlResolver.MlQueryResolver['fetchPortfolioMenu'] = (obj, args, context, info) => {
     return MlPortfolioMenu.findOne({"$and":[{communityType:args.communityType}, {templateName:args.templateName}]});
+}
+
+
+
+MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
+}
+
+MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
+}
+
+MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
 }

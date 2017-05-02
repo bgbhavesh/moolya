@@ -21,11 +21,12 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
               if(ret){
                   switch (portfolioDetails.communityType){
                     case "Ideators":{
+                      var ideatorInfo = {}
                       let fb = "";
                       let linkedIn="";
                       let twitter="";
                       let googleplus="";
-                      if(args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
+                      if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
                           _.each(args.registrationInfo.socialLinksInfo,function(link) {
                               if(link.socialLinkType == "FACEBOOK"){
                                 fb = link.socialLinkUrl
@@ -40,27 +41,29 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                             }
                           })
                       }
-
-                      let ideatorInfo={
-                        firstName:args.registrationInfo.firstName?args.registrationInfo.firstName:"",
-                        lastName:args.registrationInfo.lastName?args.registrationInfo.lastName:"",
-                        emailId:args.registrationInfo.userName?args.registrationInfo.userName:"",
-                        gender:args.registrationInfo.gender?args.registrationInfo.gender:"",
-                        dateOfBirth:args.registrationInfo.dateOfBirth?args.registrationInfo.dateOfBirth:"",
-                        qualification:args.registrationInfo.qualification?args.registrationInfo.qualification:"",
-                        employmentStatus:args.registrationInfo.employmentStatus?args.registrationInfo.employmentStatus:"",
-                        professionalTag:args.registrationInfo.professionalTag?args.registrationInfo.professionalTag:"",
-                        yearsofExperience:args.registrationInfo.experience?args.registrationInfo.experience:"",
-                        industry:args.registrationInfo.industry?args.registrationInfo.industry:"",
-                        profession:args.registrationInfo.profession?args.registrationInfo.profession:"",
-                        employerName:args.registrationInfo.employerName?args.registrationInfo.employerName:"",
-                        mobileNumber:args.registrationInfo.contactNumber?args.registrationInfo.contactNumber:"",
-                        facebookId:fb,
-                        linkedInId:linkedIn,
-                        twitterId:twitter,
-                        gplusId:googleplus,
-                        profilePic:args.registrationInfo.profileImage?args.registrationInfo.profileImage:""
+                      if(args.registrationInfo) {
+                        ideatorInfo = {
+                          firstName: args.registrationInfo.firstName ? args.registrationInfo.firstName : "",
+                          lastName: args.registrationInfo.lastName ? args.registrationInfo.lastName : "",
+                          emailId: args.registrationInfo.userName ? args.registrationInfo.userName : "",
+                          gender: args.registrationInfo.gender ? args.registrationInfo.gender : "",
+                          dateOfBirth: args.registrationInfo.dateOfBirth ? args.registrationInfo.dateOfBirth : "",
+                          qualification: args.registrationInfo.qualification ? args.registrationInfo.qualification : "",
+                          employmentStatus: args.registrationInfo.employmentStatus ? args.registrationInfo.employmentStatus : "",
+                          professionalTag: args.registrationInfo.professionalTag ? args.registrationInfo.professionalTag : "",
+                          yearsofExperience: args.registrationInfo.experience ? args.registrationInfo.experience : "",
+                          industry: args.registrationInfo.industry ? args.registrationInfo.industry : "",
+                          profession: args.registrationInfo.profession ? args.registrationInfo.profession : "",
+                          employerName: args.registrationInfo.employerName ? args.registrationInfo.employerName : "",
+                          mobileNumber: args.registrationInfo.contactNumber ? args.registrationInfo.contactNumber : "",
+                          facebookId: fb,
+                          linkedInId: linkedIn,
+                          twitterId: twitter,
+                          gplusId: googleplus,
+                          profilePic: args.registrationInfo.profileImage ? args.registrationInfo.profileImage : ""
+                        }
                       }
+
                         let portfolio = {
                           userId:portfolioDetails.userId,
                           communityType:portfolioDetails.communityType,

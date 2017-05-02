@@ -19,3 +19,8 @@ MlResolver.MlQueryResolver['fetchExternalUserMenu'] = ( _, {name}, context) =>{
     let menu = new MlUserContext().getDefaultMenu(context.userId);
     return MlMenus.findOne({name:menu});
 }
+
+MlResolver.MlQueryResolver['fetchExternalUserProfileMenu'] = ( _, {name}, context) =>{
+  let menu = new MlUserContext().getDefaultProfileMenu(context.userId);
+  return MlMenus.findOne({name:menu});
+}

@@ -11,10 +11,11 @@ import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeato
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
 
-// import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
+import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
+
+import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
 // import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
-//
-// import MlMyProfile from '../../admin/profile/component/MlMyprofile'
+import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
@@ -46,12 +47,26 @@ appSection.route('/dashboard', {
   }
 });
 
-appSection.route('/myprofile/personalInfo', {
-  name: 'myprofile',
+appSection.route('/myProfile', {
+  name: 'myProfile',
   action(){
-    mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppProfileTabs/>})
+      mount(AppLayout,{appContent:<MlMyProfile/>, isProfileMenu:true})
   }
 });
+
+appSection.route('/addressBook', {
+  name: 'addressBook',
+  action(){
+    mount(AppLayout,{appContent:<MyProfileAddressBook/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/myProfile/registerAs', {
+    name: 'registeras',
+    action(){
+        mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppCommunitiesList/>})
+    }
+})
 
 // appSection.route('/myprofile/AddressBook', {
 //   name: 'myprofile',
@@ -70,8 +85,7 @@ appSection.route('/myprofile/personalInfo', {
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
-    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
-    // mount(AppLayout,{appContent:<div>Ideator</div>})
+      mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
   }
 });
 

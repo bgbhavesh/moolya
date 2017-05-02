@@ -43,7 +43,12 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/settings/addDocumentFormat")
+        if(data && data.id) {
+          FlowRouter.go("/admin/settings/documentFormatList");
+        }else{
+          FlowRouter.go("/admin/settings/addDocumentFormat")
+
+        }
       }
     },
     // {

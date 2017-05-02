@@ -32,7 +32,7 @@ export default class MlAppIdeatorAddIdea extends React.Component{
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div>
-            <h2>Ideas</h2>
+            <h2>Add Idea</h2>
             <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
               <a href="#" >
                 <div className="list_block notrans">

@@ -321,7 +321,7 @@ if(Meteor.isServer){
         "isMenu" : true
       },
       {
-        "image" : "/images/cluster_icon.png",
+        "image" : "/images/transactions-icon.png",
         "link" : "/admin/transactions/requestedList",
         "name" : "transaction",
         "uniqueId"   :"transaction",

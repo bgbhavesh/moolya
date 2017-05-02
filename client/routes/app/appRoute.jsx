@@ -13,13 +13,18 @@ import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartu
 
 import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
 
-// import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
+import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
 // import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
-//
-// import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
+import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
+
+
+//profile
+import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
+
+
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -51,7 +56,21 @@ appSection.route('/dashboard', {
 appSection.route('/myProfile', {
   name: 'myProfile',
   action(){
-      mount(AppLayout,{appContent:<div>Srinag</div>, isProfileMenu:true})
+      mount(AppLayout,{appContent:<MlAppMyProfile/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/addressBook', {
+  name: 'addressBook',
+  action(){
+    mount(AppLayout,{appContent:<MyProfileAddressBook/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/portfolio', {
+  name: 'portfolio',
+  action(){
+    mount(AppLayout,{appContent:<MlPortfolioLanding/>, isProfileMenu:true})
   }
 });
 
@@ -61,20 +80,6 @@ appSection.route('/myProfile/registerAs', {
         mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppCommunitiesList/>})
     }
 })
-
-// appSection.route('/myprofile/AddressBook', {
-//   name: 'myprofile',
-//   action(){
-//     mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MyProfileAddressBook/>})
-//   }
-// });
-//
-// appSection.route('/myprofile/Settings', {
-//   name: 'myprofile',
-//   action(){
-//     mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MyProfileSettings/>})
-//   }
-// });
 
 appSection.route('/ideator', {
   name: 'ideator',

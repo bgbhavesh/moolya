@@ -78,7 +78,7 @@ export default class MlAppLeftNav extends Component {
         });
 
         return(
-            <div className="app_menu">
+            <div className="app_menu mCustomScrollbar _mCS_11 mCS-autoHide">
                 <ul>
                     {navOptions }
                     <li className="menu_item"></li>

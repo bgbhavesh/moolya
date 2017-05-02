@@ -333,6 +333,7 @@ let BackEndUser = `
         updateDataEntry(userId: String, moduleName: String, actionName: String, attributes:attributesObject):response
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
+        uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
     }
     
     type Query{

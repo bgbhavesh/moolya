@@ -12,18 +12,24 @@ import { withApollo } from 'react-apollo';
 class MlAppComponent extends Component{
     constructor(props, c){
         super(props, c)
-        let isProfileMenu = props.isProfileMenu || false;
-        this.state = {loading:true, theme: null, language:null, menu:null, userType:null, isProfileMenu:isProfileMenu}
+
+        this.state = {loading:true, theme: null, language:null, menu:null, userType:null}
         this.fetchMenu.bind(this)
     }
 
     componentDidMount(){
-        this.fetchMenu()
+        let isProfileMenu = this.props.isProfileMenu || false;
+        this.fetchMenu(isProfileMenu)
     }
 
-    async fetchMenu(){
+    componentWillReceiveProps(nextProps, nextState) {
+        let isProfileMenu = nextProps.isProfileMenu || false;
+        this.fetchMenu(isProfileMenu)
+    }
+
+    async fetchMenu(isProfileMenu){
         let query = "";
-        if(this.state.isProfileMenu)
+        if(isProfileMenu)
             query = profileMenuQuery
         else
             query = defaultQuery;

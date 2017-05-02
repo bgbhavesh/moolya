@@ -10,6 +10,13 @@ import 'react-responsive-tabs/styles.css'
 
 
 export default class MlAppIdeatorIdeas extends React.Component{
+  constructor(props, context){
+    super(props);
+    this.state= {
+      loading: false,
+    }
+    return this;
+  }
   componentDidMount()
   {
     var swiper = new Swiper('.ideas_swiper', {
@@ -27,12 +34,41 @@ export default class MlAppIdeatorIdeas extends React.Component{
         slideShadows : true
       }
     });
-    $('.idea_details .ideas_block').click(function () {
-      GetIdeaId = $(this).attr('name');
+    $('.idea_details .ideas_block').click(function(){
+      GetIdeaId =  $(this).attr('name');
       $('.idea_details .portfolio-main-wrap .panel').slideUp();
-      $('#' + GetIdeaId).slideDown();
+      $('#'+GetIdeaId).slideDown();
     });
   }
+  componentWillMount(){
+    let userIdeas = [
+      {
+        title:"Penny Tracker",
+        description:"A platform to connect retailers and customers and help the make all their billing needs electronic and automated.",
+        imageUrl:"/images/idea_5.jpg"
+      },
+      {
+        title:"Healthy Nutrients, Food and Drinks",
+        description:"The basic idea is to make healthy nutrients, food, drinks etc available pre - post workout/ daily exercise/yoga or meditation, for health conscious people with the help of a mobile application. Basically we need to develop a mobile app say Hulk's Chef. Practicles: The client would login into the app and choose his requirement and say i need this juice continuously for a month everyday at this time at this place in the app; we would make it available for them. So basically for eg we will have our menu card in the app with options like pre workout, post workout, yoga special, diabetes special jogging special, meditation, martial arts, special menu for people workout at beaches and national park (basically open air workout). We shall have a kitchen a central hub where in we will be preparing things and deliver it to the clients.",
+        imageUrl:"/images/idea_2.jpg"
+      },
+      {
+        title:"expertmile.com",
+        description:"Expertmile.com is an online platform for CAs, Lawyers and other professional service people who can post their listings on the website and can get connected to the clients directly. Clients get an easy approach of talking to the reputed CA according to their specializations.",
+        imageUrl:"/images/idea_6.jpg"
+      }
+    ]
+    this.setState({userIdeas:userIdeas})
+  }
+
+  // onVisibilityChange(c, e){
+  //   if(c == "public"){
+  //     this.setState({isIdeaPrivate:false})
+  //   }else{
+  //     this.setState({isIdeaPrivate:true})
+  //   }
+  // }
+
   render(){
     return (
       <div className="admin_padding_wrap">
@@ -49,18 +85,15 @@ export default class MlAppIdeatorIdeas extends React.Component{
             <div className="col-md-8">
               <div className="swiper-container ideas_swiper">
                 <div className="swiper-wrapper">
-                  <div className="swiper-slide ideas_block" name="idea1"
-                       style={{'backgroundImage': 'url(/images/idea_5.jpg)'}}>
-                    <h3 className="rating_xs"> Penny Tracker<br/> <StarRatings/></h3>
-                  </div>
-                  <div className="swiper-slide ideas_block" name="idea2"
-                       style={{'backgroundImage': 'url(/images/idea_2.jpg)'}}>
-                    <h3 className="rating_xs">Healthy Nutrients, Food and Drinks <br/> <StarRatings/></h3>
-                  </div>
-                  <div className="swiper-slide ideas_block" name="idea3"
-                       style={{'backgroundImage': 'url(/images/idea_6.jpg)'}}>
-                    <h3 className="rating_xs">expertmile.com <br/> <StarRatings/></h3>
-                  </div>
+                  {this.state.userIdeas.map(function (idea, idx) {
+                    let url = idea.imageUrl;
+                    return(
+                      <div className="swiper-slide ideas_block" name={idx}
+                           style={{'backgroundImage': 'url('+{url}+')'}} key={idx}>
+                        <h3 className="rating_xs"> {idea.title}<br/> <StarRatings/></h3>
+                      </div>
+                    )
+                  })}
 
                 </div>
                 <div className="swiper-pagination"></div>
@@ -68,53 +101,34 @@ export default class MlAppIdeatorIdeas extends React.Component{
             </div>
             <div className="col-md-2"></div>
             <br/>
-            <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
-              <div className="panel panel-default panel-form-view" id="idea1">
-                <div className="panel-heading">Penny Tracker</div>
-                <div className="panel-body">
-                  <p>A platform to connect retailers and customers and help the make all their billing needs electronic
-                    and automated.</p>
-                  <a href="/app/portfolio/view" className="mlUpload_btn pull-left">View</a>
-                  <a href="#" className="mlUpload_btn pull-left">Make Public</a>
-                  <a href="#" className="mlUpload_btn pull-left">Make Private</a>
-                  <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
-                </div>
-              </div>
 
-              <div className="panel panel-default panel-form-view" id="idea2" style={{'display': 'block'}}>
-                <div className="panel-heading">Healthy Nutrients, Food and Drinks</div>
-                <div className="panel-body">
-                  <p>The basic idea is to make healthy nutrients, food, drinks etc available pre - post workout/ daily
-                    exercise/yoga or meditation, for health conscious people with the help of a mobile application.
-                    Basically we need to develop a mobile app say Hulk's Chef. Practicles: The client would login into
-                    the app and choose his requirement and say i need this juice continuously for a month everyday at
-                    this time at this place in the app; we would make it available for them. So basically for eg we will
-                    have our menu card in the app with options like pre workout, post workout, yoga special, diabetes
-                    special jogging special, meditation, martial arts, special menu for people workout at beaches and
-                    national park (basically open air workout). We shall have a kitchen a central hub where in we will
-                    be preparing things and deliver it to the clients.</p>
-                  <a href="/app/portfolio/view" className="mlUpload_btn pull-left">View</a>
-                  <a href="#" className="mlUpload_btn pull-left">Make Public</a>
-                  <a href="#" className="mlUpload_btn pull-left">Make Private</a>
-                  <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
-                </div>
-              </div>
+              {(!this.state.userIdeas || this.state.userIdeas.length<1)?
+                <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
+                    <div className="panel panel-default" style={{'display':'block'}}>
 
-              <div className="panel panel-default panel-form-view" id="idea3">
-                <div className="panel-heading">expertmile.com - online platform for CA's to connect to the customer
-                </div>
-                <div className="panel-body">
-                  <p>Expertmile.com is an online platform for CAs, Lawyers and other professional service people who can
-                    post their listings on the website and can get connected to the clients directly. Clients get an
-                    easy approach of talking to the reputed CA according to their specializations.</p>
-                  <a href="/app/portfolio/view" className="mlUpload_btn pull-left">View</a>
-                  <a href="#" className="mlUpload_btn pull-left">Make Public</a>
-                  <a href="#" className="mlUpload_btn pull-left">Make Private</a>
-                  <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
-                </div>
-              </div>
+                    <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
 
-            </div>
+                    </div>
+                  </div>
+                :
+                  <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
+                    {this.state.userIdeas.map(function (idea, idx) {
+                      return (
+                        <div className="panel panel-default panel-form-view" id={idx} style={{'display':'block'}} key={idx}>
+                          <div className="panel-heading">{idea.title}</div>
+                          <div className="panel-body">
+                            <p>{idea.description}</p>
+
+                            <a href="/app/portfolio/view" className="mlUpload_btn pull-left">View</a>
+                            <a href="#" className="mlUpload_btn pull-left" >Make Public</a>
+                            <a href="#" className="mlUpload_btn pull-left" >Make Private</a>
+                            <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+              }
           </ScrollArea>
         </div>
       </div>

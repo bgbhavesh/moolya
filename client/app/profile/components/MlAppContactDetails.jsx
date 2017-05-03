@@ -14,21 +14,27 @@ export default class AppContactDetails extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      activeTab : "active"
+      activeTab : "active",
+      details:this.props.contactInfoDetails
     }
     return this;
   }
+
+  tabSelected(index,value){
+    this.setState({selectedContactTab : true, activeTab : ""});
+  }
+
   render(){
-    let details=this.props.contactInfoDetails
+    let details=this.state.details;
     let that=this;
-    let numberTypeQuery=gql`query($type:String,$hierarchyRefId:String){
-     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
-     label
-     value
-     }
-     }
-     `;
-    let numberTypeOption={options: { variables: {type : "CONTACTTYPE",hierarchyRefId:"svcasvsdvdsvdsv"}}};
+    // let numberTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+    //  data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+    //  label
+    //  value
+    //  }
+    //  }
+    //  `;
+    // let numberTypeOption={options: { variables: {type : "CONTACTTYPE",hierarchyRefId:"svcasvsdvdsvdsv"}}};
     return(
       <div className="panel-body">
         <div className="ml_tabs">
@@ -36,7 +42,7 @@ export default class AppContactDetails extends React.Component {
             <li className={this.state.activeTab}>
               <a  href="#contactA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square'/></b></a>
             </li>
-            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key){
+            {details && (details.map(function(options,key){
               return(
                 <li key={key} onClick={that.tabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#numberType'+key} className="add-contact">
@@ -52,7 +58,7 @@ export default class AppContactDetails extends React.Component {
                               {/*queryOptions={numberTypeOption} className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}*/}
                               {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"}*/}
                               {/*isDynamic={true}/>*/}
-                <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue="selectedNumberTypeValue" />
+                <input type="text"  ref={'name'} placeholder="selectedNumberTypeValue" className="form-control float-label" defaultValue={this.state.selectedNumberTypeValue} />
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Enter Country Code" defaultValue={this.state.contactNumberObject} ref={'countryCode'} className="form-control float-label" id=""/>
@@ -66,28 +72,31 @@ export default class AppContactDetails extends React.Component {
                 </a>
               </div>
             </div>
-            {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key) {
-              let test = that.state.contactNumberArray;
+            {details && (details.map(function(options,key) {
               return(<div className="tab-pane" id={'numberType'+key} key={key} >
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"
-                                className="form-control float-label" selectedValue={options.numberType}
-                                valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
-                                queryOptions={numberTypeOption}
-                                isDynamic={true}/>
+                  {/*<Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"*/}
+                                {/*className="form-control float-label" selectedValue={options.numberType}*/}
+                                {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}*/}
+                                {/*queryOptions={numberTypeOption}*/}
+                                {/*isDynamic={true}/>*/}
+                  <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue={options.numberType} />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Enter Country Code" ref={'countryCode'+key} defaultValue={options.countryCode} valueKey={options.countryCode}
-                         className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Enter Country Code" ref={'countryCode'+key} defaultValue={options.countryCode}
+                         className="form-control float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref={'contactNumber'+key} placeholder="Enter Number" valueKey={options.contactNumber} id="phoneNumber" defaultValue={options.contactNumber}
+                  <input type="text" ref={'contactNumber'+key} placeholder="Enter Number" id="phoneNumber" defaultValue={options.contactNumber}
                          className="form-control float-label"/>
                 </div>
                 <div className="ml_icon_btn">
                   <a href="#" className="save_btn">
-                    <span className="ml ml-save"></span></a>
-                  <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
+                    <span className="ml ml-save"></span>
+                  </a>
+                  <a href="#" id="cancel_contact" className="cancel_btn">
+                    <span className="ml ml-delete"></span>
+                  </a>
                 </div>
               </div>)
             }))}

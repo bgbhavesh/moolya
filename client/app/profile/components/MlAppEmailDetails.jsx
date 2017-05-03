@@ -13,21 +13,27 @@ export default class AppEmailDetails extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      activeTab : "active"
+      activeTab : "active",
+      details:this.props.emailInfoDetails
     }
     return this;
   }
+
+  emailTabSelected(){
+    this.setState({activeTab : ""});
+  }
+
   render(){
-    let details=this.props.emailInfoDetails
+    let details=this.state.details;
     let that=this;
-    let emailTypeQuery=gql`query($type:String,$hierarchyRefId:String){
-     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
-     label
-     value
-     }
-     }
-     `;
-    let emailTypeOption={options: { variables: {type : "EMAILTYPE",hierarchyRefId:this.props.clusterId}}};
+    // let emailTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+    //  data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+    //  label
+    //  value
+    //  }
+    //  }
+    //  `;
+    // let emailTypeOption={options: { variables: {type : "EMAILTYPE",hierarchyRefId:this.props.clusterId}}};
 
     return (<div className="panel-body">
         <div className="ml_tabs">
@@ -35,7 +41,7 @@ export default class AppEmailDetails extends React.Component {
             <li className={this.state.activeTab}>
               <a  href="#emailA" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square' /></b></a>
             </li>
-            {that.state.emailDetails && (that.state.emailDetails.map(function(options,key){
+            {details && (details.map(function(options,key){
               return(
                 <li key={key} onClick={that.emailTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#emailIdType'+key} className="add-contact">
@@ -52,7 +58,7 @@ export default class AppEmailDetails extends React.Component {
                               {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}*/}
                               {/*queryOptions={emailTypeOption}*/}
                               {/*isDynamic={true}/>*/}
-                <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue="selectedEmailTypeValue" />
+                <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" />
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Enter Email Id" ref={'emailId'} className="form-control float-label"/>
@@ -63,7 +69,7 @@ export default class AppEmailDetails extends React.Component {
                 </a>
               </div>
             </div>
-            {that.state.emailDetails && (that.state.emailDetails.map(function(options,key) {
+            {details && (details.map(function(options,key) {
               return(<div className="tab-pane" id={'emailIdType'+key} key={key}>
                 <div className="form-group">
                   {/*<Moolyaselect multiSelect={false} ref={'emailIdType'+key}*/}
@@ -72,10 +78,10 @@ export default class AppEmailDetails extends React.Component {
                                 {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}*/}
                                 {/*queryOptions={emailTypeOption}*/}
                                 {/*isDynamic={true}/>*/}
-                  <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue="Email Type" />
+                  <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue={options.emailIdType}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref={'emailId'+key} placeholder="Enter URL" valueKey={options.emailId} className="form-control float-label" defaultValue={options.emailId}/>
+                  <input type="text" ref={'emailId'+key} placeholder="Enter URL" defaultValue={options.emailId} className="form-control float-label"/>
                 </div>
                 <div className="ml_icon_btn">
                   <a href="#" className="save_btn">

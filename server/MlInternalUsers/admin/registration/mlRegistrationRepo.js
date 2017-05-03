@@ -79,11 +79,11 @@ class MlRegistrationRepo{
     var  regDetails= mlDBController.findOne('MlRegistration',regId, context) || {};
     var updatedCount=0;
     if(regDetails){
-      orderNumberGenService.generateProfileId(regDetails)
+     // orderNumberGenService.generateProfileId(regDetails)
       var info = {
         clusterId          : regDetails.clusterId,
         registrationId     : regDetails.registrationId,
-        profileId          : regDetails.profileId,
+        profileId          : regDetails.registrationId,
         socialLinksInfo    : regDetails.socialLinksInfo,
         addressInfo        : regDetails.addressInfo,
         emailInfo          : regDetails.emailInfo,

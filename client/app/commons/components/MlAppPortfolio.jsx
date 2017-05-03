@@ -140,7 +140,7 @@ class MlAppPortfolio extends React.Component{
   }
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+    FlowRouter.go("/app/portfolio");
   };
 
   render(){

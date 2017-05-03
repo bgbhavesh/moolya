@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
-import {client} from '../../core/appConnection';
+import {appClient} from '../../core/appConnection';
 
 export async function updateContactNumber(details) {
 
-  const result = await client.mutate({
+  const result = await appClient.mutate({
     mutation: gql`
           mutation($contactDetails: String){
               updateContactNumber(contactDetails:$contactDetails){

@@ -10,6 +10,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 import {updateContactNumber} from '../actions/updateAddressBookInfo'
+import _ from "lodash";
 
 export default class AppContactDetails extends React.Component {
   constructor(props) {
@@ -27,15 +28,18 @@ export default class AppContactDetails extends React.Component {
     this.setState({activeTab:""})
   }
   onSave(idx, e){
-    alert(1);
-    this.updatePortfolioDetails()
+    let details = this.state.details
+    details = _.cloneDeep(details)
+    editedObj = details[idx];
+    editedObj['numberType'] = this.refs['numberType'+idx].value;
+    editedObj['countryCode'] = this.refs['countryCode'+idx].value;
+    editedObj['contactNumber'] = this.refs['contactNumber'+idx].value;
+    this.updatePortfolioDetails(editedObj)
   }
 
-  async updatePortfolioDetails() {
-    let jsonData={
+  async updatePortfolioDetails(contactObj) {
 
-    }
-    const response = await updateContactNumber(jsonData)
+    const response = await updateContactNumber(contactObj)
     return response;
   }
 
@@ -103,7 +107,7 @@ export default class AppContactDetails extends React.Component {
                                 {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}*/}
                                 {/*queryOptions={numberTypeOption}*/}
                                 {/*isDynamic={true}/>*/}
-                  <input type="text" ref={'name'} placeholder="Name" className="form-control float-label"
+                  <input type="text" ref={'numberType'+key} placeholder="Name" className="form-control float-label"
                          defaultValue="selectedNumberTypeValue"/>
                 </div>
                 <div className="form-group">

@@ -122,7 +122,8 @@ appSection.route('/portfolio/addIdea', {
 appSection.route('/ideator/:id/', {
   name: 'ideator_portfolio_view',
   action(params){
-    mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:false})
+    // mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }
 });

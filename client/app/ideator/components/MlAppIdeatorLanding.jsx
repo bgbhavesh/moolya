@@ -14,7 +14,7 @@ export default class MlAppIdeatorLanding extends React.Component {
   componentWillMount(){
     let ideators = [
       {
-        _id:"bjnaksdhkjahskdhb",
+        _id:"pJzb7tDXnmtjEpL66",  //dynamic portfolio id should be passed
         name:"Kranthi Kumar",
         membership:"Starter",
         Idea:"Penny Tracker Health Oriented",

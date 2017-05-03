@@ -6,7 +6,7 @@ import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeat
 import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
 import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
 import MlAppIdeatorEditTabs from '../../../../app/ideator/components/MlAppIdeatorEditTabs'
-import MlAppIdeatorTabs from '../../../../app/ideator/components/MlAppIdeatorEditTabs'
+import MlAppIdeatorTabs from '../../../../app/ideator/components/MlAppIdeatorTabs'
 
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={

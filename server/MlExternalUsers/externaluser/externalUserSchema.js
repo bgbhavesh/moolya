@@ -52,6 +52,7 @@ let externalUser = `
       numberTypeName    : String
       countryCode       : String
       contactNumber     : String
+      index     : String
         
     }
     
@@ -59,6 +60,7 @@ let externalUser = `
       emailIdType        : String
       emailIdTypeName        : String
       emailId           : String
+      index     : String
      }
      
      type AddressInfoSchema{
@@ -74,6 +76,7 @@ let externalUser = `
         addressState        :  String
         addressCountry      : String
         addressPinCode      : String
+        index     : String
      }
      
      type SocialLinkInfoSchema{
@@ -103,6 +106,7 @@ let externalUser = `
       numberTypeName    : String
       countryCode       : String
       contactNumber     : String
+      index     : String
     }
     
     type Mutation{

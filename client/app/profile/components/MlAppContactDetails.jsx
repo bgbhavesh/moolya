@@ -9,6 +9,8 @@ var FontAwesome = require('react-fontawesome');
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import {updateContactNumber} from '../actions/updateAddressBookInfo'
+
 export default class AppContactDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -23,6 +25,18 @@ export default class AppContactDetails extends React.Component {
 
   onSelectAddress(idx, e) {
     this.setState({activeTab:""})
+  }
+  onSave(idx, e){
+    alert(1);
+    this.updatePortfolioDetails()
+  }
+
+  async updatePortfolioDetails() {
+    let jsonData={
+
+    }
+    const response = await updateContactNumber(jsonData)
+    return response;
   }
 
   render() {
@@ -102,7 +116,7 @@ export default class AppContactDetails extends React.Component {
                          valueKey={options.contactNumber} id="phoneNumber" defaultValue={options.contactNumber}
                          className="form-control float-label"/>
                 </div>
-                <div className="ml_icon_btn">
+                <div className="ml_icon_btn" onClick={that.onSave.bind(that, key)}>
                   <a href="#" className="save_btn">
                     <span className="ml ml-save"></span></a>
                   <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>

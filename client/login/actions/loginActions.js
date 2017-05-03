@@ -5,7 +5,7 @@ import MoolyaloginContainer from '../containers/loginContainer'
 export let loginActionHandler = {
     onLoginFormSubmit(details,callback){
         let logincontainer=MoolyaloginContainer.loginContainer
-        logincontainer.login(details.username, details.password, function (result) {
+        logincontainer.login("platformadmin@moolya.com","MoolyaAdmin@123", function (result) {
             if(result && result.error){
                 console.log(result.reason)
                 callback(result.reason)

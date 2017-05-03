@@ -129,14 +129,14 @@ class MlEditBackendUser extends React.Component{
   }
 
   async getGender() {
-    if(this.state.genderSelect === "Male"){
-      this.setState({genderStateMale: true, genderStateFemale: false, genderStateOthers:false})
+    if(this.state.genderSelect === "Others"){
+      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers:true})
     }
     else if(this.state.genderSelect === "Female"){
       this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
     }
     else{
-      this.setState({genderStateOthers: true, genderStateFemale: false, genderStateMale: false})
+      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: true})
     }
   }
 

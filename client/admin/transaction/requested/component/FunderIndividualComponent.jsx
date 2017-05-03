@@ -182,26 +182,37 @@ export default class Individual extends React.Component{
   }
 
   render(){
-    let MlActionConfig = [
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: this.updateRegistration.bind(this)
-      },
-      // {
-      //   actionName: 'comment',
-      //   showAction: true,
-      //   handler: null
-      // },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/transactions/requestedList")
+    let MlActionConfig
+    let userType=this.props.userType;
+    if(userType=='external'){
+      MlActionConfig=[
+        {
+          showAction: true,
+          actionName: 'save',
+          handler:  this.updateRegistration.bind(this),
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: null
+        },
+      ]
+    }else {
+      MlActionConfig = [
+        {
+          actionName: 'save',
+          showAction: true,
+          handler: this.updateRegistration.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: async(event) => {
+            FlowRouter.go("/admin/transactions/requestedList")
+          }
         }
-      }
-    ]
-
+      ]
+    }
     let subsidary = [
       {value: 'Yes', label: 'Yes'},
       {value: 'No', label: 'No'}

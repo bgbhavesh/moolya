@@ -19,6 +19,7 @@ export default class AppContactDetails extends React.Component {
     return this;
   }
   render(){
+    let details=this.props.contactInfoDetails
     let that=this;
     let numberTypeQuery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {

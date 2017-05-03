@@ -19,6 +19,7 @@ export default class AppAddressDetails extends React.Component {
     return this;
   }
   render(){
+    let details=this.props.addressInfoDetails
     let that=this;
     let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {

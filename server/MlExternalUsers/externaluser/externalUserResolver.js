@@ -65,7 +65,7 @@ MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
   if(user){
     var registrationId;
     var clusterId;
-    const userProfile = user.profile.isExternaluser?user.profile.externalUserProfile:[]
+    const userProfile = user.profile.isExternaluser?user.profile.externalUserProfiles:[]
 
     for(var i = 0; i < userProfile.length; i++){
       if(userProfile[i].isDefault == true){

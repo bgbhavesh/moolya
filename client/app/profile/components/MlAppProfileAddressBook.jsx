@@ -19,7 +19,7 @@ export default class MlAppProfileAddressBook extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false
+      loading: true
     }
     this.findAddressBook.bind(this);
     return this;
@@ -33,7 +33,7 @@ export default class MlAppProfileAddressBook extends React.Component {
   async findAddressBook(){
     const response = await findAddressBookActionHandler();
     if(response){
-      this.setState({loading:false,emailInfo:response.emailInfo, addressInfo:response.addressInfo, contactInfo:response.contactInfo});
+      this.setState({emailInfo:response.emailInfo, addressInfo:response.addressInfo, contactInfo:response.contactInfo, loading:false,});
     }else {
       this.setState({loading:false})
     }
@@ -45,8 +45,10 @@ export default class MlAppProfileAddressBook extends React.Component {
   }
 
   render() {
+    const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="admin_padding_wrap">
           <h2>Address Book</h2>
           <div className="main_wrap_scroll">
@@ -63,13 +65,13 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Contact Number
                       </div>
-                      <AppContactDetails />
+                      <AppContactDetails contactInfoDetails={this.state.contactInfo}/>
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Email ID
                       </div>
-                      <AppEmailDetails />
+                      <AppEmailDetails emailInfoDetails={this.state.emailInfo}/>
                     </div>
                   </form>
                 </div>
@@ -79,14 +81,14 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Address
                       </div>
-                      <AppAddressDetails />
+                      <AppAddressDetails addressInfoDetails={this.state.addressInfo}/>
                     </div>
                   </form>
                 </div>
               </div>
             </ScrollArea>
           </div>
-        </div>
+        </div>)}
       </div>
     )
   }

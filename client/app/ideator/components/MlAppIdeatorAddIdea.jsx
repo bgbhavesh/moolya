@@ -55,7 +55,7 @@ class MlAppIdeatorAddIdea extends React.Component{
           {
               actionName: 'save',
               showAction: true,
-              handler: async(event) => this.props.handler(this.createIdea.bind(this))
+              handler: async(event) => this.props.handler(this.createIdea.bind(this), this.handleSuccess.bind(this))
           },
           {
               showAction: true,

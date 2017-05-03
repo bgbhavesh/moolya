@@ -41,24 +41,10 @@ export default class MlAppIdeatorIdeas extends React.Component{
   componentWillMount()
   {
       this.fetchIdeas();
-      let userIdeas = [
-          {
-            title:"Penny Tracker",
-            description:"A platform to connect retailers and customers and help the make all their billing needs electronic and automated.",
-            imageUrl:"/images/idea_5.jpg"
-          },
-          {
-            title:"Healthy Nutrients, Food and Drinks",
-            description:"The basic idea is to make healthy nutrients, food, drinks etc available pre - post workout/ daily exercise/yoga or meditation, for health conscious people with the help of a mobile application. Basically we need to develop a mobile app say Hulk's Chef. Practicles: The client would login into the app and choose his requirement and say i need this juice continuously for a month everyday at this time at this place in the app; we would make it available for them. So basically for eg we will have our menu card in the app with options like pre workout, post workout, yoga special, diabetes special jogging special, meditation, martial arts, special menu for people workout at beaches and national park (basically open air workout). We shall have a kitchen a central hub where in we will be preparing things and deliver it to the clients.",
-            imageUrl:"/images/idea_2.jpg"
-          },
-          {
-            title:"expertmile.com",
-            description:"Expertmile.com is an online platform for CAs, Lawyers and other professional service people who can post their listings on the website and can get connected to the clients directly. Clients get an easy approach of talking to the reputed CA according to their specializations.",
-            imageUrl:"/images/idea_6.jpg"
-          }
-      ]
-      // this.setState({userIdeas:userIdeas})
+  }
+
+  AddIdea(e){
+    FlowRouter.go("/app/portfolio/addIdea")
   }
 
   async fetchIdeas(){
@@ -67,8 +53,11 @@ export default class MlAppIdeatorIdeas extends React.Component{
           this.setState({loading: false, userIdeas: response});
       }
   }
-
+  viewIdea(userId,e){
+    FlowRouter.go("/app/portfolio/view/"+userId);
+  }
   render(){
+    let that=this
       return (
           <div className="app_main_wrap">
               <h2>Ideas</h2>
@@ -112,10 +101,8 @@ export default class MlAppIdeatorIdeas extends React.Component{
                                       <div className="panel-heading">{idea.title}</div>
                                       <div className="panel-body">
                                           <p>{idea.description}</p>
-                                          <a href="/app/portfolio/view" className="mlUpload_btn pull-left">View</a>
-                                          <a href="#" className="mlUpload_btn pull-left" >Make Public</a>
-                                          <a href="#" className="mlUpload_btn pull-left" >Make Private</a>
-                                          <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
+                                          <a className="mlUpload_btn pull-left" onClick={that.viewIdea.bind(that, idea.userId)}>View</a>
+                                          <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left" onClick={that.AddIdea.bind(that)}>Add New Idea</a>
                                       </div>
                                   </div>
                               )

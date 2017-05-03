@@ -5,7 +5,7 @@ import ScrollArea from 'react-scrollbar';
 import annotator from '../../../../../../lib/collections/admin/portfolio/common/mlAnnotator'
 // import annotatormarginalia from '../../../common/lib/annotator/annotator.marginalia'
 // import annotatorImageSelect from '../../../common/lib/annotator/jquery.imgareaselect.min'
-
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -14,6 +14,21 @@ var Select = require('react-select');
 // var aaa = annotatormarginalia;
 
 export default class MlIdeatorLibrary extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      modal: false
+    };
+
+    this.toggle = this.toggle.bind(this);
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+
+    });
+  }
   componentDidMount()
   {
     $(function() {
@@ -69,49 +84,177 @@ export default class MlIdeatorLibrary extends React.Component{
   }
   render(){
     return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <div className="row requested_input">
-                <div className="in-page-controls"></div>
-                <div className="col-lg-12">
-                  <article className="content">
-                    <section className="inner">
-                      <p>"My God!" he said, as I drew him in.</p>
+      <div>
+        <h2>Library</h2>
 
-                      <p>"What has happened?" I asked.</p>
-                      <p>"What hasn't?"  In the obscurity I could see he made a gesture of despair.  "They wiped us out--simply wiped us out," he repeated again and again.</p>
+        {/* <Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>*/}
+        <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
+          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalBody>
+            <img src="/images/video_1.jpg"/>
+          </ModalBody>
 
-                      <p>He followed me, almost mechanically, into the dining room.</p>
+        </Modal>
 
-                      <p>"Take some whiskey," I said, pouring out a stiff dose.</p>
 
-                      <p>He drank it.  Then abruptly he sat down before the table, put his head on his arms, and began to sob and weep like a little boy, in a perfect passion of emotion, while I, with a curious forgetfulness of my own recent despair, stood beside him, wondering.</p>
-
-                      <p>It was a long time before he could steady his nerves to answer my questions, and then he answered perplexingly and brokenly.  He was a driver in the artillery, and had only come into action about seven.  At that time firing was going on across the common, and it was said the first party of Martians were crawling slowly towards their second cylinder under cover of a metal shield.</p>
-
-                      <p>Later this shield staggered up on tripod legs and became the first of the fighting-machines I had seen.  The gun he drove had been unlimbered near Horsell, in order to command the sand pits, and its arrival it was that had precipitated the action.  As the limber gunners went to the rear, his horse trod in a rabbit hole and came down, throwing him into a depression of the ground.  At the same moment the gun exploded behind him, the ammunition blew up, there was fire all about him, and he found himself lying under a heap of charred dead men and dead horses.</p>
-
-                      <p>"I lay still," he said, "scared out of my wits, with the fore quarter of a horse atop of me.  We'd been wiped out.  And the smell--good God!  Like burnt meat!  I was hurt across the back by the fall of the horse, and there I had to lie until I felt better.  Just like parade it had been a minute before--then stumble, bang, swish!"</p>
-                    </section>
-                  </article>
-                </div>
+        <div className="modal fade bs-example-modal-sm library-popup imagepop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               </div>
-            </ScrollArea>
+              <div className="modal-body">
+                <div className="img_scroll"><img src="/images/zomato-img-1.jpg"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="modal fade bs-example-modal-sm library-popup pdfpop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div className="modal-body">
+                <div className="img_scroll"><img src="/images/zomato-bs.png"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="modal fade bs-example-modal-sm library-popup videopop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div className="modal-body">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/TD3tYOcGlfM?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              Documents <span className="see-more pull-right"><a href="">See More</a></span>
+            </div>
+            <div className="panel-body">
+              {/*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
+              <div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/doc.png"/><div className="title">Document</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/pdf.png"/><div className="title">Document</div></div>
+            </div>
           </div>
 
+
+        </div>
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              Images <span className="see-more pull-right"><a href="">See More</a></span>
+            </div>
+            <div className="panel-body">
+              <div className="thumbnail"><FontAwesome name='unlock'/><a href="#" data-toggle="modal" data-target=".imagepop"><img src="/images/img_1.jpg"/></a><div className="title">Image</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/img_2.jpg"/><div className="title">Image</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/img_3.jpg"/><div className="title">Image</div></div>
+
+            </div>
+          </div>
+
+
+        </div>
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              Video's <span className="see-more pull-right"><a href="">See More</a></span>
+            </div>
+            <div className="panel-body">
+              <div className="thumbnail"><FontAwesome name='unlock'/><a href="#" data-toggle="modal" data-target=".videopop"><img src="/images/video_1.jpg"/></a><div className="title">Video</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><a href="#"><img src="/images/video_2.jpg"/></a><div className="title">Video</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/video_3.jpg"/><div className="title">Video</div></div>
+            </div>
+          </div>
+
+
+        </div>
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              Templates <span className="see-more pull-right"><a href="">See More</a></span>
+            </div>
+            <div className="panel-body">
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/template_1.jpg"/><div className="title">Template</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/template_2.jpg"/><div className="title">Template</div></div>
+              <div className="thumbnail"><FontAwesome name='lock'/><img src="/images/template_3.jpg"/><div className="title">Template</div></div>
+            </div>
+          </div>
 
 
         </div>
 
 
+
+
+        {/*<h2>Documents</h2>
+         <div className="col-md-12 library-wrap-details">
+         <div className="row">
+         <div className="col-lg-2 col-md-3 col-sm-3">
+         <div className="list_block">
+         <div className="cluster_status"><FontAwesome name='lock'/></div>
+
+         <h3>Document</h3>
+         </div>
+         </div>
+         <div className="col-lg-2 col-md-3 col-sm-3">
+         <div className="list_block">
+         <div className="cluster_status"><FontAwesome name='lock'/></div>
+
+         <h3>Document</h3>
+         </div>
+         </div>
+         <div className="col-lg-2 col-md-3 col-sm-3">
+         <div className="list_block">
+         <div className="cluster_status"><FontAwesome name='lock'/></div>
+
+         <h3>Document</h3>
+         </div>
+         </div>
+         <div className="col-lg-2 col-md-3 col-sm-3">
+         <div className="list_block">
+         <div className="cluster_status"><FontAwesome name='lock'/></div>
+
+         <h3>Document</h3>
+         </div>
+         </div>
+         <div className="col-lg-2 col-md-3 col-sm-3">
+         <a href="/admin/editCluster">
+         <div className="list_block">
+         <div className="cluster_status"><FontAwesome name='lock'/></div>
+
+         <h3>Document</h3>
+         </div>
+         </a>
+         </div>
+         <div className="col-lg-2 col-md-3 col-sm-3">
+         <div className="list_block">
+         <div className="cluster_status"><FontAwesome name='lock'/></div>
+
+         <h3>Document</h3>
+         </div>
+
+         </div>
+
+         </div>
+         </div>*/}
       </div>
+
     )
   }
 };

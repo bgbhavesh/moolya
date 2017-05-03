@@ -262,43 +262,61 @@ export default class Step5 extends React.Component {
    }
 
   render(){
-    let MlActionConfig = [
-      {
-        actionName: 'documentApprove',
-        showAction: true,
-        handler: this.approvedDocuments.bind(this)
-      },
-      {
-        actionName: 'documentReject',
-        showAction: true,
-        handler: this.rejectedDocuments.bind(this)
-      },
-      {
-       actionName: 'download',
-       showAction: true,
-       handler: this.downloadDocuments.bind(this)
-       },
-      {
-        showAction: false,
-        actionName: 'save',
-        handler: null
-      },
-      {
-        showAction: false,
-        actionName: 'comment',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'approveUser',
-        handler:  this.approveUser.bind(this)
-      },
-      {
-        showAction: true,
-        actionName: 'rejectUser',
-        handler: this.rejectUser.bind(this)
-      }
-    ]
+    let MlActionConfig
+    let userType=this.props.userType;
+    if(userType=='external'){
+      MlActionConfig=[
+        {
+          showAction: true,
+          actionName: 'save',
+          handler: null
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: null
+        },
+      ]
+    }else{
+     MlActionConfig = [
+        {
+          actionName: 'documentApprove',
+          showAction: true,
+          handler: this.approvedDocuments.bind(this)
+        },
+        {
+          actionName: 'documentReject',
+          showAction: true,
+          handler: this.rejectedDocuments.bind(this)
+        },
+        {
+          actionName: 'download',
+          showAction: true,
+          handler: this.downloadDocuments.bind(this)
+        },
+        {
+          showAction: false,
+          actionName: 'save',
+          handler: null
+        },
+        {
+          showAction: false,
+          actionName: 'comment',
+          handler: null
+        },
+        {
+          showAction: true,
+          actionName: 'approveUser',
+          handler:  this.approveUser.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'rejectUser',
+          handler: this.rejectUser.bind(this)
+        }
+      ]
+    }
+
     let registrationDocuments=this.state.registrationDocuments||[];
     let registrationDocumentsGroup=_.groupBy(registrationDocuments,'docTypeName')||{};
     let that=this;

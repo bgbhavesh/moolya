@@ -12,7 +12,7 @@ import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
 import _ from "underscore";
 import update from 'immutability-helper';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
-
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 
 export default class Step4 extends React.Component{
   constructor(props) {
@@ -189,7 +189,22 @@ export default class Step4 extends React.Component{
   }
 
   render(){
-
+    let MlActionConfig
+    let userType=this.props.userType;
+    if(userType=='external'){
+      MlActionConfig=[
+        {
+          showAction: true,
+          actionName: 'save',
+          handler: null
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: null
+        },
+      ]
+    }
     let that=this;
     const showLoader=this.state.loading;
     let socialLinkTypeQuery=gql`query($type:String,$hierarchyRefId:String){
@@ -202,7 +217,7 @@ export default class Step4 extends React.Component{
     let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:this.props.clusterId}}};
     return (
       <div className="step_form_wrap step2">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <div className="loader_wrap"></div>):(<div>
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
 
@@ -287,7 +302,8 @@ export default class Step4 extends React.Component{
               </form>
             </div>
           </div>
-        </ScrollArea>)}
+        </ScrollArea>{this.props.userType=="external"&&(<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>)}
+        </div>)  }
       </div>
     )
   }

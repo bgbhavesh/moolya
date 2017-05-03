@@ -46,7 +46,52 @@ let externalUser = `
         isActive:Boolean,
         accountType:String
     }
-
+    
+    type ContactInfoSchema{
+      numberType        : String
+      numberTypeName    : String
+      countryCode       : String
+      contactNumber     : String
+        
+    }
+    
+     type EmailInfoSchema{
+      emailIdType        : String
+      emailIdTypeName        : String
+      emailId           : String
+     }
+     
+     type AddressInfoSchema{
+        addressType         : String
+        addressTypeName     : String
+        name                : String
+        phoneNumber         :  String
+        addressFlat         :  String
+        addressLocality     :  String
+        addressLandmark     :  String
+        addressArea         :  String
+        addressCity         :  String
+        addressState        :  String
+        addressCountry      : String
+        addressPinCode      : String
+     }
+     
+     type SocialLinkInfoSchema{
+        socialLinkTypeName    : String
+        socialLinkType        : String
+        socialLinkUrl         : String
+     }
+     
+    type externalUserAdditionalInfoSchema{
+       clusterId          : String
+       registrationId     : String
+       profileId          : String
+       addressInfo        : [AddressInfoSchema]
+       emailInfo          : [EmailInfoSchema]
+       contactInfo        : [ContactInfoSchema]
+       socialLinkInfo     : [SocialLinkInfoSchema]
+    }
+    
     input externalUserProfile{
         firstName:String,
         lastName:String,
@@ -56,7 +101,7 @@ let externalUser = `
 
     type Query{
         fetchIdeatorUsers:response
-        FindAddressBook:response
+        findAddressBook:externalUserAdditionalInfoSchema
     }
 `
 

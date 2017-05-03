@@ -57,7 +57,7 @@ MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
   return response;
 }
 
-MlResolver.MlQueryResolver['FindAddressBook'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
   // TODO : Authorization
   let userId=context.userId
   console.log(userId)
@@ -74,8 +74,14 @@ MlResolver.MlQueryResolver['FindAddressBook'] = (obj, args, context, info) => {
         break;
       }
     }
-    console.log(registrationId)
-    console.log(clusterId)
+    const addInfo = user.profile.externalUserAdditionalInfo?user.profile.externalUserAdditionalInfo:[]
+    var infoDetails;
+    _.each(addInfo,function (say,value) {
+      if(say.registrationId == registrationId && say.clusterId == clusterId){
+        infoDetails = say
+      }
+    })
+    return infoDetails;
   }else {
     let code = 409;
     let response = new MlRespPayload().errorPayload('Not a valid user', code);

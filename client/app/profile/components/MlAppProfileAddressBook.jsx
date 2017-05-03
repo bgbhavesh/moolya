@@ -2,41 +2,43 @@
  * Created by viswadeep on 2/5/17.
  */
 
-
 import React from "react";
 import {Meteor} from "meteor/meteor";
 import {render} from "react-dom";
-// import {getContactDetails} from "../actions/getAddressBookAction";
 import ScrollArea from "react-scrollbar";
-import ContactDetails from "./../../../../client/admin/profile/component/MlMyProfileContactDetails";
-import AddressDetails from "./../../../../client/admin/profile/component/mlRegistrationAddressDetails";
-import EmailDetails from "./../../../../client/admin/profile/component/mlRegistrationEmailDetails";
+// import ContactDetails from "./../../../../client/admin/profile/component/MlMyProfileContactDetails";
+// import AddressDetails from "./../../../../client/admin/profile/component/mlRegistrationAddressDetails";
+// import EmailDetails from "./../../../../client/admin/profile/component/mlRegistrationEmailDetails";
+
+import AppContactDetails from "./MlAppContactDetails";
+import AppAddressDetails from "./MlAppAddressDetails";
+import AppEmailDetails from "./MlAppEmailDetails";
+import {findAddressBookActionHandler} from '../actions/findAddressBookAction'
 
 export default class MlAppProfileAddressBook extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
-      selectedValue: null,
-      contactNumber: [{numberType: '', countryCode: '', contactNumber: ''}, {
-        numberType: 'Test',
-        countryCode: '',
-        contactNumber: ''
-      }],
-      registerId: " ",
-      registrationDetails: " ",
-      clusterId: 'opa3eg2mFPnTaK3mw'
-
+      loading: false
     }
-
+    this.findAddressBook.bind(this);
     return this;
   }
 
   componentWillMount() {
-
+    const resp=this.findAddressBook();
+    return resp;
   }
 
+  async findAddressBook(){
+    const response = await findAddressBookActionHandler();
+    if(response){
+      this.setState({loading:false,emailInfo:response.emailInfo, addressInfo:response.addressInfo, contactInfo:response.contactInfo});
+    }else {
+      this.setState({loading:false})
+    }
+
+  }
 
   componentDidMount() {
     var WinHeight = $(window).height();
@@ -62,16 +64,13 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Contact Number
                       </div>
-                      <ContactDetails registerId={this.state.registerId}
-                                      registrationInfo={this.state.registrationDetails}
-                                      clusterId={this.state.clusterId}/>
+                      <AppContactDetails />
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Email ID
                       </div>
-                      <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}
-                                    clusterId={this.state.clusterId}/>
+                      <AppEmailDetails />
                     </div>
                   </form>
                 </div>
@@ -81,9 +80,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Address
                       </div>
-                      <AddressDetails registerId={this.state.registerId}
-                                      registrationInfo={this.state.registrationDetails}
-                                      clusterId={this.state.clusterId}/>
+                      <AppAddressDetails />
                     </div>
                   </form>
                 </div>

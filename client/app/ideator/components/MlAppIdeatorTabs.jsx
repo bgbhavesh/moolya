@@ -14,7 +14,6 @@ import AppActionButtons from '../../commons/components/appActionButtons'
 import TopIconsList from '../../commons/components/topIconsList'
 
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'
-import AppIdeatorDeatils from './AppIdeatorDeatils'
 import AppIdeatorPnS from './AppIdeatorPnS'
 import AppIdeatorAudience from './AppIdeatorAudience'
 import AppIdeatorLibrary from './AppIdeatorLibrary'
@@ -83,7 +82,7 @@ getTabComponents(){
     // {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="6"  portfolioDetailsId={this.state.ideatorId}/>},
 
     // {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas" , component:<AppIdeatorIdeas key="0"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<AppIdeatorDeatils key="1"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.state.ideatorId}/>},    //this.props.portfolioDetailsId}
     {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<AppIdeatorPnS key="2"  portfolioDetailsId={this.state.ideatorId}/>},   //id will be dyanmic
     {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<AppIdeatorAudience key="3"  portfolioDetailsId={this.state.ideatorId} />},                            //id will be dyanmic
     {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<AppIdeatorLibrary key="4"  portfolioDetailsId={this.state.ideatorId} />},

@@ -9,6 +9,9 @@ var FontAwesome = require('react-fontawesome');
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import {updateContactNumber} from '../actions/updateAddressBookInfo'
+import _ from "lodash";
+
 export default class AppContactDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -23,6 +26,21 @@ export default class AppContactDetails extends React.Component {
 
   onSelectAddress(idx, e) {
     this.setState({activeTab:""})
+  }
+  onSave(idx, e){
+    let details = this.state.details
+    details = _.cloneDeep(details)
+    editedObj = details[idx];
+    editedObj['numberType'] = this.refs['numberType'+idx].value;
+    editedObj['countryCode'] = this.refs['countryCode'+idx].value;
+    editedObj['contactNumber'] = this.refs['contactNumber'+idx].value;
+    this.updatePortfolioDetails(editedObj)
+  }
+
+  async updatePortfolioDetails(contactObj) {
+
+    const response = await updateContactNumber(contactObj)
+    return response;
   }
 
   render() {
@@ -89,7 +107,7 @@ export default class AppContactDetails extends React.Component {
                                 {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}*/}
                                 {/*queryOptions={numberTypeOption}*/}
                                 {/*isDynamic={true}/>*/}
-                  <input type="text" ref={'name'} placeholder="Name" className="form-control float-label"
+                  <input type="text" ref={'numberType'+key} placeholder="Name" className="form-control float-label"
                          defaultValue="selectedNumberTypeValue"/>
                 </div>
                 <div className="form-group">
@@ -102,7 +120,7 @@ export default class AppContactDetails extends React.Component {
                          valueKey={options.contactNumber} id="phoneNumber" defaultValue={options.contactNumber}
                          className="form-control float-label"/>
                 </div>
-                <div className="ml_icon_btn">
+                <div className="ml_icon_btn" onClick={that.onSave.bind(that, key)}>
                   <a href="#" className="save_btn">
                     <span className="ml ml-save"></span></a>
                   <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>

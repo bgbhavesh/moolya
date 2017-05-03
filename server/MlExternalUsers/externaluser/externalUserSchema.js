@@ -18,7 +18,7 @@ let externalUser = `
         cluster:String,
         chapter:String,
         community:String,
-        externalUserProfile:externalUserProfile
+        externalUserProfiles:externalUserProfile
     }
 
     input userPortfolios{
@@ -98,7 +98,17 @@ let externalUser = `
         middleName:String,
         userProfiles:[userProfiles]
     }
-
+    input contactObj {
+      numberType        : String
+      numberTypeName    : String
+      countryCode       : String
+      contactNumber     : String
+    }
+    
+    type Mutation{
+      updateContactNumber(contactDetails:contactObj):response
+    }
+    
     type Query{
         fetchIdeatorUsers:response
         findAddressBook:externalUserAdditionalInfoSchema

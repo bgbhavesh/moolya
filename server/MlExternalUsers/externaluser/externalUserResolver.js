@@ -18,7 +18,7 @@ MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
                 cluster:"",
                 chapter:"",
                 community:"",
-                externalUserProfile:{
+                externalUserProfiles:{
                     firstName:"",
                     lastName:"",
                     userProfiles:[
@@ -87,4 +87,9 @@ MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload('Not a valid user', code);
     return response;
   }
+}
+
+
+MlResolver.MlMutationResolver['updateContactNumber'] = (obj, args, context, info) => {
+
 }

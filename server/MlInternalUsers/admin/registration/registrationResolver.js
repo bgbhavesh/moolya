@@ -96,7 +96,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
   if(userId){
  user = mlDBController.findOne('users', {_id:userId}, context);
     if(user){
-      let id=user.profile.externalUserProfile[0].registrationId
+      let id=user.profile.externalUserProfiles[0].registrationId
       if(id){
         let response= MlRegistration.findOne({"_id":id});
         return response;
@@ -197,7 +197,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           firstName  :details.firstName,
           lastName   : details.lastName,
           displayName :details.firstName+' '+ details.lastName,
-          externalUserProfile: [userProfile]
+          externalUserProfiles: [userProfile]
         }
         let userObject = {
           username: details.email,

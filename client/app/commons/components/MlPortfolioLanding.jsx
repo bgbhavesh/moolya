@@ -15,7 +15,7 @@ export default class MlPortfolioLanding extends Component {
   render(){
       let user = Meteor.user();
       let userCommunity =  ""
-      _.each(user.profile.externalUserProfile, function (profile) {
+      _.each(user.profile.externalUserProfiles, function (profile) {
           if(profile.isDefault){
               userCommunity = profile.communityDefName
           }

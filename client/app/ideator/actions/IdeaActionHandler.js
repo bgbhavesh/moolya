@@ -46,3 +46,21 @@ export async function fetchIdeaActionHandler() {
     const ideas = result.data.fetchIdeas;
     return ideas
 }
+export async function fetchIdeators() {
+  const result = await appClient.query({
+    query: gql`
+            query{
+                fetchIdeators {
+                    portfolioId
+                    ideaTitle
+                    chapterName
+                    userId
+                    name
+                }
+            }
+        `,
+    forceFetch:true
+  })
+  const ideas = result.data.fetchIdeators;
+  return ideas
+}

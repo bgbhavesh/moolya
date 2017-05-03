@@ -5,8 +5,8 @@ export async function updateContactNumber(details) {
 
   const result = await appClient.mutate({
     mutation: gql`
-          mutation($contactDetails: String){
-              updateContactNumber(contactDetails:$contactDetails){
+          mutation($contactObj: String){
+              updateContactNumber(contactDetails:$contactObj){
                   success,
                   code,
                   result

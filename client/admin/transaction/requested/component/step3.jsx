@@ -12,7 +12,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import  ContactDetails from './contactDetails';
 import AddressDetails from '../component/mlRegistrationAddressDetails'
 import EmailDetails from '../component/mlRegistrationEmailDetails'
-
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 export default class Step3 extends React.Component{
 
   constructor(props){
@@ -52,6 +52,22 @@ export default class Step3 extends React.Component{
   }
 
   render(){
+    let MlActionConfig
+    let userType=this.props.userType;
+    if(userType=='external'){
+      MlActionConfig=[
+        {
+          showAction: true,
+          actionName: 'save',
+          handler: null
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: null
+        },
+      ]
+    }
     return (
       <div className="step_form_wrap step3">
 
@@ -100,11 +116,12 @@ export default class Step3 extends React.Component{
                 </div>
               </form>
               </ScrollArea>
+
             </div>
 
           </div>
 
-
+        {this.props.userType=="external"&&(<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>)}
 
       </div>
     )

@@ -83,9 +83,9 @@ export default class Pagination extends Component {
     let pagesMax = parseInt(pages)+1
     let pagesMin = 1;
 
-    if(value&&value>=pagesMax){
+    if(curPage>=pagesMax){
       curPage=pagesMax;
-    }if(value&&value<=pagesMin){
+    }else if(curPage<=pagesMin){
       curPage=pagesMin;
     }
 
@@ -152,7 +152,7 @@ export default class Pagination extends Component {
             </label>
             <a className="pagePrev pageSkip" name="prePage" onClick={that.pageSkip.bind(that)}>Previous Page</a>
             <input id="pageInput" className="pageInput" type="text" value={currentPage} maxLength="5" placeholder="#" ref="pageInput" onChange={that.onSlideChange.bind(that)}/>
-            <a className="pageNext pageSkip" name="nextPage" onClick={that.goToPage.bind(that)}>Next Page</a>
+            <a className="pageNext pageSkip" name="nextPage" onClick={that.pageSkip.bind(that)}>Next Page</a>
             <button className="pageButton" title="Go to chosen page" onClick={that.goToPage.bind(that)}>
               <FontAwesome name='hand-pointer-o'/>
             </button>

@@ -17,24 +17,24 @@ MlLoginContent = React.createClass({
   },
 
   loginSubmit(){
-   // let errMessages = {"userName": "A valid username is required", "Password": "A Password is required"};
-   // this.validationMessage = mlValidations.formValidations([this.refs.username, this.refs.password], errMessages);
-   // if (!this.validationMessage) {
+    let errMessages = {"userName": "A valid username is required", "Password": "A Password is required"};
+    this.validationMessage = mlValidations.formValidations([this.refs.username, this.refs.password], errMessages);
+    if (!this.validationMessage) {
       this.props.formSubmit({
         username: this.refs.username.value,
         password: this.refs.password.value
       }, function (result) {
         toastr.error(result);
       })
-   // }
-    /*else {
+    }
+    else {
       if (this.validationMessage.userName == true)
         toastr.error(this.validationMessage.errMsg);
         // this.setState(Object.assign({userNameErr: this.validationMessage.errMsg}))
       else if (this.validationMessage.Password == true)
         toastr.error(this.validationMessage.errMsg);
         // this.setState(Object.assign({passwordErr: this.validationMessage.errMsg}))
-    }*/
+    }
   },
 
   onValueChange(event){

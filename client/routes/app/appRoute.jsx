@@ -98,10 +98,10 @@ appSection.route('/ideator', {
       mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
   }
 });
-appSection.route('/portfolio/view', {
+appSection.route('/portfolio/view/:id/', {
   name: 'portfolio',
-  action(){
-    mount(AppLayout,{appContent:< MlAppIdeatorTabs/>, isProfileMenu:true})
+  action(params){
+    mount(AppLayout,{appContent:< MlAppIdeatorTabs viewMode={true} config={params.id}/>, isProfileMenu:true})
   }
 });
 appSection.route('/portfolio/addIdea', {

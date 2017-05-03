@@ -61,6 +61,10 @@ export default class MlAppIdeatorIdeas extends React.Component{
       // this.setState({userIdeas:userIdeas})
   }
 
+  AddIdea(e){
+    FlowRouter.go("/app/portfolio/addIdea")
+  }
+
   async fetchIdeas(){
       const response = await fetchIdeaActionHandler();
       if(response){
@@ -69,6 +73,7 @@ export default class MlAppIdeatorIdeas extends React.Component{
   }
 
   render(){
+    let that=this
       return (
           <div className="app_main_wrap">
               <h2>Ideas</h2>
@@ -113,9 +118,9 @@ export default class MlAppIdeatorIdeas extends React.Component{
                                       <div className="panel-body">
                                           <p>{idea.description}</p>
                                           <a href="/app/portfolio/view" className="mlUpload_btn pull-left">View</a>
-                                          <a href="#" className="mlUpload_btn pull-left" >Make Public</a>
-                                          <a href="#" className="mlUpload_btn pull-left" >Make Private</a>
-                                          <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left">Add New Idea</a>
+                                          {/*<a href="#" className="mlUpload_btn pull-left" >Make Public</a>*/}
+                                          {/*<a href="#" className="mlUpload_btn pull-left" >Make Private</a>*/}
+                                          <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left" onClick={that.AddIdea.bind(that)}>Add New Idea</a>
                                       </div>
                                   </div>
                               )

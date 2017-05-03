@@ -37,7 +37,6 @@ export default class MlAppProfileAddressBook extends React.Component {
     }else {
       this.setState({loading:false})
     }
-
   }
 
   componentDidMount() {

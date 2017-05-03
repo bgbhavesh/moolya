@@ -18,6 +18,7 @@ export default class AppEmailDetails extends React.Component {
     return this;
   }
   render(){
+    let details=this.props.emailInfoDetails
     let that=this;
     let emailTypeQuery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {

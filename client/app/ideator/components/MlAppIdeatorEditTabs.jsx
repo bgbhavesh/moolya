@@ -60,46 +60,37 @@ getChildContext(){
     this.setState({ideatorPortfolio : data})
     // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
     // this.setState({ideatorDetails:details})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getProblemSolution(details) {
     let data = this.state.ideatorPortfolio;
     data['problemSolution']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getStrategyAndPlanning(details) {
     let data = this.state.ideatorPortfolio;
     data['strategyAndPlanning']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getIntellectualPlanning(details) {
     let data = this.state.ideatorPortfolio;
     data['intellectualPlanning']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getAudience(details) {
     let data = this.state.ideatorPortfolio;
     data['audience']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getLookingFor(details) {
     let data = this.state.ideatorPortfolio;
     data['lookingFor']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
-  }
-
-  async updatePortfolioDetails() {
-    let jsonData={
-      portfolioId :this.props.config,
-      portfolio :this.state.ideatorPortfolio
-    }
-    const response = await updatePortfolioActionHandler(jsonData)
-    return response;
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
 
   componentWillMount()

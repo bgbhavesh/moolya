@@ -312,6 +312,7 @@ if(!systemAdminUser){
 
 Accounts.validateLoginAttempt(function (user)
 {
+  console.log("yippe login has worked");
 
     let isValid=false;
 

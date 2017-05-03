@@ -82,7 +82,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     next();
   });*/
 
-  graphQLServer.options(config.path, cors());
+  graphQLServer.use(cors());
 
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {

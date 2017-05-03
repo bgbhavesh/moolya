@@ -20,7 +20,7 @@ import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
 import MlAppIdeatorAddIdea from '../../app/ideator/components/MlAppIdeatorAddIdea'
-
+import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
 
 //profile
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
@@ -101,13 +101,13 @@ appSection.route('/ideator', {
 appSection.route('/portfolio/view/:id/', {
   name: 'portfolio',
   action(params){
-    mount(AppLayout,{appContent:< MlAppIdeatorTabs viewMode={true} config={params.id}/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:true})
   }
 });
 appSection.route('/portfolio/edit/:id/', {
   name: 'portfolio',
   action(params){
-    mount(AppLayout,{appContent:< MlAppIdeatorEditTabs viewMode={true} config={params.id}/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={false} config={params.id}/>, isProfileMenu:true})
   }
 });
 appSection.route('/portfolio/addIdea', {
@@ -122,7 +122,8 @@ appSection.route('/portfolio/addIdea', {
 appSection.route('/ideator/:id/', {
   name: 'ideator_portfolio_view',
   action(params){
-    mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:false})
+    // mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }
 });

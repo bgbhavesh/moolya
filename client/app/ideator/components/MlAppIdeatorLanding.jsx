@@ -1,6 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
 import ideatorListRoutes from '../actions/ideatorListRoutes';
+import {fetchIdeators} from '../actions/IdeaActionHandler'
 
 export default class MlAppIdeatorLanding extends React.Component {
   constructor(props){
@@ -8,41 +9,19 @@ export default class MlAppIdeatorLanding extends React.Component {
     this.state={
       ideators:[],
     }
+    this.fetchIdeators.bind(this)
   }
   componentDidMount() {
   }
   componentWillMount(){
-    let ideators = [
-      {
-        _id:"bjnaksdhkjahskdhb",
-        name:"Kranthi Kumar",
-        membership:"Starter",
-        Idea:"Penny Tracker Health Oriented",
-        City:"Mumbai"
-      },
-      {
-        _id:"ytmkjkjU8989guhuhuh",
-        name:"Shikha Maheswar",
-        membership:"Starter",
-        Idea:"M-Aid Reducing Pollution in the City",
-        City:"Delhi"
-      },
-      {
-        _id:"mmkmllklkmlmlmjkl",
-        name:"Kranthi Kumar",
-        membership:"Premium",
-        Idea:"Penny Tracker Health Oriented",
-        City:"Mumbai"
-      },
-      {
-        _id:"asasasawwasw2323ww",
-        name:"Shikha Maheswar",
-        membership:"Starter",
-        Idea:"M-Aid Reducing Pollution in the City",
-        City:"Delhi"
-      },
-    ]
-    this.setState({ideators:ideators})
+    this.fetchIdeators()
+  }
+
+  async fetchIdeators() {
+    const response = await fetchIdeators();
+    if(response){
+      this.setState({loading:false, ideators:response})
+    }
   }
 
   render() {
@@ -54,14 +33,16 @@ export default class MlAppIdeatorLanding extends React.Component {
               {this.state.ideators.map(function (ideator, idx) {
                   return (
                     <div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx}>
-                      <a href={ideatorListRoutes.ideatorDetailsRoute(ideator._id, "ideator")}>
+                      <a href={ideatorListRoutes.ideatorDetailsRoute(ideator.portfolioId, "ideator")}>
                         <div className="ideators_list_block">
-                          <div className="premium"><span>{ideator.membership}</span></div>
+                          <div className="premium">
+                            {/*<span>{ideator.membership}</span>*/}
+                          </div>
                           <h3>{ideator.name}</h3>
                           <div className="list_icon"><span className="ml ml-ideator"></span></div>
-                          <p>{ideator.Idea}<br/>...</p>
+                          <p>{ideator.ideaTitle}<br/>...</p>
                           <div className="block_footer">
-                            <span>{ideator.City}</span>
+                            <span>{ideator.chapterName}</span>
                           </div>
                         </div>
                       </a>

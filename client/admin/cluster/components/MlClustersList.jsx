@@ -19,7 +19,7 @@ export default class MlClustersList extends Component {
 
     return (
     <div className="row">
-      <h2> Cluster </h2>
+      {/*<h2> Cluster </h2>*/}
           {list}
       </div>
     );

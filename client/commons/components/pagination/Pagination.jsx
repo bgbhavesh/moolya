@@ -28,7 +28,14 @@ export default class Pagination extends Component {
   };
 
   componentDidMount() {
-
+    /*$('.pagination').click(function () {
+      $(this).toggleClass('pagination_open');
+    });*/
+    $('.pagination').on('click', function(e) {
+      if (e.target !== this)
+        return;
+      $(this).toggleClass('pagination_open');
+    });
   }
 
   // componentWillUpdate(){
@@ -40,9 +47,10 @@ export default class Pagination extends Component {
 
   toggleOnClick(e) {
     console.log("toggle to close")
-     $('.pagination').click(function () {
+     /*$('.pagination').click(function () {
+       alert(1);
        $(this).toggleClass('pagination_open');
-     })
+     })*/
   }
 
   goToPage(event) {

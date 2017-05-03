@@ -18,7 +18,7 @@ export default class MlAdminProfileHeader extends Component {
   }
   async findProcess() {
     let documentsList=[]
-      let response = [{"tabName":"personalInfo","tabCode":"Personal Info"},{"tabName":"AddressBook","tabCode":"AddressBook"},{"tabName":"Settings","tabCode":"Settings"}]
+      let response = [{"tabName":"personalInfo","tabCode":"Personal Info"},{"tabName":"Address Book","tabCode":"Address Book"},{"tabName":"Settings","tabCode":"Settings"}]
       if(response){
         let documents=response
         for(let i=0;i<documents.length;i++){

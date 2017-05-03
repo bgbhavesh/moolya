@@ -44,13 +44,13 @@ getChildContext(){
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlIdeatorDetails key="1"  portfolioDetailsId={this.state.ideatorId} getIdeatorDetails={this.getIdeatorDetails.bind(this)}/>},    //this.props.portfolioDetailsId}
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlIdeatorProblemsAndSolutions key="2"  portfolioDetailsId={this.state.ideatorId}  getProblemSolution={this.getProblemSolution.bind(this)}/>},   //id will be dyanmic
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="3"  portfolioDetailsId={this.state.ideatorId} getAudience={this.getAudience.bind(this)}/>},                            //id will be dyanmic
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlIdeatorLibrary key="4"  portfolioDetailsId={this.state.ideatorId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlIdeatorStrategyAndPlanning key="5"  portfolioDetailsId={this.state.ideatorId} getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="6"  portfolioDetailsId={this.state.ideatorId} getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlIdeatorLookingFor key="7"  portfolioDetailsId={this.state.ideatorId} getLookingFor={this.getLookingFor.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlIdeatorDetails key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getIdeatorDetails={this.getIdeatorDetails.bind(this)}/>},    //this.props.portfolioDetailsId}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlIdeatorProblemsAndSolutions key="2"  portfolioDetailsId={this.props.portfolioDetailsId}  getProblemSolution={this.getProblemSolution.bind(this)}/>},   //id will be dyanmic
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="3"  portfolioDetailsId={this.props.portfolioDetailsId} getAudience={this.getAudience.bind(this)}/>},                            //id will be dyanmic
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlIdeatorLibrary key="4"  portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlIdeatorStrategyAndPlanning key="5"  portfolioDetailsId={this.props.portfolioDetailsId} getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="6"  portfolioDetailsId={this.props.portfolioDetailsId} getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlIdeatorLookingFor key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getLookingFor={this.getLookingFor.bind(this)}/>},
     ]
     return tabs;
   }
@@ -60,46 +60,39 @@ getChildContext(){
     this.setState({ideatorPortfolio : data})
     // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
     // this.setState({ideatorDetails:details})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getProblemSolution(details) {
     let data = this.state.ideatorPortfolio;
     data['problemSolution']=details;
-    this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.setState({ideatorPortfolio : data}, function () {
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    })
+
   }
   getStrategyAndPlanning(details) {
     let data = this.state.ideatorPortfolio;
     data['strategyAndPlanning']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getIntellectualPlanning(details) {
     let data = this.state.ideatorPortfolio;
     data['intellectualPlanning']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getAudience(details) {
     let data = this.state.ideatorPortfolio;
     data['audience']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getLookingFor(details) {
     let data = this.state.ideatorPortfolio;
     data['lookingFor']=details;
     this.setState({ideatorPortfolio : data})
-    // this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
-  }
-
-  async updatePortfolioDetails() {
-    let jsonData={
-      portfolioId :this.props.config,
-      portfolio :this.state.ideatorPortfolio
-    }
-    const response = await updatePortfolioActionHandler(jsonData)
-    return response;
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
 
   componentWillMount()

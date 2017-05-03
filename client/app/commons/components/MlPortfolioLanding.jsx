@@ -13,27 +13,20 @@ export default class MlPortfolioLanding extends Component {
   }
 
   render(){
-    let user = Meteor.user();
-    let userCommunity =  ""
-    _.each(user.profile.externalUserProfile, function (profile) {
-      if(profile.isDefault){
-        userCommunity = profile.communityDefName
-      }
-    })
-    // let template;
-    // if(userCommunity=="Ideators"){
-    //   template = <MlIdeatorIdeas/>
-    // }else if(userCommunity=="Startups"){
-    //   template = <MlIdeatorIdeas/>
-    // }
-      return(
-        <div className="admin_main_wrap">
-          {(userCommunity=="Ideators")?
-            <MlAppIdeatorIdeas/>
-            :
-            <MlAppIdeatorIdeas/>
+      let user = Meteor.user();
+      let userCommunity =  ""
+      _.each(user.profile.externalUserProfile, function (profile) {
+          if(profile.isDefault){
+              userCommunity = profile.communityDefName
           }
-        </div>
+      })
+
+      return(
+          <div className="admin_main_wrap">
+              {(userCommunity=="Ideators")?
+                <MlAppIdeatorIdeas/>:<MlAppIdeatorIdeas/>
+              }
+          </div>
       )
   }
 }

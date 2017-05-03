@@ -280,7 +280,6 @@ let ideatorPortfolioSchema = `
     }
     
     input idea{
-        userId:String,
         title:String,
         isIdeaTitlePrivate:Boolean,
         description:String,
@@ -301,7 +300,7 @@ let ideatorPortfolioSchema = `
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
         fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
-        fetchIdeas(userId:String):[Idea]
+        fetchIdeas:[Idea]
     }
     
     type Mutation{

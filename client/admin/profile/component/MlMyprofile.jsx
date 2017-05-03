@@ -178,16 +178,14 @@ export default class MlMyProfile extends React.Component{
 
   async genderSelect(){
     //this.setState({genderSelect: e.target.value})
-    if(this.state.genderSelect === "Male"){
-      this.setState({genderStateMale: true,genderStateFemale:false,genderStateOthers:false })
+    if(this.state.genderSelect === "Others"){
+      this.setState({genderStateMale: false,genderStateFemale:false,genderStateOthers:true })
     }
     else if(this.state.genderSelect === "Female"){
       this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
     }
     else{
-      this.setState({genderStateOthers:
-        // true, genderStateFemale: false, genderStateMale: false}) // Changes made for 30th April App Demo
-        false, genderStateFemale: false, genderStateMale: true})
+      this.setState({genderStateOthers:false, genderStateFemale: false, genderStateMale: true})
     }
   }
 

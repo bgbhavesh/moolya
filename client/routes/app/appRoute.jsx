@@ -10,7 +10,7 @@ import MlAppIdeatorLanding from '../../../client/app/ideator/components/MlAppIde
 import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeatorTabs'
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
-
+import  MlAppIdeatorEditTabs from '../../../client/app/ideator/components/MlAppIdeatorEditTabs'
 import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
 
 // import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
@@ -20,7 +20,7 @@ import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
 import MlAppIdeatorAddIdea from '../../app/ideator/components/MlAppIdeatorAddIdea'
-
+import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
 
 //profile
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
@@ -98,10 +98,16 @@ appSection.route('/ideator', {
       mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
   }
 });
-appSection.route('/portfolio/view', {
+appSection.route('/portfolio/view/:id/', {
   name: 'portfolio',
-  action(){
-    mount(AppLayout,{appContent:< MlAppIdeatorTabs/>, isProfileMenu:true})
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:true})
+  }
+});
+appSection.route('/portfolio/edit/:id/', {
+  name: 'portfolio',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={false} config={params.id}/>, isProfileMenu:true})
   }
 });
 appSection.route('/portfolio/addIdea', {

@@ -9,10 +9,11 @@ MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
   var ideator =[];
 
   var users = Meteor.users.find({"$and": [{'profile.isActive': true}, {'profile.isExternaluser': true}]}).fetch();
-    _.each(users, function (user) {
-      userIds.push(user._id)
-    })
-
+    // _.each(users, function (user) {
+    //   userIds.push(user._id)
+    // })
+  userIds = _.map(users, "_id")
+  userIds = _.pull(userIds, context.userId)
   var allIdeas = MlIdeas.find({isActive:true, userId:{$in:userIds}}).fetch()
   var ideas = _.uniqBy(allIdeas, 'userId');
 

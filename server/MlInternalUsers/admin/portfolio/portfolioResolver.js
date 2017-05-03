@@ -16,7 +16,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
   try {
       if (portfolioDetails && portfolioDetails.userId && portfolioDetails.communityType) {
           user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}]})
-          if (!user) {
+          if (!user || portfolioDetails.communityType == 'Ideators') {
               ret = MlPortfolioDetails.insert({...portfolioDetails})
               if(ret){
                   switch (portfolioDetails.communityType){

@@ -184,7 +184,7 @@ let BackEndUser = `
         isActive          : Boolean,
         isChapterAdmin    : Boolean,
         InternalUprofile  : InternalUprofile,
-        externalUserProfile:up
+        externalUserProfiles:up
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,

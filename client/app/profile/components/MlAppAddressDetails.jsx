@@ -14,22 +14,28 @@ export default class AppAddressDetails extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      activeTab : "active"
+      activeTab : "active",
+      details:this.props.addressInfoDetails
     }
     return this;
   }
-  render(){
-    let details=this.props.addressInfoDetails
-    let that=this;
-    let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
-     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
-     label
-     value
-     }
-     }
-     `;
 
-    let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
+  addressTabSelected(){
+    this.setState({selectedTab : true, activeTab : ""});
+  }
+
+  render(){
+    let details=this.state.details;
+    let that=this;
+    // let addressTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+    //  data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+    //  label
+    //  value
+    //  }
+    //  }
+    //  `;
+    //
+    // let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
 
     return (
       <div className="panel-body">
@@ -38,9 +44,9 @@ export default class AppAddressDetails extends React.Component {
             <li className={this.state.activeTab}>
               <a  href="#1a" data-toggle="tab">Add New&nbsp;<b><FontAwesome name='plus-square' /></b></a>
             </li>
-            {that.state.addressDetails && (that.state.addressDetails.map(function(options,key){
+            {details && (details.map(function(options,key){
               return(
-                <li key={key}>
+                <li onClick={that.addressTabSelected.bind(that,key)} key={key}>
                   <a data-toggle="pill" href={'#adressType'+key} className="add-contact">
                     <FontAwesome name='minus-square'/>{options.addressTypeName}</a>
                 </li>)
@@ -54,7 +60,7 @@ export default class AppAddressDetails extends React.Component {
                               {/*className="form-control float-label" selectedValue={this.state.selectedValue}*/}
                               {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"}*/}
                               {/*isDynamic={true}/>*/}
-                <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue="Names" />
+                <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" />
               </div>
               <div className="form-group">
                 <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" />
@@ -63,7 +69,7 @@ export default class AppAddressDetails extends React.Component {
                 <input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label"/>
               </div>
               <div className="form-group">
-                <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Bulding No" className="form-control float-label"/>
+                <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Building No" className="form-control float-label"/>
               </div>
               <div className="form-group">
                 <input type="text" ref={'addressLocality'} placeholder="Colony/Street/Locality" className="form-control float-label"/>
@@ -72,7 +78,7 @@ export default class AppAddressDetails extends React.Component {
                 <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" />
               </div>
               <div className="form-group">
-                <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label"/>
+                <input type="text" ref={'addressArea'} placeaholder="Area" className="form-control float-label"/>
               </div>
               <div className="form-group">
                 <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label"/>
@@ -94,7 +100,7 @@ export default class AppAddressDetails extends React.Component {
                 </a>
               </div>
             </div>
-            {that.state.addressDetails && (that.state.addressDetails.map(function(options,key) {
+            {details && (details.map(function(options,key) {
               return(
                 <div className="tab-pane" id={'adressType' + key} key={key}>
                   <div className="form-group">
@@ -108,49 +114,49 @@ export default class AppAddressDetails extends React.Component {
                   </div>
                   <div className="form-group">
                     <input type="text" name ={'name'} ref={'name' + key} placeholder="Name"
-                           className="form-control float-label" id="" defaultValue={options.name}/>
+                           className="form-control float-label" defaultValue={options.name}/>
                   </div>
 
                   <div className="form-group">
                     <input type="text" name ={'phoneNumber'} ref={'phoneNumber' + key} placeholder="Phone Number"
-                           className="form-control float-label" id="" defaultValue={options.phoneNumber} />
+                           className="form-control float-label" defaultValue={options.phoneNumber} />
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressFlat' + key} name ={'addressFlat'} className="form-control float-label"
-                           placeholder="Flat/House/Floor/Bulding No" defaultValue={options.addressFlat} id=""/>
+                           placeholder="Flat/House/Floor/Bulding No" defaultValue={options.addressFlat} />
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressLocality' + key} name ={'addressLocality'}
-                           placeholder="Colony/Street/Loculaty" className="form-control float-label" id=""
+                           placeholder="Colony/Street/Locality" className="form-control float-label"
                            defaultValue={options.addressLocality}/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressLandmark' + key} placeholder="Landmark" name ={'addressLandmark'}
-                           className="form-control float-label" id="" defaultValue={options.addressLandmark}/>
+                           className="form-control float-label" defaultValue={options.addressLandmark}/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressArea' + key} placeholder="Area" name ={'addressArea'}
-                           className="form-control float-label" id="" defaultValue={options.addressArea}/>
+                           className="form-control float-label" defaultValue={options.addressArea}/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressCity' + key} placeholder="Town/City" name ={'addressCity'}
-                           className="form-control float-label" id="" defaultValue={options.addressCity}/>
+                           className="form-control float-label" defaultValue={options.addressCity}/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressState' + key} placeholder="State" name ={'addressState'}
-                           className="form-control float-label" id="" defaultValue={options.addressState} />
+                           className="form-control float-label" defaultValue={options.addressState} />
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressCountry' + key} placeholder="Country" name ={'addressCountry'}
-                           className="form-control float-label" id="" defaultValue={options.addressCountry}/>
+                           className="form-control float-label" defaultValue={options.addressCountry}/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressPinCode' + key} placeholder="Pincode" name ={'addressPinCode'}
-                           className="form-control float-label" id="" valueKey={options.addressPinCode}/>
+                           className="form-control float-label" defaultValue={options.addressPinCode}/>
                   </div>
 
                   <div className="ml_icon_btn">
-                    <a href="#" className="save_btn">Save</a>
+                    {/*<a href="#" className="save_btn">Save</a>*/}
                     <a href="#" className="save_btn">
                       <span className="ml ml-save"></span>
                     </a>

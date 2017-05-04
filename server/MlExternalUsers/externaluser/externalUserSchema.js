@@ -18,7 +18,7 @@ let externalUser = `
         cluster:String,
         chapter:String,
         community:String,
-        externalUserProfile:externalUserProfile
+        externalUserProfiles:externalUserProfile
     }
 
     input userPortfolios{
@@ -52,6 +52,7 @@ let externalUser = `
       numberTypeName    : String
       countryCode       : String
       contactNumber     : String
+      index     : String
         
     }
     
@@ -59,6 +60,7 @@ let externalUser = `
       emailIdType        : String
       emailIdTypeName        : String
       emailId           : String
+      index     : String
      }
      
      type AddressInfoSchema{
@@ -74,6 +76,7 @@ let externalUser = `
         addressState        :  String
         addressCountry      : String
         addressPinCode      : String
+        index     : String
      }
      
      type SocialLinkInfoSchema{
@@ -98,7 +101,18 @@ let externalUser = `
         middleName:String,
         userProfiles:[userProfiles]
     }
-
+    input contactObj {
+      numberType        : String
+      numberTypeName    : String
+      countryCode       : String
+      contactNumber     : String
+      index     : String
+    }
+    
+    type Mutation{
+      updateContactNumber(contactDetails:contactObj):response
+    }
+    
     type Query{
         fetchIdeatorUsers:response
         findAddressBook:externalUserAdditionalInfoSchema

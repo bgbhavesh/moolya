@@ -33,7 +33,7 @@ export default class MlAppProfileAddressBook extends React.Component {
   async findAddressBook(){
     const response = await findAddressBookActionHandler();
     if(response){
-      this.setState({emailInfo:response.emailInfo, addressInfo:response.addressInfo, contactInfo:response.contactInfo, loading:false,});
+      this.setState({data:response, loading:false});
     }else {
       this.setState({loading:false})
     }
@@ -65,13 +65,13 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Contact Number
                       </div>
-                      <AppContactDetails contactInfoDetails={this.state.contactInfo}/>
+                      <AppContactDetails clusterId={this.state.data.clusterId} contactInfoDetails={this.state.data.contactInfo}/>
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Email ID
                       </div>
-                      <AppEmailDetails emailInfoDetails={this.state.emailInfo}/>
+                      <AppEmailDetails clusterId={this.state.data.clusterId} emailInfoDetails={this.state.data.emailInfo}/>
                     </div>
                   </form>
                 </div>
@@ -81,7 +81,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Address
                       </div>
-                      <AppAddressDetails addressInfoDetails={this.state.addressInfo}/>
+                      <AppAddressDetails clusterId={this.state.data.clusterId} addressInfoDetails={this.state.data.addressInfo}/>
                     </div>
                   </form>
                 </div>

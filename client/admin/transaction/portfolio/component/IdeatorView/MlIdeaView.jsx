@@ -9,7 +9,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {fetchIdeaActionHandler} from '../../../../../app/ideator/actions/IdeaActionHandler'
+import {fetchIdeaActionHandler} from '../../../../../app/ideators/actions/IdeaActionHandler'
 import _ from 'lodash';
 
 

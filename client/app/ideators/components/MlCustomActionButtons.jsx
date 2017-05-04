@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 var FontAwesome = require('react-fontawesome');
 import StarRatings from '../../commons/components/starRatings';
-import {fetchIdeaActionHandler} from '../../ideator/actions/IdeaActionHandler'
+import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
 
 
 export default class MlCustomActionButtons extends React.Component {

@@ -12,6 +12,7 @@ import {resolveCommentActionHandler} from '../../../commons/annotaterComments/cr
 import {reopenCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import AppActionButtons from '../../commons/components/appActionButtons'
 import moment from "moment";
+import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
 
@@ -40,6 +41,10 @@ class MlAppPortfolio extends React.Component{
 
   componentDidMount(){
     let portfolioId = this.props.config;
+    var pathname = window.location.pathname
+    if(pathname.indexOf(("view" || "edit")) != -1){
+      this.setState({isMyPortfolio:true})
+    }
   }
 
   getContext(){
@@ -191,6 +196,7 @@ class MlAppPortfolio extends React.Component{
 
     let annotations = this.state.annotations;
     let annotationDetails = this.state.annotationData;
+    let isMyPortfolio = this.state.isMyPortfolio
     const showLoader=this.state.loading;
     return(
       <div className="admin_main_wrap">
@@ -263,7 +269,7 @@ class MlAppPortfolio extends React.Component{
               <div className="overlay"></div>
             </PopoverContent>
           </Popover>
-        <AppActionButtons ActionOptions={MlAppActionConfig} showAction='showAction' actionName="actionName"/>
+        {isMyPortfolio?<AppActionButtons ActionOptions={MlAppActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
       </div>
     )

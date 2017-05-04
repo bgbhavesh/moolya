@@ -1,8 +1,8 @@
 
 const ideatorListRoutes={
 
-  ideatorDetailsRoute:(id, communityType) =>{
-    return `/app/${communityType}/${id}`;
+  ideatorDetailsRoute:(portfolioId, ideaId) =>{
+    return `/app/ideator/${portfolioId}/${ideaId}`;
   }
 }
 

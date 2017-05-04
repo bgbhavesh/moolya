@@ -12,6 +12,8 @@ import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfol
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
 // import AppActionButtons from '../../commons/components/appActionButtons'
 import TopIconsList from '../../commons/components/topIconsList'
+import MlIdeaView from '../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
+import MlCustomActionButtons from '../components/MlCustomActionButtons'
 
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'
 
@@ -67,6 +69,7 @@ componentDidMount(){
 
 getTabComponents(){
   let tabs = [
+    {tabClassName: 'tab', panelClassName: 'panel', title:"About Idea" , component:<MlIdeaView key="0"  portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId} />},

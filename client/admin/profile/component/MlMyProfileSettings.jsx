@@ -174,6 +174,7 @@ export default class MyProfileSettings extends React.Component{
 
               </div>
               <div className="col-md-6">
+                <form>
                 <div className="form-group">
                   <Select
                     name="form-field-name" placeholder={"Language"}
@@ -184,6 +185,12 @@ export default class MyProfileSettings extends React.Component{
                     name="form-field-name"   placeholder={"Time Zone"}
                     className="float-label"/>
                 </div>
+                <br className="brclear"/>
+                <br className="brclear"/>
+                <br className="brclear"/>
+                <br className="brclear"/>
+                </form>
+
               </div>
             </form>
 

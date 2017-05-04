@@ -5,8 +5,8 @@ import mlRegistrationTemplates from '../../../../commons/containers/templates/ml
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
 import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
 import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
-import MlAppIdeatorEditTabs from '../../../../app/ideator/components/MlAppIdeatorEditTabs'
-import MlAppIdeatorTabs from '../../../../app/ideator/components/MlAppIdeatorTabs'
+import MlAppIdeatorEditTabs from '../../../../app/ideators/components/MlAppIdeatorEditTabs'
+import MlAppIdeatorTabs from '../../../../app/ideators/components/MlAppIdeatorTabs'
 
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={

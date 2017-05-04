@@ -10,7 +10,9 @@ import {findComments} from '../../../commons/annotaterComments/findComments'
 import {createCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import {resolveCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import {reopenCommentActionHandler} from '../../../commons/annotaterComments/createComment';
+import AppActionButtons from '../../commons/components/appActionButtons'
 import moment from "moment";
+import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
 
@@ -39,6 +41,10 @@ class MlAppPortfolio extends React.Component{
 
   componentDidMount(){
     let portfolioId = this.props.config;
+    var pathname = window.location.pathname
+    if(pathname.indexOf(("view" || "edit")) != -1){
+      this.setState({isMyPortfolio:true})
+    }
   }
 
   getContext(){
@@ -139,45 +145,40 @@ class MlAppPortfolio extends React.Component{
     return response;
   }
 
+  async testEditPortfolioDetails(){
+    console.log('edit testing')
+  }
+
   async handleSuccess(response) {
     FlowRouter.go("/app/portfolio");
   };
 
   render(){
     let that=this;
-    let MlActionConfig = [
-      // {
-      //   showAction: true,
-      //   actionName: 'progress',
-      //   handler: null
-      // },
-      {
+    // let MlActionConfig = [
+    //   {
+    //     showAction: true,
+    //     actionName: 'edit',
+    //     handler: null
+    //   },
+    //   {
+    //     actionName: 'save',
+    //     showAction: true,
+    //     handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
+    //   }
+    // ]
+
+    let MlAppActionConfig= [{
         showAction: true,
-        actionName: 'edit',
-        handler: null
-      },
-      {
         actionName: 'save',
-        showAction: true,
         handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
       },
       {
         showAction: true,
-        actionName: 'cancel',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'assign',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'comment',
-        handler: null,
-        iconID:'Popover1'
-      },
-    ]
+        actionName: 'edit',
+        handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
+      }]
+
     let EditComponent = ""; let ViewComponent = "";
     if(this.props.viewMode){
       ViewComponent=this.state.editComponent;
@@ -195,6 +196,7 @@ class MlAppPortfolio extends React.Component{
 
     let annotations = this.state.annotations;
     let annotationDetails = this.state.annotationData;
+    let isMyPortfolio = this.state.isMyPortfolio
     const showLoader=this.state.loading;
     return(
       <div className="admin_main_wrap">
@@ -203,7 +205,7 @@ class MlAppPortfolio extends React.Component{
             <div className='step-progress' >
               {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
-              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.props.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div>
           </div>)}
         <div className="overlay"></div>
@@ -267,7 +269,8 @@ class MlAppPortfolio extends React.Component{
               <div className="overlay"></div>
             </PopoverContent>
           </Popover>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        {isMyPortfolio?<AppActionButtons ActionOptions={MlAppActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}
+        {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
       </div>
     )
   }

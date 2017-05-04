@@ -312,17 +312,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                 return response;
             }
 
-            const hashedToken = Accounts._hashLoginToken(context.loginToken)
-            user = Meteor.users.findOne({'services.resume.loginTokens.hashedToken': hashedToken})
-            // let profile = _.find(user.profile.externalUserProfiles, {isDefault:true})
-            // if(!profile){
-            //     let code = 400;
-            //     let response = new MlRespPayload().errorPayload("No Default Profile", code);
-            //     return response;
-            // }
-
-            // As user cant set isDefalut profile, adding this code
-            let profile = user.profile.externalUserProfiles[0];
+            let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
             if(!profile){
                 let code = 400;
                 let response = new MlRespPayload().errorPayload("No Profile Found", code);

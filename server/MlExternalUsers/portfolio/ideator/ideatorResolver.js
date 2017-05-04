@@ -1,27 +1,31 @@
 import MlResolver from '../../../commons/mlResolverDef'
-let _ = require('lodash')
+import MlRespPayload from '../../../commons/mlPayload'
+import MlUserContext from '../../../MlExternalUsers/mlUserContext'
+var extendify = require('extendify');
+var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
-    let ideators =[];
-    // var users = Meteor.users.find({"$and": [{'profile.isActive': true}, {'profile.isExternaluser': true}]}).fetch();
-    // userIds = _.map(users, "_id")
-    // userIds = _.pull(userIds, context.userId)
-    // var allIdeas = MlIdeas.find({isActive:true, userId:{$in:userIds}}).fetch()
-    // var ideas = _.uniqBy(allIdeas, 'userId');
-    // _.each(ideas, function (idea) {
-    //     let user = Meteor.users.findOne({_id:idea.userId})
-    //     chapterName = user.profile.externalUserProfiles[0].chapterName
-    //     name = user.profile.firstName+" "+user.profile.lastName
-    //     ideaObj = {
-    //         userId:idea.userId,
-    //         portfolioId:idea.portfolioId,
-    //         ideaTitle:idea.title,
-    //         chapterName:chapterName,
-    //         name:name
-    //     }
-    //     ideator.push(ideaObj)
-    // })
+  var allIds = [];
+  var ideator =[];
 
-    ideators = MlPortfolioDetails.find({"communityType":"Ideators"}).fetch() || [];
-    return ideators;
+  var allIdeas = MlIdeas.find({isActive:true}).fetch();
+  allIds = _.map(allIdeas, "userId");
+  allIds = _.uniq(allIds);
+  // allIds = _.pull(allIds, context.userId);
+
+  _.each(allIds, function (userId) {
+    let user = Meteor.users.findOne({_id:userId})
+    let ideas = MlIdeas.find({userId:userId}).fetch();
+    chapterName = user.profile.externalUserProfiles[0].chapterName
+    name = user.profile.firstName+" "+user.profile.lastName
+     ideaObj = {
+       userId:userId,
+       ideas:ideas,
+       chapterName:chapterName,
+       name:name
+     }
+     ideator.push(ideaObj)
+  })
+
+  return ideator;
 }

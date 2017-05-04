@@ -51,8 +51,14 @@ export async function fetchIdeators() {
     query: gql`
             query{
                 fetchIdeators {
-                    portfolioId
-                    ideaTitle
+                    ideas {
+                      isActive
+                      isIdeaPrivate
+                      isIdeaTitlePrivate
+                      title
+                      description
+                      portfolioId
+                    }
                     chapterName
                     userId
                     name

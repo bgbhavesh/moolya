@@ -79,8 +79,7 @@ export default class AppContactDetails extends React.Component {
                 {/*queryOptions={numberTypeOption} className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}*/}
                 {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"}*/}
                 {/*isDynamic={true}/>*/}
-                <input type="text" ref={'name'} placeholder="Name" className="form-control float-label"
-                       defaultValue="selectedNumberTypeValue"/>
+                <input type="text" ref={'name'} placeholder="Name" className="form-control float-label"/>
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Enter Country Code"

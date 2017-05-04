@@ -35,7 +35,7 @@ export default class MlAppProfileAddressBook extends React.Component {
     if(response){
       this.setState({data:response, loading:false});
     }else {
-      this.setState({loading:false})
+      this.setState({loading:false, data:null})
     }
   }
 
@@ -46,6 +46,10 @@ export default class MlAppProfileAddressBook extends React.Component {
 
   render() {
     const showLoader=this.state.loading;
+    let clusterId=this.state.data?this.state.data.clusterId:'';
+    let contactInfo= this.state.data?this.state.data.contactInfo:''
+    let emailInfo= this.state.data?this.state.data.emailInfo:''
+    let addressInfo = this.state.data?this.state.data.addressInfo:''
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -65,13 +69,13 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Contact Number
                       </div>
-                      <AppContactDetails clusterId={this.state.data.clusterId} contactInfoDetails={this.state.data.contactInfo}/>
+                      <AppContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}/>
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Email ID
                       </div>
-                      <AppEmailDetails clusterId={this.state.data.clusterId} emailInfoDetails={this.state.data.emailInfo}/>
+                      <AppEmailDetails clusterId={clusterId} emailInfoDetails={emailInfo}/>
                     </div>
                   </form>
                 </div>
@@ -81,7 +85,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Address
                       </div>
-                      <AppAddressDetails clusterId={this.state.data.clusterId} addressInfoDetails={this.state.data.addressInfo}/>
+                      <AppAddressDetails clusterId={clusterId} addressInfoDetails={addressInfo}/>
                     </div>
                   </form>
                 </div>

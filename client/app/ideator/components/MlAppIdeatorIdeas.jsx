@@ -54,12 +54,12 @@ export default class MlAppIdeatorIdeas extends React.Component{
       }
   }
 
-  viewIdea(id,e){
-    FlowRouter.go("/app/portfolio/view/"+id);
+  viewIdea(portfolioId, ideaId,e){
+    FlowRouter.go("/app/portfolio/view/"+portfolioId+"/"+ideaId);
   }
 
-  editIdea(id,e){
-    FlowRouter.go("/app/portfolio/edit/"+id);
+  editIdea(portfolioId, ideaId,e){
+    FlowRouter.go("/app/portfolio/edit/"+portfolioId+"/"+ideaId);
   }
 
   render(){
@@ -107,8 +107,8 @@ export default class MlAppIdeatorIdeas extends React.Component{
                                       <div className="panel-heading">{idea.title}</div>
                                       <div className="panel-body">
                                           <p>{idea.description}</p>
-                                          <a className="mlUpload_btn pull-left" onClick={that.viewIdea.bind(that, idea.portfolioId)}>View</a>
-                                          <a className="mlUpload_btn pull-left" onClick={that.editIdea.bind(that, idea.portfolioId)}>Edit</a>
+                                          <a className="mlUpload_btn pull-left" onClick={that.viewIdea.bind(that, idea.portfolioId, idea._id)}>View</a>
+                                          <a className="mlUpload_btn pull-left" onClick={that.editIdea.bind(that, idea.portfolioId, idea._id)}>Edit</a>
                                           <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left" onClick={that.AddIdea.bind(that)}>Add New Idea</a>
                                       </div>
                                   </div>

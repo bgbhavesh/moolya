@@ -270,6 +270,7 @@ let ideatorPortfolioSchema = `
     }
     
     type Idea{
+        _id:String
         userId:String,
         portfolioId:String,
         title:String,

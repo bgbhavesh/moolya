@@ -12,6 +12,8 @@ import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfol
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
 import AppActionButtons from '../../commons/components/appActionButtons'
 import TopIconsList from '../../commons/components/topIconsList'
+import MlIdeaView from '../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
+import MlCustomActionButtons from '../components/MlCustomActionButtons'
 
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'
 
@@ -49,6 +51,10 @@ componentDidMount(){
   //   $('.RRT__tab').addClass('horizon-item');
   //   $('.horizon-swiper').horizonSwiper();
   // },300);
+  var pathname = window.location.pathname
+  if(pathname.indexOf(("view" || "edit")) != -1){
+    this.setState({isMyPortfolio:true})
+  }
 }
   //
   // (selAnnotation){
@@ -67,6 +73,7 @@ componentDidMount(){
 
 getTabComponents(){
   let tabs = [
+    {tabClassName: 'tab', panelClassName: 'panel', title:"About Idea" , component:<MlIdeaView key="0"  portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId} />},
@@ -94,6 +101,7 @@ componentWillMount()
 
 render(){
   let tabs = this.state.tabs;
+  let isMyPortfolio = this.state.isMyPortfolio
   return (
     <div className="app_main_wrap">
       <div className="app_padding_wrap">
@@ -101,7 +109,7 @@ render(){
           <TopIconsList/>
           <MlTabComponent tabs={tabs}/>
         </div>
-        <AppActionButtons/>
+        {isMyPortfolio?<AppActionButtons/>:<MlCustomActionButtons/>}
         <br className="brclear"/>
       </div>
     </div>

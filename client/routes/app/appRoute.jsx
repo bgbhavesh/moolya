@@ -98,16 +98,16 @@ appSection.route('/ideator', {
       mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
   }
 });
-appSection.route('/portfolio/view/:id/', {
+appSection.route('/portfolio/view/:portfolioId/:ideaId', {
   name: 'portfolio',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} ideaId={params.ideaId}/>, isProfileMenu:true})
   }
 });
-appSection.route('/portfolio/edit/:id/', {
+appSection.route('/portfolio/edit/:portfolioId/:ideaId', {
   name: 'portfolio',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={false} config={params.id}/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={false} config={params.portfolioId} ideaId={params.ideaId}/>, isProfileMenu:true})
   }
 });
 appSection.route('/portfolio/addIdea', {
@@ -119,10 +119,10 @@ appSection.route('/portfolio/addIdea', {
 
 
 // appSection.route('/ideator/viewPortfolio/:id/:communityType', {
-appSection.route('/ideator/:id/', {
-  name: 'ideator_portfolio_view',
+appSection.route('/ideator/:portfolioId/:ideaId', {
+  name: 'ideator',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:false})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} ideaId={params.ideaId}/>, isProfileMenu:false})
     // mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }

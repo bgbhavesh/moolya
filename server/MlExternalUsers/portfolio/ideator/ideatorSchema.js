@@ -13,12 +13,14 @@ let ideatorPortfolioSchema = `
         name:String
     }
     type ideasOutput{
+        _id:String,
         title:String,
         isIdeaTitlePrivate:Boolean,
         description:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
         portfolioId:String,
+        userId:String
     }
     
     

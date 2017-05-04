@@ -60,12 +60,13 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
   let data = _.omit(id,'__typename')
   return data
 }
-export async function findIdeatorIdeasActionHandler(portfoliodetailsId) {
+export async function findIdeatorIdeasActionHandler(ideaId) {
   const result = await client.query({
     query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchIdeatorPortfolioIdeas(portfoliodetailsId: $portfoliodetailsId) {
+          query ($ideaId: String!) {
+            fetchIdeatorPortfolioIdeas(ideaId: $ideaId) {
                 title
+                portfolioId
                 description
                 isIdeasTitlePrivate
                 isIdeasPrivate
@@ -75,7 +76,7 @@ export async function findIdeatorIdeasActionHandler(portfoliodetailsId) {
 
       `,
     variables: {
-      portfoliodetailsId: portfoliodetailsId
+      ideaId: ideaId
     },
     forceFetch: true
   })

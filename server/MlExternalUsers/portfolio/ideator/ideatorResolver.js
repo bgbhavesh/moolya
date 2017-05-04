@@ -14,15 +14,18 @@ MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
   // allIds = _.pull(allIds, context.userId);
 
   _.each(allIds, function (userId) {
-    let user = Meteor.users.findOne({_id:userId})
+    let portfolio = MlPortfolioDetails.find({userId:userId}).fetch();
+    let user = Meteor.users.findOne({_id:userId});
     let ideas = MlIdeas.find({userId:userId}).fetch();
-    chapterName = user.profile.externalUserProfiles[0].chapterName
-    name = user.profile.firstName+" "+user.profile.lastName
+    chapterName = portfolio[0].chapterName;
+    accountType = portfolio[0].accountType;
+    name = user.profile.firstName+" "+user.profile.lastName;
      ideaObj = {
        userId:userId,
        ideas:ideas,
        chapterName:chapterName,
-       name:name
+       name:name,
+       accountType:accountType
      }
      ideator.push(ideaObj)
   })

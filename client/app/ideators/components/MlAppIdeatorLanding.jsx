@@ -36,7 +36,7 @@ export default class MlAppIdeatorLanding extends React.Component {
                       <a href={ideatorListRoutes.ideatorDetailsRoute(ideator.ideas[0].portfolioId, ideator.ideas[0]._id,)}>
                         <div className="ideators_list_block">
                           <div className="premium">
-                            {/*<span>{ideator.membership}</span>*/}
+                            <span>{ideator.accountType}</span>
                           </div>
                           <h3>{ideator.name}</h3>
                           <div className="list_icon"><span className="ml ml-ideator"></span></div>

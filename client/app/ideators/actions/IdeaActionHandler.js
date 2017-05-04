@@ -61,6 +61,7 @@ export async function fetchIdeators() {
                       description
                       portfolioId
                     }
+                    accountType
                     chapterName
                     userId
                     name

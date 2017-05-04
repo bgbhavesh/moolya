@@ -1,5 +1,5 @@
 /**
- * Created by viswadeep on 2/5/17.
+ * Created by vishwadeep on 2/5/17.
  */
 
 import React from 'react';

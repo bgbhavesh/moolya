@@ -23,17 +23,21 @@ export default class AppEmailDetails extends React.Component {
     this.setState({activeTab : ""});
   }
 
+  optionsBySelectEmailType(selectedIndex,handler,selectedObj){
+    this.setState({selectedEmailTypeValue : selectedIndex,selectedEmailTypeLabel:selectedObj.label});
+  }
+
   render(){
     let details=this.state.details;
     let that=this;
-    // let emailTypeQuery=gql`query($type:String,$hierarchyRefId:String){
-    //  data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
-    //  label
-    //  value
-    //  }
-    //  }
-    //  `;
-    // let emailTypeOption={options: { variables: {type : "EMAILTYPE",hierarchyRefId:this.props.clusterId}}};
+    let emailTypeQuery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+       label
+       value
+       }
+     }
+     `;
+    let emailTypeOption={options: { variables: {type : "EMAILTYPE",hierarchyRefId:this.props.clusterId}}};
 
     return (<div className="panel-body">
         <div className="ml_tabs">
@@ -52,13 +56,13 @@ export default class AppEmailDetails extends React.Component {
           <div className="tab-content clearfix">
             <div className={"tab-pane"+this.state.activeTab} id="emailA">
               <div className="form-group">
-                {/*<Moolyaselect multiSelect={false} ref={'emailType'}*/}
-                              {/*placeholder="Select Email Type"*/}
-                              {/*className="form-control float-label" selectedValue={this.state.selectedEmailTypeValue}*/}
-                              {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}*/}
-                              {/*queryOptions={emailTypeOption}*/}
-                              {/*isDynamic={true}/>*/}
-                <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" />
+                <Moolyaselect multiSelect={false} ref={'emailType'}
+                              placeholder="Select Email Type"
+                              className="form-control float-label" selectedValue={this.state.selectedEmailTypeValue}
+                              valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}
+                              queryOptions={emailTypeOption} onSelect={this.optionsBySelectEmailType.bind(this)}
+                              isDynamic={true}/>
+                {/*<input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" />*/}
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Enter Email Id" ref={'emailId'} className="form-control float-label"/>

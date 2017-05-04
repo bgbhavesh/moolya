@@ -9,7 +9,7 @@ export default class MlListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sizePerPage: 5,
+      sizePerPage: 50,
       pageNumber: 1,
       sort: null,
       pubSelector: null
@@ -35,7 +35,8 @@ export default class MlListView extends Component {
       }
       if (hasQueryOptions) {
         let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
-        let extendedVariables = _.extend(dynamicQueryOptions);
+        // let extendedVariables = _.extend(dynamicQueryOptions);
+        let extendedVariables = _.merge(dynamicQueryOptions, variables);
         this.props.fetchMore(extendedVariables);
       }
       if(this.state.searchValue!==nextState.searchValue){

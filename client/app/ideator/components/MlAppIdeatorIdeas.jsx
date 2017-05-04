@@ -65,7 +65,7 @@ export default class MlAppIdeatorIdeas extends React.Component{
   render(){
     let that=this
       return (
-          <div className="app_main_wrap">
+          <div>
               <h2>Ideas</h2>
               <div className="main_wrap_scroll idea_details">
                   <ScrollArea

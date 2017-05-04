@@ -34,7 +34,8 @@ export default class MlMyProfile extends React.Component{
       genderStateFemale: " ",
       genderStateOthers: " ",
       dateOfBirth:" ",
-      genderSelect:" "
+      genderSelect:" ",
+      responsePic:" "
       // Details:{
       //   firstName: " ",
       //   middleName:" ",
@@ -51,6 +52,7 @@ export default class MlMyProfile extends React.Component{
     this.displayNameUpdation.bind(this);
     this.updateProfile.bind(this);
     this.genderSelect = this.genderSelect.bind(this);
+   // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
    // this.firstNameUpdation.bind(this);
     return this;
@@ -95,9 +97,10 @@ export default class MlMyProfile extends React.Component{
           console.log(resp);
           this.setState({"uploadedProfilePic": resp});
           var temp = $.parseJSON(this.state.uploadedProfilePic).result;
-          this.setState({"uploadedProfilePic":temp});
+        this.setState({"responsePic":temp});
+        this.setState({"uploadedProfilePic":temp});
           console.log(temp);
-          this.storeImage();
+          this.showImage(temp);
           return temp;
       }
   }
@@ -118,7 +121,9 @@ export default class MlMyProfile extends React.Component{
       this.setState({userName: e.target.value})
   }
 
-
+async showImage(temp){
+  this.setState({responsePic:temp})
+}
 
   async storeImage() {
   let Details = {
@@ -214,6 +219,9 @@ export default class MlMyProfile extends React.Component{
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      // this.showImage();
+      this.storeImage();
+
       return response;
     }
     else{
@@ -270,11 +278,11 @@ export default class MlMyProfile extends React.Component{
                       <div className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
                         {isExternaluser ? <div></div> :
-                          <input type="file" className="upload" id="profilePic"/>
+                          <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
                         }
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={profilePic}/>
+                        <img src={this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
                       </div>
                     </div>
                   </form>

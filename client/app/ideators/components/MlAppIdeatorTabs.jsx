@@ -10,7 +10,7 @@ import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
-import AppActionButtons from '../../commons/components/appActionButtons'
+// import AppActionButtons from '../../commons/components/appActionButtons'
 import TopIconsList from '../../commons/components/topIconsList'
 import MlIdeaView from '../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
 import MlCustomActionButtons from '../components/MlCustomActionButtons'
@@ -51,10 +51,6 @@ componentDidMount(){
   //   $('.RRT__tab').addClass('horizon-item');
   //   $('.horizon-swiper').horizonSwiper();
   // },300);
-  var pathname = window.location.pathname
-  if(pathname.indexOf(("view" || "edit")) != -1){
-    this.setState({isMyPortfolio:true})
-  }
 }
   //
   // (selAnnotation){
@@ -101,7 +97,6 @@ componentWillMount()
 
 render(){
   let tabs = this.state.tabs;
-  let isMyPortfolio = this.state.isMyPortfolio
   return (
     <div className="app_main_wrap">
       <div className="app_padding_wrap">
@@ -109,7 +104,7 @@ render(){
           <TopIconsList/>
           <MlTabComponent tabs={tabs}/>
         </div>
-        {isMyPortfolio?<AppActionButtons/>:<MlCustomActionButtons/>}
+        {/*<AppActionButtons/>*/}
         <br className="brclear"/>
       </div>
     </div>

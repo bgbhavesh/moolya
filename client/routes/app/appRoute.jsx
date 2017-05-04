@@ -6,11 +6,11 @@ import MlMapViewContainer from "../../admin/core/containers/MlMapViewContainer"
 import MoolyaMapView from "../../commons/components/map/MoolyaMapView"
 import MlViews from "../../admin/core/components/MlViews";
 import {mlBrowserDashboardMapConfig} from '../../app/dashboard/config/mlBrowserDashboardConfig'
-import MlAppIdeatorLanding from '../../../client/app/ideator/components/MlAppIdeatorLanding'
-import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeatorTabs'
+import MlAppIdeatorLanding from '../../../client/app/ideators/components/MlAppIdeatorLanding'
+import MlAppIdeatorTabs from '../../../client/app/ideators/components/MlAppIdeatorTabs'
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
-import  MlAppIdeatorEditTabs from '../../../client/app/ideator/components/MlAppIdeatorEditTabs'
+import  MlAppIdeatorEditTabs from '../../../client/app/ideators/components/MlAppIdeatorEditTabs'
 import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
 
 // import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
@@ -19,7 +19,7 @@ import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
-import MlAppIdeatorAddIdea from '../../app/ideator/components/MlAppIdeatorAddIdea'
+import MlAppIdeatorAddIdea from '../../app/ideators/components/MlAppIdeatorAddIdea'
 import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
 
 //profile

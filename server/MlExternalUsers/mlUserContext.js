@@ -15,6 +15,9 @@ class MlUserContext{
         if(user && user.profile && user.profile.isExternaluser == true){
             let user_profiles = user.profile.externalUserProfiles;
             default_User_Profile = _.find(user_profiles, {'isDefault': true });
+            if(!default_User_Profile ){
+                default_User_Profile = user_profiles[0];
+            }
         }
         return default_User_Profile;
     }

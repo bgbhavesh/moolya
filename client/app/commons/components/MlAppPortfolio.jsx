@@ -10,6 +10,7 @@ import {findComments} from '../../../commons/annotaterComments/findComments'
 import {createCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import {resolveCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import {reopenCommentActionHandler} from '../../../commons/annotaterComments/createComment';
+import AppActionButtons from '../../commons/components/appActionButtons'
 import moment from "moment";
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
@@ -139,45 +140,40 @@ class MlAppPortfolio extends React.Component{
     return response;
   }
 
+  async testEditPortfolioDetails(){
+    console.log('edit testing')
+  }
+
   async handleSuccess(response) {
     FlowRouter.go("/app/portfolio");
   };
 
   render(){
     let that=this;
-    let MlActionConfig = [
-      // {
-      //   showAction: true,
-      //   actionName: 'progress',
-      //   handler: null
-      // },
-      {
+    // let MlActionConfig = [
+    //   {
+    //     showAction: true,
+    //     actionName: 'edit',
+    //     handler: null
+    //   },
+    //   {
+    //     actionName: 'save',
+    //     showAction: true,
+    //     handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
+    //   }
+    // ]
+
+    let MlAppActionConfig= [{
         showAction: true,
-        actionName: 'edit',
-        handler: null
-      },
-      {
         actionName: 'save',
-        showAction: true,
         handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
       },
       {
-        showAction: true,
-        actionName: 'cancel',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'assign',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'comment',
-        handler: null,
-        iconID:'Popover1'
-      },
-    ]
+        showAction: false,
+        actionName: 'edit',
+        handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
+      }]
+
     let EditComponent = ""; let ViewComponent = "";
     if(this.props.viewMode){
       ViewComponent=this.state.editComponent;
@@ -267,7 +263,8 @@ class MlAppPortfolio extends React.Component{
               <div className="overlay"></div>
             </PopoverContent>
           </Popover>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        <AppActionButtons ActionOptions={MlAppActionConfig} showAction='showAction' actionName="actionName"/>
+        {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
       </div>
     )
   }

@@ -87,7 +87,7 @@ export default class MlAppMyProfile extends Component {
                 </div>
               </div>
               <div className="col-md-6">
-                <div className="form_bg">`
+                <div className="form_bg">
                   <form>
                     <div className="form-group">
                       <input type="text" placeholder="Display Name" className="form-control float-label"

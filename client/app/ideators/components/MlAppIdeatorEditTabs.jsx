@@ -118,7 +118,7 @@ getChildContext(){
             <TopIconsList/>
             <MlTabComponent tabs={tabs}/>
           </div>
-          <AppActionButtons/>
+          {/*<AppActionButtons/>*/}
           <br className="brclear"/>
         </div>
       </div>

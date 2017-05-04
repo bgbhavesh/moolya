@@ -10,7 +10,7 @@ import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
-import AppActionButtons from '../../commons/components/appActionButtons'
+// import AppActionButtons from '../../commons/components/appActionButtons'
 import TopIconsList from '../../commons/components/topIconsList'
 
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'
@@ -101,7 +101,7 @@ render(){
           <TopIconsList/>
           <MlTabComponent tabs={tabs}/>
         </div>
-        <AppActionButtons/>
+        {/*<AppActionButtons/>*/}
         <br className="brclear"/>
       </div>
     </div>

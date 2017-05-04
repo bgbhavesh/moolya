@@ -85,7 +85,7 @@ export default class AppContactDetails extends React.Component {
               <div className="form-group">
                 <input type="text" placeholder="Enter Country Code"
                        ref={'countryCode'}
-                       className="form-control float-label" id=""/>
+                       className="form-control float-label"/>
               </div>
               {/*defaultValue={that.state.selectedAddress.countryCode}*/}
               <div className="form-group">
@@ -113,12 +113,12 @@ export default class AppContactDetails extends React.Component {
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Enter Country Code" ref={'countryCode' + key}
-                         defaultValue={options.countryCode} valueKey={options.countryCode}
+                         defaultValue={options.countryCode}
                          className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref={'contactNumber' + key} placeholder="Enter Number"
-                         valueKey={options.contactNumber} id="phoneNumber" defaultValue={options.contactNumber}
+                         id="phoneNumber" defaultValue={options.contactNumber}
                          className="form-control float-label"/>
                 </div>
                 <div className="ml_icon_btn" onClick={that.onSave.bind(that, key)}>

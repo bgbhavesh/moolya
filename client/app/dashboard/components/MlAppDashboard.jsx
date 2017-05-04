@@ -47,7 +47,6 @@ export default class MlAppDashboard extends React.Component{
           <a data-toggle="tooltip" title="Providers" data-placement="bottom" href="#" data-filter="provider"><span className="ml ml-users"></span></a>
           <a data-toggle="tooltip" title="Browsers" data-placement="bottom" href="#" data-filter="browser"><span className="ml ml-browser"></span></a>
           <a data-toggle="tooltip" title="Company" data-placement="bottom" href="#" data-filter="company"><span className="ml ml-company"></span></a>
-          <a data-toggle="tooltip" title="Backend Users" data-placement="bottom" href="#" data-filter="internalUser"><span className="ml ml-moolya-symbol"></span></a>
         </div>
         <div className="view_switch map_view" />
         <div className="map_view_block">

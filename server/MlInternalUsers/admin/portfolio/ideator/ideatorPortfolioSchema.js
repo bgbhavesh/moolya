@@ -75,6 +75,7 @@ let ideatorPortfolioSchema = `
     type ideasObject{
         title:String,
         isIdeasTitlePrivate:Boolean,
+        portfolioId:String
         description:String,
         isIdeasPrivate:Boolean,
         isActive:Boolean
@@ -290,7 +291,7 @@ let ideatorPortfolioSchema = `
     
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
-        fetchIdeatorPortfolioIdeas(portfoliodetailsId:String!):ideasObject
+        fetchIdeatorPortfolioIdeas(ideaId:String!):ideasObject
         fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
         fetchIdeatorPortfolioAudience(portfoliodetailsId:String!): audienceInfo
         fetchIdeatorPortfolioLibrary(portfoliodetailsId:String!): libraryInfo

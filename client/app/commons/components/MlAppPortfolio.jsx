@@ -42,7 +42,9 @@ class MlAppPortfolio extends React.Component{
   componentDidMount(){
     let portfolioId = this.props.config;
     var pathname = window.location.pathname
-    if(pathname.indexOf(("view" || "edit")) != -1){
+    if(pathname.indexOf("view") != -1){
+      this.setState({isMyPortfolio:true})
+    }else if(pathname.indexOf("edit") != -1){
       this.setState({isMyPortfolio:true})
     }
   }

@@ -8,6 +8,7 @@ let ideatorPortfolioSchema = `
     
     type Ideator{
         ideas:[ideasOutput],
+        accountType:String
         chapterName:String,
         userId:String
         name:String

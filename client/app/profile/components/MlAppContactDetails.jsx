@@ -31,6 +31,7 @@ export default class AppContactDetails extends React.Component {
     let details = this.state.details
     details = _.cloneDeep(details)
     editedObj = details[idx];
+    editedObj = _.omit(editedObj, '__typename');
     editedObj['numberType'] = this.refs['numberType'+idx].value;
     editedObj['countryCode'] = this.refs['countryCode'+idx].value;
     editedObj['contactNumber'] = this.refs['contactNumber'+idx].value;

@@ -169,7 +169,7 @@ class MlAppPortfolio extends React.Component{
         handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
       },
       {
-        showAction: false,
+        showAction: true,
         actionName: 'edit',
         handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
       }]

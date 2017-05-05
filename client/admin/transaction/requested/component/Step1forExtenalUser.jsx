@@ -41,23 +41,28 @@ export default class Step1forExtenalUser extends React.Component{
       identityTypesData:[],
       selectedTypeOfIndustry:'',
       profession:null,
-      defaultIdentityIndividual: " ",
-      defaultIdentityCompany:" ",
+      defaultIdentityIndividual: false,
+      defaultIdentityCompany:false,
     }
 
     this.fetchIdentityTypesMaster.bind(this);
     this.updateregistrationInfo.bind(this);
-    this.settingIdentity.bind(this);
+   this.settingIdentity.bind(this);
 
     return this;
   }
   async settingIdentity(identity){
-    if(identity === "Individual"){
+
+    if(identity == "Individual"){
+      $('#companyId').hide();
+      this.setState({identityType:"Individual"})
       this.setState({defaultIdentityIndividual:true, defaultIdentityCompany: false})
+
     }
-    if(identity === "Company"){
-      this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
-      $('#indi').hide();
+    if(identity == "Company"){
+      this.setState({identityType:"Company"})
+     this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
+      $('#individualId').hide();
     }
     if(identity === null){
       this.setState({defaultIdentityCompany: false, defaultIdentityIndividual:false})
@@ -103,12 +108,12 @@ export default class Step1forExtenalUser extends React.Component{
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
     initalizeFloatLabel();
-    if(this.state.defaultIdentityIndividual === true){
-      $('#comp').hide();
+    if(this.state.defaultIdentityIndividual == true){
+      $('#companyId').hide();
 
     }
-    if(this.state.defaultIdentityCompany === true){
-      $('#indi').hide();
+    if(this.state.defaultIdentityCompany == true){
+      $('#individualId').hide();
 
     }
 
@@ -153,16 +158,32 @@ export default class Step1forExtenalUser extends React.Component{
   checkIdentityIndividual(event) {
     this.setState({identityType: event.target.name});
     i++;
-    $('#comp').hide();
-    if (i > 1){
-      i = 0;
-      this.setState({identityType: " "});
-      $('#indi').show();
-      $('#comp').show();
-    }}
+    if(event.target.name=="Individual"){
+    // this.settingIdentity(event.target.name);
+      $('#companyId').hide();
+      this.setState({defaultIdentityIndividual: true, defaultIdentityCompany:false})
+
+      if (i>1){
+        i = 0;
+       // this.setState({identityType: " "});
+    $('#individualId').show();
+        $('#companyId').show();
+      }
+    }else if(event.target.name=="Company"){
+     //this.settingIdentity(event.target.name);
+      this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
+      $('#individualId').hide();
+      if (i>1){
+        i = 0;
+       // this.setState({identityType: " "});
+       $('#individualId').show();
+        $('#companyId').show();
+      }
+    }
+   }
 
 
-  checkIdentityCompany(event) {
+ /* checkIdentityCompany(event) {
     this.setState({identityType: event.target.name});
     i++;
     $('#indi').hide();
@@ -175,7 +196,7 @@ export default class Step1forExtenalUser extends React.Component{
   }
 
 
-
+*/
   optionsBySelectUserType(value){
     this.setState({userType:value})
   }
@@ -379,16 +400,16 @@ export default class Step1forExtenalUser extends React.Component{
                       <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} disabled="true" />
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} disabled={true} />
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id="" data-required={true} data-errMsg="Contact Number is required" disabled="true"/>
+                      <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""data-required={true} data-errMsg="Contact Number is required" disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} disabled="true"/>
+                      <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} disabled={true}/>
                     </div>
                     {/*<div className="form-group">*/}
                     {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
@@ -396,50 +417,66 @@ export default class Step1forExtenalUser extends React.Component{
                     <div className="panel panel-default">
                       <div className="panel-heading">Operation Area</div>
                       <div className="panel-body">
-                        <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} disabled="true"/>
-                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} disabled="true"/>
+                        <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} disabled={true}/>
+                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} disabled={true}/>
 
-                        {/*{canSelectIdentity&&*/}
-                        {/*<div className="ml_tabs">*/}
-                        {/*<ul  className="nav nav-pills">*/}
+                       {/* {canSelectIdentity&&
+                        <div className="ml_tabs">
+                        <ul  className="nav nav-pills">
 
-                        {/*{identityTypez.map((i)=>{*/}
+                        {identityTypez.map((i)=>{
 
-                        {/*return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>*/}
-                        {/*<a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>*/}
-                        {/*</li>);*/}
-                        {/*})}*/}
-                        {/*/!* <li className={this.state.identityType==="Individual"?"active":""}>*/}
-                        {/*<a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>*/}
-                        {/*</li>*/}
-                        {/*<li className={this.state.identityType==="Company"?"active":""}>*/}
-                        {/*<a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>*/}
-                        {/*</li>*!/*/}
-                        {/*</ul>*/}
-                        {/*</div>*/}
-                        {/*}*/}
-
-                        <div className="form-group">
-
-                          <div   id="indi" className="input_types">
-
-                            <input  type="checkbox"   name="Individual" value="Individual" onChange={that.checkIdentityIndividual.bind(that)} defaultChecked={this.state.defaultIdentityIndividual}/><label htmlFor="radio1"><span><span></span></span>Individual</label>
-                            {/*<a  href="#3a" data-toggle="tab" name="Individual" >&nbsp;</a>*/}
-                          </div>
-                          <div id="comp" className="input_types">
-                            <input  type="checkbox"  name="Company" value="Company" onChange={that.checkIdentityCompany.bind(that)} defaultChecked={this.state.defaultIdentityCompany}  /><label htmlFor="radio2"><span><span></span></span>Company</label>
-                            {/*<a href="#4a" data-toggle="tab" name="Company" >&nbsp;</a>*/}
-                          </div>
+                        return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
+                        <a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>
+                        </li>);
+                        })}
+                        /!* <li className={this.state.identityType==="Individual"?"active":""}>
+                        <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
+                        </li>
+                        <li className={this.state.identityType==="Company"?"active":""}>
+                        <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
+                        </li>*!/
+                        </ul>
                         </div>
+                        }*/}
+                        {canSelectIdentity &&
+                        <div className="form-group">
+                          {identityTypez.map((i) => {
+                            let checked=null
+                                if(i._id=='individual'){
+                                  checked=that.state.defaultIdentityIndividual
+                                }else if(i._id=='company'){
+                                  checked=that.state.defaultIdentityCompany
+                                }
+                            return (
+                            <div key={i._id}>
+                              <div id={`${i._id}Id`}  className="input_types">
+
+                                <input type="checkbox" name={i.identityTypeName} value={i._id}
+                                       onChange={that.checkIdentityIndividual.bind(that) }
+                                       defaultChecked={checked}/><label
+                                htmlFor="radio1"><span><span></span></span>{i.identityTypeName}</label>
+                              </div>
+                             {/* <div id="comp" className="input_types">
+                                <input type="checkbox" name="Company" value="Company"
+                                       onChange={that.checkIdentityCompany.bind(that)}
+                                       defaultChecked={this.state.defaultIdentityCompany}/><label
+                                htmlFor="radio2"><span><span></span></span>Company</label>
+                              </div>*/}
+                            </div>)
+                          })
+                          }
+                        </div>
+                        }
                         <div className="clearfix"></div>
                         <div className="form-group mart20">
                           <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true} disabled="true"/>
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true} disabled="true"/>
+                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true} disabled={true}/>
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} disabled="true"/>
+                          <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} disabled={true}/>
 
                         </div>
 

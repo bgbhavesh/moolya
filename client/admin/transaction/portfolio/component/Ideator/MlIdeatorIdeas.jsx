@@ -61,10 +61,10 @@ export default class MlIdeatorIdeas extends React.Component{
   }
   async fetchPortfolioDetails() {
     let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let ideaId=that.props.ideaId;
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.ideas)
     if(empty){
-      const response = await findIdeatorIdeasActionHandler(portfoliodetailsId);
+      const response = await findIdeatorIdeasActionHandler(ideaId);
       if (response) {
         this.setState({loading: false, data: response});
       }

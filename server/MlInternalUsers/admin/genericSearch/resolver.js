@@ -764,6 +764,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data=list
     totalRecords=MlHierarchy.find(query,findOptions).count();
   }
+  if(args.module=="filters"){
+    data= MlFilters.find(query,findOptions).fetch();
+    totalRecords=MlFilters.find(query,findOptions).count();
+  }
 
 
   return {'totalRecords':totalRecords,'data':data};
@@ -935,6 +939,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.module){
       return 'Hierarchy'
+    }
+    if(data.filterName){
+      return 'Filters'
     }
     return null;
   }

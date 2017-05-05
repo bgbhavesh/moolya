@@ -56,12 +56,12 @@ export default class MlAppIdeatorIdeas extends React.Component{
       }
   }
 
-  viewIdea(portfolioId, ideaId,e){
-    FlowRouter.go("/app/portfolio/view/"+portfolioId+"/"+ideaId);
+  viewIdea(portfolioId, community,e){
+    FlowRouter.go("/app/portfolio/view/"+portfolioId+"/"+community);
   }
 
-  editIdea(portfolioId, ideaId,e){
-    FlowRouter.go("/app/portfolio/edit/"+portfolioId+"/"+ideaId);
+  editIdea(portfolioId, community,e){
+    FlowRouter.go("/app/portfolio/edit/"+portfolioId+"/"+community);
   }
 
   render(){
@@ -109,8 +109,8 @@ export default class MlAppIdeatorIdeas extends React.Component{
                                       <div className="panel-heading">{idea.title}</div>
                                       <div className="panel-body">
                                           <p>{idea.description}</p>
-                                          <a className="mlUpload_btn pull-left" onClick={that.viewIdea.bind(that, idea.portfolioId, idea._id)}>View</a>
-                                          <a className="mlUpload_btn pull-left" onClick={that.editIdea.bind(that, idea.portfolioId, idea._id)}>Edit</a>
+                                          <a className="mlUpload_btn pull-left" onClick={that.viewIdea.bind(that, idea.portfolioId, "Ideators")}>View</a>
+                                          <a className="mlUpload_btn pull-left" onClick={that.editIdea.bind(that, idea.portfolioId, "Ideators")}>Edit</a>
                                           <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left" onClick={that.AddIdea.bind(that)}>Add New Idea</a>
                                       </div>
                                   </div>

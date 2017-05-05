@@ -102,8 +102,7 @@ export default class MlTableView extends Component {
   }
 
   onFilterChange(filterQuery){
-        console.log(filterQuery);
-        this.setState({filterValue:filterQuery});
+       this.setState({filterValue:filterQuery});
   }
 
   render() {

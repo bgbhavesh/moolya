@@ -31,7 +31,6 @@ MlResolver.MlQueryResolver['fetchModuleFilters'] = (obj, args, context, info) =>
 
 MlResolver.MlQueryResolver['fetchFilterListDropDown'] = (obj, args, context, info) => {
   // TODO : Authorization
-  console.log(args);
   let filtersData =new MlFilterListRepo().getFilterDropDownSettings(args);
   return filtersData;
 }

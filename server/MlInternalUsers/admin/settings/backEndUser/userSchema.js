@@ -189,7 +189,8 @@ let BackEndUser = `
         numericalFormat: String,
         currencyTypes: String,
         dateOfBirth: String,
-        genderType: String
+        genderType: String,
+        profileImage: String
     }
     
     input userObject{

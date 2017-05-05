@@ -73,3 +73,27 @@ export async function fetchIdeators() {
   const ideas = result.data.fetchIdeators;
   return ideas
 }
+
+export async function fetchIdeaByPortfolioId(portfolioId) {
+  const result = await appClient.query({
+    query: gql`
+            query($portfolioId:String){
+                fetchIdeaByPortfolioId(portfolioId:$portfolioId) {
+                      _id
+                      isActive
+                      isIdeaPrivate
+                      isIdeaTitlePrivate
+                      title
+                      description
+                      portfolioId
+                }
+            }
+        `,
+    variables:{
+      portfolioId:portfolioId
+    },
+    forceFetch:true
+  })
+  const ideas = result.data.fetchIdeaByPortfolioId;
+  return ideas
+}

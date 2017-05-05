@@ -73,6 +73,7 @@ let ideatorPortfolioSchema = `
         profilePic:String
     }
     type ideasObject{
+        _id:String
         title:String,
         isIdeasTitlePrivate:Boolean,
         portfolioId:String

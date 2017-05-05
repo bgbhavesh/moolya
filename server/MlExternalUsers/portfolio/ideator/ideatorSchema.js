@@ -27,6 +27,7 @@ let ideatorPortfolioSchema = `
     
     type Query{
         fetchIdeators:[Ideator]
+        fetchIdeaByPortfolioId(portfolioId:String):ideasOutput
     }
     
     type Mutation{

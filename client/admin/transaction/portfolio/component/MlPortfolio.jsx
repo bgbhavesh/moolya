@@ -12,6 +12,7 @@ import {resolveCommentActionHandler} from '../../../../commons/annotaterComments
 import {reopenCommentActionHandler} from '../../../../commons/annotaterComments/createComment';
 import moment from "moment";
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
+import {fetchIdeaByPortfolioId} from '../../../../app/ideators/actions/IdeaActionHandler'
 
 
 class MlPortfolio extends React.Component{
@@ -26,7 +27,7 @@ class MlPortfolio extends React.Component{
     this.getSelectedAnnotation.bind(this);
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
-
+    this.fetchIdeaId.bind(this);
     return this;
   }
 
@@ -74,9 +75,18 @@ class MlPortfolio extends React.Component{
     }else{
       this.fetchEditPortfolioTemplate(this.props.config);
     }
+    if(this.props.communityType == "Ideators"){
+      this.fetchIdeaId()
+    }else{
+      this.setState({ideaId:" "})
+    }
 
   }
-
+  async fetchIdeaId(){
+    let portfolioId = this.props.config;
+    const response = await fetchIdeaByPortfolioId(portfolioId);
+    this.setState({ideaId : response._id});
+  }
   async fetchEditPortfolioTemplate(pId) {
       let userType = this.context.userType;
       const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType});
@@ -202,8 +212,8 @@ class MlPortfolio extends React.Component{
           <div className="admin_padding_wrap">
             <div className='step-progress' >
               {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
-              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
+              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div>
           </div>)}
         <div className="overlay"></div>

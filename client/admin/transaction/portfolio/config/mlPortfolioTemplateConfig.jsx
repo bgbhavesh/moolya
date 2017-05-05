@@ -55,7 +55,7 @@ const mlStartupViewExternalUserPortfolioTemplateConfig={
 };
 const mlFunderEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Funder-Edit",
-  templateCode:"PFFUNEDT",
+  templateCode:"PFTFUNEDT",   //PFFUNEDT
   userType:'internal',
   process:'Registration',
   subProcess:'Registration',

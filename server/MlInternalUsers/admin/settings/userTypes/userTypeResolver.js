@@ -28,17 +28,23 @@ MlResolver.MlMutationResolver['createUserType'] = (obj, args, context, info) => 
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
-
+if(args.userType.communityCode) {
   // let result= MlUserTypes.insert({...args.userType})
-  let result= mlDBController.insert('MlUserTypes', args.userType, context)
+  let result = mlDBController.insert('MlUserTypes', args.userType, context)
   if (result) {
     let code = 200;
     let result = {userTypeId: result}
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-
+}else{
+  let response = new MlRespPayload().errorPayload("Community Needed");
+  return response;
 }
+}
+
+
+
 MlResolver.MlQueryResolver['FindUserType'] = (obj, args, context, info) => {
   // TODO : Authorization
 

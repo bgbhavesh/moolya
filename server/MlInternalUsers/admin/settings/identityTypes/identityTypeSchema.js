@@ -12,6 +12,7 @@ let IdentityTypesSchema = `
    
     type Query{
         FetchIdentityTypes:[IdentityTypes]
+        FetchCommunityBasedIdentity(communityId:String):[IdentityTypes]
     }
 `
 

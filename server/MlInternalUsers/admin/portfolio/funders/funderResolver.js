@@ -1,3 +1,114 @@
 /**
  * Created by venkatsrinag on 24/4/17.
  */
+import MlResolver from '../../../../commons/mlResolverDef'
+import MlRespPayload from '../../../../commons/mlPayload'
+import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
+
+var _ = require('lodash')
+
+
+MlResolver.MlMutationResolver['createFunderPortfolio'] = (obj, args, context, info) => {
+    try {
+        if (args && args.userId && args.communityType)
+        {
+            user = MlFunderPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
+            if (!user) {
+                MlFunderPortfolio.insert({
+                    userId: args.userId,
+                    communityType: args.communityType,
+                    portfolioDetailsId: args.portfolioDetailsId
+                })
+            }
+        }
+    } catch (e) {
+        console.log("Error: In creating Funder portfolio");
+    }
+}
+
+MlResolver.MlMutationResolver['updateFunderPortfolio'] = (obj, args, context, info) =>
+{
+    if (args.portfoliodetailsId){
+        try {
+            let funderPortfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+            let updateFor = args.portfolio.funderPortfolio;
+            if (funderPortfolio){
+                for (key in updateFor){
+                    if (funderPortfolio.hasOwnProperty(key)){
+                        if(_.isArray(updateFor[key]) && _.isArray(funderPortfolio[key])){
+                          funderPortfolio[key] = updateArrayofObjects(updateFor[key], startupPortfolio[key])
+                        }
+                        else if(_.isObject(updateFor[key]) && _.isObject(funderPortfolio[key]))
+                        {
+                            _.mergeWith(funderPortfolio[key], updateFor[key], function (objValue, srcValue) {
+                                if (_.isArray(objValue)) {
+                                    return objValue.concat(srcValue);
+                                }
+                            });
+                        }
+                    }
+                    else{
+                        funderPortfolio[key] = updateFor[key]
+                    }
+                }
+
+                let ret = MlFunderPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: funderPortfolio})
+                if (ret) {
+                    let code = 200;
+                    let response = new MlRespPayload().successPayload("Updated Successfully", code);
+                    return response;
+                }
+            }
+            else{
+                let code = 400;
+                let response = new MlRespPayload().errorPayload("Invalid Portfolio Request", code);
+                return response;
+            }
+        }
+        catch (e) {
+            let code = 400;
+            let response = new MlRespPayload().errorPayload(e.message, code);
+            return response;
+        }
+    }
+}
+
+MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
+
+}
+
+MlResolver.MlQueryResolver['fetchFunderInvestments'] = (obj, args, context, info) => {
+
+}
+
+MlResolver.MlQueryResolver['fetchFunderPrincipal'] = (obj, args, context, info) => {
+
+}
+
+MlResolver.MlQueryResolver['fetchFunderTeam'] = (obj, args, context, info) => {
+
+}
+
+MlResolver.MlQueryResolver['fetchFunderAreaofInterest'] = (obj, args, context, info) => {
+
+}
+
+MlResolver.MlQueryResolver['fetchFunderSuccessStories'] = (obj, args, context, info) => {
+
+}
+
+updateArrayofObjects = (updateFor, source) =>{
+  if(_.isArray(updateFor) && _.isArray(source)){
+      _.each(updateFor, function (obj) {
+          let isObj = _.find(source, {index:obj.index})
+          let itemIndex = _.findIndex(source, {index:obj.index})
+          if(isObj &&  itemIndex >= 0){
+              _.mergeWith(source[itemIndex], obj)
+          }
+          else{
+              source.push(obj)
+          }
+      })
+  }
+  return source;
+}

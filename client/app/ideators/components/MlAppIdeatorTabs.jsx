@@ -98,15 +98,9 @@ componentWillMount()
 render(){
   let tabs = this.state.tabs;
   return (
-    <div className="app_main_wrap">
-      <div className="app_padding_wrap">
-        <div className="col-md-12">
-          <TopIconsList/>
-          <MlTabComponent tabs={tabs}/>
-        </div>
-        {/*<AppActionButtons/>*/}
-        <br className="brclear"/>
-      </div>
+    <div className="col-md-12">
+      <TopIconsList/>
+      <MlTabComponent tabs={tabs}/>
     </div>
   )
   // return <MlTabComponent tabs={tabs}/>

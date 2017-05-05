@@ -14,7 +14,7 @@ import AppActionButtons from '../../commons/components/appActionButtons'
 import moment from "moment";
 import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-
+import {fetchIdeaByPortfolioId} from '../../ideators/actions/IdeaActionHandler'
 
 class MlAppPortfolio extends React.Component{
   constructor(props){
@@ -28,7 +28,7 @@ class MlAppPortfolio extends React.Component{
     this.getSelectedAnnotation.bind(this);
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
-
+    this.fetchIdeaId.bind(this);
     return this;
   }
 
@@ -82,7 +82,13 @@ class MlAppPortfolio extends React.Component{
     }else{
       this.fetchEditPortfolioTemplate(this.props.config);
     }
-
+    if(this.props.communityType == "Ideators"){
+      this.fetchIdeaId()
+    }else if(this.props.communityType =="ideator"){
+      this.fetchIdeaId()
+    }else{
+      this.setState({ideaId:" "})
+    }
   }
 
   async fetchEditPortfolioTemplate(pId) {
@@ -132,6 +138,11 @@ class MlAppPortfolio extends React.Component{
 
       });
     }
+  }
+  async fetchIdeaId(){
+      let portfolioId = this.props.config;
+      const response = await fetchIdeaByPortfolioId(portfolioId);
+      this.setState({ideaId : response._id});
   }
 
   getPortfolioDetails(details){
@@ -201,14 +212,11 @@ class MlAppPortfolio extends React.Component{
     let isMyPortfolio = this.state.isMyPortfolio
     const showLoader=this.state.loading;
     return(
-      <div className="admin_main_wrap">
+      <div className="app_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_padding_wrap">
-            <div className='step-progress' >
-              {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
+          <div className="app_padding_wrap">
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.props.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
-            </div>
           </div>)}
         <div className="overlay"></div>
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>

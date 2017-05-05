@@ -65,6 +65,7 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
     query: gql`
           query ($ideaId: String!) {
             fetchIdeatorPortfolioIdeas(ideaId: $ideaId) {
+                _id
                 title
                 portfolioId
                 description

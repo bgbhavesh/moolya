@@ -181,7 +181,7 @@ class MlAppPortfolio extends React.Component{
         handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
       }]
 
-    let EditComponent = ""; let ViewComponent = "";
+    let   EditComponent = ""; let ViewComponent = "";
     if(this.props.viewMode){
       ViewComponent=this.state.editComponent;
     }else{
@@ -201,14 +201,11 @@ class MlAppPortfolio extends React.Component{
     let isMyPortfolio = this.state.isMyPortfolio
     const showLoader=this.state.loading;
     return(
-      <div className="admin_main_wrap">
+      <div className="app_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
-          <div className="admin_padding_wrap">
-            <div className='step-progress' >
-              {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
+          <div className="app_padding_wrap">
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.props.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
-            </div>
           </div>)}
         <div className="overlay"></div>
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>

@@ -129,7 +129,7 @@ export default class MlHierarchyDetails extends React.Component {
       }
       console.log(hierarchyInfo);
       const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
-      this.state.isExpanded=true
+      //this.state.isExpanded=true
       return response;
     }
   }
@@ -139,14 +139,15 @@ export default class MlHierarchyDetails extends React.Component {
   }
 
   expandComponent(row) {
-    let rowValue,selctedRowDetails=false;
+    let subdepartment,selctedRowDetails=false;
     let selectedRow=this.refs.table
     if(selectedRow){
      let selectedRowValue=selectedRow.state.selectedRowKeys;
      if(selectedRowValue.length==1){
-       if(selectedRowValue[0]){
-         rowValue=selectedRowValue[0]
-         if(rowValue==row.departmentId){
+       //department=selectedRowValue[0]
+       subdepartment=selectedRowValue[0]
+       if(subdepartment){
+         if(subdepartment==row.subDepartmentId){
            selctedRowDetails=true
          }
        }
@@ -165,9 +166,9 @@ export default class MlHierarchyDetails extends React.Component {
     const assigned = this.updateunassignedRoles();
     const upAssigned = this.updateassignRoles();
     const hierarchyAssignment = this.updatehierarchyAssignments();
-    if(this.state.isExpanded){
+    //if(this.state.isExpanded){
       toastr.success("Update Successful");
-    }
+    //}
     return assigned;
   }
   SwitchBtn(cell,row){
@@ -177,7 +178,7 @@ export default class MlHierarchyDetails extends React.Component {
     }
     return(
       <div>
-    {activeDetails?(<div className="form-group switch_wrap"><label className="switch"><input type="checkbox" ref="status" id="status" checked={row.isActive}/><div className="slider"></div></label></div>):''}
+    {activeDetails?(<div className="form-group switch_wrap"><label className="switch"><input type="checkbox" disabled="true" ref="status" id="status" checked={row.isActive}/><div className="slider"></div></label></div>):''}
       </div>
     )
 
@@ -221,8 +222,8 @@ export default class MlHierarchyDetails extends React.Component {
                                pagination
                                search
               >
-                <TableHeaderColumn dataField="departmentId" isKey={true} dataSort={true} hidden={true}></TableHeaderColumn>
-                <TableHeaderColumn dataField="subDepartmentId" dataSort={true} hidden={true}></TableHeaderColumn>
+                <TableHeaderColumn dataField="departmentId"  dataSort={true} hidden={true}></TableHeaderColumn>
+                <TableHeaderColumn dataField="subDepartmentId" isKey={true} dataSort={true} hidden={true}></TableHeaderColumn>
                 <TableHeaderColumn dataField="isMoolya" hidden={true}>isMoolya</TableHeaderColumn>
                 <TableHeaderColumn dataField="departmentName">Department</TableHeaderColumn>
                 <TableHeaderColumn dataField="subDepartmentName">Sub-Department</TableHeaderColumn>

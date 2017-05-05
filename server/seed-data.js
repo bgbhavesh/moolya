@@ -321,7 +321,9 @@ Accounts.validateLoginAttempt(function (user)
     // }
 
     if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
-      return validateExternalUserLoginAttempt(user)
+      let isAllowed= validateExternalUserLoginAttempt(user);
+      if(!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
+      return true;
     }
     else if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
         if(user && user.user && user.user.profile && !user.user.profile.isActive){               //temporary moving here for external user
@@ -336,7 +338,11 @@ Accounts.validateLoginAttempt(function (user)
 })
 
 validateExternalUserLoginAttempt=(user)=>{
-  let userExternal = user.user.profile.isExternaluser
+  let userExternal = user.user.profile.isExternaluser;
+  //check if email is verified.
+  let emails=user.user&&user.user.emails?user.user.emails:[];
+  var email = _.find(emails || [], function (e) { return (e.verified&&e.address===user.user.username);});
+  if(!email){return false;}
   return userExternal
 }
 

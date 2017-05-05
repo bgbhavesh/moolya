@@ -73,8 +73,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
- // console.log("graphQLServer :"+graphQLServer);
   config.configServer(graphQLServer)
+  graphQLServer.use(cors());
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
     try {
@@ -202,7 +202,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
             case "PROFILE":{
               imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
               imageUploadCallback=Meteor.bindEnvironment(function(resp) {
-                MlResolver.MlMutationResolver['createRegistration'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
+                // MlResolver.MlMutationResolver['createRegistration'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
+                MlResolver.MlMutationResolver['uploadUserImage'](null, {userId:data.userId, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
               });
               break;
             }
@@ -247,6 +248,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       if(req && req.body && req.body.data)
       {
         console.log("Processing started..!!");
+
         let data = req.body.data;
         let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
@@ -358,7 +360,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                       id:city._id,
                       name:city.name
                     }
-                    cities.push(json)
+                    let c = _.find(cities, {name:json.name});
+                    if(c){
+                      //do nothing
+                    }else{
+                      cities.push(json)
+                    }
                 })
             }
             console.log(cities);

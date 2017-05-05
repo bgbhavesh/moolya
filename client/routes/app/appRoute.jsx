@@ -6,18 +6,29 @@ import MlMapViewContainer from "../../admin/core/containers/MlMapViewContainer"
 import MoolyaMapView from "../../commons/components/map/MoolyaMapView"
 import MlViews from "../../admin/core/components/MlViews";
 import {mlBrowserDashboardMapConfig} from '../../app/dashboard/config/mlBrowserDashboardConfig'
-import MlAppIdeatorLanding from '../../../client/app/ideator/components/MlAppIdeatorLanding'
-import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeatorTabs'
+import MlAppIdeatorLanding from '../../../client/app/ideators/components/MlAppIdeatorLanding'
+import MlAppIdeatorTabs from '../../../client/app/ideators/components/MlAppIdeatorTabs'
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
+import  MlAppIdeatorEditTabs from '../../../client/app/ideators/components/MlAppIdeatorEditTabs'
+import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
 
 // import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
 // import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
-//
-// import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
+import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
+import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
+import MlAppIdeatorAddIdea from '../../app/ideators/components/MlAppIdeatorAddIdea'
+import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
 
+//profile
+import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
+import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
+import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
+
+
+import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 export const appSection = FlowRouter.group({
   prefix: "/app",
   name: 'app',
@@ -40,45 +51,79 @@ appSection.route('/', {
 appSection.route('/dashboard', {
   name: 'dashboard',
   action(){
-    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlBrowserDashboardMapConfig}/>})
+    // mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlBrowserDashboardMapConfig}/>})
+    mount(AppLayout,{appContent:<MlAppDashboard/>})
   }
 });
 
-appSection.route('/myprofile/personalInfo', {
-  name: 'myprofile',
+appSection.route('/myProfile', {
+  name: 'myProfile',
   action(){
-    mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppProfileTabs/>})
+      mount(AppLayout,{appContent:<MlAppMyProfile/>, isProfileMenu:true})
   }
 });
 
-// appSection.route('/myprofile/AddressBook', {
-//   name: 'myprofile',
-//   action(){
-//     mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MyProfileAddressBook/>})
-//   }
-// });
-//
-// appSection.route('/myprofile/Settings', {
-//   name: 'myprofile',
-//   action(){
-//     mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MyProfileSettings/>})
-//   }
-// });
+appSection.route('/addressBook', {
+  name: 'addressBook',
+  action(){
+    // mount(AppLayout,{appContent:<MyProfileAddressBook/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:<MlAppProfileAddressBook/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/portfolio', {
+  name: 'portfolio',
+  action(){
+    mount(AppLayout,{appContent:<MlPortfolioLanding/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/settings', {
+  name: 'settings',
+  action(){
+    mount(AppLayout,{appContent:<MlProfileSettings/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/myProfile/registerAs', {
+    name: 'registeras',
+    action(){
+        mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppCommunitiesList/>})
+    }
+})
 
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
-    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
-    // mount(AppLayout,{appContent:<div>Ideator</div>})
+      mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
+  }
+});
+appSection.route('/portfolio/view/:portfolioId/:communityType', {
+  name: 'portfolio',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>, isProfileMenu:true})
+  }
+});
+appSection.route('/portfolio/edit/:portfolioId/:communityType', {
+  name: 'portfolio',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>, isProfileMenu:true})
+  }
+});
+appSection.route('/portfolio/addIdea', {
+  name: 'portfolio',
+  action(){
+    mount(AppLayout,{appContent:< MlAppIdeatorAddIdea/>, isProfileMenu:true})
   }
 });
 
 
 // appSection.route('/ideator/viewPortfolio/:id/:communityType', {
-appSection.route('/ideator/:id/', {
-  name: 'ideator_portfolio_view',
+appSection.route('/:communityType/:portfolioId', {
+  name: 'ideator',
   action(params){
-    mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>, isProfileMenu:false})
+    // mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }
 });
@@ -106,3 +151,11 @@ appSection.route('/startup/:id', {
     // mount(AppLayout,{appContent:<div>Startup</div>})
   }
 });
+
+appSection.route('/register/:id', {
+  name: 'registeras',
+  action(params){
+    mount(AppLayout,{appContent:<RegistrationWizard config={params.id}/>})
+  }
+});
+

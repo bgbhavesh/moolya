@@ -148,16 +148,8 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     let solutionLockStatus =  this.state.data.isSolutionPrivate?this.state.data.isSolutionPrivate:false
     const showLoader = this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-        <div className="admin_padding_wrap">
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
               <div className="row requested_input">
                 <div className="col-lg-6">
                   <div className="panel panel-default panel-form">
@@ -218,9 +210,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                   </div>
                 </div>
               </div>
-            </ScrollArea>
-          </div>
-        </div>)}
+
+
+        )}
       </div>
     )
   }

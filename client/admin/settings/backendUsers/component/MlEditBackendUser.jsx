@@ -53,7 +53,8 @@ class MlEditBackendUser extends React.Component{
       dateOfBirth: " ",
       genderStateMale: " ",
       genderStateFemale: " ",
-      genderStateOthers: " "
+      genderStateOthers: " ",
+      profilePic:" "
     }
     this.addEventHandler.bind(this);
     this.updateBackendUser.bind(this);
@@ -129,14 +130,14 @@ class MlEditBackendUser extends React.Component{
   }
 
   async getGender() {
-    if(this.state.genderSelect === "Male"){
-      this.setState({genderStateMale: true, genderStateFemale: false, genderStateOthers:false})
+    if(this.state.genderSelect === "Others"){
+      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers:true})
     }
     else if(this.state.genderSelect === "Female"){
       this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
     }
     else{
-      this.setState({genderStateOthers: true, genderStateFemale: false, genderStateMale: false})
+      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: true})
     }
   }
 
@@ -154,6 +155,7 @@ class MlEditBackendUser extends React.Component{
      this.setState({isActive:this.state.data.profile.InternalUprofile.moolyaProfile.isActive})
      this.setState({globalStatus:this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment})
      this.setState({genderSelect : response.profile.genderType, dateOfBirth:response.profile.dateOfBirth});
+     this.setState({profilePic: response.profile.profileImage})
      let clusterId="",chapterId='',subChapterId='',communityId=''
      let dataDetails=this.state.data
        if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
@@ -198,16 +200,11 @@ class MlEditBackendUser extends React.Component{
 
 
        }
-       // else{
-       //
-       // }
+
      this.getGender();
    }
 
     }
-
-
-
 
   onGlobalStatusChanged(e){
     if(e.currentTarget.checked){
@@ -317,7 +314,8 @@ class MlEditBackendUser extends React.Component{
       isActive:this.refs.deActive.checked,
       InternalUprofile: InternalUprofile,
       genderType:this.state.genderSelect,
-      dateOfBirth: this.state.dateOfBirth
+      dateOfBirth: this.state.dateOfBirth,
+      profileImage: this.state.profilePic
     }
     let userObject={
       username: moolyaProfile.email,

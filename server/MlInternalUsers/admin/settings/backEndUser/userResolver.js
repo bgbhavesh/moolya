@@ -756,9 +756,9 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
 }
 
 MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
-       let rest = null;
-        let user = mlDBController.findOne('users', {_id: args.userId}, context);
-        return user.profile;
+      let rest = null;
+      let user = mlDBController.findOne('users', {_id: args.userId}, context);
+      return user.profile;
 }
 
 MlResolver.MlQueryResolver['FindUserOnToken'] = (obj, args, context, info) => {
@@ -775,5 +775,17 @@ MlResolver.MlQueryResolver['FindUserOnToken'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload(result, code);
     return response
   }
-
 }
+
+
+
+MlResolver.MlMutationResolver['uploadUserImage'] = (obj, args, context, info) => {
+  const user = Meteor.users.findOne({'_id':args.userId})
+  if(user){
+    let result = Meteor.users.update({'_id': args.userId}, {$set:{'profile.profileImage':args.userProfilePic}})
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+}
+

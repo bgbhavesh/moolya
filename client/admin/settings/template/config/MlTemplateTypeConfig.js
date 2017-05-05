@@ -37,7 +37,12 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
+        if(data&&data.id){
+        FlowRouter.go("/admin/settings/templateTypeList")
+      }else{
         FlowRouter.go("/admin/settings/addTemplateType")
+
+      }
       }
     },
     // {

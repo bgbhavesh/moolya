@@ -345,7 +345,7 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/documents_icon.png",
-        "link" : "/admin/documents",
+        "link" : "/admin/documents/clusterList",
         "name" : "documents",
         "uniqueId" : "documents",
         "isLink" : true,
@@ -360,7 +360,7 @@ if(Meteor.isServer){
         "isMenu" : true
       },
       {
-        "image" : "/images/cluster_icon.png",
+        "image" : "/images/transactions-icon.png",
         "link" : "/admin/transactions/requestedList",
         "name" : "transaction",
         "uniqueId"   :"transaction",

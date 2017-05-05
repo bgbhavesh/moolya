@@ -51,16 +51,7 @@ class MlAddUserType extends React.Component {
   };
 
   async createUserType() {
-    try {
-      if (!(this.state.communityCode)) {
-        throw error;
-      }
-    }
-  catch(error){
-if(error)
-  toastr.error("Please Enter The Community");
-    return false;
-  }
+
     let UserTypeDetails = {
       userTypeName: this.refs.userTypeName.value,
       displayName: this.refs.displayName.value,

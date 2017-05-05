@@ -42,6 +42,9 @@ orderNumberGenService = (function(){
     assignTransationRequest:function(transaction){
       transaction.requestId="ML-TR-"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);
     }
+    /*generateProfileId:function(transaction){
+      regDetails.profileId="ML-PR-"+FormatUtil.leadingZeros(getNextSequence("profileNumber"),8);
+    }*/
   }})();
 
 FormatUtil = {

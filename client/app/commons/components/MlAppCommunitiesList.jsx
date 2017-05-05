@@ -82,8 +82,11 @@ export default class MlAppCommunitiesList extends Component {
   }
 
     async fetchCommunities() {
-        const communities = await fetchCommunitiesHandler();
-        this.setState({communities:communities})
+        let communities = await fetchCommunitiesHandler();
+     let communitilist= _.filter(communities, function(community) {
+        return community.code != "BRW"
+      });
+        this.setState({communities:communitilist})
         return communities;
     }
 
@@ -105,7 +108,7 @@ export default class MlAppCommunitiesList extends Component {
     this.setState({coummunityName:selObject.label})
   }
   optionsBySelectIdentity(val){
-    this.setState({identity:val.value})
+    this.setState({identity:val})
   }
   optionsBySelectUserType(value){
     this.setState({userType:value})
@@ -136,6 +139,13 @@ export default class MlAppCommunitiesList extends Component {
   data:fetchCommunityDefinition{label:name,value:code}
 } 
 `;
+      let fetchIdentity=gql`query($communityId:String){
+        data:FetchCommunityBasedIdentity(communityId:$communityId) {
+          value: identityTypeName
+          label: identityTypeName
+        }
+      }`;
+
       let userTypequery = gql` query($communityCode:String){  
     data:FetchUserType(communityCode:$communityCode) {
       value:_id
@@ -153,14 +163,12 @@ export default class MlAppCommunitiesList extends Component {
         value:_id
       }
     }`;
-      let IdentityOptions = [
-        {value: 'Company', label: 'Company'},
-        {value: 'Individual', label: 'Individual'}
-      ];
+
       let citiesquery = gql`query($countryId:String){
       data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
     }
     `;
+      let identityOptions={options: {variables: {communityId:this.state.selectedCommunity}}};
       let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
       let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
       let countryOption = {options: { variables: {countryId:this.state.country}}};
@@ -191,7 +199,7 @@ export default class MlAppCommunitiesList extends Component {
                         <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCommunity} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} onSelect={this.optionBySelectRegistrationType.bind(this)} disabled={true}/>
                       </div>
                       <div className="form-group">
-                        <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
+                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Identity"  selectedValue={this.state.identity} queryType={"graphql"} query={fetchIdentity} queryOptions={identityOptions} isDynamic={true}  onSelect={this.optionsBySelectIdentity.bind(this)}   />
                       </div>
                       <div className="col-md-6 nopadding-left">
                         <div className="form-group ">

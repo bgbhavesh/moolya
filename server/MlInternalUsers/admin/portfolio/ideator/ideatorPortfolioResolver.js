@@ -218,10 +218,8 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
 }
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
   if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('ideas')) {
-      return ideatorPortfolio['ideas'];
-    }
+    let ideatorPortfolio = MlIdeas.findOne({"_id": args.ideaId})
+      return ideatorPortfolio;
   }
 
   return {};

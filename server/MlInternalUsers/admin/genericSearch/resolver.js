@@ -651,7 +651,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     if(clusterIds.length>=1){
       let result=[];
-      data= MlRegistration.find(query,findOptions).fetch();
+      let serverQueryList ={$or: [{status:"Rejected"}, {status: "Pending"}]}
+      let queryCountList = mergeQueries(query,serverQueryList);
+      data= MlRegistration.find(queryCountList,findOptions).fetch();
       if(clusterIds[0]=="all"){
         data.map(function (doc,index) {
           if(doc.status!='Approved'){
@@ -705,8 +707,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       }
     });
     if(clusterIds.length>=1){
-
-      data= MlRegistration.find(query,findOptions).fetch();
+      let serverQueryList ={status:"Approved"}
+      let queryCountList = mergeQueries(query,serverQueryList);
+      data= MlRegistration.find(queryCountList,findOptions).fetch();
       let result=[];
       if(clusterIds[0]=="all"){
         data.map(function (doc,index) {

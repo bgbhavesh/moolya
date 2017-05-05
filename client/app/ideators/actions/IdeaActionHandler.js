@@ -31,6 +31,7 @@ export async function fetchIdeaActionHandler() {
         query: gql`
             query{
                 fetchIdeas {
+                    _id
                     portfolioId
                     title
                     isIdeaTitlePrivate
@@ -51,8 +52,16 @@ export async function fetchIdeators() {
     query: gql`
             query{
                 fetchIdeators {
-                    portfolioId
-                    ideaTitle
+                    ideas {
+                      _id
+                      isActive
+                      isIdeaPrivate
+                      isIdeaTitlePrivate
+                      title
+                      description
+                      portfolioId
+                    }
+                    accountType
                     chapterName
                     userId
                     name

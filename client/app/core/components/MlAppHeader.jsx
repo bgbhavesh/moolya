@@ -10,20 +10,26 @@ export default class MlAppHeader extends Component {
     this.state = {}
     return this;
   }
-
-  componentDidMount() {
-    var WinHeight = $(window).height();
+  componentDidUpdate(){
     var WinWidth = $(window).width();
-    $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
-    $('.ml_app_profile h1').click(function () {
-      $(this).parent('.ml_app_profile').toggleClass('profile_open');
-    });
-    $("#notification").popover({
-      'title': 'Notifications',
-      'html': true,
-      'placement': 'bottom',
-      'content': $(".ml_app_notification").html()
-    });
+    if(WinWidth > 768){
+    $(".app_menu,.app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
+  }}
+  componentDidMount() {
+      var WinHeight = $(window).height();
+      var WinWidth = $(window).width();
+      $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
+      $('.ml_app_profile h1').click(function () {
+          $(this).parent('.ml_app_profile').toggleClass('profile_open');
+      });
+      $("#notification").popover({
+          'title': 'Notifications',
+          'html': true,
+          'placement': 'bottom',
+          'content': $(".ml_app_notification").html()
+      });
+
+
   }
 
   logoutUser() {

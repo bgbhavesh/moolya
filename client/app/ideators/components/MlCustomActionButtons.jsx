@@ -1,96 +1,90 @@
 import React from "react";
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import _ from "lodash";
-import StarRatings from "./starRatings";
 var FontAwesome = require('react-fontawesome');
+import StarRatings from '../../commons/components/starRatings';
+import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
 
 
-export default class AppActionButtons extends React.Component {
+export default class MlCustomActionButtons extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       // popoverOpen_pop_connect: false
+      loading:true,
     };
     this.actionClick.bind(this);
+    this.fetchIdeatorIdeas.bind(this)
     return this;
   }
 
   actionClick(value, e) {
-    let icon = "popoverOpen_" + value;
+    // $('.overlay').toggle();
+    let icon = "popoverOpen_"+value;
     this.setState({
-      [icon]: !(this.state[icon])
-    })
+        [icon]: !(this.state[icon])
+      }
+      //, function () {
+      // if(this.state[icon]){
+      //   $('.overlay').show();
+      // }else{
+      //   $('.overlay').hide();
+      // }
+      // }
+    );
   }
 
-  cancelClick(value, e) {
-    let icon = "popoverOpen_" + value;
+  cancelClick(value, e){
+    // $('.overlay').hide();
+    let icon = "popoverOpen_"+value;
     this.setState({
       [icon]: false
-    })
+    });
+
+  }
+  // componentWillUpdate(nextProps, nextState){
+  //   let state = this.state
+  //     for (var propName in nextState) {
+  //       if (nextState[propName] != state[propName]) {
+  //         this.setState({propName: false})
+  //       }
+  //     }
+  // }
+
+
+  componentDidMount() {
+    // $('.actions-button').click(function () {
+    //   $(this).toggleClass('open');
+    //   $('.action-buttons').toggle();
+    //   $('.related-buttons').hide();
+    // });
+    // $('.related-button').click(function () {
+    //   $(this).toggleClass('open');
+    //   $('.action-buttons').hide(200);
+    //   $('.related-buttons').toggle();
+    // });
+  }
+  componentWillMount(){
+    this.fetchIdeatorIdeas();
+  }
+  async fetchIdeatorIdeas() {
+    const response = await fetchIdeaActionHandler();
+    if(response){
+      this.setState({loading:false, ideas:response})
+    }
+  }
+
+  selectedIdea(ideaId, portfolioId, e){
+    FlowRouter.go('/app/ideator/'+portfolioId+'/'+ideaId);
   }
 
   render() {
-    let config = [
-      {
-        actionName: 'feedback',
-        iconClass: 'ml flaticon-ml-note-1'
-      },
-      {
-        actionName: 'Compare',
-        iconClass: 'ml flaticon-ml-share-files'
-      },
-      {
-        actionName: 'Share',
-        iconClass: 'ml flaticon-ml-share-arrow'
-      },
-      {
-        actionName: 'Download',
-        iconClass: 'ml flaticon-ml-cloud-computing-1'
-      },
-      {
-        actionName: 'uplaod',
-        iconClass: 'ml flaticon-ml-cloud-computing'
-      },
-      {
-        actionName: 'Wishlist',
-        iconClass: 'ml flaticon-ml-interface'
-      },
-      {
-        actionName: 'Favorites',
-        iconName: 'ml flaticon-ml-shapes'
-      },
-      {
-        actionName: 'edit',
-        iconClass: 'ml ml-edit'
-      },
-      {
-        actionName: 'save',
-        iconClass: 'ml ml-save'
-      }
-    ]
-    let ActionOptions= this.props.ActionOptions|| []
-    let actionView = ActionOptions.map(function (option, id) {
-      let activeClass = '';
-      let action = _.find(config, {'actionName': option.actionName});
-      for (let i = 0; i < config.length; i++) {
-        console.log("success action")
-        if (config[i].actionName == option.actionName && option.showAction == true) {
-          activeClass = ""
-        } else if (config[i].actionName == option.actionName && option.showAction != true) {
-          activeClass = "hide"
-        }
-      }
-      return (
-        <li key={id} className={activeClass}>
-          <a href="#" onClick={option.handler && option.handler.bind(this, option)}> <span
-            className={action['iconClass']}></span>
-            <br />{option.actionName}</a>
-        </li>
-      )
-    })
+    let that = this;
+    const showLoader = this.state.loading;
     return (
+      <div className="admin_padding_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
       <div>
         <div className="opacity"></div>
         <div className="panel-group bottom-buttons" id="accordion">
@@ -99,6 +93,7 @@ export default class AppActionButtons extends React.Component {
               <h4 className="panel-title text-left">
                 <a className="re-btn" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Related</a>
                 <a className="act-btn" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Action</a>
+                <a className="re-btn" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">All Ideas</a>
               </h4>
             </div>
             <div id="collapseOne" className="panel-collapse collapse" style={{'background': '#273545'}}>
@@ -107,39 +102,61 @@ export default class AppActionButtons extends React.Component {
                 <ul>
                   <li><a href="#"><span className="ml flaticon-ml-handshake"></span><br />Connect</a></li>
                   <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml ml-calls"></span><br />Connect</a></li>
                 </ul>
               </div>
-            </div>
 
+            </div>
             <div id="collapseTwo" className="panel-collapse collapse" style={{'background': '#ef4647'}}>
+
               <div className="action_buttons">
                 <ul>
-                  <li className="hide"><a href="#" id="pop_connect"
-                                          onClick={this.actionClick.bind(this, "pop_connect")}>
-                    <span className="ml flaticon-ml-handshake">
-                    </span><br />Connect</a></li>
-                  <li><a href="#" id="pop_inquiry" onClick={this.actionClick.bind(this, "pop_inquiry")}>
-                    <span className="ml flaticon-ml-support">
-                    </span><br />Inquiry</a></li>
-                  <li><a href="#" id="pop_review" onClick={this.actionClick.bind(this, "pop_review")}>
-                    <span className="ml flaticon-ml-note">
-                    </span><br />Review</a></li>
-                  <li><a href="#" id="pop_conersation" onClick={this.actionClick.bind(this, "pop_conersation")}>
-                    <span className="ml flaticon-ml-chat">
-                    </span><br />Conversation</a></li>
-                  <li><a href="#" id="pop_collaborate" onClick={this.actionClick.bind(this, "pop_collaborate")}>
-                    <span className="ml flaticon-ml-networking">
-                    </span><br />Collaborate</a></li>
-                  {actionView}
+                  <li><a href="#" id="pop_connect" onClick={this.actionClick.bind(this, "pop_connect")}><span
+                    className="ml flaticon-ml-handshake"></span><br />Connect</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-shapes"></span><br />Favorites</a></li>
+                  <li><a href="#" id="pop_inquiry" onClick={this.actionClick.bind(this, "pop_inquiry")}><span
+                    className="ml flaticon-ml-support"></span><br />Inquiry</a></li>
+                  <li><a href="#" id="pop_review" onClick={this.actionClick.bind(this, "pop_review")}><span
+                    className="ml flaticon-ml-note"></span><br />Review</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-interface"></span><br />Wishlist</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-cloud-computing"></span><br />Upload</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-cloud-computing-1"></span><br />Download</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-share-arrow"></span><br />Share</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-share-files"></span><br />Compare</a></li>
+                  <li><a href="#" id="pop_conersation" onClick={this.actionClick.bind(this, "pop_conersation")}><span
+                    className="ml flaticon-ml-chat"></span><br />Conversation</a></li>
+                  <li><a href="#" id="pop_collaborate" onClick={this.actionClick.bind(this, "pop_collaborate")}><span
+                    className="ml flaticon-ml-networking"></span><br />Collaborate</a></li>
+                  <li><a href="#"><span className="ml flaticon-ml-note-1"></span><br />Feedback</a></li>
+                </ul>
+
+              </div>
+
+            </div>
+            <div id="collapseThree" className="panel-collapse collapse" style={{'background': '#273545'}}>
+
+              <div className="related_buttons">
+                <ul>
+                  {that.state.ideas.map(function (idea, idx) {
+                    return(
+                      <li onClick={that.selectedIdea.bind(that, idea._id, idea.portfolioId)} key={idx}><a href=""><span className="ml flaticon-ml-handshake"></span><br />{idea.title}</a></li>
+                    )
+                  })}
                 </ul>
               </div>
-            </div>
 
+            </div>
           </div>
         </div>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_collaborate}
-                 target="pop_collaborate"
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_collaborate} target="pop_collaborate"
                  toggle={this.toggle}>
           <PopoverTitle>Collaborate</PopoverTitle>
           <PopoverContent>Do you want to collaborate ?
@@ -150,8 +167,7 @@ export default class AppActionButtons extends React.Component {
           </PopoverContent>
         </Popover>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_review}
-                 target="pop_review"
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_review} target="pop_review"
                  toggle={this.toggle}>
           <PopoverTitle>Reviews</PopoverTitle>
           <PopoverContent>
@@ -193,11 +209,12 @@ export default class AppActionButtons extends React.Component {
                 </div>
               </li>
             </ul>
+
+
           </PopoverContent>
         </Popover>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_connect}
-                 target="pop_connect"
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_connect} target="pop_connect"
                  toggle={this.toggle}>
           <PopoverTitle>Connect</PopoverTitle>
           <PopoverContent>
@@ -209,8 +226,7 @@ export default class AppActionButtons extends React.Component {
           </PopoverContent>
         </Popover>
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_conersation}
-                 target="pop_conersation"
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_conersation} target="pop_conersation"
                  toggle={this.toggle}>
           <PopoverTitle>Connect</PopoverTitle>
           <PopoverContent>
@@ -256,8 +272,7 @@ export default class AppActionButtons extends React.Component {
         </Popover>
 
 
-        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_inquiry}
-                 target="pop_inquiry"
+        <Popover placement="top" className="footer_popover" isOpen={this.state.popoverOpen_pop_inquiry} target="pop_inquiry"
                  toggle={this.toggle}>
           <PopoverTitle>Inquiry</PopoverTitle>
           <PopoverContent>
@@ -277,6 +292,7 @@ export default class AppActionButtons extends React.Component {
             </div>
           </PopoverContent>
         </Popover>
+      </div>)}
       </div>
     )
   }

@@ -78,7 +78,7 @@ export default class AppAddressDetails extends React.Component {
                 <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" />
               </div>
               <div className="form-group">
-                <input type="text" ref={'addressArea'} placeaholder="Area" className="form-control float-label"/>
+                <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label"/>
               </div>
               <div className="form-group">
                 <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label"/>

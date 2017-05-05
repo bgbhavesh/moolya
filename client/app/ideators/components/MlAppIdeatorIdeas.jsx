@@ -11,18 +11,19 @@ import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
 export default class MlAppIdeatorIdeas extends React.Component{
   constructor(props, context){
       super(props);
-      this.state= {loading: false,userIdeas:[]},
+      this.state= {loading: false,userIdeas:[], initialSlide:1},
       this.fetchIdeas.bind(this)
       return this;
   }
-  componentDidMount()
-  {
-      var swiper = new Swiper('.ideas_swiper', {
+  componentDidMount() {
+  }
+  componentDidUpdate(){
+      let swiper = new Swiper('.ideas_swiper', {
           pagination: '.swiper-pagination',
           effect: 'coverflow',
           grabCursor: true,
           centeredSlides: true,
-          initialSlide:1,
+          initialSlide:this.state.initialSlide,
           slidesPerView: 'auto',
           coverflow: {
               rotate: 50,
@@ -37,6 +38,7 @@ export default class MlAppIdeatorIdeas extends React.Component{
           $('.idea_details .portfolio-main-wrap .panel').slideUp();
           $('#'+GetIdeaId).slideDown();
       });
+      $('#'+this.state.initialSlide).slideDown();
   }
   componentWillMount()
   {
@@ -54,18 +56,18 @@ export default class MlAppIdeatorIdeas extends React.Component{
       }
   }
 
-  viewIdea(id,e){
-    FlowRouter.go("/app/portfolio/view/"+id);
+  viewIdea(portfolioId, ideaId,e){
+    FlowRouter.go("/app/portfolio/view/"+portfolioId+"/"+ideaId);
   }
 
-  editIdea(id,e){
-    FlowRouter.go("/app/portfolio/edit/"+id);
+  editIdea(portfolioId, ideaId,e){
+    FlowRouter.go("/app/portfolio/edit/"+portfolioId+"/"+ideaId);
   }
 
   render(){
     let that=this
       return (
-          <div className="app_main_wrap">
+          <div>
               <h2>Ideas</h2>
               <div className="main_wrap_scroll idea_details">
                   <ScrollArea
@@ -103,12 +105,12 @@ export default class MlAppIdeatorIdeas extends React.Component{
                       <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
                           {this.state.userIdeas.map(function (idea, idx) {
                               return (
-                                  <div className="panel panel-default panel-form-view" id={idx} style={{'display':'block'}} key={idx}>
+                                  <div className="panel panel-default panel-form-view" id={idx} style={{'display':'none'}} key={idx}>
                                       <div className="panel-heading">{idea.title}</div>
                                       <div className="panel-body">
                                           <p>{idea.description}</p>
-                                          <a className="mlUpload_btn pull-left" onClick={that.viewIdea.bind(that, idea.portfolioId)}>View</a>
-                                          <a className="mlUpload_btn pull-left" onClick={that.editIdea.bind(that, idea.portfolioId)}>Edit</a>
+                                          <a className="mlUpload_btn pull-left" onClick={that.viewIdea.bind(that, idea.portfolioId, idea._id)}>View</a>
+                                          <a className="mlUpload_btn pull-left" onClick={that.editIdea.bind(that, idea.portfolioId, idea._id)}>Edit</a>
                                           <a href="/app/portfolio/addIdea" className="mlUpload_btn pull-left" onClick={that.AddIdea.bind(that)}>Add New Idea</a>
                                       </div>
                                   </div>

@@ -64,16 +64,7 @@ class MlEditUserType extends React.Component{
     this.onCommunitySelect();
   }
   async updateUserType() {
-    try {
-      if (!(this.state.communityCode)) {
-        throw error;
-      }
-    }
-    catch(error){
-      if(error)
-        toastr.error("Please Enter The Community");
-      return false;
-    }
+
     let UserTypeDetails = {
       id: this.refs.id.value,
       displayName: this.refs.displayName.value,

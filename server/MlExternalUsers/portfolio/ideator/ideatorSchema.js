@@ -7,21 +7,23 @@ import MlSchemaDef from '../../../commons/mlSchemaDef';
 let ideatorPortfolioSchema = ` 
     
     type Ideator{
-        
-        portfolioId:String,
-        ideaTitle:String,
+        ideas:[ideasOutput],
+        accountType:String
         chapterName:String,
         userId:String
         name:String
     }
-    
-    input idea{
+    type ideasOutput{
+        _id:String,
         title:String,
         isIdeaTitlePrivate:Boolean,
         description:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
+        portfolioId:String,
+        userId:String
     }
+    
     
     type Query{
         fetchIdeators:[Ideator]

@@ -13,7 +13,6 @@ MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, i
           userId: args.userId,
           communityType: args.communityType,
           portfolioDetailsId: args.portfolioDetailsId
-          // portfolioStartupDetails:args.portfolioStartupDetails
         })
       }
     }
@@ -222,6 +221,5 @@ updateArrayofObjects = (updateFor, source) =>{
       }
     })
   }
-
   return source;
 }

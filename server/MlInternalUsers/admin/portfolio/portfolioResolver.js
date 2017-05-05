@@ -83,13 +83,14 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           MlResolver.MlMutationResolver['createStartupPortfolio'](obj, portfolio, context, info)
                       break;
 
-                      case "Funders":
+                      case "Funders": {
                           let portfolio = {
-                              userId: portfolioDetails.userId,
-                              communityType: portfolioDetails.communityType,
-                              portfolioDetailsId: ret
+                            userId: portfolioDetails.userId,
+                            communityType: portfolioDetails.communityType,
+                            portfolioDetailsId: ret
                           }
                           MlResolver.MlMutationResolver['createFunderPortfolio'](obj, portfolio, context, info)
+                      }
                       break;
                   }
               }

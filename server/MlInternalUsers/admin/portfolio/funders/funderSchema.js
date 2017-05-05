@@ -6,7 +6,7 @@ import MlSchemaDef from '../../../../commons/mlSchemaDef';
 
 let FunderPortfolioSchema = `
 
-    type successStories{
+    type SuccessStories{
           date:String,
           storyImage:String,
           storyTitle:String,
@@ -17,7 +17,7 @@ let FunderPortfolioSchema = `
           isActive:Boolean
     }
     
-    type areaofInterest{
+    type AreaofInterest{
         industryType:String,
         domainType:String,
         makePrivate:Boolean,
@@ -30,7 +30,7 @@ let FunderPortfolioSchema = `
         isuserIdPrivate:Boolean
     }
     
-    type team{
+    type Team{
         title:String,
         firstName:String,
         isFirstNamePrivate:Boolean,
@@ -42,11 +42,11 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrincipal,
+        isyearsOfExperiencePrivate:Boolean,
         qualification:String,
-        isQualificationPrivate,
+        isQualificationPrivate:Boolean,
         aboutTeam:String,
-        isAboutTeamPrivate,
+        isAboutTeamPrivate:Boolean,
         socialLinks:[SocialLinks]
     }
 
@@ -62,11 +62,11 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrincipal,
+        isyearsOfExperiencePrivate:Boolean,
         qualification:String,
-        isQualificationPrivate,
+        isQualificationPrivate:Boolean,
         aboutPrincipal:String,
-        isAboutPrincipalPrivate,
+        isAboutPrincipalPrivate:Boolean,
         socialLinks:[SocialLinks]
     }
     
@@ -168,11 +168,11 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrincipal,
+        isyearsOfExperiencePrivate:Boolean,
         qualification:String,
-        isQualificationPrivate,
+        isQualificationPrivate:Boolean,
         aboutTeam:String,
-        isAboutTeamPrivate,
+        isAboutTeamPrivate:Boolean,
         socialLinks:[socialLinks]
     }
 
@@ -188,11 +188,11 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrincipal,
+        isyearsOfExperiencePrivate:Boolean,
         qualification:String,
-        isQualificationPrivate,
+        isQualificationPrivate:Boolean,
         aboutPrincipal:String,
-        isAboutPrincipalPrivate,
+        isAboutPrincipalPrivate:Boolean,
         socialLinks:[socialLinks]
     }
 

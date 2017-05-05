@@ -276,8 +276,8 @@ a.mlUpload_btn:hover{text-decoration: none;color: #fff;}
 .steps_pic_upload .ProfileImg img{width: 200px;height: 200px;border:2px solid #273545;}
 .steps_pic_upload .mlUpload_btn{float: none;margin: 15px auto;}
 .jvFloat {position: relative;}
-.jvFloat .placeHolder {position: absolute;top: 6px;left: 0;color: #ef4647;font-size: .8em;font-weight: bold;-webkit-transform: translate(0, 0);-moz-transform: translate(0, 0);-o-transform: translate(0, 0);-ms-transform: translate(0, 0);transform: translate(0, 0);-webkit-transition: -webkit-transform 150ms, opacity 120s;transition: transform 150ms, opacity 120s;opacity: 0;visibility: hidden;}
-.jvFloat .placeHolder.active {display: block;visibility: visible;-webkit-transform: translate(0, -1.5em);-moz-transform: translate(0, -1.5em);-o-transform: translate(0, -1.5em);-ms-transform: translate(0, -1.5em);transform: translate(0, -1.5em);-webkit-transition: -webkit-transform 150ms, opacity 120ms;transition: transform 150ms, opacity 120ms;opacity: 1;}
+.placeHolder {position: absolute;top: 6px;left: 0;color: #ef4647;font-size: .8em;font-weight: bold;-webkit-transform: translate(0, 0);-moz-transform: translate(0, 0);-o-transform: translate(0, 0);-ms-transform: translate(0, 0);transform: translate(0, 0);-webkit-transition: -webkit-transform 150ms, opacity 120s;transition: transform 150ms, opacity 120s;opacity: 0;visibility: hidden;}
+.placeHolder.active {display: block;visibility: visible;-webkit-transform: translate(0, -1.5em);-moz-transform: translate(0, -1.5em);-o-transform: translate(0, -1.5em);-ms-transform: translate(0, -1.5em);transform: translate(0, -1.5em);-webkit-transition: -webkit-transform 150ms, opacity 120ms;transition: transform 150ms, opacity 120ms;opacity: 1;}
 .fa {text-shadow: none}
 table img{width: 40px;}
 table .form-group.switch_wrap{margin-bottom: 0px;margin-right: 0px;height: 26px;}

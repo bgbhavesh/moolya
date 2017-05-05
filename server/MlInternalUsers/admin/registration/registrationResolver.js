@@ -398,14 +398,36 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
       let documentList=args.documentId;
       let doctypeList=args.docTypeId
     let updatedResponse;
-      for(let i=0;i<documentList.length;i++){
-      // updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i],'docTypeId':doctypeList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
-        updatedResponse = mlDBController.update('MlRegistration', {
-          _id: args.registrationId,
-          'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
-        }, {"kycDocuments.$.status": "Approved"}, {$set: true}, context)
-        //return updatedResponse;
+      if(documentList.length>0){
+        for(let i=0;i<documentList.length;i++){
+          // updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i],'docTypeId':doctypeList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
+          let user=MlRegistration.findOne({_id:args.registrationId})
+          let kyc=user.kycDocuments
+          let kycDoc = _.find(kyc, function (item) {
+            return item.documentId == documentList[i]&&item.docTypeId==doctypeList[i];
+          });
+          if(kycDoc.docFiles.length>0){
+            let response = mlDBController.update('MlRegistration', {
+              _id: args.registrationId,
+              'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
+            }, {"kycDocuments.$.status": "Approved"}, {$set: true}, context)
+            if(response){
+              let code = 200;
+              let result = {registrationId : response}
+              updatedResponse = new MlRespPayload().successPayload(result, code);
+
+            }
+          }else{
+            let code = 409;
+            updatedResponse = new MlRespPayload().errorPayload("Please upload the documents!!!!");
+
+          }
+        }
+      }else {
+        let code = 409;
+        updatedResponse = new MlRespPayload().errorPayload("Please select kyc documents !!!!");
       }
+
     return updatedResponse;
   }
 }

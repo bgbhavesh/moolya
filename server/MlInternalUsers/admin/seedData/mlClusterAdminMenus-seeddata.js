@@ -345,7 +345,7 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/documents_icon.png",
-        "link" : "/admin/documents",
+        "link" : "/admin/documents/clusterList",
         "name" : "documents",
         "uniqueId" : "documents",
         "isLink" : true,

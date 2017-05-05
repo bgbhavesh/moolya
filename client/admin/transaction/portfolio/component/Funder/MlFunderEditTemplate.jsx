@@ -43,7 +43,6 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getTabComponents(){
     let tabs = [
-
       {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAbout key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" , component:<MlFunderInvestment key="2" getInvestmentsDetails={this.getInvestmentsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Principal & Team" , component:<MlFunderPrincipalTeam key="3" getPrincipalDetails={this.getPrincipalDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -55,14 +54,14 @@ export default class MlFunderEditTemplate extends React.Component{
     ]
     return tabs;
   }
+
   getSuccessStoriesDetails(details){
     let data = this.state.funderPortfolio;
     data['portfolioIdeatorDetails']=details;
     this.setState({ideatorPortfolio : data})
-    // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
-    // this.setState({ideatorDetails:details})
     this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
+
   getAboutus(details,tabName){
     let data = this.state.funderPortfolio;
     data[tabName] = details;

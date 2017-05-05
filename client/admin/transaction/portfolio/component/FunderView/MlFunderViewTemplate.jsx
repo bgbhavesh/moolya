@@ -13,7 +13,7 @@ import MlFunderNewsView from './MlFunderNewsView'
 import MlFunderPrincipalTeamView from './MlFunderPrincipalTeamView'
 import MlFunderSuccessStoriesView from './MlFunderSuccessStoriesView'
 
-export default class MlFunderEditTemplate extends React.Component{
+export default class MlFunderViewTemplate extends React.Component{
   constructor(props){
     super(props)
     this.state =  {tabs: [],aboutUs: {}, funderPortfolio:{}};
@@ -143,6 +143,6 @@ export default class MlFunderEditTemplate extends React.Component{
     return <MlTabComponent tabs={tabs}/>
   }
 }
-MlFunderEditTemplate.childContextTypes = {
+MlFunderViewTemplate.childContextTypes = {
   funderPortfolio: PropTypes.object,
 };

@@ -91,8 +91,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             </div>
                           </a>
                         </div>
-
-
                       </div>
                     </div>
                   </div>
@@ -122,15 +120,10 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             </div>
                           </a>
                         </div>
-
-
                       </div>
                     </div>
                   </div>
-
-
                 </div>
-
               </div>
             </ScrollArea>
 

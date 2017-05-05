@@ -42,7 +42,7 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrivate:Boolean,
+        isYearsOfExperiencePrivate:Boolean,
         qualification:String,
         isQualificationPrivate:Boolean,
         aboutTeam:String,
@@ -62,7 +62,7 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrivate:Boolean,
+        isYearsOfExperiencePrivate:Boolean,
         qualification:String,
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
@@ -89,25 +89,25 @@ let FunderPortfolioSchema = `
     }
     type FunderAbout{
         firstName : String,
-        isfirstNamePrivate:Boolean,
+        isFirstNamePrivate:Boolean,
         lastName:String
-        islastNamePrivate:Boolean
+        isLastNamePrivate:Boolean
         gender:String
-        isgenderPrivate:Boolean
+        isGenderPrivate:Boolean
         category:String
-        iscategoryPrivate:Boolean
+        isCategoryPrivate:Boolean
         qualification:String
-        isqualificationPrivate:Boolean
+        isQualificationPrivate:Boolean
         employmentStatus:String
-        isemploymentStatusPrivate:Boolean
+        isEmploymentStatusPrivate:Boolean
         professionalTag:String
-        isprofessionalTagPrivate:Boolean
+        isProfessionalTagPrivate:Boolean
         yearsOfExperience:String
-        isyearsOfExperiencePrivate:Boolean
+        isYearsOfExperiencePrivate:Boolean
         industry:String
-        isindustryPrivate:Boolean
+        isIndustryPrivate:Boolean
         profession:String
-        isprofessionPrivate:Boolean
+        isProfessionPrivate:Boolean
         investmentForm:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean
@@ -168,7 +168,7 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrivate:Boolean,
+        isYearsOfExperiencePrivate:Boolean,
         qualification:String,
         isQualificationPrivate:Boolean,
         aboutTeam:String,
@@ -188,7 +188,7 @@ let FunderPortfolioSchema = `
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
-        isyearsOfExperiencePrivate:Boolean,
+        isYearsOfExperiencePrivate:Boolean,
         qualification:String,
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
@@ -215,25 +215,25 @@ let FunderPortfolioSchema = `
     }
     input funderAbout{
         firstName : String,
-        isfirstNamePrivate:Boolean,
+        isFirstNamePrivate:Boolean,
         lastName:String
-        islastNamePrivate:Boolean
+        isLastNamePrivate:Boolean
         gender:String
-        isgenderPrivate:Boolean
+        isGenderPrivate:Boolean
         category:String
-        iscategoryPrivate:Boolean
+        isCategoryPrivate:Boolean
         qualification:String
-        isqualificationPrivate:Boolean
+        isQualificationPrivate:Boolean
         employmentStatus:String
-        isemploymentStatusPrivate:Boolean
+        isEmploymentStatusPrivate:Boolean
         professionalTag:String
-        isprofessionalTagPrivate:Boolean
+        isProfessionalTagPrivate:Boolean
         yearsOfExperience:String
-        isyearsOfExperiencePrivate:Boolean
+        isYearsOfExperiencePrivate:Boolean
         industry:String
-        isindustryPrivate:Boolean
+        isIndustryPrivate:Boolean
         profession:String
-        isprofessionPrivate:Boolean
+        isProfessionPrivate:Boolean
         investmentForm:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean

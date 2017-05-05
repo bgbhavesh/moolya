@@ -76,13 +76,13 @@ export default class AppEmailDetails extends React.Component {
             {details && (details.map(function(options,key) {
               return(<div className="tab-pane" id={'emailIdType'+key} key={key}>
                 <div className="form-group">
-                  {/*<Moolyaselect multiSelect={false} ref={'emailIdType'+key}*/}
-                                {/*placeholder="Select Email Type"*/}
-                                {/*className="form-control float-label" selectedValue={options.emailIdType}*/}
-                                {/*valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}*/}
-                                {/*queryOptions={emailTypeOption}*/}
-                                {/*isDynamic={true}/>*/}
-                  <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue={options.emailIdType}/>
+                  <Moolyaselect multiSelect={false} ref={'emailIdType'+key}
+                                placeholder="Select Email Type"
+                                className="form-control float-label" selectedValue={options.emailIdType}
+                                valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}
+                                queryOptions={emailTypeOption}
+                                isDynamic={true}/>
+                  {/*<input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue={options.emailIdType}/>*/}
                 </div>
                 <div className="form-group">
                   <input type="text" ref={'emailId'+key} placeholder="Enter URL" defaultValue={options.emailId} className="form-control float-label"/>

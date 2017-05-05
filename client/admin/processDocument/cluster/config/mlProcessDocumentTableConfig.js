@@ -2,6 +2,7 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import ActiveProcessFormatter from "../components/ActiveProcessDocFormatter"
+import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 function stateFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.stateNames?data.data.stateNames:[];
@@ -73,6 +74,15 @@ const mlProcessTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  buildQueryOptions:(config)=>
+  {
+    if(!config.params){
+      let userDefaultObj = getAdminUserContext()
+      return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
+    }
+    else
+      return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+  },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "processName", title: "Process",dataSort:true},

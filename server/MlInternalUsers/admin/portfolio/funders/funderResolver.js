@@ -5,7 +5,6 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
 
-var extendify = require('extendify');
 var _ = require('lodash')
 
 

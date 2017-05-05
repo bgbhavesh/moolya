@@ -14,7 +14,7 @@ import AppActionButtons from '../../commons/components/appActionButtons'
 import moment from "moment";
 import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-
+import {fetchIdeaByPortfolioId} from '../../ideators/actions/IdeaActionHandler'
 
 class MlAppPortfolio extends React.Component{
   constructor(props){
@@ -28,7 +28,7 @@ class MlAppPortfolio extends React.Component{
     this.getSelectedAnnotation.bind(this);
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
-
+    this.fetchIdeaId.bind(this);
     return this;
   }
 
@@ -82,7 +82,13 @@ class MlAppPortfolio extends React.Component{
     }else{
       this.fetchEditPortfolioTemplate(this.props.config);
     }
-
+    if(this.props.communityType == "Ideators"){
+      this.fetchIdeaId()
+    }else if(this.props.communityType =="ideator"){
+      this.fetchIdeaId()
+    }else{
+      this.setState({ideaId:" "})
+    }
   }
 
   async fetchEditPortfolioTemplate(pId) {
@@ -133,6 +139,11 @@ class MlAppPortfolio extends React.Component{
       });
     }
   }
+  async fetchIdeaId(){
+      let portfolioId = this.props.config;
+      const response = await fetchIdeaByPortfolioId(portfolioId);
+      this.setState({ideaId : response._id});
+  }
 
   getPortfolioDetails(details){
     this.setState({portfolio:details});
@@ -181,7 +192,7 @@ class MlAppPortfolio extends React.Component{
         handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
       }]
 
-    let   EditComponent = ""; let ViewComponent = "";
+    let EditComponent = ""; let ViewComponent = "";
     if(this.props.viewMode){
       ViewComponent=this.state.editComponent;
     }else{

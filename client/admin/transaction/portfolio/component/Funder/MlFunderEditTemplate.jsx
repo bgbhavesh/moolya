@@ -70,10 +70,7 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getInvestmentsDetails(details){
     let data = this.state.funderPortfolio;
-    if(data && !data.management){
-      data['management']=[];
-    }
-    data['management'] = details;
+    data['investments'] = details;
     this.setState({funderPortfolio : data})
     this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
   }

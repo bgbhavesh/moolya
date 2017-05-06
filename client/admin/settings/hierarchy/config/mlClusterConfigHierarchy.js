@@ -8,8 +8,8 @@ const mlClusterListConfig=new MlViewer.View({
   name:"clusterList",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
-  fields:["userName","mobileNumber","eMail","city","regType"],
-  searchFields:["userName","mobileNumber","eMail","city","regType"],
+  fields:["displayName"],
+  searchFields:["displayName"],
   throttleRefresh:true,
   pagination:true,
   sort:true,
@@ -43,8 +43,8 @@ const mlClusterListConfig=new MlViewer.View({
   ],
   viewComponent:<MlClustersListHierarchy />,
   graphQlQuery:gql`
-                   query ContextSpecSearch($context:ContextParams,$searchSpec:SearchSpec){
-                    data:ContextSpecSearch(module:"cluster",context:$context,searchSpec:$searchSpec){
+                   query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec, $fieldsData:[GenericFilter]){
+                    data:ContextSpecSearch(module:"cluster",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec, fieldsData:$fieldsData){
                     totalRecords
                     data{
                      ...on Cluster{
@@ -66,6 +66,7 @@ const mlClusterListConfig=new MlViewer.View({
                       }
               }
               }
+              
               `
 });
 

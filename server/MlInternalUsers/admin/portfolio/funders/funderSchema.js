@@ -72,13 +72,18 @@ let FunderPortfolioSchema = `
     
     type Investments{
         dateOfInvestment:String,
+        isDateOfInvestmentPrivate :Boolean
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        typeOfFunding:String,
+        typeOfFundingId:String,
+        typeOfFundingName : String,
         isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
         isAboutInvestmentPrivate:Boolean,
-        isPrivate:Boolean
+        isPrivate:Boolean,
+        investmentAmount :String,
+        isInvestmentAmountPrivate :Boolean
+        index: Int
     }
     
     type Investmentbudget{
@@ -198,13 +203,18 @@ let FunderPortfolioSchema = `
 
     input investments{
         dateOfInvestment:String,
+        isDateOfInvestmentPrivate :Boolean
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        typeOfFunding:String,
+        typeOfFundingId:String,
+        typeOfFundingName : String,
         isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
         isAboutInvestmentPrivate:Boolean,
-        isPrivate:Boolean
+        isPrivate:Boolean,
+        investmentAmount :String,
+        isInvestmentAmountPrivate :Boolean
+        index: Int
     }
     
     input investmentbudget{
@@ -260,7 +270,7 @@ let FunderPortfolioSchema = `
     
     type Query{
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
-        fetchFunderInvestments(portfoliodetailsId:String!):Investments
+        fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
         fetchFunderPrincipal(portfoliodetailsId:String!):Principal
         fetchFunderTeam(portfoliodetailsId:String!):Team
         fetchFunderAreaofInterest(portfoliodetailsId:String!):Team

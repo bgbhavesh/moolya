@@ -8,6 +8,7 @@ import Datetime from "react-datetime";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
+import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderInvestment extends React.Component {
@@ -25,6 +26,7 @@ export default class MlFunderInvestment extends React.Component {
     }
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
+    this.fetchPortfolioDetails.bind(this);
     return this;
   }
 
@@ -36,6 +38,28 @@ export default class MlFunderInvestment extends React.Component {
   componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
+  }
+
+  componentWillMount() {
+    this.fetchPortfolioDetails();
+  }
+
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfolioDetailsId = that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.investments)
+    if (empty) {
+      const response = await fetchfunderPortfolioInvestor(portfolioDetailsId);
+      if (response) {
+        this.setState({loading: false, funderInvestment: response, funderInvestmentList: response});
+      }
+    } else {
+      this.setState({
+        loading: false,
+        funderInvestment: that.context.funderPortfolio.investments,
+        funderInvestmentList: that.context.funderPortfolio.investments
+      });
+    }
   }
 
   onLockChange(field, e) {
@@ -88,23 +112,53 @@ export default class MlFunderInvestment extends React.Component {
 
   onOptionSelected(selectedFunding) {
     let details = this.state.data;
-    details = _.omit(details, ["typeOfFunding"]);
-    details = _.extend(details, {["typeOfFunding"]: selectedFunding});
+    details = _.omit(details, ["typeOfFundingId"]);
+    details = _.extend(details, {["typeOfFundingId"]: selectedFunding});
     this.setState({data: details}, function () {
       this.setState({"selectedVal": selectedFunding})
       this.sendDataToParent()
     })
   }
 
-  sendDataToParent(){
+  onStatusChangeNotify(e)
+  {
+    let updatedData = this.state.data||{};
+    let key = e.target.id;
+    updatedData=_.omit(updatedData,[key]);
+    if (e.currentTarget.checked) {
+      updatedData=_.extend(updatedData,{[key]:true});
+    } else {
+      updatedData=_.extend(updatedData,{[key]:false});
+    }
+    this.setState({data:updatedData}, function () {
+      this.sendDataToParent()
+    })
+  }
+
+  onTileClick(index, e) {
+    let cloneArray = _.cloneDeep(this.state.funderInvestment);
+    let details = cloneArray[index]
+    details = _.omit(details, "__typename");
+    if (details && details.logo) {
+      delete details.logo['__typename'];
+    }
+    this.setState({
+      selectedIndex: index,
+      data: details,
+      selectedObject: index,
+      popoverOpen: !(this.state.popoverOpen),
+      "selectedVal": details.typeOfFundingId
+    });
+  }
+
+  sendDataToParent() {
     let data = this.state.data;
     let investment = this.state.funderInvestment;
     let funderInvestment = _.cloneDeep(investment);
     data.index = this.state.selectedIndex;
     funderInvestment[this.state.selectedIndex] = data;
     let arr = [];
-    _.each(funderInvestment, function (item)
-    {
+    _.each(funderInvestment, function (item) {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
@@ -115,7 +169,7 @@ export default class MlFunderInvestment extends React.Component {
       arr.push(updateItem)
     })
     funderInvestment = arr;
-    this.setState({funderInvestment:funderInvestment})
+    this.setState({funderInvestment: funderInvestment})
     this.props.getInvestmentsDetails(funderInvestment);
   }
 
@@ -154,13 +208,19 @@ export default class MlFunderInvestment extends React.Component {
                     </div>
                     {funderInvestmentList.map(function (details, idx) {
                       return (
-                        <div className="col-lg-2 col-md-4 col-sm-4">
-                          <a href="#" id={"create_client"+idx}>
+                        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                          <a href="#" id={"create_client" + idx}>
                             <div className="list_block notrans funding_list">
-                              <FontAwesome name='lock'/>
-                              <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                              <div><p>DoneThing</p><p className="fund">$300k</p><p>Seed</p></div>
-                              <h3>March, 2017</h3>
+                              {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
+                              <div className="cluster_status inactive_cl">
+                                <FontAwesome name='lock' id="isPrivate" defaultValue={details.isPrivate}/>
+                                <input type="checkbox" className="lock_input" id="isPrivate"
+                                       checked={details.isPrivate}/></div>
+                              <div onClick={that.onTileClick.bind(that, idx)}>
+                                <p>{details.companyName}</p>
+                                <p className="fund">{details.investmentAmount}</p>
+                              </div>
+                              <h3>{details.dateOfInvestment}</h3>
                             </div>
                           </a>
                         </div>
@@ -178,20 +238,31 @@ export default class MlFunderInvestment extends React.Component {
                         <div className="col-md-12">
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                      inputProps={{placeholder: "Enter Date of Investment"}} refs="dateOfInvestment"
+                                      inputProps={{placeholder: "Enter Date of Investment"}} ref="dateOfInvestment"
+                                      defaultValue={this.state.data.dateOfInvestment?this.state.data.dateOfInvestment:''}
                                       closeOnSelect={true} onBlur={this.dateChange.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isDateOfInvestmentPrivate"/>
+                            <FontAwesome name='unlock' className="input_icon" id="isDateOfInvestmentPrivate"
+                                         onClick={this.onLockChange.bind(this, "isDateOfInvestmentPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isDateOfInvestmentPrivate}/>
                           </div>
-
                           <div className="form-group">
                             <input type="text" placeholder="Company Name" name="companyName"
+                                   defaultValue={this.state.data.companyName}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"/>
+                            <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
+                                         onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isCompanyNamePrivate}/>
                           </div>
                           <div className="form-group">
                             <input type="text" placeholder="Investment Amount" name="investmentAmount"
+                                   defaultValue={this.state.data.investmentAmount}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isInvestmentAmountPrivate"/>
+                            <FontAwesome name='unlock' className="input_icon" id="isInvestmentAmountPrivate"
+                                         onClick={this.onLockChange.bind(this, "isInvestmentAmountPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isInvestmentAmountPrivate}/>
                           </div>
                           <div className="form-group">
                             <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
@@ -202,13 +273,20 @@ export default class MlFunderInvestment extends React.Component {
                           </div>
                           <div className="form-group">
                             <input type="text" placeholder="About" name="aboutInvestment"
+                                   defaultValue={this.state.data.aboutInvestment}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isAboutInvestmentPrivate"/>
+                            <FontAwesome name='unlock' className="input_icon" id="isAboutInvestmentPrivate"
+                                         onClick={this.onLockChange.bind(this, "isAboutInvestmentPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isAboutInvestmentPrivate}/>
                           </div>
                           <div className="form-group">
-                            <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox"
-                                                                value="1"/><label htmlFor="checkbox1">
-                              <span></span>Make Private</label></div>
+                            <div className="input_types">
+                              <input id="isPrivate" type="checkbox"
+                                     checked={this.state.data.isPrivate && this.state.data.isPrivate}
+                                     name="checkbox"
+                                     onChange={this.onStatusChangeNotify.bind(this)}/>
+                              <label htmlFor="checkbox1"><span></span>Make Private</label></div>
                           </div>
                           <div className="ml_btn" style={{'textAlign': 'center'}}>
                             <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>

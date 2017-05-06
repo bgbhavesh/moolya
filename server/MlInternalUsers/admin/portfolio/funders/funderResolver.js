@@ -36,7 +36,7 @@ MlResolver.MlMutationResolver['updateFunderPortfolio'] = (obj, args, context, in
                 for (key in updateFor){
                     if (funderPortfolio.hasOwnProperty(key)){
                         if(_.isArray(updateFor[key]) && _.isArray(funderPortfolio[key])){
-                          funderPortfolio[key] = updateArrayofObjects(updateFor[key], startupPortfolio[key])
+                          funderPortfolio[key] = updateArrayofObjects(updateFor[key], funderPortfolio[key])
                         }
                         else if(_.isObject(updateFor[key]) && _.isObject(funderPortfolio[key]))
                         {
@@ -77,8 +77,24 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
 
 }
 
-MlResolver.MlQueryResolver['fetchFunderInvestments'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('investments')) {
+      if(portfolio && portfolio['investments']){
+        portfolio.investments.map(function(investment,index) {
+          if(portfolio.investments[index]){
+            let investmentData = MlFundingTypes.findOne({"_id" : investment.typeOfFundingId}) || {};
+            portfolio.investments[index].typeOfFundingName = investmentData.displayName || "";
+          }
 
+        })
+      }
+      return portfolio['investments'];
+    }
+  }
+
+  return [];
 }
 
 MlResolver.MlQueryResolver['fetchFunderPrincipal'] = (obj, args, context, info) => {

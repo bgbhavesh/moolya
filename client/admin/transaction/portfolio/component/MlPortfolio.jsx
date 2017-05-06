@@ -77,6 +77,7 @@ class MlPortfolio extends React.Component{
       this.fetchEditPortfolioTemplate(this.props.config);
     }
     if(this.props.communityType == "Ideators"){
+      this.setState({loading:true});
       this.fetchIdeaId()
     }else{
       this.setState({ideaId:" "})
@@ -86,7 +87,7 @@ class MlPortfolio extends React.Component{
   async fetchIdeaId(){
     let portfolioId = this.props.config;
     const response = await fetchIdeaByPortfolioId(portfolioId);
-    this.setState({ideaId : response._id});
+    this.setState({loading:false, ideaId : response._id});
   }
   async fetchEditPortfolioTemplate(pId) {
       let userType = this.context.userType;

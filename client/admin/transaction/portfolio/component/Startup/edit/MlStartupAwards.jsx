@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
-import Moolyaselect from "../../../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../../../../../client/commons/components/select/MoolyaSelect";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import _ from "lodash";
@@ -288,7 +288,7 @@ export default class MlStartupAwards extends React.Component{
                         <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                       </div>
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                        <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                       </div>
                     </div>
                   </div></div>

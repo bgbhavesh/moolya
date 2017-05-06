@@ -10,7 +10,7 @@ import MlIdeatorLibrary from '../../../admin/transaction/portfolio/component/Ide
 import MlIdeatorStrategyAndPlanning from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorStrategyAndPlanning'
 import MlIdeatorLookingFor from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorLookingFor'
 import MlIdeatorIntellectualPlanningAndTrademark from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
-// import MlIdeatorIdeas from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIdeas'
+import MlIdeatorIdeas from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIdeas'
 import AppActionButtons from '../../commons/components/appActionButtons'
 import TopIconsList from '../../commons/components/topIconsList'
 import {updatePortfolioActionHandler} from '../../../admin/transaction/portfolio/actions/updatePortfolioDetails';
@@ -36,7 +36,8 @@ export default class MlAppIdeatorEditTabs extends React.Component{
 
 getChildContext(){
   return {
-    ideatorPortfolio: this.state.ideatorPortfolio
+    ideatorPortfolio: this.state.ideatorPortfolio,
+    idea:this.state.idea
   }
 }
 
@@ -45,7 +46,7 @@ getChildContext(){
 
   getTabComponents(){
     let tabs = [
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlIdeatorDetails key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getIdeatorDetails={this.getIdeatorDetails.bind(this)}/>},    //this.props.portfolioDetailsId}
       {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlIdeatorProblemsAndSolutions key="2"  portfolioDetailsId={this.props.portfolioDetailsId}  getProblemSolution={this.getProblemSolution.bind(this)}/>},   //id will be dyanmic
       {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="3"  portfolioDetailsId={this.props.portfolioDetailsId} getAudience={this.getAudience.bind(this)}/>},                            //id will be dyanmic
@@ -64,12 +65,12 @@ getChildContext(){
     // this.setState({ideatorDetails:details})
     this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
-  // getIdeas(details) {
-  //   let data = this.state.idea;
-  //   data=details;
-  //   this.setState({idea : data})
-  //   this.props.getPortfolioDetails({idea:this.state.idea});
-  // }
+  getIdeas(details) {
+    let data = this.state.idea;
+    data=details;
+    this.setState({idea : data})
+    this.props.getIdeatorIdeaDetails(data);
+  }
   getProblemSolution(details) {
     let data = this.state.ideatorPortfolio;
     data['problemSolution']=details;
@@ -130,4 +131,5 @@ getChildContext(){
 }
 MlAppIdeatorEditTabs.childContextTypes = {
   ideatorPortfolio: PropTypes.object,
+  idea:PropTypes.object
 };

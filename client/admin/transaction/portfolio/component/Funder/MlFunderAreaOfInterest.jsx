@@ -34,8 +34,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
 
   render() {
     return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap portfolio-main-wrap">
+      <div>
+        <div className="portfolio-main-wrap">
           <h2>Area of Intrests</h2>
           <div className="requested_input main_wrap_scroll">
 

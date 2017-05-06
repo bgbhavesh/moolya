@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import classNames from "classnames"
 import { render } from 'react-dom';
 import formHandler from '../../../commons/containers/MlFormHandler';
-import {updatePortfolioActionHandler} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
+import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import {findComments} from '../../../commons/annotaterComments/findComments'
@@ -83,8 +83,10 @@ class MlAppPortfolio extends React.Component{
       this.fetchEditPortfolioTemplate(this.props.config);
     }
     if(this.props.communityType == "Ideators"){
+      this.setState({loading:true});
       this.fetchIdeaId()
     }else if(this.props.communityType =="ideator"){
+      this.setState({loading:true});
       this.fetchIdeaId()
     }else{
       this.setState({ideaId:" "})
@@ -142,7 +144,10 @@ class MlAppPortfolio extends React.Component{
   async fetchIdeaId(){
       let portfolioId = this.props.config;
       const response = await fetchIdeaByPortfolioId(portfolioId);
-      this.setState({ideaId : response._id});
+      this.setState({loading:false, ideaId : response._id});
+  }
+  getIdeatorIdeaDetails(details){
+    this.setState({idea:details});
   }
 
   getPortfolioDetails(details){
@@ -155,7 +160,16 @@ class MlAppPortfolio extends React.Component{
       portfolio :this.state.portfolio
     }
     const response = await updatePortfolioActionHandler(jsonData)
-    return response;
+    if(response){
+      if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
+        let idea = this.state.idea
+        if(idea){
+          const response1 = await updateIdeatorIdeaActionHandler(idea)
+          return response1;
+        }
+      }
+      return response;
+    }
   }
 
   async testEditPortfolioDetails(){
@@ -215,8 +229,8 @@ class MlAppPortfolio extends React.Component{
       <div className="app_main_wrap">
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="app_padding_wrap">
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}
-              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.props.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
+              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}
         <div className="overlay"></div>
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import classNames from "classnames"
 import { render } from 'react-dom';
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {updatePortfolioActionHandler} from '../actions/updatePortfolioDetails';
+import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler} from '../actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent';
 import {findComments} from '../../../../commons/annotaterComments/findComments'
@@ -25,6 +25,7 @@ class MlPortfolio extends React.Component{
     this.getPortfolioDetails.bind(this);
     this.getContext.bind(this);
     this.getSelectedAnnotation.bind(this);
+    this.getIdeatorIdeaDetails.bind(this);
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
     this.fetchIdeaId.bind(this);
@@ -76,6 +77,7 @@ class MlPortfolio extends React.Component{
       this.fetchEditPortfolioTemplate(this.props.config);
     }
     if(this.props.communityType == "Ideators"){
+      this.setState({loading:true});
       this.fetchIdeaId()
     }else{
       this.setState({ideaId:" "})
@@ -85,7 +87,7 @@ class MlPortfolio extends React.Component{
   async fetchIdeaId(){
     let portfolioId = this.props.config;
     const response = await fetchIdeaByPortfolioId(portfolioId);
-    this.setState({ideaId : response._id});
+    this.setState({loading:false, ideaId : response._id});
   }
   async fetchEditPortfolioTemplate(pId) {
       let userType = this.context.userType;
@@ -135,6 +137,9 @@ class MlPortfolio extends React.Component{
       });
     }
   }
+  getIdeatorIdeaDetails(details){
+    this.setState({idea:details});
+  }
 
   getPortfolioDetails(details){
     this.setState({portfolio:details});
@@ -146,7 +151,16 @@ class MlPortfolio extends React.Component{
       portfolio :this.state.portfolio
     }
     const response = await updatePortfolioActionHandler(jsonData)
-    return response;
+    if(response){
+      if(this.props.communityType == "Ideators"){
+        let idea = this.state.idea
+        if(idea){
+          const response1 = await updateIdeatorIdeaActionHandler(idea)
+          return response1;
+        }
+      }
+      return response;
+    }
   }
 
   async handleSuccess(response) {
@@ -212,7 +226,7 @@ class MlPortfolio extends React.Component{
           <div className="admin_padding_wrap">
             <div className='step-progress' >
               {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
+              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div>
           </div>)}

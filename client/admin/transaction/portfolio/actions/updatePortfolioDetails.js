@@ -24,6 +24,30 @@ export async function updatePortfolioActionHandler(details) {
   return id
 }
 
+export async function updateIdeatorIdeaActionHandler(details) {
+  let ideaId  = details._id;
+  let idea = _.omit(details, '_id');
+  idea = _.omit(idea, 'portfolioId');
+
+  const result = await client.mutate({
+    mutation: gql`
+          mutation  ($ideaId: String, $idea:idea){
+              updateIdea(ideaId:$ideaId, idea:$idea){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      ideaId:ideaId,
+      idea:idea,
+    }
+  })
+  const id = result.data.updateIdea;
+  return id
+}
+
 
 export async function createAnnotationActionHandler(details) {
   let portfoliodetailsId  = details.portfolioId;

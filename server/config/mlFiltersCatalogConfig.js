@@ -20,7 +20,7 @@ if(Meteor.isServer){
   },{$set:{
     fields:[
       {
-        name:"registrationInfo.createdDate",
+        name:"createdDate",
         type:'Date',
         collectionName : " "
       },

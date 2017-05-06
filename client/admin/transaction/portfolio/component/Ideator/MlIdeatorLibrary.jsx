@@ -44,42 +44,42 @@ export default class MlIdeatorLibrary extends React.Component{
     });
 
 
-    if (typeof annotator === 'undefined') {
-      alert("Oops! it looks like you haven't built Annotator. " +
-        "Either download a tagged release from GitHub, or build the " +
-        "package by running `make`");
-    } else {
-
-      function generate_id() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
-      }
-      // set fake date, id, and author in order to demonstrate footer,
-      // since demo operates without an annotate store
-      var fakeData = function () {
-        return {
-          beforeAnnotationCreated: function (ann) {
-            ann.updated = new Date();
-            ann.user = 'anon';
-            ann.id = generate_id();
-          }
-        };
-      };
-
-      //var _marginalia = annotatorMarginalia();
-      var app = new annotator.App()
-        .include(annotator.ui.main)
-        .include(fakeData)
-
-
-
-      app.start();
-
-      // simulate empty data load since demo has no annotation store
-      // _marginalia.annotationsLoaded([]);
-
-    }
+    // if (typeof annotator === 'undefined') {
+    //   alert("Oops! it looks like you haven't built Annotator. " +
+    //     "Either download a tagged release from GitHub, or build the " +
+    //     "package by running `make`");
+    // } else {
+    //
+    //   function generate_id() {
+    //     return Math.floor((1 + Math.random()) * 0x10000)
+    //       .toString(16)
+    //       .substring(1);
+    //   }
+    //   // set fake date, id, and author in order to demonstrate footer,
+    //   // since demo operates without an annotate store
+    //   var fakeData = function () {
+    //     return {
+    //       beforeAnnotationCreated: function (ann) {
+    //         ann.updated = new Date();
+    //         ann.user = 'anon';
+    //         ann.id = generate_id();
+    //       }
+    //     };
+    //   };
+    //
+    //   //var _marginalia = annotatorMarginalia();
+    //   var app = new annotator.App()
+    //     .include(annotator.ui.main)
+    //     .include(fakeData)
+    //
+    //
+    //
+    //   app.start();
+    //
+    //   // simulate empty data load since demo has no annotation store
+    //   // _marginalia.annotationsLoaded([]);
+    //
+    // }
 
   }
   render(){

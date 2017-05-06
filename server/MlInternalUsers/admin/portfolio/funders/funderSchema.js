@@ -27,7 +27,7 @@ let FunderPortfolioSchema = `
     type SocialLinks{
         socialLinkType:String,
         userId:String,
-        isuserIdPrivate:Boolean
+        isUserIdPrivate:Boolean
     }
     
     type Team{
@@ -72,13 +72,18 @@ let FunderPortfolioSchema = `
     
     type Investments{
         dateOfInvestment:String,
+        isDateOfInvestmentPrivate :Boolean
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        typeOfFunding:String,
-        istypeOfFundingPrivate:Boolean,
+        typeOfFundingId:String,
+        typeOfFundingName : String,
+        isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
-        isaboutInvestmentPrivate:Boolean,
-        isPivate:Boolean
+        isAboutInvestmentPrivate:Boolean,
+        isPrivate:Boolean,
+        investmentAmount :String,
+        isInvestmentAmountPrivate :Boolean
+        index: Int
     }
     
     type Investmentbudget{
@@ -153,7 +158,7 @@ let FunderPortfolioSchema = `
     input socialLinks{
         socialLinkType:String,
         userId:String,
-        isuserIdPrivate:Boolean
+        isUserIdPrivate:Boolean
     }
     
     input team{
@@ -198,13 +203,18 @@ let FunderPortfolioSchema = `
 
     input investments{
         dateOfInvestment:String,
+        isDateOfInvestmentPrivate :Boolean
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        typeOfFunding:String,
-        istypeOfFundingPrivate:Boolean,
+        typeOfFundingId:String,
+        typeOfFundingName : String,
+        isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
-        isaboutInvestmentPrivate:Boolean,
-        isPivate:Boolean
+        isAboutInvestmentPrivate:Boolean,
+        isPrivate:Boolean,
+        investmentAmount :String,
+        isInvestmentAmountPrivate :Boolean
+        index: Int
     }
     
     input investmentbudget{
@@ -260,7 +270,7 @@ let FunderPortfolioSchema = `
     
     type Query{
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
-        fetchFunderInvestments(portfoliodetailsId:String!):Investments
+        fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
         fetchFunderPrincipal(portfoliodetailsId:String!):Principal
         fetchFunderTeam(portfoliodetailsId:String!):Team
         fetchFunderAreaofInterest(portfoliodetailsId:String!):Team

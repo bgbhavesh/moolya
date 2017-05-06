@@ -69,7 +69,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
 
   render() {
     return (
-      <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <div className="main_wrap_scroll">
             <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
@@ -81,14 +80,11 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                   <li><a href="#2a" data-toggle="tab">Team</a>
                   </li>
                 </ul>
-
                 <div className="tab-content clearfix requested_input">
                   <div className="tab-pane active" id="1a">
                     <div className="col-lg-12 nopadding">
                       <div className="row">
-
                         <div className="col-lg-2 col-md-4 col-sm-4">
-
                           <div className="list_block notrans funding_list">
                             <img src="../images/p_29.jpg"/>
                             <div><p>Kishore Kumar</p><p className="small">Founder</p></div>
@@ -98,19 +94,14 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               <a href="#" id="" className="save_btn"><FontAwesome name='linkedin'/></a>
                             </div>
                           </div>
-
                         </div>
-
-
                       </div>
                     </div>
                   </div>
                   <div className="tab-pane" id="2a">
                     <div className="col-lg-12">
                       <div className="row">
-
                         <div className="col-lg-2 col-md-4 col-sm-4">
-
                           <div className="list_block notrans funding_list">
                             <img src="../images/p_5.jpg"/>
                             <div><p>Rajesh Sethi</p><p className="small">COO</p></div>
@@ -120,10 +111,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               <a href="#" id="" className="save_btn"><FontAwesome name='linkedin'/></a>
                             </div>
                           </div>
-
                         </div>
-
-
                       </div>
                     </div>
                   </div>
@@ -182,8 +170,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                             </li>
                           </ul>
                         </div>
-
-
                       </div>
                       <div className="main_wrap_scroll">
                         <ScrollArea
@@ -196,9 +182,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                             <div className="row">
                               <div className="col-lg-3 col-md-3 col-sm-4">
                                 <div className="col-lg-12 col-md-12 col-sm-12">
-
                                   <div className="list_block notrans funding_list">
-
                                     <img src="../images/p_5.jpg"/>
                                     <div><p>Naval Ravikant</p><p className="small">Partner</p></div>
                                     <div className="ml_icon_btn">
@@ -207,18 +191,15 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <a href="#" id="" className="save_btn"><FontAwesome name='linkedin'/></a>
                                     </div>
                                   </div>
-
                                 </div>
                               </div>
                               <div className="col-lg-9 col-md-9 col-sm-8">
                                 <div className="form_bg col-md-6">
                                   <form>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="Name" className="form-control float-label"
                                              id="cluster_name"/>
                                     </div>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="Company" className="form-control float-label"
                                              id="cluster_name"/>
@@ -227,12 +208,10 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <input type="text" placeholder="Year of Experience"
                                              className="form-control float-label" id="cluster_name"/>
                                     </div>
-
                                   </form>
                                 </div>
                                 <div className="form_bg col-md-6">
                                   <form>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="Designation" className="form-control float-label"
                                              id="cluster_name"/>
@@ -246,31 +225,22 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <input type="text" placeholder="Qualification"
                                              className="form-control float-label" id="cluster_name"/>
                                     </div>
-
-
                                   </form>
                                 </div>
                                 <div className="form_bg col-md-12">
                                   <form>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="About" className="form-control float-label"
                                              id="cluster_name"/>
                                     </div>
-
-
                                   </form>
                                 </div>
                               </div>
-
-
                             </div>
                           </div>
                         </ScrollArea>
                       </div>
-
                     </div>
-
                   </div>
                   <div className="tab-pane" id="2a">
                     <div className="col-lg-12">
@@ -357,11 +327,8 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 </h3>
                               </div>
                             </li>
-
                           </ul>
                         </div>
-
-
                       </div>
                       <div className="main_wrap_scroll">
                         <ScrollArea
@@ -390,12 +357,10 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               <div className="col-lg-9 col-md-9 col-sm-8">
                                 <div className="form_bg col-md-6">
                                   <form>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="Name" className="form-control float-label"
                                              id="cluster_name" disabled/>
                                     </div>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="Company" className="form-control float-label"
                                              id="cluster_name" disabled/>
@@ -404,7 +369,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <input type="text" placeholder="Year of Experience"
                                              className="form-control float-label" id="cluster_name" disabled/>
                                     </div>
-
                                   </form>
                                 </div>
                                 <div className="form_bg col-md-6">
@@ -414,7 +378,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <input type="text" placeholder="Disignation" className="form-control float-label"
                                              id="cluster_name" disabled/>
                                     </div>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="Duration" className="form-control float-label"
                                              id="cluster_name" disabled/>
@@ -423,35 +386,24 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <input type="text" placeholder="Qualification"
                                              className="form-control float-label" id="cluster_name" disabled/>
                                     </div>
-
-
                                   </form>
                                 </div>
                                 <div className="form_bg col-md-12">
                                   <form>
-
                                     <div className="form-group">
                                       <input type="text" placeholder="About" className="form-control float-label"
                                              id="cluster_name" disabled/>
                                     </div>
-
-
                                   </form>
                                 </div>
                               </div>
-
-
                             </div>
                           </div>
                         </ScrollArea>
                       </div>
-
                     </div>
                   </div>
-
-
                 </div>
-
               </div>
             </ScrollArea>
 
@@ -533,7 +485,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                 </div>
               </div>
             </div>
-
             <div style={{'display': 'none'}} className="team-list-main">
               <div className="medium-popover">
                 <div className="row">
@@ -551,7 +502,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                       <input type="text" placeholder="Title" className="form-control float-label" id=""/>
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
-
                     <div className="form-group">
                       <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
                       <FontAwesome name='unlock' className="input_icon"/>
@@ -560,8 +510,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                       <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
-
-
                     <div className="form-group">
                       <input type="text" placeholder="Disignation" className="form-control float-label" id=""/>
                       <FontAwesome name='unlock' className="input_icon"/>
@@ -574,8 +522,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                       <input type="text" placeholder="Duration" className="form-control float-label" id=""/>
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
-
-
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
                       <a href="#" className="save_btn">Save</a>
                     </div>
@@ -585,7 +531,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
             </div>
           </div>
         </div>
-      </div>
     )
   }
 };

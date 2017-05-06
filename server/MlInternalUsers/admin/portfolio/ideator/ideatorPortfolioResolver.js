@@ -390,6 +390,18 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
+  if(args.idea) {
+    var idea = MlIdeas.findOne({"_id":args.ideaId})
+    var updatedIdea = args.idea;
+    if(idea){
+      let ret = MlIdeas.update({"_id": args.ideaId}, {$set: updatedIdea}, {upsert: true})
+      if (ret) {
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        return response;
+      }
+    }
+  }
 }
 
 MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {

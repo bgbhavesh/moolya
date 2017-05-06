@@ -8,6 +8,7 @@ import Moolyaselect from  '../../commons/components/select/MoolyaSelect'
 import {graphql} from 'react-apollo';
 import Datetime from "react-datetime";
 import moment from "moment";
+import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {customFilterSearchQuery} from "./customFilterSearchQueryActionHandler"
 export default class MlCustomFilter extends Component {
   constructor(props){
@@ -26,6 +27,9 @@ export default class MlCustomFilter extends Component {
     $('.filter_btn').click(function(){
       $('.filter_table').toggleClass('filter_hide');
     });
+  }
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
   async fetchFilters(){
     const response = await findModuleCustomFilterActionHandler(this.props.moduleName);
@@ -129,6 +133,11 @@ export default class MlCustomFilter extends Component {
     //const response = await customFilterSearchQuery(this.state.filterQueries,this.props.moduleName);
 
     this.props.onFilterChange(this.state.filterQueries);
+
+
+
+
+    $('.filter_table').removeClass('filter_hide');
     //this.setState({filterQueries : []});
   }
   render(){
@@ -148,11 +157,11 @@ export default class MlCustomFilter extends Component {
     }`;
 
     return(
-      <div className=" ">
+      <div className="filter_table filter_hide">
         <div className="panel panel-default">
-         <div className="">
-            <div>
-            <div className="">
+
+
+
               {fieldsData && fieldsData[0]&& fieldsData[0].filterFields&& fieldsData[0].filterFields.map(function(options,id){
                 if(options && options.fieldList && options.fieldCollectionName){
                   listOptions={options: { variables: {moduleName:options.fieldCollectionName,list:options.fieldList}}}
@@ -176,21 +185,46 @@ export default class MlCustomFilter extends Component {
                   listOptions={options: { variables: {moduleName:options.fieldCollectionName,list:options.fieldList}}}
                 }
                 return(<span key={id}>
-                  {dateSelect?<div><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From"}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"$gte")}/></div>:""}
-                  {dateSelect?<div><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To"}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"$lt")}/></div>:""}
-                  {listSelect?<div><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,options.fieldName)} isDynamic={true} id={'list'+id}/></div>:""}
-                  {stringSelect?<div><input type="text"  ref="documentId" placeholder="Document Id" className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)}/></div>:""}</span>)
+                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control"}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"$gte")}/></div>:""}
+                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control"}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"$lt")}/></div>:""}
+                  {listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,options.fieldName)} isDynamic={true} id={'list'+id}/></div>:""}
+                  {stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="documentId" placeholder="Document Id" className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)}/></div>:""}</span>)
 
                 })}
+                <div className="col-lg-3">
+                    <div className="input_types label_name">
+                      <label>label : </label>
+                    </div>
+                    <div className="input_types">
+                    <input id="radio1" type="radio" name="radio" value="1"/><label htmlFor="radio1"><span><span></span></span>option1</label>
+                    </div>
+                    <div className="input_types">
+                    <input id="radio1" type="radio" name="radio" value="1"/><label htmlFor="radio1"><span><span></span></span>option2</label>
+                    </div>
+                </div>
+
+                <div className="col-lg-3">
+                  <div className="input_types label_name">
+                    <label>label : </label>
+                  </div>
+                  <div className="input_types">
+                  <input id="check1" type="checkbox" name="" value=""/><label htmlFor="check1"><span><span></span></span>option1</label>
+                  </div>
+                  <div className="input_types">
+                  <input id="check2" type="checkbox" name="" value=""/><label htmlFor="check2"><span><span></span></span>option2</label>
+                  </div>
+                </div>
+
+                <br className="brclear"/>
               <div className="ml_icon_btn">
                 <a href="#"  className="save_btn" onClick={this.onApplyFilter.bind(this)} ><span
                   className="ml ml-save"></span></a>
                 <a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>
-              </div>
+
 
             </div>
-            </div>
-          </div>
+
+
 
         </div>
         <div className="filter_btn"><img src="/images/filter_icon.png"/></div>

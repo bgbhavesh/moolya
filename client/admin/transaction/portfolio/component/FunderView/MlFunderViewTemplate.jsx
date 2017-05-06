@@ -3,16 +3,17 @@ import {render} from "react-dom";
 import MlTabComponent from "../../../../.././commons/components/tabcomponent/MlTabComponent";
 import MlIdeatorDetails from "../Ideator/MlIdeatorDetails";
 import _ from 'lodash'
-import MlFunderAbout from './MlFunderAbout'
-import MlFunderAreaOfInterest from './MlFunderAreaOfInterest'
-import MlFunderEngagementMethod from './MlFunderEngagementMethod'
-import MlFunderInvestment from './MlFunderInvestment'
-import MlFunderLibrary from './MlFunderLibrary'
-import MlFunderNews from './MlFunderNews'
-import MlFunderPrincipalTeam from './MlFunderPrincipalTeam'
-import MlFunderSuccessStories from './MlFunderSuccessStories'
+import MlFunderAboutView from './MlFunderAboutView'
+import MlFunderInvestmentView from './MlFunderInvestmentView'
+import MlFunderEngagementMethodView from './MlFunderEngagementMethodView'
 
-export default class MlFunderEditTemplate extends React.Component{
+import MlFunderAreaOfInterestView from './MlFunderAreaOfInterestView'
+import MlFunderLibraryView from './MlFunderLibraryView'
+import MlFunderNewsView from './MlFunderNewsView'
+import MlFunderPrincipalTeamView from './MlFunderPrincipalTeamView'
+import MlFunderSuccessStoriesView from './MlFunderSuccessStoriesView'
+
+export default class MlFunderViewTemplate extends React.Component{
   constructor(props){
     super(props)
     this.state =  {tabs: [],aboutUs: {}, funderPortfolio:{}};
@@ -43,25 +44,25 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAbout key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" , component:<MlFunderInvestment key="2" getInvestmentsDetails={this.getInvestmentsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Principal & Team" , component:<MlFunderPrincipalTeam key="3" getPrincipalDetails={this.getPrincipalDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" , component:<MlFunderEngagementMethod key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Area Of Interests" , component:<MlFunderAreaOfInterest key="6" getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStories key="7" getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlFunderLibrary key="8" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNews key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAboutView key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" , component:<MlFunderInvestmentView key="2" getInvestmentsDetails={this.getInvestmentsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Principal & Team" , component:<MlFunderPrincipalTeamView key="3" getPrincipalDetails={this.getPrincipalDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" , component:<MlFunderEngagementMethodView key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Area Of Interests" , component:<MlFunderAreaOfInterestView key="6" getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStoriesView key="7" getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlFunderLibraryView key="8" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNewsView key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
     ]
     return tabs;
   }
-
   getSuccessStoriesDetails(details){
     let data = this.state.funderPortfolio;
     data['portfolioIdeatorDetails']=details;
     this.setState({ideatorPortfolio : data})
+    // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
+    // this.setState({ideatorDetails:details})
     this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
-
   getAboutus(details,tabName){
     let data = this.state.funderPortfolio;
     data[tabName] = details;
@@ -142,6 +143,6 @@ export default class MlFunderEditTemplate extends React.Component{
     return <MlTabComponent tabs={tabs}/>
   }
 }
-MlFunderEditTemplate.childContextTypes = {
+MlFunderViewTemplate.childContextTypes = {
   funderPortfolio: PropTypes.object,
 };

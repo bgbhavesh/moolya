@@ -5,8 +5,12 @@ export function searchFunction(args) {
   let fieldsArgs=args.fieldsData||[];
   _.each(fieldsArgs,function (s,v) {
     let json={};
-    let regex={$regex:".*"+s.value+".*",$options:"i"};
-    json[s.fieldName]=regex
+    if(s.fieldType == "List"){
+     json[s.fieldName]=s.value
+    }else{
+      let regex={$regex:".*"+s.value+".*",$options:"i"};
+      json[s.fieldName]=regex
+    }
     ary.push(json);
   })
 

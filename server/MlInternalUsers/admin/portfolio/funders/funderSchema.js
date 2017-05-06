@@ -27,7 +27,7 @@ let FunderPortfolioSchema = `
     type SocialLinks{
         socialLinkType:String,
         userId:String,
-        isuserIdPrivate:Boolean
+        isUserIdPrivate:Boolean
     }
     
     type Team{
@@ -75,10 +75,10 @@ let FunderPortfolioSchema = `
         companyName:String,
         isCompanyNamePrivate:Boolean,
         typeOfFunding:String,
-        istypeOfFundingPrivate:Boolean,
+        isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
-        isaboutInvestmentPrivate:Boolean,
-        isPivate:Boolean
+        isAboutInvestmentPrivate:Boolean,
+        isPrivate:Boolean
     }
     
     type Investmentbudget{
@@ -153,7 +153,7 @@ let FunderPortfolioSchema = `
     input socialLinks{
         socialLinkType:String,
         userId:String,
-        isuserIdPrivate:Boolean
+        isUserIdPrivate:Boolean
     }
     
     input team{
@@ -201,10 +201,10 @@ let FunderPortfolioSchema = `
         companyName:String,
         isCompanyNamePrivate:Boolean,
         typeOfFunding:String,
-        istypeOfFundingPrivate:Boolean,
+        isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
-        isaboutInvestmentPrivate:Boolean,
-        isPivate:Boolean
+        isAboutInvestmentPrivate:Boolean,
+        isPrivate:Boolean
     }
     
     input investmentbudget{

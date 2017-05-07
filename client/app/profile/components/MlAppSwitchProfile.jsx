@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import {fetchExternalUserProfilesActionHandler} from '../actions/findUserProfiles';
+import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler} from '../actions/switchUserProfilesActions';
 import _ from 'lodash';
 
 export default class MlAppSwitchProfile extends React.Component{
@@ -9,13 +9,14 @@ export default class MlAppSwitchProfile extends React.Component{
       super(props);
       this.state= {loading: true,swiper:null,userProfiles:[],currentSlideIndex:0};
       this.fetchExternalUserProfiles.bind(this);
+      this.setDefaultUserProfile.bind(this);
+      this.deactivateUserProfile.bind(this);
       this.onSlideIndexChange.bind(this);
       this.initializeSwiper.bind(this);
     return this;
   }
 
   onSlideIndexChange(swiper){
-     console.log(swiper);
     if(this.state.currentSlideIndex!==swiper.activeIndex){
       this.setState({'currentSlideIndex':swiper.activeIndex});
     }
@@ -37,7 +38,9 @@ export default class MlAppSwitchProfile extends React.Component{
           modifier: 1,
           slideShadows: true
         },
-        onSlideChangeEnd: this.onSlideIndexChange.bind(this)
+        onSlideChangeEnd: this.onSlideIndexChange.bind(this),
+        onTouchEnd:this.onSlideIndexChange.bind(this),
+        onTransitionEnd:this.onSlideIndexChange.bind(this)
       });
     }
   };
@@ -56,6 +59,28 @@ export default class MlAppSwitchProfile extends React.Component{
       let index=_.findIndex(response, {'isDefault':true })||0;
       let initialSlideIndex=index>=0?index:0;
       this.setState({loading: false, userProfiles: response,'currentSlideIndex':initialSlideIndex});
+    }
+  }
+
+  async setDefaultUserProfile(){
+
+    let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+    const response = await setDefaultProfileActionHandler(profileDetails.registrationId);
+    if(response&&response.success){
+      toastr.success("Default Profile set successfully");
+    }else{
+      //throw error
+      toastr.success("Failed to set the default profile");
+    }
+  }
+
+  async deactivateUserProfile(){
+    let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+    const response = await deActivateProfileProfileActionHandler(profileDetails.registrationId);
+    if(response&&response.success){
+
+    }else{
+      //throw error
     }
   }
 
@@ -131,13 +156,10 @@ export default class MlAppSwitchProfile extends React.Component{
             </div>
 
             <div className="col-md-12 text-center">
-              <div className="col-md-4">
+              <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
                 <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
               </div>
-              <div className="col-md-4">
-                <a href="#" className="fileUpload mlUpload_btn">Switch Profile</a>
-              </div>
-              <div className="col-md-4">
+              <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
                 <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
               </div>
             </div>

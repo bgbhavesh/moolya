@@ -141,6 +141,8 @@ let externalUser = `
     
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
+      deActivateUserProfile(profileId:String!):response
+      setDefaultProfile(profileId:String!):response
     }
     
     type Query{

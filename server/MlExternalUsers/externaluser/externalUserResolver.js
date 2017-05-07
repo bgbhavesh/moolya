@@ -108,3 +108,42 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
   }
 
 }
+
+MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, info) => {
+  let userId=context.userId;
+  var response=null;
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user&&args&&args.profileId){
+    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+      {"profile.externalUserProfiles.$.isDefault": true}, {$set: true}, context);
+    response = new MlRespPayload().successPayload({}, 200);
+  }else {
+    let code = 409;
+    response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+
+  return response;
+
+}
+
+MlResolver.MlMutationResolver['setDefaultProfile'] = (obj, args, context, info) => {
+  let userId=context.userId;
+  var response=null;
+  var update=null;
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user&&args&&args.profileId){
+
+    result= mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'isDefault': true}}},
+      {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+
+    result= mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+      {"profile.externalUserProfiles.$.isDefault": true}, {$set: true}, context);
+     response = new MlRespPayload().successPayload({}, 200);
+  }else {
+    let code = 409;
+     response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+  return response;
+}

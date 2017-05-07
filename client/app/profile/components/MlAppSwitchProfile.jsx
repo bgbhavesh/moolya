@@ -1,8 +1,6 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
-import ScrollArea from 'react-scrollbar'
+import {fetchExternalUserProfilesActionHandler} from '../actions/findUserProfiles';
 
 
 export default class MlAppSwitchProfile extends React.Component{
@@ -10,7 +8,7 @@ export default class MlAppSwitchProfile extends React.Component{
   constructor(props, context){
       super(props);
       this.state= {loading: false,userProfiles:[]};
-     // this.fetchExternalUserProfiles.bind(this)
+      this.fetchExternalUserProfiles.bind(this);
     return this;
   }
 
@@ -36,6 +34,19 @@ export default class MlAppSwitchProfile extends React.Component{
       }
     });
   }
+
+  async fetchExternalUserProfiles(){
+    const response = await fetchExternalUserProfilesActionHandler();
+    if(response){
+      this.setState({loading: false, userProfiles: response});
+    }
+  }
+
+  componentWillMount()
+  {
+    this.fetchExternalUserProfiles();
+  }
+
   render(){
     return (
       <div className="app_main_wrap">
@@ -47,44 +58,20 @@ export default class MlAppSwitchProfile extends React.Component{
             <div className="col-md-2"></div>
             <div className="col-md-8">
               <div className="swiper-container profile_container">
+
                 <div className="swiper-wrapper">
-                  <div className="swiper-slide profile_accounts">
+                    {this.state.userProfiles.map(function (prf, idx) {
+                      return(
+                        <div className="swiper-slide profile_accounts">
+                          <img src={prf.countryFlag?prf.countryFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
+                          <h2>{prf.communityDefName?prf.communityDefName:""}</h2>
+                        </div>
+                      )
+                    })}
 
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
-                  <div className="swiper-slide profile_accounts">
-
-                    <img src="../images/india.png" /><br />Hyderabad
-                    <h2>Finance / Accounts</h2>
-                    <h3>Manager</h3>
-
-                  </div>
 
                 </div>
+
                 <div className="swiper-pagination"></div>
               </div>
             </div>
@@ -118,7 +105,7 @@ export default class MlAppSwitchProfile extends React.Component{
             </div>
             <div className="col-md-12 text-center">
               <div className="col-md-4">
-                <a href="#" className="fileUpload mlUpload_btn">Make Defalt</a>
+                <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
               </div>
               <div className="col-md-4">
                 <a href="#" className="fileUpload mlUpload_btn">Switch Profile</a>

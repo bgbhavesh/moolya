@@ -93,3 +93,18 @@ MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['updateContactNumber'] = (obj, args, context, info) => {
 
 }
+
+
+MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => {
+  let userId=context.userId
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user){
+    const userProfile = user.profile.isExternaluser?user.profile.externalUserProfiles:[];
+    return userProfile;
+  }else {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+
+}

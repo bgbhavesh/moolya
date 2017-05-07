@@ -78,9 +78,10 @@ export default class MlAppSwitchProfile extends React.Component{
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
     const response = await deActivateProfileProfileActionHandler(profileDetails.registrationId);
     if(response&&response.success){
-
+      toastr.success("Profile deactivated successfully");
     }else{
       //throw error
+      toastr.success("Failed to deactivate the profile");
     }
   }
 
@@ -97,13 +98,14 @@ export default class MlAppSwitchProfile extends React.Component{
     }
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+    let profileExists=this.state.userProfiles&&this.state.userProfiles.length>0?true:false;
 
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap portfolio-main-wrap">
           <h2>Switch Profile</h2>
 
-
+          { profileExists?
           <div id="location_div">
             <div className="col-md-2"></div>
             <div className="col-md-8">
@@ -164,7 +166,9 @@ export default class MlAppSwitchProfile extends React.Component{
               </div>
             </div>
 
-          </div>
+          </div>:<div>No Profiles Available</div>
+
+          }
 
 
         </div>

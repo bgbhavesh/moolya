@@ -1,9 +1,9 @@
 /**
  * Created by venkatsrinag on 28/4/17.
  */
-import _ from'lodash'
 import MlResolver from '../../commons/mlResolverDef'
 import MlRespPayload from '../../commons/mlPayload'
+import _ from 'lodash'
 
 MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
 {
@@ -99,8 +99,11 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
   let userId=context.userId
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user){
-    const userProfile = user.profile.isExternaluser?user.profile.externalUserProfiles:[];
-    return userProfile;
+    var userProfiles = user.profile.isExternaluser?user.profile.externalUserProfiles:[];
+
+    //todo: add isApproved Attribute to the profile
+    userProfiles=_.filter(userProfiles, {'isProfileActive': true })||[];
+    return userProfiles;
   }else {
     let code = 409;
     let response = new MlRespPayload().errorPayload('Not a valid user', code);
@@ -115,7 +118,7 @@ MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, in
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
     result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
-      {"profile.externalUserProfiles.$.isDefault": true}, {$set: true}, context);
+      {"profile.externalUserProfiles.$.isProfileActive": true}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
   }else {
     let code = 409;

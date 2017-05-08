@@ -30,7 +30,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
                   isIndustryPrivate
                   profession
                   isProfessionPrivate
-                  investmentForm
+                  investmentFrom
                   investmentCount
                   isInvestmentCountPrivate
                   emailId
@@ -57,8 +57,91 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
   })
   const id = result.data.fetchFunderAbout;
   let data = _.omit(id,'__typename')
+  data.investmentBudget =_.omit(data.investmentBudget,'__typename')
   return data
   // return id
+}
+
+export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchFunderPrincipal(portfoliodetailsId: $portfoliodetailsId) {
+                  title
+                  firstName
+                  isFirstNamePrivate
+                  lastName
+                  isLastNamePrivate
+                  designation
+                  isDesignationPrivate
+                  companyName
+                  duration
+                  isDurationPrivate
+                  yearsOfExperience
+                  isYearsOfExperiencePrivate
+                  qualification
+                  aboutPrincipal
+                  isQualificationPrivate
+                  isAboutPrincipalPrivate
+                  socialLinks{
+                    socialLinkType
+                    userId
+                    isUserIdPrivate
+                  }
+                  index
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchFunderPrincipal;
+  // let data = _.omit(id,'__typename')
+  // return data
+  return id
+}
+
+export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchFunderTeam(portfoliodetailsId: $portfoliodetailsId) {
+                  title
+                  firstName
+                  isFirstNamePrivate
+                  lastName
+                  isLastNamePrivate
+                  designation
+                  isDesignationPrivate
+                  companyName
+                  duration
+                  isDurationPrivate
+                  yearsOfExperience
+                  isYearsOfExperiencePrivate
+                  qualification
+                  aboutTeam
+                  isQualificationPrivate
+                  isAboutTeamPrivate
+                  socialLinks{
+                    socialLinkType
+                    userId
+                    isUserIdPrivate
+                  }
+                  index
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchFunderTeam;
+  // let data = _.omit(id,'__typename')
+  // return data
+  return id
 }
 
 export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
@@ -108,6 +191,10 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
               isPrivate
               isActive
               index
+              logo{
+                    fileName
+                    fileUrl
+                }
             }
           }
       `,
@@ -117,5 +204,28 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.fetchFunderSuccessStories;
+  return id
+}
+
+export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchFunderAreaOfInterest(portfoliodetailsId: $portfoliodetailsId) {
+              industryTypeId
+              industryTypeName
+              domainType
+              makePrivate
+              isActive
+              index
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchFunderAreaOfInterest;
   return id
 }

@@ -61,7 +61,7 @@ export default class MlAssignComponent extends Component {
   }
   cancel(){
     this.setState({show:false})
-    FlowRouter.go("/admin/transactions/registrationRequested");/*/transactions/registrationRequested");*/
+   // FlowRouter.go("/");/*/transactions/registrationRequested");*/
   }
   async assignUser(){
     let params={

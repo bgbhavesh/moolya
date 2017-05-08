@@ -20,7 +20,7 @@ if(Meteor.isServer){
   },{$set:{
     fields:[
       {
-        name:"registrationInfo.createdDate",
+        name:"createdDate",
         type:'Date',
         collectionName : " "
       },
@@ -33,8 +33,12 @@ if(Meteor.isServer){
         name:"registrationInfo.clusterId",
         type:'List',
         collectionName : "Clusters"
+      },
+      {
+        name:"status",
+        type:'Boolean',
       }
-        ]
+    ]
   }})
   MlFiltersCatalog.upsert({
     "_id" : "requests",

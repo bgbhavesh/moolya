@@ -80,7 +80,8 @@ export default class MlListView extends Component {
   }
 
   onAlphaSearchChange(alpha){
-    alert("selected alphabet is "+alpha);
+    //alert("selected alphabet is "+alpha);
+    this.setState({searchValue: alpha})
   }
 
   onSizePerPageList(sizePerPage) {

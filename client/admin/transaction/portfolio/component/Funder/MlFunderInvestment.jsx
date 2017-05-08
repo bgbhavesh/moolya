@@ -26,6 +26,7 @@ export default class MlFunderInvestment extends React.Component {
     }
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
+    this.dateChange.bind(this)
     this.fetchPortfolioDetails.bind(this);
     return this;
   }
@@ -240,7 +241,7 @@ export default class MlFunderInvestment extends React.Component {
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                       inputProps={{placeholder: "Enter Date of Investment"}} ref="dateOfInvestment"
                                       defaultValue={this.state.data.dateOfInvestment?this.state.data.dateOfInvestment:''}
-                                      closeOnSelect={true} onBlur={this.dateChange.bind(this)}/>
+                                      onBlur={this.dateChange.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon" id="isDateOfInvestmentPrivate"
                                          onClick={this.onLockChange.bind(this, "isDateOfInvestmentPrivate")}/>
                             <input type="checkbox" className="lock_input"

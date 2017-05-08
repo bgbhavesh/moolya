@@ -84,6 +84,38 @@ export default class MlFunderAbout extends React.Component {
     }
     this.props.getAboutus(data)
   }
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{funderPortfolio:{funderAbout:{logo:{fileUrl:'', fileName : fileName}}}}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+  }
+  onFileUploadCallBack(name,fileName, resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+        this.setState({loading:true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+  async fetchOnlyImages(){
+    const response = await fetchfunderPortfolioAbout(this.props.portfolioDetailsId);
+    if (response) {
+      let dataDetails =response
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      if(cloneBackUp){
+        let curUpload=dataDetails
+        cloneBackUp['logo']= curUpload['logo']
+        this.setState({loading: false, funderAbout:cloneBackUp})
+      }else {
+        this.setState({loading: false})
+      }
+    }
+  }
 
   render() {
     const showLoader = this.state.loading;
@@ -174,7 +206,7 @@ export default class MlFunderAbout extends React.Component {
                       <div className="form-group">
                         <div className="fileUpload mlUpload_btn">
                           <span>Profile Pic</span>
-                          <input type="file" className="upload"/>
+                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                         </div>
                         <div className="previewImg ProfileImg">
                           <img src="/images/ideator_01.png"/>
@@ -214,10 +246,8 @@ export default class MlFunderAbout extends React.Component {
                       </div>
                       <div className="clearfix"></div>
                       <div className="form-group">
-                        <input type="text" placeholder="Number of Investments" className="form-control float-label"
-                               id="cluster_name"/>
-                        <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
+                        <input type="text" placeholder="Number of Investments" name="investmentCount" defaultValue={this.state.data.investmentCount} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <FontAwesome name='unlock' className="input_icon un_lock" id="isInvestmentCountPrivate" onClick={this.onClick.bind(this, "isInvestmentCountPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isInvestmentCountPrivate}/>
                       </div>
                       <div className="form-group">
                         <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>

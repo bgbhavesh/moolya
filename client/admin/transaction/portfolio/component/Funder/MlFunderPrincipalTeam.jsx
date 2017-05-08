@@ -276,12 +276,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
                         {that.state.funderPrincipalList.map(function (principal, idx) {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                                <a href="#" id={"create_clientP" + idx} onClick={that.onPrincipalTileClick.bind(that, idx)}>
+                                <a href="#" id={"create_clientP" + idx}>
                                   <div className="list_block notrans funding_list">
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                     <img src="../images/p_5.jpg"/>
-                                    <div><p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
+                                    <div onClick={that.onPrincipalTileClick.bind(that, idx)}><p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
                                     <div className="ml_icon_btn">
                                       <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
                                       <a href="#"   className="save_btn"><FontAwesome name='twitter'/></a>
@@ -312,12 +312,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
                         {that.state.funderTeamList.map(function (team, idx) {
                           return (
                             <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                              <a href="#" id={"create_clientT" + idx} onClick={that.onTeamTileClick.bind(that, idx)}>
+                              <a href="#" id={"create_clientT" + idx}>
                                 <div className="list_block notrans funding_list">
                                   <FontAwesome name='lock'/>
                                   <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                   <img src="../images/p_5.jpg"/>
-                                  <div><p>{team.firstName}</p><p className="small">{team.designation}</p></div>
+                                  <div onClick={that.onTeamTileClick.bind(that, idx)}><p>{team.firstName}</p><p className="small">{team.designation}</p></div>
                                   <div className="ml_icon_btn">
                                     <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
                                     <a href="#"   className="save_btn"><FontAwesome name='twitter'/></a>

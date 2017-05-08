@@ -136,7 +136,8 @@ let FunderPortfolioSchema = `
         isLinkedinUrlPrivate:Boolean
         facebookUrl:String
         isFacebookUrlPrivate:Boolean
-        investmentBudget:Investmentbudget
+        investmentBudget:Investmentbudget,
+        logo:imagesTypeSchema
     }
     
     type FunderPortfolio{

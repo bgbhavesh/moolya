@@ -30,7 +30,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
                   isIndustryPrivate
                   profession
                   isProfessionPrivate
-                  investmentForm
+                  investmentFrom
                   investmentCount
                   isInvestmentCountPrivate
                   emailId
@@ -57,6 +57,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
   })
   const id = result.data.fetchFunderAbout;
   let data = _.omit(id,'__typename')
+  data.investmentBudget =_.omit(data.investmentBudget,'__typename')
   return data
   // return id
 }

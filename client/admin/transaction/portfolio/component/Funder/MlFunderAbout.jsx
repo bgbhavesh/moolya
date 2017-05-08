@@ -53,6 +53,23 @@ export default class MlFunderAbout extends React.Component {
     })
 
   }
+  onBudgetClick(field,e){
+    let details = this.state.data.investmentBudget||{};
+    let key = e.target.id;
+    details=_.omit(details,[key]);
+    let className = e.target.className;
+    if(className.indexOf("fa-lock") != -1){
+      details=_.extend(details,{[key]:true});
+    }else{
+      details=_.extend(details,{[key]:false});
+    }
+    let data = this.state.data;
+    data['investmentBudget'] = details
+    this.setState({data:data}, function () {
+      this.sendDataToParent()
+    })
+
+  }
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -62,6 +79,27 @@ export default class MlFunderAbout extends React.Component {
       this.sendDataToParent()
     })
   }
+  handleBudgetBlur(e){
+    let details =this.state.data.investmentBudget;
+    let name  = e.target.name;
+    details=_.omit(details,[name]);
+    details=_.extend(details,{[name]:e.target.value});
+    let data = this.state.data;
+    data['investmentBudget'] = details
+    this.setState({data:data}, function () {
+      this.sendDataToParent()
+    })
+  }
+
+  onSelectInvestmentFrom(type, e){
+    let details =this.state.data;
+    details=_.omit(details,'investmentFrom');
+    details=_.extend(details,{'investmentFrom':type});
+    this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -121,6 +159,15 @@ export default class MlFunderAbout extends React.Component {
 
   render() {
     const showLoader = this.state.loading;
+    let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
+    let personal = null, familyFund= null;
+    if(investmentFrom == "PERSONAL"){
+      personal = true;
+      familyFund = false;
+    }else if(investmentFrom == "FAMILY FUND"){
+      familyFund = true;
+      personal = false;
+    }
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -206,12 +253,12 @@ export default class MlFunderAbout extends React.Component {
                     <form>
 
                       <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
-                          <span>Profile Pic</span>
-                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
-                        </div>
+                        {/*<div className="fileUpload mlUpload_btn">*/}
+                          {/*<span>Profile Pic</span>*/}
+                          {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
+                        {/*</div>*/}
                         <div className="previewImg ProfileImg">
-                          <img src="/images/ideator_01.png"/>
+                          <img src="/images/def_profile.png"/>
                         </div>
                       </div>
                       <div className="clearfix"></div>
@@ -220,12 +267,12 @@ export default class MlFunderAbout extends React.Component {
 
                         <div className="panel-body">
                           <div className="form-group">
-                            <input type="text" placeholder="From" name="from" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.from?this.state.data.investmentBudget.from:""} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isFromPrivate" onClick={this.onClick.bind(this, "isFromPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isFromPrivate?this.state.data.investmentBudget.isFromPrivate:""}/>
+                            <input type="text" placeholder="From" name="from" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.from?this.state.data.investmentBudget.from:""} className="form-control float-label" id="cluster_name" onBlur={this.handleBudgetBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isFromPrivate" onClick={this.onBudgetClick.bind(this, "isFromPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isFromPrivate?this.state.data.investmentBudget.isFromPrivate:""}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="To" name="to" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.from?this.state.data.investmentBudget.from:""} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="to" onClick={this.onClick.bind(this, "to")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isToPrivate?this.state.data.investmentBudget.isToPrivate:""}/>
+                            <input type="text" placeholder="To" name="to" defaultValue={this.state.data.investmentBudget && this.state.data.investmentBudget.from?this.state.data.investmentBudget.from:""} className="form-control float-label" id="cluster_name" onBlur={this.handleBudgetBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isToPrivate" onClick={this.onBudgetClick.bind(this, "isToPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.investmentBudget && this.state.data.investmentBudget.isToPrivate?this.state.data.investmentBudget.isToPrivate:""}/>
                           </div>
                         </div>
                       </div>
@@ -237,11 +284,11 @@ export default class MlFunderAbout extends React.Component {
 
                         <div className="panel-body">
                           <div className="input_types">
-                            <input id="radio1" type="radio" name="radio" value="1"/><label
+                            <input id="radio1" type="radio" name="radio" value="1" defaultChecked={personal} onChange={this.onSelectInvestmentFrom.bind(this, 'PERSONAL')}/><label
                             htmlFor="radio1"><span><span></span></span>Personal</label>
                           </div>
                           <div className="input_types">
-                            <input id="radio2" type="radio" name="radio" value="2"/><label
+                            <input id="radio2" type="radio" name="radio" value="2" defaultChecked={familyFund} onChange={this.onSelectInvestmentFrom.bind(this, 'FAMILY FUND')}/><label
                             htmlFor="radio2"><span><span></span></span>Family Fund</label>
                           </div>
                         </div>

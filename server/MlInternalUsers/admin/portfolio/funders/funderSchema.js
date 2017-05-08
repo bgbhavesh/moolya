@@ -125,7 +125,7 @@ let FunderPortfolioSchema = `
         isIndustryPrivate:Boolean
         profession:String
         isProfessionPrivate:Boolean
-        investmentForm:String
+        investmentFrom:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean
         emailId:String
@@ -263,7 +263,7 @@ let FunderPortfolioSchema = `
         isIndustryPrivate:Boolean
         profession:String
         isProfessionPrivate:Boolean
-        investmentForm:String
+        investmentFrom:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean
         emailId:String

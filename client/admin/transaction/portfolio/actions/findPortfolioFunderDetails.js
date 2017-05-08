@@ -190,6 +190,10 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
               isPrivate
               isActive
               index
+              logo{
+                    fileName
+                    fileUrl
+                }
             }
           }
       `,

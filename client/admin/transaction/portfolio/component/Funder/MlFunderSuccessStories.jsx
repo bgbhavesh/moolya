@@ -5,6 +5,7 @@ import Datetime from "react-datetime";
 import {Popover, PopoverContent} from "reactstrap";
 import _ from 'lodash'
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
+import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioSuccess} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 
@@ -87,6 +88,7 @@ export default class MlFunderSuccessStories extends React.Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+    // initalizeFloatLabel();
   }
 
   componentDidMount() {
@@ -122,11 +124,46 @@ export default class MlFunderSuccessStories extends React.Component {
     this.setState({funderSuccessList: this.state.funderSuccess, popoverOpen: false})
   }
 
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{successStories:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+  }
+
+  onFileUploadCallBack(resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+        this.setState({loading:true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+
+  async fetchOnlyImages(){
+    const response = await fetchfunderPortfolioSuccess(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.funderSuccess
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, funderSuccess:cloneBackUp });
+      }else {
+        this.setState({loading: false})
+      }
+    }
+  }
 
   sendDataToParent() {
     let data = this.state.data;
-    let investment = this.state.funderSuccess;
-    let funderSuccess = _.cloneDeep(investment);
+    let success = this.state.funderSuccess;
+    let funderSuccess = _.cloneDeep(success);
     data.index = this.state.selectedIndex;
     funderSuccess[this.state.selectedIndex] = data;
     let arr = [];
@@ -175,7 +212,7 @@ export default class MlFunderSuccessStories extends React.Component {
                             <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, idx)}>
                               <FontAwesome name='lock'/>
                               <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                              <img src="/images/def_profile.png"/>
+                              <img src={details.logo?details.logo.fileUrl:"/images/def_profile.png"}/>
                               <div><p>{details.storyTitle}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>
                             </div>
@@ -208,7 +245,7 @@ export default class MlFunderSuccessStories extends React.Component {
                           <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
                               <span>Upload Pic</span>
-                              <input type="file" className="upload"/>
+                              <input type="file" className="upload" name="logo" id="logo" accept="image/*" onChange={this.onLogoFileUpload.bind(this)}/>
                             </div>
                             {/*<div className="previewImg ProfileImg">*/}
                               {/*<img src="/images/ideator_01.png"/>*/}
@@ -225,7 +262,7 @@ export default class MlFunderSuccessStories extends React.Component {
                           </div>
                           <div className="form-group">
                             <input type="text" placeholder="Description" className="form-control float-label"
-                                   name="description" onBlur={this.handleBlur.bind(this)}/>
+                                   name="description" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon"
                                          onClick={this.onLockChange.bind(this, "isDescPrivate")}/>
                             <input type="checkbox" className="lock_input"

@@ -201,3 +201,26 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
   const id = result.data.fetchFunderSuccessStories;
   return id
 }
+
+export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchFunderAreaOfInterest(portfoliodetailsId: $portfoliodetailsId) {
+              industryTypeId
+              industryTypeName
+              domainType
+              makePrivate
+              isActive
+              index
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchFunderAreaOfInterest;
+  return id
+}

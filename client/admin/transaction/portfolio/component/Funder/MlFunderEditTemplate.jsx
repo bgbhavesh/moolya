@@ -97,10 +97,10 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getAreaOfInterestDetails(details){
     let data = this.state.funderPortfolio;
-    if(data && !data.awardsRecognition){
-      data['awardsRecognition']=[];
+    if(data && !data.areaOfInterest){
+      data['areaOfInterest']=[];
     }
-    data['awardsRecognition'] = details;
+    data['areaOfInterest'] = details;
     this.setState({funderPortfolio : data})
     this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
   }

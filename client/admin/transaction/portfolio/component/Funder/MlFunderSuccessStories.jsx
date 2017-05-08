@@ -175,7 +175,7 @@ export default class MlFunderSuccessStories extends React.Component {
                             <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, idx)}>
                               <FontAwesome name='lock'/>
                               <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                              <img src="../images/p_5.jpg"/>
+                              <img src="/images/def_profile.png"/>
                               <div><p>{details.storyTitle}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>
                             </div>
@@ -210,9 +210,9 @@ export default class MlFunderSuccessStories extends React.Component {
                               <span>Upload Pic</span>
                               <input type="file" className="upload"/>
                             </div>
-                            <div className="previewImg ProfileImg">
-                              <img src="/images/ideator_01.png"/>
-                            </div>
+                            {/*<div className="previewImg ProfileImg">*/}
+                              {/*<img src="/images/ideator_01.png"/>*/}
+                            {/*</div>*/}
                           </div>
                           <div className="form-group">
                             <input type="text" placeholder="Enter title of Story" className="form-control float-label"

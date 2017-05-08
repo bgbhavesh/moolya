@@ -166,6 +166,9 @@ import MlViews from '../../admin/core/components/MlViews';
 import MlHierarchyList from '../../admin/settings/hierarchy/component/MlHierarchyList'
 import MlAdminHierarchyHeader from '../../admin/layouts/header/MlAdminHierarchyHeader'
 import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHierarchyDetails'
+import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
+import MlAddFilter from '../../admin/settings/filters/components/MlAddFilter'
+import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'
 
 // @End
 
@@ -325,12 +328,7 @@ adminSection.route('/settings/editRequestType/:id', {
     mount(AdminLayout,{adminContent:<MlEditRequestType config={params.id} />})
   }
 });
-adminSection.route('/settings/filtersList', {
-  name: 'settings_filters',
-  action(){
-    mount(AdminLayout,{adminContent:< MlAsignInternalUsers/>})
-  }
-});
+
 adminSection.route('/settings/countriesList', {
   name: 'settings_CountriesList',
   action(){
@@ -1016,4 +1014,20 @@ adminSection.route('/settings/editAward/:id', {
     mount(AdminLayout,{adminContent:<MlEditAwardType config={params.id} />})
   }
 });
+
+adminSection.route('/settings/filtersList', {
+  name: 'settings_FiltersList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlFiltersList />})
+  }
+});
+
+adminSection.route('/settings/addFilter', {
+  name: 'settings_AddFilter',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddFilter/>})
+  }
+});
+
+
 //  @End

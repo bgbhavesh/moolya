@@ -3,6 +3,7 @@
  */
 import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
+import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
 
 var extendify = require('extendify');
 var _ = require('lodash')
@@ -97,7 +98,6 @@ MlResolver.MlMutationResolver['createAnnotation'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['updateAnnotation'] = (obj, args, context, info) => {
-
 }
 
 MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
@@ -217,11 +217,9 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
     return {};
 }
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('ideas')) {
-      return ideatorPortfolio['ideas'];
-    }
+  if(args.ideaId){
+    let ideatorPortfolio = MlIdeas.findOne({"_id": args.ideaId})
+      return ideatorPortfolio;
   }
 
   return {};
@@ -295,4 +293,135 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioRequests'] = (obj, args, contex
 
 MlResolver.MlQueryResolver['fetchPortfolioMenu'] = (obj, args, context, info) => {
     return MlPortfolioMenu.findOne({"$and":[{communityType:args.communityType}, {templateName:args.templateName}]});
+}
+
+
+
+MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
+    let portfolioId = ""
+    let  user = {}
+    if(args && args.idea){
+        try{
+            let idea = args.idea;
+            let isCreatePortfolioRequest = true;
+            if(!context.userId){
+                let code = 400;
+                let response = new MlRespPayload().errorPayload("Invalid User", code);
+                return response;
+            }
+
+            let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+            if(!profile){
+                let code = 400;
+                let response = new MlRespPayload().errorPayload("No Profile Found", code);
+                return response;
+            }
+
+            let pfDetails = MlPortfolioDetails.find({"$and": [{'userId': context.userId}, {'communityType': profile.communityDefName}, {'clusterId':profile.clusterId}]}).fetch();
+            if(pfDetails.length == 1){
+                portfolioId = pfDetails[0]._id;
+                let ideas = MlIdeas.findOne({"portfolioId":portfolioId})
+                if(!ideas){
+                  idea.portfolioId = portfolioId;
+                  isCreatePortfolioRequest = false
+                }
+            }
+            if(isCreatePortfolioRequest) {
+                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId}, context) || {"registrationInfo": {}};
+
+                let portfolioDetails={
+                    "transactionType" : "portfolio",
+                    "communityType" : regRecord.registrationInfo.communityDefName,
+                    "communityCode" :regRecord.registrationInfo.communityDefCode,
+                    "clusterId" :regRecord.registrationInfo.clusterId,
+                    "chapterId" : regRecord.registrationInfo.chapterId,
+                    "subChapterId" :regRecord.registrationInfo.subChapterId,
+                    "source" : "self",
+                    "createdBy" : "admin",
+                    "status" : "Yet To Start",
+                    "isPublic": false,
+                    "isGoLive" : false,
+                    "isActive" : false,
+                    "portfolioUserName" : regRecord.registrationInfo.userName,
+                    "userId" :context.userId,
+                    "userType":regRecord.registrationInfo.userType,
+                    contactNumber : regRecord.registrationInfo.contactNumber,
+                    accountType   : regRecord.registrationInfo.accountType,
+                    registrationId: regRecord._id,
+                    clusterName   : regRecord.registrationInfo.clusterName,
+                    chapterName   : regRecord.registrationInfo.chapterName,
+                    subChapterName: regRecord.registrationInfo.subChapterName,
+                    communityName : regRecord.registrationInfo.communityName,
+                    identityType  : regRecord.registrationInfo.identityType,
+                    industryId    : regRecord.registrationInfo.industry,
+                    professionId  : regRecord.registrationInfo.profession,
+                }
+                orderNumberGenService.assignPortfolioId(portfolioDetails)
+                let registrationData = regRecord.registrationDetails;
+                registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
+                registrationData.emailId = regRecord.registrationInfo.userName;
+                registrationData.industry = regRecord.registrationInfo.industry;
+                registrationData.profession = regRecord.registrationInfo.profession;
+                let resp = MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);
+                if(!resp.success){
+                  return resp;
+                }
+                idea.portfolioId = resp.result;
+            }
+
+            idea.userId = context.userId;
+            let id = MlIdeas.insert({...idea})
+            if(!id){
+                let code = 400;
+                let response = new MlRespPayload().errorPayload(e.message, code);
+                return response;
+            }
+        }
+        catch (e){
+            let code = 400;
+            let response = new MlRespPayload().errorPayload(e.message, code);
+            return response;
+        }
+
+        let code = 200;
+        let response = new MlRespPayload().successPayload('Idea Created Successfully', code);
+        return response;
+    }
+}
+
+MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
+  if(args.idea) {
+    var idea = MlIdeas.findOne({"_id":args.ideaId})
+    var updatedIdea = args.idea;
+    if(idea){
+      let ret = MlIdeas.update({"_id": args.ideaId}, {$set: updatedIdea}, {upsert: true})
+      if (ret) {
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        return response;
+      }
+    }
+  }
+}
+
+MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
+    let ideas = [];
+    if(!context.userId){
+        return ideas;
+    }
+
+    let defaultProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+    if(!defaultProfile)
+        return ideas;
+
+    let portfolios = MlPortfolioDetails.find({"$and":[{"userId":context.userId}, {"clusterId":defaultProfile.clusterId}, {"communityType":"Ideators"}]}).fetch()
+    if(!portfolios)
+        return ideas;
+
+    _.each(portfolios, function (portfolio) {
+          let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
+          ideas.push(idea);
+    })
+
+    return ideas;
 }

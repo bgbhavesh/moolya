@@ -13,8 +13,11 @@ class MlUserContext{
         check(userId, String)
         var user = Meteor.users.findOne({_id:userId});
         if(user && user.profile && user.profile.isExternaluser == true){
-            let user_profiles = user.profile.externalUserProfile.userProfiles;
+            let user_profiles = user.profile.externalUserProfiles;
             default_User_Profile = _.find(user_profiles, {'isDefault': true });
+            if(!default_User_Profile ){
+                default_User_Profile = user_profiles[0];
+            }
         }
         return default_User_Profile;
     }
@@ -25,6 +28,14 @@ class MlUserContext{
         if(userProfile){
         }
         return 'mlDefaultMenu';
+    }
+
+    getDefaultProfileMenu(userId){
+        check(userId,String);
+        let userProfile = this.userProfileDetails(userId)||{};
+        if(userProfile){
+        }
+        return 'mlDefaultProfileMenu';
     }
 }
 

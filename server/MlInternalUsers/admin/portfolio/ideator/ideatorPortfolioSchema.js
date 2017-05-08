@@ -73,8 +73,10 @@ let ideatorPortfolioSchema = `
         profilePic:String
     }
     type ideasObject{
+        _id:String
         title:String,
         isIdeasTitlePrivate:Boolean,
+        portfolioId:String
         description:String,
         isIdeasPrivate:Boolean,
         isActive:Boolean
@@ -269,9 +271,28 @@ let ideatorPortfolioSchema = `
       createdAt:String
     }
     
+    type Idea{
+        _id:String
+        userId:String,
+        portfolioId:String,
+        title:String,
+        isIdeaTitlePrivate:Boolean,
+        description:String,
+        isIdeaPrivate:Boolean,
+        isActive:Boolean
+    }
+    
+    input idea{
+        title:String,
+        isIdeaTitlePrivate:Boolean,
+        description:String,
+        isIdeaPrivate:Boolean,
+        isActive:Boolean
+    }
+    
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
-        fetchIdeatorPortfolioIdeas(portfoliodetailsId:String!):ideasObject
+        fetchIdeatorPortfolioIdeas(ideaId:String!):ideasObject
         fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
         fetchIdeatorPortfolioAudience(portfoliodetailsId:String!): audienceInfo
         fetchIdeatorPortfolioLibrary(portfoliodetailsId:String!): libraryInfo
@@ -282,6 +303,7 @@ let ideatorPortfolioSchema = `
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
         fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
+        fetchIdeas:[Idea]
     }
     
     type Mutation{
@@ -292,6 +314,8 @@ let ideatorPortfolioSchema = `
         updateIdeatorPortfolio(portfoliodetailsId:String, portfolio:ideatorPortfolio):response
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
+        createIdea(idea:idea):response
+        updateIdea(ideaId:String, idea:idea):response
     }
 `
 

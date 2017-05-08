@@ -4,35 +4,78 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 let Filters = `    
-    input assignFilter 
-    {
-    cluster : String
-    chapter : String
-    subChapter : String
-    department : String
-    subDepartment : String
-    role : String
+
+    type filterFieldOutput{
+      fieldName : String
+      displayName : String
+      isActive : Boolean
+      isRestrictedFilter : Boolean
+      fieldType : String
+      fieldCollectionName : String
+      fieldList : [String]
+    }
+    
+    type clusterFieldOutput{
+       cluster : String
+       chapter : String
+       subChapter : String
+       department : String
+       subDepartment : String
+       role : String
+    } 
+    
+    type Filters{
+        _id:String
+       filterName:String
+       filterDescription:String
+       isActive:Boolean
+       clusterFields : [clusterFieldOutput]
+       moduleName:String
+       filterFields:[filterFieldOutput]
     }
     
     input filterField{
-    fieldName : String
-    displayName : String
-    isActive : Boolean
-    isRestrictedFilter : Boolean
-    fieldType : String
+      fieldName : String
+      displayName : String
+      isActive : Boolean
+      isRestrictedFilter : Boolean
+      fieldType : String
+      fieldCollectionName : String
+      fieldList : [String]
+    }
+    
+    type FiltersDropData{
+          label:String,
+          value:String
+    }
+      
+    input clusterField{
+       cluster : String
+       chapter : String
+       subChapter : String
+       department : String
+       subDepartment : String
+       role : String
     }
     
     input filter{
        filterName:String
-       aboutFilter:String
-       isActive:String
-       assignFilters:[assignFilter]
-       transactionType:String
+       filterDescription:String
+       isActive:Boolean
+       clusterFields : [clusterField]
+       moduleName:String
        filterFields:[filterField]
     }
     
     type Mutation{
-        CreateFilter(filterObject:filter):String
+        CreateFilter(filterObject:filter):response
+    }
+    
+    type Query{
+        findFilters:[Filters]
+        fetchModuleFilters(moduleName:String) : [Filters]
+        fetchFilterListDropDown(moduleName:String!):[FiltersDropData]
+        fetchSelectedFilterListDropDown(moduleName:String!,list:[String]):[FiltersDropData]
     }
 `
 

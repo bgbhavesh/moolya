@@ -15,7 +15,7 @@ import _ from 'lodash'
 export default class MlIdeatorPortfolioTemplate extends React.Component{
     constructor(props){
         super(props)
-        this.state =  {tabs: [], ideatorPortfolio:{}};
+        this.state =  {tabs: [], ideatorPortfolio:{}, idea:{}};
         this.getIdeatorDetails.bind(this);
         this.getProblemSolution.bind(this)
         this.getChildContext.bind(this)
@@ -23,7 +23,8 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
 
     getChildContext(){
       return {
-        ideatorPortfolio: this.state.ideatorPortfolio
+        ideatorPortfolio: this.state.ideatorPortfolio,
+        idea:this.state.idea
       }
     }
 
@@ -42,7 +43,7 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
 
     getTabComponents(){
         let tabs = [
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/> },
           {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component:<MlIdeatorProblemsAndSolutions key="3" getProblemSolution={this.getProblemSolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4" getAudience={this.getAudience.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -63,10 +64,10 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
     }
     getIdeas(details) {
-      let data = this.state.ideatorPortfolio;
-      data['ideas']=details;
-      this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      let data = this.state.idea;
+      data=details;
+      this.setState({idea : data})
+      this.props.getIdeatorIdeaDetails(data);
     }
     getProblemSolution(details) {
       let data = this.state.ideatorPortfolio;
@@ -120,4 +121,5 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
 }
 MlIdeatorPortfolioTemplate.childContextTypes = {
   ideatorPortfolio: PropTypes.object,
+  idea:PropTypes.object
 };

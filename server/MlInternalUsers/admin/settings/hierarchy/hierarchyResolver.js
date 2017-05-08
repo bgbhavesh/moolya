@@ -82,44 +82,60 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
   let levelCode = args.levelCode
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
-    _.each(valueGet, function (item, say) {
-      let ary = []
-      _.each(item.assignRoles, function (value, key) {
-        if (value.cluster == args.clusterId || value.cluster == 'all') {
-          if (value.isActive) {
-            ary.push(value);
-          }
-        }
+    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
+    var filteredRole = []
+    if (department.isSystemDefined) {
+      _.each(valueGet, function (item, say) {
+              filteredRole.push(item)
       })
-      item.assignRoles = ary
-    })
-    _.each(valueGet, function (item, key) {
-      if (item) {
-        if (item.assignRoles.length < 1) {
-          valueGet.splice(key, 1)
-        }
+    }
+    else {
+      if (levelCode == 'cluster') {
+        _.each(valueGet, function (item, say) {
+          let ary = []
+          _.each(item.assignRoles, function (value, key) {
+            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all")) {
+              if (value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+          })
+          item.assignRoles = ary
+        })
+      } else if (levelCode == 'chapter') {
+        _.each(valueGet, function (item, say) {
+          let ary = []
+          _.each(item.assignRoles, function (value, key) {
+            if (((value.cluster == args.clusterId ) && (value.chapter != "all")) || (value.cluster == 'all' && value.chapter == "all")) {
+              if (value.isActive) {
+                filteredRole.push(item)
+              }
+            }else if((value.cluster == "all" && value.chapter == "all" && value.subChapter == "all")||(value.cluster == args.clusterId  && value.chapter == "all" && value.subChapter == "all" )){
+              if (value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+          })
+          item.assignRoles = ary
+        })
+      }  else if (levelCode == 'community') {
+        _.each(valueGet, function (item, say) {
+          let ary = []
+          _.each(item.assignRoles, function (value, key) {
+            if ((value.cluster == args.clusterId && value.chapter != "all" && value.subChapter != "all" && value.community != "all")) { // need to add  more conditions
+              if (value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+          })
+          item.assignRoles = ary
+        })
       }
-    })
-    roles = valueGet;
-  }
-  _.remove(roles, {roleName: 'platformadmin'})
-  if (levelCode == 'cluster') {
-   /* _.remove(roles, {roleName: 'chapteradmin'})
-    _.remove(roles, {roleName: 'subchapteradmin'})
-    _.remove(roles, {roleName: 'communityadmin'})*/
+    }
+
   }
 
-  else if (levelCode == 'chapter') {
-    _.remove(roles, {roleName: 'clusteradmin'})
-  }
-
-  else if ( levelCode == 'community') {
-    _.remove(roles, {roleName: 'clusteradmin'})
-    _.remove(roles, {roleName: 'chapteradmin'})
-    _.remove(roles, {roleName: 'subchapteradmin'})
-  }
-  return roles;
+  return filteredRole;
 }
 
 MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => { //
@@ -175,14 +191,12 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
         }
       }
     })
-    if(!department.isSystemDefined){
-      _.remove(roles, {roleName: 'platformadmin'})
-      _.remove(roles, {roleName: 'clusteradmin'})
-      _.remove(roles, {roleName: 'chapteradmin'})
-      _.remove(roles, {roleName: 'subchapteradmin'})
-      _.remove(roles, {roleName: 'communityadmin'})
-    }
     roles = valueGet;
+    _.remove(roles, {roleName: 'platformadmin'})
+    _.remove(roles, {roleName: 'clusteradmin'})
+    _.remove(roles, {roleName: 'chapteradmin'})
+    _.remove(roles, {roleName: 'subchapteradmin'})
+    _.remove(roles, {roleName: 'communityadmin'})
   }
   return roles;
 }

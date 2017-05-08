@@ -131,7 +131,11 @@ export default class MlStartupManagement extends React.Component{
             delete item[propName];
           }
         }
-       newItem = _.omit(item, "__typename")
+      newItem = _.omit(item, "__typename")
+      if(item && item.logo){
+        // delete item.logo['__typename'];
+        newItem = _.omit(item, 'logo')
+      }
       managementArr.push(newItem)
     })
     startupManagement = managementArr;
@@ -153,28 +157,29 @@ export default class MlStartupManagement extends React.Component{
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-        // this.setState({loading:true})
-        // this.fetchOnlyImages();
+        this.setState({loading:true})
+        this.fetchOnlyImages();
       }
     }
   }
-
-  // async fetchOnlyImages(){
-  //   const response = await findStartupManagementActionHandler(this.props.portfolioDetailsId);
-  //   if (response) {
-  //     let thisState=this.state.selectedIndex;
-  //     let dataDetails =this.state.startupAwards
-  //     let cloneBackUp = _.cloneDeep(dataDetails);
-  //     let specificData = cloneBackUp[thisState];
-  //     if(specificData){
-  //       let curUpload=response[thisState]
-  //       specificData['logo']= curUpload['logo']
-  //       this.setState({loading: false, startupManagement:cloneBackUp });
-  //     }else {
-  //       this.setState({loading: false})
-  //     }
-  //   }
-  // }
+  async fetchOnlyImages(){
+    const response = await findStartupManagementActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let thisState=this.state.selectedIndex;
+      let dataDetails =this.state.startupManagement
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      let specificData = cloneBackUp[thisState];
+      if(specificData){
+        let curUpload=response[thisState]
+        specificData['logo']= curUpload['logo']
+        this.setState({loading: false, startupManagement:cloneBackUp, data: specificData}, function () {
+          $('#management-form').slideDown();
+        });
+      }else {
+        this.setState({loading: false})
+      }
+    }
+  }
 
   render(){
     let that = this;
@@ -284,7 +289,7 @@ export default class MlStartupManagement extends React.Component{
                             <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>
                           <div className="previewImg ProfileImg">
-                            <img src="/images/ideator_01.png"/>
+                            <img src={this.state.data && this.state.data.logo && this.state.data.logo.fileUrl?this.state.data.logo.fileUrl:""}/>
                           </div>
                         </div>
 

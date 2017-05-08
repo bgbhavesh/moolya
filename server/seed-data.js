@@ -232,7 +232,66 @@ if(!systemAdminUser){
 }
 
 /*********************************** Default Moolya System Admin Creation <End> **********************************************/
+/*********************************** Default Hierarchy Assignements <Start> **********************************************/
+let depHierarchy = MlDepartments.findOne({"departmentName":"operations"});
+let subDepHierarchy = MlSubDepartments.findOne({"subDepartmentName":"systemadmin"});
 
+var platformAdminHierarchy = MlRoles.findOne({roleName:"platformadmin"})
+var clusterAdminHierarchy = MlRoles.findOne({roleName:"clusteradmin"})
+var chapterAdminHierarchy = MlRoles.findOne({roleName:"chapteradmin"})
+var subchapterAdminHierarchy = MlRoles.findOne({roleName:"subchapteradmin"})
+var communityAdminHierarchy = MlRoles.findOne({roleName:"communityadmin"})
+var hierarchyAssignment = MlHierarchyAssignments.findOne({clusterId:"All"})
+if(!hierarchyAssignment) {
+  var hierarchy = {
+    parentDepartment: depHierarchy._id,
+    parentSubDepartment: subDepHierarchy._id,
+    clusterId: "All",
+    teamStructureAssignment: [{
+      roleId: clusterAdminHierarchy._id,
+      roleName: clusterAdminHierarchy.roleName,
+      displayName: clusterAdminHierarchy.displayName,
+      isAssigned: true,
+      assignedLevel: "cluster",
+      reportingRole: ""
+    },
+      {
+        roleId: chapterAdminHierarchy._id,
+        roleName: chapterAdminHierarchy.roleName,
+        displayName: chapterAdminHierarchy.displayName,
+        isAssigned: true,
+        assignedLevel: "chapter",
+        reportingRole: clusterAdmin._id
+      },
+      {
+        roleId: subchapterAdminHierarchy._id,
+        roleName: subchapterAdminHierarchy.roleName,
+        displayName: subchapterAdminHierarchy.displayName,
+        isAssigned: true,
+        assignedLevel: "chapter",
+        reportingRole: chapterAdminHierarchy._id
+      },
+      {
+        roleId: communityAdminHierarchy._id,
+        roleName: communityAdminHierarchy.roleName,
+        displayName: communityAdminHierarchy.displayName,
+        isAssigned: true,
+        assignedLevel: "community",
+        reportingRole: subchapterAdminHierarchy._id
+      }],
+    finalApproval: {
+      department: depHierarchy._id,
+      subDepartment: subDepHierarchy._id,
+      role: platformAdminHierarchy._id,
+      isChecked: true
+    }
+  };
+  MlHierarchyAssignments.insert(hierarchy);
+}
+
+
+
+/*********************************** Default Hierarchy Assignements <End> **********************************************/
 
 // db.users.insert({
 //   "_id":1,
@@ -321,7 +380,9 @@ Accounts.validateLoginAttempt(function (user)
     // }
 
     if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
-      return validateExternalUserLoginAttempt(user)
+      let isAllowed= validateExternalUserLoginAttempt(user);
+      if(!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
+      return true;
     }
     else if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
         if(user && user.user && user.user.profile && !user.user.profile.isActive){               //temporary moving here for external user
@@ -336,7 +397,11 @@ Accounts.validateLoginAttempt(function (user)
 })
 
 validateExternalUserLoginAttempt=(user)=>{
-  let userExternal = user.user.profile.isExternaluser
+  let userExternal = user.user.profile.isExternaluser;
+  //check if email is verified.
+  let emails=user.user&&user.user.emails?user.user.emails:[];
+  var email = _.find(emails || [], function (e) { return (e.verified&&e.address===user.user.username);});
+  if(!email){return false;}
   return userExternal
 }
 

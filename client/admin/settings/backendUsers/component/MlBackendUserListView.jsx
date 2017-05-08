@@ -45,7 +45,7 @@ export default class MlClusterListView extends Component {
             <a href={backendUserRoute.backendUserDetailRoute(prop._id)}>
               <div className="provider_mask">
                 <img src="/images/funder_bg.png"/>
-                <img className="user_pic" src="/images/def_profile.png"/>
+                <img className="user_pic" src={prop.profile.profileImage}/>
               </div>
             </a>
             <h3>{username}  <br />

@@ -101,6 +101,7 @@ export default class RegistrationWizard extends React.Component{
     let registrationId = this.props.config;
     let registrationConfig={
       registrationId:registrationId,
+      userType:this.context.userType,
       getRegistrationDetails:this.getRegistrationDetails.bind(this),
       registrationInfo:this.state.registrationDetails.registrationInfo,
       refetchRegistrationAndTemplates:this.refetchRegistrationAndTemplates.bind(this),

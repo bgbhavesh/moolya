@@ -34,7 +34,8 @@ export default class MlMyProfile extends React.Component{
       genderStateFemale: " ",
       genderStateOthers: " ",
       dateOfBirth:" ",
-      genderSelect:" "
+      genderSelect:" ",
+      responsePic:" "
       // Details:{
       //   firstName: " ",
       //   middleName:" ",
@@ -51,6 +52,7 @@ export default class MlMyProfile extends React.Component{
     this.displayNameUpdation.bind(this);
     this.updateProfile.bind(this);
     this.genderSelect = this.genderSelect.bind(this);
+   // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
    // this.firstNameUpdation.bind(this);
     return this;
@@ -91,57 +93,51 @@ export default class MlMyProfile extends React.Component{
   }
 
   onFileUploadCallBack(resp) {
-    if (resp) {
-      console.log(resp);
-      this.setState({"uploadedProfilePic": resp});
-      var temp = $.parseJSON(this.state.uploadedProfilePic).result;
-      this.setState({"uploadedProfilePic":temp});
-      console.log(temp);
-     // toastr.success("Update Successful");
-      this.storeImage();
-      return temp;
-
-    }
+      if (resp) {
+          console.log(resp);
+          this.setState({"uploadedProfilePic": resp});
+          var temp = $.parseJSON(this.state.uploadedProfilePic).result;
+        this.setState({"responsePic":temp});
+        this.setState({"uploadedProfilePic":temp});
+          console.log(temp);
+          this.showImage(temp);
+          return temp;
+      }
   }
 
-  // async fileUpdation(Details){
-  //   let userId = Meteor.userId();
-  //   const response = await updateDataEntry(Details,userId);
-  //   toastr.success("Update Successful");
-  //   return response;
-  //
-  // }
-  //
   async firstNameUpdation(e) {
-    this.setState({firstName: e.target.value})
+      this.setState({firstName: e.target.value})
   }
 
   async middleNameUpdation(e) {
-    this.setState({middleName: e.target.value})
+      this.setState({middleName: e.target.value})
   }
 
   async lastNameUpdation(e) {
-    this.setState({lastName: e.target.value})
+      this.setState({lastName: e.target.value})
   }
 
   async displayNameUpdation(e) {
-    this.setState({userName: e.target.value})
+      this.setState({userName: e.target.value})
   }
 
-
+async showImage(temp){
+  this.setState({responsePic:temp})
+}
 
   async storeImage() {
   let Details = {
-    profileImage : this.state.uploadedProfilePic,
-    firstName :this.state.firstName,
-    middleName : this.state.middleName,
-    lastName : this.state.lastName,
-    userName: this.state.userName,
-    genderType:this.state.genderSelect,
-    dateOfBirth:this.refs.dob.value,
-    userId : Meteor.userId()
+      profileImage : this.state.uploadedProfilePic,
+      firstName :this.state.firstName,
+      middleName : this.state.middleName,
+      lastName : this.state.lastName,
+      userName: this.state.userName,
+      genderType:this.state.genderSelect,
+      dateOfBirth:this.refs.dob.value,
+      userId : Meteor.userId()
   }
-    const dataresponse = await updateDataEntry(Details);
+
+  const dataresponse = await updateDataEntry(Details);
   console.log(dataresponse);
     toastr.success("Update Successful")
     return dataresponse;
@@ -187,16 +183,14 @@ export default class MlMyProfile extends React.Component{
 
   async genderSelect(){
     //this.setState({genderSelect: e.target.value})
-    if(this.state.genderSelect === "Male"){
-      this.setState({genderStateMale: true,genderStateFemale:false,genderStateOthers:false })
+    if(this.state.genderSelect === "Others"){
+      this.setState({genderStateMale: false,genderStateFemale:false,genderStateOthers:true })
     }
     else if(this.state.genderSelect === "Female"){
       this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
     }
     else{
-      this.setState({genderStateOthers:
-        // true, genderStateFemale: false, genderStateMale: false}) // Changes made for 30th April App Demo
-        false, genderStateFemale: false, genderStateMale: true})
+      this.setState({genderStateOthers:false, genderStateFemale: false, genderStateMale: true})
     }
   }
 
@@ -225,6 +219,9 @@ export default class MlMyProfile extends React.Component{
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      // this.showImage();
+      this.storeImage();
+
       return response;
     }
     else{
@@ -281,11 +278,11 @@ export default class MlMyProfile extends React.Component{
                       <div className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
                         {isExternaluser ? <div></div> :
-                          <input type="file" className="upload" id="profilePic"/>
+                          <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
                         }
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={profilePic}/>
+                        <img src={this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
                       </div>
                     </div>
                   </form>
@@ -295,7 +292,7 @@ export default class MlMyProfile extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Display Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
+                      <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
                       <input type="password" placeholder="Password" className="form-control float-label" id=""/>

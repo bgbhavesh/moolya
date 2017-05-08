@@ -17,10 +17,6 @@ export let loginActionHandler = {
             else if(result && result.profile && result.profile.isExternaluser == true){
                 FlowRouter.redirect("/app");
             }
-
-            else if(result && result.profile && result.profile.isExternalUser == true){
-              FlowRouter.redirect("/app");
-            }
            /* else if(result && result.profile && result.profile.isInternaluser == true&&result.profile.InternalUprofile.moolyaProfile.isActive==true&&result.profile.InternalUprofile.moolyaProfile.assignedDepartment!=undefined&&result.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department!=null&&result.profile.InternalUprofile.moolyaProfile.userProfiles[0]!=undefined&&result.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles!=undefined&&result.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleId!=null) {
               FlowRouter.redirect("/admin");
             }

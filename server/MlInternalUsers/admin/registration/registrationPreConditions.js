@@ -30,4 +30,14 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
      }
     return {'isValid':true};
   }
+  static  validateEmailClusterCommunity(registration) {
+    var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.countryId":registration.countryId},{"registrationInfo.registrationType":registration.registrationType}]})
+    if(validate){
+      let code = 409;
+      let message ="Registration Exist"
+      let errResp = new MlRespPayload().errorPayload(message, code);
+      return {'isValid':false,'validationResponse':errResp};
+    }
+    return {'isValid':true};
+  }
 }

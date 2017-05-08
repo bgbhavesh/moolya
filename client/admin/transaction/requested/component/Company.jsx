@@ -154,26 +154,42 @@ export default class Company extends React.Component{
   }
 
   render(){
-    let MlActionConfig = [
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: this.updateRegistration.bind(this),
-      },
-      // {
-      //   actionName: 'comment',
-      //   showAction: true,
-      //   handler: null
-      // },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/transactions/registrationRequested")
+    let MlActionConfig
+    let userType=this.props.userType;
+    if(userType=='external'){
+      MlActionConfig=[
+        {
+          showAction: true,
+          actionName: 'save',
+          handler:  this.updateRegistration.bind(this),
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: null
+        },
+      ]
+    }else {
+      MlActionConfig = [
+        {
+          actionName: 'save',
+          showAction: true,
+          handler: this.updateRegistration.bind(this),
+        },
+        // {
+        //   actionName: 'comment',
+        //   showAction: true,
+        //   handler: null
+        // },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: async(event) => {
+            FlowRouter.go("/admin/transactions/registrationRequested")
+          }
         }
-      }
-    ]
-
+      ]
+    }
     let subsidary = [
       {value: 'Yes', label: 'Yes'},
       {value: 'No', label: 'No'}
@@ -248,9 +264,9 @@ export default class Company extends React.Component{
               <div className="form-group">
                 <input type="text" placeholder="Request Id" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationId}/>
               </div>
-              <div className="form-group">
+             {/* <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery}  reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
-              </div>
+              </div>*/}
               <div className="form-group">
                 <input type="text" ref="companyName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyName} placeholder="Company Name" className="form-control float-label" id=""/>
               </div>

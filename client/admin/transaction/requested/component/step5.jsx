@@ -68,14 +68,17 @@ export default class Step5 extends React.Component {
     let selectedDocs = this.state.selectedFiles
     let selectedDocType = this.state.selectedDocTypeFiles
     const response = await approvedStausForDocuments(selectedDocs, selectedDocType, registrationId);
-    if (response) {
+    if (response.success) {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
       toastr.success("Selected Documents Approved Successfully")
     }
     else{
-      toastr.error("please select kyc documents")
+      this.setState({selectedFiles: []})
+      this.setState({selectedDocTypeFiles:[]})
+      this.props.getRegistrationKYCDetails();
+      toastr.error(response.result)
     }
   }
 
@@ -134,13 +137,16 @@ export default class Step5 extends React.Component {
     let selectedDocs = this.state.selectedFiles
     let selectedDocType = this.state.selectedDocTypeFiles
     const response = await rejectedStausForDocuments(selectedDocs, selectedDocType, registrationId);
-    if (response) {
+    if (response.success) {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
       toastr.success("Selected Documents Rejected Successfully")
     }else{
-      toastr.error("please select kyc documents")
+      this.setState({selectedFiles: []})
+      this.setState({selectedDocTypeFiles:[]})
+      this.props.getRegistrationKYCDetails();
+      toastr.error(response.result)
     }
   }
 
@@ -262,43 +268,61 @@ export default class Step5 extends React.Component {
    }
 
   render(){
-    let MlActionConfig = [
-      {
-        actionName: 'documentApprove',
-        showAction: true,
-        handler: this.approvedDocuments.bind(this)
-      },
-      {
-        actionName: 'documentReject',
-        showAction: true,
-        handler: this.rejectedDocuments.bind(this)
-      },
-      {
-       actionName: 'download',
-       showAction: true,
-       handler: this.downloadDocuments.bind(this)
-       },
-      {
-        showAction: false,
-        actionName: 'save',
-        handler: null
-      },
-      {
-        showAction: false,
-        actionName: 'comment',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'approveUser',
-        handler:  this.approveUser.bind(this)
-      },
-      {
-        showAction: true,
-        actionName: 'rejectUser',
-        handler: this.rejectUser.bind(this)
-      }
-    ]
+    let MlActionConfig
+    let userType=this.props.userType;
+    if(userType=='external'){
+      MlActionConfig=[
+        {
+          showAction: true,
+          actionName: 'save',
+          handler: null
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: null
+        },
+      ]
+    }else{
+     MlActionConfig = [
+        {
+          actionName: 'documentApprove',
+          showAction: true,
+          handler: this.approvedDocuments.bind(this)
+        },
+        {
+          actionName: 'documentReject',
+          showAction: true,
+          handler: this.rejectedDocuments.bind(this)
+        },
+        {
+          actionName: 'download',
+          showAction: true,
+          handler: this.downloadDocuments.bind(this)
+        },
+        {
+          showAction: false,
+          actionName: 'save',
+          handler: null
+        },
+        {
+          showAction: false,
+          actionName: 'comment',
+          handler: null
+        },
+        {
+          showAction: true,
+          actionName: 'approveUser',
+          handler:  this.approveUser.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'rejectUser',
+          handler: this.rejectUser.bind(this)
+        }
+      ]
+    }
+
     let registrationDocuments=this.state.registrationDocuments||[];
     let registrationDocumentsGroup=_.groupBy(registrationDocuments,'docTypeName')||{};
     let that=this;

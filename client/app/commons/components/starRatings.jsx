@@ -7,14 +7,8 @@ export default class StarRatings extends React.Component{
   render(){
     return (
       <div className="star_ratings">
-      <Rating
-  empty="fa fa-star-o empty"
-  full="fa fa-star fill"
-  fractions={2}
-  initialRate={2.5}
-  readonly={true}
-/>
-</div>
-)
-}
+        <Rating  empty="fa fa-star-o empty"  full="fa fa-star fill" fractions={2} initialRate={2.5} readonly={true}/>
+      </div>
+    )
+  }
 };

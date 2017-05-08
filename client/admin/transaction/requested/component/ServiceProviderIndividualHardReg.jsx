@@ -6,7 +6,7 @@ import Step5 from './step5';
 import Step6 from './step6';
 import Step7 from './step7';
 
-import Individual from './Individual'
+import Individual from './ServiceProviderIndividualComponent'
 
 export default class ServiceProviderIndividualHardReg extends React.Component{
 

@@ -384,7 +384,7 @@ if(Meteor.isServer){
         "image" : "/images/documents_icon.png",
         "link" : "/admin/documents/clusterList",
         "uniqueId" : "documents",
-        "name" : "documents",
+        "name" : " process documents",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
@@ -497,7 +497,7 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/cluster_icon.png",
+        "image" : "/images/transactions-icon.png",
         "link" : "/admin/transactions/requestedList",
         "name" : "transaction",
         "uniqueId"   :"transaction",
@@ -971,10 +971,43 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/filtersList",
             "name" : "Filters",
-            "uniqueId" : "settings_filters",
+            "uniqueId" : "settings_Filters",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addFilter",
+                "name": "Add Filters",
+                "uniqueId": "settings_AddFilter",
+                "subMenuMappingId":"settings_Filters",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/filtersList",
+                "name": "Filters List",
+                "uniqueId": "settings_FiltersList",
+                "subMenuMappingId":"settings_Filters",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editFilter",
+                "name": "Edit Filter",
+                "uniqueId": "settings_EditFilter",
+                "subMenuMappingId":"settings_Filters",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
           },
           {
             "link" : "/admin/settings/countriesList",

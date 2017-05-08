@@ -11,7 +11,8 @@ export default class MlTableView extends Component {
       pageNumber: 1,
       sort: null,
       selectedRow: null,
-      searchValue:""
+      searchValue:"",
+      filterValue:{},
     }
 
     this.onPageChange.bind(this);
@@ -19,6 +20,10 @@ export default class MlTableView extends Component {
     this.constructSearchCriteria.bind(this);
     this.onSortChange.bind(this);
   }
+
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
 
   componentWillUpdate(nextProps, nextState) {
     let hasQueryOptions = this.props.queryOptions ? true : false;
@@ -36,6 +41,9 @@ export default class MlTableView extends Component {
     }else if(this.state.sort!==nextState.sort){
       let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
       this.props.fetchMore(this.state.sizePerPage,1,searchCriteria,nextState.sort,context);
+    }else if(!this.compareQueryOptions(this.state.filterValue,nextState.filterValue)){
+      //let filterCriteria=this.constructSearchCriteria(nextState.searchValue);
+      this.props.fetchMore(this.state.sizePerPage,1,nextState.filterValue,nextState.sort,context);
     }
   }
 
@@ -93,6 +101,10 @@ export default class MlTableView extends Component {
     action.handler(selectedRow);
   }
 
+  onFilterChange(filterQuery){
+       this.setState({filterValue:filterQuery});
+  }
+
   render() {
     let data = this.props.data && this.props.data.data ? this.props.data.data : [];
     let totalDataSize = this.props.data && this.props.data.totalRecords ? this.props.data.totalRecords : 0;
@@ -108,8 +120,16 @@ export default class MlTableView extends Component {
       act.handler = that.actionHandlerProxy.bind(that);
       actionsProxyList.push(act);
     });
+
+
+    var FilterComponent ='';
+    if(this.props.filter){
+      // let pConfig=_.extend(this.props,{onFilterChange:this.onFilterChange.bind(this)});
+       FilterComponent=React.cloneElement(this.props.filterComponent,{onFilterChange:this.onFilterChange.bind(this)});
+    }
     return (<div>{loading ? (<div className="loader_wrap"></div>) : (
       <div>
+        {FilterComponent}
         <MlTable {...config } totalDataSize={totalDataSize} data={data} pageNumber={this.state.pageNumber}
                  sizePerPage={this.state.sizePerPage} onPageChange={this.onPageChange.bind(this)}
                  onSizePerPageList={this.onSizePerPageList.bind(this)} onSearchChange={this.onSearchChange.bind(this)}

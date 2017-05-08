@@ -64,6 +64,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                   </li>
                 </ul>
 
+                {/*principle list*/}
                 <div className="tab-content clearfix requested_input">
                   <div className="tab-pane active" id="1a">
                     <div className="col-lg-12">
@@ -84,9 +85,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <img src="../images/p_5.jpg"/>
                               <div><p>Naval Ravikant</p><p className="small">Founder</p></div>
                               <div className="ml_icon_btn">
-                                <a href="#" id="" className="save_btn"><FontAwesome name='facebook'/></a>
-                                <a href="#" id="" className="save_btn"><FontAwesome name='twitter'/></a>
-                                <a href="#" id="" className="save_btn"><FontAwesome name='linkedin'/></a>
+                                <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
+                                <a href="#"   className="save_btn"><FontAwesome name='twitter'/></a>
+                                <a href="#"   className="save_btn"><FontAwesome name='linkedin'/></a>
                               </div>
                             </div>
                           </a>
@@ -94,6 +95,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
                       </div>
                     </div>
                   </div>
+
+                  {/*team list view*/}
                   <div className="tab-pane" id="2a">
                     <div className="col-lg-12">
                       <div className="row">
@@ -113,9 +116,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <img src="../images/p_5.jpg"/>
                               <div><p>Rajesh Sethi</p><p className="small">COO</p></div>
                               <div className="ml_icon_btn">
-                                <a href="#" id="" className="save_btn"><FontAwesome name='facebook'/></a>
-                                <a href="#" id="" className="save_btn"><FontAwesome name='twitter'/></a>
-                                <a href="#" id="" className="save_btn"><FontAwesome name='linkedin'/></a>
+                                <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
+                                <a href="#"   className="save_btn"><FontAwesome name='twitter'/></a>
+                                <a href="#"   className="save_btn"><FontAwesome name='linkedin'/></a>
                               </div>
                             </div>
                           </a>
@@ -123,10 +126,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
             </ScrollArea>
 
+            {/*principle popover*/}
             <div style={{'display': 'none'}} className="ml_create_client">
               <div className="medium-popover">
                 <div className="row">
@@ -141,16 +146,16 @@ export default class MlFunderPrincipalTeam extends React.Component {
                       </div>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Title" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Title" className="form-control float-label" />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="First Name" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Last Name" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
@@ -163,39 +168,39 @@ export default class MlFunderPrincipalTeam extends React.Component {
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Duration" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Duration" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Years of Experience" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Years of Experience" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Qualification" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Qualification" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="About" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="About" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="LinkedIn" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="LinkedIn" className="form-control float-label"  />
                       <FontAwesome name="linkedin-square" className="password_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Facebook" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Facebook" className="form-control float-label"  />
                       <FontAwesome name="facebook-square" className="password_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="twitter" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="twitter" className="form-control float-label"  />
                       <FontAwesome name="twitter-square" className="password_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Youtube" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Youtube" className="form-control float-label"  />
                       <FontAwesome name="youtube-square" className="password_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Google plus" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Google plus" className="form-control float-label"  />
                       <FontAwesome name="google-plus-square" className="password_icon"/>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
@@ -206,6 +211,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
               </div>
             </div>
 
+            {/*team popover*/}
             <div style={{'display': 'none'}} className="team-list-main">
               <div className="medium-popover">
                 <div className="row">
@@ -220,28 +226,28 @@ export default class MlFunderPrincipalTeam extends React.Component {
                       </div>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Title" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Title" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="First Name" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Last Name" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Disignation" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Disignation" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Company Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Company Name" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Duration" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Duration" className="form-control float-label"  />
                       <FontAwesome name='unlock' className="input_icon"/>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>

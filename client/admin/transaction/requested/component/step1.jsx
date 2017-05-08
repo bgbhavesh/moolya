@@ -47,11 +47,11 @@ export default class step1 extends React.Component{
 
     this.fetchIdentityTypesMaster.bind(this);
     this.updateregistrationInfo.bind(this);
-    this.settingIdentity.bind(this);
+    //this.settingIdentity.bind(this);
 
     return this;
   }
-  async settingIdentity(identity){
+  /*async settingIdentity(identity){
 
     if(identity == "Individual"){
       this.setState({defaultIdentityIndividual:true, defaultIdentityCompany: false})
@@ -67,7 +67,7 @@ export default class step1 extends React.Component{
     }
   }
 
-
+*/
   async fetchIdentityTypesMaster() {
     const response = await fetchIdentityTypes(this.props.config);
     this.setState({identityTypesData: response});
@@ -96,7 +96,7 @@ export default class step1 extends React.Component{
       selectedTypeOfIndustry:details.industry,
       profession:details.profession
     });
-    this.settingIdentity(details.identityType);
+    //this.settingIdentity(details.identityType);
 
   }
 
@@ -439,19 +439,25 @@ export default class step1 extends React.Component{
                         {canSelectIdentity &&
                         <div className="form-group">
                           {identityTypez.map((i) => {
-                            let checked=null
-                            if(i._id=='individual'){
-                              checked=that.state.defaultIdentityIndividual
-                            }else if(i._id=='company'){
-                              checked=that.state.defaultIdentityCompany
+                            let checked=null,showRadioChecked=false
+                            let identity=this.state.identityType
+                            if(identity=="Individual"&&i._id=='individual'){
+                              showRadioChecked=true
+                              checked=true
+                            }else if(identity=="Company"&&i._id=='company'){
+                              showRadioChecked=true
+                              checked=true
+                            }else{
+                              showRadioChecked=true
+                              checked=false
                             }
                             return (
-                              <div key={i._id}>
+                              <div>{showRadioChecked&&<div key={i._id}>
                                 <div id={`${i._id}Id`}  className="input_types">
 
                                   <input type="checkbox" name={i.identityTypeName} value={i._id}
                                          onChange={that.checkIdentityIndividual.bind(that) }
-                                         defaultChecked={checked}/><label
+                                         checked ={checked}/><label
                                   htmlFor="radio1"><span><span></span></span>{i.identityTypeName}</label>
                                 </div>
                                 {/* <div id="comp" className="input_types">
@@ -460,7 +466,7 @@ export default class step1 extends React.Component{
                                  defaultChecked={this.state.defaultIdentityCompany}/><label
                                  htmlFor="radio2"><span><span></span></span>Company</label>
                                  </div>*/}
-                              </div>)
+                              </div>}</div>)
                           })
                           }
                         </div>

@@ -33,8 +33,12 @@ if(Meteor.isServer){
         name:"registrationInfo.clusterId",
         type:'List',
         collectionName : "Clusters"
+      },
+      {
+        name:"status",
+        type:'Boolean',
       }
-        ]
+    ]
   }})
   MlFiltersCatalog.upsert({
     "_id" : "requests",

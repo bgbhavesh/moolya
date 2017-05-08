@@ -169,7 +169,8 @@ export default class MlCustomFilter extends Component {
     let fieldsData = that.state.filterFields || [];
     let dateSelect = false;
     let stringSelect = false;
-    let listSelect = false
+    let listSelect = false;
+    let booleanSelect = false;
     let listOptions = null;
     let selectedValue = that.state.selectedOption?that.state.selectedOption:""
 
@@ -205,6 +206,11 @@ export default class MlCustomFilter extends Component {
                 }else{
                   stringSelect = false
                 }
+                if(options.fieldType == "Boolean"){
+                  booleanSelect = true
+                }else{
+                  booleanSelect = false
+                }
                 if(options && options.fieldList && options.fieldCollectionName){
                   listOptions={options: { variables: {moduleName:options.fieldCollectionName,list:options.fieldList}}}
                 }
@@ -215,7 +221,7 @@ export default class MlCustomFilter extends Component {
                   {stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)}/></div>:""}</span>)
 
                 })}
-                <div className="col-lg-3">
+              {/*  <div className="col-lg-3">
                     <div className="input_types label_name">
                       <label>label : </label>
                     </div>
@@ -238,7 +244,7 @@ export default class MlCustomFilter extends Component {
                   <input id="check2" type="checkbox" name="" value=""/><label htmlFor="check2"><span><span></span></span>option2</label>
                   </div>
                 </div>
-
+*/}
                 <br className="brclear"/>
               <div className="ml_icon_btn">
                 <a href="#"  className="save_btn" onClick={this.onApplyFilter.bind(this)} ><span

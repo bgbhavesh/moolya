@@ -17,6 +17,12 @@ let FunderPortfolioSchema = `
         isPrivate:Boolean,
         isActive:Boolean
         index: Int
+        logo:imagesTypeSchema,
+    }
+    
+     type imagesTypeSchema{
+        fileUrl   : String,
+        fileName  : String
     }
     
     type AreaOfInterest{

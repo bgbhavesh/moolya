@@ -106,11 +106,25 @@ MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context
 }
 
 MlResolver.MlQueryResolver['fetchFunderPrincipal'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('principal')) {
+      return portfolio['principal'];
+    }
+  }
 
+  return [];
 }
 
 MlResolver.MlQueryResolver['fetchFunderTeam'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('team')) {
+      return portfolio['team'];
+    }
+  }
 
+  return [];
 }
 
 MlResolver.MlQueryResolver['fetchFunderAreaofInterest'] = (obj, args, context, info) => {

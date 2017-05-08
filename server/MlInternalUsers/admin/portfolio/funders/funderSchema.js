@@ -50,6 +50,7 @@ let FunderPortfolioSchema = `
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
         socialLinks:[SocialLinks]
+        index: Int
     }
 
     type Principal{
@@ -69,7 +70,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
-        socialLinks:[SocialLinks]
+        socialLinks:[SocialLinks],
+        index:Int
     }
     
     type Investments{
@@ -182,7 +184,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
-        socialLinks:[socialLinks]
+        socialLinks:[socialLinks],
+        index: Int
     }
 
     input principal{
@@ -202,7 +205,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
-        socialLinks:[socialLinks]
+        socialLinks:[socialLinks],
+        index:Int
     }
 
     input investments{
@@ -275,8 +279,8 @@ let FunderPortfolioSchema = `
     type Query{
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
         fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
-        fetchFunderPrincipal(portfoliodetailsId:String!):Principal
-        fetchFunderTeam(portfoliodetailsId:String!):Team
+        fetchFunderPrincipal(portfoliodetailsId:String!):[Principal]
+        fetchFunderTeam(portfoliodetailsId:String!):[Team]
         fetchFunderAreaofInterest(portfoliodetailsId:String!):Team
         fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
     }

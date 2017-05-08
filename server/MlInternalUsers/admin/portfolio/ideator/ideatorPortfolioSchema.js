@@ -315,7 +315,7 @@ let ideatorPortfolioSchema = `
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
-        updateIdea(idea:idea):response
+        updateIdea(ideaId:String, idea:idea):response
     }
 `
 

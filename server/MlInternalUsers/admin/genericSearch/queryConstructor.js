@@ -5,8 +5,15 @@ export function searchFunction(args) {
   let fieldsArgs=args.fieldsData||[];
   _.each(fieldsArgs,function (s,v) {
     let json={};
-    let regex={$regex:".*"+s.value+".*",$options:"i"};
-    json[s.fieldName]=regex
+    if(s.fieldType == "List"){
+     json[s.fieldName]=s.value
+    }else if(s.fieldType == "Date"){
+        let dateObject =  JSON.parse(s.value)
+        json[s.fieldName]={$gte: new Date(dateObject.$gte),$lt : new Date(dateObject.$lt)}
+    }else{
+      let regex={$regex:".*"+s.value+".*",$options:"i"};
+      json[s.fieldName]=regex
+    }
     ary.push(json);
   })
 

@@ -62,15 +62,15 @@ export default class MlIdeatorIdeas extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let ideaId=that.props.ideaId;
-    // let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.ideas)
-    // if(empty){
+    let empty = _.isEmpty(that.context.idea)
+    if(empty){
       const response = await findIdeatorIdeasActionHandler(ideaId);
       if (response) {
         this.setState({loading: false, data: response});
       }
-    // }else{
-    //   this.setState({loading: false, data: that.context.ideatorPortfolio.ideas});
-    // }
+    }else{
+      this.setState({loading: false, data: that.context.idea});
+    }
 
   }
   sendDataToParent(){
@@ -119,5 +119,5 @@ export default class MlIdeatorIdeas extends React.Component{
     )}
 };
 MlIdeatorIdeas.contextTypes = {
-  ideatorPortfolio: PropTypes.object,
+  idea: PropTypes.object,
 };

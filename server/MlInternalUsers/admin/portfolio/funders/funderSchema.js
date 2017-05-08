@@ -7,14 +7,16 @@ import MlSchemaDef from '../../../../commons/mlSchemaDef';
 let FunderPortfolioSchema = `
 
     type SuccessStories{
-          date:String,
-          storyImage:String,
-          storyTitle:String,
-          isStoryTitlePrivate:Boolean,
-          description:String,
-          isDescPrivate:Boolean,
-          makePrivate:Boolean,
-          isActive:Boolean
+        date:String,
+        isDatePrivate : Boolean
+        storyImage:String,
+        storyTitle:String,
+        isStoryTitlePrivate:Boolean,
+        description:String,
+        isDescPrivate:Boolean,
+        isPrivate:Boolean,
+        isActive:Boolean
+        index: Int
     }
     
     type AreaofInterest{
@@ -27,7 +29,7 @@ let FunderPortfolioSchema = `
     type SocialLinks{
         socialLinkType:String,
         userId:String,
-        isuserIdPrivate:Boolean
+        isUserIdPrivate:Boolean
     }
     
     type Team{
@@ -72,13 +74,18 @@ let FunderPortfolioSchema = `
     
     type Investments{
         dateOfInvestment:String,
+        isDateOfInvestmentPrivate :Boolean
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        typeOfFunding:String,
-        istypeOfFundingPrivate:Boolean,
+        typeOfFundingId:String,
+        typeOfFundingName : String,
+        isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
-        isaboutInvestmentPrivate:Boolean,
-        isPivate:Boolean
+        isAboutInvestmentPrivate:Boolean,
+        isPrivate:Boolean,
+        investmentAmount :String,
+        isInvestmentAmountPrivate :Boolean
+        index: Int
     }
     
     type Investmentbudget{
@@ -124,7 +131,7 @@ let FunderPortfolioSchema = `
     
     type FunderPortfolio{
         portfolioDetailsId  : String,
-        funderAbout         : [FunderAbout],
+        funderAbout         : FunderAbout,
         investments         : [Investments],
         principal           : [Principal],
         team                : [Team],
@@ -134,13 +141,15 @@ let FunderPortfolioSchema = `
   
     input successStories{
         date:String,
+        isDatePrivate : Boolean
         storyImage:String,
         storyTitle:String,
         isStoryTitlePrivate:Boolean,
         description:String,
         isDescPrivate:Boolean,
-        makePrivate:Boolean,
+        isPrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
 
     input areaofInterest{
@@ -153,7 +162,7 @@ let FunderPortfolioSchema = `
     input socialLinks{
         socialLinkType:String,
         userId:String,
-        isuserIdPrivate:Boolean
+        isUserIdPrivate:Boolean
     }
     
     input team{
@@ -198,13 +207,18 @@ let FunderPortfolioSchema = `
 
     input investments{
         dateOfInvestment:String,
+        isDateOfInvestmentPrivate :Boolean
         companyName:String,
         isCompanyNamePrivate:Boolean,
-        typeOfFunding:String,
-        istypeOfFundingPrivate:Boolean,
+        typeOfFundingId:String,
+        typeOfFundingName : String,
+        isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
-        isaboutInvestmentPrivate:Boolean,
-        isPivate:Boolean
+        isAboutInvestmentPrivate:Boolean,
+        isPrivate:Boolean,
+        investmentAmount :String,
+        isInvestmentAmountPrivate :Boolean
+        index: Int
     }
     
     input investmentbudget{
@@ -250,7 +264,7 @@ let FunderPortfolioSchema = `
     
     input funderPortfolio{
         portfolioDetailsId  : String,
-        funderAbout         : [funderAbout],
+        funderAbout         : funderAbout,
         investments         : [investments],
         principal           : [principal],
         team                : [team],
@@ -260,11 +274,11 @@ let FunderPortfolioSchema = `
     
     type Query{
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
-        fetchFunderInvestments(portfoliodetailsId:String!):Investments
+        fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
         fetchFunderPrincipal(portfoliodetailsId:String!):Principal
         fetchFunderTeam(portfoliodetailsId:String!):Team
         fetchFunderAreaofInterest(portfoliodetailsId:String!):Team
-        fetchFunderSuccessStories(portfoliodetailsId:String!):SuccessStories
+        fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
     }
     
     type Mutation{

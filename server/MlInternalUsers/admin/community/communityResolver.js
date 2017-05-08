@@ -455,3 +455,28 @@ MlResolver.MlQueryResolver['fetchCommunitiesSelect'] = (obj, args, context, info
 // MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {
 //
 // }
+
+MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, context, info) =>
+{
+  // TODO : Authorization
+  let query;
+  let communities = [];
+  if(args.clusterId != "" && args.chapterId == "all" && args.subChapterId != "all" ){
+    query= {"$and":[{clusterId:args.clusterId, subChapterId:args.subChapterId, isActive:true}]};
+  }
+  else if(args.clusterId != "" && args.chapterId != "all" && args.subChapterId == "all" ){
+    query= {"$and":[{clusterId:args.clusterId, chapterId:args.chapterId, isActive:true}]};
+  }
+  else if(args.clusterId != "" && args.chapterId != "all" && args.subChapterId != "all" ){
+    query= {"$and":[{clusterId:args.clusterId, chapterId:args.chapterId, subChapterId:args.subChapterId, isActive:true}]};
+  }
+
+  let communitiesAccess = MlCommunityAccess.find(query).fetch();
+  communitiesAccess.map(function (communityAccess) {
+    let community = {};
+    community["name"] = communityAccess.communityDefName;
+    community["code"] = communityAccess.communityDefCode;
+    communities.push(community);
+  })
+  return communities;
+}

@@ -9,7 +9,9 @@ import {getContactDetails} from '../actions/getAddressBookAction'
 import ScrollArea from 'react-scrollbar'
 import  ContactDetails from './MlMyProfileContactDetails';
 import AddressDetails from './mlRegistrationAddressDetails'
-import EmailDetails from './mlRegistrationEmailDetails'
+import EmailDetails from './mlRegistrationEmailDetails';
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+
 
 export default class Step3 extends React.Component{
 
@@ -21,14 +23,15 @@ export default class Step3 extends React.Component{
       contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}],
       registerId : " ",
       registrationDetails:" ",
-      clusterId : 'opa3eg2mFPnTaK3mw'
-
+      clusterId : " "
     }
     //this.getContents.bind(this);
 
     return this;
   }
     componentWillMount(){
+      let res = getAdminUserContext();
+      this.setState({clusterId:res.clusterId})
       //this.setState({contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}]})
       // this.setState({'registrationDetails':this.props.registrationData});
       const response = this.getContents();

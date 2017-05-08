@@ -7,6 +7,9 @@ export function searchFunction(args) {
     let json={};
     if(s.fieldType == "List"){
      json[s.fieldName]=s.value
+    }else if(s.fieldType == "Date"){
+        let dateObject =  JSON.parse(s.value)
+        json[s.fieldName]={$gte: new Date(dateObject.$gte),$lt : new Date(dateObject.$lt)}
     }else{
       let regex={$regex:".*"+s.value+".*",$options:"i"};
       json[s.fieldName]=regex

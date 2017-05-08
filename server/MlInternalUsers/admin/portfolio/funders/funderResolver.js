@@ -75,6 +75,14 @@ MlResolver.MlMutationResolver['updateFunderPortfolio'] = (obj, args, context, in
 
 MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
 
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('funderAbout')) {
+      return portfolio['funderAbout'];
+    }
+  }
+
+  return {};
 }
 
 MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context, info) => {
@@ -110,7 +118,14 @@ MlResolver.MlQueryResolver['fetchFunderAreaofInterest'] = (obj, args, context, i
 }
 
 MlResolver.MlQueryResolver['fetchFunderSuccessStories'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('successStories')){
+      return portfolio['successStories'];
+    }
+  }
 
+  return [];
 }
 
 updateArrayofObjects = (updateFor, source) =>{

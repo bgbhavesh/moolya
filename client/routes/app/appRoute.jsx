@@ -26,7 +26,7 @@ import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
 import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
-
+import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile';
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 export const appSection = FlowRouter.group({
@@ -62,6 +62,14 @@ appSection.route('/myProfile', {
       mount(AppLayout,{appContent:<MlAppMyProfile/>, isProfileMenu:true})
   }
 });
+
+appSection.route('/appSwitchProfile', {
+  name: 'appSwitchProfile',
+  action(){
+    mount(AppLayout,{appContent:<MlAppSwitchProfile/>, isProfileMenu:true})
+  }
+});
+
 
 appSection.route('/addressBook', {
   name: 'addressBook',

@@ -9,7 +9,7 @@ export default class MlAssignClustersToRoles extends React.Component {
       super(props);
       this.state={
          selectedValue:null,
-         assignRoleToClusters:[{cluster: '',chapter:'',subChapter:'',department:'',subDepartment:'',isActive:false }]
+         assignRoleToClusters:[{cluster: '',chapter:'',subChapter:'',community:'',department:'',subDepartment:'',isActive:false }]
       }
       this.addDepartmentComponent.bind(this);
       this.onStatusChange=this.onStatusChange.bind(this)
@@ -18,7 +18,7 @@ export default class MlAssignClustersToRoles extends React.Component {
 
   AssignassignRoleToClusters(id){
     this.setState({
-      assignRoleToClusters: this.state.assignRoleToClusters.concat([{cluster: '',chapter:'',subChapter:'',department:'',subDepartment:'',isActive:false }])
+      assignRoleToClusters: this.state.assignRoleToClusters.concat([{cluster: '',chapter:'',subChapter:'',community:'',department:'',subDepartment:'',isActive:false }])
     });
   }
 
@@ -85,6 +85,13 @@ export default class MlAssignClustersToRoles extends React.Component {
     this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
   }
 
+  optionsBySelectCommunity(index, selectedIndex){
+    let availabilityDetails=this.state.assignRoleToClusters
+    availabilityDetails[index]['community']=selectedIndex
+    this.setState({assignRoleToClusters:availabilityDetails})
+    this.props.getassignRoleToClusters(this.state.assignRoleToClusters)
+  }
+
   optionsBySelectDepartment(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
     console.log("Selected--"+availabilityDetails);
@@ -111,7 +118,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     });
     mySwiper.updateContainerSize()
     this.setState({
-      assignRoleToClusters: this.state.assignRoleToClusters.concat([{cluster: '',chapter:'',subChapter:'',email:'',isActive:false }])
+      assignRoleToClusters: this.state.assignRoleToClusters.concat([{cluster: '',chapter:'',subChapter:'',community:'',email:'',isActive:false }])
     });
 
   }
@@ -157,6 +164,10 @@ export default class MlAssignClustersToRoles extends React.Component {
           label:subChapterName
         }
       }`;
+      let communityQuery = gql` query{
+        data:fetchCommunityDefinition{label:name,value:code}
+      }
+      `;
     let selectedUserType=this.props.selectedBackendUserType
     let selectedSubChapter=this.props.selectedSubChapter
     if(selectedUserType=='moolya'){
@@ -227,6 +238,11 @@ export default class MlAssignClustersToRoles extends React.Component {
                   <div className="form-group">
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'+id} reExecuteQuery={true}  onSelect={that.optionsBySelectCommunity.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">

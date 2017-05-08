@@ -31,11 +31,20 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
 MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info) => {
   let response;
   if (args.departmentId && args.subDepartmentId) {
-    response = mlDBController.findOne("MlHierarchyAssignments", {
-      "parentDepartment": args.departmentId,
-      "parentSubDepartment": args.subDepartmentId,
-      "clusterId":args.clusterId
-    }, context)
+    let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
+    if(department.isSystemDefined){
+      response = mlDBController.findOne("MlHierarchyAssignments", {
+        "parentDepartment": args.departmentId,
+        "parentSubDepartment": args.subDepartmentId,
+        "clusterId":"All"
+      }, context)
+    }else{
+      response = mlDBController.findOne("MlHierarchyAssignments", {
+        "parentDepartment": args.departmentId,
+        "parentSubDepartment": args.subDepartmentId,
+        "clusterId":args.clusterId
+      }, context)
+    }
   }
   return response;
 }

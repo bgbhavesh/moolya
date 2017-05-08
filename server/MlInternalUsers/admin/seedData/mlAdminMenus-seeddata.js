@@ -786,47 +786,6 @@ if(Meteor.isServer){
             ]
           },
           {
-            "link" : "/admin/settings/filtersList",
-            "name" : "Filters",
-            "uniqueId" : "settings_Filters",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "subMenu": [
-
-              {
-                "link": "/admin/settings/addFilter",
-                "name": "Add Filters",
-                "uniqueId": "settings_AddFilter",
-                "subMenuMappingId":"settings_Filters",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/filtersList",
-                "name": "Filters List",
-                "uniqueId": "settings_FiltersList",
-                "subMenuMappingId":"settings_Filters",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editFilter",
-                "name": "Edit Filter",
-                "uniqueId": "settings_EditFilter",
-                "subMenuMappingId":"settings_Filters",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }
-            ]
-          },
-          {
             "link" : "/admin/settings/subDepartmentsList",
             "name" : "Sub Departments",
             "uniqueId" : "settings_SubDepartments",
@@ -1012,10 +971,43 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/filtersList",
             "name" : "Filters",
-            "uniqueId" : "settings_filters",
+            "uniqueId" : "settings_Filters",
             "isLink" : true,
             "isMenu" : true,
-            "image" : ""
+            "image" : "",
+            "subMenu": [
+
+              {
+                "link": "/admin/settings/addFilter",
+                "name": "Add Filters",
+                "uniqueId": "settings_AddFilter",
+                "subMenuMappingId":"settings_Filters",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/filtersList",
+                "name": "Filters List",
+                "uniqueId": "settings_FiltersList",
+                "subMenuMappingId":"settings_Filters",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editFilter",
+                "name": "Edit Filter",
+                "uniqueId": "settings_EditFilter",
+                "subMenuMappingId":"settings_Filters",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
           },
           {
             "link" : "/admin/settings/countriesList",

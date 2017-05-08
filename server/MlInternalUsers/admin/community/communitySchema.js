@@ -46,6 +46,7 @@ let communitySchema = `
         fetchCommunities(clusterId:String, chapterId:String, subChapterId:String):SearchResp
         fetchCommunitiesSelect(clusterId:String, chapterId:String, subChapterId:String):[Community]
         fetchCommunityDef(clusterId:String, chapterId:String, subChapterId:String, communityId:String):Community
+        fetchCommunitiesForRolesSelect(clusterId:String, chapterId:String, subChapterId:String):[Community]
     }
     
     type Mutation{

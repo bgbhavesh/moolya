@@ -62,10 +62,11 @@ export default class MlFunderEditTemplate extends React.Component{
     this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
 
-  getAboutus(details,tabName){
+  getAboutus(details){
     let data = this.state.funderPortfolio;
-    data[tabName] = details;
-    this.props.getPortfolioDetails({funderPortfolio : data});
+    data['funderAbout']=details;
+    this.setState({funderPortfolio : data})
+    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio});
   }
 
   getInvestmentsDetails(details){

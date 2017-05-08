@@ -6,6 +6,7 @@ let Role = `
       cluster:String,
       chapter:String,
       subChapter:String,
+      community :String,
       department:String, 
       subDepartment:String, 
       isActive:Boolean
@@ -50,6 +51,7 @@ let Role = `
       cluster:String,
       chapter:String,
       subChapter:String,
+      community : String,
       department:String, 
       subDepartment:String, 
       isActive:Boolean

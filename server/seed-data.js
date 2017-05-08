@@ -232,7 +232,66 @@ if(!systemAdminUser){
 }
 
 /*********************************** Default Moolya System Admin Creation <End> **********************************************/
+/*********************************** Default Hierarchy Assignements <Start> **********************************************/
+let depHierarchy = MlDepartments.findOne({"departmentName":"operations"});
+let subDepHierarchy = MlSubDepartments.findOne({"subDepartmentName":"systemadmin"});
 
+var platformAdminHierarchy = MlRoles.findOne({roleName:"platformadmin"})
+var clusterAdminHierarchy = MlRoles.findOne({roleName:"clusteradmin"})
+var chapterAdminHierarchy = MlRoles.findOne({roleName:"chapteradmin"})
+var subchapterAdminHierarchy = MlRoles.findOne({roleName:"subchapteradmin"})
+var communityAdminHierarchy = MlRoles.findOne({roleName:"communityadmin"})
+var hierarchyAssignment = MlHierarchyAssignments.findOne({clusterId:"All"})
+if(!hierarchyAssignment) {
+  var hierarchy = {
+    parentDepartment: depHierarchy._id,
+    parentSubDepartment: subDepHierarchy._id,
+    clusterId: "All",
+    teamStructureAssignment: [{
+      roleId: clusterAdminHierarchy._id,
+      roleName: clusterAdminHierarchy.roleName,
+      displayName: clusterAdminHierarchy.displayName,
+      isAssigned: true,
+      assignedLevel: "cluster",
+      reportingRole: ""
+    },
+      {
+        roleId: chapterAdminHierarchy._id,
+        roleName: chapterAdminHierarchy.roleName,
+        displayName: chapterAdminHierarchy.displayName,
+        isAssigned: true,
+        assignedLevel: "chapter",
+        reportingRole: clusterAdmin._id
+      },
+      {
+        roleId: subchapterAdminHierarchy._id,
+        roleName: subchapterAdminHierarchy.roleName,
+        displayName: subchapterAdminHierarchy.displayName,
+        isAssigned: true,
+        assignedLevel: "chapter",
+        reportingRole: chapterAdminHierarchy._id
+      },
+      {
+        roleId: communityAdminHierarchy._id,
+        roleName: communityAdminHierarchy.roleName,
+        displayName: communityAdminHierarchy.displayName,
+        isAssigned: true,
+        assignedLevel: "community",
+        reportingRole: subchapterAdminHierarchy._id
+      }],
+    finalApproval: {
+      department: depHierarchy._id,
+      subDepartment: subDepHierarchy._id,
+      role: platformAdminHierarchy._id,
+      isChecked: true
+    }
+  };
+  MlHierarchyAssignments.insert(hierarchy);
+}
+
+
+
+/*********************************** Default Hierarchy Assignements <End> **********************************************/
 
 // db.users.insert({
 //   "_id":1,

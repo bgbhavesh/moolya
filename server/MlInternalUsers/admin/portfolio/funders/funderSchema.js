@@ -7,14 +7,16 @@ import MlSchemaDef from '../../../../commons/mlSchemaDef';
 let FunderPortfolioSchema = `
 
     type SuccessStories{
-          date:String,
-          storyImage:String,
-          storyTitle:String,
-          isStoryTitlePrivate:Boolean,
-          description:String,
-          isDescPrivate:Boolean,
-          makePrivate:Boolean,
-          isActive:Boolean
+        date:String,
+        isDatePrivate : Boolean
+        storyImage:String,
+        storyTitle:String,
+        isStoryTitlePrivate:Boolean,
+        description:String,
+        isDescPrivate:Boolean,
+        isPrivate:Boolean,
+        isActive:Boolean
+        index: Int
     }
     
     type AreaofInterest{
@@ -139,13 +141,15 @@ let FunderPortfolioSchema = `
   
     input successStories{
         date:String,
+        isDatePrivate : Boolean
         storyImage:String,
         storyTitle:String,
         isStoryTitlePrivate:Boolean,
         description:String,
         isDescPrivate:Boolean,
-        makePrivate:Boolean,
+        isPrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
 
     input areaofInterest{
@@ -274,7 +278,7 @@ let FunderPortfolioSchema = `
         fetchFunderPrincipal(portfoliodetailsId:String!):Principal
         fetchFunderTeam(portfoliodetailsId:String!):Team
         fetchFunderAreaofInterest(portfoliodetailsId:String!):Team
-        fetchFunderSuccessStories(portfoliodetailsId:String!):SuccessStories
+        fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
     }
     
     type Mutation{

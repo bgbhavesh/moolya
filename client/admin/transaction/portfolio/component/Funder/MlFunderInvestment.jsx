@@ -121,17 +121,16 @@ export default class MlFunderInvestment extends React.Component {
     })
   }
 
-  onStatusChangeNotify(e)
-  {
-    let updatedData = this.state.data||{};
+  onStatusChangeNotify(e) {
+    let updatedData = this.state.data || {};
     let key = e.target.id;
-    updatedData=_.omit(updatedData,[key]);
+    updatedData = _.omit(updatedData, [key]);
     if (e.currentTarget.checked) {
-      updatedData=_.extend(updatedData,{[key]:true});
+      updatedData = _.extend(updatedData, {[key]: true});
     } else {
-      updatedData=_.extend(updatedData,{[key]:false});
+      updatedData = _.extend(updatedData, {[key]: false});
     }
-    this.setState({data:updatedData}, function () {
+    this.setState({data: updatedData}, function () {
       this.sendDataToParent()
     })
   }
@@ -221,7 +220,7 @@ export default class MlFunderInvestment extends React.Component {
                                 <p>{details.companyName}</p>
                                 <p className="fund">{details.investmentAmount}</p>
                               </div>
-                              <h3>{details.dateOfInvestment}</h3>
+                              <h3>{details.dateOfInvestment ? details.dateOfInvestment : 'Date :'}</h3>
                             </div>
                           </a>
                         </div>
@@ -240,7 +239,7 @@ export default class MlFunderInvestment extends React.Component {
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                       inputProps={{placeholder: "Enter Date of Investment"}} ref="dateOfInvestment"
-                                      defaultValue={this.state.data.dateOfInvestment?this.state.data.dateOfInvestment:''}
+                                      defaultValue={this.state.data.dateOfInvestment ? this.state.data.dateOfInvestment : ''}
                                       onBlur={this.dateChange.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon" id="isDateOfInvestmentPrivate"
                                          onClick={this.onLockChange.bind(this, "isDateOfInvestmentPrivate")}/>

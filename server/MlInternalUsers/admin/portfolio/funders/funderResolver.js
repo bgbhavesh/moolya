@@ -118,7 +118,14 @@ MlResolver.MlQueryResolver['fetchFunderAreaofInterest'] = (obj, args, context, i
 }
 
 MlResolver.MlQueryResolver['fetchFunderSuccessStories'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('successStories')){
+      return portfolio['successStories'];
+    }
+  }
 
+  return [];
 }
 
 updateArrayofObjects = (updateFor, source) =>{

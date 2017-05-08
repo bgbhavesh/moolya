@@ -19,11 +19,13 @@ let FunderPortfolioSchema = `
         index: Int
     }
     
-    type AreaofInterest{
-        industryType:String,
+    type AreaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
     
     type SocialLinks{
@@ -135,7 +137,7 @@ let FunderPortfolioSchema = `
         investments         : [Investments],
         principal           : [Principal],
         team                : [Team],
-        areaofInterest      : [AreaofInterest],
+        areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
     }
   
@@ -152,11 +154,13 @@ let FunderPortfolioSchema = `
         index: Int
     }
 
-    input areaofInterest{
-        industryType:String,
+    input areaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
 
     input socialLinks{
@@ -268,7 +272,7 @@ let FunderPortfolioSchema = `
         investments         : [investments],
         principal           : [principal],
         team                : [team],
-        areaofInterest      : [areaofInterest],
+        areaOfInterest      : [areaOfInterest],
         successStories      : [successStories]
     }
     
@@ -277,7 +281,7 @@ let FunderPortfolioSchema = `
         fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
         fetchFunderPrincipal(portfoliodetailsId:String!):Principal
         fetchFunderTeam(portfoliodetailsId:String!):Team
-        fetchFunderAreaofInterest(portfoliodetailsId:String!):Team
+        fetchFunderAreaOfInterest(portfoliodetailsId:String!):[AreaOfInterest]
         fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
     }
     

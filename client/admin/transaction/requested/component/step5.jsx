@@ -68,14 +68,17 @@ export default class Step5 extends React.Component {
     let selectedDocs = this.state.selectedFiles
     let selectedDocType = this.state.selectedDocTypeFiles
     const response = await approvedStausForDocuments(selectedDocs, selectedDocType, registrationId);
-    if (response) {
+    if (response.success) {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
       toastr.success("Selected Documents Approved Successfully")
     }
     else{
-      toastr.error("please select kyc documents")
+      this.setState({selectedFiles: []})
+      this.setState({selectedDocTypeFiles:[]})
+      this.props.getRegistrationKYCDetails();
+      toastr.error(response.result)
     }
   }
 
@@ -134,13 +137,16 @@ export default class Step5 extends React.Component {
     let selectedDocs = this.state.selectedFiles
     let selectedDocType = this.state.selectedDocTypeFiles
     const response = await rejectedStausForDocuments(selectedDocs, selectedDocType, registrationId);
-    if (response) {
+    if (response.success) {
       this.setState({selectedFiles: []})
       this.setState({selectedDocTypeFiles:[]})
       this.props.getRegistrationKYCDetails();
       toastr.success("Selected Documents Rejected Successfully")
     }else{
-      toastr.error("please select kyc documents")
+      this.setState({selectedFiles: []})
+      this.setState({selectedDocTypeFiles:[]})
+      this.props.getRegistrationKYCDetails();
+      toastr.error(response.result)
     }
   }
 

@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import { render } from 'react-dom';
-import MlAppIdeatorIdeas from '../../ideator/components/MlAppIdeatorIdeas'
+import MlAppIdeatorIdeas from '../../ideators/components/MlAppIdeatorIdeas'
 
 export default class MlPortfolioLanding extends Component {
   constructor(props){
@@ -15,7 +15,7 @@ export default class MlPortfolioLanding extends Component {
   render(){
       let user = Meteor.user();
       let userCommunity =  ""
-      _.each(user.profile.externalUserProfile, function (profile) {
+      _.each(user.profile.externalUserProfiles, function (profile) {
           if(profile.isDefault){
               userCommunity = profile.communityDefName
           }

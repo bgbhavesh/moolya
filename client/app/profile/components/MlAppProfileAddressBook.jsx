@@ -19,7 +19,7 @@ export default class MlAppProfileAddressBook extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false
+      loading: true
     }
     this.findAddressBook.bind(this);
     return this;
@@ -33,9 +33,9 @@ export default class MlAppProfileAddressBook extends React.Component {
   async findAddressBook(){
     const response = await findAddressBookActionHandler();
     if(response){
-      this.setState({loading:false,emailInfo:response.emailInfo, addressInfo:response.addressInfo, contactInfo:response.contactInfo});
+      this.setState({data:response, loading:false});
     }else {
-      this.setState({loading:false})
+      this.setState({loading:false, data:null})
     }
   }
 
@@ -45,8 +45,14 @@ export default class MlAppProfileAddressBook extends React.Component {
   }
 
   render() {
+    const showLoader=this.state.loading;
+    let clusterId=this.state.data?this.state.data.clusterId:'';
+    let contactInfo= this.state.data?this.state.data.contactInfo:''
+    let emailInfo= this.state.data?this.state.data.emailInfo:''
+    let addressInfo = this.state.data?this.state.data.addressInfo:''
     return (
       <div className="admin_main_wrap">
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
         <div className="admin_padding_wrap">
           <h2>Address Book</h2>
           <div className="main_wrap_scroll">
@@ -63,13 +69,13 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Contact Number
                       </div>
-                      <AppContactDetails />
+                      <AppContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}/>
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Email ID
                       </div>
-                      <AppEmailDetails />
+                      <AppEmailDetails clusterId={clusterId} emailInfoDetails={emailInfo}/>
                     </div>
                   </form>
                 </div>
@@ -79,14 +85,14 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Address
                       </div>
-                      <AppAddressDetails />
+                      <AppAddressDetails clusterId={clusterId} addressInfoDetails={addressInfo}/>
                     </div>
                   </form>
                 </div>
               </div>
             </ScrollArea>
           </div>
-        </div>
+        </div>)}
       </div>
     )
   }

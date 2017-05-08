@@ -1,6 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"registrationInfoTable",
   module:"registrationInfo",//Module name for filter.
@@ -11,6 +12,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  filter:true,
+  filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "firstName", title: "Name",dataSort:true},

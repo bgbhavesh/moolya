@@ -16,6 +16,7 @@ export async function findAddressBookActionHandler() {
           emailId
           emailIdType
           emailIdTypeName
+          index
         }
         addressInfo {
           addressType
@@ -30,12 +31,14 @@ export async function findAddressBookActionHandler() {
           addressState
           addressCountry
           addressPinCode
+          index
         }
         contactInfo {
           numberType
           numberTypeName
           countryCode
           contactNumber
+          index
         }
       }
     }

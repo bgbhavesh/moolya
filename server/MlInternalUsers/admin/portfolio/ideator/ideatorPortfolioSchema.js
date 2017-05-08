@@ -73,8 +73,10 @@ let ideatorPortfolioSchema = `
         profilePic:String
     }
     type ideasObject{
+        _id:String
         title:String,
         isIdeasTitlePrivate:Boolean,
+        portfolioId:String
         description:String,
         isIdeasPrivate:Boolean,
         isActive:Boolean
@@ -270,6 +272,7 @@ let ideatorPortfolioSchema = `
     }
     
     type Idea{
+        _id:String
         userId:String,
         portfolioId:String,
         title:String,
@@ -289,7 +292,7 @@ let ideatorPortfolioSchema = `
     
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
-        fetchIdeatorPortfolioIdeas(portfoliodetailsId:String!):ideasObject
+        fetchIdeatorPortfolioIdeas(ideaId:String!):ideasObject
         fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
         fetchIdeatorPortfolioAudience(portfoliodetailsId:String!): audienceInfo
         fetchIdeatorPortfolioLibrary(portfoliodetailsId:String!): libraryInfo
@@ -312,7 +315,7 @@ let ideatorPortfolioSchema = `
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
-        updateIdea(idea:idea):response
+        updateIdea(ideaId:String, idea:idea):response
     }
 `
 

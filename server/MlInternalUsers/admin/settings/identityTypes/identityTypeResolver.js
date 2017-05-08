@@ -7,3 +7,8 @@ MlResolver.MlQueryResolver['FetchIdentityTypes'] = (obj, args, context, info) =>
   return result;
 }
 
+MlResolver.MlQueryResolver['FetchCommunityBasedIdentity'] = (obj, args, context, info) => {
+  let result=MlIdentityTypes.find({"$and": [{communities: args.communityId, isActive: true}]}).fetch()||[];
+  return result;
+}
+

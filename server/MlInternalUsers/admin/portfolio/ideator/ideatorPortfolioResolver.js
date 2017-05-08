@@ -217,11 +217,9 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
     return {};
 }
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('ideas')) {
-      return ideatorPortfolio['ideas'];
-    }
+  if(args.ideaId){
+    let ideatorPortfolio = MlIdeas.findOne({"_id": args.ideaId})
+      return ideatorPortfolio;
   }
 
   return {};
@@ -312,17 +310,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                 return response;
             }
 
-            const hashedToken = Accounts._hashLoginToken(context.loginToken)
-            user = Meteor.users.findOne({'services.resume.loginTokens.hashedToken': hashedToken})
-            // let profile = _.find(user.profile.externalUserProfiles, {isDefault:true})
-            // if(!profile){
-            //     let code = 400;
-            //     let response = new MlRespPayload().errorPayload("No Default Profile", code);
-            //     return response;
-            // }
-
-            // As user cant set isDefalut profile, adding this code
-            let profile = user.profile.externalUserProfiles[0];
+            let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
             if(!profile){
                 let code = 400;
                 let response = new MlRespPayload().errorPayload("No Profile Found", code);
@@ -402,6 +390,18 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
+  if(args.idea) {
+    var idea = MlIdeas.findOne({"_id":args.ideaId})
+    var updatedIdea = args.idea;
+    if(idea){
+      let ret = MlIdeas.update({"_id": args.ideaId}, {$set: updatedIdea}, {upsert: true})
+      if (ret) {
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        return response;
+      }
+    }
+  }
 }
 
 MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {

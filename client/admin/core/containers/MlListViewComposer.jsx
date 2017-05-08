@@ -14,7 +14,7 @@ export default class  MlListViewComposer extends Component {
       forceFetch: true,
       variables: {
         offset: 0,
-        limit: config.sizePerPage||100,   //config.sizePerPage|| 10
+        limit: config.sizePerPage||50,   //config.sizePerPage|| 10
         context:null,
         searchSpec:null,
         fieldsData:config.fieldsData||null,

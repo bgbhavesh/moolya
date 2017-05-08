@@ -24,7 +24,7 @@ let moolya = `
 //MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],moolya]);
 
 let search = `
-union SearchResult = Cluster | Chapter | SubChapter | Community | Department | SubDepartment | Requests | Countries | States | Cities | UserTypes | Transaction | RoleTypes | DocumentTypes | DocumentFormats | KycCategories | DocumentMapping | Template | BackendUsers | Industry | Specification | Profession | Entity | StageOfCompany | BusinessType | Citizenship | LookingFor | Assets | Technologies | FundingType | Roles | ProcessType | Tax | taxation | Title | Regional | Language | DateAndTime | NumericalFormat | AddressType | CompanyType | Gender | SocialLinks | EmployeeType | EmailType | ContactType | RegistrationInfo | TemplateDetails | TemplateAssignment | Hierarchy | Portfoliodetails | Award
+union SearchResult = Cluster | Chapter | SubChapter | Community | Department | SubDepartment | Requests | Countries | States | Cities | UserTypes | Transaction | RoleTypes | DocumentTypes | DocumentFormats | KycCategories | DocumentMapping | Template | BackendUsers | Industry | Specification | Profession | Entity | StageOfCompany | BusinessType | Citizenship | LookingFor | Assets | Technologies | FundingType | Roles | ProcessType | Tax | taxation | Title | Regional | Language | DateAndTime | NumericalFormat | AddressType | CompanyType | Gender | SocialLinks | EmployeeType | EmailType | ContactType | RegistrationInfo | TemplateDetails | TemplateAssignment | Hierarchy | Portfoliodetails | Award | Filters
 
 input SearchGenericSpec{
   filter:[GenericFilter],
@@ -33,7 +33,9 @@ input SearchGenericSpec{
 
 input GenericFilter {
    fieldName: String,
-   value: String
+   value: String,
+   fieldType:String,
+   operator:String
 }
 
 input SortFilter {

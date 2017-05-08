@@ -184,12 +184,13 @@ let BackEndUser = `
         isActive          : Boolean,
         isChapterAdmin    : Boolean,
         InternalUprofile  : InternalUprofile,
-        externalUserProfile:up
+        externalUserProfiles:up
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
         dateOfBirth: String,
-        genderType: String
+        genderType: String,
+        profileImage: String
     }
     
     input userObject{

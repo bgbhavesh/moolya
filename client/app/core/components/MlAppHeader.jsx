@@ -10,20 +10,27 @@ export default class MlAppHeader extends Component {
     this.state = {}
     return this;
   }
-
-  componentDidMount() {
-    var WinHeight = $(window).height();
+  componentDidUpdate(){
     var WinWidth = $(window).width();
-    $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
-    $('.ml_app_profile h1').click(function () {
-      $(this).parent('.ml_app_profile').toggleClass('profile_open');
-    });
-    $("#notification").popover({
-      'title': 'Notifications',
-      'html': true,
-      'placement': 'bottom',
-      'content': $(".ml_app_notification").html()
-    });
+    if(WinWidth > 768){
+    $(".app_menu,.app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
+  }
+  }
+  componentDidMount() {
+      var WinHeight = $(window).height();
+      var WinWidth = $(window).width();
+      $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
+      $('.ml_app_profile h1').click(function () {
+          $(this).parent('.ml_app_profile').toggleClass('profile_open');
+      });
+      $("#notification").popover({
+          'title': 'Notifications',
+          'html': true,
+          'placement': 'bottom',
+          'content': $(".ml_app_notification").html()
+      });
+
+
   }
 
   logoutUser() {
@@ -65,7 +72,7 @@ export default class MlAppHeader extends Component {
             <li data-toggle="tooltip" title="Log as" data-placement="right"><a href="#"><img className="profile-img"
                                                                                              src="/images/2.png"/></a>
             </li>
-            <li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchProfile"><img
+            <li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/app/appSwitchProfile"><img
               className="profile-img" src="/images/3.png"/></a></li>
 
             <li data-toggle="tooltip" title="Register As" data-placement="right"><a href="/app/myProfile/registerAs"><img

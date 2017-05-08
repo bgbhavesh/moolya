@@ -9,7 +9,7 @@ export default class MlListView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sizePerPage: 5,
+      sizePerPage: 50,
       pageNumber: 1,
       sort: null,
       pubSelector: null
@@ -35,7 +35,8 @@ export default class MlListView extends Component {
       }
       if (hasQueryOptions) {
         let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
-        let extendedVariables = _.extend(dynamicQueryOptions);
+        // let extendedVariables = _.extend(dynamicQueryOptions);
+        let extendedVariables = _.merge(dynamicQueryOptions, variables);
         this.props.fetchMore(extendedVariables);
       }
       if(this.state.searchValue!==nextState.searchValue){
@@ -79,7 +80,8 @@ export default class MlListView extends Component {
   }
 
   onAlphaSearchChange(alpha){
-    alert("selected alphabet is "+alpha);
+    //alert("selected alphabet is "+alpha);
+    this.setState({searchValue: alpha})
   }
 
   onSizePerPageList(sizePerPage) {
@@ -136,7 +138,7 @@ export default class MlListView extends Component {
           <div className="col-md-12">
               {ListComponent}
           </div>
-          {/*<Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>*/}
+          <Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>
         </div>
         </ScrollArea>
       </div>

@@ -31,13 +31,6 @@ import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate
 import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
 import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
 import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
-import MlIdeatorDetails from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorDetails'
-import MlIdeatorLookingFor from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorLookingFor'
-import MlIdeatorProblemsAndSolutions from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorProblemsAndSolutions'
-import MlIdeatorAudience from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorAudience'
-import MlIdeatorLibrary from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorLibrary'
-import MlIdeatorStrategyAndPlanning from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorStrategyAndPlanning'
-import MlIdeatorIntellectualPlanningAndTrademark from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 
 import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
 import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'

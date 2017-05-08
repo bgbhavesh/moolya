@@ -18,7 +18,7 @@ let externalUser = `
         cluster:String,
         chapter:String,
         community:String,
-        externalUserProfile:externalUserProfile
+        externalUserProfiles:externalUserProfile
     }
 
     input userPortfolios{
@@ -52,6 +52,7 @@ let externalUser = `
       numberTypeName    : String
       countryCode       : String
       contactNumber     : String
+      index     : String
         
     }
     
@@ -59,6 +60,7 @@ let externalUser = `
       emailIdType        : String
       emailIdTypeName        : String
       emailId           : String
+      index     : String
      }
      
      type AddressInfoSchema{
@@ -74,6 +76,7 @@ let externalUser = `
         addressState        :  String
         addressCountry      : String
         addressPinCode      : String
+        index     : String
      }
      
      type SocialLinkInfoSchema{
@@ -92,16 +95,60 @@ let externalUser = `
        socialLinkInfo     : [SocialLinkInfoSchema]
     }
     
+    type externalUserProfiles{
+        registrationId:String,
+        countryName:String,
+        countryId:String,
+        cityName:String,
+        cityId:String,
+        mobileNumber:String,
+        clusterId:String,
+        clusterName:String,
+        chapterId:String,
+        chapterName:String,
+        subChapterId:String,
+        subChapterName:String,
+        communityId:String,
+        communityName:String,
+        communityType:String,
+        communityName:String,
+        communityDefCode:String,
+        communityDefName:String,
+        communityType:String,
+               
+        isDefault:Boolean,
+        isActive:Boolean,
+        accountType:String,
+        isProfileActive:Boolean,
+        optional:Boolean,
+        userType :String,
+        identityType:String
+    }
+    
     input externalUserProfile{
         firstName:String,
         lastName:String,
         middleName:String,
         userProfiles:[userProfiles]
     }
-
+    input contactObj {
+      numberType        : String
+      numberTypeName    : String
+      countryCode       : String
+      contactNumber     : String
+      index     : String
+    }
+    
+    type Mutation{
+      updateContactNumber(contactDetails:contactObj):response
+      deActivateUserProfile(profileId:String!):response
+      setDefaultProfile(profileId:String!):response
+    }
+    
     type Query{
         fetchIdeatorUsers:response
         findAddressBook:externalUserAdditionalInfoSchema
+        fetchUserProfiles:[externalUserProfiles]
     }
 `
 

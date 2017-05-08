@@ -6,11 +6,11 @@ import MlMapViewContainer from "../../admin/core/containers/MlMapViewContainer"
 import MoolyaMapView from "../../commons/components/map/MoolyaMapView"
 import MlViews from "../../admin/core/components/MlViews";
 import {mlBrowserDashboardMapConfig} from '../../app/dashboard/config/mlBrowserDashboardConfig'
-import MlAppIdeatorLanding from '../../../client/app/ideator/components/MlAppIdeatorLanding'
-import MlAppIdeatorTabs from '../../../client/app/ideator/components/MlAppIdeatorTabs'
+import MlAppIdeatorLanding from '../../../client/app/ideators/components/MlAppIdeatorLanding'
+import MlAppIdeatorTabs from '../../../client/app/ideators/components/MlAppIdeatorTabs'
 import MlAppStartupLanding from '../../../client/app/startup/components/MlAppStartupLanding'
 import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartupTabs'
-import  MlAppIdeatorEditTabs from '../../../client/app/ideator/components/MlAppIdeatorEditTabs'
+import  MlAppIdeatorEditTabs from '../../../client/app/ideators/components/MlAppIdeatorEditTabs'
 import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
 
 // import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
@@ -19,14 +19,14 @@ import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
-import MlAppIdeatorAddIdea from '../../app/ideator/components/MlAppIdeatorAddIdea'
+import MlAppIdeatorAddIdea from '../../app/ideators/components/MlAppIdeatorAddIdea'
 import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
 
 //profile
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
 import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
-
+import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile';
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 export const appSection = FlowRouter.group({
@@ -63,6 +63,14 @@ appSection.route('/myProfile', {
   }
 });
 
+appSection.route('/appSwitchProfile', {
+  name: 'appSwitchProfile',
+  action(){
+    mount(AppLayout,{appContent:<MlAppSwitchProfile/>, isProfileMenu:true})
+  }
+});
+
+
 appSection.route('/addressBook', {
   name: 'addressBook',
   action(){
@@ -98,16 +106,16 @@ appSection.route('/ideator', {
       mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
   }
 });
-appSection.route('/portfolio/view/:id/', {
+appSection.route('/portfolio/view/:portfolioId/:communityType', {
   name: 'portfolio',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>, isProfileMenu:true})
   }
 });
-appSection.route('/portfolio/edit/:id/', {
+appSection.route('/portfolio/edit/:portfolioId/:communityType', {
   name: 'portfolio',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={false} config={params.id}/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={false} config={params.portfolioId} communityType={params.communityType}/>, isProfileMenu:true})
   }
 });
 appSection.route('/portfolio/addIdea', {
@@ -119,10 +127,10 @@ appSection.route('/portfolio/addIdea', {
 
 
 // appSection.route('/ideator/viewPortfolio/:id/:communityType', {
-appSection.route('/ideator/:id/', {
-  name: 'ideator_portfolio_view',
+appSection.route('/:communityType/:portfolioId', {
+  name: 'ideator',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.id}/>, isProfileMenu:false})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>, isProfileMenu:false})
     // mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
     // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }

@@ -35,7 +35,7 @@ export default class MlMyProfile extends React.Component{
       genderStateOthers: " ",
       dateOfBirth:" ",
       genderSelect:" ",
-      responsePic:" "
+      responsePic:" ",
       // Details:{
       //   firstName: " ",
       //   middleName:" ",
@@ -52,6 +52,7 @@ export default class MlMyProfile extends React.Component{
     this.displayNameUpdation.bind(this);
     this.updateProfile.bind(this);
     this.genderSelect = this.genderSelect.bind(this);
+    this.onfoundationDateSelection.bind(this);
    // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
    // this.firstNameUpdation.bind(this);
@@ -133,7 +134,7 @@ async showImage(temp){
       lastName : this.state.lastName,
       userName: this.state.userName,
       genderType:this.state.genderSelect,
-      dateOfBirth:this.refs.dob.value,
+      dateOfBirth:this.state.dateOfBirth,
       userId : Meteor.userId()
   }
 
@@ -194,6 +195,12 @@ async showImage(temp){
     }
   }
 
+  onfoundationDateSelection(event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({loading: false, dateOfBirth: value});
+    }
+  }
 
   async handleSuccess() {
     this.resetBackendUers();
@@ -302,11 +309,18 @@ async showImage(temp){
                       <input type="password" placeholder="Confirm Password" className="form-control float-label" id=""/>
                       <FontAwesome name='eye' className="password_icon"/>
                     </div>
-                    <div className="form-group">
-                      <input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label" defaultValue={this.state.dateOfBirth} disabled="true" />
-                      <FontAwesome name='calendar' className="password_icon" />
+                    {/*<div className="form-group">*/}
+                      {/*<input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label"  disabled="true" />*/}
+                      {/*<FontAwesome name='calendar' className="password_icon" />*/}
 
+                    {/*</div>*/}
+
+                    <div className="form-group">
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onfoundationDateSelection.bind(this)} />
+                      <FontAwesome name="calendar" className="password_icon"/>
                     </div>
+
+
                     <div className="form-group">
                       <div className="input_types">
                         <label>Gender : </label>

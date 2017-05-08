@@ -280,7 +280,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                   <div className="list_block notrans funding_list">
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                    <img src="../images/p_5.jpg"/>
+                                    <img src="/images/def_profile.png"/>
                                     <div onClick={that.onPrincipalTileClick.bind(that, idx)}><p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
                                     <div className="ml_icon_btn">
                                       <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
@@ -316,7 +316,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                 <div className="list_block notrans funding_list">
                                   <FontAwesome name='lock'/>
                                   <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                  <img src="../images/p_5.jpg"/>
+                                  <img src="/images/def_profile.png"/>
                                   <div onClick={that.onTeamTileClick.bind(that, idx)}><p>{team.firstName}</p><p className="small">{team.designation}</p></div>
                                   <div className="ml_icon_btn">
                                     <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>

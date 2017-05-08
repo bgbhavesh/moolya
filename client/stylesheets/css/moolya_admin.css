@@ -49,7 +49,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .moolya_admin .admin_menu{width: 94px;min-height: 400px;padding: 0px;/*overflow-y:auto;*/float:left;background: #fff;}
 .admin_menu ul{padding:20px 6px 0px 6px;}
 .admin_menu ul .menu_item a{color:#000;text-decoration: none;}
-.admin_menu ul .menu_item .menu_in{position: absolute;/*left: 50%;transform: translateX(-50%);*/z-index: 1;}
+.admin_menu ul .menu_item .menu_in{position: absolute;/*left: 50%;transform: translateX(-50%);*/z-index: 1; line-height: 15px;}
 .admin_menu ul .menu_item .menu_in img{margin-bottom: 5px;margin-top: -8px;}
 .admin_menu ul .menu_item:nth-of-type(2) .menu_in img{margin-bottom: -3px; margin-top: -9px;}
 .admin_menu ul .menu_item {background: #ffe144;display: inline-block;height: 102px;margin-left: 0px;margin-top: 6px;position: relative;width: 82px;padding-top: 15px;color: #000;text-align: center;cursor: pointer;font-size: 14px;}
@@ -215,7 +215,7 @@ input:checked + .slider:before {-webkit-transform: translateX(34px);-ms-transfor
 .ml_profile.profile_open>ol>li:nth-of-type(3) {right: 126px;top: 103px;}
 .ml_profile.profile_open>ol>li:nth-of-type(4) {right: 71px;top: 134px;}
 .ml_profile.profile_open>ol>li:nth-of-type(5) {right: 10px;top: 150px;}
-.filter_table{text-shadow:none;width: calc(100% - 20px);margin-top: 22px;height: auto;overflow: hidden;position: absolute;z-index:1;transition: .2s linear;}
+.filter_table{text-shadow:none;width: calc(100% - 20px);margin-top: 22px;height: auto;/*overflow: auto;*/position: absolute;z-index:1;transition: .2s linear;}
 .filter_table.filter_hide{height: 16px;}
 .filter_table .panel{border-radius: 0px 0px 4px 4px;border-width:1px;max-height: 200px;margin-bottom: 0px;transition: .2s linear;padding-top: 20px;background: #ffe144;border-color: #d9bf35;}
 .filter_table.filter_hide .panel{height: 0px;overflow:hidden;border-width:0px;padding: 0px;background: transparent;}

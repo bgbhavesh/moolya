@@ -23,7 +23,8 @@ class MlAddRole extends React.Component{
       assignModulesToRoles:[],
       selectedUserType:'',
       selectedBackendUser:'Internal User',
-      selectedSubChapter:''
+      selectedSubChapter:'',
+      selectedCommunity:''
     }
     this.addEventHandler.bind(this);
     return this;
@@ -137,6 +138,7 @@ class MlAddRole extends React.Component{
   data:fetchActiveSubChapters{label:subChapterName,value:_id}
 }
 `;
+
 
    return (
       <div className="admin_main_wrap">

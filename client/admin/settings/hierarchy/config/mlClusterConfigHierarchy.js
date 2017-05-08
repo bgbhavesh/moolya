@@ -48,7 +48,7 @@ const mlClusterListConfig=new MlViewer.View({
                     totalRecords
                     data{
                      ...on Cluster{
-                                id:_id
+                                 id:_id
                                 about
                                 displayName
                                 latitude

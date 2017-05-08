@@ -57,15 +57,16 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getSuccessStoriesDetails(details){
     let data = this.state.funderPortfolio;
-    data['portfolioIdeatorDetails']=details;
-    this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    data['successStories'] = details;
+    this.setState({funderPortfolio : data})
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
   }
 
-  getAboutus(details,tabName){
+  getAboutus(details){
     let data = this.state.funderPortfolio;
-    data[tabName] = details;
-    this.props.getPortfolioDetails({funderPortfolio : data});
+    data['funderAbout']=details;
+    this.setState({funderPortfolio : data})
+    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio});
   }
 
   getInvestmentsDetails(details){
@@ -87,10 +88,10 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getAreaOfInterestDetails(details){
     let data = this.state.funderPortfolio;
-    if(data && !data.awardsRecognition){
-      data['awardsRecognition']=[];
+    if(data && !data.areaOfInterest){
+      data['areaOfInterest']=[];
     }
-    data['awardsRecognition'] = details;
+    data['areaOfInterest'] = details;
     this.setState({funderPortfolio : data})
     this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
   }

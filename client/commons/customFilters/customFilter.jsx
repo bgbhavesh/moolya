@@ -173,6 +173,7 @@ export default class MlCustomFilter extends Component {
     let booleanSelect = false;
     let listOptions = null;
     let selectedValue = that.state.selectedOption?that.state.selectedOption:""
+    let restrictedFilterStatus = false
 
     let filterListQuery=gql`query($moduleName:String!,$list:[String]){  
       data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list) {
@@ -193,6 +194,7 @@ export default class MlCustomFilter extends Component {
                 }
                 if(options.fieldType == "Date"){
                   dateSelect = true
+                  restrictedFilterStatus = options.isRestrictedFilter;
                 }else{
                   dateSelect = false
                 }
@@ -203,9 +205,11 @@ export default class MlCustomFilter extends Component {
                 }
                 if(options.fieldType == "String"){
                   stringSelect = true
+
                 }else{
                   stringSelect = false
-                }
+                 }
+
                 if(options.fieldType == "Boolean"){
                   booleanSelect = true
                 }else{
@@ -214,11 +218,12 @@ export default class MlCustomFilter extends Component {
                 if(options && options.fieldList && options.fieldCollectionName){
                   listOptions={options: { variables: {moduleName:options.fieldCollectionName,list:options.fieldList}}}
                 }
+
                 return(<span key={id}>
-                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control"}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
-                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control"}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
-                  {listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,options.fieldName)} isDynamic={true} id={'list'+id}/></div>:""}
-                  {stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)}/></div>:""}</span>)
+                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
+                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
+                  {listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,options.fieldName)} isDynamic={true} id={'list'+id} disabled={options.isRestrictedFilter}/></div>:""}
+                  {stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)} disabled={options.isRestrictedFilter}/></div>:""}</span>)
 
                 })}
               {/*  <div className="col-lg-3">

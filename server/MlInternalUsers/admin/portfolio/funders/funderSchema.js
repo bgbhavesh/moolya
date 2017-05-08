@@ -7,21 +7,31 @@ import MlSchemaDef from '../../../../commons/mlSchemaDef';
 let FunderPortfolioSchema = `
 
     type SuccessStories{
-          date:String,
-          storyImage:String,
-          storyTitle:String,
-          isStoryTitlePrivate:Boolean,
-          description:String,
-          isDescPrivate:Boolean,
-          makePrivate:Boolean,
-          isActive:Boolean
+        date:String,
+        isDatePrivate : Boolean
+        storyImage:String,
+        storyTitle:String,
+        isStoryTitlePrivate:Boolean,
+        description:String,
+        isDescPrivate:Boolean,
+        isPrivate:Boolean,
+        isActive:Boolean
+        index: Int
+        logo:imagesTypeSchema,
     }
     
-    type AreaofInterest{
-        industryType:String,
+     type imagesTypeSchema{
+        fileUrl   : String,
+        fileName  : String
+    }
+    
+    type AreaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
     
     type SocialLinks{
@@ -129,30 +139,34 @@ let FunderPortfolioSchema = `
     
     type FunderPortfolio{
         portfolioDetailsId  : String,
-        funderAbout         : [FunderAbout],
+        funderAbout         : FunderAbout,
         investments         : [Investments],
         principal           : [Principal],
         team                : [Team],
-        areaofInterest      : [AreaofInterest],
+        areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
     }
   
     input successStories{
         date:String,
+        isDatePrivate : Boolean
         storyImage:String,
         storyTitle:String,
         isStoryTitlePrivate:Boolean,
         description:String,
         isDescPrivate:Boolean,
-        makePrivate:Boolean,
+        isPrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
 
-    input areaofInterest{
-        industryType:String,
+    input areaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
 
     input socialLinks{
@@ -260,11 +274,11 @@ let FunderPortfolioSchema = `
     
     input funderPortfolio{
         portfolioDetailsId  : String,
-        funderAbout         : [funderAbout],
+        funderAbout         : funderAbout,
         investments         : [investments],
         principal           : [principal],
         team                : [team],
-        areaofInterest      : [areaofInterest],
+        areaOfInterest      : [areaOfInterest],
         successStories      : [successStories]
     }
     
@@ -273,8 +287,8 @@ let FunderPortfolioSchema = `
         fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
         fetchFunderPrincipal(portfoliodetailsId:String!):Principal
         fetchFunderTeam(portfoliodetailsId:String!):Team
-        fetchFunderAreaofInterest(portfoliodetailsId:String!):Team
-        fetchFunderSuccessStories(portfoliodetailsId:String!):SuccessStories
+        fetchFunderAreaOfInterest(portfoliodetailsId:String!):[AreaOfInterest]
+        fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
     }
     
     type Mutation{

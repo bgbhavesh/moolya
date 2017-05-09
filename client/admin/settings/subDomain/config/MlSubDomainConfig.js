@@ -46,12 +46,7 @@ const mlSubDomainTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/addSubDomain")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   sizePerPage:5,
   graphQlQuery:gql`

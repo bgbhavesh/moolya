@@ -87,8 +87,7 @@ export default class MlCustomFilter extends Component {
 
 
       this.setState({"filterQueries" : queries})
-      console.log("********************************************");
-      console.log(this.state.filterQueries);
+
     }
 
 

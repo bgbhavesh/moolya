@@ -30,8 +30,6 @@ export default class MlEditFilter extends React.Component{
 
   async fetchSelectedFilterData(){
     const response= await fetchSelectedFilterDataActionHandler(this.props.config);
-    console.log("----------------------------------------------------");
-    console.log(response);
     this.setState({loading:false,data : response});
   }
   getassignFilterToClusters(details){

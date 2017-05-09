@@ -604,7 +604,7 @@ if(Meteor.isServer){
                     "dynamicLink" : true,
                     "dynamicLinkHandler" : "",
                     "subMenusId":"transaction_Registration",
-                    //"subMenuMappingId":"transaction_registration_requested_edit"
+                    "subMenuMappingId":"transaction_registration_requested"
                   }
                 ]
               },

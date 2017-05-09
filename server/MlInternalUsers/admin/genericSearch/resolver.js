@@ -768,7 +768,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlFilters.find(query,findOptions).fetch();
     totalRecords=MlFilters.find(query,findOptions).count();
   }
-  if(args.module=="Funders"){
+  if(args.module=="FunderPortfolio"){
     data= MlFunderPortfolio.find(query,findOptions).fetch();
     totalRecords=MlFunderPortfolio.find(query,findOptions).count();
   }

@@ -9,7 +9,8 @@ let FiltersCatalogSchema = `
     {
       name : String
       type : String
-      collectionName : String
+      resolverName : String
+      isDynamic : Boolean
     }
     type fields
     {

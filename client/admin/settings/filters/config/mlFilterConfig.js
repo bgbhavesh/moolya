@@ -59,19 +59,19 @@ const mlFilterTableConfig=new MlViewer.View({
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
   actionConfiguration:[
-    /*{
+    {
       actionName: 'edit',
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editDepartment/"+data.id)
+          FlowRouter.go("/admin/settings/editFilter/"+data.id)
         }
         else{
-          toastr.error("Please select a department");
+          toastr.error("Please select a filter");
         }
       }
 
-    },*/
+    },
     {
       showAction: true,
       actionName: 'add',

@@ -9,9 +9,10 @@ let Filters = `
       fieldName : String
       displayName : String
       isActive : Boolean
+      isDynamic:Boolean
       isRestrictedFilter : Boolean
       fieldType : String
-      fieldCollectionName : String
+      fieldResolverName:String
       fieldList : [String]
     }
     
@@ -38,9 +39,10 @@ let Filters = `
       fieldName : String
       displayName : String
       isActive : Boolean
+      isDynamic:Boolean
       isRestrictedFilter : Boolean
       fieldType : String
-      fieldCollectionName : String
+      fieldResolverName : String
       fieldList : [String]
     }
     
@@ -67,6 +69,13 @@ let Filters = `
        filterFields:[filterField]
     }
     
+    type GenericFilter {
+         fieldName: String,
+         value: String,
+         fieldType:String,
+         operator:String
+    }
+    
     type Mutation{
         CreateFilter(filterObject:filter):response
     }
@@ -75,7 +84,8 @@ let Filters = `
         findFilters:[Filters]
         fetchModuleFilters(moduleName:String) : [Filters]
         fetchFilterListDropDown(moduleName:String!):[FiltersDropData]
-        fetchSelectedFilterListDropDown(moduleName:String!,list:[String]):[FiltersDropData]
+      fetchSelectedFilterListDropDown(moduleName:String!,list:[String],filteredListId : [GenericFilter]):[FiltersDropData]
+        fetchSelectedFilterData(id:String) : Filters
     }
 `
 

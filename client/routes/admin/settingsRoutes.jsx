@@ -1057,5 +1057,12 @@ adminSection.route('/settings/addFilter', {
   }
 });
 
+adminSection.route('/settings/editFilter/:id', {
+  name: 'settings_EditFilter',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditFilter config={params.id}/>})
+  }
+});
+
 
 //  @End

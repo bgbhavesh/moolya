@@ -11,7 +11,7 @@ if(Meteor.isServer){
       {
         name:"clusterId",
         type:'List',
-        collectionName : "Clusters"
+        resolverName : "Clusters"
       }]
   }});
   MlFiltersCatalog.upsert({
@@ -22,21 +22,34 @@ if(Meteor.isServer){
       {
         name:"createdDate",
         type:'Date',
-        collectionName : " "
+        resolverName : " "
       },
       {
         name:"registrationInfo.firstName",
         type:'String',
-        collectionName : " "
+        resolverName : " "
       },
       {
         name:"registrationInfo.clusterId",
         type:'List',
-        collectionName : "Clusters"
+        resolverName : "Reg_Clusters",
+        isDynamic:true
+      },
+      {
+        name:"registrationInfo.chapterId",
+        type:'List',
+        resolverName : "Gen_Chapters",
+        isDynamic:true
+      },
+      {
+        name:"registrationInfo.chapterId",
+        type:'List',
+        resolverName : "Reg_SubChapters",
+        isDynamic:true
       },
       {
         name:"status",
-        type:'Boolean',
+        type:'List',
       }
     ]
   }})

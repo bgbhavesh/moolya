@@ -73,7 +73,7 @@ export default class MlCreateRegistration extends React.Component{
       FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error(response.result);
-      FlowRouter.go("/admin/transactions/registrationRequested");
+    //  FlowRouter.go("/admin/transactions/registrationRequested");
     }
    }
 

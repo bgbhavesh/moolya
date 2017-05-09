@@ -92,7 +92,7 @@ export default class MlAddFilter extends Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/rolesList")
+          FlowRouter.go("/admin/settings/filtersList")
         }
       }
     ]

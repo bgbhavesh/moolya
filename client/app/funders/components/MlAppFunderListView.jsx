@@ -22,7 +22,7 @@ export default class MlAppFunderListView extends Component {
       </div>
     );
 
-    return (<div className="row communities_list">{list}</div>);
+    return (<div className="row funders_list">{list}</div>);
 
   }
 

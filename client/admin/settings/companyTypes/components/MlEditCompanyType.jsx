@@ -63,6 +63,7 @@ class MlEditCompanyType extends React.Component{
       isActive: this.refs.isActive.checked
     }
     const response = await updateCompanyTypeActionHandler(CmpType)
+    toastr.success("Update Successful")
     return response;
 
   }
@@ -81,7 +82,13 @@ class MlEditCompanyType extends React.Component{
       {
         showAction: true,
         actionName: 'save',
-        handler: null
+        handler:(data) => {
+          if (data) {
+            this.updateCompanyType();
+            FlowRouter.go("/admin/settings/companyTypesList")
+
+          }
+        }
       },
       {
         showAction: true,

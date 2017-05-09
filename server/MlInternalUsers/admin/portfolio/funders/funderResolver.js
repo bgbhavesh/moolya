@@ -106,15 +106,45 @@ MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context
 }
 
 MlResolver.MlQueryResolver['fetchFunderPrincipal'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('principal')) {
+      return portfolio['principal'];
+    }
+  }
 
+  return [];
 }
 
 MlResolver.MlQueryResolver['fetchFunderTeam'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('team')) {
+      return portfolio['team'];
+    }
+  }
 
+  return [];
 }
 
-MlResolver.MlQueryResolver['fetchFunderAreaofInterest'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchFunderAreaOfInterest'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('areaOfInterest')){
+      if(portfolio && portfolio['areaOfInterest']){
+        portfolio.areaOfInterest.map(function(areaOfInterest,index) {
+          if(portfolio.areaOfInterest[index]){
+            let areaOfInterestData = MlIndustries.findOne({"_id" : areaOfInterest.industryTypeId}) || {};
+            portfolio.areaOfInterest[index].industryTypeName = areaOfInterestData.industryName || "";
+          }
 
+        })
+      }
+      return portfolio['areaOfInterest'];
+    }
+  }
+
+  return [];
 }
 
 MlResolver.MlQueryResolver['fetchFunderSuccessStories'] = (obj, args, context, info) => {

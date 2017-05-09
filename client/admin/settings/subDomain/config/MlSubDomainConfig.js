@@ -7,16 +7,16 @@ const mlSubDomainTableConfig=new MlViewer.View({
   module:"SubDomain",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["Name","DisplayName","industry","about","isActive"],
-  searchFields:["Name","DisplayName","industry","about","isActive"],
+  fields:["name","displayName","industryId","about","isActive"],
+  searchFields:["name","displayName","industryId","about","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "Name", title: "Name",dataSort:true},
+    {dataField: "name", title: "Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "industry", title: "Icon",dataSort:true},
+    {dataField: "industryId", title: "Industry",dataSort:true},
     {dataField: "about", title: "About",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true},
   ],
@@ -46,22 +46,18 @@ const mlSubDomainTableConfig=new MlViewer.View({
           FlowRouter.go("/admin/settings/addSubDomain")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   sizePerPage:5,
   graphQlQuery:gql`
               query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"Technologies",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+              data:SearchQuery(module:"SubDomain",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on Technologies{
-                              technologyName
+                     ...on SubDomain{
+                              name
                               displayName
+                              industryId
                               about
                               isActive
                               id:_id

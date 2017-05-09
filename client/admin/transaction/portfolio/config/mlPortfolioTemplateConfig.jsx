@@ -9,6 +9,7 @@ import MlAppIdeatorEditTabs from '../../../../app/ideators/components/MlAppIdeat
 import MlAppIdeatorTabs from '../../../../app/ideators/components/MlAppIdeatorTabs'
 import MlFunderEditTemplate from '../component/Funder/MlFunderEditTemplate'
 import MlFunderViewTemplate from '../component/FunderView/MlFunderViewTemplate'
+import MlAppFunderViewTabs from '../../../../app/funders/components/MlAppFunderViewTabs'
 
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
@@ -128,7 +129,30 @@ const mlAppIdeatorViewExternalUserPortfolioTemplateConfig={
 //   component:MlViewStartupPortfolioTemplate
 // };
 
+// const mlAppFunderEditExternalUserPortfolioTemplateConfig={
+//   templateName:"Portfolio-Template-Funder-Edit",
+//   templateCode:"PFTFUNEDT",
+//   userType:'external',
+//   process:'Registration',
+//   subProcess:'Registration',
+//   stepCode:'PORTFOLIO',
+//   stepName:'Portfolio',
+//   component:MlAppIdeatorEditTabs
+// };
+
+const mlAppFunderViewExternalUserPortfolioTemplateConfig={
+  templateName:"Portfolio-Template-Funder-View",
+  templateCode:"PFTFUNVIW",
+  userType:'external',
+  process:'Registration',
+  subProcess:'Registration',
+  stepCode:'PORTFOLIO',
+  stepName:'Portfolio',
+  component:MlAppFunderViewTabs
+};
+
 mlRegistrationTemplates.setTemplate(mlAppIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppIdeatorViewExternalUserPortfolioTemplateConfig);
 // mlRegistrationTemplates.setTemplate(mlAppStartupEditExternalUserPortfolioTemplateConfig);
 // mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppFunderViewExternalUserPortfolioTemplateConfig);

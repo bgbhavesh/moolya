@@ -1,16 +1,16 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findTechnologyActionHandler(SubDomainId) {
+export async function findSubDomainActionHandler(SubDomainId) {
   let did = SubDomainId
   const result = await client.query({
     query: gql`
-          query  ($technologyId: String){
-              findTechnology(SubDomainId:SubDomainId){
-                  Name,
+          query  ($SubDomainId: String){
+              findSubDomain(SubDomainId:SubDomainId){
+                  name,
                   displayName,
                   about,
-                  industry,
+                  industryId,
                   isActive
               }
           }
@@ -20,6 +20,6 @@ export async function findTechnologyActionHandler(SubDomainId) {
     },
     forceFetch:true
   })
-  const id = result.data.findTechnology;
+  const id = result.data.findSubDomain;
   return id
 }

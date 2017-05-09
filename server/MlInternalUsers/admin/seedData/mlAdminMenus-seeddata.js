@@ -1811,6 +1811,44 @@ if(Meteor.isServer){
               }]
           },
           {
+            "link" : "/admin/settings/subDomainList",
+            "name" : "Sub Domain",
+            "uniqueId" : "SubDomain",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[{
+              "link": "/admin/settings/addSubDomain",
+              "name": "Add Sub Domain",
+              "uniqueId": "settings_AddSubDomain",
+              "subMenuMappingId":"settings_SubDomain",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": true,
+              "image": ""
+            },
+              {
+                "link": "/admin/settings/SubDomainList",
+                "name": "List SubDomain",
+                "uniqueId": "settings_SubDomainList",
+                "subMenuMappingId":"settings_SubDomain",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+              {
+                "link": "/admin/settings/editSubDomain",
+                "name": "Edit SubDomain",
+                "uniqueId": "settings_EditSubDomain",
+                "subMenuMappingId":"settings_SubDomain",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+          },
+          {
             "link" : "/admin/settings/fundingTypeList",
             "name" : "Funding Type",
             "uniqueId" : "settings_FundingType",

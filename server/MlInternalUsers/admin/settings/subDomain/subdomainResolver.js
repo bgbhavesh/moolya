@@ -47,12 +47,12 @@ MlResolver.MlMutationResolver['updateSelectedSubDomain'] = (obj, args, context, 
 }
 
 MlResolver.MlQueryResolver['findSubDomain'] = (obj, args, context, info) => {
-  if(args && args.technologyId){
-    return MlTechnologies.findOne({"_id":args.technologyId})
+  if(args && args.SubDomainId){
+    return MlTechnologies.findOne({"_id":args.SubDomainId})
   }
 }
 
 
-MlResolver.MlQueryResolver['fetchSubDomains'] = (obj, args, context, info) => {
-  return MlTechnologies.find({isActive : true}).fetch();
+MlResolver.MlQueryResolver['fetchIndustryDomain'] = (obj, args, context, info) => {
+  return MlSubDomain.find({industryId:args.industryId, isActive : true}).fetch();
 }

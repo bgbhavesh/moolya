@@ -20,7 +20,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
       this.setState({loading: true})
       let data = this.state.funderAreaOfInterestList;
       let getData = data[id];
-      let subDomain =getData.industryTypeName
+      let subDomain =getData.subDomainName
       this.setState({loading: false, viewCurDetail: subDomain});
   }
 
@@ -137,7 +137,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
                     <div className="investement-view-content">
                       <div className="panel panel-default panel-form-view">
                         <div className="panel-body">
-                          <p>{this.state.viewCurDetail}</p>
+                          <p>Domain : {this.state.viewCurDetail}</p>
                         </div>
                       </div>
 

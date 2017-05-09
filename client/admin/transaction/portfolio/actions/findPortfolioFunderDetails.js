@@ -216,6 +216,8 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
               industryTypeName
               domainType
               makePrivate
+              subDomainId
+              subDomainName
               isActive
               index
             }

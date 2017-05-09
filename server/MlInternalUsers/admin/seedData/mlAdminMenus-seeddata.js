@@ -1813,7 +1813,7 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/subDomainList",
             "name" : "Sub Domain",
-            "uniqueId" : "SubDomain",
+            "uniqueId" : "settings_SubDomain",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",

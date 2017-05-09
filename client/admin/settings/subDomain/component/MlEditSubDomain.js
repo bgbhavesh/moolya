@@ -69,9 +69,10 @@ class MlEditSubDomain extends React.Component{
       name: this.refs.name.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
-      industry:this.state.industry,
+      industryId:this.state.industry,
       isActive: this.refs.isActive.checked
     }
+    console.log(this.props)
 
     const response = await updateSelectedSubDomainActionHandler(this.props.config, subDomainDetails)
     return response;
@@ -105,12 +106,12 @@ class MlEditSubDomain extends React.Component{
         {showLoader===true?( <div className="loader_wrap"></div>):(
 
           <div className="admin_padding_wrap">
-            <h2>Update Technology</h2>
+            <h2>Edit Sub Domain</h2>
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
+                    {/*<input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>*/}
                     <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.name}/>
                   </div>
                   <div className="form-group">
@@ -131,7 +132,8 @@ class MlEditSubDomain extends React.Component{
                                   className="form-control float-label" selectedValue = {this.state.industry}
                                   valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={industriesquery}
                                   onSelect={this.optionsBySelectTypeOfIndustry.bind(this)}
-                                  isDynamic={true}/>
+                                  isDynamic={true} />
+                    {console.log(this.state.data)}
                   </div>
 
 

@@ -774,7 +774,15 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module=="SubDomain"){
-    data= MlSubDomain.find(query,findOptions).fetch();
+    var domain= MlSubDomain.find(query,findOptions).fetch();
+    let modArray =[]
+    _.each(domain, function(item){
+      var industryName = MlIndustries.findOne({_id:item.industryId}).industryName;
+      var obj = item;
+      obj.industryId = industryName;
+      modArray.push(obj)
+    })
+    data= modArray
     totalRecords=MlSubDomain.find(query,findOptions).count();
   }
 

@@ -15,7 +15,7 @@ export default class MlCustomFilter extends Component {
     super(props);
     this.state = {
       filterFields : [],
-      selectedOption : null,
+      selectedOption : '',
       selectedFromDate : null,
       selectedToDate : null,
       filterQueries : [],
@@ -51,9 +51,13 @@ export default class MlCustomFilter extends Component {
       this.setFilterData(fieldName,value,"Date",subType)
     }
   }
-  optionsSelected(selectedFieldName, selectedValue, callback,selObject){
-    this.setState({selectedOption : selectedValue})
+  optionsSelected(index,selectedFieldName, selectedValue, callback,selObject){
+
+    let selectedOption = "selectedOption_"+selectedFieldName;
+
+    this.setState({[selectedOption] : selectedValue})
     this.setFilterData(selectedFieldName,selectedValue,"List",null)
+
 
   }
   onInputBlur(fieldName,event){
@@ -63,25 +67,6 @@ export default class MlCustomFilter extends Component {
 
   setFilterData(selectedFieldName,selectedValue,selectedType,selectedSubType){
     let queries = this.state.filterQueries;
-  /*  if(queries.length>1){
-      queries = queries[queries.length-1];
-    }*/
-    /*if(selectedValue){
-      let selector = this.create_selector(selectedFieldName, selectedValue, selectedType,selectedSubType);
-      //only for between operator
-      if(selectedType==="Date"){
-        let query=queries[selectedFieldName]||{};
-        let updatedSelector=_.extend(query,selector);
-        selector=updatedSelector;
-      }
-      queries[selectedFieldName] = selector;
-      this.setState({"filterQueries" : queries})
-    }else{
-      if(selectedType!=="Date"){
-        let queries=_.omit(queries,selectedFieldName);
-        this.setState({"filterQueries" : queries})
-      }
-    }*/
     if(selectedValue){
 
       let selector = this.create_selector(selectedFieldName, selectedValue, selectedType,selectedSubType);
@@ -102,6 +87,8 @@ export default class MlCustomFilter extends Component {
 
 
       this.setState({"filterQueries" : queries})
+      console.log("********************************************");
+      console.log(this.state.filterQueries);
     }
 
 
@@ -111,13 +98,13 @@ export default class MlCustomFilter extends Component {
     switch(selectedType){
       case "String":
         /*select={$regex: selectedValue, $options: 'i'};*/
-        select = {"fieldName" : selectedFieldName,"value" : selectedValue,"fieldType" : selectedType,"operator" : selectedSubType}
+        select = {"fieldName" : selectedFieldName,"value" : selectedValue,"fieldType" : selectedType,"operator" : "$and"}
         return select;
         break;
       case "Number":
         /*selectedValue = Number(selectedValue);
         select =selectedValue;*/
-        select = {"fieldName" : selectedFieldName,"value" :  Number(selectedValue),"fieldType" : selectedType,"operator" : selectedSubType}
+        select = {"fieldName" : selectedFieldName,"value" :  Number(selectedValue),"fieldType" : selectedType,"operator" : "$and"}
         return select;
       case "Boolean":
         if(selectedValue&&selectedValue.toLowerCase()==="true"){
@@ -128,7 +115,7 @@ export default class MlCustomFilter extends Component {
           selectedValue=false;
         }
         /*select= selectedValue;*/
-        select = {"fieldName" : selectedFieldName,"value" :  selectedValue,"fieldType" : selectedType,"operator" : selectedSubType}
+        select = {"fieldName" : selectedFieldName,"value" :  selectedValue,"fieldType" : selectedType,"operator" : "$and"}
         return select;
       case "Date":
         let value= moment(selectedValue).startOf("day").toDate();
@@ -146,7 +133,7 @@ export default class MlCustomFilter extends Component {
         return select;
       case "List":
         /*select={$in: selectedValue};*/
-        select = {"fieldName" : selectedFieldName,"value" :  selectedValue,"fieldType" : selectedType,"operator" : selectedSubType}
+        select = {"fieldName" : selectedFieldName,"value" :  selectedValue,"fieldType" : selectedType,"operator" : "$and"}
         return select;
       default:
         return {};
@@ -172,15 +159,9 @@ export default class MlCustomFilter extends Component {
     let listSelect = false;
     let booleanSelect = false;
     let listOptions = null;
-    let selectedValue = that.state.selectedOption?that.state.selectedOption:""
+
     let restrictedFilterStatus = false
 
-    let filterListQuery=gql`query($moduleName:String!,$list:[String]){  
-      data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list) {
-       label
-        value
-      }  
-    }`;
 
     return(
       <div className="filter_table filter_hide">
@@ -189,9 +170,11 @@ export default class MlCustomFilter extends Component {
 
 
               {fieldsData && fieldsData[0]&& fieldsData[0].filterFields&& fieldsData[0].filterFields.map(function(options,id){
-                if(options && options.fieldList && options.fieldCollectionName){
-                  listOptions={options: { variables: {moduleName:options.fieldCollectionName,list:options.fieldList}}}
-                }
+
+                let filterListQuery = null
+                let select = '';
+                let selectedValue = '';
+
                 if(options.fieldType == "Date"){
                   dateSelect = true
                   restrictedFilterStatus = options.isRestrictedFilter;
@@ -199,7 +182,18 @@ export default class MlCustomFilter extends Component {
                   dateSelect = false
                 }
                 if(options.fieldType == "List"){
+
                   listSelect = true
+                  select =  "selectedOption_"+options.fieldName;
+                  selectedValue = that.state[select];
+                  filterListQuery=gql`query($moduleName:String!,$list:[String],$filteredListId : [GenericFilter]){
+                    data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId) {
+                     label
+                      value
+                    }
+                  }`;
+                  listOptions={options: { variables: {moduleName:options.fieldResolverName,list:options.fieldList,filteredListId:that.state.filterQueries}}}
+
                 }else{
                   listSelect = false
                 }
@@ -215,14 +209,14 @@ export default class MlCustomFilter extends Component {
                 }else{
                   booleanSelect = false
                 }
-                if(options && options.fieldList && options.fieldCollectionName){
-                  listOptions={options: { variables: {moduleName:options.fieldCollectionName,list:options.fieldList}}}
+                if(options && options.fieldList && options.fieldResolverName){
+                  listOptions={options: { variables: {moduleName:options.fieldResolverName,list:options.fieldList}}}
                 }
 
                 return(<span key={id}>
                   {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
                   {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
-                  {listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,options.fieldName)} isDynamic={true} id={'list'+id} disabled={options.isRestrictedFilter}/></div>:""}
+                  {listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName)} isDynamic={true} id={'list'+id} disabled={options.isRestrictedFilter}/></div>:""}
                   {stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)} disabled={options.isRestrictedFilter}/></div>:""}</span>)
 
                 })}

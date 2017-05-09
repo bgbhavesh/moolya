@@ -136,6 +136,8 @@ MlResolver.MlQueryResolver['fetchFunderAreaOfInterest'] = (obj, args, context, i
           if(portfolio.areaOfInterest[index]){
             let areaOfInterestData = MlIndustries.findOne({"_id" : areaOfInterest.industryTypeId}) || {};
             portfolio.areaOfInterest[index].industryTypeName = areaOfInterestData.industryName || "";
+            let areaOfInterestDomain = MlSubDomain.findOne({_id : areaOfInterest.subDomainId}) || {};
+            portfolio.areaOfInterest[index].subDomainName = areaOfInterestDomain.name || "";
           }
 
         })

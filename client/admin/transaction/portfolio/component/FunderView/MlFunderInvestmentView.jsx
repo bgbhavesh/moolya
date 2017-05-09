@@ -2,9 +2,6 @@ import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-
 
 export default class MlFunderInvestmentView extends React.Component {
 
@@ -15,41 +12,42 @@ export default class MlFunderInvestmentView extends React.Component {
     }
     this.fetchPortfolioDetails.bind(this);
     this.viewDetails.bind(this)
+    this.showDetails.bind(this)
     return this;
   }
 
   componentDidMount() {
-    $("#show").click(function () {
-      $("#details-div").show();
-      var $frame = $('#forcecentered');
-      var $wrap = $frame.parent();
-
-      // Call Sly on frame
-      $frame.sly({
-        horizontal: 1,
-        itemNav: 'forceCentered',
-        smart: 1,
-        activateOn: 'click',
-        mouseDragging: 1,
-        touchDragging: 1,
-        releaseSwing: 1,
-        startAt: 0,
-        scrollBar: $wrap.find('.scrollbar'),
-        scrollBy: 1,
-        speed: 300,
-        elasticBounds: 1,
-        easing: 'easeOutExpo',
-        dragHandle: 1,
-        dynamicHandle: 1,
-        clickBar: 1,
-
-      });
-      $("#show").hide();
-    });
     $(function () {
       $('.float-label').jvFloat();
     });
+  }
+  showDetails(id){
+    $("#details-div").show();
+    var $frame = $('#forcecentered');
+    var $wrap = $frame.parent();
 
+    // Call Sly on frame
+    $frame.sly({
+      horizontal: 1,
+      itemNav: 'forceCentered',
+      smart: 1,
+      activateOn: 'click',
+      mouseDragging: 1,
+      touchDragging: 1,
+      releaseSwing: 1,
+      startAt: 0,
+      scrollBar: $wrap.find('.scrollbar'),
+      scrollBy: 1,
+      speed: 300,
+      elasticBounds: 1,
+      easing: 'easeOutExpo',
+      dragHandle: 1,
+      dynamicHandle: 1,
+      clickBar: 1,
+
+    });
+    $("#show").hide();
+    this.viewDetails(id)
   }
 
   componentWillMount() {
@@ -113,7 +111,7 @@ export default class MlFunderInvestmentView extends React.Component {
                   <div className="row">
                     {investmentArray && investmentArray.map(function (details, idx) {
                       return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that,idx)} key={idx}>
                           <div className="list_block notrans funding_list">
                             <div><p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
                               <p>{details.typeOfFundingName}</p></div>

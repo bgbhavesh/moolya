@@ -773,6 +773,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlFunderPortfolio.find(query,findOptions).count();
   }
 
+  if(args.module=="SubDomain"){
+    data= MlSubDomain.find(query,findOptions).fetch();
+    totalRecords=MlSubDomain.find(query,findOptions).count();
+  }
 
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -948,6 +952,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.filterName){
       return 'Filters'
+    }
+    if(data.name){
+      return 'SubDomain'
     }
     return null;
   }

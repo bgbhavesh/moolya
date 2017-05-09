@@ -8,23 +8,7 @@ import {Popover, PopoverContent} from "reactstrap";
 import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
-var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-
-var options = [
-  {value: 'Select Industry', label: 'Select Industry'},
-  {value: '2', label: '2'}
-]
-
-var options2 = [
-  {value: 'Select Domain', label: 'Select Domain'},
-  {value: '2', label: '2'}
-]
-
-function logChange(val) {
-  console.log("Selected: " + val);
-}
-
 
 export default class MlFunderAreaOfInterest extends React.Component {
   constructor(props, context) {
@@ -141,12 +125,22 @@ export default class MlFunderAreaOfInterest extends React.Component {
     this.setState({funderAreaOfInterestList: this.state.funderAreaOfInterest, popoverOpen: false})
   }
 
-  onOptionSelected(selectedFunding,  callback, selObject) {
+  onOptionSelectedIndustry(selectedFunding, callback, selObject) {
     let details = this.state.data;
     details = _.omit(details, ["industryTypeId"]);
-    details = _.extend(details, {["industryTypeId"]: selectedFunding, "industryTypeName" : selObject.label});
+    details = _.extend(details, {["industryTypeId"]: selectedFunding, "industryTypeName": selObject.label});
     this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedFunding, "industryTypeName" : selObject.label})
+      this.setState({"selectedVal": selectedFunding, "industryTypeName": selObject.label})
+      this.sendDataToParent()
+    })
+  }
+
+  onOptionSelectedSubDomain(selectedSubDomain) {
+    let details = this.state.data;
+    details = _.omit(details, ["subDomainId"]);
+    details = _.extend(details, {["subDomainId"]: selectedSubDomain});
+    this.setState({data: details}, function () {
+      this.setState({"selectedValDomain": selectedSubDomain})
       this.sendDataToParent()
     })
   }
@@ -178,10 +172,15 @@ export default class MlFunderAreaOfInterest extends React.Component {
     let that = this;
     const showLoader = that.state.loading;
     let funderAreaOfInterestList = that.state.funderAreaOfInterestList || [];
-    let industriesquery=gql` query{
+    let industriesquery = gql` query{
     data:fetchIndustries{label:industryName,value:_id}
     }
   `;
+    let subDomainQuery = gql` query($industryId:String){
+    data:fetchIndustryDomain(industryId:$industryId){label:name,value:_id}
+    }
+  `;
+    let subDomainOption = {options: {variables: {industryId: this.state.data.industryTypeId}}};
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
@@ -239,25 +238,19 @@ export default class MlFunderAreaOfInterest extends React.Component {
                         <div className="col-md-12">
 
                           <div className="form-group">
-                            {/*<Select*/}
-                              {/*name="form-field-name"*/}
-                              {/*options={options}*/}
-                              {/*value='Select Industry'*/}
-                              {/*onChange={logChange}*/}
-                            {/*/>*/}
                             <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
                                           labelKey={'label'} queryType={"graphql"} query={industriesquery}
                                           isDynamic={true} placeholder="Select Industry.."
-                                          onSelect={this.onOptionSelected.bind(this)}
+                                          onSelect={this.onOptionSelectedIndustry.bind(this)}
                                           selectedValue={this.state.selectedVal}/>
                           </div>
                           <div className="form-group">
-                            <Select
-                              name="form-field-name"
-                              options={options2}
-                              value='Select Domain'
-                              onChange={logChange}
-                            />
+                            <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
+                                          labelKey={'label'} queryType={"graphql"} query={subDomainQuery}
+                                          queryOptions={subDomainOption}
+                                          isDynamic={true} placeholder="Select SubDomain.."
+                                          onSelect={this.onOptionSelectedSubDomain.bind(this)}
+                                          selectedValue={this.state.selectedValDomain}/>
                           </div>
 
                           <div className="ml_btn" style={{'textAlign': 'center'}}>

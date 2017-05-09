@@ -29,7 +29,7 @@ let SubDomainSchema = `
     }
     type Query{
         findSubDomain(SubDomainId:String): SubDomain
-        fetchSubDomains:[SubDomain]
+        fetchIndustryDomain(industryId: String):[SubDomain]
     }
 `
 

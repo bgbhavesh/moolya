@@ -631,11 +631,18 @@ transition: none;
     .team-block{
       background:$mlRed;
     }
+    .list_block{
+      background:$mlBlue;
+      h3{
+        background:$mlRed;
+      }
+    }
     .team_img{
       border:#d41a1b solid 2px;
     }
   }
 }
+
 
 
 /* Scrollbar */

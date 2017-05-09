@@ -10,12 +10,6 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admi
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-
-var options = [
-  {value: 'Select Industry', label: 'Select Industry'},
-  {value: '2', label: '2'}
-]
-
 var options2 = [
   {value: 'Select Domain', label: 'Select Domain'},
   {value: '2', label: '2'}
@@ -239,12 +233,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
                         <div className="col-md-12">
 
                           <div className="form-group">
-                            {/*<Select*/}
-                              {/*name="form-field-name"*/}
-                              {/*options={options}*/}
-                              {/*value='Select Industry'*/}
-                              {/*onChange={logChange}*/}
-                            {/*/>*/}
                             <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
                                           labelKey={'label'} queryType={"graphql"} query={industriesquery}
                                           isDynamic={true} placeholder="Select Industry.."

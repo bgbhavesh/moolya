@@ -7,21 +7,31 @@ import MlSchemaDef from '../../../../commons/mlSchemaDef';
 let FunderPortfolioSchema = `
 
     type SuccessStories{
-          date:String,
-          storyImage:String,
-          storyTitle:String,
-          isStoryTitlePrivate:Boolean,
-          description:String,
-          isDescPrivate:Boolean,
-          makePrivate:Boolean,
-          isActive:Boolean
+        date:String,
+        isDatePrivate : Boolean
+        storyImage:String,
+        storyTitle:String,
+        isStoryTitlePrivate:Boolean,
+        description:String,
+        isDescPrivate:Boolean,
+        isPrivate:Boolean,
+        isActive:Boolean
+        index: Int
+        logo:imagesTypeSchema,
     }
     
-    type AreaofInterest{
-        industryType:String,
+     type imagesTypeSchema{
+        fileUrl   : String,
+        fileName  : String
+    }
+    
+    type AreaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
     
     type SocialLinks{
@@ -48,6 +58,7 @@ let FunderPortfolioSchema = `
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
         socialLinks:[SocialLinks]
+        index: Int
     }
 
     type Principal{
@@ -67,7 +78,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
-        socialLinks:[SocialLinks]
+        socialLinks:[SocialLinks],
+        index:Int
     }
     
     type Investments{
@@ -113,7 +125,7 @@ let FunderPortfolioSchema = `
         isIndustryPrivate:Boolean
         profession:String
         isProfessionPrivate:Boolean
-        investmentForm:String
+        investmentFrom:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean
         emailId:String
@@ -124,35 +136,40 @@ let FunderPortfolioSchema = `
         isLinkedinUrlPrivate:Boolean
         facebookUrl:String
         isFacebookUrlPrivate:Boolean
-        investmentBudget:Investmentbudget
+        investmentBudget:Investmentbudget,
+        logo:imagesTypeSchema
     }
     
     type FunderPortfolio{
         portfolioDetailsId  : String,
-        funderAbout         : [FunderAbout],
+        funderAbout         : FunderAbout,
         investments         : [Investments],
         principal           : [Principal],
         team                : [Team],
-        areaofInterest      : [AreaofInterest],
+        areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
     }
   
     input successStories{
         date:String,
+        isDatePrivate : Boolean
         storyImage:String,
         storyTitle:String,
         isStoryTitlePrivate:Boolean,
         description:String,
         isDescPrivate:Boolean,
-        makePrivate:Boolean,
+        isPrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
 
-    input areaofInterest{
-        industryType:String,
+    input areaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        index: Int
     }
 
     input socialLinks{
@@ -178,7 +195,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
-        socialLinks:[socialLinks]
+        socialLinks:[socialLinks],
+        index: Int
     }
 
     input principal{
@@ -198,7 +216,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
-        socialLinks:[socialLinks]
+        socialLinks:[socialLinks],
+        index:Int
     }
 
     input investments{
@@ -244,7 +263,7 @@ let FunderPortfolioSchema = `
         isIndustryPrivate:Boolean
         profession:String
         isProfessionPrivate:Boolean
-        investmentForm:String
+        investmentFrom:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean
         emailId:String
@@ -260,21 +279,21 @@ let FunderPortfolioSchema = `
     
     input funderPortfolio{
         portfolioDetailsId  : String,
-        funderAbout         : [funderAbout],
+        funderAbout         : funderAbout,
         investments         : [investments],
         principal           : [principal],
         team                : [team],
-        areaofInterest      : [areaofInterest],
+        areaOfInterest      : [areaOfInterest],
         successStories      : [successStories]
     }
     
     type Query{
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
         fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
-        fetchFunderPrincipal(portfoliodetailsId:String!):Principal
-        fetchFunderTeam(portfoliodetailsId:String!):Team
-        fetchFunderAreaofInterest(portfoliodetailsId:String!):Team
-        fetchFunderSuccessStories(portfoliodetailsId:String!):SuccessStories
+        fetchFunderPrincipal(portfoliodetailsId:String!):[Principal]
+        fetchFunderTeam(portfoliodetailsId:String!):[Team]
+        fetchFunderAreaOfInterest(portfoliodetailsId:String!):[AreaOfInterest]
+        fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
     }
     
     type Mutation{

@@ -164,10 +164,15 @@ export default class MlAssignClustersToRoles extends React.Component {
           label:subChapterName
         }
       }`;
-      let communityQuery = gql` query{
-        data:fetchCommunityDefinition{label:name,value:code}
-      }
-      `;
+
+
+    let communityQuery=gql`query($clusterId:String, $chapterId:String, $subChapterId:String){  
+      data:fetchCommunitiesForRolesSelect(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId) {
+          value:code    
+          label:name
+      }  
+    }`;
+
     let selectedUserType=this.props.selectedBackendUserType
     let selectedSubChapter=this.props.selectedSubChapter
     if(selectedUserType=='moolya'){
@@ -220,6 +225,7 @@ export default class MlAssignClustersToRoles extends React.Component {
           }
 
           let subDeparatmentOption={options: { variables: {id:assignCluster.department}}};
+          let communityOption={options: { variables: {clusterId:assignCluster.cluster, chapterId:assignCluster.chapter, subChapterId:assignCluster.subChapter}}};
           return(
             <div className="panel panel-default" key={id}>
                 <div className="panel-heading">Assign Role{id==0?(<div className="pull-right block_action" onClick={that.AssignassignRoleToClusters.bind(that,id)}><img src="/images/add.png"/></div>):(<div className="pull-right block_action" onClick={that.RemoveAssignassignRoleToClusters.bind(that,id)}><img src="/images/remove.png"/></div>)}</div>
@@ -242,7 +248,7 @@ export default class MlAssignClustersToRoles extends React.Component {
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'+id} reExecuteQuery={true}  onSelect={that.optionsBySelectCommunity.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'+id} reExecuteQuery={true} queryOptions={communityOption} onSelect={that.optionsBySelectCommunity.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">

@@ -14,7 +14,8 @@ export async function fetchFilterCatalogActionHandler(moduleName) {
                 fields{
                   name
                   type
-                  collectionName
+                  resolverName
+                  isDynamic
                 }
               }
           }

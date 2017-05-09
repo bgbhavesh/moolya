@@ -118,6 +118,11 @@ import MlAwardTypeList from '../../admin/settings/awards/component/MlAwardTypeLi
 import MlAddAwardType from '../../admin/settings/awards/component/MlAddAwardType'
 import MlEditAwardType from '../../admin/settings/awards/component/MlEditAwardType'
 
+import MlSubDomainList from '../../admin/settings/subDomain/component/MlSubDomainList'
+import MlAddSubDomain from '../../admin/settings/subDomain/component/MlAddSubDomain'
+// import MlSubDomainList from '../../admin/settings/subDomain/component/MlSubDomainList'
+
+
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
 // @Importing Cluster Admin SettNing Employee Type Components from parent directory
@@ -702,6 +707,29 @@ adminSection.route('/settings/edittechnology/:id', {
     mount(AdminLayout,{adminContent:<MlEditTechnology config={params.id} />})
   }
 });
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+adminSection.route('/settings/SubdomainList', {
+  name: 'settings_SubdomainList',
+  action(){
+    mount(AdminLayout,{adminContent:<MlSubDomainList/>})
+  }
+});
+adminSection.route('/settings/addSubDomain', {
+  name: 'settings_AddSubDomain',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddSubDomain />})
+  }
+});
+// adminSection.route('/settings/editSubdomain/:id', {
+//   name: 'settings_EditSubdomain',
+//   action(params){
+//     mount(AdminLayout,{adminContent:<MlEditSubdomain config={params.id} />})
+//   }
+// });
+
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 adminSection.route('/settings/fundingTypeList', {
   name: 'settings_FundingTypeList',

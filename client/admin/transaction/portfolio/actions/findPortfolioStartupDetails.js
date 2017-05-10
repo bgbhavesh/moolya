@@ -80,6 +80,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 }
                 rating{
                   rating
+                  isRatingPrivate
                 }
                 clients{
                   companyName

@@ -14,12 +14,8 @@ export default class MlAppCommunitiesList extends Component {
         this.state={communities:[], popoverOpen:false, selectedCommunity:"",
           country:'',
           selectedCity:'',
-          cluster:'',
-          chapter:'',
-          identity:'',
           userType:null,
-          selectedTypeOfIndustry:'',
-          profession:null,
+          countryId:null,
           registrationType:'',
         }
         this.fetchCommunities.bind(this)
@@ -41,12 +37,13 @@ export default class MlAppCommunitiesList extends Component {
           this.setState({contactNumber:registrationInfo.contactNumber});
           this.setState({email:registrationInfo.email});
           this.setState({userName:registrationInfo.userName})
+          this.setState({country:registrationInfo.countryId})
         }
       }
 
     setSelectedCommunity(selCommunity,idx, e){
         this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})
-      this.setState({identity:null,registrationType:null,country:null,selectedCity:null})
+      this.setState({identity:null,registrationType:null,countryId:null})
     }
 
     toggle() {
@@ -65,7 +62,7 @@ export default class MlAppCommunitiesList extends Component {
       email:this.state.email,
       registrationType:this.state.selectedCommunity,
       identityType:this.state.identity,
-      countryId:this.state.country,
+      countryId:this.state.countryId,
       cityId:this.state.selectedCity
     }
     const response = await createRegistrationInfo(registrationInfo);
@@ -84,8 +81,8 @@ export default class MlAppCommunitiesList extends Component {
     async fetchCommunities() {
         let communities = await fetchCommunitiesHandler();
      let communitilist= _.filter(communities, function(community) {
-        return community.code != "BRW"
-      });
+        return community.code==="FUN" ||community.code==="IDE"||community.code==="STU"||community.code==="SPS"
+     });
         this.setState({communities:communitilist})
         return communities;
     }
@@ -93,15 +90,9 @@ export default class MlAppCommunitiesList extends Component {
   optionsBySelectCountry(value){
     this.setState({country:value})
   }
-  optionsBySelectCity(value){
+  /*optionsBySelectCity(value){
     this.setState({selectedCity:value})
-  }
-  optionsBySelectCluster(value){
-    this.setState({cluster:value})
-  }
-  optionsBySelectChapter(value){
-    this.setState({chapter:value})
-  }
+  }*/
   optionBySelectRegistrationType(value, calback, selObject){
     this.setState({registrationType:value});
    // this.setState({identityType:null});
@@ -110,15 +101,11 @@ export default class MlAppCommunitiesList extends Component {
   optionsBySelectIdentity(val){
     this.setState({identity:val})
   }
-  optionsBySelectUserType(value){
-    this.setState({userType:value})
+  optionsBySelectOperationCountry(val){
+    this.setState({countryId:val})
   }
-  optionsBySelectTypeOfIndustry(value){
-    this.setState({selectedTypeOfIndustry:value})
-  }
-  optionsBySelectProfession(val){
-    this.setState({profession:val})
-  }
+
+
     render(){
 
             let countryQuery = gql`query{
@@ -209,7 +196,7 @@ export default class MlAppCommunitiesList extends Component {
                           <input type="text" ref="contactNumber" value={this.state.lastName} placeholder="Contact number" className="form-control float-label" id="" disabled="true"/>
                         </div>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}   />
+                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}  disabled={true} />
                       </div>
 
                       </div>
@@ -221,18 +208,9 @@ export default class MlAppCommunitiesList extends Component {
                           <input type="text" ref="email"   value={this.state.email} placeholder="Email ID" className="form-control float-label" id="" disabled="true" />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Your City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>
+                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Operation Country"  selectedValue={this.state.countryId} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectOperationCountry.bind(this)} />
+                          {/*<Moolyaselect multiSelect={false} placeholder="Your City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelect.bind(this)} isDynamic={true}/>*/}
                         </div>
-                        {/*<div className="form-group mart20">
-                        <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={this.optionsBySelectUserType.bind(this)}  isDynamic={true}/>
-                      </div>
-                      <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
-                      </div>
-                      <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions} onSelect={this.optionsBySelectProfession.bind(this)} isDynamic={true}/>
-
-                      </div>*/}
                       </div>
                       <div className="assign-popup">
                         <a data-toggle="tooltip" title="Save" data-placement="top"  className="hex_btn hex_btn_in" onClick={this.registerAs.bind(this)}>

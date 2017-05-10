@@ -20,8 +20,13 @@ MlResolver.MlMutationResolver['CreateFilter'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchModuleFilters'] = (obj, args, context, info) => {
   // TODO : Authorization
 
-  if (args.moduleName) {
-    var id= args._id;
+  if (args.moduleName && context.userId) {
+   /* let user = Meteor.users.findOne({_id:context.userId});
+    if(user && user.profile && user.profile.isInternaluser == true){
+      let userProfiles = user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.userProfiles;
+      let defaultProfile = _.find(userProfiles, {isDefault:true});
+
+    }*/
     let response= MlFilters.find({"moduleName":args.moduleName}).fetch();
     return response;
   }
@@ -31,16 +36,25 @@ MlResolver.MlQueryResolver['fetchModuleFilters'] = (obj, args, context, info) =>
 
 MlResolver.MlQueryResolver['fetchFilterListDropDown'] = (obj, args, context, info) => {
   // TODO : Authorization
-  let filtersData =new MlFilterListRepo().getFilterDropDownSettings(args);
+  let filtersData =new MlFilterListRepo(context.userId).getFilterDropDownSettings(args);
   return filtersData;
 }
 
 
 MlResolver.MlQueryResolver['fetchSelectedFilterListDropDown'] = (obj, args, context, info) => {
   // TODO : Authorization
-  console.log(args);
-  let filtersData =new MlFilterListRepo().getFilterDropDownSettings(args);
+  let filtersData =new MlFilterListRepo(context.userId).getFilterDropDownSettings(args);
   return filtersData;
 }
+
+MlResolver.MlQueryResolver['fetchSelectedFilterData'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+  if (args.id) {
+    let response= MlFilters.findOne({"_id":args.id});
+    return response;
+  }
+}
+
 
 

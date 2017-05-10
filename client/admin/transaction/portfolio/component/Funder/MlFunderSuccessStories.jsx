@@ -242,6 +242,7 @@ export default class MlFunderSuccessStories extends React.Component {
                             <input type="checkbox" className="lock_input"
                                    checked={this.state.data.isDatePrivate}/>
                           </div>
+                          <div className="clearfix"></div>
                           <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
                               <span>Upload Pic</span>

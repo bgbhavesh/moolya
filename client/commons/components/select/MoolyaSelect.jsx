@@ -127,6 +127,7 @@ export default class MoolyaSelect extends Component {
     const query=this.props.query;
     const labelKey=this.props.labelKey||'label';
     const valueKey=this.props.valueKey||'value';
+    const mandatoryClass=this.props.mandatory?"mandatory":"";
 
     // let queryOptions=this.props.queryOptions&&this.props.queryOptions.options&&this.props.queryOptions.options.variables?this.props.queryOptions:{options:{variables:{},forceFetch:true}};
     //  queryOptions.options.variables.searchQuery=this.state.searchTerm;
@@ -140,7 +141,7 @@ export default class MoolyaSelect extends Component {
     //   QueryExecutor= graphql(query,queryOptions)(QueryHandler);
     // }
     return(
-      <div className="form-group">
+      <div className={`form-group ${mandatoryClass}`}>
         <span className="placeHolder active">{placeholder}</span>
         {/*{executeQuery&&<QueryExecutor />}*/}
         {<Select  multi={this.props.multiSelect} disabled={this.props.disabled} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch} onChange={this.onchangeOption}/>}

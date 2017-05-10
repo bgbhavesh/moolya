@@ -26,15 +26,14 @@ export default class MlAssignModulesToFilters extends React.Component {
 
   componentDidMount() {
     let filters=this.props.filterCatalog;
-    console.log("--------------------------------------------");
-    console.log(filters)
     if(filters){
       let availabilityDetailsForm=[]
       for(let i=0;i<filters.length;i++){
         let json={
           fieldName:filters[i].name,
           fieldType:filters[i].type,
-          fieldCollectionName : filters[i].collectionName,
+          fieldResolverName : filters[i].resolverName,
+          isDynamic:filters[i].isDynamic,
         }
         availabilityDetailsForm.push(json)
       }
@@ -129,7 +128,7 @@ export default class MlAssignModulesToFilters extends React.Component {
     this.props.getFiltersData(details);
   }
 
-  optionsBySelect(id,collectionName,val){
+  optionsBySelect(id,resolverName,val){
     let details =this.state.assignModulesToFilters || [];
     if(details[id]){
       details[id]["fieldList"] = val;
@@ -171,11 +170,11 @@ export default class MlAssignModulesToFilters extends React.Component {
 
         {that.state.assignModulesToFilters.map(function (options, id) {
 
-          if(options&&options.fieldType == "List"){
+          if(options&&options.fieldType == "List"&&!options.isDynamic){
             listSelect = true
           }
-          if(options&&options.fieldCollectionName){
-             listOptions={options: { variables: {moduleName:options.fieldCollectionName}}}
+          if(options&&options.fieldResolverName){
+             listOptions={options: { variables: {moduleName:options.fieldResolverName}}}
           }else{
             listOptions={options: { variables: {moduleName:''}}}
           }
@@ -238,15 +237,15 @@ export default class MlAssignModulesToFilters extends React.Component {
 
                   <div className="col-md-12">
                     {listSelect?<div className="form-group">
-                      <input type="text" placeholder="Field Collection" ref={"collectionName"}
-                             className="form-control float-label" defaultValue={options.fieldCollectionName} disabled={true}/>
+                      <input type="text" placeholder="Field Collection" ref={"resolverName"}
+                             className="form-control float-label" defaultValue={options.fieldResolverName} disabled={true}/>
                     </div>:""}
                   </div>
 
                   <div className="col-md-12">
                   {listSelect?<div className="form-group">
 
-                    <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={listValues} queryType={"graphql"} query={listQuery} reExecuteQuery={true} queryOptions={listOptions}  isDynamic={true} id={'list'+id}  onSelect={that.optionsBySelect.bind(that,id,options.fieldCollectionName)} />
+                    <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={listValues} queryType={"graphql"} query={listQuery} reExecuteQuery={true} queryOptions={listOptions}  isDynamic={true} id={'list'+id}  onSelect={that.optionsBySelect.bind(that,id,options.fieldResolverName)} />
                   </div>:false}
                   </div>
 

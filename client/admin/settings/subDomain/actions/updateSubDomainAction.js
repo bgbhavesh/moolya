@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function updateSelectedSubDomainActionHandler(SubDomainId, SubDomainDetails) {
+export async function   updateSelectedSubDomainActionHandler(SubDomainId, SubDomainDetails) {
   let SubDomainMasterData =  SubDomainDetails;
   const result = await client.mutate({
     mutation: gql`

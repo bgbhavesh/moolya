@@ -604,7 +604,7 @@ if(Meteor.isServer){
                     "dynamicLink" : true,
                     "dynamicLinkHandler" : "",
                     "subMenusId":"transaction_Registration",
-                    //"subMenuMappingId":"transaction_registration_requested_edit"
+                    "subMenuMappingId":"transaction_registration_requested"
                   }
                 ]
               },
@@ -704,34 +704,34 @@ if(Meteor.isServer){
                 "subMenusId":"portfolio",
                 //"subMenuMappingId":"transaction_registration_create"
               },
-              {
-                "link" : "/admin/transactions/portfolio/requestedPortfolioList/edit",
-                "name" : "Edit",
-                "uniqueId" : "transaction_portfolio_requested_edit",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio"
-              },
-
-              {
-                "link" : "/admin/transactions/portfolio/editRequests",
-                "name" : "Edit",
-                "uniqueId" : "transaction_portfolio_EditRequests",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio"
-              },
-              {
-                "link" : "/admin/transactions/portfolio/viewPortfolio",
-                "name" : "Edit",
-                "uniqueId" : "transaction_portfolio_viewPortfolio",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio"
-              }
+              // {
+              //   "link" : "/admin/transactions/portfolio/requestedPortfolioList/edit",
+              //   "name" : "Edit",
+              //   "uniqueId" : "transaction_portfolio_requested_edit",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio"
+              // },
+              //
+              // {
+              //   "link" : "/admin/transactions/portfolio/editRequests",
+              //   "name" : "Edit",
+              //   "uniqueId" : "transaction_portfolio_EditRequests",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio"
+              // },
+              // {
+              //   "link" : "/admin/transactions/portfolio/viewPortfolio",
+              //   "name" : "Edit",
+              //   "uniqueId" : "transaction_portfolio_viewPortfolio",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio"
+              // }
             ]
           }
       ]
@@ -851,7 +851,30 @@ if(Meteor.isServer){
             "isLink" : true,
             "isMenu" : true,
             "hideSubMenu":true,
-            "subMenu":[]
+            "subMenu":[
+              {
+                "link": "/admin/settings/hierarchy/clusterhierarchy/:clusterId/chapters",
+                "name": "cluster hierarchy",
+                "uniqueId": "hierarchy",
+                "subMenuMappingId":"",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": "",
+                "subMenu":[
+                  {
+                    "link": "/settings/hierarchy/clusterhierarchy/:clusterId/hierarchyDetails",
+                    "name": " cluster hierarchy",
+                    "uniqueId": "hierarchy_chapters",
+                    "subMenuMappingId":"",
+                    "subMenusId":"settings",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  },
+                ]
+              },
+            ]
           },
           {
             "link" : "/admin/settings/rolesList",
@@ -1813,7 +1836,7 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/subDomainList",
             "name" : "Sub Domain",
-            "uniqueId" : "SubDomain",
+            "uniqueId" : "settings_SubDomain",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",

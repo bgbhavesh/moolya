@@ -62,7 +62,6 @@ export default class AppEmailDetails extends React.Component {
                               valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}
                               queryOptions={emailTypeOption} onSelect={this.optionsBySelectEmailType.bind(this)}
                               isDynamic={true}/>
-                {/*<input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" />*/}
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Enter Email Id" ref={'emailId'} className="form-control float-label"/>
@@ -82,7 +81,6 @@ export default class AppEmailDetails extends React.Component {
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}
                                 queryOptions={emailTypeOption}
                                 isDynamic={true}/>
-                  {/*<input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue={options.emailIdType}/>*/}
                 </div>
                 <div className="form-group">
                   <input type="text" ref={'emailId'+key} placeholder="Enter URL" defaultValue={options.emailId} className="form-control float-label"/>

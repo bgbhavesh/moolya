@@ -28,8 +28,8 @@ MlResolver.MlMutationResolver['createSubDomain'] = (obj, args, context, info) =>
 
 MlResolver.MlMutationResolver['updateSelectedSubDomain'] = (obj, args, context, info) => {
   if(args && args.SubDomainId && args.SubDomainMasterData){
-    try{
-      let resp = MlTechnologies.update({_id: args.SubDomainId}, {$set: args.SubDomainMasterData}, {upsert: true})
+    // try{
+      let resp = MlSubDomain.update({_id: args.SubDomainId}, {$set: args.SubDomainMasterData}, {upsert: true})
       if(resp){
         let response = new MlRespPayload().successPayload("Sub Domain Created Successfully", 200);
         return response;
@@ -38,17 +38,17 @@ MlResolver.MlMutationResolver['updateSelectedSubDomain'] = (obj, args, context, 
         let response = new MlRespPayload().errorPayload("Error in Creating Sub Domain", 400);
         return response;
       }
-    }
-    catch (e){
-      let response = new MlRespPayload().errorPayload(e.message, 400);
-      return response;
-    }
+    // }
+    // catch (e){
+    //   let response = new MlRespPayload().errorPayload(e.message, 400);
+    //   return response;
+    // }
   }
 }
 
 MlResolver.MlQueryResolver['findSubDomain'] = (obj, args, context, info) => {
   if(args && args.SubDomainId){
-    return MlTechnologies.findOne({"_id":args.SubDomainId})
+    return MlSubDomain.findOne({"_id":args.SubDomainId})
   }
 }
 

@@ -6,7 +6,7 @@ export async function findSubDomainActionHandler(SubDomainId) {
   const result = await client.query({
     query: gql`
           query  ($SubDomainId: String){
-              findSubDomain(SubDomainId:SubDomainId){
+              findSubDomain(SubDomainId:$SubDomainId){
                   name,
                   displayName,
                   about,

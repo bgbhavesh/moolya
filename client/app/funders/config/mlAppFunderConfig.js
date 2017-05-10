@@ -11,13 +11,13 @@ export const mlAppFunderConfig=new MlViewer.View({
   searchFields:["firstName","lastName","category","investmentBudget"],
   throttleRefresh:true,
   pagination:true,
-  moduleName:"Funders",
+  moduleName:"FunderPortfolio",
   sort:true,
   viewComponent:<MlAppFunderListView />,
   showActionComponent:true,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"Funders"){
+              query SearchQuery($offset: Int, $limit: Int,$fieldsData:[GenericFilter], $sortData:[SortFilter]) {
+              data:SearchQuery(module:"FunderPortfolio", offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
                     totalRecords
                     data{
                      ...on FunderPortfolio{

@@ -111,6 +111,7 @@ export default class MlStartupViewAboutUs extends React.Component {
 
   render(){
     let clientsArray = this.state.startupAboutUsList.clients || [];
+    let rating = parseInt(this.state.startupAboutUsList&&this.state.startupAboutUsList.rating?this.state.startupAboutUsList.rating:0);
     return (
       <div>
           <h2>About</h2>
@@ -129,7 +130,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                         empty="fa fa-star-o empty"
                         full="fa fa-star fill"
                         fractions={2}
-                        initialRate={this.state.startupAboutUsList&&this.state.startupAboutUsList.rating&&this.state.startupAboutUsList.rating}
+                        initialRate={rating}
                       /></p>
                       {/*<h4>Clients</h4>
 

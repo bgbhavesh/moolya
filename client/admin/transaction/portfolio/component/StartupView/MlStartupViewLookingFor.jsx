@@ -4,6 +4,8 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {fetchStartupPortfolioLookingFor} from '../../actions/findPortfolioStartupDetails'
+import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
+import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
 
 export default class MlStartupViewLookingFor extends React.Component {

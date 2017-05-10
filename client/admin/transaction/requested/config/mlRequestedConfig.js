@@ -86,7 +86,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               assignedUser
               								registrationStatus
                       				registrationDate
-                               
+                              transactionId
                  
                           }
                       }

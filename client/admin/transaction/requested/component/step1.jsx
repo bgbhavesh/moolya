@@ -96,7 +96,7 @@ export default class step1 extends React.Component{
       userType:details.userType,
       selectedTypeOfIndustry:details.industry,
       profession:details.profession,
-      transactionId : details.transactionId
+      transactionId : this.props.registrationData.transactionId
     });
     //this.settingIdentity(details.identityType);
 

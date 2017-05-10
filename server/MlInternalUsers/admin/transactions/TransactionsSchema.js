@@ -102,6 +102,7 @@ let transactionsSchema = `
        subDepartment  : String
        role           : String
        user           : String
+       transactionId  : String
     }
     type Mutation{
       createTransaction(transaction:TransactionsInput):response

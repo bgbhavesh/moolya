@@ -110,6 +110,7 @@ let transactionsSchema = `
       assignRegistrationTransaction(params:assignmentParams,transactionType:String):response
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
+      updateRegistrationTransaction(transactionInfo:TransactionsInput):response
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]

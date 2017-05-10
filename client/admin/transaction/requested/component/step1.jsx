@@ -43,6 +43,7 @@ export default class step1 extends React.Component{
       profession:null,
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
+      transactionId:''
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -94,7 +95,8 @@ export default class step1 extends React.Component{
       identityType:details.identityType,
       userType:details.userType,
       selectedTypeOfIndustry:details.industry,
-      profession:details.profession
+      profession:details.profession,
+      transactionId : details.transactionId
     });
     //this.settingIdentity(details.identityType);
 
@@ -230,8 +232,8 @@ export default class step1 extends React.Component{
           identityType: this.state.identityType,
           userType: this.state.userType,
           industry: this.state.selectedTypeOfIndustry,
-          profession: this.state.profession
-
+          profession: this.state.profession,
+          transactionId:this.state.transactionId
         }
       }
       const response = await updateRegistrationActionHandler(Details);

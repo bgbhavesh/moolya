@@ -1352,3 +1352,6 @@ button.close {
 .filter_table  .filter-wrap span span {float: right; margin: 0px 16px 0px 0px; display: inline-block; position: relative; top: 28px; }
 .filter_table .filter-wrap input, .filter_table .filter-wrap select {width: 120px; margin: 5px auto; border-radius: 2px; border: 1px solid #ddd; padding: 0px 2px; }
 .filter-wrap-inner div{ float: left; width: 145px;}
+
+.menunone{display: none !important;}
+.nomargintop{margin-top: 0 !important;}

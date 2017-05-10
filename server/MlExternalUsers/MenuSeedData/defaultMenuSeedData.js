@@ -33,7 +33,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-funder",
-                "link": "funder",
+                "link": "/app/funder",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Funder",

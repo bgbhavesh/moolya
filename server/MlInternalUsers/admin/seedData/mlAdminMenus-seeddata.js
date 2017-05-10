@@ -704,34 +704,34 @@ if(Meteor.isServer){
                 "subMenusId":"portfolio",
                 //"subMenuMappingId":"transaction_registration_create"
               },
-              {
-                "link" : "/admin/transactions/portfolio/requestedPortfolioList/edit",
-                "name" : "Edit",
-                "uniqueId" : "transaction_portfolio_requested_edit",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio"
-              },
-
-              {
-                "link" : "/admin/transactions/portfolio/editRequests",
-                "name" : "Edit",
-                "uniqueId" : "transaction_portfolio_EditRequests",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio"
-              },
-              {
-                "link" : "/admin/transactions/portfolio/viewPortfolio",
-                "name" : "Edit",
-                "uniqueId" : "transaction_portfolio_viewPortfolio",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio"
-              }
+              // {
+              //   "link" : "/admin/transactions/portfolio/requestedPortfolioList/edit",
+              //   "name" : "Edit",
+              //   "uniqueId" : "transaction_portfolio_requested_edit",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio"
+              // },
+              //
+              // {
+              //   "link" : "/admin/transactions/portfolio/editRequests",
+              //   "name" : "Edit",
+              //   "uniqueId" : "transaction_portfolio_EditRequests",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio"
+              // },
+              // {
+              //   "link" : "/admin/transactions/portfolio/viewPortfolio",
+              //   "name" : "Edit",
+              //   "uniqueId" : "transaction_portfolio_viewPortfolio",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio"
+              // }
             ]
           }
       ]

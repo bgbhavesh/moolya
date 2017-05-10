@@ -31,6 +31,8 @@ let FunderPortfolioSchema = `
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        subDomainId : String
+        subDomainName :String
         index: Int
     }
     
@@ -169,6 +171,8 @@ let FunderPortfolioSchema = `
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        subDomainId : String
+        subDomainName :String
         index: Int
     }
 

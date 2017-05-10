@@ -25,10 +25,6 @@ export default class MlFunderSuccessStoriesView extends React.Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
   render() {
     let funderSuccessList = this.state.funderSuccessList || [];
     return (

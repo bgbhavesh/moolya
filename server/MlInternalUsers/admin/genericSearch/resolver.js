@@ -768,7 +768,23 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlFilters.find(query,findOptions).fetch();
     totalRecords=MlFilters.find(query,findOptions).count();
   }
+  if(args.module=="FunderPortfolio"){
+    data= MlFunderPortfolio.find(query,findOptions).fetch();
+    totalRecords=MlFunderPortfolio.find(query,findOptions).count();
+  }
 
+  if(args.module=="SubDomain"){
+    var domain= MlSubDomain.find(query,findOptions).fetch();
+    let modArray =[]
+    _.each(domain, function(item){
+      var industryName = MlIndustries.findOne({_id:item.industryId}).industryName;
+      var obj = item;
+      obj.industryId = industryName;
+      modArray.push(obj)
+    })
+    data= modArray
+    totalRecords=MlSubDomain.find(query,findOptions).count();
+  }
 
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -779,7 +795,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.registrationType){
       return 'RegistrationInfo';
     }
-
+    if((data.communityType=="Funders") && data.portfolioDetailsId){
+      return 'FunderPortfolio';
+    }
     if(data.portfolioUserName){
       return 'Portfoliodetails';
     }
@@ -942,6 +960,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     }
     if(data.filterName){
       return 'Filters'
+    }
+    if(data.name){
+      return 'SubDomain'
     }
     return null;
   }

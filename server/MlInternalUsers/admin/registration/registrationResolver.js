@@ -35,7 +35,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
   // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails}, context)
+  //create transaction
+  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"Registration"},context, info);
+  args.registration.transactionId = resp.transactionId;
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails,transactionId:resp.transactionId}, context)
   if(id){
 
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
@@ -240,6 +243,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
               mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
               updatedResponse = new MlRespPayload().successPayload(result, code);
+              //update transaction with operational area
+              let transactionInfo = {
+                cluster : details.clusterId,
+                chapter : details.chapterId,
+                requestId : details.transactionId
+              }
+              let resp = MlResolver.MlMutationResolver['updateRegistrationTransaction'] (obj,{'transactionInfo':transactionInfo},context, info);
               return updatedResponse;
           }
 

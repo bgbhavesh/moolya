@@ -37,11 +37,8 @@ MlResolver.MlMutationResolver['updateTransactionStatus'] = (obj, args, context, 
 }
 
 
-MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
-    let transaction={};
-  let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
-  transaction.transactionTypeName=transact.transactionName;
-  transaction.transactionTypeId=transact._id;
+MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, context, info) => {
+  let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
   //find hierarchy
   let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
     parentDepartment: args.params.department,
@@ -74,8 +71,8 @@ MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, con
   transaction.userId=args.params.user
   transaction.status="Pending"
   transaction.allocation = allocation;
-  orderNumberGenService.assignTransationRequest(transaction)
-  let id = mlDBController.insert('MlTransactions',transaction, context)
+  transaction.transactionUpdatedDate=date.date;
+  let id =mlDBController.update('MlTransactions', {_id:args.params.transactionId},{transaction}, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}
@@ -95,4 +92,35 @@ MlResolver.MlQueryResolver['fetchTransactions']=(obj, args, context, info) => {
     return transactions;
   }
   return null;
+}
+
+MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
+  let transaction={};
+  let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
+  transaction.transactionTypeName=transact.transactionName;
+  transaction.transactionTypeId=transact._id;
+  transaction.status="Pending";
+  orderNumberGenService.assignTransationRequest(transaction)
+  let id = mlDBController.insert('MlTransactions',transaction, context)
+  if(id){
+    let code = 200;
+    let result = {transactionId : transaction.requestId}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+}
+
+MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, context, info) => {
+  let transaction = MlTransactions.findOne({"requestId":args.transactionInfo.requestId})|| {};
+  let date=new Date();
+  transaction.cluster=args.transactionInfo.cluster;
+  transaction.chapter=args.transactionInfo.chapter;
+  transaction.transactionUpdatedDate=date.date;
+  let id =mlDBController.update('MlTransactions', {_id:args.transactionInfo.requestId},{transaction}, {$set: true},context)
+  if(id){
+    let code = 200;
+    let result = {transactionId : id}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
 }

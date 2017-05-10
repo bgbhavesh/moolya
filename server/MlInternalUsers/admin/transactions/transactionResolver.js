@@ -37,7 +37,7 @@ MlResolver.MlMutationResolver['updateTransactionStatus'] = (obj, args, context, 
 }
 
 
-MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, context, info) => {
     let transaction={};
   let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
   transaction.transactionTypeName=transact.transactionName;
@@ -95,4 +95,51 @@ MlResolver.MlQueryResolver['fetchTransactions']=(obj, args, context, info) => {
     return transactions;
   }
   return null;
+}
+
+MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, context, info) => {
+  let transaction={};
+  let transact = MlTransactionTypes.findOne({"_id":args.transactionType})|| {};
+  transaction.transactionTypeName=transact.transactionName;
+  transaction.transactionTypeId=transact._id;
+  //find hierarchy
+  let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+    parentDepartment: args.params.department,
+    parentSubDepartment: args.params.subDepartment,
+    clusterId:args.params.cluster
+  }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
+  //update hierarchy from hierarchy result
+  transaction.hierarchy=hierarchy._id
+
+  //get user details iterate through profiles match with role and get department and update allocation details.
+  let user = mlDBController.findOne('users', {_id: args.params.user}, context)
+  let userprofile=user.profile.InternalUprofile.moolyaProfile.userProfiles
+  userProfileRoles = _.find(userprofile, function (item) {
+    return item.clusterId == args.params.cluster
+  });
+  let roles=userProfileRoles.userRoles
+  roleDetails=_.find(roles, function (item) {
+    return item.roleId == args.params.role
+  });
+  let date=new Date();
+  let allocation={
+    assignee            : user.username,
+    assigneeId          : args.params.user,
+    assignedDate        : date.date,
+    department          : roleDetails.departmentName,
+    departmentId        : roleDetails.departmentId,
+    subDepartment       : roleDetails.subDepartmentName,
+    subDepartmentId     : roleDetails.subDepartmentId,
+  }
+  transaction.userId=args.params.user
+  transaction.status="Pending"
+  transaction.allocation = allocation;
+  orderNumberGenService.assignTransationRequest(transaction)
+  let id = mlDBController.insert('MlTransactions',transaction, context)
+  if(id){
+    let code = 200;
+    let result = {transactionId : id}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
 }

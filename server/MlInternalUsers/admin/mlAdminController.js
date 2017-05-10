@@ -315,7 +315,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                 countries.push(json)
               })
             }
-            console.log(countries);
+            //console.log(countries);
             res.send(countries);
 
       }else{
@@ -371,7 +371,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                     }
                 })
             }
-            console.log(cities);
+            //console.log(cities);
             res.send(cities);
           }
         }else{
@@ -421,7 +421,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                 communities.push(json)
               })
             }
-            console.log(communities);
+            //console.log(communities);
             res.send(communities);
           }
         }else{

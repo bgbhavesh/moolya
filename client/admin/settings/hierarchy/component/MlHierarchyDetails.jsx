@@ -166,9 +166,8 @@ export default class MlHierarchyDetails extends React.Component {
     const assigned = this.updateunassignedRoles();
     const upAssigned = this.updateassignRoles();
     const hierarchyAssignment = this.updatehierarchyAssignments();
-    //if(this.state.isExpanded){
-      toastr.success("Update Successful");
-    //}
+    toastr.success("Update Successful");
+    FlowRouter.go("/admin/settings/hierarchy/clusterhierarchy/"+this.props.clusterId+"/hierarchyDetails");
     return assigned;
   }
   SwitchBtn(cell,row){

@@ -300,6 +300,8 @@ export default class MlAssignHierarchy extends React.Component {
             }
           </div>
         </div>
+        <h4 className="panel-title"> Role Structure </h4>
+        <br className="clearfix"/>
         <div className="panel-group" id="accordion">
           <div className="panel panel-default">
             <div className="panel-heading">

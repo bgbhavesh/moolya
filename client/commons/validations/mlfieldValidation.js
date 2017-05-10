@@ -18,9 +18,15 @@ export function mlFieldValidations(elements) {
       var selectObj = element;
       let isRequired = selectObj.props['data-required'];
       let value = selectObj.props['selectedValue']
-      if (isRequired && !value) {
-        return selectObj.props['data-errMsg']
-      }
+      let multi= selectObj.props['multiSelect']
+
+        if (isRequired && value.length>0&&multi) {
+          return selectObj.props['data-errMsg']
+        }else if (isRequired && !value) {
+          return selectObj.props['data-errMsg']
+        }
+
+
     }
     else if (element && element.getAttribute('data-required') && !element.value) {
         return element.getAttribute('data-errMsg');

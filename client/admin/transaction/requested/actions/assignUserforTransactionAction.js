@@ -21,6 +21,6 @@ export async function assignUserForTransactionAction(paramDetails,transactionTyp
     }
   })
 
-  const id = result.data.createRegistrationTransaction;
+  const id = result.data.assignRegistrationTransaction;
   return id
 }

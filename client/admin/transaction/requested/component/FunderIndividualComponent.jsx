@@ -181,6 +181,14 @@ export default class Individual extends React.Component{
     }
   }
 
+  openDatePickerEmploymentDate(){
+    $('#date-time').toggleClass('rdtOpen')
+  }
+
+  openDatePickerDateOfBirth(){
+    $('#date-of-birth').toggleClass('rdtOpen')
+  }
+
   render(){
     let MlActionConfig
     let userType=this.props.userType;
@@ -310,9 +318,9 @@ export default class Individual extends React.Component{
                   <div className="form-group">
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group" id="date-of-birth">
                     <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
-                    <FontAwesome name="calendar" className="password_icon"/>
+                    <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerDateOfBirth.bind(that)}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>
@@ -363,9 +371,9 @@ export default class Individual extends React.Component{
                 <div className="form-group">
                   <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group">
+                <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)}/>
-                  <FontAwesome name="calendar" className="password_icon"/>
+                  <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerEmploymentDate.bind(that)}/>
                 </div>
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="Investing From" options={investingFrom} value={this.state.investingFrom} onChange={this.optionsBySelectInvestingFrom.bind(this)}  className="float-label"/>

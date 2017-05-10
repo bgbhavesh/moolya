@@ -93,6 +93,17 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   optionsBySelectSubsidaryComapny(val){
     this.setState({employmentStatus:val.value})
   }
+
+
+  openDatePickerEmploymentDate(){
+    $('#date-time').toggleClass('rdtOpen')
+  }
+
+  openDatePickerDateOfBirth(){
+    $('#date-of-birth').toggleClass('rdtOpen')
+  }
+
+
   checkIdentity(event){
     console.log(event.target.name)
     // this.setState({identity:event.target.name})
@@ -302,9 +313,9 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                   <div className="form-group mandatory">
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
-                  <div className="form-group mandatory">
+                  <div className="form-group mandatory" id="date-of-birth">
                     <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} data-required={true} data-errMssg="Date Of Birth is required"/>
-                    <FontAwesome name="calendar" className="password_icon"/>
+                    <FontAwesome name="calendar" className="password_icon"  onClick={that.openDatePickerDateOfBirth.bind(that)} />
                     <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
                   </div>
                   <div className="form-group">
@@ -345,9 +356,9 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                 <div className="form-group">
                   <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group">
+                <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)}/>
-                  <FontAwesome name="calendar" className="password_icon"/>
+                  <FontAwesome name="calendar" className="password_icon"  onClick={that.openDatePickerEmploymentDate.bind(that)}/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="experience" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.experience} placeholder="Year of Experience" className="form-control float-label" id=""/>

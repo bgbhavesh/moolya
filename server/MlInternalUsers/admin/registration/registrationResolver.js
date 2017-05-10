@@ -243,6 +243,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
               mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
               updatedResponse = new MlRespPayload().successPayload(result, code);
+              //update transaction with operational area
+              let transactionInfo = {
+                cluster : details.clusterId,
+                chapter : details.chapterId,
+                requestId : details.transactionId
+              }
+              let resp = MlResolver.MlMutationResolver['updateRegistrationTransaction'] (obj,{'transactionInfo':transactionInfo},context, info);
               return updatedResponse;
           }
 

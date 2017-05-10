@@ -303,7 +303,7 @@ let ideatorPortfolioSchema = `
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
         fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
-        fetchIdeas:[Idea]
+        fetchIdeas(portfolioId:String):[Idea]
     }
     
     type Mutation{

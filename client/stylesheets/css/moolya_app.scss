@@ -616,7 +616,7 @@ transition: none;
 
 
 .top_block_scroller{
-  li{width: 100px; float: left; margin-right: 10px;
+  li{width: 100px; float: left; margin-right: 10px; cursor: pointer;
     h3{
       font-size: 9px;
     }
@@ -631,11 +631,18 @@ transition: none;
     .team-block{
       background:$mlRed;
     }
+    .list_block{
+      background:$mlBlue;
+      h3{
+        background:$mlRed;
+      }
+    }
     .team_img{
       border:#d41a1b solid 2px;
     }
   }
 }
+
 
 
 /* Scrollbar */

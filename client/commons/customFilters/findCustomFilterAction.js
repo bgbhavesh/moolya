@@ -14,9 +14,10 @@ export async function findModuleCustomFilterActionHandler(moduleName){
               fieldName
               displayName
               isActive
+              isDynamic
               isRestrictedFilter
               fieldType
-              fieldCollectionName
+              fieldResolverName
               fieldList
             }
             clusterFields{

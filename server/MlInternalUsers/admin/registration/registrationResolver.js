@@ -475,9 +475,27 @@ MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, 
   if (args.registrationId) {
     let documentList=args.documentId;
     let updatedResponse;
+    let user=MlRegistration.findOne({_id:args.registrationId})
+    let kyc=user.kycDocuments
+     let kycDoc = _.find(kyc, function (item) {
+      return item.documentId == args.documentId&&item.docTypeId==args.docTypeId;
+    });
+    if(kycDoc.docFiles.length>0&&kycDoc.status!="Approved"){
+      response = mlDBController.update('MlRegistration', {"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]}, { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }}, {$pull:true}, context)
+      if(response){
+        let code = 200;
+        let result = {registrationId : response}
+        updatedResponse = new MlRespPayload().successPayload(result, code);
+
+      }
+    }
+    else{
+      let code = 409;
+      updatedResponse = new MlRespPayload().errorPayload("documents can not allowed to remove once approved!!!!");
+    }
     //  updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}},'kycDocuments':{$elemMatch: {'documentId.$.docFiles':{$elemMatch:{'fileId':args.fileId}}}}},{$pull: {}});
     // updatedResponse=MlRegistration.update({"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]},{ $pull: { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }} });
-    updatedResponse = mlDBController.update('MlRegistration', {"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]}, { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }}, {$pull:true}, context)
+
     return updatedResponse;
   }
 }

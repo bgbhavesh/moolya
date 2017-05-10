@@ -26,11 +26,11 @@ export async function createIdeaActionHandler(ideaDetails) {
 }
 
 
-export async function fetchIdeaActionHandler() {
+export async function fetchIdeaActionHandler(portfolioId) {
     const result = await appClient.query({
         query: gql`
-            query{
-                fetchIdeas {
+            query($portfolioId:String){
+                fetchIdeas(portfolioId:$portfolioId) {
                     _id
                     portfolioId
                     title
@@ -42,6 +42,9 @@ export async function fetchIdeaActionHandler() {
                 }
             }
         `,
+      variables:{
+        portfolioId:  portfolioId
+      },
         forceFetch:true
     })
     const ideas = result.data.fetchIdeas;

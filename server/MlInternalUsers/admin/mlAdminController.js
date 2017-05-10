@@ -192,6 +192,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                   case 'Startups':
                                     portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
+                                  case 'Funders':
+                                    portfolio = {portfolio:{funderPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                    break;
                               }
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                           }
@@ -312,7 +315,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                 countries.push(json)
               })
             }
-            console.log(countries);
+            //console.log(countries);
             res.send(countries);
 
       }else{
@@ -418,7 +421,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                 communities.push(json)
               })
             }
-            console.log(communities);
+            //console.log(communities);
             res.send(communities);
           }
         }else{

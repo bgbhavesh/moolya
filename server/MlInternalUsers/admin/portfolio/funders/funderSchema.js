@@ -17,13 +17,23 @@ let FunderPortfolioSchema = `
         isPrivate:Boolean,
         isActive:Boolean
         index: Int
+        logo:imagesTypeSchema,
     }
     
-    type AreaofInterest{
-        industryType:String,
+     type imagesTypeSchema{
+        fileUrl   : String,
+        fileName  : String
+    }
+    
+    type AreaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        subDomainId : String
+        subDomainName :String
+        index: Int
     }
     
     type SocialLinks{
@@ -50,6 +60,7 @@ let FunderPortfolioSchema = `
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
         socialLinks:[SocialLinks]
+        index: Int
     }
 
     type Principal{
@@ -69,7 +80,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
-        socialLinks:[SocialLinks]
+        socialLinks:[SocialLinks],
+        index:Int
     }
     
     type Investments{
@@ -115,7 +127,7 @@ let FunderPortfolioSchema = `
         isIndustryPrivate:Boolean
         profession:String
         isProfessionPrivate:Boolean
-        investmentForm:String
+        investmentFrom:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean
         emailId:String
@@ -126,7 +138,8 @@ let FunderPortfolioSchema = `
         isLinkedinUrlPrivate:Boolean
         facebookUrl:String
         isFacebookUrlPrivate:Boolean
-        investmentBudget:Investmentbudget
+        investmentBudget:Investmentbudget,
+        logo:imagesTypeSchema
     }
     
     type FunderPortfolio{
@@ -135,7 +148,7 @@ let FunderPortfolioSchema = `
         investments         : [Investments],
         principal           : [Principal],
         team                : [Team],
-        areaofInterest      : [AreaofInterest],
+        areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
     }
   
@@ -152,11 +165,15 @@ let FunderPortfolioSchema = `
         index: Int
     }
 
-    input areaofInterest{
-        industryType:String,
+    input areaOfInterest{
+        industryTypeId:String,
+        industryTypeName :String
         domainType:String,
         makePrivate:Boolean,
         isActive:Boolean
+        subDomainId : String
+        subDomainName :String
+        index: Int
     }
 
     input socialLinks{
@@ -182,7 +199,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
-        socialLinks:[socialLinks]
+        socialLinks:[socialLinks],
+        index: Int
     }
 
     input principal{
@@ -202,7 +220,8 @@ let FunderPortfolioSchema = `
         isQualificationPrivate:Boolean,
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
-        socialLinks:[socialLinks]
+        socialLinks:[socialLinks],
+        index:Int
     }
 
     input investments{
@@ -248,7 +267,7 @@ let FunderPortfolioSchema = `
         isIndustryPrivate:Boolean
         profession:String
         isProfessionPrivate:Boolean
-        investmentForm:String
+        investmentFrom:String
         investmentCount:String
         isInvestmentCountPrivate:Boolean
         emailId:String
@@ -268,16 +287,16 @@ let FunderPortfolioSchema = `
         investments         : [investments],
         principal           : [principal],
         team                : [team],
-        areaofInterest      : [areaofInterest],
+        areaOfInterest      : [areaOfInterest],
         successStories      : [successStories]
     }
     
     type Query{
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
         fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
-        fetchFunderPrincipal(portfoliodetailsId:String!):Principal
-        fetchFunderTeam(portfoliodetailsId:String!):Team
-        fetchFunderAreaofInterest(portfoliodetailsId:String!):Team
+        fetchFunderPrincipal(portfoliodetailsId:String!):[Principal]
+        fetchFunderTeam(portfoliodetailsId:String!):[Team]
+        fetchFunderAreaOfInterest(portfoliodetailsId:String!):[AreaOfInterest]
         fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
     }
     

@@ -98,7 +98,8 @@ export default class MlIdeaView extends React.Component {
   }
   async fetchIdeatorIdeas() {
     let ideaId = this.props.ideaId;
-    const response = await fetchIdeaActionHandler();
+    let portfolioId =  this.props.portfolioDetailsId
+    const response = await fetchIdeaActionHandler(portfolioId);
     if(response){
       // this.setState({loading:false, ideas:response})
       let currentIdea ={}

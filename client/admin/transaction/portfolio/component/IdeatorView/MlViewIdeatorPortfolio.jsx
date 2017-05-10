@@ -9,6 +9,7 @@ import MlPortfolioIdeatorLibraryView from '../../component/IdeatorView/MlPortfol
 import MlPortfolioIdeatorStrategyPlansView from '../../component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../component/IdeatorView/MlInAndTrademarkView'
+import MlIdeaView from '../../../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
 
 //import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 //import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
@@ -53,6 +54,7 @@ export default class MlViewIdeatorPortfolioTemplate extends React.Component{
 
   getTabComponents(){
     let tabs = [
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About Idea" , component:<MlIdeaView key="0"  portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Details" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},

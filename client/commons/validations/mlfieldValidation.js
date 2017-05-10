@@ -20,7 +20,7 @@ export function mlFieldValidations(elements) {
       let value = selectObj.props['selectedValue']
       let multi= selectObj.props['multiSelect']
 
-        if (isRequired && value.length>0&&multi) {
+        if (isRequired && value.length==0&&multi) {
           return selectObj.props['data-errMsg']
         }else if (isRequired && !value) {
           return selectObj.props['data-errMsg']

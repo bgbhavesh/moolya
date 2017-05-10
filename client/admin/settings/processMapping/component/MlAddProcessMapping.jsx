@@ -12,7 +12,7 @@ import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 let Select = require('react-select');
 
 class MlAddProcessMapping extends React.Component{
@@ -93,23 +93,28 @@ class MlAddProcessMapping extends React.Component{
   }
 
   async  createProcess() {
-    let processDetails = {
-      processId   : this.refs.processId.value,
-      process     : this.state.process,
-      communities : this.state.communities,
-      userTypes   : this.state.userTypes,
-      identity    : this.state.identity,
-      industries  : this.state.industries,
-      professions : this.state.professions,
-      clusters    : this.state.clusters,
-      states      : this.state.states,
-      chapters    : this.state.chapters,
-      subChapters : this.state.subChapters,
-      isActive    : this.refs.status.checked,
-      documents   : this.state.assignDocument
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let processDetails = {
+        processId: this.refs.processId.value,
+        process: this.state.process,
+        communities: this.state.communities,
+        userTypes: this.state.userTypes,
+        identity: this.state.identity,
+        industries: this.state.industries,
+        professions: this.state.professions,
+        clusters: this.state.clusters,
+        states: this.state.states,
+        chapters: this.state.chapters,
+        subChapters: this.state.subChapters,
+        isActive: this.refs.status.checked,
+        documents: this.state.assignDocument
+      }
+      const response = await addProcessActionHandler(processDetails)
+      return response;
     }
-    const response = await addProcessActionHandler(processDetails)
-    return response;
   }
   getAssignedDocuments(departments){
     this.setState({'assignDocument':departments})
@@ -277,13 +282,13 @@ class MlAddProcessMapping extends React.Component{
                     <div className="form-group">
                       <input type="text"  ref="processId" placeholder="Process Id" className="form-control float-label"/>
                     </div>
-                   <Moolyaselect multiSelect={false} placeholder={"Process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={processQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} />
+                   <Moolyaselect ref="process" multiSelect={false} mandatory={true}placeholder={"Process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={processQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} data-required={true} data-errMsg="Process is required" />
 
-                    <Moolyaselect multiSelect={true}  placeholder={"Communities"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} id={'fetchcommunities'} onSelect={this.optionsBySelectCommunities.bind(this)} />
-                    <Moolyaselect multiSelect={true}  placeholder={"User Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers} queryOptions={userTypeOption} isDynamic={true} id={'fetchuserTypes'} onSelect={this.optionsBySelectUserType.bind(this)} />
+                    <Moolyaselect ref="communities" multiSelect={true} mandatory={true} placeholder={"Communities"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} id={'fetchcommunities'} onSelect={this.optionsBySelectCommunities.bind(this)} data-required={true} data-errMsg="Community Needed" />
+                    <Moolyaselect ref="userCategory" multiSelect={true} mandatory={true}  placeholder={"User Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers} queryOptions={userTypeOption} isDynamic={true} id={'fetchuserTypes'} onSelect={this.optionsBySelectUserType.bind(this)}  data-required={true} data-errMsg="UserType  is required"/>
                     <div className="form-group">
                      {/* <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>*/}
-                      <Moolyaselect multiSelect={false}  placeholder={"Identity"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.identity} queryType={"graphql"} query={fetchIdentity} queryOptions={identityOption} isDynamic={true} id={'fetchuserTypes'} onSelect={this.optionsBySelectIdentity.bind(this)} />
+                      <Moolyaselect ref="identity" multiSelect={false} mandatory={true} placeholder={"Identity"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.identity} queryType={"graphql"} query={fetchIdentity} queryOptions={identityOption} isDynamic={true} id={'fetchuserTypes'} onSelect={this.optionsBySelectIdentity.bind(this)} data-required={true} data-errMsg="Identity is required" />
                     </div>
 
 
@@ -305,25 +310,25 @@ class MlAddProcessMapping extends React.Component{
               <div className="left_wrap">
 <form>
 
-  <Moolyaselect multiSelect={true}  placeholder={"Industries"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.industries} queryType={"graphql"} query={industriesquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectIndustries.bind(this)} />
+  <Moolyaselect ref="industries" multiSelect={true} mandatory={true} placeholder={"Industries"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.industries} queryType={"graphql"} query={industriesquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectIndustries.bind(this)}  data-required={true} data-errMsg="Industry is required" />
 
 
 
-  <Moolyaselect multiSelect={true}  placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={professionquery} queryOptions={professionOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)} />
+  <Moolyaselect ref="profession"multiSelect={true} mandatory={true} placeholder={"Profession"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.professions} queryType={"graphql"} query={professionquery} queryOptions={professionOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectProfessions.bind(this)}  data-required={true} data-errMsg="Profession is required" />
 
 
 
-  <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
+  <Moolyaselect ref="cluster" multiSelect={true} mandatory={true}   placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)}  data-required={true} data-errMsg="Cluster is required"/>
 
 
 
-  <Moolyaselect multiSelect={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={statesQuery}  queryOptions={stateOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)} />
+  <Moolyaselect ref="state" multiSelect={true} mandatory={true}  placeholder={"State"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.states} queryType={"graphql"} query={statesQuery}  queryOptions={stateOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectStates.bind(this)}  data-required={true} data-errMsg="State is required" />
 
 
 
-  <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+  <Moolyaselect ref="chapter" multiSelect={true}mandatory={true}   placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}  data-required={true} data-errMsg="Chapter is required"/>
 
-  <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+  <Moolyaselect  ref="subChapter"multiSelect={true} mandatory={true}   placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required" />
 </form>
   <ScrollArea
                   speed={0.8}

@@ -73,25 +73,30 @@ class MlAddDocumentMapping extends React.Component{
   // }
 
   async  createDocument() {
-    let documentDetails = {
-      documentId : this.refs.documentId.value,
-      documentDisplayName  : this.refs.displayName.value,
-      allowableFormat : this.state.allowableFormat,
-      clusters    : this.state.clusters,
-      chapters    : this.state.chapters,
-      subChapters : this.state.subChapters,
-      validity    : this.refs.validity.value,
-      inputLength      : this.refs.length.value,
-      remarks      : this.refs.remark.value,
-      documentName   : this.refs.documentName.value,
-      kycCategory  : this.state.kycCategory,
-      documentType   : this.state.documentType,
-      allowableMaxSize  : this.refs.allowableSize.value,
-      issuingAuthority   : this.refs.issuingAuthority.value,
-      isActive    : this.refs.status.checked,
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let documentDetails = {
+        documentId: this.refs.documentId.value,
+        documentDisplayName: this.refs.displayName.value,
+        allowableFormat: this.state.allowableFormat,
+        clusters: this.state.clusters,
+        chapters: this.state.chapters,
+        subChapters: this.state.subChapters,
+        validity: this.refs.validity.value,
+        inputLength: this.refs.length.value,
+        remarks: this.refs.remark.value,
+        documentName: this.refs.documentName.value,
+        kycCategory: this.state.kycCategory,
+        documentType: this.state.documentType,
+        allowableMaxSize: this.refs.allowableSize.value,
+        issuingAuthority: this.refs.issuingAuthority.value,
+        isActive: this.refs.status.checked,
+      }
+      const response = await addDocumentMappingActionHandler(documentDetails)
+      return response;
     }
-    const response = await addDocumentMappingActionHandler(documentDetails)
-    return response;
   }
 
   optionsBySelectAllowableFormats(val){
@@ -215,24 +220,24 @@ class MlAddDocumentMapping extends React.Component{
                     </div>
 
                     <div className="form-group mandatory">
-                      <input type="text"  ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                      <input type="text"  ref="displayName" placeholder="Display Name" className="form-control float-label" id=""data-required={true} data-errMsg="Display Name is required"/>
                     </div>
 
 
-                      <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat} queryType={"graphql"} query={documentFormatquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
+                      <Moolyaselect ref="allowableFormat"multiSelect={true} mandatory={true} placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat} queryType={"graphql"} query={documentFormatquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} data-required={true} data-errMsg="Format is required"/>
 
                     <div className="panel panel-default">
                       <div className="panel-heading">Jurisdiction</div>
                       <div className="panel-body">
 
 
-                          <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectClusters.bind(this)} />
+                          <Moolyaselect ref="cluster" multiSelect={true} mandatory={true} placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectClusters.bind(this)} data-required={true} data-errMsg="Cluster is required"/>
 
 
-                          <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+                          <Moolyaselect ref="chapter" multiSelect={true} mandatory={true} placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}  data-required={true} data-errMsg="Chapter is required"/>
 
 
-                          <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+                          <Moolyaselect ref="subChapter" multiSelect={true} mandatory={true} placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="SubChapter is required"/>
 
                         <div className="form-group">
                           <input type="text"  ref="validity" placeholder="Validity" className="form-control float-label" id=""/>
@@ -243,7 +248,7 @@ class MlAddDocumentMapping extends React.Component{
                         <div className="form-group">
                           <input type="text"  ref="remark" placeholder="Remark" className="form-control float-label" id=""/>
                         </div>
-                        <div className="form-group switch_wrap inline_switch mandatory">
+                        <div className="form-group switch_wrap inline_switch">
                           <label className="">Status</label>
                           <label className="switch">
                             <input type="checkbox" ref="status"/>
@@ -262,17 +267,17 @@ class MlAddDocumentMapping extends React.Component{
           <div className="col-md-6 nopadding-right"  >
             <div className="form_bg">
               <form>
-            <div className="form-group">
-              <input type="text"  ref="documentName" placeholder="Name" className="form-control float-label" id=""/>
+            <div className="form-group mandatory">
+              <input type="text"  ref="documentName" placeholder="Name" className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />
+              <Moolyaselect  ref="kycCategory"multiSelect={true}  mandatory={true} placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)}  data-required={true} data-errMsg="KYC Category is required"/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
+              <Moolyaselect ref="documentType" multiSelect={true} mandatory={true} placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} data-required={true} data-errMsg="Document Type is required" />
             </div>
             <div className="form-group mandatory">
-              <input type="text"  ref="allowableSize" placeholder="Allowable Size" className="form-control float-label" id=""/>
+              <input type="text"  ref="allowableSize" placeholder="Allowable Size" className="form-control float-label" id="" data-required={true} data-errMsg="Size is required"/>
             </div>
             <div className="form-group">
               <input type="text"  ref="issuingAuthority" placeholder="Issuing Authority" className="form-control float-label" id=""/>

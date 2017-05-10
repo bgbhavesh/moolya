@@ -72,7 +72,8 @@ export default class MlAssignComponent extends Component {
       "department": this.state.selectedDepartment,
       "subDepartment": this.state.selectedSubDepartment,
       "role": this.state.selectedRole,
-      "user": this.state.selectedUser
+      "user": this.state.selectedUser,
+      "transactionId" : this.props.transactionId
     }
     let transactionType=this.props.transactionType
     const response = await assignUserForTransactionAction(params,transactionType);

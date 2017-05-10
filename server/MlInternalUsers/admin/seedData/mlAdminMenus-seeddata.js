@@ -851,7 +851,30 @@ if(Meteor.isServer){
             "isLink" : true,
             "isMenu" : true,
             "hideSubMenu":true,
-            "subMenu":[]
+            "subMenu":[
+              {
+                "link": "/admin/settings/hierarchy/clusterhierarchy/:clusterId/chapters",
+                "name": "cluster hierarchy",
+                "uniqueId": "hierarchy",
+                "subMenuMappingId":"",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": "",
+                "subMenu":[
+                  {
+                    "link": "/settings/hierarchy/clusterhierarchy/:clusterId/hierarchyDetails",
+                    "name": " cluster hierarchy",
+                    "uniqueId": "hierarchy_chapters",
+                    "subMenuMappingId":"",
+                    "subMenusId":"settings",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  },
+                ]
+              },
+            ]
           },
           {
             "link" : "/admin/settings/rolesList",

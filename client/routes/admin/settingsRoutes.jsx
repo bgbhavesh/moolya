@@ -723,7 +723,7 @@ adminSection.route('/settings/addSubDomain', {
   }
 });
 adminSection.route('/settings/editSubDomain/:id', {
-  name: 'settings_EditSubdomain',
+  name: 'settings_EditSubDomain',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditSubDomain config={params.id} />})
   }

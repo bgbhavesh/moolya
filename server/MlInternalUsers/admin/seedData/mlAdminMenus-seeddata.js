@@ -604,7 +604,7 @@ if(Meteor.isServer){
                     "dynamicLink" : true,
                     "dynamicLinkHandler" : "",
                     "subMenusId":"transaction_Registration",
-                    //"subMenuMappingId":"transaction_registration_requested_edit"
+                    "subMenuMappingId":"transaction_registration_requested"
                   }
                 ]
               },
@@ -1813,7 +1813,7 @@ if(Meteor.isServer){
           {
             "link" : "/admin/settings/subDomainList",
             "name" : "Sub Domain",
-            "uniqueId" : "SubDomain",
+            "uniqueId" : "settings_SubDomain",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",

@@ -14,7 +14,7 @@ class MlAddSubDomain extends React.Component {
     this.state={
       industry:''
     }
-
+    this.optionsBySelectTypeOfIndustry.bind(this)
     this.createSubDomain.bind(this)
     return this;
   }
@@ -32,11 +32,12 @@ class MlAddSubDomain extends React.Component {
     }
   };
 
-  optionsBySelectTypeOfIndustry(value){
-    this.setState({industry:value})
+  optionsBySelectTypeOfIndustry(val){
+    this.setState({industry:val.value})
+    console.log(val)
   }
 
-  async createSubDomain()
+  async   createSubDomain()
   {
     let subdomainInfo = {
       name: this.refs.name.value,
@@ -93,11 +94,7 @@ class MlAddSubDomain extends React.Component {
                     <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} ref="indutryType" placeholder="Select Industry"
-                                  className="form-control float-label" selectedValue = {this.state.industry}
-                                  valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={industriesquery}
-                                onSelect={this.optionsBySelectTypeOfIndustry.bind(this)}
-                                  isDynamic={true}/>
+                    <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.industry} queryType={"graphql"} query={industriesquery} onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>

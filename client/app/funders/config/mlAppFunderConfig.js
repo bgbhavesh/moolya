@@ -16,8 +16,8 @@ export const mlAppFunderConfig=new MlViewer.View({
   viewComponent:<MlAppFunderListView />,
   showActionComponent:true,
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"FunderPortfolio"){
+              query SearchQuery($offset: Int, $limit: Int,$fieldsData:[GenericFilter], $sortData:[SortFilter]) {
+              data:SearchQuery(module:"FunderPortfolio", offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
                     totalRecords
                     data{
                      ...on FunderPortfolio{

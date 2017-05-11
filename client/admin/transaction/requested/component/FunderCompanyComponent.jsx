@@ -116,6 +116,13 @@ export default class Company extends React.Component{
   optionsBySelectInvestingFrom(val){
    this.setState({investingFrom:val.value})
   }
+  openDatePickerEmploymentDate(){
+    $('#date-time').toggleClass('rdtOpen')
+  }
+
+  openDatePickerDateOfBirth(){
+    $('#date-of-birth').toggleClass('rdtOpen')
+  }
 
 
   async  updateregistration() {
@@ -304,9 +311,9 @@ export default class Company extends React.Component{
               <div className="form-group">
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
               </div>
-              <div className="form-group">
+              <div className="form-group" id="date-of-birth">
                 <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid }/>
-                <FontAwesome name="calendar" className="password_icon"/>
+                <FontAwesome name="calendar" className="password_icon"onClick={that.openDatePickerDateOfBirth.bind(that)}/>
               </div>
               <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>

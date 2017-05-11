@@ -19,11 +19,14 @@ export default function ({req})
   const expiresAt = Accounts._tokenExpiration(user.services.resume.loginTokens[0].when)
   const isExpired = expiresAt < new Date()
   if (isExpired) return {}
-
+  console.log(req);
+  console.log("Request Headers Log Start");
+  console.log(req.headers);
+  console.log("Request Headers Log End");
   const context = {
     userId: user._id,
     loginToken: token,
-    ip: req.headers['x-forwarded-for'],
+    ip: req.headers['x-forwarded-for']||req.headers['X-Forwarded-For'],
     url: req.headers['referer'],
     browser: req.headers['user-agent']
   }

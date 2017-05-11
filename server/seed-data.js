@@ -261,7 +261,7 @@ if(!hierarchyAssignment) {
         displayName: chapterAdminHierarchy.displayName,
         isAssigned: true,
         assignedLevel: "chapter",
-        reportingRole: clusterAdmin._id
+        reportingRole: clusterAdminHierarchy._id
       },
       {
         roleId: subchapterAdminHierarchy._id,

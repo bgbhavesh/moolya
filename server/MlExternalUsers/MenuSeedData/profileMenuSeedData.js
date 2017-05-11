@@ -34,7 +34,7 @@ if(Meteor.isServer){
               "link": "/app/myConnections",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "My Connections",
+              "name" : "My List",
               "uniqueId" : "myConnections"
           },
           {

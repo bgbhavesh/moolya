@@ -27,6 +27,7 @@ import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
 import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
 import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile';
+import MlAppProfileList from '../../../client/app/profile/components/MlAppProfileList'
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
@@ -82,6 +83,14 @@ appSection.route('/addressBook', {
     mount(AppLayout,{appContent:<MlAppProfileAddressBook/>, isProfileMenu:true})
   }
 });
+
+appSection.route('/myConnections', {
+  name: 'myConnections',
+  action(){
+    mount(AppLayout, {appContent: <MlAppProfileList />, isProfileMenu: true})
+  }
+});
+
 
 appSection.route('/portfolio', {
   name: 'portfolio',

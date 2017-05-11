@@ -1,3 +1,4 @@
+/*
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
@@ -78,7 +79,7 @@ export default class MlEditFilter extends React.Component{
                         <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.filterDescription} className="form-control float-label" ></textarea>
                       </div>
 
-                      {/*
+                      {/!*
                       <div className="form-group">
                         <input ref="displayName" defaultValue={this.state.data&&this.state.data.displayName} placeholder="Display Name" className="form-control float-label" id=""></input>
                       </div>
@@ -92,12 +93,12 @@ export default class MlEditFilter extends React.Component{
                           <input type="checkbox" ref="departmentStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
                           <div className="slider"></div>
                         </label>
-                      </div>*/}
+                      </div>*!/}
                     </form>
                   </div>
                 </div>
 
-                {/*<div className="col-md-6 nopadding-right">
+                {/!*<div className="col-md-6 nopadding-right">
                   <div className="form_bg">
                     <form>
                       <div className="clearfix"></div>
@@ -112,7 +113,7 @@ export default class MlEditFilter extends React.Component{
                       {this.state.isMoolyaChecked?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)} nonMoolya={this.state.data&&this.state.data.depatmentAvailable} isSystemDefined={this.state.data&&this.state.data.isSystemDefined}/>:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)} moolya={this.state.data&&this.state.data.depatmentAvailable}/>}
                     </form>
                   </div>
-                </div>*/}
+                </div>*!/}
               </ScrollArea>
             </div>
 
@@ -122,3 +123,4 @@ export default class MlEditFilter extends React.Component{
     )
   }
 }
+*/

@@ -288,19 +288,19 @@ class MlEditDocumentMapping extends React.Component{
                         </div>
 
 
-                          <Moolyaselect multiSelect={true}  placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat} queryType={"graphql"} query={documentFormatquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)} />
+                          <Moolyaselect ref="allowableFormat" multiSelect={true} mandatory={true} placeholder={"Allowable Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.allowableFormat} queryType={"graphql"} query={documentFormatquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectAllowableFormats.bind(this)}  data-required={true} data-errMsg="Format is required"/>
 
                         <div className="panel panel-default">
                           <div className="panel-heading">Jurisdiction</div>
                           <div className="panel-body">
 
 
-                              <Moolyaselect multiSelect={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
+                              <Moolyaselect ref="cluster" multiSelect={true} mandatory={true}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)}  data-required={true} data-errMsg="Cluster is required" />
 
 
-                              <Moolyaselect multiSelect={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} />
+                              <Moolyaselect ref="chapter" multiSelect={true}  placeholder={"Chapter"} mandatory={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}  data-required={true} data-errMsg="Chapter is required"/>
 
-                              <Moolyaselect multiSelect={true}  placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery}  queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} />
+                              <Moolyaselect ref="subChapter" multiSelect={true}  placeholder={"SubChapter"} mandatory={true}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery}  queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required"/>
 
                             <div className="form-group">
                               <input type="text"  ref="validity" defaultValue={this.state.data&&this.state.data.validity} placeholder="Validity" className="form-control float-label" id=""/>
@@ -332,12 +332,12 @@ class MlEditDocumentMapping extends React.Component{
                   <input type="text"  ref="documentName" defaultValue={this.state.data&&this.state.data.documentName} placeholder="Name" className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
                 </div>
 
-                  <Moolyaselect multiSelect={true}  placeholder={"KYC Categories"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)} />
+                  <Moolyaselect  ref="kycCategory" multiSelect={true}  placeholder={"KYC Categories"} mandatory={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.kycCategory} queryType={"graphql"} query={kycCategoryquery}  isDynamic={true} id={'query'} onSelect={this.optionsByKycCategories.bind(this)}  data-required={true} data-errMsg="kyc Category is required"/>
 
-                  <Moolyaselect multiSelect={true}  placeholder={"Type of Document"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)} />
+                  <Moolyaselect  ref="documentType" multiSelect={true}  placeholder={"Type of Document"} mandatory={true}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.documentType} queryType={"graphql"} query={documentTypequery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectDocumentType.bind(this)}  data-required={true} data-errMsg="Document Type is required"/>
 
-                <div className="form-group">
-                  <input type="text"  ref="allowableSize" defaultValue={this.state.data&&this.state.data.allowableMaxSize} placeholder="Allowable Size" className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text"  ref="allowableSize" defaultValue={this.state.data&&this.state.data.allowableMaxSize} placeholder="Allowable Size" className="form-control float-label" id="" data-required={true} data-errMsg="Size is required"/>
                 </div>
                 <div className="form-group">
                   <input type="text"  ref="issuingAuthority" defaultValue={this.state.data&&this.state.data.issuingAuthority} placeholder="Issuing Authority" className="form-control float-label" id=""/>

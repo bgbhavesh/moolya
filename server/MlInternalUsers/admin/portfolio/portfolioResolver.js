@@ -8,6 +8,13 @@ import _ from "lodash";
 MlResolver.MlQueryResolver['fetchPortfolioDetails'] = (obj, args, context, info) => {
 }
 
+MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, context, info) => {
+  var portfolio = MlPortfolioDetails.findOne({'userId': context.userId})
+  if(portfolio)
+    return portfolio;
+  else
+    return {};
+}
 
 MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, info) => {
   let user;

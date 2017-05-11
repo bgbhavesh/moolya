@@ -167,8 +167,8 @@ import MlHierarchyList from '../../admin/settings/hierarchy/component/MlHierarch
 import MlAdminHierarchyHeader from '../../admin/layouts/header/MlAdminHierarchyHeader'
 import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHierarchyDetails'
 import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
-import MlAddFilter from '../../admin/settings/filters/components/MlAddFilter'
-import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'
+import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
+/*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/
 
 // @End
 
@@ -1022,12 +1022,14 @@ adminSection.route('/settings/filtersList', {
   }
 });
 
+/*
 adminSection.route('/settings/addFilter', {
   name: 'settings_AddFilter',
   action(){
     mount(AdminLayout,{adminContent:<MlAddFilter/>})
   }
 });
+*/
 
 adminSection.route('/settings/editFilter/:id', {
   name: 'settings_EditFilter',

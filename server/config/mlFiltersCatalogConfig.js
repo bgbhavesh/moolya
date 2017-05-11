@@ -42,14 +42,22 @@ if(Meteor.isServer){
         isDynamic:true
       },
       {
-        name:"registrationInfo.chapterId",
+        name:"registrationInfo.subChapterId",
         type:'List',
-        resolverName : "Reg_SubChapters",
+        resolverName : "Gen_SubChapters",
         isDynamic:true
       },
       {
-        name:"status",
+        name:"registrationInfo.communityDefName",
         type:'List',
+        resolverName : "Reg_Community",
+        isDynamic:false
+      },
+      {
+        name:"registrationInfo.identityType",
+        type:'List',
+        resolverName : "Reg_IdentityType",
+        isDynamic:false
       }
     ]
   }})

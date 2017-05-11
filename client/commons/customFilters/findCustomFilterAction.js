@@ -15,10 +15,14 @@ export async function findModuleCustomFilterActionHandler(moduleName){
               displayName
               isActive
               isDynamic
-              isRestrictedFilter
               fieldType
               fieldResolverName
-              fieldList
+              fieldList{
+                departmentId
+                subDepartmentId
+                roleId
+                listValueId
+              }
             }
             clusterFields{
               cluster

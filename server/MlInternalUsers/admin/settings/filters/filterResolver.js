@@ -5,6 +5,7 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import MlFilterListRepo from './filterListRepo';
 
+/*
 
 MlResolver.MlMutationResolver['CreateFilter'] = (obj, args, context, info) => {
         // TODO : Authorization
@@ -15,6 +16,19 @@ MlResolver.MlMutationResolver['CreateFilter'] = (obj, args, context, info) => {
             let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
             return response
         }
+}
+*/
+
+
+MlResolver.MlMutationResolver['updateFilter'] = (obj, args, context, info) => {
+  // TODO : Authorization
+
+  if (args.filterId) {
+    var id= args.filterId;
+    let updatedResponse= MlFilters.update({_id:id}, {$set: args.filterObject});
+    return updatedResponse
+  }
+
 }
 
 MlResolver.MlQueryResolver['fetchModuleFilters'] = (obj, args, context, info) => {

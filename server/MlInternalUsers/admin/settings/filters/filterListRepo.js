@@ -59,6 +59,22 @@ export default class MlFilterListRepo{
         })
 
         break;
+
+      case "Reg_Community":
+
+        if(listData.length < 1){
+          result= MlCommunityDefinition.find({isActive : true}).fetch();
+        }else{
+
+          result= MlCommunityDefinition.find({ _id: { $in: listData },isActive : true}).fetch();
+        }
+
+        let communityResponse=_.each(result,function (option,id) {
+          options.push({"label":option.displayName,"value":option._id})
+        })
+
+
+        break;
     }
 
 

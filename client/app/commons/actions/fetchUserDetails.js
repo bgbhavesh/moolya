@@ -13,6 +13,8 @@ export async function fetchUserDetailsHandler() {
             contactNumber
             email
             userName
+            countryId
+            registrationType
           }
         }
       }

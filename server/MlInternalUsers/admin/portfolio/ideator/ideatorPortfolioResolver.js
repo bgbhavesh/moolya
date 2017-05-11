@@ -406,6 +406,12 @@ MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
     let ideas = [];
+    let  userId;
+    if(args.portfolioId){
+      userId = MlPortfolioDetails.findOne({_id:args.portfolioId}).userId;
+    }else if(context.userId){
+      userId=context.userId
+    }
     if(!context.userId){
         return ideas;
     }
@@ -414,7 +420,8 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
     if(!defaultProfile)
         return ideas;
 
-    let portfolios = MlPortfolioDetails.find({"$and":[{"userId":context.userId}, {"clusterId":defaultProfile.clusterId}, {"communityType":"Ideators"}]}).fetch()
+    // let portfolios = MlPortfolioDetails.find({"$and":[{"userId":userId}, {"clusterId":defaultProfile.clusterId}, {"communityType":"Ideators"}]}).fetch()
+    let portfolios = MlPortfolioDetails.find({"$and":[{"userId":userId}, {"communityType":"Ideators"}]}).fetch()
     if(!portfolios)
         return ideas;
 

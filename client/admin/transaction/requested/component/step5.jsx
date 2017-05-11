@@ -232,9 +232,11 @@ export default class Step5 extends React.Component {
     console.log(docTypeId)
     let  registrationId=this.props.registrationData._id
     const response = await removeFileFromDocumentsActionHandler(fileId,docTypeId,documentId,registrationId);
-    if(response){
+    if(response.success){
       this.props.getRegistrationKYCDetails();
 
+    }else{
+      toastr.error(response.result)
     }
   }
 

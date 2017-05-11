@@ -240,7 +240,7 @@ adminSection.route('transactions/registrationRequested/edit', {
 
 
 adminSection.route('/transactions/editRequests/:id', {
-  name: 'transaction_EditRequests',
+  name: 'transaction_registration_requested_edit',
   action(params){
     mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }

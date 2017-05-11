@@ -3,6 +3,7 @@
  */
 import MlResolver from '../../commons/mlResolverDef'
 import MlRespPayload from '../../commons/mlPayload'
+import MlUserContext from '../../MlExternalUsers/mlUserContext'
 import _ from 'lodash'
 
 MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
@@ -60,20 +61,22 @@ MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
   // TODO : Authorization
   let userId=context.userId
-  console.log(userId)
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user){
     var registrationId;
     var clusterId;
-    const userProfile = user.profile.isExternaluser?user.profile.externalUserProfiles:[]
+    // const userProfile = user.profile.isExternaluser?user.profile.externalUserProfiles:[]
 
-    for(var i = 0; i < userProfile.length; i++){
-      if(userProfile[i].isDefault == true){
-        registrationId = userProfile[i].registrationId;
-        clusterId = userProfile[i].clusterId;
-        break;
-      }
-    }
+    let profile = new MlUserContext(userId).userProfileDetails(userId)
+    // for(var i = 0; i < userProfile.length; i++){
+    //   if(userProfile[i].isDefault == true){
+    //     registrationId = userProfile[i].registrationId;
+    //     clusterId = userProfile[i].clusterId;
+    //     break;
+    //   }
+    // }
+    registrationId = profile.registrationId;
+    clusterId = profile.clusterId;
     const addInfo = user.profile.externalUserAdditionalInfo?user.profile.externalUserAdditionalInfo:[]
     var infoDetails;
     _.each(addInfo,function (say,value) {

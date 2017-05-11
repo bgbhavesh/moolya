@@ -173,7 +173,8 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        status          : String
+        status          : String,
+        transactionId   : String
      
     }
     
@@ -187,6 +188,7 @@ let registrationSchema = `
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
          kycDocuments: [kycDocumentInfoSchema]
+         transactionId : String
         
     }
     
@@ -231,7 +233,8 @@ let registrationSchema = `
         userId          :   String,
         registrationStatus        :   String,
         assignedUser    :   String,
-        profileImage    : String
+        profileImage    :   String,
+        transactionId   :   String
     }
     
     type branchLocation{

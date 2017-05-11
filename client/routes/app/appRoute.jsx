@@ -27,8 +27,13 @@ import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
 import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
 import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile';
+import MlAppProfileList from '../../../client/app/profile/components/MlAppProfileList'
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
+
+//Funders
+import {mlAppFunderConfig} from '../../app/funders/config/mlAppFunderConfig'
+
 export const appSection = FlowRouter.group({
   prefix: "/app",
   name: 'app',
@@ -79,6 +84,14 @@ appSection.route('/addressBook', {
   }
 });
 
+appSection.route('/myConnections', {
+  name: 'myConnections',
+  action(){
+    mount(AppLayout, {appContent: <MlAppProfileList />, isProfileMenu: true})
+  }
+});
+
+
 appSection.route('/portfolio', {
   name: 'portfolio',
   action(){
@@ -99,7 +112,7 @@ appSection.route('/myProfile/registerAs', {
         mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppCommunitiesList/>})
     }
 })
-
+// Ideators
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
@@ -125,38 +138,31 @@ appSection.route('/portfolio/addIdea', {
   }
 });
 
-
-// appSection.route('/ideator/viewPortfolio/:id/:communityType', {
-appSection.route('/:communityType/:portfolioId', {
+appSection.route('/ideator/:portfolioId', {
   name: 'ideator',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={params.communityType}/>, isProfileMenu:false})
-    // mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={true} config={params.id} />})
-    // mount(AppLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"ideator"}/>, isProfileMenu:false})
   }
 });
 
-// appSection.route('/ideator/editPortfolio/:id/:communityType', {
 appSection.route('/ideator/editPortfolio/', {
   appSection: 'ideator_portfolio_edit',
   action(params){
-    // mount(AppLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
     mount(AppLayout,{appContent:<MlAppIdeatorTabs viewMode={false}/>})
   }
 });
 
+//Startups
 appSection.route('/startup', {
   name: 'startup',
   action(){
     mount(AppLayout,{appContent:< MlAppStartupLanding/>})
-    // mount(AppLayout,{appContent:<div>Startup</div>})
   }
 });
 appSection.route('/startup/:id', {
   name: 'startup',
   action(params){
     mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
-    // mount(AppLayout,{appContent:<div>Startup</div>})
   }
 });
 
@@ -167,3 +173,18 @@ appSection.route('/register/:id', {
   }
 });
 
+
+// Funders
+appSection.route('/funder', {
+  name: 'funder',
+  action(){
+    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={mlAppFunderConfig} />})
+  }
+});
+
+appSection.route('/funder/:portfolioId', {
+  name: 'funder',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"funder"}/>, isProfileMenu:false})
+  }
+});

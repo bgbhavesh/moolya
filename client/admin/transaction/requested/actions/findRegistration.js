@@ -8,6 +8,7 @@ export async function findRegistrationActionHandler(registrationId) {
    query($id: String){  
         findRegistrationInfo(registrationId:$id){          
           _id
+          transactionId
           registrationInfo {
           registrationId
             industry
@@ -49,6 +50,7 @@ export async function findRegistrationActionHandler(registrationId) {
             registrationStatus
             assignedUser
             profileImage
+            
             
           }
         registrationDetails {

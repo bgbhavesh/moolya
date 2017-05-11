@@ -31,6 +31,10 @@ export default class AppActionButtons extends React.Component {
     })
   }
 
+  connectRequest(){
+    toastr.success("connect request");
+  }
+
   render() {
     let config = [
       {
@@ -114,8 +118,8 @@ export default class AppActionButtons extends React.Component {
             <div id="collapseTwo" className="panel-collapse collapse" style={{'background': '#ef4647'}}>
               <div className="action_buttons">
                 <ul>
-                  <li className="hide"><a href="#" id="pop_connect"
-                                          onClick={this.actionClick.bind(this, "pop_connect")}>
+                  <li><a href="#" id="pop_connect"
+                         onClick={this.actionClick.bind(this, "pop_connect")}>
                     <span className="ml flaticon-ml-handshake">
                     </span><br />Connect</a></li>
                   <li><a href="#" id="pop_inquiry" onClick={this.actionClick.bind(this, "pop_inquiry")}>
@@ -203,7 +207,7 @@ export default class AppActionButtons extends React.Component {
           <PopoverContent>
             Do you want to connect ?
             <div className="ml_btn">
-              <a href="#" className="save_btn">Connect</a>
+              <a href="#" className="save_btn" onClick={this.connectRequest.bind(this)}>Connect</a>
               <a href="#" className="cancel_btn" onClick={this.cancelClick.bind(this, 'pop_connect')}>Cancel</a>
             </div>
           </PopoverContent>

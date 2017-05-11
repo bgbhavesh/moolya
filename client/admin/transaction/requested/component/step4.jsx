@@ -13,7 +13,7 @@ import _ from "underscore";
 import update from 'immutability-helper';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 export default class Step4 extends React.Component{
   constructor(props) {
     super(props);
@@ -68,7 +68,9 @@ export default class Step4 extends React.Component{
     }
 
   }
-
+  componentDidUpdate() {
+    initalizeFloatLabel();
+  }
   async onDeleteSocialLink(index,value){
     let listArray = update(this.state.socialLinkArray, {
       $splice: [[index, 1]]

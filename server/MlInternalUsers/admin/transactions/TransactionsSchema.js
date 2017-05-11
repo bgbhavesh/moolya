@@ -43,6 +43,10 @@ let transactionsSchema = `
       transactionUpdatedDate    : String
       hierarchy                 : String
       allocation                : allocation
+      cluster                   : String
+      chapter                   : String
+      subChapter                : String
+      community                 : String
     }
     input byInput{
       type                      : String
@@ -84,6 +88,10 @@ let transactionsSchema = `
       transactionUpdatedDate    : String
       hierarchy                 : String
       allocation                : allocationInput
+      cluster                   : String
+      chapter                   : String
+      subChapter                : String
+      community                 : String
     }
     input assignmentParams{
        cluster        : String
@@ -93,13 +101,15 @@ let transactionsSchema = `
        department     : String
        subDepartment  : String
        role           : String
-       user           : String
+       user           : String      
     }
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput):response
-      createRegistrationTransaction(params:assignmentParams,transactionType:String):response
+      assignRegistrationTransaction(params:assignmentParams,transactionId:String,transactionType:String):response
       updateTransactionStatus(transactionId:String,status:String):response
+      createRegistrationTransaction(transactionType:String):response
+      updateRegistrationTransaction(transactionInfo:TransactionsInput):response
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]

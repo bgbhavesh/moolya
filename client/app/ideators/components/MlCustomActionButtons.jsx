@@ -76,7 +76,7 @@ export default class MlCustomActionButtons extends React.Component {
   }
 
   selectedIdea(ideaId, portfolioId, e){
-    FlowRouter.go('/app/ideator/'+portfolioId+'/'+ideaId);
+    FlowRouter.go('/app/ideator/'+portfolioId);
   }
 
   render() {

@@ -35,7 +35,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
   // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails}, context)
+  //create transaction
+  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
+  args.registration.transactionId = resp.result;
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails, transactionId: resp.result}, context)
   if(id){
 
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
@@ -157,7 +160,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         updatedResponse = mlDBController.update('MlRegistration', id, {
           registrationInfo: details,
-          "registrationDetails.firstName": details.firstName,
+            "registrationDetails.firstName": details.firstName,
           "registrationDetails.lastName": details.lastName,
           "registrationDetails.identityType": details.identityType,
           "registrationDetails.userType": details.userType
@@ -240,8 +243,17 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
               mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
               updatedResponse = new MlRespPayload().successPayload(result, code);
+              //update transaction with operational area
+            // var temp =mlDbController.find('MlRegistration',id,{"registrationInfo.userId": userId},context ).fetch()
+
+              let transactionInfo = {
+                cluster : details.clusterId,
+                chapter : details.chapterId,
+                requestId : details.transactionId
+              }
+              let resp = MlResolver.MlMutationResolver['updateRegistrationTransaction'] (obj,{'transactionInfo':transactionInfo},context, info);
               return updatedResponse;
-          }
+          }x``
 
 
       }else {
@@ -475,9 +487,27 @@ MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, 
   if (args.registrationId) {
     let documentList=args.documentId;
     let updatedResponse;
+    let user=MlRegistration.findOne({_id:args.registrationId})
+    let kyc=user.kycDocuments
+     let kycDoc = _.find(kyc, function (item) {
+      return item.documentId == args.documentId&&item.docTypeId==args.docTypeId;
+    });
+    if(kycDoc.docFiles.length>0&&kycDoc.status!="Approved"){
+      response = mlDBController.update('MlRegistration', {"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]}, { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }}, {$pull:true}, context)
+      if(response){
+        let code = 200;
+        let result = {registrationId : response}
+        updatedResponse = new MlRespPayload().successPayload(result, code);
+
+      }
+    }
+    else{
+      let code = 409;
+      updatedResponse = new MlRespPayload().errorPayload("documents can not allowed to remove once approved!!!!");
+    }
     //  updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId}},'kycDocuments':{$elemMatch: {'documentId.$.docFiles':{$elemMatch:{'fileId':args.fileId}}}}},{$pull: {}});
     // updatedResponse=MlRegistration.update({"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]},{ $pull: { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }} });
-    updatedResponse = mlDBController.update('MlRegistration', {"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]}, { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }}, {$pull:true}, context)
+
     return updatedResponse;
   }
 }

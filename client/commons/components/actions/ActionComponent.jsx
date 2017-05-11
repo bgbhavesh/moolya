@@ -98,6 +98,11 @@ export default class MlActionComponent extends Component {
         imagefield:'/images/act_select_icon.png',
         actionName:'documentReject',
         iconClass:'ml ml-document-reject'
+      },
+      {
+        imagefield:'/images/act_select_icon.png',
+        actionName:'view',
+        iconClass:'fa fa-eye'
       }
     ]
 

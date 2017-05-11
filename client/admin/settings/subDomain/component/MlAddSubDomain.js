@@ -33,7 +33,7 @@ class MlAddSubDomain extends React.Component {
   };
 
   optionsBySelectTypeOfIndustry(val){
-    this.setState({industry:val.value})
+    this.setState({industry:val})
     console.log(val)
   }
 
@@ -90,14 +90,9 @@ class MlAddSubDomain extends React.Component {
                   <div className="form-group">
                     <input type="text" ref="name" placeholder="Name" className="form-control float-label"/>
                   </div>
+                  <br className="clearfix"/>
                   <div className="form-group">
                     <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"/>
-                  </div>
-                  <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.industry} queryType={"graphql"} query={industriesquery} onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
-                  </div>
-                  <div className="form-group">
-                    <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
                   </div>
                 </form>
               </div>
@@ -105,6 +100,12 @@ class MlAddSubDomain extends React.Component {
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">
                 <form>
+                  <div className="form-group">
+                    <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.industry} queryType={"graphql"} query={industriesquery} onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
+                  </div>
+                  <div className="form-group">
+                    <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
+                  </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">

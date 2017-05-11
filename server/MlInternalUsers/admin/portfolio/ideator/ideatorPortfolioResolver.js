@@ -8,9 +8,6 @@ import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
 var extendify = require('extendify');
 var _ = require('lodash')
 
-let applyDiff   = require('deep-diff').applyDiff,
-  observableDiff  = require('deep-diff').observableDiff
-
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
       try {
           if (args && args.userId && args.communityType) {

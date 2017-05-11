@@ -25,8 +25,8 @@ export default class MlAppCommunitiesList extends Component {
     }
 
     componentDidMount(){
-        this.fetchCommunities();
-        this.fetchUserDetails();
+      this.fetchUserDetails();
+
     }
       async fetchUserDetails(){
             let response=await fetchUserDetailsHandler()
@@ -38,6 +38,8 @@ export default class MlAppCommunitiesList extends Component {
           this.setState({email:registrationInfo.email});
           this.setState({userName:registrationInfo.userName})
           this.setState({country:registrationInfo.countryId})
+          this.setState({communityId:registrationInfo.registrationType});
+          this.fetchCommunities();
         }
       }
 
@@ -63,7 +65,8 @@ export default class MlAppCommunitiesList extends Component {
       registrationType:this.state.selectedCommunity,
       identityType:this.state.identity,
       countryId:this.state.countryId,
-      cityId:this.state.selectedCity
+      cityId:this.state.selectedCity,
+
     }
     const response = await createRegistrationInfo(registrationInfo);
     if(response.success){
@@ -80,10 +83,27 @@ export default class MlAppCommunitiesList extends Component {
 
     async fetchCommunities() {
         let communities = await fetchCommunitiesHandler();
-     let communitilist= _.filter(communities, function(community) {
-        return community.code==="FUN" ||community.code==="IDE"||community.code==="STU"||community.code==="SPS"
-     });
+        let userCommunity=this.state.communityId
+      if(userCommunity=="CMP"){
+        let communitilist= _.filter(communities, function(community) {
+          return community.code==="CMP"
+        });
         this.setState({communities:communitilist})
+      }else if(userCommunity=="INS"){
+        let communitilist= _.filter(communities, function(community) {
+          return community.code==="INS"
+        });
+        this.setState({communities:communitilist})
+      }else if(userCommunity=="BRW"){
+        let communitilist=[]
+        this.setState({communities:communitilist})
+      }else{
+        let communitilist= _.filter(communities, function(community) {
+          return community.code==="FUN" ||community.code==="IDE"||community.code==="STU"||community.code==="SPS"
+        });
+        this.setState({communities:communitilist})
+      }
+
         return communities;
     }
 

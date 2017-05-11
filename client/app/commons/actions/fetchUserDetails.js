@@ -14,6 +14,7 @@ export async function fetchUserDetailsHandler() {
             email
             userName
             countryId
+            registrationType
           }
         }
       }

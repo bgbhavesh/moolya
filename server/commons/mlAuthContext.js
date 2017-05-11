@@ -23,7 +23,7 @@ export default function ({req})
   const context = {
     userId: user._id,
     loginToken: token,
-    ip: req.headers['x-forwarded-for'],
+    ip: req.headers['x-forwarded-for']||req.headers['X-Forwarded-For'],
     url: req.headers['referer'],
     browser: req.headers['user-agent']
   }

@@ -14,6 +14,7 @@ export async function fetchUserDetailsHandler() {
             email
             userName
             countryId
+            registrationType
           }
         }
       }
@@ -22,5 +23,23 @@ export async function fetchUserDetailsHandler() {
   })
 
   const user = result.data.findRegistrationInfoForUser;
+  return user;
+}
+
+export async function fetchPortfolioDetails() {
+  const result = await appClient.query({
+    query: gql`
+         query{
+        fetchPortfolioDetailsByUserId {
+          _id
+          communityType
+          communityCode
+        }
+      }
+        `,
+    forceFetch:true
+  })
+
+  const user = result.data.fetchPortfolioDetailsByUserId;
   return user;
 }

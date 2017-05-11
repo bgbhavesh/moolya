@@ -12,7 +12,7 @@ import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlEditSubDomain extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {loading:true,data:{}, industry:" "};
+    this.state = {loading:true,data:{}, industryId:" ", industry:"  "};
     this.updateSelectedSubDomain.bind(this)
     this.findSubDomain.bind(this);
     this.onStatusChange.bind(this);
@@ -33,7 +33,7 @@ class MlEditSubDomain extends React.Component{
   }
 
   optionsBySelectTypeOfIndustry(value){
-    this.setState({industry:value})
+    this.setState({industryId:value})
   }
 
   async handleError(response) {
@@ -61,7 +61,9 @@ class MlEditSubDomain extends React.Component{
   async findSubDomain(){
     let subDomainId = this.props.config
     const response = await findSubDomainActionHandler(subDomainId);
-    this.setState({loading:false,data:response});
+    this.setState({loading:false,data:response, industryId:response.industryId});
+    // const industryDetails = await findIndustryActionHandler(industryId)
+    // this.setState({industry:industryDetails.industryName})
   }
 
   async  updateSelectedSubDomain() {
@@ -69,7 +71,7 @@ class MlEditSubDomain extends React.Component{
       name: this.refs.name.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
-      industryId:this.state.industry,
+      industryId:this.state.industryId,
       isActive: this.refs.isActive.checked
     }
     console.log(this.props)
@@ -114,26 +116,28 @@ class MlEditSubDomain extends React.Component{
                     {/*<input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>*/}
                     <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.name}/>
                   </div>
+                  <br className="clearfix"/>
                   <div className="form-group">
-                    <textarea ref="about" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.about}></textarea>
+                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName}/>
                   </div>
+
                 </form>
               </div>
             </div>
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName}/>
-                  </div>
 
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} ref="indutryType" placeholder="Select Industry"
-                                  className="form-control float-label" selectedValue = {this.state.industry}
+                                  className="form-control float-label" selectedValue = {this.state.industryId}
                                   valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={industriesquery}
-                                  onSelect={this.optionsBySelectTypeOfIndustry.bind(this)}
+                                  onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} defaultValue={this.state.industry}
                                   isDynamic={true} />
                     {console.log(this.state.data)}
+                  </div>
+                  <div className="form-group">
+                    <textarea ref="about" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.about}></textarea>
                   </div>
 
 

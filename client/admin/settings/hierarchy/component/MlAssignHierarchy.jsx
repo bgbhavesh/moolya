@@ -7,21 +7,19 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
 import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
 import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
 import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
 import {findFinalApprovalRoleActionHandler} from '../actions/findFinalApprovalRoleAction'
 import _ from 'lodash'
 var assignedParent = [
   {
-    value: 'cluster',    label: 'cluster'
+    value: '3',    label: 'cluster'
   },
   {
-    value: 'chapter',    label: 'chapter'
+    value: '2',    label: 'chapter'
   },
   {
-    value: 'community',    label: 'community'
+    value: '0',    label: 'community'
   },
   {
     value: 'unassign',    label: 'unassign'
@@ -29,13 +27,13 @@ var assignedParent = [
 ];
 var unAssignedParent = [
   {
-    value: 'cluster',    label: 'cluster'
+    value: '3',    label: 'cluster'
   },
   {
-    value: 'chapter',    label: 'chapter'
+    value: '2',    label: 'chapter'
   },
   {
-    value: 'community',    label: 'community'
+    value: '0',    label: 'community'
   }
 
 ];
@@ -46,8 +44,8 @@ export default class MlAssignHierarchy extends React.Component {
     this.state={
       loading:true,
       finalApproval:{isChecked:false,id:null,parentDepartment:null,parentSubDepartment:null,department:null,subDepartment:null,role:null},
-      unAssignedRoles:{id:"",teamStructureAssignment:[{roleId:"",roleName:"",displayName:"",roleType:"",isAssigned:false,assignedLevel:"",reportingRole:""}]},
-      assignedRoles:{id:"",teamStructureAssignment:[{roleId:"",roleName:"",displayName:"",roleType:"",isAssigned:false,assignedLevel:"",reportingRole:""}]}
+      unAssignedRoles:{id:"",teamStructureAssignment:[{roleId:"",roleName:"",displayName:"",roleType:"",isAssigned:false,assignedLevel:"",reportingRole:"", levelCode:" "}]},
+      assignedRoles:{id:"",teamStructureAssignment:[{roleId:"",roleName:"",displayName:"",roleType:"",isAssigned:false,assignedLevel:"",reportingRole:"",levelCode:" "}]}
     }
     return this;
   }
@@ -116,9 +114,10 @@ export default class MlAssignHierarchy extends React.Component {
     this.setState({finalApproval:finalApproval})
     this.props.getFinalApprovalDetails(finalApproval);
   }
-  optionsBySelectParentNode(index, value){
+  optionsBySelectParentNode(index, value, calback, selObject){
     let roles=this.state.unAssignedRoles
-    roles.teamStructureAssignment[index].assignedLevel = value.value
+    roles.teamStructureAssignment[index].assignedLevel = value.label
+    roles.teamStructureAssignment[index].levelCode = value.value
     this.setState({unAssignedRoles:roles})
     this.props.getUnAssignRoleDetails(roles)
   }
@@ -129,10 +128,11 @@ export default class MlAssignHierarchy extends React.Component {
       this.setState({unAssignedRoles:roles})
       this.props.getUnAssignRoleDetails(roles)
   }
-  optionsBySelectAssignedParentNode(index, value){
+  optionsBySelectAssignedParentNode(index, value, calback, selObject){
     let roles = _.cloneDeep(this.state.assignedRoles);
     //  let roles=this.state.assignedRoles
-      roles.teamStructureAssignment[index].assignedLevel = value.value
+    roles.teamStructureAssignment[index].assignedLevel = value.label
+    roles.teamStructureAssignment[index].levelCode = value.value
       if( value.value=="unassign"){
         roles.teamStructureAssignment[index].isAssigned = false
       }

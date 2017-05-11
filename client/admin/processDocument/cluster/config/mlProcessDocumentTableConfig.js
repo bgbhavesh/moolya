@@ -78,10 +78,27 @@ const mlProcessTableConfig=new MlViewer.View({
   {
     if(!config.params){
       let userDefaultObj = getAdminUserContext()
+      console.log(userDefaultObj);
+      if(userDefaultObj.hierarchyCode === "CLUSTER"){
       return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
     }
     else
       return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+    if(userDefaultObj.hierarchyCode === "CHAPTER"){
+      return {context:{chapterId:userDefaultObj.chapterId?userDefaultObj.chapterId:null}}
+    }
+    else
+      return {context:{chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
+    if(userDefaultObj.hierarchyCode === "COMMUNITY"){
+      return {context:{communityId:userDefaultObj.communityId?userDefaultObj.communityId:null}}
+    }
+    else
+      return {context:{communityId:config.params&&config.params.communityId?config.params.communityId:null}}
+      if(userDefaultObj.hierarchyCode === "SUBCHAPTER"){
+        return {context:{subChapterId:userDefaultObj.subChapterId?userDefaultObj.subChapterId:null}}
+      }
+      else
+        return {context:{subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}}}
   },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},

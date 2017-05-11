@@ -72,7 +72,7 @@ const mlFilterTableConfig=new MlViewer.View({
       }
 
     },
-    {
+    /*{
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
@@ -80,7 +80,7 @@ const mlFilterTableConfig=new MlViewer.View({
         else{
           FlowRouter.go("/admin/settings/addFilter")}
       }
-    },
+    },*/
     // {
     //   showAction: true,
     //   actionName: 'logout',

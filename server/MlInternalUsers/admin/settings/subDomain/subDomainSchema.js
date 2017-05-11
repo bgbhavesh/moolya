@@ -10,6 +10,7 @@ let SubDomainSchema = `
         displayName :String,
         about: String,
         industryId:String,
+        industryName:String,
         isActive:Boolean
     }
     
@@ -29,7 +30,7 @@ let SubDomainSchema = `
     }
     type Query{
         findSubDomain(SubDomainId:String): SubDomain
-        fetchIndustryDomain(industryId: String):[SubDomain]
+        fetchIndustryDomain(industryId: String):SubDomain
     }
 `
 

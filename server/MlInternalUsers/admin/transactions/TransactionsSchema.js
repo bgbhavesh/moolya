@@ -101,13 +101,12 @@ let transactionsSchema = `
        department     : String
        subDepartment  : String
        role           : String
-       user           : String
-       transactionId  : String
+       user           : String      
     }
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput):response
-      assignRegistrationTransaction(params:assignmentParams,transactionType:String):response
+      assignRegistrationTransaction(params:assignmentParams,transactionId:String,transactionType:String):response
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response

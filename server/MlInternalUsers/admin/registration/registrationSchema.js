@@ -188,6 +188,7 @@ let registrationSchema = `
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
          kycDocuments: [kycDocumentInfoSchema]
+         transactionId : String
         
     }
     

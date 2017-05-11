@@ -106,6 +106,9 @@ export default class MlMyProfile extends React.Component{
       }
   }
 
+    openDatePickerDateOfBirth(){
+    $('#date-of-birth').toggleClass('rdtOpen')
+  }
   async firstNameUpdation(e) {
       this.setState({firstName: e.target.value})
   }
@@ -216,7 +219,6 @@ async showImage(temp){
   }
 
   async onFileUpload(){
-    // let file=document.getElementById("profilePic").files[0];
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage:" " }}
@@ -234,8 +236,6 @@ async showImage(temp){
     else{
       this.storeImage();
     }
-
-    //this.props.onFileUpload(file,documentId);
   }
 
   render(){
@@ -315,9 +315,9 @@ async showImage(temp){
 
                     {/*</div>*/}
 
-                    <div className="form-group">
+                    <div className="form-group" id="date-of-birth">
                       <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onfoundationDateSelection.bind(this)} />
-                      <FontAwesome name="calendar" className="password_icon"/>
+                      <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 
 

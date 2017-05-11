@@ -65,7 +65,7 @@ class  MlAdminProfileApp extends Component {
   }
 
   componentWillUpdate(){
-    console.log(this.props.user);
+    // console.log(this.props.user);
      let temp =this.state.profilePic;
      console.log(temp);
   }

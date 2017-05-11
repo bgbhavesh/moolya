@@ -17,8 +17,8 @@ export async function findComments(annotationId) {
     							portfolioId
     							userId 
                   userName
-                  isResolved
-                  isReopened
+                  firstName
+                  lastName
                   createdAt
               }
           }

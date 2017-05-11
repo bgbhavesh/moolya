@@ -110,6 +110,8 @@ let transactionsSchema = `
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response
+      selfAssignTransaction(transactionId:String):response
+      unAssignTransaction(transactionId:String):response
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]

@@ -5,6 +5,8 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {assignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+import {selfAssignTransactionAction} from '../actions/selfAssignTransactionAction'
+import {unAssignTransactionAction} from '../actions/unAssignTransactionAction'
 export default class MlAssignComponent extends Component {
 
   constructor(props){
@@ -86,6 +88,31 @@ export default class MlAssignComponent extends Component {
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
 
+  }
+  async selfAssignTransaction(){
+    let transactionType=this.props.transactionType
+    const response = await selfAssignTransactionAction(params,this.props.transactionId);
+    if(response){
+      toastr.success("Self Assignment successfull");
+      FlowRouter.go("/admin/transactions/requestedList");
+    }else{
+      toastr.error(response.result);
+      this.setState({show:false})
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }
+  }
+
+  async unAssignTransaction(){
+    let transactionType=this.props.transactionType
+    const response = await unAssignTransactionAction(params,this.props.transactionId);
+    if(response){
+      toastr.success("Self Assignment successfull");
+      FlowRouter.go("/admin/transactions/requestedList");
+    }else{
+      toastr.error(response.result);
+      this.setState({show:false})
+      FlowRouter.go("/admin/transactions/registrationRequested");
+    }
   }
 
   render() {
@@ -208,6 +235,12 @@ export default class MlAssignComponent extends Component {
           </a>
           <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>
             <span className="ml ml-delete"></span>
+          </a>
+          <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.selfAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
+            <span className="ml ml-save"></span>
+          </a>
+          <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.unAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
+            <span className="ml ml-save"></span>
           </a>
         </div>
 

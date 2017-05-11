@@ -8,10 +8,15 @@ let FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag'
 import Datetime from "react-datetime";
 import moment from "moment";
+import MlAssignClustersToFilters from '../components/mlAssignClustersToFilters'
+import _ from 'lodash';
+import update from 'immutability-helper';
+
 export default class MlAssignModulesToFilters extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       selectedValue: null,
       listValues : [],
@@ -25,48 +30,16 @@ export default class MlAssignModulesToFilters extends React.Component {
 
 
   componentDidMount() {
-    let filters=this.props.filterCatalog;
-    if(filters){
-      let availabilityDetailsForm=[]
-      for(let i=0;i<filters.length;i++){
-        let json={
-          fieldName:filters[i].name,
-          fieldType:filters[i].type,
-          fieldResolverName : filters[i].resolverName,
-          isDynamic:filters[i].isDynamic,
-        }
-        availabilityDetailsForm.push(json)
-      }
-      this.setState({assignModulesToFilters:availabilityDetailsForm})
-    }
+    let filterDetails = this.props.filterExistingData;
+    this.setState({assignModulesToFilters:filterDetails.filterFields})
   }
 
-/*
-  componentWillMount(){
-    let assignFiltersForm = this.state.assignModulesToFilters
-    if (assignFiltersForm) {
-      let assignFiltersFormDetails=[]
-      for(let i=0;i<assignFiltersForm.length;i++){
-        let json={
-          fieldName:assignFiltersForm[i].fieldName,
-          displayName:assignFiltersForm[i].displayName,
-          isRestrictedFilter:assignFiltersForm[i].isRestrictedFilter,
-          isActive:assignFiltersForm[i].isActive,
-          fieldType:assignFiltersForm[i].fieldType
-        }
-        assignFiltersFormDetails.push(json)
-      }
-      this.setState({assignModulesToFilters: assignFiltersFormDetails});
-    }
-  }
-*/
 
   assignModuleToRoles(id) {
     this.setState({
       assignModulesToFilters: this.state.assignModulesToFilters.concat([{
         fieldName: '',
         displayName: '',
-        isRestrictedFilter: '',
         isActive: '',
         fieldType:''
       }])
@@ -88,13 +61,33 @@ export default class MlAssignModulesToFilters extends React.Component {
   }
 
   onStatusChange(index,event){
-    let filterDetails=this.state.assignModulesToFilters
+    let cloneArray = _.cloneDeep(this.state.assignModulesToFilters);
+    let filterDetails = cloneArray;
     if(event.currentTarget.checked){
       filterDetails[index]['isActive']=true
       this.setState({assignModulesToFilters:filterDetails})
       this.props.getFiltersData(this.state.assignModulesToFilters);
     }else {
       filterDetails[index]['isActive'] =false
+      this.setState({assignModulesToFilters: filterDetails})
+      this.props.getFiltersData(this.state.assignModulesToFilters);
+    }
+  }
+
+  customChange(index,event){
+    let cloneArray = _.cloneDeep(this.state.assignModulesToFilters);
+    let filterDetails = cloneArray[index]
+    if(event.currentTarget.checked){
+
+
+        filterDetails['isCustom']=true
+      cloneArray[index] = filterDetails
+      this.setState({assignModulesToFilters:cloneArray})
+      this.props.getFiltersData(this.state.assignModulesToFilters);
+    }else {
+
+        filterDetails['isCustom'] = false
+
       this.setState({assignModulesToFilters: filterDetails})
       this.props.getFiltersData(this.state.assignModulesToFilters);
     }
@@ -118,7 +111,8 @@ export default class MlAssignModulesToFilters extends React.Component {
   }*/
 
   handleBlur(id,e){
-    let details =this.state.assignModulesToFilters || [];
+    let cloneArray = _.cloneDeep(this.state.assignModulesToFilters);
+    let details = cloneArray
     let name  = e.target.name;
    /* details=_.extend(details[id],{[name]:e.target.value});*/
     if(details[id]){
@@ -128,16 +122,7 @@ export default class MlAssignModulesToFilters extends React.Component {
     this.props.getFiltersData(details);
   }
 
-  optionsBySelect(id,resolverName,val){
-    let details =this.state.assignModulesToFilters || [];
-    if(details[id]){
-      details[id]["fieldList"] = val;
-    }
-    this.setState({listValues:val,assignModulesToFilters:details})
-    this.props.getFiltersData(details)
-
-  }
-
+/*
   restrictionChange(index,event){
     let filterDetails=this.state.assignModulesToFilters
 
@@ -152,11 +137,21 @@ export default class MlAssignModulesToFilters extends React.Component {
       this.props.getFiltersData(this.state.assignModulesToFilters);
     }
   }
+*/
+
+  getRolesData(index,details){
+      let filterDetails = this.state.assignModulesToFilters || [];
+    filterDetails[index]["fieldList"] = details;
+    this.setState({assignModulesToFilters: filterDetails})
+    this.props.getFiltersData(this.state.assignModulesToFilters);
+
+  }
 
 
   render() {
     let that = this;
     let listOptions = null;
+    let customSelect = false;
     let listQuery=gql`query($moduleName:String!){  
       data:fetchFilterListDropDown(moduleName:$moduleName) {
        label
@@ -166,12 +161,19 @@ export default class MlAssignModulesToFilters extends React.Component {
     let listSelect = false
     let listValues = that.state.listValues || []
     return (
+
       <div>
 
         {that.state.assignModulesToFilters.map(function (options, id) {
 
+
           if(options&&options.fieldType == "List"&&!options.isDynamic){
             listSelect = true
+          }
+          if(options&&options.fieldType == "List"&&!options.isDynamic&&options.isCustom){
+            customSelect = true
+          }else{
+            customSelect = false
           }
           if(options&&options.fieldResolverName){
              listOptions={options: { variables: {moduleName:options.fieldResolverName}}}
@@ -179,37 +181,50 @@ export default class MlAssignModulesToFilters extends React.Component {
             listOptions={options: { variables: {moduleName:''}}}
           }
 
-
           return (
 
             <div className="panel panel-default" key={id}>
-              <div className="panel-heading">Add Filter{id == 0 ? (
+             {/* <div className="panel-heading">Add Filter{id == 0 ? (
                 <div className="pull-right block_action" onClick={that.assignModuleToRoles.bind(that, id)}><img
                   src="/images/add.png"/></div>) :
                 <div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that, id)}><img
                   src="/images/remove.png"/></div>}
-              </div>
+              </div>*/}
+            <div className="panel-heading">Add Filter</div>
 
               <div className="panel-body">
                 <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <div className="form-group" >
-                        <input type="text" placeholder="Field Type"
-                               className="form-control float-label" defaultValue={options.fieldName}/>
+                        <input type="text" placeholder="Field Type" className="form-control float-label" defaultValue={options.fieldName}  disabled={true}/>
 
-                      </div>
+
 
                     </div>
                   </div>
+
                   <div className="col-md-12">
                     <div className="form-group">
-                      <input type="text" placeholder="Display Name" name={"displayName"}
+                      <input type="text" placeholder="Display Name" name={"displayName"} defaultValue={options.displayName}
                              className="form-control float-label" onBlur={that.handleBlur.bind(that,id)}/>
                     </div>
                   </div>
 
-                  <div className="col-md-6">
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      <input type="text" placeholder="Field Type"
+                             className="form-control float-label" defaultValue={options.fieldType}  disabled={true}/>
+                    </div>
+                  </div>
+
+                  <div className="col-md-12"  hidden="true">
+                    {listSelect?<div className="form-group">
+                      <input type="text" placeholder="Field Collection" ref={"resolverName"}
+                             className="form-control float-label" defaultValue={options.fieldResolverName} disabled={true}/>
+                    </div>:""}
+                  </div>
+
+                  <div className="col-md-4 nopadding">
                     <div className="form-group switch_wrap inline_switch">
                       <label>Status</label>
                       <label className="switch">
@@ -219,40 +234,30 @@ export default class MlAssignModulesToFilters extends React.Component {
                     </div>
                   </div>
 
-                  <div className="col-md-6">
-                    <div className="email_notify">
+                  {listSelect?<div className="col-md-4 nopadding">
+
+                      <div className="input_types">
+                        <input  type="checkbox" name="checkbox" id={options.fieldName} onChange={that.customChange.bind(that,id)}/>
+                        <label htmlFor="checkbox1"><span> </span>Is Custom</label>
+                      </div>
+
+                  </div>:""}
+
+               {/*   <div className="col-md-4 nopadding">
+
                       <div className="input_types">
                         <input  type="checkbox" name="checkbox" checked={options.isRestrictedFilter} onChange={that.restrictionChange.bind(that,id)}/>
                         <label htmlFor="checkbox1"><span> </span>Is Restrictedfilter</label>
                       </div>
-                    </div>
-                  </div>
 
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <input type="text" placeholder="Field Type"
-                             className="form-control float-label" defaultValue={options.fieldType}/>
-                    </div>
                   </div>
-
-                  <div className="col-md-12">
-                    {listSelect?<div className="form-group">
-                      <input type="text" placeholder="Field Collection" ref={"resolverName"}
-                             className="form-control float-label" defaultValue={options.fieldResolverName} disabled={true}/>
-                    </div>:""}
-                  </div>
-
-                  <div className="col-md-12">
-                  {listSelect?<div className="form-group">
-
-                    <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={listValues} queryType={"graphql"} query={listQuery} reExecuteQuery={true} queryOptions={listOptions}  isDynamic={true} id={'list'+id}  onSelect={that.optionsBySelect.bind(that,id,options.fieldResolverName)} />
-                  </div>:false}
-                  </div>
+*/}
+                  <br className="brclear"/><br/>
+                  {listSelect && customSelect?<div><MlAssignClustersToFilters getRolesData={that.getRolesData.bind(that,id)} moduleName={options.fieldResolverName} filtersDepartmentData={options.fieldList}/></div>:""}
 
 
                 </div>
               </div>
-
             </div>
           )
         })}

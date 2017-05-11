@@ -4,46 +4,51 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
 let Filters = `    
-
+        
+    type fieldListSpecificsOutput{
+      departmentId : String
+      subDepartmentId : String
+      roleId : [String]
+      listValueId : [String]
+    }
+    
     type filterFieldOutput{
       fieldName : String
       displayName : String
       isActive : Boolean
       isDynamic:Boolean
-      isRestrictedFilter : Boolean
       fieldType : String
       fieldResolverName:String
-      fieldList : [String]
+      isCustom:Boolean
+      fieldList : [fieldListSpecificsOutput]
     }
     
-    type clusterFieldOutput{
-       cluster : String
-       chapter : String
-       subChapter : String
-       department : String
-       subDepartment : String
-       role : String
-    } 
+    
     
     type Filters{
         _id:String
        filterName:String
        filterDescription:String
        isActive:Boolean
-       clusterFields : [clusterFieldOutput]
-       moduleName:String
+        moduleName:String
        filterFields:[filterFieldOutput]
     }
     
+    input fieldListSpecifics{
+      departmentId : String
+      subDepartmentId : String
+      roleId : [String]
+      listValueId : [String]
+    }
     input filterField{
       fieldName : String
       displayName : String
       isActive : Boolean
       isDynamic:Boolean
-      isRestrictedFilter : Boolean
       fieldType : String
       fieldResolverName : String
-      fieldList : [String]
+      fieldList : [fieldListSpecifics]
+      isCustom:Boolean
     }
     
     type FiltersDropData{
@@ -51,20 +56,12 @@ let Filters = `
           value:String
     }
       
-    input clusterField{
-       cluster : String
-       chapter : String
-       subChapter : String
-       department : String
-       subDepartment : String
-       role : String
-    }
+ 
     
     input filter{
        filterName:String
        filterDescription:String
        isActive:Boolean
-       clusterFields : [clusterField]
        moduleName:String
        filterFields:[filterField]
     }
@@ -77,14 +74,15 @@ let Filters = `
     }
     
     type Mutation{
-        CreateFilter(filterObject:filter):response
+       updateFilter(filterId:String, filterObject: filter,moduleName:String, actionName:String):response
+       
     }
     
     type Query{
         findFilters:[Filters]
         fetchModuleFilters(moduleName:String) : [Filters]
         fetchFilterListDropDown(moduleName:String!):[FiltersDropData]
-      fetchSelectedFilterListDropDown(moduleName:String!,list:[String],filteredListId : [GenericFilter]):[FiltersDropData]
+        fetchSelectedFilterListDropDown(moduleName:String!,list:[String],filteredListId : [GenericFilter]):[FiltersDropData]
         fetchSelectedFilterData(id:String) : Filters
     }
 `

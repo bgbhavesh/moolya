@@ -10,6 +10,7 @@ import MlAppIdeatorTabs from '../../../../app/ideators/components/MlAppIdeatorTa
 import MlFunderEditTemplate from '../component/Funder/MlFunderEditTemplate'
 import MlFunderViewTemplate from '../component/FunderView/MlFunderViewTemplate'
 import MlAppFunderViewTabs from '../../../../app/funders/components/MlAppFunderViewTabs'
+import MlAppFunderEditTabs from '../../../../app/funders/components/MlAppFunderEditTabs'
 
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
@@ -129,16 +130,16 @@ const mlAppIdeatorViewExternalUserPortfolioTemplateConfig={
 //   component:MlViewStartupPortfolioTemplate
 // };
 
-// const mlAppFunderEditExternalUserPortfolioTemplateConfig={
-//   templateName:"Portfolio-Template-Funder-Edit",
-//   templateCode:"PFTFUNEDT",
-//   userType:'external',
-//   process:'Registration',
-//   subProcess:'Registration',
-//   stepCode:'PORTFOLIO',
-//   stepName:'Portfolio',
-//   component:MlAppIdeatorEditTabs
-// };
+const mlAppFunderEditExternalUserPortfolioTemplateConfig={
+  templateName:"Portfolio-Template-Funder-Edit",
+  templateCode:"PFTFUNEDT",
+  userType:'external',
+  process:'Registration',
+  subProcess:'Registration',
+  stepCode:'PORTFOLIO',
+  stepName:'Portfolio',
+  component:MlAppFunderEditTabs
+};
 
 const mlAppFunderViewExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Funder-View",
@@ -156,3 +157,4 @@ mlRegistrationTemplates.setTemplate(mlAppIdeatorViewExternalUserPortfolioTemplat
 // mlRegistrationTemplates.setTemplate(mlAppStartupEditExternalUserPortfolioTemplateConfig);
 // mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderViewExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppFunderEditExternalUserPortfolioTemplateConfig);

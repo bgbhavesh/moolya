@@ -12,22 +12,21 @@ export async function fetchSelectedFilterDataActionHandler(id) {
               filterName
               filterDescription
               isActive
+              moduleName
               filterFields{
                 fieldName
+                displayName
                 fieldType
-                fieldList
-                isRestrictedFilter
                 fieldResolverName
                 isDynamic
                 isActive
-              }
-              clusterFields{
-                cluster
-                chapter
-                subChapter
-                department
-                subDepartment
-                role
+                isCustom
+                fieldList{
+                  departmentId
+                  subDepartmentId
+                  roleId
+                  listValueId
+                }
               }
               }
         }
@@ -39,5 +38,9 @@ export async function fetchSelectedFilterDataActionHandler(id) {
     forceFetch: true
   })
   const data = result.data.fetchSelectedFilterData;
-  return data
+  let resultData = _.omit(data,'__typename');
+  let fieldsArray = [];
+  fieldsArray=_.map(resultData.filterFields, function (row) {return _.omit(row, ['__typename'])});
+  resultData["filterFields"] = fieldsArray
+  return resultData
 }

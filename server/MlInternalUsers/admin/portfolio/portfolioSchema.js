@@ -78,6 +78,7 @@ let portfolioSchema = `
     
     type Query{
           fetchPortfolioDetails(portfolioId:String):Portfoliodetails
+          fetchPortfolioDetailsByUserId:Portfoliodetails
     }
     
     type Mutation{

@@ -38,7 +38,7 @@ MlResolver.MlMutationResolver['updateTransactionStatus'] = (obj, args, context, 
 
 
 MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, context, info) => {
-  let transaction = MlTransactions.findOne({"requestId":args.transactionType})|| {};
+  let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
   //find hierarchy
   let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
     parentDepartment: args.params.department,
@@ -72,7 +72,7 @@ MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, con
   transaction.status="Pending"
   transaction.allocation = allocation;
   transaction.transactionUpdatedDate=date.date;
-  let id =mlDBController.update('MlTransactions', {_id:args.params.transactionId},{transaction}, {$set: true},context)
+  let id =mlDBController.update('MlTransactions', {_id:args.params.transactionId},{transaction},{multi:true}, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}
@@ -104,7 +104,22 @@ MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, con
   let id = mlDBController.insert('MlTransactions',transaction, context)
   if(id){
     let code = 200;
-    let result = {transactionId : transaction.requestId}
+    let result = transaction.requestId
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+}
+
+MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, context, info) => {
+  let transaction = MlTransactions.findOne({"requestId":args.transactionInfo.requestId})|| {};
+  let date=new Date();
+ /* transaction.cluster=args.transactionInfo.cluster;
+  transaction.chapter=args.transactionInfo.chapter;
+  transaction.transactionUpdatedDate=date.date;*/
+  let id =mlDBController.update('MlTransactions', {requestId:args.transactionInfo.requestId},{'cluster':args.transactionInfo.cluster,'chapter':args.transactionInfo.chapter,'transactionUpdatedDate':date.date}, {$set: true},context)
+  if(id){
+    let code = 200;
+    let result = {transactionId : id}
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }

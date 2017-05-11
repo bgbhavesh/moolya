@@ -36,9 +36,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   var emails=[{address:args.registration.email,verified:false}];
   // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
   //create transaction
-  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"Registration"},context, info);
-  args.registration.transactionId = resp.transactionId;
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails,transactionId:resp.transactionId}, context)
+  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
+  args.registration.transactionId = resp.result;
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails, transactionId: resp.result}, context)
   if(id){
 
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
@@ -160,7 +160,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         updatedResponse = mlDBController.update('MlRegistration', id, {
           registrationInfo: details,
-          "registrationDetails.firstName": details.firstName,
+            "registrationDetails.firstName": details.firstName,
           "registrationDetails.lastName": details.lastName,
           "registrationDetails.identityType": details.identityType,
           "registrationDetails.userType": details.userType
@@ -243,8 +243,17 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
               mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
               updatedResponse = new MlRespPayload().successPayload(result, code);
+              //update transaction with operational area
+            // var temp =mlDbController.find('MlRegistration',id,{"registrationInfo.userId": userId},context ).fetch()
+
+              let transactionInfo = {
+                cluster : details.clusterId,
+                chapter : details.chapterId,
+                requestId : details.transactionId
+              }
+              let resp = MlResolver.MlMutationResolver['updateRegistrationTransaction'] (obj,{'transactionInfo':transactionInfo},context, info);
               return updatedResponse;
-          }
+          }x``
 
 
       }else {

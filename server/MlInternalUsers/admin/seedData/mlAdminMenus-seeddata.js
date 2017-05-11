@@ -384,7 +384,7 @@ if(Meteor.isServer){
         "image" : "/images/documents_icon.png",
         "link" : "/admin/documents/clusterList",
         "uniqueId" : "documents",
-        "name" : " process documents",
+        "name" : "documents",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [

@@ -24,14 +24,6 @@ export async function findModuleCustomFilterActionHandler(moduleName){
                 listValueId
               }
             }
-            clusterFields{
-              cluster
-              chapter
-              subChapter
-              department
-              subDepartment
-              role
-            }
         }
       }
     `,

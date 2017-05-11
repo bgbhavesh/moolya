@@ -51,21 +51,25 @@ class MlAddUserType extends React.Component {
   };
 
   async createUserType() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
 
-    let UserTypeDetails = {
-      userTypeName: this.refs.userTypeName.value,
-      displayName: this.refs.displayName.value,
-      userTypeDesc: this.refs.userTypeDesc.value,
-      communityCode: this.state.communityCode,
-      communityName: this.state.communityName,
-      isActive: this.refs.isActive.checked
+      let UserTypeDetails = {
+        userTypeName: this.refs.userTypeName.value,
+        displayName: this.refs.displayName.value,
+        userTypeDesc: this.refs.userTypeDesc.value,
+        communityCode: this.state.communityCode,
+        communityName: this.state.communityName,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await createUserTypeActionHandler(UserTypeDetails)
+
+      return response;
+
     }
-        const response = await createUserTypeActionHandler(UserTypeDetails)
-
-        return response;
-
-    }
-
+  }
    // async validation()
    //  {
    //    console.log(this.state.communityCode);
@@ -110,10 +114,10 @@ class MlAddUserType extends React.Component {
                   <Moolyaselect ref="Community " multiSelect={false} className="form-control float-label" valueKey={'value'}
                                 labelKey={'label'} queryType={"graphql"} placeholder="Select Community"
                                 selectedValue={this.state.communityCode}
-                                query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)} data-required={true} data-errMsg="Name is required"/>
+                                query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)} data-required={true} data-errMsg="Community Needed"/>
 
                   <div className="form-group">
-                    <input type="text" ref="userTypeName" placeholder="User Category Name" className="form-control float-label"/>
+                    <input type="text" ref="userTypeName" placeholder="User Category Name" className="form-control float-label" data-required={true} data-errMsg="User Category is required"/>
                   </div>
                   <div className="form-group">
                     <textarea  ref="userTypeDesc" placeholder="About" className="form-control float-label"></textarea>

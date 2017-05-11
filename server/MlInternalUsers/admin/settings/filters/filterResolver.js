@@ -41,7 +41,7 @@ MlResolver.MlQueryResolver['fetchModuleFilters'] = (obj, args, context, info) =>
       let defaultProfile = _.find(userProfiles, {isDefault:true});
 
     }*/
-    let response= MlFilters.find({"moduleName":args.moduleName}).fetch();
+    let response= MlFilters.findOne({"moduleName":args.moduleName});
     return response;
   }
 }

@@ -234,7 +234,9 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        transactionId   :   String
+        transactionId   :   String,
+        canAssign       :   Boolean,
+        canUnAssign     :   Boolean
     }
     
     type branchLocation{

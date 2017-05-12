@@ -19,7 +19,10 @@ export default class DocumentViewer extends React.Component{
       /*var FileName = $(this).val().replace(/C:\\fakepath\\/i, '');
       $(this).parents('.uploaded_files').find(".panel-body ul").prepend('<li class="doc_card" data-toggle="tooltip" data-placement="bottom" title="'+FileName+'"><span class="ml ml-minus"></span><img id="preview_file" /></li>');
       $(this).parents('.uploaded_files').find("#preview_file").attr("src", URL.createObjectURL(this.files[0]));*/
-      $('[data-toggle="tooltip"]').tooltip({container:'body'});
+      $('[data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
     });
   }
   onFileUpload(documentId,docTypeId){

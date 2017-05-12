@@ -7,6 +7,8 @@ export async function fetchUserDetailsHandler() {
     query: gql`
          query{
         findRegistrationInfoForUser {
+       _id
+       status
           registrationInfo {
             firstName
             lastName

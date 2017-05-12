@@ -19,6 +19,7 @@ export async function findComments(annotationId) {
                   userName
                   firstName
                   lastName
+                  profileImage
                   createdAt
               }
           }

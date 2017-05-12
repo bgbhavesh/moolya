@@ -7,7 +7,7 @@ import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
 import {fetchUserDetailsHandler} from '../actions/fetchUserDetails'
 let Select = require('react-select');
-import {createRegistrationInfo} from  '../../../admin/transaction/requested/actions/createRegistrationInfo'
+import {registerAsInfo} from  '../../../admin/transaction/requested/actions/registrationAs'
 export default class MlAppCommunitiesList extends Component {
     constructor(props){
         super(props);
@@ -15,7 +15,7 @@ export default class MlAppCommunitiesList extends Component {
           country:'',
           selectedCity:'',
           userType:null,
-          countryId:null,
+          clusterId:null,
           registrationType:'',
         }
         this.fetchCommunities.bind(this)
@@ -32,6 +32,8 @@ export default class MlAppCommunitiesList extends Component {
             let response=await fetchUserDetailsHandler()
         if(response){
             let registrationInfo=response.registrationInfo
+          this.setState({status:response.status})
+          this.setState({registerId:response._id})
           this.setState({firstName:registrationInfo.firstName});
           this.setState({lastName:registrationInfo.lastName});
           this.setState({contactNumber:registrationInfo.contactNumber});
@@ -45,7 +47,7 @@ export default class MlAppCommunitiesList extends Component {
 
     setSelectedCommunity(selCommunity,idx, e){
         this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})
-      this.setState({identity:null,registrationType:null,countryId:null})
+      this.setState({identity:null,registrationType:null,clusterId:null})
     }
 
     toggle() {
@@ -64,11 +66,12 @@ export default class MlAppCommunitiesList extends Component {
       email:this.state.email,
       registrationType:this.state.selectedCommunity,
       identityType:this.state.identity,
-      countryId:this.state.countryId,
+      clusterId:this.state.clusterId,
       cityId:this.state.selectedCity,
 
     }
-    const response = await createRegistrationInfo(registrationInfo);
+    let registrationId=this.state.registerId
+    const response = await registerAsInfo(registrationInfo,registrationId);
     if(response.success){
       let registrtionId=response.result
      let registrtion= JSON.parse(registrtionId)
@@ -84,25 +87,32 @@ export default class MlAppCommunitiesList extends Component {
     async fetchCommunities() {
         let communities = await fetchCommunitiesHandler();
         let userCommunity=this.state.communityId
-      if(userCommunity=="CMP"){
-        let communitilist= _.filter(communities, function(community) {
-          return community.code==="CMP"
-        });
-        this.setState({communities:communitilist})
-      }else if(userCommunity=="INS"){
-        let communitilist= _.filter(communities, function(community) {
-          return community.code==="INS"
-        });
-        this.setState({communities:communitilist})
-      }else if(userCommunity=="BRW"){
+      let status=this.state.status
+      if(status=="Approved"){
+        if(userCommunity=="CMP"){
+          let communitilist= _.filter(communities, function(community) {
+            return community.code==="CMP"
+          });
+          this.setState({communities:communitilist})
+        }else if(userCommunity=="INS"){
+          let communitilist= _.filter(communities, function(community) {
+            return community.code==="INS"
+          });
+          this.setState({communities:communitilist})
+        }else if(userCommunity=="BRW"){
+          let communitilist=[]
+          this.setState({communities:communitilist})
+        }else{
+          let communitilist= _.filter(communities, function(community) {
+            return community.code==="FUN" ||community.code==="IDE"||community.code==="STU"||community.code==="SPS"
+          });
+          this.setState({communities:communitilist})
+        }
+      }else{
         let communitilist=[]
         this.setState({communities:communitilist})
-      }else{
-        let communitilist= _.filter(communities, function(community) {
-          return community.code==="FUN" ||community.code==="IDE"||community.code==="STU"||community.code==="SPS"
-        });
-        this.setState({communities:communitilist})
       }
+
 
         return communities;
     }
@@ -122,7 +132,7 @@ export default class MlAppCommunitiesList extends Component {
     this.setState({identity:val})
   }
   optionsBySelectOperationCountry(val){
-    this.setState({countryId:val})
+    this.setState({clusterId:val})
   }
 
 
@@ -134,8 +144,7 @@ export default class MlAppCommunitiesList extends Component {
           label:country
         }
       }`
-            let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}
-          `;
+
             let chapterQuery = gql`query($id:String){  
         data:fetchChaptersWithoutAll(id:$id) {
           value:_id
@@ -175,6 +184,8 @@ export default class MlAppCommunitiesList extends Component {
       data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
     }
     `;
+      let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+
       let identityOptions={options: {variables: {communityId:this.state.selectedCommunity}}};
       let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
       let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
@@ -228,7 +239,7 @@ export default class MlAppCommunitiesList extends Component {
                           <input type="text" ref="email"   value={this.state.email} placeholder="Email ID" className="form-control float-label" id="" disabled="true" />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Operation Country"  selectedValue={this.state.countryId} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectOperationCountry.bind(this)} />
+                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Operation Country"  selectedValue={this.state.clusterId} queryType={"graphql"} query={clusterQuery} isDynamic={true}  onSelect={this.optionsBySelectOperationCountry.bind(this)} />
                           {/*<Moolyaselect multiSelect={false} placeholder="Your City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelect.bind(this)} isDynamic={true}/>*/}
                         </div>
                       </div>

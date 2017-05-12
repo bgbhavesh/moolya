@@ -1,11 +1,10 @@
 /**
  * Created by venkatasrinag on 3/4/17.
  */
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
 
-var extendify = require('extendify');
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
@@ -116,7 +115,7 @@ MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
                               // isResolved:false,
                               // isReopened:false,
                               firstName:userDetails.profile.firstName?userDetails.profile.firstName:intFirstName,
-                              firstName:userDetails.profile.lastName?userDetails.profile.lastName:intLastName,
+                              lastName:userDetails.profile.lastName?userDetails.profile.lastName:intLastName,
                               createdAt: new Date()
                           }
             MlAnnotatorComments.insert({...comment})
@@ -142,7 +141,7 @@ MlResolver.MlMutationResolver['resolveComment'] = (obj, args, context, info) => 
     let id = MlAnnotator.update(args.commentId, {$set:  {isResolved:true}});
     if(id){
       let code = 200;
-      let response = new MlRespPayload().successPayload("Comment resolved", code);
+      let response = new MlRespPayload().successPayload("Comment Resolved", code);
       return response;
     }
   }
@@ -153,7 +152,7 @@ MlResolver.MlMutationResolver['reopenComment'] = (obj, args, context, info) => {
     let id = MlAnnotator.update(args.commentId, {$set:  {isReopened:true}});
     if(id){
       let code = 200;
-      let response = new MlRespPayload().successPayload("Comment resolved", code);
+      let response = new MlRespPayload().successPayload("Comment Re-Opened", code);
       return response;
     }
   }
@@ -188,26 +187,29 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
-    let comments = [];
-    try {
-        if( args.annotationId){
-           let response = MlAnnotatorComments.find({"annotatorId":args.annotationId}).fetch()
-            return response
-        }
-        else{
-            let code = 400;
-            let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
-            return response;
-        }
-    }catch (e){
-        let code = 400;
-        let response = new MlRespPayload().errorPayload(e.message, code);
-        return response;
+  let comments = [];
+  try {
+    if (args.annotationId) {
+      let response = MlAnnotatorComments.find({"annotatorId": args.annotationId}).fetch()
+      _.each(response, function (say, value) {
+        say.profileImage = Meteor.users.findOne({_id: say.userId}).profile ? Meteor.users.findOne({_id: say.userId}).profile.profileImage : ''
+      })
+      return response
     }
-
-    let code = 200;
-    let response = new MlRespPayload().successPayload(comments, code);
+    else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Invalid Portfolio ID", code);
+      return response;
+    }
+  } catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(e.message, code);
     return response;
+  }
+
+  let code = 200;
+  let response = new MlRespPayload().successPayload(comments, code);
+  return response;
 }
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {

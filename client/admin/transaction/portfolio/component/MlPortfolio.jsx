@@ -139,20 +139,16 @@ class MlPortfolio extends React.Component {
 
   async onResolveComment() {
     const response = await resolveCommentActionHandler(this.state.annotationData.id)
-      if(response){
-        if(response.success)
-          toastr.success(response.result);
-      }
+    if (response && response.success)
+      toastr.success(response.result);
     return response;
   }
 
 
   async onReopenComment() {
     const response = await reopenCommentActionHandler(this.state.annotationData.id)
-    if(response){
-      if(response.success)
-        toastr.success(response.result);
-    }
+    if (response && response.success)
+      toastr.success(response.result);
     return response;
   }
 
@@ -161,7 +157,6 @@ class MlPortfolio extends React.Component {
     if (annotationId) {
       const response = await findComments(annotationId);
       this.setState({commentsData: response}, function () {
-
       });
     }
   }
@@ -199,11 +194,6 @@ class MlPortfolio extends React.Component {
   render() {
     let that = this;
     let MlActionConfig = [
-      // {
-      //   showAction: true,
-      //   actionName: 'progress',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'edit',
@@ -274,14 +264,15 @@ class MlPortfolio extends React.Component {
                 <ul id="comments-list" className="comments-list">
                   <li>
                     <div className="comment-main-level">
-                      <div className="comment-avatar"><img src="/images/def_profile.png" alt="No image available"/></div>
+                      <div className="comment-avatar"><img src="/images/def_profile.png" alt="No image available"/>
+                      </div>
                       <div className="comment-box">
                         <div style={{marginTop: '8px'}} className="annotate">1</div>
                         <div style={{paddingLeft: '50px'}} className="comment-head">
                           <h6
                             className="comment-name"> {annotationDetails.userName ? annotationDetails.userName : ""}</h6>
                           <div className="author">Manager</div>
-                          <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
+                          <span>{moment(annotationDetails.createdAt).format('DD MMM YYYY,HH:MM:SS')}</span>
                         </div>
                         <div className="comment-content">
                           {annotationDetails.text}
@@ -295,7 +286,7 @@ class MlPortfolio extends React.Component {
                       <a className="cancel_btn" onClick={this.commentClicked.bind(this)}>Comment</a>
                     </div>
                     <div className="comment_wrap">
-                      <textarea ref="comment" id="comment" className="form-control comment-input-box"
+                      <textarea ref="comment" className="form-control comment-input-box"
                                 placeholder="Enter your comment here"></textarea>
 
                       <a href="#" data-id={annotationDetails.id} className="circle_btn">
@@ -308,12 +299,12 @@ class MlPortfolio extends React.Component {
                       {that.state.commentsData.map(function (options, key) {
                         return (<li key={key}>
                           <div className="comment-avatar">
-                            <img src="/images/def_profile.png" alt=""/>
+                            <img src={options.profileImage?options.profileImage:"/images/def_profile.png"} alt=""/>
                           </div>
                           <div className="comment-box">
                             <div className="comment-head">
                               <h6 className="comment-name">{options.firstName} {options.lastName}</h6>
-                              <span>{moment(options.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
+                              <span>{moment(options.createdAt).format('DD MMM YYYY,HH:MM:SS')}</span>
                             </div>
                             <div className="comment-content">
                               {options.comment}

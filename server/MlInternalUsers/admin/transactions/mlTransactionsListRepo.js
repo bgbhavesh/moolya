@@ -82,6 +82,28 @@ class MlTransactionsListRepo{
   }
    return null;
   }
+
+  processAssignmentTransactions(data,userId) {
+    var updatedList = []
+    data.map(function (doc,index) {
+      let object = doc;
+      let transaction = mlDBController.findOne('MlTransactions', {requestId: doc.transactionId});
+      //check can be assigned
+        if(transaction.allocation){
+          object.canAssign = false;
+          //check if it is already assigned to this user and above in hierarchy
+          let allocation = transaction.allocation
+          if(allocation.assigneeId==userId){
+            object.canUnAssign = true;
+          }
+        }else{
+          object.canAssign = true;
+          object.canUnAssign = false;
+        }
+      updatedList.push(object);
+    });
+    return updatedList;
+  }
 }
 const mlTransactionsListRepo = new MlTransactionsListRepo();
 Object.freeze(mlTransactionsListRepo);

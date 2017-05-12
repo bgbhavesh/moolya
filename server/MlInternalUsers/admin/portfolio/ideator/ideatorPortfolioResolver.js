@@ -433,7 +433,9 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
 
     _.each(portfolios, function (portfolio) {
           let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
-          ideas.push(idea);
+          if(idea){
+            ideas.push(idea);
+          }
     })
 
     return ideas;

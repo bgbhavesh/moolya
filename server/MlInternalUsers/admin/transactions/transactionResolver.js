@@ -39,14 +39,6 @@ MlResolver.MlMutationResolver['updateTransactionStatus'] = (obj, args, context, 
 
 MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, context, info) => {
   let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
-  //find hierarchy
-  let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-    parentDepartment: args.params.department,
-    parentSubDepartment: args.params.subDepartment,
-    clusterId:args.params.cluster
-  }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
-  //update hierarchy from hierarchy result
-  transaction.hierarchy=hierarchy._id
 
   //get user details iterate through profiles match with role and get department and update allocation details.
   let user = mlDBController.findOne('users', {_id: args.params.user}, context)
@@ -55,24 +47,33 @@ MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, con
     return item.clusterId == args.params.cluster
   });
   let roles=userProfileRoles.userRoles
-    roleDetails=_.find(roles, function (item) {
+  roleDetails = roles[0]
+    /*roleDetails=_.find(roles, function (item) {
       return item.roleId == args.params.role
-    });
+    });*/
   let date=new Date();
   let allocation={
     assignee            : user.username,
     assigneeId          : args.params.user,
-    assignedDate        : date.date,
+    assignedDate        : date,
     department          : roleDetails.departmentName,
     departmentId        : roleDetails.departmentId,
     subDepartment       : roleDetails.subDepartmentName,
     subDepartmentId     : roleDetails.subDepartmentId,
   }
+  //find hierarchy
+  let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+    parentDepartment: roleDetails.departmentId,
+    parentSubDepartment: roleDetails.subDepartmentId,
+    clusterId:args.params.cluster
+  }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
+  //update hierarchy from hierarchy result
+  transaction.hierarchy=hierarchy._id
   transaction.userId=args.params.user
   transaction.status="Pending"
   transaction.allocation = allocation;
   transaction.transactionUpdatedDate=date.date;
-  let id =mlDBController.update('MlTransactions', {_id:args.params.transactionId},{transaction},{multi:true}, {$set: true},context)
+  let id =mlDBController.update('MlTransactions', {requestId:args.transactionId},transaction, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}
@@ -127,15 +128,7 @@ MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, con
 
 MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, info) => {
   let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
-  //find hierarchy
- /* let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-    parentDepartment: args.params.department,
-    parentSubDepartment: args.params.subDepartment,
-    clusterId:args.params.cluster
-  }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
-  //update hierarchy from hierarchy result
-  transaction.hierarchy=hierarchy._id
-*/
+
   //get user details iterate through profiles match with role and get department and update allocation details.
   let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let userprofile=user.profile.InternalUprofile.moolyaProfile.userProfiles
@@ -143,24 +136,33 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
     return item.clusterId == args.params.cluster
   });
   let roles=userProfileRoles.userRoles
-  roleDetails=_.find(roles, function (item) {
-    return item.roleId == args.params.role
-  });
+  roleDetails = roles[0]
+  /*roleDetails=_.find(roles, function (item) {
+   return item.roleId == args.params.role
+   });*/
   let date=new Date();
   let allocation={
     assignee            : user.username,
     assigneeId          : args.params.user,
-    assignedDate        : date.date,
+    assignedDate        : date,
     department          : roleDetails.departmentName,
     departmentId        : roleDetails.departmentId,
     subDepartment       : roleDetails.subDepartmentName,
     subDepartmentId     : roleDetails.subDepartmentId,
   }
+  //find hierarchy
+  let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+    parentDepartment: roleDetails.departmentId,
+    parentSubDepartment: roleDetails.subDepartmentId,
+    clusterId:args.params.cluster
+  }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
+  //update hierarchy from hierarchy result
+  transaction.hierarchy=hierarchy._id
   transaction.userId=args.params.user
   transaction.status="Pending"
   transaction.allocation = allocation;
-  transaction.transactionUpdatedDate=date.date;
-  let id =mlDBController.update('MlTransactions', {_id:args.params.transactionId},{transaction},{multi:true}, {$set: true},context)
+  transaction.transactionUpdatedDate=date;
+  let id =mlDBController.update('MlTransactions', {requestId:args.transactionId},transaction, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}
@@ -171,40 +173,14 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
 
 MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info) => {
   let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
-  //find hierarchy
-  /* let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-   parentDepartment: args.params.department,
-   parentSubDepartment: args.params.subDepartment,
-   clusterId:args.params.cluster
-   }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
-   //update hierarchy from hierarchy result
-   transaction.hierarchy=hierarchy._id
-   */
-  //get user details iterate through profiles match with role and get department and update allocation details.
-  let user = mlDBController.findOne('users', {_id: context.userId}, context)
-  let userprofile=user.profile.InternalUprofile.moolyaProfile.userProfiles
-  userProfileRoles = _.find(userprofile, function (item) {
-    return item.clusterId == args.params.cluster
-  });
-  let roles=userProfileRoles.userRoles
-  roleDetails=_.find(roles, function (item) {
-    return item.roleId == args.params.role
-  });
   let date=new Date();
-  let allocation={
-    assignee            : user.username,
-    assigneeId          : args.params.user,
-    assignedDate        : date.date,
-    department          : roleDetails.departmentName,
-    departmentId        : roleDetails.departmentId,
-    subDepartment       : roleDetails.subDepartmentName,
-    subDepartmentId     : roleDetails.subDepartmentId,
-  }
-  transaction.userId=args.params.user
+  let allocation=null
+  transaction.hierarchy=null
+  transaction.userId=null
   transaction.status="Pending"
   transaction.allocation = allocation;
-  transaction.transactionUpdatedDate=date.date;
-  let id =mlDBController.update('MlTransactions', {_id:args.params.transactionId},{transaction},{multi:true}, {$set: true},context)
+  transaction.transactionUpdatedDate=date;
+  let id =mlDBController.update('MlTransactions', {requestId:args.transactionId},transaction, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}

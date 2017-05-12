@@ -12,6 +12,16 @@ export function searchFunction(args) {
       }else if(s.fieldType == "Date"){
         let dateObject =  JSON.parse(s.value)
         json[s.fieldName]={$gte: new Date(dateObject.$gte),$lt : new Date(dateObject.$lt)}
+      }else  if(s.fieldType == "Boolean"){
+        let selectedValue = null;
+        if(s.value==="true"){
+          selectedValue=true;
+        }else if(s.value==="false"){
+          selectedValue=false;
+        }else{
+          selectedValue=false;
+        }
+        json[s.fieldName]=selectedValue
       }else{
         let regex={$regex:".*"+s.value+".*",$options:"i"};
         json[s.fieldName]=regex

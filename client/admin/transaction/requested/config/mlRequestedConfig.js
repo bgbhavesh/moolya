@@ -71,8 +71,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
               data:SearchQuery(module:"registrationInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on RegistrationInfo{
-              
+                     ...on RegistrationInfo{              
                               firstName 
                               lastName
                               id:_id
@@ -87,10 +86,11 @@ const mlUserTypeTableConfig=new MlViewer.View({
               								registrationStatus
                       				registrationDate
                               transactionId
-                 
+                              canAssign       
+                              canUnAssign 
                           }
                       }
-              }
+                  }
               }
               `
 });

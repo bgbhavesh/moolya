@@ -46,7 +46,7 @@ export default class MlAssignClustersToFilters extends React.Component {
       }
     });
     let filtersDepartmentData=this.props.filtersDepartmentData;
-    if(filtersDepartmentData.length>0){
+    if(filtersDepartmentData && filtersDepartmentData.length>0){
       let availabilityDetailsForm=[]
       for(let i=0;i<filtersDepartmentData.length;i++){
         let json={

@@ -30,6 +30,8 @@ import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile'
 import MlAppProfileList from '../../../client/app/profile/components/MlAppProfileList'
 import MlAppMyOffice from '../../../client/app/profile/office/components/MlAppMyOffice'
 import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
+import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
+import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
@@ -100,6 +102,19 @@ appSection.route('/addOffice', {
   }
 });
 
+appSection.route('/officeMembersDetails', {
+  name: 'officeMembersDetails',
+  action(){
+    mount(AppLayout, {appContent: <MlAppOfficeMembersDetails />, isProfileMenu: true})
+  }
+});
+
+appSection.route('/newSpokePerson', {
+  name: 'newSpokePerson',
+  action(){
+    mount(AppLayout, {appContent: <MlAppNewSpokePerson/>, isProfileMenu: true})
+  }
+});
 appSection.route('/myConnections', {
   name: 'myConnections',
   action(){

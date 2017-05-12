@@ -32,6 +32,7 @@ let myOfficeSchema = `
   
     type MyOffice{
         _id:String,
+        userId:String,
         totalCount:Int,
         principalUserCount:Int,
         teamUserCount:Int,
@@ -92,15 +93,19 @@ let myOfficeSchema = `
         country:String,
         zipCode: Int,
         isActive:Boolean,
-        officeMembers:[officeMembers]
+        officeMembers:[officeMembers],
+        paymentLink:String
     }
   
     type Query{
         fetchMyOffice:[MyOffice]
+        fetchMyOfficeMembers:[OfficeMembers]
     }
     
     type Mutation{       
         createMyOffice(myOffice:myOffice):response
+        createOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
+        updateOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
         updateMyOffice(myOffice:myOffice, myOfficeId:String):response
     }
 `

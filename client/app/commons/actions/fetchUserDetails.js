@@ -8,6 +8,7 @@ export async function fetchUserDetailsHandler() {
          query{
         findRegistrationInfoForUser {
        _id
+       status
           registrationInfo {
             firstName
             lastName

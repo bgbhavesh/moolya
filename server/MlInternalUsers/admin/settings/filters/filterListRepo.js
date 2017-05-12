@@ -16,11 +16,38 @@ export default class MlFilterListRepo{
     check(requestParams.moduleName, String);
 
     let userProfile = new MlAdminUserContext().userProfileDetails(this.userId);
+    let user = Meteor.users.findOne({_id:context.userId});
+    let roleIds=[];
+    let hirarichyLevel=[]
+    let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+    userProfiles.map(function (doc,index) {
+
+      let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+      for (let i = 0; i < userRoles.length; i++) {
+        roleIds.push(userRoles[i].roleId);
+        break
+
+      }
+
+    });
     let settingsObj = null;
     let result = null;
     let listData = []
+    let roleExist = null;
     if(requestParams.list && requestParams.list.length>0){
-      listData = requestParams.list
+
+       _.map(requestParams.list, function (val) {
+
+          if(val.roleId){
+            roleExist = _.contains(val.roleId,roleIds.toString());
+          }
+          if(roleExist){
+            let valueArray = []
+            listData = valueArray.concat(val.listValueId);
+          }
+
+
+        });
     }
     let  options=[]
     switch (requestParams.moduleName) {

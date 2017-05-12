@@ -69,6 +69,7 @@ export default class MlEditFilter extends Component {
 
   async fetchSelectedFilterData(){
     const response= await fetchSelectedFilterDataActionHandler(this.props.config);
+
     this.setState({loading:false,data : response,transactionId : response.moduleName});
   }
 
@@ -140,14 +141,14 @@ export default class MlEditFilter extends Component {
                       </div>
 
 
-                      <div className="form-group switch_wrap inline_switch">
+                     {/* <div className="form-group switch_wrap inline_switch">
                         <label>Status</label>
                         <label className="switch">
                           <input type="checkbox" name={'isActive'} checked={this.state.data.isActive} onChange={this.onStatusChange.bind(this)} />
                           <div className="slider"></div>
                         </label>
                       </div>
-
+*/}
                       <br className="brclear"/>
 
 

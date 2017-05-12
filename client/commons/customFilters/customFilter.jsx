@@ -10,6 +10,7 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {customFilterSearchQuery} from "./customFilterSearchQueryActionHandler"
+import _ from 'lodash';
 export default class MlCustomFilter extends Component {
   constructor(props){
     super(props);
@@ -175,9 +176,19 @@ export default class MlCustomFilter extends Component {
 
               {fieldsData &&  fieldsData.filterFields&& fieldsData.filterFields.map(function(options,id){
 
+
+
                 let filterListQuery = null
                 let select = '';
                 let selectedValue = '';
+                let zz =  options.fieldList|| [];
+                var fieldListDataArray=_.map(zz, function (row) {
+                  let val= _.omit(row, ['__typename']);
+                  return val;
+                });
+
+
+             //   console.log(fieldListDataArray)
 
                 if(options.fieldType == "Date"){
                   dateSelect = true
@@ -190,13 +201,16 @@ export default class MlCustomFilter extends Component {
                   listSelect = true
                   select =  "selectedOption_"+options.fieldName;
                   selectedValue = that.state[select];
-                  filterListQuery=gql`query($moduleName:String!,$list:[String],$filteredListId : [GenericFilter]){
+                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter]){
                     data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId) {
                      label
                       value
                     }
                   }`;
-                  listOptions={options: { variables: {moduleName:options.fieldResolverName,list:options.fieldList,filteredListId:that.state.filterQueries}}}
+
+                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries}}}
+
+
 
                 }else{
                   listSelect = false
@@ -214,17 +228,15 @@ export default class MlCustomFilter extends Component {
                 }else{
                   booleanSelect = false
                 }
-                if(options && options.fieldList && options.fieldResolverName){
-                  listOptions={options: { variables: {moduleName:options.fieldResolverName,list:options.fieldList}}}
-                }
                 let fieldListData = options.fieldList && options.fieldList ? options.fieldList[0].listValueId : []
+
 
                 return(<span key={id}>
                   {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
                   {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
                   {listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName)} isDynamic={true} id={'list'+id} disabled={options.isRestrictedFilter}/></div>:""}
                   {stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)} disabled={options.isRestrictedFilter}/></div>:""}
-                  {booleanSelect?<div className="col-lg-3">
+                  {/*{booleanSelect?<div className="col-lg-3">
                     <div className="input_types label_name">
                       <label>{options.displayName} : </label>
                     </div>
@@ -239,6 +251,17 @@ export default class MlCustomFilter extends Component {
 
                     })}
 
+                  </div>:""}*/}
+                  {booleanSelect?<div className="col-lg-3">
+                    <div className="input_types label_name">
+                      <label>label : </label>
+                    </div>
+                    <div className="input_types">
+                      <input id="radio1" type="radio" name="radio" onChange={that.onSelectBoolean.bind(that, "true",booleanFieldName)}/><label htmlFor="radio1"><span><span></span></span>true</label>
+                    </div>
+                    <div className="input_types">
+                      <input id="radio1" type="radio" name="radio" onChange={that.onSelectBoolean.bind(that, "false",booleanFieldName)}/><label htmlFor="radio1"><span><span></span></span>false</label>
+                    </div>
                   </div>:""}
                   </span>)
                 })}

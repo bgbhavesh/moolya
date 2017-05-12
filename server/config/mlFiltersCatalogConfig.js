@@ -45,7 +45,7 @@ if(Meteor.isServer){
           name:"isActive",
           type:'Boolean',
           resolverName : "Gen_isActive",
-          isDynamic:false
+          isDynamic:true
         },
         {
           name:"accountType",

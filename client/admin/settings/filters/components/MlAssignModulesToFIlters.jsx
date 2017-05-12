@@ -17,7 +17,6 @@ export default class MlAssignModulesToFilters extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       selectedValue: null,
       listValues : [],
@@ -233,7 +232,7 @@ export default class MlAssignModulesToFilters extends React.Component {
                     </div>:""}
                   </div>
 
-                  <div className="col-md-4 nopadding">
+                 {/* <div className="col-md-4 nopadding">
                     <div className="form-group switch_wrap inline_switch">
                       <label>Status</label>
                       <label className="switch">
@@ -241,7 +240,7 @@ export default class MlAssignModulesToFilters extends React.Component {
                         <div className="slider"></div>
                       </label>
                     </div>
-                  </div>
+                  </div>*/}
 
                   {listSelect?<div className="col-md-4 nopadding">
 

@@ -82,7 +82,7 @@ let Filters = `
         findFilters:[Filters]
         fetchModuleFilters(moduleName:String) : Filters
         fetchFilterListDropDown(moduleName:String!):[FiltersDropData]
-        fetchSelectedFilterListDropDown(moduleName:String!,list:[String],filteredListId : [GenericFilter]):[FiltersDropData]
+        fetchSelectedFilterListDropDown(moduleName:String!,list:[fieldListSpecifics],filteredListId : [GenericFilter]):[FiltersDropData]
         fetchSelectedFilterData(id:String) : Filters
     }
 `

@@ -121,7 +121,7 @@ if(Meteor.isServer){
         {
           "fieldName" : "isActive",
           "displayName" : "isActive??",
-          "isDynamic" : false,
+          "isDynamic" : true,
           "fieldType" : "Boolean",
           "fieldResolverName" : "Gen_isActive"
         },

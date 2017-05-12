@@ -20,7 +20,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
     return response;
   }
-  validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(args.registration);
+  validationCheck=MlRegistrationPreCondition.validateEmail(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
 
@@ -51,10 +51,72 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     return response
   }
 }
+MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
+  var validationCheck=null;
+  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  if (!isValidAuth) {
+    let code = 401;
+    let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    return response;
+  }
+  if(!args.registrationId){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Registration Id  is mandatory!!!!",code);
+    return response;
+  }
+  if(!args.registration.registrationType){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!",code);
+    return response;
+  }else if(!args.registration.userName){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
+    return response;
+  }
+  var userInfo = mlDBController.findOne('MlRegistration', args.registrationId, context) || {};
+  let userRegisterInfo=userInfo.registrationInfo;
+  let registrationInfo=args.registration
+  let clusterInfo=MlClusters.findOne({_id:registrationInfo.clusterId})
+    registrationInfo.clusterName=clusterInfo.clusterName,
+    registrationInfo.clusterId=clusterInfo._id
+    registrationInfo.countryId=userRegisterInfo.countryId
+    registrationInfo.cityId=userRegisterInfo.cityId
+    registrationInfo.password=userRegisterInfo.password
+    registrationInfo.accountType=userRegisterInfo.accountType
+    registrationInfo.institutionAssociation=userRegisterInfo.institutionAssociation
+    registrationInfo.companyname=userRegisterInfo.companyname
+    registrationInfo.companyUrl=userRegisterInfo.companyUrl
+    registrationInfo.remarks=userRegisterInfo.remarks
+    registrationInfo.referralType=userRegisterInfo.referralType
+  validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+
+  orderNumberGenService.assignRegistrationId(args.registration)
+  var emails=[{address:args.registration.email,verified:false}];
+  //create transaction
+  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
+  args.registration.transactionId = resp.result;
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Pending",emails:emails, transactionId: resp.result}, context)
+  if(id){
+
+    MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
+    // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
+
+    //send email and otp;
+    let code = 200;
+    let result = {registrationId : id}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+}
 
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
+
   var response=null;
-  var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.countryId":args.registration.countryId},{"registrationInfo.registrationType":args.registration.registrationType}]})
+
+ // let clusterInfo=MlClusters.findOne({_id:args.registration.clusterId})
+ // var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.clusterId":args.registration.clusterId},{"registrationInfo.registrationType":args.registration.registrationType}]})
+  var validate = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   if(validate){
     let code = 400;
     let result = {message: "Registration Exist"}
@@ -288,7 +350,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 
     let temp=0
         let registrationRecord=MlRegistration.findOne(args.registrationId)
-      if(registrationRecord){
+      if(registrationRecord&&registrationRecord.status!='Approved'){
         let kycDocuments=registrationRecord.kycDocuments
         if(kycDocuments&&kycDocuments.length>=1){
           //mandatory doc exist or not
@@ -331,7 +393,11 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
           }
 
         }
-        }
+        }else{
+        let code = 555;
+        let response = new MlRespPayload().errorPayload("User already approved", code);
+        return response;
+      }
     let updatedResponse;
         if(temp==1){
          // updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
@@ -391,8 +457,16 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
          //send error response;
        }
     }
-
-    return updatedResponse;
+    if(updatedResponse===1){
+      let code = 200;
+      let result = {registrationId : updatedResponse}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }else{
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Please validate the user", code);
+      return response;
+    }
   }
 }
 MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, info) => {

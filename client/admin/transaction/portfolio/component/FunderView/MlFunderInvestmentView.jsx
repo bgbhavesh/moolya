@@ -11,9 +11,9 @@ export default class MlFunderInvestmentView extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      annotations:[],
-      content:{},
-      tabIndex : null
+      annotations: [],
+      content: {},
+      tabIndex: null
     }
     this.fetchPortfolioDetails.bind(this);
     this.viewDetails.bind(this)
@@ -32,8 +32,6 @@ export default class MlFunderInvestmentView extends React.Component {
       pluginInit: function () {
       }
     });
-   /* this.state.content.annotator("addPlugin", "Touch", {
-    });*/
   }
 
 
@@ -43,6 +41,7 @@ export default class MlFunderInvestmentView extends React.Component {
     switch (event) {
       case 'create': {
         let response = this.createAnnotations(annotation);
+        return response
       }
         break;
       case 'update': {
@@ -63,21 +62,19 @@ export default class MlFunderInvestmentView extends React.Component {
   async createAnnotations(annotation) {
     let details = {
       portfolioId: this.props.portfolioDetailsId,
-      docId: "funderInvestment"+this.state.tabIndex,
+      docId: "funderInvestment" + this.state.tabIndex,
       quote: JSON.stringify(annotation)
     }
     const response = await createAnnotationActionHandler(details);
     if (response && response.success) {
-      this.fetchAnnotations(true);
+      this.fetchAnnotations(this.state.tabIndex);
     }
     return response;
   }
 
 
-  async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "funderInvestment"+this.state.tabIndex);
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
+  async fetchAnnotations(id, isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, "funderInvestment" + id);
     this.setState({annotations: JSON.parse(response.result)})
 
     let quotes = [];
@@ -94,14 +91,8 @@ export default class MlFunderInvestmentView extends React.Component {
     this.state.content.annotator('loadAnnotations', quotes);
     return response;
   }
-
-
-  componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
-  }
-  showDetails(id){
+  
+  showDetails(id) {
     $("#details-div").show();
     var $frame = $('#forcecentered');
     var $wrap = $frame.parent();
@@ -148,11 +139,15 @@ export default class MlFunderInvestmentView extends React.Component {
     let getData = data[id];
     let ary = []
     ary.push(getData)
-    $('.actions_switch').click();
-
-    this.setState({loading: false, viewCurDetail: ary,tabIndex: id});
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    if (this.state.content && this.state.content.annotator) {
+      this.state.content.unbind();
+      this.state.content.annotator('destroy');
+    }
+    this.state.content = null;
+    this.initalizeAnnotaor();
+    this.state.annotations = [];
+    this.setState({loading: false, viewCurDetail: ary, tabIndex: id});
+    this.fetchAnnotations(id);
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
   }
@@ -165,7 +160,7 @@ export default class MlFunderInvestmentView extends React.Component {
     const detailView = detailData.map(function (say, value) {
       return (
         <div key={value}>
-          <h3>{say.dateOfInvestment?say.dateOfInvestment:'Date :'}</h3>
+          <h3>{say.dateOfInvestment ? say.dateOfInvestment : 'Date :'}</h3>
           <p>Date
             - {say.dateOfInvestment}<br/>
             Company - {say.companyName}<br/>
@@ -174,7 +169,7 @@ export default class MlFunderInvestmentView extends React.Component {
             Funding Type
             - {say.typeOfFundingName}
           </p>
-          <p>{say.aboutInvestment?say.aboutInvestment : '--'}</p>
+          <p>{say.aboutInvestment ? say.aboutInvestment : '--'}</p>
         </div>
       )
     })
@@ -195,7 +190,8 @@ export default class MlFunderInvestmentView extends React.Component {
                   <div className="row">
                     {investmentArray && investmentArray.map(function (details, idx) {
                       return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that,idx)} key={idx}>
+                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, idx)}
+                             key={idx}>
                           <div className="list_block notrans funding_list">
                             <div><p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
                               <p>{details.typeOfFundingName}</p></div>

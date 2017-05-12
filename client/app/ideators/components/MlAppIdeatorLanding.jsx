@@ -7,21 +7,23 @@ export default class MlAppIdeatorLanding extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      ideators:[],
+        loading:true,
+        ideators:[]
     }
     this.fetchIdeators.bind(this)
   }
   componentDidMount() {
   }
   componentWillMount(){
-    this.fetchIdeators()
+      const resp = this.fetchIdeators()
+      return resp
   }
 
   async fetchIdeators() {
-    const response = await fetchIdeators();
-    if(response){
-      this.setState({loading:false, ideators:response})
-    }
+      const response = await fetchIdeators();
+      if(response){
+        this.setState({loading:false, ideators:response})
+      }
   }
 
   render() {

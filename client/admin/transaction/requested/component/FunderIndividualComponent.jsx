@@ -180,10 +180,10 @@ export default class Individual extends React.Component{
       this.setState({loading: false, employmentDate: value});
     }
   }
-
-  openDatePickerEmploymentDate(){
-    $('#date-time').toggleClass('rdtOpen')
-  }
+  //
+  // openDatePickerEmploymentDate(){
+  //   $('#date-time').toggleClass('rdtOpen')
+  // }
 
   openDatePickerDateOfBirth(){
     $('#date-of-birth').toggleClass('rdtOpen')

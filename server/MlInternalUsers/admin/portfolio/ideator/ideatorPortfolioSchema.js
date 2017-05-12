@@ -256,6 +256,7 @@ let ideatorPortfolioSchema = `
       userName : String,
       firstName:String,
       lastName:String,
+      profileImage : String
       createdAt:String
     }
     

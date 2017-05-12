@@ -10,7 +10,7 @@ export default class MlChapterCommunitiesList extends Component {
     const list=  data.map((prop) =>
       <div className="col-lg-2 col-md-4 col-sm-4" key={prop.code}>
         <div className="list_block">
-          <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.isActive?"check":"times"}/></div>
+          <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}></div>
 
           {prop.isActive?<a href={chapterRoutes.communityDetailsRoute(prop.clusters[0],prop.chapters[0],prop.subchapters[0],prop.code)}> <div className={"hex_outer"}><span className={prop.communityImageLink}></span></div></a>
             :

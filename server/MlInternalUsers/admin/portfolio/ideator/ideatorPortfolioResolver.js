@@ -8,9 +8,6 @@ import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
 var extendify = require('extendify');
 var _ = require('lodash')
 
-let applyDiff   = require('deep-diff').applyDiff,
-  observableDiff  = require('deep-diff').observableDiff
-
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
       try {
           if (args && args.userId && args.communityType) {
@@ -104,6 +101,11 @@ MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
     let userDetails = Meteor.users.findOne({_id:context.userId});
     try {
         if(args.portfolioId && args.annotatorId && args.comment && context.userId){
+          var isInternal=userDetails.profile.isInternaluser
+          if(isInternal){
+            var intFirstName=userDetails.profile.InternalUprofile.moolyaProfile.firstName?userDetails.profile.InternalUprofile.moolyaProfile.firstName:''
+            var intLastName=userDetails.profile.InternalUprofile.moolyaProfile.lastName?userDetails.profile.InternalUprofile.moolyaProfile.lastName:''
+          }
             let comment = {
                               annotatorId:args.annotatorId,
                               portfolioId:args.portfolioId,
@@ -111,8 +113,10 @@ MlResolver.MlMutationResolver['createComment'] = (obj, args, context, info) => {
                               quote:args.quote,
                               userId:context.userId,
                               userName:userDetails.username,
-                              isResolved:false,
-                              isReopened:false,
+                              // isResolved:false,
+                              // isReopened:false,
+                              firstName:userDetails.profile.firstName?userDetails.profile.firstName:intFirstName,
+                              firstName:userDetails.profile.lastName?userDetails.profile.lastName:intLastName,
                               createdAt: new Date()
                           }
             MlAnnotatorComments.insert({...comment})

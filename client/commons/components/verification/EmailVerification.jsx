@@ -65,7 +65,8 @@ export default class EmailVerification extends React.Component{
               <div>
               <img src="../images/success_icon.png" /><br />
               <h2>Congratulations</h2>
-               You have successfully verified your account. You will be notified once your profile is activated<br /><br />
+               You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
+                Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>
               {/*<div className="form-group">
                 <input type="text"  value={mobileNumber} className="form-control sendotp float-label" disabled id="mobileNumber"/>
               </div>

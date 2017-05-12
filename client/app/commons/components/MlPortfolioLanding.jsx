@@ -1,32 +1,69 @@
 /**
  * Created by venkatsrinag on 2/5/17.
  */
-import React, { Component, PropTypes } from 'react';
-import { graphql } from 'react-apollo';
+import React, {Component, PropTypes} from 'react';
+import {graphql} from 'react-apollo';
 import gql from 'graphql-tag'
-import { render } from 'react-dom';
+import {render} from 'react-dom';
 import MlAppIdeatorIdeas from '../../ideators/components/MlAppIdeatorIdeas'
+import MlAppPortfolio from '../../../app/commons/components/MlAppPortfolio'
+import {fetchPortfolioDetails} from '../actions/fetchUserDetails'
 
 export default class MlPortfolioLanding extends Component {
-  constructor(props){
-      super(props);
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      data: {}
+    }
+    this.fetchPortfolioDetails.bind(this);
   }
 
-  render(){
-      let user = Meteor.user();
-      let userCommunity =  ""
-      _.each(user.profile.externalUserProfiles, function (profile) {
-          if(profile.isDefault){
-              userCommunity = profile.communityDefName
-          }
-      })
+  componentWillMount() {
+    const resp = this.fetchPortfolioDetails();
+    return resp;
+  }
 
-      return(
+  async fetchPortfolioDetails() {
+    const response = await fetchPortfolioDetails();
+    if (response) {
+      this.setState({loading: false, data: response})
+    }else {
+      this.setState({loading:false});
+    }
+  }
+
+  render() {
+    const showLoader = this.state.loading;
+    let user = Meteor.user();
+    let userCommunity = ""
+    if (user.profile.externalUserProfiles.length > 1) {
+      _.each(user.profile.externalUserProfiles, function (profile) {
+        if (profile.isDefault) {
+          userCommunity = profile.communityDefName
+        }
+      })
+    } else {
+      userCommunity = user.profile.externalUserProfiles[0].communityDefName
+    }
+    let communityType = "";
+    let portfolioId = this.state.data._id
+    if (this.state.data && this.state.data.communityType == "Funders") {
+      communityType = "funder"
+    }
+
+
+    return (
+      <div>
+        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div className="admin_main_wrap">
-              {(userCommunity=="Ideators")?
-                <MlAppIdeatorIdeas/>:<MlAppIdeatorIdeas/>
-              }
+            {(userCommunity == "Ideators") ?
+              <MlAppIdeatorIdeas/> : <MlAppPortfolio config={portfolioId} communityType={communityType}/>
+            }
           </div>
-      )
+        )}
+      </div>
+
+    )
   }
 }

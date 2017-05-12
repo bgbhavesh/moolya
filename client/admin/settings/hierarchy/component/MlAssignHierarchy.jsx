@@ -7,8 +7,6 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
 import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
 import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
 import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
 import {findFinalApprovalRoleActionHandler} from '../actions/findFinalApprovalRoleAction'
@@ -54,7 +52,7 @@ export default class MlAssignHierarchy extends React.Component {
 
   componentWillMount(){
     const resp=this.findUnAssignedDeptRoles();
-   const hierarchyDetails=this.findHierarchyDetails();
+    const hierarchyDetails=this.findHierarchyDetails();
     return resp;
   }
 
@@ -81,13 +79,13 @@ export default class MlAssignHierarchy extends React.Component {
           let role=response[i]
           if((role.isHierarchyAssigned==false||role.isHierarchyAssigned==null)) {
             let json = {
-                roleId: role._id,
-                roleName: role.roleName,
-                displayName: role.displayName,
-                roleType: "Internal User",
-                isAssigned:false,
-                assignedLevel:"",
-                reportingRole:""
+              roleId: role._id,
+              roleName: role.roleName,
+              displayName: role.displayName,
+              roleType: "Internal User",
+              isAssigned:false,
+              assignedLevel:"",
+              reportingRole:""
             }
             roleDetails.push(json);
           }
@@ -98,9 +96,9 @@ export default class MlAssignHierarchy extends React.Component {
     }
   }
   optionsBySelectDepartment(val){
-      let finalApproval = this.state.finalApproval
-      finalApproval.department = val;
-      this.setState({finalApproval:finalApproval})
+    let finalApproval = this.state.finalApproval
+    finalApproval.department = val;
+    this.setState({finalApproval:finalApproval})
     this.props.getFinalApprovalDetails(finalApproval);
 
   }
@@ -119,36 +117,39 @@ export default class MlAssignHierarchy extends React.Component {
   optionsBySelectParentNode(index, value){
     let roles=this.state.unAssignedRoles
     roles.teamStructureAssignment[index].assignedLevel = value.value
+    if(value.value=="cluster"){
+      roles.teamStructureAssignment[index].isAssigned = true
+    }
     this.setState({unAssignedRoles:roles})
     this.props.getUnAssignRoleDetails(roles)
   }
   optionsBySelectReportingRole(index, selectedIndex){
-      let roles=this.state.unAssignedRoles
-      roles.teamStructureAssignment[index].reportingRole = selectedIndex
-      roles.teamStructureAssignment[index].isAssigned = true
-      this.setState({unAssignedRoles:roles})
-      this.props.getUnAssignRoleDetails(roles)
+    let roles=this.state.unAssignedRoles
+    roles.teamStructureAssignment[index].reportingRole = selectedIndex
+    roles.teamStructureAssignment[index].isAssigned = true
+    this.setState({unAssignedRoles:roles})
+    this.props.getUnAssignRoleDetails(roles)
   }
   optionsBySelectAssignedParentNode(index, value){
     let roles = _.cloneDeep(this.state.assignedRoles);
     //  let roles=this.state.assignedRoles
-      roles.teamStructureAssignment[index].assignedLevel = value.value
-      if( value.value=="unassign"){
-        roles.teamStructureAssignment[index].isAssigned = false
-      }
-      this.setState({assignedRoles:roles})
-      this.props.getAssignRoleDetails(roles)
+    roles.teamStructureAssignment[index].assignedLevel = value.value
+    if( value.value=="unassign"){
+      roles.teamStructureAssignment[index].isAssigned = false
+    }
+    this.setState({assignedRoles:roles})
+    this.props.getAssignRoleDetails(roles)
   }
   optionsBySelectAssignedReportingRole(index, selectedIndex){
-      let roles=this.state.assignedRoles
-      roles.teamStructureAssignment[index].reportingRole = selectedIndex
-      this.setState({assignedRoles:roles})
-      this.props.getAssignRoleDetails(roles)
+    let roles=this.state.assignedRoles
+    roles.teamStructureAssignment[index].reportingRole = selectedIndex
+    this.setState({assignedRoles:roles})
+    this.props.getAssignRoleDetails(roles)
   }
   updateFinalApproval(){
-      const resp=this.updateFinalApprovalRoles();
-      toastr.success("Update Successful");
-      return resp;
+    const resp=this.updateFinalApprovalRoles();
+    toastr.success("Update Successful");
+    return resp;
   }
 
   async  updateFinalApprovalRoles() {
@@ -264,35 +265,35 @@ export default class MlAssignHierarchy extends React.Component {
               let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
               return(
-            <div className="row" key={roles.roleId}>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                <div className="row" key={roles.roleId}>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <Select name="form-field-name"   options={unAssignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectReportingRole.bind(that,id)} />
+                    </div>
+                  </div>
+                  <br className="brclear" />
+                  <hr />
                 </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Select name="form-field-name"   options={unAssignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="form-group">
-                  <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectReportingRole.bind(that,id)} />
-                </div>
-              </div>
-              <br className="brclear" />
-              <hr />
-            </div>
 
               )
             })
@@ -314,46 +315,46 @@ export default class MlAssignHierarchy extends React.Component {
             <div id="collapseOne" className="panel-collapse collapse">
               {this.state.assignedRoles.id!=''?
                 (<div className="panel-body">
-                {that.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
-                  let parentDepartment = that.props.departmentInfo;
-                  let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
-                  //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                  {that.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
+                    let parentDepartment = that.props.departmentInfo;
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
-                  return(
-                    <div className="row" key={roles.roleId}>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                    return(
+                      <div className="row" key={roles.roleId}>
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <Select name="form-field-name"   options={assignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <Select name="form-field-name"   options={assignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
+                        <div className="col-md-4">
+                          <div className="form-group">
+                            <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
+                          </div>
                         </div>
+                        <br className="brclear" />
+                        <hr />
                       </div>
-                      <br className="brclear" />
-                      <hr />
-                    </div>
-                  )
-                })
+                    )
+                  })
 
-                }
-              </div>):(<div>No Assignments</div>)}
+                  }
+                </div>):(<div>No Assignments</div>)}
             </div>
           </div>
           <div className="panel panel-default">

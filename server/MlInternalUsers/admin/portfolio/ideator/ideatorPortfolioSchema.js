@@ -254,8 +254,9 @@ let ideatorPortfolioSchema = `
       comment : String,
       userId :String,
       userName : String,
-      isResolved:Boolean,
-      isReopened:Boolean,
+      firstName:String,
+      lastName:String,
+      profileImage : String
       createdAt:String
     }
     

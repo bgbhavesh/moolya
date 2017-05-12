@@ -9,9 +9,10 @@ import MlAssignClustersToFilters from './mlAssignClustersToFilters'
 import MlAssignModulesToFilters from './MlAssignModulesToFIlters'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {fetchFilterCatalogActionHandler} from '../actions/fetchFilterCatalogActionHandler'
-import {createFilterActionHandler} from '../actions/createFilterActionHandler'
+import {updateFilterActionHandler} from '../actions/createFilterActionHandler'
+import {fetchSelectedFilterDataActionHandler} from '../actions/fetchSelectedFilterDataActionHandler'
 
-export default class MlAddFilter extends Component {
+export default class MlEditFilter extends Component {
 
   constructor(props) {
     super(props);
@@ -21,18 +22,21 @@ export default class MlAddFilter extends Component {
       filterData:{},
       clustersData:{},
       isFilterActive : false,
-      showFilters:false
+      data : [],
+      loading:true
     }
     this.optionBySelectTransactionType.bind(this);
+    this.fetchSelectedFilterData.bind(this);
     return this;
   }
 
   componentDidMount() {
+    this.fetchSelectedFilterData()
   }
 
-  getassignFilterToClusters(details){
+/*  getassignFilterToClusters(details){
     this.setState({'assignFilterToClusters':details})
-  }
+  }*/
 
   optionBySelectTransactionType(value, calback, selObject){
     this.setState({transactionId:value});
@@ -56,16 +60,22 @@ export default class MlAddFilter extends Component {
   getassignFilterToClusters(details){
     this.setState({clustersData:details});
   }
-  async insertFilterDetails() {
+
+  async fetchSelectedFilterData(){
+    const response= await fetchSelectedFilterDataActionHandler(this.props.config);
+    this.setState({loading:false,data : response,transactionId : response.moduleName});
+  }
+
+  async updateFilterDetails() {
     let jsonData={
       filterName :this.refs.name.value || "",
       filterDescription : this.refs.about.value || "",
       isActive : this.state.isFilterActive,
-      clusterFields : this.state.clustersData || [],
       moduleName:this.state.transactionId || "",
       filterFields : this.state.filterData || []
     }
-    const response = await createFilterActionHandler(jsonData)
+
+    const response = await updateFilterActionHandler(this.props.config  ,jsonData)
     if(response){
       FlowRouter.go("/admin/settings/filtersList");
       return response;
@@ -86,7 +96,7 @@ export default class MlAddFilter extends Component {
       {
         showAction: true,
         actionName: 'save',
-        handler:this.insertFilterDetails.bind(this)
+        handler:this.updateFilterDetails.bind(this)
       },
       {
         showAction: true,
@@ -104,10 +114,73 @@ export default class MlAddFilter extends Component {
     }
      `;*/
     let transactionType = gql` query{data:fetchModules{label:name,value:name}}`;
-
+    const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
+        {showLoader===true?( <div className="loader_wrap"></div>):(
+          <div className="admin_padding_wrap">
+            <h2>Edit Filter</h2>
+            <div className="main_wrap_scroll">
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}
+              >
+                <div className="col-md-6 nopadding-left">
+                  <div className="form_bg">
+                    <form>
+                      <div className="form-group">
+                        <input type="text" ref="name" defaultValue={this.state.data&&this.state.data.filterName} placeholder="Filter Name" className="form-control float-label" id=""/>
+                      </div>
+
+
+                      <div className="form-group">
+                        <textarea placeholder="About" ref="about" defaultValue={this.state.data&&this.state.data.filterDescription} className="form-control float-label" ></textarea>
+                      </div>
+
+
+                      <div className="form-group switch_wrap inline_switch">
+                        <label>Status</label>
+                        <label className="switch">
+                          <input type="checkbox" name={'isActive'} checked={this.state.data.isActive} onChange={this.onStatusChange.bind(this)} />
+                          <div className="slider"></div>
+                        </label>
+                      </div>
+
+                      <br className="brclear"/>
+
+
+                    </form>
+                  </div>
+                </div>
+                <div className="col-md-6 nopadding-right"  >
+                  <div className="clearfix"></div>
+                  <div className="form_bg left_wrap">
+                    <ScrollArea
+                      speed={0.8}
+                      className="left_wrap"
+                      smoothScrolling={true}
+                      default={true}
+                    >
+                      <form>
+                        <div className="form-group">
+                          <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionId} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true} disabled={true}/>
+                        </div>
+                        <MlAssignModulesToFilters filterExistingData = {this.state.data} getFiltersData={this.getFiltersData.bind(this)} filterCatalog={this.state.filterCatalogData}/>
+                      </form>
+                    </ScrollArea>
+                  </div>
+                </div>
+
+              </ScrollArea>
+            </div>
+
+            <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+          </div>)}
+      </div>
+/*      <div className="admin_main_wrap">
+        <div className="admin_padding_wrap">d
           <h2>Create Filter</h2>
           <div className="main_wrap_scroll">
             <ScrollArea
@@ -127,8 +200,7 @@ export default class MlAddFilter extends Component {
                     <div className="form_bg">
                       <form>
                         <div className="form-group">
-                          <input type="text"  ref="name" placeholder="Name" className="form-control float-label" id=""/>
-
+                          <input type="text" ref="Name" defaultValue={this.state.data&&this.state.data.filterName} placeholder="Filter Name" className="form-control float-label" id=""/>
                         </div>
 
 
@@ -139,7 +211,7 @@ export default class MlAddFilter extends Component {
 
 
 
-                        <MlAssignClustersToFilters getassignFilterToClusters={this.getassignFilterToClusters.bind(this)}/>
+
 
                         <div className="form-group switch_wrap inline_switch">
                           <label>Status</label>
@@ -183,7 +255,7 @@ export default class MlAddFilter extends Component {
         </div>
 
 
-      </div>
+      </div>*/
     )
   }
 }

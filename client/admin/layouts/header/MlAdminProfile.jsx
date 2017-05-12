@@ -4,8 +4,10 @@ import { render } from 'react-dom';
 import {logout} from "../header/actions/logoutAction";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
+import { createContainer } from 'meteor/react-meteor-data';
 
-export default class  MlAdminProfile extends Component {
+
+class  MlAdminProfileApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,12 +15,12 @@ export default class  MlAdminProfile extends Component {
       profilePic:" "
     }
     this.getValue = this.getValue.bind(this);
-
+    console.log(this.props.user);
     return this;
   }
   componentWillMount(){
     const resp=this.getValue();
-    return resp;
+      return resp;
   }
   componentDidMount(){
     $('.ml_profile h1').click(function(){
@@ -29,6 +31,11 @@ export default class  MlAdminProfile extends Component {
       container:'mooly_admin',
       trigger: 'hover'
     });
+  }
+
+  componentWillReceiveProps(){
+    console.log(this.props.user);
+    this.getValue();
   }
 
   logoutUser(){
@@ -49,15 +56,16 @@ export default class  MlAdminProfile extends Component {
   async getValue() {
     // let Details = {
     //   profilePic: this.refs.upload.value};
-    let userType = Meteor.userId();
+    let userType = this.props.user._id;
     let response = await findBackendUserActionHandler(userType);
     // let profilePicResponse = await addProfilePicAction(Details);
     this.setState({firstName : response.profile.InternalUprofile.moolyaProfile.displayName,
-      profilePic:response.profile.profileImage
+      profilePic: this.props.user.profile.profileImage//response.profile.profileImage
     });
   }
 
   componentWillUpdate(){
+    // console.log(this.props.user);
      let temp =this.state.profilePic;
      console.log(temp);
   }
@@ -93,3 +101,9 @@ export default class  MlAdminProfile extends Component {
 
 }
 
+
+export default MlAdminProfile = createContainer(props => {
+  return {
+    user: Meteor.user(),
+  };
+}, MlAdminProfileApp);

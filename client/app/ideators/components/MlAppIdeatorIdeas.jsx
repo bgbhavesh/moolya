@@ -17,7 +17,8 @@ export default class MlAppIdeatorIdeas extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchIdeas();
+    const resp =this.fetchIdeas();
+    return resp
   }
 
   componentDidUpdate() {
@@ -84,11 +85,11 @@ export default class MlAppIdeatorIdeas extends React.Component {
                 <div className="swiper-container ideas_swiper">
                   <div className="swiper-wrapper">
                     {this.state.userIdeas.map(function (idea, idx) {
-                      let url = idea.imageUrl;
+                      let url = idea && idea.imageUrl?idea.imageUrl:'';
                       return (
                         <div className="swiper-slide ideas_block" name={idx}
                              style={{'backgroundImage': 'url(' + {url} + ')'}} key={idx}>
-                          <h3 className="rating_xs"> {idea.title}<br/> <StarRatings/></h3>
+                          <h3 className="rating_xs"> {idea && idea.title?idea.title:''}<br/> <StarRatings/></h3>
                         </div>
                       )
                     })}

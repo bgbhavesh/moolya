@@ -16,11 +16,38 @@ export default class MlFilterListRepo{
     check(requestParams.moduleName, String);
 
     let userProfile = new MlAdminUserContext().userProfileDetails(this.userId);
+    let user = Meteor.users.findOne({_id:context.userId});
+    let roleIds=[];
+    let hirarichyLevel=[]
+    let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+    userProfiles.map(function (doc,index) {
+
+      let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+      for (let i = 0; i < userRoles.length; i++) {
+        roleIds.push(userRoles[i].roleId);
+        break
+
+      }
+
+    });
     let settingsObj = null;
     let result = null;
     let listData = []
+    let roleExist = null;
     if(requestParams.list && requestParams.list.length>0){
-      listData = requestParams.list
+
+       _.map(requestParams.list, function (val) {
+
+          if(val.roleId){
+            roleExist = _.contains(val.roleId,roleIds.toString());
+          }
+          if(roleExist){
+            let valueArray = []
+            listData = valueArray.concat(val.listValueId);
+          }
+
+
+        });
     }
     let  options=[]
     switch (requestParams.moduleName) {
@@ -37,7 +64,7 @@ export default class MlFilterListRepo{
         })
 
         break;
-      case "Gen_Chapters":
+      case "Reg_Chapters":
         let arrayOfValues = _.pluck(requestParams.filteredListId, 'value') || [];
         result= MlChapters.find({ clusterId: {$in : arrayOfValues},isActive : true}).fetch();
 
@@ -48,7 +75,7 @@ export default class MlFilterListRepo{
 
         break;
 
-      case "Gen_SubChapters":
+      case "Reg_SubChapters":
 
         let arrayOfSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
         result= MlSubChapters.find({clusterId: {$in : arrayOfSubChapter}, chapterId: {$in : arrayOfSubChapter},isActive : true}).fetch();
@@ -60,7 +87,7 @@ export default class MlFilterListRepo{
 
         break;
 
-      case "Reg_Community":
+      case "Gen_Community":
 
         if(listData.length < 1){
           result= MlCommunityDefinition.find({isActive : true}).fetch();
@@ -75,6 +102,67 @@ export default class MlFilterListRepo{
 
 
         break;
+
+      case "Gen_IdentityType":
+
+        if(listData.length < 1){
+          result= MlIdentityTypes.find({isActive : true}).fetch();
+        }else{
+
+          result= MlIdentityTypes.find({ _id: { $in: listData },isActive : true}).fetch();
+        }
+
+        let identityResponse=_.each(result,function (option,id) {
+          options.push({"label":option.identityTypeDisplayName,"value":option.identityTypeName})
+        })
+
+
+        break;
+
+      case "Gen_isActive":
+
+
+          options.push({"label":"true","value":true},{"label":"false","value":false})
+
+
+
+        break;
+      case "Gen_Clusters":
+        if(listData.length < 1){
+          result= MlClusters.find({isActive : true}).fetch();
+        }else{
+
+          result= MlClusters.find({ _id: { $in: listData },isActive : true}).fetch();
+        }
+
+        let genClusterResponse=_.each(result,function (option,id) {
+          options.push({"label":option.displayName,"value":option._id})
+        })
+
+        break;
+      case "Gen_Chapters":
+        let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
+        result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
+
+
+        let genChapterResponse=_.each(result,function (option,id) {
+          options.push({"label":option.displayName,"value":option._id})
+        })
+
+        break;
+
+      case "Gen_SubChapters":
+
+        let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
+        result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
+
+
+        let genSubChapterResponse=_.each(result,function (option,id) {
+          options.push({"label":option.subChapterDisplayName,"value":option._id})
+        })
+
+        break;
+
     }
 
 

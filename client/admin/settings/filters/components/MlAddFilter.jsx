@@ -11,7 +11,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {fetchFilterCatalogActionHandler} from '../actions/fetchFilterCatalogActionHandler'
 import {updateFilterActionHandler} from '../actions/createFilterActionHandler'
 import {fetchSelectedFilterDataActionHandler} from '../actions/fetchSelectedFilterDataActionHandler'
-
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 export default class MlEditFilter extends Component {
 
   constructor(props) {
@@ -32,6 +32,12 @@ export default class MlEditFilter extends Component {
 
   componentDidMount() {
     this.fetchSelectedFilterData()
+  }
+  componentDidUpdate(){
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
 
 /*  getassignFilterToClusters(details){
@@ -63,6 +69,7 @@ export default class MlEditFilter extends Component {
 
   async fetchSelectedFilterData(){
     const response= await fetchSelectedFilterDataActionHandler(this.props.config);
+
     this.setState({loading:false,data : response,transactionId : response.moduleName});
   }
 
@@ -120,13 +127,7 @@ export default class MlEditFilter extends Component {
         {showLoader===true?( <div className="loader_wrap"></div>):(
           <div className="admin_padding_wrap">
             <h2>Edit Filter</h2>
-            <div className="main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
+
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <form>
@@ -140,14 +141,14 @@ export default class MlEditFilter extends Component {
                       </div>
 
 
-                      <div className="form-group switch_wrap inline_switch">
+                     {/* <div className="form-group switch_wrap inline_switch">
                         <label>Status</label>
                         <label className="switch">
                           <input type="checkbox" name={'isActive'} checked={this.state.data.isActive} onChange={this.onStatusChange.bind(this)} />
                           <div className="slider"></div>
                         </label>
                       </div>
-
+*/}
                       <br className="brclear"/>
 
 
@@ -173,8 +174,7 @@ export default class MlEditFilter extends Component {
                   </div>
                 </div>
 
-              </ScrollArea>
-            </div>
+
 
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>)}

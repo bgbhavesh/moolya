@@ -5,6 +5,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {graphql} from 'react-apollo';
 import ScrollArea from 'react-scrollbar';
 let FontAwesome = require('react-fontawesome');
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import gql from 'graphql-tag'
 import Datetime from "react-datetime";
 import moment from "moment";
@@ -16,7 +17,6 @@ export default class MlAssignModulesToFilters extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       selectedValue: null,
       listValues : [],
@@ -31,7 +31,12 @@ export default class MlAssignModulesToFilters extends React.Component {
 
   componentDidMount() {
     let filterDetails = this.props.filterExistingData;
-    this.setState({assignModulesToFilters:filterDetails.filterFields})
+    this.setState({assignModulesToFilters:filterDetails.filterFields});
+
+  }
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+    initalizeFloatLabel();
   }
 
 
@@ -78,17 +83,14 @@ export default class MlAssignModulesToFilters extends React.Component {
     let cloneArray = _.cloneDeep(this.state.assignModulesToFilters);
     let filterDetails = cloneArray[index]
     if(event.currentTarget.checked){
-
-
-        filterDetails['isCustom']=true
+      filterDetails['isCustom']=true
       cloneArray[index] = filterDetails
       this.setState({assignModulesToFilters:cloneArray})
       this.props.getFiltersData(this.state.assignModulesToFilters);
     }else {
-
-        filterDetails['isCustom'] = false
-
-      this.setState({assignModulesToFilters: filterDetails})
+      filterDetails['isCustom']=false
+      cloneArray[index] = filterDetails
+      this.setState({assignModulesToFilters: cloneArray})
       this.props.getFiltersData(this.state.assignModulesToFilters);
     }
   }
@@ -166,12 +168,18 @@ export default class MlAssignModulesToFilters extends React.Component {
 
         {that.state.assignModulesToFilters.map(function (options, id) {
 
-
-          if(options&&options.fieldType == "List"&&!options.isDynamic){
-            listSelect = true
+         if(options&&!options.isDynamic){
+            if(options.fieldType == "List" || options.fieldType == "Boolean"){
+              listSelect = true
+            }
+          }else{
+            listSelect = false
           }
-          if(options&&options.fieldType == "List"&&!options.isDynamic&&options.isCustom){
-            customSelect = true
+          if(options && !options.isDynamic&&options.isCustom){
+            if(options&&options.fieldType == "List" || options&&options.fieldType == "Boolean"){
+              customSelect = true
+            }
+
           }else{
             customSelect = false
           }
@@ -224,7 +232,7 @@ export default class MlAssignModulesToFilters extends React.Component {
                     </div>:""}
                   </div>
 
-                  <div className="col-md-4 nopadding">
+                 {/* <div className="col-md-4 nopadding">
                     <div className="form-group switch_wrap inline_switch">
                       <label>Status</label>
                       <label className="switch">
@@ -232,7 +240,7 @@ export default class MlAssignModulesToFilters extends React.Component {
                         <div className="slider"></div>
                       </label>
                     </div>
-                  </div>
+                  </div>*/}
 
                   {listSelect?<div className="col-md-4 nopadding">
 

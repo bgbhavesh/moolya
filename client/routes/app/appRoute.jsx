@@ -28,6 +28,10 @@ import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
 import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile';
 import MlAppProfileList from '../../../client/app/profile/components/MlAppProfileList'
+import MlAppMyOffice from '../../../client/app/profile/office/components/MlAppMyOffice'
+import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
+import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
+import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
@@ -84,6 +88,33 @@ appSection.route('/addressBook', {
   }
 });
 
+appSection.route('/myOffice', {
+  name: 'myOffice',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMyOffice />, isProfileMenu: true})
+  }
+});
+
+appSection.route('/addOffice', {
+  name: 'addOffice',
+  action(){
+    mount(AppLayout, {appContent: <MlAppAddOffice />, isProfileMenu: true})
+  }
+});
+
+appSection.route('/officeMembersDetails', {
+  name: 'officeMembersDetails',
+  action(){
+    mount(AppLayout, {appContent: <MlAppOfficeMembersDetails />, isProfileMenu: true})
+  }
+});
+
+appSection.route('/newSpokePerson', {
+  name: 'newSpokePerson',
+  action(){
+    mount(AppLayout, {appContent: <MlAppNewSpokePerson/>, isProfileMenu: true})
+  }
+});
 appSection.route('/myConnections', {
   name: 'myConnections',
   action(){
@@ -112,6 +143,7 @@ appSection.route('/myProfile/registerAs', {
         mount(AppLayout,{headerContent:<MlAdminProfileHeader />,appContent:< MlAppCommunitiesList/>})
     }
 })
+
 // Ideators
 appSection.route('/ideator', {
   name: 'ideator',

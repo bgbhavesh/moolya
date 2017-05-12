@@ -58,7 +58,7 @@ export async function reopenCommentActionHandler(commentId) {
       commentId : commentId
     }
   })
-  const id = result.data.resolveComment;
+  const id = result.data.reopenComment;
   return id
 }
 

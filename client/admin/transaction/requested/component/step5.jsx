@@ -158,12 +158,19 @@ export default class Step5 extends React.Component {
   async updateApproveUser(){
     let registrationId = this.props.registrationData._id
     const response = await approvedStatusForUser(registrationId);
-    if (response) {
+  /*  if (response) {
       this.props.getRegistrationKYCDetails();
       toastr.success("User Approved Successfully")
     }else{
       this.props.getRegistrationKYCDetails();
       toastr.error("Please validate user")
+    }*/
+    if (response.success) {
+      this.props.getRegistrationKYCDetails();
+      toastr.success("User Approved Successfully")
+    }else{
+      this.props.getRegistrationKYCDetails();
+      toastr.error(response.result)
     }
   }
   approveUser(){

@@ -19,12 +19,20 @@ export default class DocumentViewer extends React.Component{
       /*var FileName = $(this).val().replace(/C:\\fakepath\\/i, '');
       $(this).parents('.uploaded_files').find(".panel-body ul").prepend('<li class="doc_card" data-toggle="tooltip" data-placement="bottom" title="'+FileName+'"><span class="ml ml-minus"></span><img id="preview_file" /></li>');
       $(this).parents('.uploaded_files').find("#preview_file").attr("src", URL.createObjectURL(this.files[0]));*/
-      $('[data-toggle="tooltip"]').tooltip({container:'body'});
+      $('[data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
     });
   }
-  onFileUpload(documentId,docTypeId){
-    let file=document.getElementById(docTypeId+documentId).files[0];
-    this.props.onFileUpload(file,documentId,docTypeId);
+  onFileUpload(documentId,docTypeId,status){
+    if(status!='Approved'){
+      let file=document.getElementById(docTypeId+documentId).files[0];
+      this.props.onFileUpload(file,documentId,docTypeId);
+    }else{
+      toastr.error("documents can not allowed to upload once approved!!!!")
+    }
+
   }
   onDocSelect(documentId,docTypeId,event){
     if(event.target.checked){
@@ -70,7 +78,7 @@ export default class DocumentViewer extends React.Component{
            <div className="pull-right block_action">
            <div className="fileUpload upload_file_mask">
            <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-           <input type="file" className="upload_file upload" name="file_source" id={doc.docTypeId+doc.documentId} ref={doc.documentId} onChange={this.onFileUpload.bind(this,doc.documentId,doc.docTypeId)}/></a>
+           <input type="file" className="upload_file upload" name="file_source" id={doc.docTypeId+doc.documentId} ref={doc.documentId} onChange={this.onFileUpload.bind(this,doc.documentId,doc.docTypeId,doc.status)}/></a>
            </div>
            </div>
            <div className="pull-right block_action">

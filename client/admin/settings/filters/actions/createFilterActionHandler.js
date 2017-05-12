@@ -3,6 +3,7 @@ import {client} from '../../../core/apolloConnection';
 
 export async function updateFilterActionHandler(filterId,filterObject) {
 
+
     const result = await client.mutate({
       mutation: gql`
       mutation  ($filterId: String, $filterObject: filter, $moduleName:String, $actionName:String){

@@ -39,8 +39,19 @@ export async function fetchSelectedFilterDataActionHandler(id) {
   })
   const data = result.data.fetchSelectedFilterData;
   let resultData = _.omit(data,'__typename');
+
+
   let fieldsArray = [];
-  fieldsArray=_.map(resultData.filterFields, function (row) {return _.omit(row, ['__typename'])});
+
+  fieldsArray=_.map(resultData.filterFields, function (row) {
+                      return _.omit(row, ['__typename'])
+
+                    });
+
+
+
   resultData["filterFields"] = fieldsArray
+  console.log("-----------------------------------------------------");
+  console.log(resultData);
   return resultData
 }

@@ -20,7 +20,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
     return response;
   }
-  validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(args.registration);
+  validationCheck=MlRegistrationPreCondition.validateEmail(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
 
@@ -115,7 +115,8 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var response=null;
 
  // let clusterInfo=MlClusters.findOne({_id:args.registration.clusterId})
-  var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.clusterId":args.registration.clusterId},{"registrationInfo.registrationType":args.registration.registrationType}]})
+ // var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.clusterId":args.registration.clusterId},{"registrationInfo.registrationType":args.registration.registrationType}]})
+  var validate = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   if(validate){
     let code = 400;
     let result = {message: "Registration Exist"}

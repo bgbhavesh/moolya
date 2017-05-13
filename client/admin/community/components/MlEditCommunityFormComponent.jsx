@@ -63,6 +63,8 @@ class MlEditCommunityFormComponent extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
+    $('.Select-control').css({'height':'auto'});
+
   }
 
   async addEventHandler() {

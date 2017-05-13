@@ -207,7 +207,8 @@ export async function findCountryCode(clusterId) {
                 capital     
                 isActive     
                 lat        
-                lng       
+                lng 
+                phoneNumberCode
             }
         }`,
     variables: {

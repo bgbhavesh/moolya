@@ -439,7 +439,7 @@ export default class step1 extends React.Component{
                          </div>
                          }*/}
                         {canSelectIdentity &&
-                        <div className="form-group">
+                        <div className="form-group nomarginbot">
                           {identityTypez.map((i) => {
                             let checked=null,showRadioChecked=false
                             let identity=this.state.identityType
@@ -459,8 +459,8 @@ export default class step1 extends React.Component{
 
                                   <input type="checkbox" name={i.identityTypeName} value={i._id}
                                          onChange={that.checkIdentityIndividual.bind(that) }
-                                         checked ={checked}/><label
-                                  htmlFor="radio1"><span><span></span></span>{i.identityTypeName}</label>
+                                         checked ={checked} id={i._id}/><label
+                                  htmlFor={i._id}><span><span></span></span>{i.identityTypeName}</label>
                                 </div>
                                 {/* <div id="comp" className="input_types">
                                  <input type="checkbox" name="Company" value="Company"
@@ -471,6 +471,7 @@ export default class step1 extends React.Component{
                               </div>}</div>)
                           })
                           }
+                          <br className="brclear"/>
                         </div>
                         }
                         <div className="clearfix"></div>

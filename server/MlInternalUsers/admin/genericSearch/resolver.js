@@ -681,7 +681,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         });
       let serverQuery ={$and: [{$or: [{"registrationInfo.clusterId":clusterId},{"registrationInfo.chapterId":{$in: [chapterId]}}]},{$or:[{status:"Rejected"},{status: "Pending"}]}]}
       let queryCount = mergeQueries(query,serverQuery);
-      data = mlTransactionsListRepo.processAssignmentTransactions(result,context.userId);
+    //  data = mlTransactionsListRepo.processAssignmentTransactions(result,context.userId);
       //data = result;
       totalRecords=MlRegistration.find(queryCount,findOptions).count();
     }

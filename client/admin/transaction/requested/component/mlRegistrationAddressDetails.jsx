@@ -290,7 +290,6 @@ export default class AddressDetails extends React.Component{
 
 
             {that.state.addressDetails && (that.state.addressDetails.map(function(options,key) {
-
               return(
                 <div className="tab-pane" id={'adressType' + key} key={key}>
                   <div className="form-group">
@@ -341,7 +340,7 @@ export default class AddressDetails extends React.Component{
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressPinCode' + key} placeholder="Pincode" name ={'addressPinCode'}
-                           className="form-control float-label" id="" valueKey={options.addressPinCode}/>
+                           className="form-control float-label" id="" defaultValue={options.addressPinCode}/>
                   </div>
 
                   <div className="ml_icon_btn">

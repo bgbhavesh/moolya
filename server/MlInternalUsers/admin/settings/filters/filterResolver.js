@@ -35,13 +35,42 @@ MlResolver.MlQueryResolver['fetchModuleFilters'] = (obj, args, context, info) =>
   // TODO : Authorization
 
   if (args.moduleName && context.userId) {
-   /* let user = Meteor.users.findOne({_id:context.userId});
-    if(user && user.profile && user.profile.isInternaluser == true){
-      let userProfiles = user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.userProfiles;
-      let defaultProfile = _.find(userProfiles, {isDefault:true});
+    let user = Meteor.users.findOne({_id:context.userId});
+    let roleIds=[];
+    let hirarichyLevel=[]
+    let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+    userProfiles.map(function (doc,index) {
 
-    }*/
-    let response= MlFilters.find({"moduleName":args.moduleName}).fetch();
+        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+        /*userRoles.map(function (doc, index) {
+          hirarichyLevel.push(doc.hierarchyLevel)
+
+        });
+        hirarichyLevel.sort(function (a, b) {
+          return b - a
+        });*/
+        for (let i = 0; i < userRoles.length; i++) {
+         /* if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {*/
+            roleIds.push(userRoles[i].roleId);
+            break
+          //}
+        }
+
+    });
+ /*   let response=  MlFilters.findOne({"moduleName" : "portfolio",
+      "filterFields": {
+        "$elemMatch": {
+          "isDynamic": false,
+          "fieldList": {
+            "$elemMatch": {
+              "roleId": {$in : roleIds}
+            }
+          }
+        }
+      }
+    })*/
+    let response= MlFilters.findOne({"moduleName":args.moduleName,"isActive":true});
+
     return response;
   }
 }

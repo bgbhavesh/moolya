@@ -202,11 +202,11 @@ export default class Company extends React.Component{
           showAction: true,
           handler: this.updateRegistration.bind(this),
         },
-        {
+        /*{
           actionName: 'comment',
           showAction: true,
           handler: null
-        },
+        },*/
         {
           showAction: true,
           actionName: 'cancel',

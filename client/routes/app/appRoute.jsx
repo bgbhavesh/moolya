@@ -109,12 +109,6 @@ appSection.route('/officeMembersDetails', {
   }
 });
 
-appSection.route('/newSpokePerson', {
-  name: 'newSpokePerson',
-  action(){
-    mount(AppLayout, {appContent: <MlAppNewSpokePerson/>, isProfileMenu: true})
-  }
-});
 appSection.route('/myConnections', {
   name: 'myConnections',
   action(){

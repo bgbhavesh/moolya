@@ -27,13 +27,13 @@ export default class ContactDetails extends React.Component{
 
     }
     this.findRegistration.bind(this);
-    this.fetchCountryCode.bind(this);
+    //this.fetchCountryCode.bind(this);
     return this;
   }
 
   componentDidMount(){
     this.findRegistration.bind(this);
-    this.fetchCountryCode();
+    //this.fetchCountryCode();
   }
   componentWillUpdate(nextProps, nextState) {
 
@@ -136,10 +136,12 @@ export default class ContactDetails extends React.Component{
     this.findRegistration();
   }
 
+/*
   async fetchCountryCode(){
     const response = await findCountryCode(this.props.clusterId);
   }
 
+*/
 
 
   optionsBySelectNumberType(selectedIndex,handler,selectedObj){

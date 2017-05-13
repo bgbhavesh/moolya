@@ -33,7 +33,7 @@ let countriesSchema = `
         fetchCountry(countryId: String): Countries
         fetchCountriesSearch: [Countries]
         fetchCountriesAPI:[Countries]
-        fetchCountryCode(clusterId: String):Countries
+     
     }
     
     type Mutation{

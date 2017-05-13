@@ -192,22 +192,23 @@ export async function fetchIdentityTypes() {
   return result&&result.data?result.data.data:[];
 
 };
+/*
 
 export async function findCountryCode(clusterId) {
   const result = await client.query({
         query: gql`
-            query($clusterId: String){  
-                fetchCountryCode(clusterId:$clusterId){          
-                _id          
-                country      
-                countryCode  
-                displayName   
-                url        
-                about       
-                capital     
-                isActive     
-                lat        
-                lng       
+            query($clusterId: String){
+                fetchCountryCode(clusterId:$clusterId){
+                _id
+                country
+                countryCode
+                displayName
+                url
+                about
+                capital
+                isActive
+                lat
+                lng
             }
         }`,
     variables: {
@@ -220,3 +221,4 @@ export async function findCountryCode(clusterId) {
 
 }
 
+*/

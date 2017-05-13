@@ -236,13 +236,21 @@ export default class MlAssignComponent extends Component {
           <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>
             <span className="ml ml-delete"></span>
           </a>
-          <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.selfAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
-            <span className="ml ml-save"></span>
-          </a>
-          <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.unAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
-            <span className="ml ml-save"></span>
-          </a>
         </div>
+
+        {this.props.canAssign?
+        <div className="assign-popup">
+          <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.selfAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
+            <span className="ml flaticon-ml-assign-user"></span>
+          </a>
+        </div>:<div></div>}
+
+        {this.props.canUnAssign?
+        <div className="assign-popup">
+          <a data-toggle="tooltip" title="Cancel" data-placement="top" onClick={this.unAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
+            <span className="ml flaticon-ml-unassign-user"></span>
+          </a>
+        </div>:<div></div>}
 
 
       </div>

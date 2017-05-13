@@ -205,7 +205,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
         details.communityId = communityDetails._id;
-        //details.communityName=communityDetails.communityName;
+        details.communityName=communityDetails.communityName;
         details.communityDefName = communityDetails.communityDefName;
         details.communityDefCode = communityDetails.communityDefCode;
 

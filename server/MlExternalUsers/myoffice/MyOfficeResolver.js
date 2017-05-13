@@ -35,7 +35,7 @@ MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => 
     }
 
     let code = 200;
-    let response = new MlRespPayload().successPayload(ret, code);
+    let response = new MlRespPayload().successPayload('Office Successfully Created', code);
     return response;
 }
 

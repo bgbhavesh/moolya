@@ -20,7 +20,7 @@ function logChange(val) {
 export default class MlAppAddOffice extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showNewSpokePerson: false};
+    this.state = {showNewSpokePerson: true};
     return this;
   }
 

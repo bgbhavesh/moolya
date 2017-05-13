@@ -516,9 +516,11 @@ export default class step1 extends React.Component{
                       <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
+                      <span className="placeHolder active">Account Type</span>
                       <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} />
                     </div>
                     <div className="form-group">
+                      <span className="placeHolder active">Do You Want To Associate To Any Of The Institution</span>
                       <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" />
                     </div>
                     <div className="form-group">
@@ -531,6 +533,7 @@ export default class step1 extends React.Component{
                       <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id="" />
                     </div>
                     <div className="form-group mandatory">
+                      <span className="placeHolder active">How Did You Know About Us</span>
                       <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required" />
                     </div>
 

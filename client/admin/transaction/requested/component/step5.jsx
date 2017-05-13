@@ -275,8 +275,7 @@ export default class Step5 extends React.Component {
         if(resp){
           this.props.getRegistrationKYCDetails();
           setTimeout(function(){
-            alert(1);
-            $('[data-toggle="tooltip"]').tooltip({
+           $('[data-toggle="tooltip"]').tooltip({
               container:'body',
               trigger:"hover"
             });

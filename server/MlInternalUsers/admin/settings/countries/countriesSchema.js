@@ -12,7 +12,8 @@ let countriesSchema = `
         capital       : String,
         isActive      : Boolean,
         lat           : String,
-        lng           : String
+        lng           : String,
+        phoneNumberCode : String
     }
     
     input countryObject{
@@ -25,7 +26,8 @@ let countriesSchema = `
         capital       : String,
         isActive      : Boolean
         lat           : String,
-        lng           : String
+        lng           : String,
+        phoneNumberCode : String
     }
     
     type Query {
@@ -33,7 +35,7 @@ let countriesSchema = `
         fetchCountry(countryId: String): Countries
         fetchCountriesSearch: [Countries]
         fetchCountriesAPI:[Countries]
-     
+        fetchCountryCode(clusterId: String):Countries
     }
     
     type Mutation{

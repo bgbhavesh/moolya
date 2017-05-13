@@ -95,3 +95,18 @@ MlResolver.MlQueryResolver['fetchCountriesAPI'] = (obj, args, context, info) =>{
   let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
   return result
 }
+
+
+MlResolver.MlQueryResolver['fetchCountryCode'] = (obj, args, context, info) =>{
+  if(args.clusterId){
+    let clusterData = MlClusters.findOne({"_id" : args.clusterId});
+    let result=MlCountries.findOne({"_id" : clusterData.countryId});
+    //let result=MlCountries.find().fetch();
+    let code = 200;
+    let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+    return result
+  }
+
+
+}
+

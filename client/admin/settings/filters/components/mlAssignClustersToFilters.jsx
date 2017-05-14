@@ -45,7 +45,12 @@ export default class MlAssignClustersToFilters extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-    let filtersDepartmentData=this.props.filtersDepartmentData;
+    let filtersDepartmentData=this.props.filtersDepartmentData || [];
+
+    filtersDepartmentData=_.map(filtersDepartmentData, function (row) {
+      let val= _.omit(row, ['__typename']);
+      return val;
+    });
     if(filtersDepartmentData && filtersDepartmentData.length>0){
       let availabilityDetailsForm=[]
       for(let i=0;i<filtersDepartmentData.length;i++){
@@ -58,6 +63,7 @@ export default class MlAssignClustersToFilters extends React.Component {
         availabilityDetailsForm.push(json)
       }
       this.setState({assignFilterToClusters:availabilityDetailsForm})
+      this.props.getRolesData(this.state.assignFilterToClusters)
     }
   }
 

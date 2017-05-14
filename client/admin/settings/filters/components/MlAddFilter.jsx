@@ -22,7 +22,7 @@ export default class MlEditFilter extends Component {
       filterData:{},
       clustersData:{},
       isFilterActive : false,
-      data : [],
+      data : {},
       loading:true
     }
     this.optionBySelectTransactionType.bind(this);
@@ -50,12 +50,16 @@ export default class MlEditFilter extends Component {
   }
 
   onStatusChange(event){
-    let filedName=event.target.name
-    let fieldValue=event.target.value;
-    if(filedName=='isActive'){
-      fieldValue=event.target.checked;
+
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["isActive"]);
+    if (event.currentTarget.checked) {
+      var z=_.extend(updatedData,{isActive:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{isActive:false});
+      this.setState({data:z,loading:false});
     }
-    this.setState({isFilterActive:fieldValue})
   }
 
 
@@ -70,14 +74,14 @@ export default class MlEditFilter extends Component {
   async fetchSelectedFilterData(){
     const response= await fetchSelectedFilterDataActionHandler(this.props.config);
 
-    this.setState({loading:false,data : response,transactionId : response.moduleName});
+    this.setState({loading:false,data : response,transactionId : response.moduleName,"filterData" : response.filterFields});
   }
 
   async updateFilterDetails() {
     let jsonData={
       filterName :this.refs.name.value || "",
       filterDescription : this.refs.about.value || "",
-      isActive : this.state.isFilterActive,
+      isActive : this.refs.filterStatus.checked,
       moduleName:this.state.transactionId || "",
       filterFields : this.state.filterData || []
     }
@@ -149,6 +153,13 @@ export default class MlEditFilter extends Component {
                         </label>
                       </div>
 */}
+                      <div className="form-group switch_wrap inline_switch">
+                        <label>Status</label>
+                        <label className="switch">
+                          <input type="checkbox" ref="filterStatus" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)} />
+                          <div className="slider"></div>
+                        </label>
+                      </div>
                       <br className="brclear"/>
 
 

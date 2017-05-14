@@ -2,12 +2,14 @@ import async from 'async';
 import each from 'async/each';
 import _ from 'lodash';
 var diff = require('deep-diff').diff;
-
+//TODO: Drive the Audit Log through Audit Definition and configuration
+var isAuditEnabled=Meteor.settings.private.isAuditEnabled;
 class MlAuditLog {
   constructor(){
   }
 
   insertAudit(auditParams, context){
+    if(!isAuditEnabled){ return;}
     let userAgent = {
       OS: '-',
       ipAddress: context.ip,
@@ -66,6 +68,7 @@ class MlAuditLog {
   }
 
   updateAudit(auditParams, context){
+    if(!isAuditEnabled){ return;}
     let userAgent = {
       OS: '-',
       ipAddress: context.ip,

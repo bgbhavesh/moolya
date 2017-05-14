@@ -51,7 +51,5 @@ export async function fetchSelectedFilterDataActionHandler(id) {
 
 
   resultData["filterFields"] = fieldsArray
-  console.log("-----------------------------------------------------");
-  console.log(resultData);
   return resultData
 }

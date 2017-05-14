@@ -96,7 +96,6 @@ MlResolver.MlQueryResolver['fetchCountriesAPI'] = (obj, args, context, info) =>{
   return result
 }
 
-/*
 
 MlResolver.MlQueryResolver['fetchCountryCode'] = (obj, args, context, info) =>{
   if(args.clusterId){
@@ -110,5 +109,4 @@ MlResolver.MlQueryResolver['fetchCountryCode'] = (obj, args, context, info) =>{
 
 
 }
-*/
 

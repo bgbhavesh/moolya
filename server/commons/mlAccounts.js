@@ -76,7 +76,7 @@ export default MlAccounts=class MlAccounts {
 
     emailOptions.from=fromEmail;
     emailOptions.to=address;
-    emailOptions.subject="Welcome to moolya India!";
+    emailOptions.subject="Welcome to moolya !";
     if (emailOptions&&emailOptions.emailContentType==="html") {
       emailOptions.html=emailContent;
       Meteor.setTimeout(function () {

@@ -15,7 +15,7 @@ export default class MlAppFunderListView extends Component {
             <h3>{funder.funderAbout.firstName}</h3>
             <div className="list_icon"><span className="ml ml-funder"></span></div>
             <div className="block_footer">
-              <span>Hyderabad</span>
+              <span>New York</span>
             </div>
           </div>
         </a>

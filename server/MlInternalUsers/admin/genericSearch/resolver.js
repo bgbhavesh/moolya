@@ -967,6 +967,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
     if(data.name){
       return 'SubDomain'
     }
-    return null;
+    return 'GenericType';
   }
 }

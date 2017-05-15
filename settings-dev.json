@@ -39,6 +39,6 @@
     "smtpMailUrl":"smtp://qasmtp%40moolya.in:Moolya123@smtp.moolya.in:25",
     "fromEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
-    "isAuditEnabled":false
+    "isAuditEnabled":true
   }
 }

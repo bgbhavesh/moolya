@@ -6,8 +6,8 @@ export async function findRequestssActionHandler(requestTypeDetails) {
   let status=["WIP","Pending"]
   const result = await client.query({
     query: gql`
- query ($userId: String, $status: String) {
-  fetchRequestss(userId: $userId , status:$status) {
+ query ($userId: String) {
+  fetchRequestss(userId: $userId ) {
     _id
     userId
     status

@@ -33,14 +33,14 @@ MlResolver.MlQueryResolver['fetchRequestss'] = (obj, args, context, info) => {
     //todo: conditions based on record id for steps like registration,portfolio
     //resolve userType:internal/external and send with response
     let requestType=args.requestType;
-    var arr = [];
-    for(let i = 0 ; i< args.status.length;i++){
-      arr.push(args.status[i]);
-    }
-    let requests=mlDBController.find('MlRequests',({userId:args.userId })).fetch()
+    // var arr = [];
+    // for(let i = 0 ; i< args.status.length;i++){
+    //   arr.push(args.status[i]);
+
+    let requests=mlDBController.find('MlRequests',({userId:args.userId })).fetch();
     return requests;
   }
-  return null;
+  return null
 }
 
 

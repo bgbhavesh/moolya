@@ -73,7 +73,7 @@ let requestsSchema = `
       }
 
     type Query{
-      fetchRequestss(userId: String , status: [String]): [requests]
+      fetchRequestss(userId: String ): [requests]
       fetchRequestsForApproval(transactionType:String):[requests]
 
     }`;

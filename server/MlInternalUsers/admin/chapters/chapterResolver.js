@@ -1,7 +1,7 @@
-import MlResolver from '../../../commons/mlResolverDef'
-import MlRespPayload from '../../../commons/mlPayload'
-import geocoder from 'geocoder'
-import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+import MlResolver from "../../../commons/mlResolverDef";
+import MlRespPayload from "../../../commons/mlPayload";
+import geocoder from "geocoder";
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
     let chapter = args.chapter;
@@ -232,20 +232,27 @@ MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info
   return result
 }
 
-MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =>
-{
+MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
+  let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
+  geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+    if (err) {
+      return "Invalid Country Name";
+    }
+    args.subChapter.latitude = data.results[0].geometry.location.lat;
+    args.subChapter.longitude = data.results[0].geometry.location.lng;
 
     let subChapterId = createSubChapter(args.subChapter, context)
-    if(subChapterId){
-        let code = 200;
-        let response = new MlRespPayload().successPayload(subChapterId, code);
-        return response
+    if (subChapterId) {
+      let code = 200;
+      let response = new MlRespPayload().successPayload(subChapterId, code);
+      return response
     }
-    else{
-        let code = 400;
-        let response = new MlRespPayload().errorPayload("Unable To Create Subchapter", code);
-        return response
+    else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Unable To Create Subchapter", code);
+      return response
     }
+  }), {key: Meteor.settings.private.googleApiKey});
 }
 
 

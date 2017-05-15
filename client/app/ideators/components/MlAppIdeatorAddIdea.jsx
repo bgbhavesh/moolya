@@ -42,6 +42,11 @@ class MlAppIdeatorAddIdea extends React.Component{
           isActive:true
       };
       const response = await createIdeaActionHandler(idea)
+      if(response && !response.success){
+        toastr.error(response.result);
+      }else if (response && response.success){
+        toastr.success(response.result);
+      }
       return response;
   }
 

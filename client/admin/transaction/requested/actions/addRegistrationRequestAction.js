@@ -3,11 +3,11 @@ import {client} from '../../../core/apolloConnection';
 
 export async function addReqgistrationRequestInfo(requestDetails) {
   let transaction = {}
-  transaction = requestDetails;
+  requests = requestDetails;
   const result = await client.mutate({
     mutation: gql`
-      mutation($transaction:TransactionsInput){
-          createTransaction(transaction:$transaction) {
+      mutation($requests:requests){
+          createRequests(requests:$requests) {
             success
             code
             result
@@ -16,7 +16,7 @@ export async function addReqgistrationRequestInfo(requestDetails) {
         }
     `,
     variables: {
-      transaction
+      requests
     }
   })
   const id = result.data.createTransaction;

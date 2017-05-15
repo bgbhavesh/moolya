@@ -20,9 +20,12 @@ export default class MlFilterListRepo{
     let roleIds=[];
     let hirarichyLevel=[]
     let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+    let listData = [];
+    let clusterIds = [];
     userProfiles.map(function (doc,index) {
 
       let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+      clusterIds = _.pluck(userRoles, 'clusterId') || [];
       for (let i = 0; i < userRoles.length; i++) {
         roleIds.push(userRoles[i].roleId);
         break
@@ -32,28 +35,34 @@ export default class MlFilterListRepo{
     });
     let settingsObj = null;
     let result = null;
-    let listData = []
     let roleExist = null;
     if(requestParams.list && requestParams.list.length>0){
-
+      let valueArray = []
        _.map(requestParams.list, function (val) {
 
           if(val.roleId){
             roleExist = _.contains(val.roleId,roleIds.toString());
           }
           if(roleExist){
-            let valueArray = []
-            listData = valueArray.concat(val.listValueId);
+
+            valueArray = valueArray.concat(val.listValueId);
           }
 
 
         });
+      listData = valueArray;
     }
     let  options=[]
     switch (requestParams.moduleName) {
       case "Reg_Clusters":
         if(listData.length < 1){
-          result= MlClusters.find({isActive : true}).fetch();
+          let allclusterIds = _.contains(clusterIds,"all");
+          if(allclusterIds){
+            result = MlClusters.find({isActive : true}).fetch();
+          }else{
+            result= MlClusters.find({ _id: { $in: clusterIds },isActive : true}).fetch();
+          }
+
         }else{
 
           result= MlClusters.find({ _id: { $in: listData },isActive : true}).fetch();

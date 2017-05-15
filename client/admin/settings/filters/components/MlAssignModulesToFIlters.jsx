@@ -66,8 +66,7 @@ export default class MlAssignModulesToFilters extends React.Component {
   }
 
   onStatusChange(index,event){
-    let cloneArray = _.cloneDeep(this.state.assignModulesToFilters);
-    let filterDetails = cloneArray;
+    let filterDetails=this.state.assignModulesToFilters
     if(event.currentTarget.checked){
       filterDetails[index]['isActive']=true
       this.setState({assignModulesToFilters:filterDetails})
@@ -143,7 +142,13 @@ export default class MlAssignModulesToFilters extends React.Component {
 
   getRolesData(index,details){
       let filterDetails = this.state.assignModulesToFilters || [];
-    filterDetails[index]["fieldList"] = details;
+      let zz =  details|| [];
+      var fieldListDataArray=_.map(zz, function (row) {
+        let val= _.omit(row, ['__typename']);
+        return val;
+      });
+
+    filterDetails[index]["fieldList"] = fieldListDataArray;
     this.setState({assignModulesToFilters: filterDetails})
     this.props.getFiltersData(this.state.assignModulesToFilters);
 
@@ -232,7 +237,7 @@ export default class MlAssignModulesToFilters extends React.Component {
                     </div>:""}
                   </div>
 
-                 {/* <div className="col-md-4 nopadding">
+                  <div className="col-md-4 nopadding">
                     <div className="form-group switch_wrap inline_switch">
                       <label>Status</label>
                       <label className="switch">
@@ -240,12 +245,12 @@ export default class MlAssignModulesToFilters extends React.Component {
                         <div className="slider"></div>
                       </label>
                     </div>
-                  </div>*/}
+                  </div>
 
                   {listSelect?<div className="col-md-4 nopadding">
 
                       <div className="input_types">
-                        <input  type="checkbox" name="checkbox" id={options.fieldName} onChange={that.customChange.bind(that,id)}/>
+                        <input  type="checkbox" name="checkbox" checked={options.isCustom} onChange={that.customChange.bind(that,id)}/>
                         <label htmlFor="checkbox1"><span> </span>Is Custom</label>
                       </div>
 

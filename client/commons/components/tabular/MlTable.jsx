@@ -24,7 +24,7 @@ export default class MlTable extends React.Component {
 
   render() {
     const selectRow = {
-      mode: 'radio',
+      mode: 'checkbox',
       bgColor: '#feeebf',
       onSelect: this.props.handleRowSelect
     };
@@ -53,7 +53,7 @@ export default class MlTable extends React.Component {
     };
 
      config['options']={sizePerPage:this.props.sizePerPage,
-      sizePerPageList: [10,20,50,100],
+      sizePerPageList: [10,20,50,100,200,300,500,700,1000,2000,3000],
       page: this.props.pageNumber,
       onPageChange: this.props.onPageChange,
       onSizePerPageList: this.props.onSizePerPageList,

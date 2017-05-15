@@ -12,37 +12,45 @@ import {addReqgistrationRequestInfo} from '../../requested/actions/addRegistrati
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
+import {createRequestsActionHandler} from '../actions/createRequests'
+import {findRequestssActionHandler} from '../actions/findTransactionRequests'
+
 export default class MlTransactionRequested extends Component {
   constructor(props){
     super(props);
     this.state={
       requetsInfo:[],
-      requestType:null,
+      requestType: null,
       createRequest:false,
-      popoverOpen: false
+      popoverOpen: false,
+      requestTypeId: " "
     }
     this.toggle = this.toggle.bind(this);
+    this.findRequestDetails.bind(this);
     return this;
   }
   componentWillMount() {
    // this.setState({requetsInfo:[{transactionCreatedDate:'',transactionTypeId:'',transactionTypeName:'',status:''}]})
-    const resp=this.findRequestDetails();
+    const resp = this.findRequestDetails();
     return resp;
   }
-  optionsBySelectRequestType(value){
-    this.setState({requestType:value})
+ async  optionsBySelectRequestType(value){
+    this.setState({requestTypeId:value})
+ //   console.log(this.state.requestType)
   }
   async createRequest(){
-    let transaction={
-      requestTypeId:this.state.requestType,
+    let requests={
+      requestTypeId:this.state.requestTypeId,
       requestDescription:this.refs.about.value,
-      transactionStatus:{
-        code: 1,
+      requestsStatus:{
+        code: "1",
         description:"requested"
       },
+      userId:Meteor.userId(),
+      requestId: " ",
       status:"Pending"
     }
-    const response = await addReqgistrationRequestInfo(transaction);
+    const response = await createRequestsActionHandler(requests);
     if(response.success){
       this.setState({requestType:null})
       this.toggle();
@@ -54,6 +62,7 @@ export default class MlTransactionRequested extends Component {
       this.setState({requestType:null})
       FlowRouter.go("/admin/transactions/requestedList");
     }
+
   }
 
   cancel(){
@@ -69,11 +78,11 @@ export default class MlTransactionRequested extends Component {
   }
 
     async findRequestDetails(){
-      let requestDetails = await findTransactionRequestActionHandler('All');
+      let requestDetails = await findRequestssActionHandler(Meteor.userId());
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
+          requestsCreatedDate:requestDetails[i].requestsCreatedDate,
           requestDescription:requestDetails[i].requestDescription,
           requestTypeName:requestDetails[i].requestTypeName,
           requestId: requestDetails[i].requestId,
@@ -88,21 +97,22 @@ export default class MlTransactionRequested extends Component {
     }
 
   isExpandableRow(row) {
-    if (row.transactionCreatedDate!=undefined) return true;
+    if (row.requestsCreatedDate!=undefined) return true;
     else return false;
   }
 
 
   expandComponent(row) {
    return (
-     <MlDetailsNotesComponent id={ row.transactionId } transaction={row}/>
+     <MlDetailsNotesComponent id={ row.requestId } transaction={row}/>
     )
   }
-  creatRequestType(){
-      this.setState({createRequest:true});
+  async creatRequestType(){
+    this.setState({createRequest:true});
     if(!this.state.popoverOpen){
       this.toggle();
     }
+
   }
 
   render() {
@@ -121,7 +131,7 @@ export default class MlTransactionRequested extends Component {
       mode: 'checkbox',
       bgColor: '#feeebf',
       clickToSelect: true,  // click to select, default is false
-      clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
+      clickToExpand: true , // click to expand row, default is false// click to expand row, default is false
     }
     let requestTypeQuery=gql`query{
   data:FetchRequestType {
@@ -130,7 +140,7 @@ export default class MlTransactionRequested extends Component {
   }
 }`;
     return (
-      <div className="admin_main_wrap">
+      <div className="admin_main_wrap" >
         <div className="admin_padding_wrap">
           <h2>Requests</h2>
           <div className="main_wrap_scroll">
@@ -145,13 +155,14 @@ export default class MlTransactionRequested extends Component {
                              hover={true}
                              expandableRow={ this.isExpandableRow }
                              expandComponent={ this.expandComponent.bind(this) }
-                             selectRow={ selectRow }
+                             selectRow= { selectRow }
                              pagination
-            >
-              <TableHeaderColumn dataField="transactionId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
-              <TableHeaderColumn dataField="transactionCreatedDate" >Date&Time</TableHeaderColumn>
-              <TableHeaderColumn dataField="requestId">RequestId</TableHeaderColumn>
-              <TableHeaderColumn dataField="requestTypeName">Type</TableHeaderColumn>
+
+>
+              <TableHeaderColumn dataField="requestId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
+              <TableHeaderColumn dataField="requestsCreatedDate"   >Date&Time</TableHeaderColumn>
+              <TableHeaderColumn dataField="requestId" >RequestId</TableHeaderColumn>
+              <TableHeaderColumn dataField="requestTypeName">Request Type</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             </BootstrapTable>
             </ScrollArea>
@@ -165,7 +176,7 @@ export default class MlTransactionRequested extends Component {
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Request type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.requestType} queryType={"graphql"} query={requestTypeQuery} onSelect={this.optionsBySelectRequestType.bind(this)} isDynamic={true}/>
+                      <Moolyaselect multiSelect={false} placeholder="Request type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.requestTypeId} queryType={"graphql"} query={requestTypeQuery} onSelect={this.optionsBySelectRequestType.bind(this)} isDynamic={true}/>
                     </div>
                     <div className="form-group">
                       <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>

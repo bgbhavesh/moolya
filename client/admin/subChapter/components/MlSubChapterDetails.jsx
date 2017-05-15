@@ -150,6 +150,7 @@ class MlSubChapterDetails extends React.Component {
   }
   async findSubChapter() {
     let subChapterId = this.props.params;
+    console.log(this.props)
     const response = await findSubChapterActionHandler(subChapterId);
     // console.log(response);
     if(response && response.internalSubChapterAccess){
@@ -188,7 +189,7 @@ class MlSubChapterDetails extends React.Component {
         handler: async (event) => {
           console.log(this.state.data.chapterId);
           console.log(this.state.data);
-          FlowRouter.go("/admin/clusters/")
+          history.back();
         }
       }
     ]

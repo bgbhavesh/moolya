@@ -1,37 +1,32 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findTransactionRequestActionHandler(transactionTypeDetails) {
-  let transactionType = transactionTypeDetails
+export async function findRequestssActionHandler(requestTypeDetails) {
+  let userId = requestTypeDetails
   let status=["WIP","Pending"]
   const result = await client.query({
     query: gql`
-      query($transactionType:String,$status:[String]){
-  fetchTransactions(transactionType:$transactionType,status:$status) {
-          _id
-          userId
-          status
-          requestId
-          transactionTypeName
-          transactionTypeId
-          requestTypeName
-          requestTypeId
-          requestDescription
-          transactionAssignedBy
-          transactionCompletedBy
-          transactionCreatedDate
-          transactionUpdatedDate
-          hierarchy
-        }
-      }
+ query ($userId: String, $status: String) {
+  fetchRequestss(userId: $userId , status:$status) {
+    _id
+    userId
+    status
+    requestId
+    requestTypeName
+    requestsCreatedDate
+    requestTypeId
+    requestDescription
+  }
+}
+
     `,
     variables: {
-  transactionType,
+      userId,
   status
     },
     forceFetch: true
   })
-  const id = result.data.fetchTransactions;
+  const id = result.data.fetchRequestss;
   return id
 }
 

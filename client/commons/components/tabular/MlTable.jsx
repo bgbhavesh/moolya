@@ -24,7 +24,7 @@ export default class MlTable extends React.Component {
 
   render() {
     const selectRow = {
-      mode: 'radio',
+      mode: 'checkbox',
       bgColor: '#feeebf',
       onSelect: this.props.handleRowSelect
     };

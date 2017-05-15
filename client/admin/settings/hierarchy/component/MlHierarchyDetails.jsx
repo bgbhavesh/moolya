@@ -186,6 +186,26 @@ export default class MlHierarchyDetails extends React.Component {
 
     let MlActionConfig = [
       {
+        actionName: 'edit',
+        showAction: true,
+        handler: null
+      },
+      {
+        actionName: 'add',
+        showAction: true,
+        handler: null
+      },
+      {
+        actionName: 'logout',
+        showAction: true,
+        handler: null
+      },
+      {
+        actionName: 'assign',
+        showAction: true,
+        handler: null
+      },
+      {
         actionName: 'save',
         showAction: true,
         handler: this.updateHierarchy.bind(this)

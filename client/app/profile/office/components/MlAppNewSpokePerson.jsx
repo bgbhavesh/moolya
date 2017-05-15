@@ -71,8 +71,10 @@ export default class MlAppNewSpokePerson extends React.Component {
 
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
-    if(response && response.success){
+    if (response && response.success) {
       toastr.success(response.result);
+    }else {
+      toastr.error(response.result);
     }
     return response;
   }
@@ -130,16 +132,16 @@ export default class MlAppNewSpokePerson extends React.Component {
                     <div className="panel-body">
 
                       <div className="form-group">
-                        <input type="text" placeholder="Total Number of Users" ref="totalCount"
+                        <input type="number" placeholder="Total Number of Users" ref="totalCount"
                                className="form-control float-label"/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Principal Users" className="form-control float-label"
+                        <input type="number" placeholder="Principal Users" className="form-control float-label"
                                ref="principalUserCount"/>
                       </div>
                       <div className="form-group">
-                        <input type="text" placeholder="Team Members" className="form-control float-label"
+                        <input type="number" placeholder="Team Members" className="form-control float-label"
                                ref="teamUserCount"/>
                       </div>
                       <div className="form-group switch_wrap switch_names">

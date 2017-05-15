@@ -125,13 +125,13 @@ class MlEditRoleType extends React.Component{
                   <div className="form-group">
                     <input type="text" ref="roleTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.roleTypeDisplayName} className="form-control float-label"  disabled="disabled"/>
                   </div>
-                  <div className="form-group switch_wrap">
-                    <label>Status</label><br/>
-                    <label className="switch">
-                      <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
+                  {/*<div className="form-group switch_wrap">*/}
+                    {/*<label>Status</label><br/>*/}
+                    {/*<label className="switch">*/}
+                      {/*<input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>*/}
+                      {/*<div className="slider"></div>*/}
+                    {/*</label>*/}
+                  {/*</div>*/}
                   </form>
                 </div>
               </div>

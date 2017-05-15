@@ -6,24 +6,24 @@ export async function findTransactionApprovalActionHandler(transactionTypeDetail
   let status=["Approved"]
   const result = await client.query({
     query: gql`
-      query($transactionType:String,$status:[String]){
-  fetchTransactions(transactionType:$transactionType,status:$status) {
-          _id
-          userId
-          status
-          requestId
-          transactionTypeName
-          transactionTypeId
-          requestTypeName
-          requestTypeId
-          requestDescription
-          transactionAssignedBy
-          transactionCompletedBy
-          transactionCreatedDate
-          transactionUpdatedDate
-          hierarchy
-        }
-      }
+     query ($transactionType: String) {
+  fetchRequestsForApproval(transactionType: $transactionType) {
+    _id
+    userId
+    status
+    requestId
+    transactionTypeName
+    transactionTypeId
+    requestTypeName
+    requestTypeId
+    requestDescription
+    transactionAssignedBy
+    transactionCompletedBy
+    transactionUpdatedDate
+    hierarchy
+  }
+}
+
     `,
     variables: {
       transactionType,
@@ -31,7 +31,7 @@ export async function findTransactionApprovalActionHandler(transactionTypeDetail
     },
     forceFetch: true
   })
-  const id = result.data.fetchTransactions;
+  const id = result.data.fetchRequestsForApproval;
   return id
 }
 

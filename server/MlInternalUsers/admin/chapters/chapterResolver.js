@@ -1,7 +1,7 @@
-import MlResolver from '../../../commons/mlResolverDef'
-import MlRespPayload from '../../../commons/mlPayload'
-import geocoder from 'geocoder'
-import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+import MlResolver from "../../../commons/mlResolverDef";
+import MlRespPayload from "../../../commons/mlPayload";
+import geocoder from "geocoder";
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
     let chapter = args.chapter;
@@ -233,8 +233,28 @@ MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info
 }
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
-    createSubChapter(args.subChapter, context)
+  let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
+  geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+    if (err) {
+      return "Invalid Country Name";
+    }
+    args.subChapter.latitude = data.results[0].geometry.location.lat;
+    args.subChapter.longitude = data.results[0].geometry.location.lng;
+
+    let subChapterId = createSubChapter(args.subChapter, context)
+    if (subChapterId) {
+      let code = 200;
+      let response = new MlRespPayload().successPayload(subChapterId, code);
+      return response
+    }
+    else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Unable To Create Subchapter", code);
+      return response
+    }
+  }), {key: Meteor.settings.private.googleApiKey});
 }
+
 
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.subChapterDetails);
@@ -400,13 +420,11 @@ MlResolver.MlQueryResolver['fetchSubChaptersForRegistration'] = (obj, args, cont
 }
 
 createSubChapter = (subChapter, context) =>{
-    // if(MlSubChapters.find({$and:[{chapterId:subChapter.chapterId}, {subChapterName:subChapter.subChapterName}]}).count() > 0){
     if(mlDBController.find('MlSubChapters', {$and:[{chapterId:subChapter.chapterId}, {subChapterName:subChapter.subChapterName}]}, context).count() > 0){
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
     check(subChapter, Object)
-    // let id = MlSubChapters.insert(subChapter);
     let id = mlDBController.insert('MlSubChapters', subChapter, context)
     return id
 }

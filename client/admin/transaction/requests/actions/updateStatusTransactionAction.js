@@ -8,7 +8,7 @@ export async function updateStusForTransactionActionHandler(transactionInfo,stat
   const result = await client.mutate({
     mutation: gql`
          mutation($transactionId:String,$status:String){
-        updateTransactionStatus(transactionId:$transactionId,status:$status) {
+        updateTransactionStatuss(transactionId:$transactionId,status:$status) {
           success
           code
           result
@@ -20,6 +20,6 @@ export async function updateStusForTransactionActionHandler(transactionInfo,stat
       transactionId
     }
   })
-  const id = result.data.updateTransactionStatus;
+  const id = result.data.updateTransactionStatuss;
   return id
 }

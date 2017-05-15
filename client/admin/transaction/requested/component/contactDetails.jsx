@@ -12,6 +12,7 @@ import {findUserRegistartionActionHandler} from '../actions/findUserRegistration
 import {findRegistrationActionHandler} from '../actions/findRegistration';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
 import update from 'immutability-helper';
+import {findCountryCode} from '../actions/findRegistration'
 
 export default class ContactDetails extends React.Component{
   constructor(props){
@@ -22,15 +23,19 @@ export default class ContactDetails extends React.Component{
       selectedNumberTypeLabel: null,
       contactNumberObject:{numberType : "",numberTypeName: "",countryCode: "",contactNumber: ""},
       contactNumberArray : this.props.registrationInfo.contactInfo|| [],
-      activeTab : "active"
+      activeTab : "active",
+      countryDetails : null,
+      loading:true
 
     }
     this.findRegistration.bind(this);
+    this.fetchCountryCode.bind(this);
     return this;
   }
 
   componentDidMount(){
     this.findRegistration.bind(this);
+    this.fetchCountryCode();
   }
   componentWillUpdate(nextProps, nextState) {
 
@@ -133,6 +138,11 @@ export default class ContactDetails extends React.Component{
     this.findRegistration();
   }
 
+  async fetchCountryCode(){
+    const response = await findCountryCode(this.props.clusterId);
+    this.setState({"countryDetails" : response,loading:false});
+  }
+
 
 
   optionsBySelectNumberType(selectedIndex,handler,selectedObj){
@@ -168,12 +178,14 @@ export default class ContactDetails extends React.Component{
      `;
 
      let numberTypeOption={options: { variables: {type : "CONTACTTYPE",hierarchyRefId:this.props.clusterId}}};
-
+      let countryPhoneCode =  that.state.countryDetails&&that.state.countryDetails.phoneNumberCode?that.state.countryDetails.phoneNumberCode:"";
+    let defaultCountryCode = this.state.countryDetails&&this.state.countryDetails.phoneNumberCode?this.state.countryDetails.phoneNumberCode:"";
+    const showLoader=this.state.loading;
 
     return (
 
       <div className="panel-body">
-
+        {showLoader===true?( <div className="loader_wrap"></div>):(
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
             <li className={this.state.activeTab}>
@@ -202,7 +214,7 @@ export default class ContactDetails extends React.Component{
                               isDynamic={true}/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Enter Country Code" defaultValue={this.state.contactNumberObject.countryCode} ref={'countryCode'} className="form-control float-label" id=""/>
+                <input type="text" placeholder="Enter Country Code" defaultValue={defaultCountryCode} ref={'countryCode'} className="form-control float-label" id="" disabled={true}/>
               </div>
               <div className="form-group">
                 <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber" className="form-control float-label"/>
@@ -223,8 +235,8 @@ export default class ContactDetails extends React.Component{
                                 isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Enter Country Code" ref={'countryCode'+key} defaultValue={options.countryCode} valueKey={options.countryCode}
-                         className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Enter Country Code" ref={'countryCode'+key} defaultValue={countryPhoneCode} valueKey={countryPhoneCode}
+                         className="form-control float-label" id="" disabled={true}/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref={'contactNumber'+key} placeholder="Enter Number" valueKey={options.contactNumber} id="phoneNumber" defaultValue={options.contactNumber}
@@ -240,6 +252,7 @@ export default class ContactDetails extends React.Component{
 
           </div>
         </div>
+        )}
       </div>
     )}
 }

@@ -10,6 +10,7 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {customFilterSearchQuery} from "./customFilterSearchQueryActionHandler"
+import _ from 'lodash';
 export default class MlCustomFilter extends Component {
   constructor(props){
     super(props);
@@ -65,6 +66,10 @@ export default class MlCustomFilter extends Component {
     this.setFilterData(fieldName,enteredValue,"String",null)
   }
 
+  onSelectBoolean(value,fieldName,event){
+    this.setFilterData(fieldName,value,"Boolean",null)
+  }
+
   setFilterData(selectedFieldName,selectedValue,selectedType,selectedSubType){
     let queries = this.state.filterQueries;
     if(selectedValue){
@@ -106,13 +111,13 @@ export default class MlCustomFilter extends Component {
         select = {"fieldName" : selectedFieldName,"value" :  Number(selectedValue),"fieldType" : selectedType,"operator" : "$and"}
         return select;
       case "Boolean":
-        if(selectedValue&&selectedValue.toLowerCase()==="true"){
+      /*  if(selectedValue&&selectedValue.toLowerCase()==="true"){
           selectedValue=true;
         }else if(selectedValue&&selectedValue.toLowerCase()==="false"){
           selectedValue=false;
         }else{
           selectedValue=false;
-        }
+        }*/
         /*select= selectedValue;*/
         select = {"fieldName" : selectedFieldName,"value" :  selectedValue,"fieldType" : selectedType,"operator" : "$and"}
         return select;
@@ -158,8 +163,9 @@ export default class MlCustomFilter extends Component {
     let listSelect = false;
     let booleanSelect = false;
     let listOptions = null;
+    let booleanFieldName = null;
 
-    let restrictedFilterStatus = false
+      let restrictedFilterStatus = false
 
 
     return(
@@ -168,11 +174,21 @@ export default class MlCustomFilter extends Component {
 
 
 
-              {fieldsData && fieldsData[0]&& fieldsData[0].filterFields&& fieldsData[0].filterFields.map(function(options,id){
+              {fieldsData &&  fieldsData.filterFields&& fieldsData.filterFields.map(function(options,id){
+
+
 
                 let filterListQuery = null
                 let select = '';
                 let selectedValue = '';
+                let zz =  options.fieldList|| [];
+                var fieldListDataArray=_.map(zz, function (row) {
+                  let val= _.omit(row, ['__typename']);
+                  return val;
+                });
+
+
+             //   console.log(fieldListDataArray)
 
                 if(options.fieldType == "Date"){
                   dateSelect = true
@@ -185,13 +201,16 @@ export default class MlCustomFilter extends Component {
                   listSelect = true
                   select =  "selectedOption_"+options.fieldName;
                   selectedValue = that.state[select];
-                  filterListQuery=gql`query($moduleName:String!,$list:[String],$filteredListId : [GenericFilter]){
+                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter]){
                     data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId) {
                      label
                       value
                     }
                   }`;
-                  listOptions={options: { variables: {moduleName:options.fieldResolverName,list:options.fieldList,filteredListId:that.state.filterQueries}}}
+
+                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries}}}
+
+
 
                 }else{
                   listSelect = false
@@ -205,21 +224,48 @@ export default class MlCustomFilter extends Component {
 
                 if(options.fieldType == "Boolean"){
                   booleanSelect = true
+                  booleanFieldName = options.fieldName
                 }else{
                   booleanSelect = false
                 }
-                if(options && options.fieldList && options.fieldResolverName){
-                  listOptions={options: { variables: {moduleName:options.fieldResolverName,list:options.fieldList}}}
-                }
+                let fieldListData = options.fieldList && options.fieldList ? options.fieldList[0].listValueId : []
+
 
                 return(<span key={id}>
-                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
-                  {dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
-                  {listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName)} isDynamic={true} id={'list'+id} disabled={options.isRestrictedFilter}/></div>:""}
-                  {stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)} disabled={options.isRestrictedFilter}/></div>:""}</span>)
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
+                  {options.isActive&&listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName)} isDynamic={true} id={'list'+id} disabled={options.isRestrictedFilter}/></div>:""}
+                  {options.isActive&&stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)} disabled={options.isRestrictedFilter}/></div>:""}
+                  {/*{booleanSelect?<div className="col-lg-3">
+                    <div className="input_types label_name">
+                      <label>{options.displayName} : </label>
+                    </div>
+                    {fieldListData.map(function(data,id) {
 
+
+                        return(<div className="input_types">
+                          <input id="radio1" type="radio" name="radio"
+                                 onChange={that.onSelectBoolean.bind(that, data,booleanFieldName)}/><label htmlFor="radio1"><span><span></span></span>{data}</label>
+                        </div>)
+
+
+                    })}
+
+                  </div>:""}*/}
+                  {booleanSelect?<div className="col-lg-3">
+                    <div className="input_types label_name">
+                      <label>{options.displayName} : </label>
+                    </div>
+                    <div className="input_types">
+                      <input id="radio1" type="radio" name="radio" onChange={that.onSelectBoolean.bind(that, "true",booleanFieldName)}/><label htmlFor="radio1"><span><span></span></span>true</label>
+                    </div>
+                    <div className="input_types">
+                      <input id="radio1" type="radio" name="radio" onChange={that.onSelectBoolean.bind(that, "false",booleanFieldName)}/><label htmlFor="radio1"><span><span></span></span>false</label>
+                    </div>
+                  </div>:""}
+                  </span>)
                 })}
-              {/*  <div className="col-lg-3">
+{/*                <div className="col-lg-3">
                     <div className="input_types label_name">
                       <label>label : </label>
                     </div>
@@ -229,9 +275,9 @@ export default class MlCustomFilter extends Component {
                     <div className="input_types">
                     <input id="radio1" type="radio" name="radio" value="1"/><label htmlFor="radio1"><span><span></span></span>option2</label>
                     </div>
-                </div>
+                </div>*/}
 
-                <div className="col-lg-3">
+             {/*   <div className="col-lg-3">
                   <div className="input_types label_name">
                     <label>label : </label>
                   </div>
@@ -241,8 +287,8 @@ export default class MlCustomFilter extends Component {
                   <div className="input_types">
                   <input id="check2" type="checkbox" name="" value=""/><label htmlFor="check2"><span><span></span></span>option2</label>
                   </div>
-                </div>
-*/}
+                </div>*/}
+
                 <br className="brclear"/>
               <div className="ml_icon_btn">
                 <a href="#"  className="save_btn" onClick={this.onApplyFilter.bind(this)} ><span

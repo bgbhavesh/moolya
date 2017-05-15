@@ -32,9 +32,24 @@ export async function findModuleCustomFilterActionHandler(moduleName){
     },
     forceFetch:true
   });
-  const id = result.data.fetchModuleFilters;
-/*  let data = _.omit(id,'__typename');*/
 
-  return id
+  const data = result.data.fetchModuleFilters;
+  let resultData = _.omit(data,'__typename');
+
+
+  let fieldsArray = [];
+
+  fieldsArray=_.map(resultData.filterFields, function (row) {
+    return _.omit(row, ['__typename'])
+
+  });
+
+
+
+  resultData["filterFields"] = fieldsArray
+
+  return resultData
+
+
 
 }

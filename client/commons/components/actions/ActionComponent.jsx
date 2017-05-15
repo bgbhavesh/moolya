@@ -70,17 +70,17 @@ export default class MlActionComponent extends Component {
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'download',
-        iconClass:'ml ml-download'
+        iconClass:'ml flaticon-ml-cloud-computing-1'
       },
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'approveUser',
-        iconClass:'ml ml-approve-User'
+        iconClass:'ml flaticon-ml-active-user'
       },
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'rejectUser',
-        iconClass:'ml ml-inactive-user'
+        iconClass:'ml flaticon-ml-inactive-user'
       },
       {
         //id:'annotationss',
@@ -92,12 +92,12 @@ export default class MlActionComponent extends Component {
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'documentApprove',
-        iconClass:'ml ml-document-approve'
+        iconClass:'ml flaticon-ml-file'
       },
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'documentReject',
-        iconClass:'ml ml-document-reject'
+        iconClass:'ml flaticon-ml-file-1'
       },
       {
         imagefield:'/images/act_select_icon.png',

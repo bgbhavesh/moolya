@@ -250,29 +250,29 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
 
     // let communitiesDef = MlCommunityAccess.find({"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}).fetch()
     let communitiesDef = mlDBController.find('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}, context).fetch()
-    for(var i = 0; i < communitiesDef.length; i++){
-        if(communitiesDef[i].isActive){
+    _.each(communitiesDef, function (community) {
+        if(community.isActive){
             let community = {
                 clusterId:args.clusterId,
                 chapterId:args.chapterId || null,
                 subChapterId:args.subChapterId || null,
                 communityId:"",
-                communityDefId:communitiesDef[i].communityDefId,
-                communityDefCode:communitiesDef[i].communityDefCode,
-                communityDefName:communitiesDef[i].communityDefName,
-                communityImageLink:communitiesDef[i].communityImageLink,
+                communityDefId:community.communityDefId,
+                communityDefCode:community.communityDefCode,
+                communityDefName:community.communityDefName,
+                communityImageLink:community.communityImageLink,
                 showOnMap:false,
                 isRoot: false,
                 isLeaf:false,
                 isActive:false,
-                isAvailableByParent:communitiesDef[i].isActive,
+                isAvailableByParent:community.isActive,
                 hierarchyLevel:hierarchy.level,
                 hierarchyCode:hierarchy.code
             }
             // MlCommunityAccess.insert(community)
             mlDBController.insert('MlCommunityAccess', community, context)
         }
-    }
+    })
 }
 
 MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {
@@ -322,20 +322,20 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
       levelCode = "";
 
     if(!args.communityId)
-        return new MlRespPayload().errorPayload("Failed to update community", 400);
+        return new MlRespPayload().errorPayload("Failed to update community 1", 400);
     if(!context.userId){
-        return new MlRespPayload().errorPayload("Failed to update community", 400);
+        return new MlRespPayload().errorPayload("Failed to update community 2", 400);
     }
 
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
     if(!userProfile||(!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
-      return new MlRespPayload().errorPayload("Failed to update community", 400);
+      return new MlRespPayload().errorPayload("Failed to update community 3", 400);
     }
 
     // userHierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
     userHierarchy = mlDBController.findOne('MlHierarchy', {level:Number(userProfile.hierarchyLevel)}, context)
     if(!userHierarchy){
-      return new MlRespPayload().errorPayload("Failed to update community", 400);
+      return new MlRespPayload().errorPayload("Failed to update community 4", 400);
     }
 
     let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
@@ -430,7 +430,7 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
 
     }
 
-    return new MlRespPayload().errorPayload("Failed to update community", 400);
+    return new MlRespPayload().errorPayload("Failed to update community 5", 400);
 }
 
 MlResolver.MlQueryResolver['fetchCommunitiesSelect'] = (obj, args, context, info) =>

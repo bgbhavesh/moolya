@@ -1,6 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 const mlRequestedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
   module:"PortfolioRquest",//Module name for filter.
@@ -11,6 +12,8 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  filter:true,
+  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "portfolioId", title: "Requested Id",dataSort:true},

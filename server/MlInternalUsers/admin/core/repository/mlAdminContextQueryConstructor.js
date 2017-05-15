@@ -31,26 +31,24 @@ class MlAdminContextQueryConstructor
       if(hierarchy.isParent===true){
         return query;
       }
-      //Cluster Admin
-      else if(userProfile&&userProfile.defaultProfileHierarchyCode===hierarchy.code){
-          if(_.toLower(this.module)===_.toLower(hierarchy.module)){
-              query["_id"]=userProfile.defaultProfileHierarchyRefId;
-          }else{
-              query[hierarchy.moduleFieldRef]=userProfile.defaultProfileHierarchyRefId;
-          }
-          return query;
-      }
-      //Chapter/Sub Chapter  Admin
-      else if(userProfile&&userProfile.hierarchyCode===hierarchy.code)  {
-          if(this.module == 'chapter')
+      //Cluster/Chapter/Sub Chapter  Admin
+      if(userProfile&&userProfile.hierarchyCode===hierarchy.code)  {
+          if(this.module == 'cluster')
           {
+              if(_.toLower(this.module)===_.toLower(hierarchy.module)){
+                  query["_id"]=userProfile.defaultProfileHierarchyRefId;
+              }else{
+                query[hierarchy.moduleFieldRef]=userProfile.defaultProfileHierarchyRefId;
+              }
+          }
+
+          else if(this.module == 'chapter'){
               query["_id"]=userProfile.defaultChapters;
           }
 
           else if(this.module == 'subChapter'){
               query["_id" ]=userProfile.defaultSubChapters;
           }
-
           return query;
       }
 

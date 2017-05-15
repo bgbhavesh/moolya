@@ -106,9 +106,9 @@ let chapterSchema = `
         clusterId:String, 
         clusterName:String,
         stateId:String,
+        stateName : String,
         chapterId:String,
         chapterName:String,
-        stateName : String,
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
@@ -153,7 +153,7 @@ let chapterSchema = `
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
-        createSubChapter(subChapter:subChapterObject):String
+        createSubChapter(subChapter:subChapterObject):response
         updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
      }
 `

@@ -242,6 +242,7 @@ export default class Step5 extends React.Component {
     if(response.success){
       this.props.getRegistrationKYCDetails();
 
+      $('*').tooltip('hide');
     }else{
       toastr.error(response.result)
     }
@@ -273,6 +274,12 @@ export default class Step5 extends React.Component {
   onFileUploadCallBack(resp){
         if(resp){
           this.props.getRegistrationKYCDetails();
+          setTimeout(function(){
+           $('[data-toggle="tooltip"]').tooltip({
+              container:'body',
+              trigger:"hover"
+            });
+          },1000);
         }
    }
 

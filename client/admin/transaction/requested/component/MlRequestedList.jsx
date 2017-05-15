@@ -8,7 +8,7 @@ import _ from 'lodash';
 export default class MlRequestedList extends Component {
   constructor(props){
      super(props);
-     this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null};
+     this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null,canAssign:false,canUnAssign:false};
      this.assignActionHandler.bind(this);
   }
   componentDidMount() {
@@ -24,7 +24,7 @@ export default class MlRequestedList extends Component {
   }
   assignActionHandler(data){
     if(data&&data.id){
-    this.setState({requestId:data.id,show:true,transactionId:data.transactionId});
+    this.setState({requestId:data.id,show:true,transactionId:data.transactionId,canAssign:data.canAssign,canUnAssign:data.canUnAssign});
     console.log(data);
     console.log("yipppe its working");
     }else {
@@ -51,7 +51,7 @@ export default class MlRequestedList extends Component {
           <h2>Requested List</h2>
       {/*    <button id="createRegistrationRequest"></button>*/}
           <MlTableViewContainer {...mlUserTypeTableConfig} forceFetch={false}/>
-          {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId}/>}
+          {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} canAssign={this.state.canAssign} canUnAssign={this.state.canUnAssign}/>}
           {showCreateComponent&&<CreateRequestComponent openPopUp={true}/>}
         </div>
 

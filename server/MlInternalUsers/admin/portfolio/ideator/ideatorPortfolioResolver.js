@@ -333,9 +333,9 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                 }
             }
             if(isCreatePortfolioRequest) {
-                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId}, context) || {"registrationInfo": {}};
-
-                let portfolioDetails={
+                let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId, status: "Approved"}, context) //|| {"registrationInfo": {}};
+                if(regRecord){
+                  let portfolioDetails={
                     "transactionType" : "portfolio",
                     "communityType" : regRecord.registrationInfo.communityDefName,
                     "communityCode" :regRecord.registrationInfo.communityDefCode,
@@ -361,18 +361,23 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                     identityType  : regRecord.registrationInfo.identityType,
                     industryId    : regRecord.registrationInfo.industry,
                     professionId  : regRecord.registrationInfo.profession,
+                  }
+                  orderNumberGenService.assignPortfolioId(portfolioDetails)
+                  let registrationData = regRecord.registrationDetails;
+                  registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
+                  registrationData.emailId = regRecord.registrationInfo.userName;
+                  registrationData.industry = regRecord.registrationInfo.industry;
+                  registrationData.profession = regRecord.registrationInfo.profession;
+                  let resp = MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);
+                  if(!resp.success){
+                    return resp;
+                  }
+                  idea.portfolioId = resp.result;
+                }else {
+                  let code = 400;
+                  let response = new MlRespPayload().errorPayload('User is not approved from Hard registration', code);
+                  return response;
                 }
-                orderNumberGenService.assignPortfolioId(portfolioDetails)
-                let registrationData = regRecord.registrationDetails;
-                registrationData.contactNumber = regRecord.registrationInfo.contactNumber;
-                registrationData.emailId = regRecord.registrationInfo.userName;
-                registrationData.industry = regRecord.registrationInfo.industry;
-                registrationData.profession = regRecord.registrationInfo.profession;
-                let resp = MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);
-                if(!resp.success){
-                  return resp;
-                }
-                idea.portfolioId = resp.result;
             }
 
             idea.userId = context.userId;
@@ -433,7 +438,9 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
 
     _.each(portfolios, function (portfolio) {
           let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
-          ideas.push(idea);
+          if(idea){
+            ideas.push(idea);
+          }
     })
 
     return ideas;

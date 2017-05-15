@@ -45,7 +45,8 @@ export default class MlAssignHierarchy extends React.Component {
       loading:true,
       finalApproval:{isChecked:false,id:null,parentDepartment:null,parentSubDepartment:null,department:null,subDepartment:null,role:null},
       unAssignedRoles:{id:"",teamStructureAssignment:[{roleId:"",roleName:"",displayName:"",roleType:"",isAssigned:false,assignedLevel:"",reportingRole:""}]},
-      assignedRoles:{id:"",teamStructureAssignment:[{roleId:"",roleName:"",displayName:"",roleType:"",isAssigned:false,assignedLevel:"",reportingRole:""}]}
+      assignedRoles:{id:"",teamStructureAssignment:[{roleId:"",roleName:"",displayName:"",roleType:"",isAssigned:false,assignedLevel:"",reportingRole:""}]},
+      hierarchyId : ''
     }
     return this;
   }
@@ -63,6 +64,9 @@ export default class MlAssignHierarchy extends React.Component {
     let clusterId = this.props.clusterId;
     const response = await findFinalApprovalRoleActionHandler(departmnetId,subDepartmentId,clusterId);
     if(response){
+      this.props.getFinalApprovalDetails(response.finalApproval);
+      let unassignedRoles = this.state.unAssignedRoles
+      this.setState({unAssignedRoles:{id:response._id,teamStructureAssignment:unassignedRoles.teamStructureAssignment}})
       this.setState({loading:false,finalApproval:response.finalApproval})
     }
     return response

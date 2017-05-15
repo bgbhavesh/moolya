@@ -27,7 +27,7 @@ let myOfficeSchema = `
     type AvailableCommunities{
         communityName:String,
         communityId:String,
-        userCount:String
+        userCount:Int
     }
   
     type MyOffice{
@@ -74,7 +74,7 @@ let myOfficeSchema = `
     input availableCommunities{
         communityName:String,
         communityId:String,
-        userCount:String
+        userCount:Int
     }
   
     input myOffice{

@@ -1,22 +1,20 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
-import formHandler from '../../../../commons/containers/MlFormHandler'
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
-import MlContactFormComponent from './MlContactFormComponent'
-import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
-import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import React from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import MlAssignDepartmentComponent from "./MlAssignDepartmentComponent";
+import MlContactFormComponent from "./MlContactFormComponent";
+import {addBackendUserActionHandler} from "../actions/addBackendUserAction";
+import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
+import Datetime from "react-datetime";
+import moment from "moment";
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
-import Datetime from "react-datetime";
-import moment from "moment";
 
 class MlAddBackendUser extends React.Component {
   constructor(props) {
@@ -197,9 +195,11 @@ class MlAddBackendUser extends React.Component {
 
   onBackendUserTypeSelect(val){
     if(val)
-      this.setState({selectedBackendUserType:val.value})
-    else
-      this.setState({selectedBackendUserType:''})
+      this.setState({selectedBackendUserType:val.value, selectedSubChapter:''})
+    else{
+      this.setState({selectedBackendUserType:'', selectedSubChapter:''})
+    }
+
   }
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
@@ -212,7 +212,6 @@ class MlAddBackendUser extends React.Component {
     let confirmPassword=this.refs.confirmPassword.value;
     if(confirmPassword!=password){
       this.setState({"pwdErrorMsg":'Confirm Password does not match with Password'})
-      //alert("ur confirm pwd not match with pwd")
     }else{
       this.setState({"pwdErrorMsg":''})
     }
@@ -264,10 +263,10 @@ class MlAddBackendUser extends React.Component {
     data:fetchActiveRoles{label:roleName,value:_id}
     }
 `;*/
-    let subChapterQuery=gql` query{
-  data:fetchActiveSubChapters{label:subChapterName,value:_id}
-}
-`;
+    let subChapterQuery = gql` query{
+      data:fetchActiveSubChapters{label:subChapterName,value:_id}
+    }
+  `;
 
     return (
       <div className="admin_main_wrap">

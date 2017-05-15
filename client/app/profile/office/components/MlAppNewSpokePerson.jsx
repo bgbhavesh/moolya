@@ -11,9 +11,6 @@ var options = [
   {value: 'Type of Funding', label: 'Type of Funding'},
   {value: '2', label: '2'}
 ];
-function logChange(val) {
-  console.log("Selected: " + val);
-}
 
 
 export default class MlAppNewSpokePerson extends React.Component {
@@ -37,8 +34,6 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   submitDetails() {
-    FlowRouter.go('/app/officeMembersDetails')
-    console.log('submit clicked')
     let community = _.uniqBy(this.state.availableCommunities, 'communityId');
     let myOffice = {
       totalCount: this.refs.totalCount.value,
@@ -56,7 +51,6 @@ export default class MlAppNewSpokePerson extends React.Component {
       about: this.refs.about.value,
       availableCommunities : community
     }
-    console.log(myOffice)
     let data = myOffice;
     for (var propName in data) {
       if (data[propName] === null || data[propName] === undefined || data[propName] === '') {
@@ -64,15 +58,18 @@ export default class MlAppNewSpokePerson extends React.Component {
       }
     }
     console.log(data)
+    if(data.availableCommunities.length<1){
+      data = _.omit(data, 'availableCommunities')
+    }
 
     const resp = this.createMyOfficeAction(data)
-
   }
 
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      toastr.success(response.result);
+      FlowRouter.go('/app/officeMembersDetails/'+response.result)
+      toastr.success('Office Successfully Created');
     }else {
       toastr.error(response.result);
     }
@@ -172,7 +169,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                                   </h3>
                                 </div>
                                 <div className="form-group mart20">
-                                  <input type="text" placeholder="Enter Total Numbers"
+                                  <input type="number" placeholder="Enter Total Numbers"
                                          onBlur={that.handleBlur.bind(that, idx)}
                                          className="form-control float-label" ref='count'/>
                                 </div>

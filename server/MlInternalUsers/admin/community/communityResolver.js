@@ -250,29 +250,29 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
 
     // let communitiesDef = MlCommunityAccess.find({"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}).fetch()
     let communitiesDef = mlDBController.find('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}, context).fetch()
-    for(var i = 0; i < communitiesDef.length; i++){
-        if(communitiesDef[i].isActive){
+    _.each(communitiesDef, function (community) {
+        if(community.isActive){
             let community = {
                 clusterId:args.clusterId,
                 chapterId:args.chapterId || null,
                 subChapterId:args.subChapterId || null,
                 communityId:"",
-                communityDefId:communitiesDef[i].communityDefId,
-                communityDefCode:communitiesDef[i].communityDefCode,
-                communityDefName:communitiesDef[i].communityDefName,
-                communityImageLink:communitiesDef[i].communityImageLink,
+                communityDefId:community.communityDefId,
+                communityDefCode:community.communityDefCode,
+                communityDefName:community.communityDefName,
+                communityImageLink:community.communityImageLink,
                 showOnMap:false,
                 isRoot: false,
                 isLeaf:false,
                 isActive:false,
-                isAvailableByParent:communitiesDef[i].isActive,
+                isAvailableByParent:community.isActive,
                 hierarchyLevel:hierarchy.level,
                 hierarchyCode:hierarchy.code
             }
             // MlCommunityAccess.insert(community)
             mlDBController.insert('MlCommunityAccess', community, context)
         }
-    }
+    })
 }
 
 MlResolver.MlMutationResolver['createCommunity'] = (obj, args, context, info) => {

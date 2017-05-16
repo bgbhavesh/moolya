@@ -8,12 +8,7 @@ import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMult
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../commons/components/loader/loader'
-
-function logChange(val) {
-  console.log("Selected: " + val);
-}
 
 export default class MlFunderPrincipalTeam extends React.Component {
   constructor(props, context) {

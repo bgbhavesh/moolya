@@ -147,7 +147,7 @@ MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'] = (obj, args, context, in
       limit=50;
     }
     // let resp = MlCities.find({"countryId":args.countryId,"isActive":true},{sort: {name:1}}).fetch()
-    let resp = mlDBController.find('MlCities',query, context, {"limit": limit,sort: {name:1}}).fetch();
+    let resp = mlDBController.find('MlCities',query, context, {"limit": limit,"fields": {"_id": 1,"name": 1},sort: {name:1}}).fetch();
     var totalCount=MlCities.find(query).count();
     return {
       results: resp,totalCount:totalCount

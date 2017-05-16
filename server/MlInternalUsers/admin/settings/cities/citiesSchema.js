@@ -25,7 +25,7 @@ let citiesSchema = `
     }
     
     type citiesSearchResult{
-     result:[Cities],
+     results:[Cities],
      totalCount:Int
     }
     

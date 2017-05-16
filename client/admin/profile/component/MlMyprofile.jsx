@@ -12,6 +12,7 @@ import {updateDataEntry} from '../actions/addProfilePicAction'
 import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction'
 import Datetime from "react-datetime";
 import moment from "moment";
+import MlLoader from '../../../commons/components/loader/loader'
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 
 
@@ -259,7 +260,7 @@ async showImage(temp){
     }
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
         <div className="admin_padding_wrap">
           <h2>My Profile Info</h2>
           <div className="main_wrap_scroll">

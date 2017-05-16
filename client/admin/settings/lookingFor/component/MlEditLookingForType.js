@@ -9,6 +9,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findLookingForActionHandler} from '../actions/findLookingForTypeAction'
 import {updateLookingForTypeActionHandler} from '../actions/updateLookingForTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditLookingForType extends React.Component{
   constructor(props) {
     super(props);
@@ -110,7 +111,7 @@ class MlEditLookingForType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Looking For</h2>

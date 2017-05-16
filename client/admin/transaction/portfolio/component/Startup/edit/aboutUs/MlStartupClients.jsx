@@ -11,6 +11,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+import MlLoader from '../../../../../../../commons/components/loader/loader'
 
 
 export default class MlStartupClients extends React.Component{
@@ -193,7 +194,7 @@ export default class MlStartupClients extends React.Component{
     return(
       <div>
         <h2>Clients</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
           <ScrollArea
             speed={0.8}

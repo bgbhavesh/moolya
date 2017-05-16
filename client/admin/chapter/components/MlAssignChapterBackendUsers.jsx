@@ -14,6 +14,7 @@ import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import MlLoader from '../../../commons/components/loader/loader'
 var _ = require('lodash');
 
 
@@ -213,7 +214,7 @@ class MlAssignChapterBackendUsers extends React.Component {
 
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Assign Backend Users to Sub Chapter</h2>

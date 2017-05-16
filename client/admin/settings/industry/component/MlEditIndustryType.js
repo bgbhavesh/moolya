@@ -7,6 +7,7 @@ import {findIndustryActionHandler} from '../actions/findIndustryTypeAction'
 import {updateIndustryTypeActionHandler} from '../actions/updateIndustryTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditIndustryType extends React.Component{
   constructor(props) {
     super(props);
@@ -107,7 +108,7 @@ class MlEditIndustryType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Industry Type</h2>

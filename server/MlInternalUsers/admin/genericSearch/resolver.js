@@ -1,4 +1,4 @@
-import MlResolver from '../../../commons/mlResolverDef'
+  import MlResolver from '../../../commons/mlResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
 import mlTransactionsListRepo from '../../admin/transactions/mlTransactionsListRepo'
 

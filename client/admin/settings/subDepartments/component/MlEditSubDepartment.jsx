@@ -1,17 +1,19 @@
-import React from "react";
-import {render} from "react-dom";
-import {graphql} from "react-apollo";
-import gql from "graphql-tag";
-import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
-import formHandler from "../../../../commons/containers/MlFormHandler";
-import {findSubDepartmentActionHandler} from "../actions/findSubDepartmentAction";
-import {updateSubDepartmentActionHandler} from "../actions/updateSubDepartmentAction";
-import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
-import MlAssignDepartments from "./MlAssignDepartments";
-import MlMoolyaAssignDepartment from "./MlMoolyaAssignDepartment";
-import {findDepartmentActionHandler} from "../actions/findDepartmentAction";
-import ScrollArea from "react-scrollbar";
-import {OnToggleSwitch, initalizeFloatLabel} from "../../../utils/formElemUtil";
+import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag'
+import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
+import formHandler from '../../../../commons/containers/MlFormHandler';
+import {findSubDepartmentActionHandler} from '../actions/findSubDepartmentAction'
+import {updateSubDepartmentActionHandler} from '../actions/updateSubDepartmentAction'
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import MlAssignDepartments from './MlAssignDepartments'
+import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
+import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
+import ScrollArea from 'react-scrollbar';
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditSubDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -143,16 +145,17 @@ class MlEditSubDepartment extends React.Component{
     let departmentQuery=gql`query{ data:fetchDepartments{value:_id,label:departmentName}}`;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-          <div className="admin_padding_wrap">
-            <h2>Edit Sub Department</h2>
-            <div className="main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
+        {showLoader===true?(<MlLoader/>):(
+
+            <div className="admin_padding_wrap">
+              <h2>Edit Sub Department</h2>
+              <div className="main_wrap_scroll">
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <form>

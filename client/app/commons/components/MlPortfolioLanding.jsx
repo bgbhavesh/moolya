@@ -8,6 +8,7 @@ import {render} from 'react-dom';
 import MlAppIdeatorIdeas from '../../ideators/components/MlAppIdeatorIdeas'
 import MlAppPortfolio from '../../../app/commons/components/MlAppPortfolio'
 import {fetchPortfolioDetails} from '../actions/fetchUserDetails'
+import MlLoader from '../../../commons/components/loader/loader'
 
 export default class MlPortfolioLanding extends Component {
   constructor(props) {
@@ -55,7 +56,7 @@ export default class MlPortfolioLanding extends Component {
 
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_main_wrap">
             {(userCommunity == "Ideators") ?
               <MlAppIdeatorIdeas/> : <MlAppPortfolio config={portfolioId} communityType={communityType}/>

@@ -7,6 +7,7 @@ import _ from "lodash";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioSuccess} from "../../actions/findPortfolioFunderDetails";
+import MlLoader from '../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderSuccessStories extends React.Component {
@@ -179,8 +180,8 @@ export default class MlFunderSuccessStories extends React.Component {
         }
       }
       let newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      // let updateItem = _.omit(newItem, 'logo');
+      arr.push(newItem)
     })
     funderSuccess = arr;
     this.setState({funderSuccess: funderSuccess})
@@ -193,7 +194,7 @@ export default class MlFunderSuccessStories extends React.Component {
     let funderSuccessList = that.state.funderSuccessList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
           <div className="portfolio-main-wrap">
             <h2>Success Stories</h2>
             <div className="main_wrap_scroll">

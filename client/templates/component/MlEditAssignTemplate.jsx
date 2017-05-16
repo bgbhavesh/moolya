@@ -11,6 +11,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../commons/components/select/MoolyaSelect'
 import MlStepAvailability from './MlStepAvailabilityComponent'
+import MlLoader from '../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -285,7 +286,7 @@ class MlEditAssignTemplate extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_main_wrap">
               <div className="admin_padding_wrap">

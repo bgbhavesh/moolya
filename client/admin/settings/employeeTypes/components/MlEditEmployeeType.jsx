@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findEmployeeTypeActionHandler} from '../actions/findEmployeeTypeAction'
 import {updateEmployeeTypeActionHandler} from '../actions/updateEmployeeTypeAction';
 import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 class MlEditEmployeeType extends React.Component{
   constructor(props) {
@@ -95,7 +96,7 @@ class MlEditEmployeeType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
             <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
                 <h2>Edit Employee Type</h2>

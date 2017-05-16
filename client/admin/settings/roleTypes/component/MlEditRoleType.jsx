@@ -13,6 +13,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+  import MlLoader from '../../../../commons/components/loader/loader'
 
 class MlEditRole extends React.Component {
   constructor(props) {
@@ -173,7 +174,7 @@ class MlEditRole extends React.Component {
     return (
       <div>
         {showLoader === true ? (<div className="loader_container">
-          <div className="loader_wrap"></div>
+          <MlLoader/>
         </div>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">

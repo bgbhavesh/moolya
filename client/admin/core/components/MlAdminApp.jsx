@@ -8,6 +8,7 @@ import MlAdminLeftNav from '../../layouts/leftnav/MlAdminLeftNav'
 import MlAppContextProvider from '../../../commons/components/appContext/MlAppContextProvider';
 import { graphql,compose } from 'react-apollo';
 import gql from 'graphql-tag'
+import MlLoader from '../../../commons/components/loader/loader'
 
 import { withApollo } from 'react-apollo';
 
@@ -39,7 +40,7 @@ class MlAdminAppComponent extends Component {
     const showLoader=this.state.loading;
     const MlComponent=function(props){
       if (props.showLoader) {
-        return <div className="loader_wrap"></div>;
+        return <MlLoader/>;
       }
 
       return (<MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>

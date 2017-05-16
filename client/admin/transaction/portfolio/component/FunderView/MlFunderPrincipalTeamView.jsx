@@ -1,6 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import MlLoader from '../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
@@ -159,7 +160,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     let selectedTeam = that.state.funderTeamList[TIndex] || {};
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap portfolio-main-wrap">
               <div className="main_wrap_scroll">
@@ -184,7 +185,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <div className="list_block notrans funding_list">
                                       <FontAwesome name='lock'/>
                                       <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                      <img src="/images/def_profile.png"/>
+                                      <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
                                       <div><p>{principal.firstName+" "+principal.lastName}</p><p className="small">{principal.designation}</p></div>
                                       <div className="ml_icon_btn">
                                         <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
@@ -208,7 +209,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     return (
                                       <li key={idx} onClick={that.onSelectPrincipal.bind(that, idx)}>
                                         <div className="team-block">
-                                          <img src="/images/def_profile.png" className="team_img" />
+                                          <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"} className="team_img" />
                                           <h3>
                                             {principal.firstName+" "+principal.lastName}<br /><b>{principal.designation}</b>
                                           </h3>
@@ -323,7 +324,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 <div className="list_block notrans funding_list">
                                   <FontAwesome name='lock'/>
                                   <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                  <img src="/images/def_profile.png"/>
+                                  <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
                                   <div><p>{team.firstName+" "+team.lastName}</p><p className="small">{team.designation}</p></div>
                                   <div className="ml_icon_btn">
                                     <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
@@ -346,7 +347,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     return (
                                       <li onClick={that.onSelectTeam.bind(that, idx)} key={idx}>
                                         <div className="team-block">
-                                          <img src="/images/def_profile.png" className="team_img"/>
+                                          <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
                                           <h3>
                                             {team.firstName+" "+team.lastName}<br /><b>{team.designation}Founder</b>
                                           </h3>

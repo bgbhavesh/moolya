@@ -13,6 +13,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 let Select = require('react-select');
 
 class MlEditDocumentMapping extends React.Component{
@@ -258,7 +259,7 @@ class MlEditDocumentMapping extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Document</h2>

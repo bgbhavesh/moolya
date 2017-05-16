@@ -6,6 +6,7 @@ import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 
 
@@ -149,7 +150,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     const showLoader = this.state.loading;
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
               <div className="row requested_input">
                 <div className="col-lg-6">
                   <div className="panel panel-default panel-form">

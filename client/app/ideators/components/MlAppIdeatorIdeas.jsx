@@ -7,6 +7,7 @@ var Select = require('react-select');
 import StarRatings from '../../commons/components/starRatings';
 import 'react-responsive-tabs/styles.css'
 import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
+import MlLoader from '../../../commons/components/loader/loader'
 
 export default class MlAppIdeatorIdeas extends React.Component {
   constructor(props, context) {
@@ -72,7 +73,7 @@ export default class MlAppIdeatorIdeas extends React.Component {
     return (
       <div>
         <h2>Ideas</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="main_wrap_scroll idea_details">
             <ScrollArea
               speed={0.8}

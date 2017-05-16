@@ -13,6 +13,7 @@ import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
 import ScrollArea from 'react-scrollbar';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditSubDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -147,7 +148,7 @@ class MlEditSubDepartment extends React.Component{
     let departmentquery=gql`query{ data:fetchDepartments{value:_id,label:departmentName}}`;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Sub Department</h2>

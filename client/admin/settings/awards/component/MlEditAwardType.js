@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findAwardActionHandler} from '../actions/findAwardTypeAction'
 import {updateAwardTypeActionHandler} from '../actions/updateAwardTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditAwardType extends React.Component{
   constructor(props) {
@@ -107,7 +108,7 @@ class MlEditAwardType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Award Type</h2>

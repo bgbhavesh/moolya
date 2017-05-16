@@ -10,6 +10,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
+import MlLoader from '../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 
@@ -190,7 +191,7 @@ export default class institution extends React.Component{
     let countryOption = {options: { variables: {countryId:this.props.clusterId}}};
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
       <div className="step_form_wrap step2">
 
       <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >

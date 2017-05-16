@@ -7,6 +7,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElem
 import {findStartupManagementActionHandler} from '../../../actions/findPortfolioStartupDetails'
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import _ from 'lodash';
+import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -187,7 +188,7 @@ export default class MlStartupManagement extends React.Component{
     let managementArr = that.state.startupManagementList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Management</h2>

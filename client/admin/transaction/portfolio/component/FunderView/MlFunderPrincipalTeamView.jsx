@@ -1,6 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
+import MlLoader from '../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
@@ -159,7 +160,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     let selectedTeam = that.state.funderTeamList[TIndex] || {};
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap portfolio-main-wrap">
               <div className="main_wrap_scroll">

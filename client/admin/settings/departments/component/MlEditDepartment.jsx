@@ -9,6 +9,7 @@ import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import ScrollArea from 'react-scrollbar';
 import {OnToggleSwitch, MoolyaToggleSwitch} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -131,7 +132,7 @@ class MlEditDepartment extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-      {showLoader===true?( <div className="loader_wrap"></div>):(
+      {showLoader===true?(<MlLoader/>):(
           <div className="admin_padding_wrap">
             <h2>Edit Department</h2>
             <div className="main_wrap_scroll">

@@ -8,6 +8,7 @@ import Datetime from "react-datetime";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
+import MlLoader from '../../../../../commons/components/loader/loader'
 import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 
@@ -185,7 +186,7 @@ export default class MlFunderInvestment extends React.Component {
     let funderInvestmentList = that.state.funderInvestmentList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="portfolio-main-wrap">
             <h2>Investments</h2>
             <div className="requested_input main_wrap_scroll">

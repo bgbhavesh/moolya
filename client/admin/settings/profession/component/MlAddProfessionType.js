@@ -9,6 +9,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addProfessionActionHandler} from '../actions/addProfessionTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlAddProfession extends React.Component {
   constructor(props) {
     super(props);
@@ -96,7 +97,7 @@ class MlAddProfession extends React.Component {
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader/>):(
 
         <div className="admin_padding_wrap">
           <h2>Create Profession</h2>

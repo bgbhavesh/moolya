@@ -8,6 +8,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findAssetActionHandler} from '../actions/findAssetsAction'
 import {updateSelectedAssetActionHandler} from '../actions/updateAssetsAction'
+import MlLoader from '../../../../commons/components/loader/loader'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 class MlEditAssets extends React.Component{
   constructor(props) {
@@ -92,7 +93,7 @@ class MlEditAssets extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
           <div className="admin_padding_wrap">
             <h2>Update Asset</h2>

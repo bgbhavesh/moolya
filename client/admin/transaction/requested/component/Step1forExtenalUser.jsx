@@ -12,6 +12,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [
@@ -380,7 +381,7 @@ export default class Step1forExtenalUser extends React.Component{
     let countryOption = {options: { variables: {countryId:this.state.country}}};
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="step_form_wrap step1">
 
             <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >

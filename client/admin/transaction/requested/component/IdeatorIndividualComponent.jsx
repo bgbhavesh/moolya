@@ -285,8 +285,9 @@ export default class IdeatorIndividualComponent extends React.Component{
     return (
 
       <div>
-        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
+            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
             <div className="form_bg">
               <form>
                 <div>
@@ -332,8 +333,11 @@ export default class IdeatorIndividualComponent extends React.Component{
 
               </form>
             </div>
+            </ScrollArea>
           </div>
           <div className="col-md-6 nopadding-right">
+            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
             <div className="form_bg">
               <form>
                 <div className="form-group">
@@ -364,8 +368,8 @@ export default class IdeatorIndividualComponent extends React.Component{
                 </div>
               </form>
             </div>
+            </ScrollArea>
           </div>
-        </ScrollArea>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )

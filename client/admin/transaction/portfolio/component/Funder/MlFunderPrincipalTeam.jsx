@@ -8,6 +8,7 @@ import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 var options = [
   {value: 'Company Name', label: 'Company Name'},
@@ -246,7 +247,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
     let funderPrincipalList = that.state.funderPrincipal || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
         <div className="portfolio-main-wrap">
           <div className="main_wrap_scroll">
             <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>

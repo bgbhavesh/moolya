@@ -25,6 +25,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
   let date=new Date()
+  validationCheck=MlRegistrationPreCondition.validateMobile(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
   let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
 

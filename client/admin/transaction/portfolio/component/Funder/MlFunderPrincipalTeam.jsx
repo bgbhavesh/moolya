@@ -181,7 +181,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       selectedIndex: index,
       data: details,
       selectedObject: index,
-      popoverOpenP: !(this.state.popoverOpenP),
+      popoverOpenT: !(this.state.popoverOpenT),
       // "selectedVal": details.typeOfFundingId
     });
   }
@@ -640,7 +640,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                    checked={this.state.data.isQualificationPrivate}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="About" name="aboutPrincipal"
+                            <input type="text" placeholder="About" name="aboutTeam"
                                    defaultValue={this.state.data.aboutTeam}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon" id="isAboutTeamPrivate"

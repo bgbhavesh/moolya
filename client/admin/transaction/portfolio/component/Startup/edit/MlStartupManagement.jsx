@@ -7,6 +7,8 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElem
 import {findStartupManagementActionHandler} from '../../../actions/findPortfolioStartupDetails'
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import _ from 'lodash';
+import Datetime from "react-datetime";
+import moment from "moment";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -114,7 +116,18 @@ export default class MlStartupManagement extends React.Component{
         this.setState({loading: false, startupManagement: response, startupManagementList: response});
       }
     }else{
-      this.setState({loading: false, startupManagement: that.context.startupPortfolio.management});
+      this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
+    }
+  }
+  onDateChange(name, event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      let details =this.state.data;
+      details=_.omit(details,[name]);
+      details=_.extend(details,{[name]:value});
+      this.setState({data:details}, function () {
+        this.sendDataToParent()
+      })
     }
   }
 
@@ -264,13 +277,21 @@ export default class MlStartupManagement extends React.Component{
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isYOFPrivate" onClick={this.onClick.bind(this, "isYOFPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isYOFPrivate}/>
                         </div>
 
-                        <div className="form-group">
-                          <input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group date-pick-wrap">
+                          {/*<input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                    inputProps={{placeholder: "Joining Date to this Company"}}
+                                    closeOnSelect={true} value={this.state.data.joiningDate}
+                                    onChange={this.onDateChange.bind(this, "joiningDate")}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isJoiningDatePrivate" onClick={this.onClick.bind(this, "isJoiningDatePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isJoiningDatePrivate}/>
                         </div>
 
-                        <div className="form-group">
-                          <input type="text" placeholder="First Job Joining Date" name="firstJobJoiningDate" defaultValue={this.state.data.firstJobJoiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group date-pick-wrap">
+                          {/*<input type="text" placeholder="First Job Joining Date" name="firstJobJoiningDate" defaultValue={this.state.data.firstJobJoiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                    inputProps={{placeholder: "First Job Joining Date"}}
+                                    closeOnSelect={true} value={this.state.data.firstJobJoiningDate}
+                                    onChange={this.onDateChange.bind(this, "firstJobJoiningDate")}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isFJJDPrivate" onClick={this.onClick.bind(this, "isFJJDPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFJJDPrivate}/>
                         </div>
                       </form>

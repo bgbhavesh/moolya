@@ -68,14 +68,16 @@ export default class MlAssignDepartmentComponent extends React.Component {
     let selectedUserType=that.props.selectedBackendUserType
     let selectedSubChapter=that.props.selectedSubChapter
     if (selectedUserType == 'moolya') {
-      departmentqueryOptions = {options: {variables: {isMoolya: false}}};
+      // departmentqueryOptions = {options: {variables: {isMoolya: false}}};
+      departmentqueryOptions = {options: {variables: {isMoolya: true}}};
       departmentQuery = gql` query($isMoolya:Boolean){
             data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
           }
           `;
     }
     if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){
-      departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:selectedSubChapter}}};
+      // departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:selectedSubChapter}}};
+      departmentqueryOptions = {options: {variables: {isMoolya: false, subChapter: selectedSubChapter}}};
       departmentQuery=gql` query($isMoolya:Boolean,$subChapter:String){
   data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
 }

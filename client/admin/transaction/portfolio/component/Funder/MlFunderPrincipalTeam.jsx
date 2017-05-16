@@ -1,13 +1,12 @@
-import $ from 'jquery'
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
+import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 
 var options = [
   {value: 'Company Name', label: 'Company Name'},
@@ -32,7 +31,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       funderTeamList: [],
       selectedVal: null,
       selectedObject: "default",
-      selectedTab:'principal'
+      selectedTab: 'principal'
     }
     this.handleBlur.bind(this);
     this.onSavePrincipalAction.bind(this);
@@ -74,6 +73,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       });
     }
   }
+
   async fetchTeamDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
@@ -116,9 +116,11 @@ export default class MlFunderPrincipalTeam extends React.Component {
       this.sendDataToParent()
     })
   }
+
   onSavePrincipalAction(e) {
     this.setState({funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false})
   }
+
   onSaveTeamAction(e) {
     this.setState({funderTeamList: this.state.funderTeam, popoverOpenT: false})
   }
@@ -170,6 +172,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       // "selectedVal": details.typeOfFundingId
     });
   }
+
   onTeamTileClick(index, e) {
     let cloneArray = _.cloneDeep(this.state.funderTeam);
     let details = cloneArray[index]
@@ -189,7 +192,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
   sendDataToParent() {
     let data = this.state.data;
     selectedTab = this.state.selectedTab;
-    if(selectedTab == "principal"){
+    if (selectedTab == "principal") {
       let fun = this.state.funderPrincipal;
       let funderPrincipal = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
@@ -209,7 +212,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       this.setState({funderPrincipal: funderPrincipal})
       this.props.getPrincipalDetails(funderPrincipal);
 
-    }else if(selectedTab == "team"){
+    } else if (selectedTab == "team") {
 
       let fun = this.state.funderTeam;
       let funderTeam = _.cloneDeep(fun);
@@ -232,9 +235,10 @@ export default class MlFunderPrincipalTeam extends React.Component {
     }
 
   }
-  onTabSelect(tab, e){
+
+  onTabSelect(tab, e) {
     this.setState({
-      selectedTab:tab,
+      selectedTab: tab,
       popoverOpenP: false,
       popoverOpenT: false,
     });
@@ -247,336 +251,363 @@ export default class MlFunderPrincipalTeam extends React.Component {
     return (
       <div>
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-        <div className="portfolio-main-wrap">
-          <div className="main_wrap_scroll">
-            <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
-              <div className="ml_tabs ml_tabs_large">
-                <ul className="nav nav-pills">
-                  <li id="principal" className="active" onClick={this.onTabSelect.bind(this, "principal")}>
-                    <a href="#1a" data-toggle="tab">Principal</a>
-                  </li>
-                  <li id="team" onClick={this.onTabSelect.bind(this, "team")}>
-                    <a href="#2a" data-toggle="tab">Team</a>
-                  </li>
-                </ul>
+          <div className="portfolio-main-wrap">
+            <div className="main_wrap_scroll">
+              <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
+                <div className="ml_tabs ml_tabs_large">
+                  <ul className="nav nav-pills">
+                    <li id="principal" className="active" onClick={this.onTabSelect.bind(this, "principal")}>
+                      <a href="#1a" data-toggle="tab">Principal</a>
+                    </li>
+                    <li id="team" onClick={this.onTabSelect.bind(this, "team")}>
+                      <a href="#2a" data-toggle="tab">Team</a>
+                    </li>
+                  </ul>
 
-                {/*principle list*/}
-                <div className="tab-content clearfix requested_input">
-                  <div className="tab-pane active" id="1a">
-                    <div className="col-lg-12">
-                      <div className="row">
-                        <div className="col-lg-2 col-md-4 col-sm-4"  onClick={this.addPrincipal.bind(this)}>
-                          <a href="#" id="create_clientPdefault" data-placement="top" data-class="large_popover">
-                            <div className="list_block notrans">
-                              <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                              <h3>Add New Principal</h3>
-                            </div>
-                          </a>
-                        </div>
-                        {that.state.funderPrincipalList.map(function (principal, idx) {
+                  {/*principle list*/}
+                  <div className="tab-content clearfix requested_input">
+                    <div className="tab-pane active" id="1a">
+                      <div className="col-lg-12">
+                        <div className="row">
+                          <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addPrincipal.bind(this)}>
+                            <a href="#" id="create_clientPdefault" data-placement="top" data-class="large_popover">
+                              <div className="list_block notrans">
+                                <div className="hex_outer"><span className="ml ml-plus "></span></div>
+                                <h3>Add New Principal</h3>
+                              </div>
+                            </a>
+                          </div>
+                          {that.state.funderPrincipalList.map(function (principal, idx) {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                                 <a href="#" id={"create_clientP" + idx}>
-                                  <div className="list_block notrans funding_list">
+                                  <div className="list_block notrans funding_list"
+                                       onClick={that.onPrincipalTileClick.bind(that, idx)}>
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                     <img src="/images/def_profile.png"/>
-                                    <div onClick={that.onPrincipalTileClick.bind(that, idx)}><p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
+                                    <div>
+                                      <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
                                     <div className="ml_icon_btn">
-                                      <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
-                                      <a href="#"   className="save_btn"><FontAwesome name='twitter'/></a>
-                                      <a href="#"   className="save_btn"><FontAwesome name='linkedin'/></a>
+                                      <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
+                                      <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
+                                      <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
                                     </div>
                                   </div>
                                 </a>
                               </div>
                             )
-                        })}
+                          })}
 
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/*team list view*/}
-                  <div className="tab-pane" id="2a">
-                    <div className="col-lg-12">
-                      <div className="row">
-                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addTeam.bind(this)}>
-                          <a href="#" id="create_clientTdefault" data-placement="top" data-class="large_popover">
-                            <div className="list_block notrans">
-                              <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                              <h3>Add New</h3>
-                            </div>
-                          </a>
-                        </div>
-                        {that.state.funderTeamList.map(function (team, idx) {
-                          return (
-                            <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                              <a href="#" id={"create_clientT" + idx}>
-                                <div className="list_block notrans funding_list">
-                                  <FontAwesome name='lock'/>
-                                  <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                  <img src="/images/def_profile.png"/>
-                                  <div onClick={that.onTeamTileClick.bind(that, idx)}><p>{team.firstName}</p><p className="small">{team.designation}</p></div>
-                                  <div className="ml_icon_btn">
-                                    <a href="#"   className="save_btn"><FontAwesome name='facebook'/></a>
-                                    <a href="#"   className="save_btn"><FontAwesome name='twitter'/></a>
-                                    <a href="#"   className="save_btn"><FontAwesome name='linkedin'/></a>
+                    {/*team list view*/}
+                    <div className="tab-pane" id="2a">
+                      <div className="col-lg-12">
+                        <div className="row">
+                          <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addTeam.bind(this)}>
+                            <a href="#" id="create_clientTdefault" data-placement="top" data-class="large_popover">
+                              <div className="list_block notrans">
+                                <div className="hex_outer"><span className="ml ml-plus "></span></div>
+                                <h3>Add New</h3>
+                              </div>
+                            </a>
+                          </div>
+                          {that.state.funderTeamList.map(function (team, idx) {
+                            return (
+                              <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                                <a href="#" id={"create_clientT" + idx}>
+                                  <div className="list_block notrans funding_list"
+                                       onClick={that.onTeamTileClick.bind(that, idx)}>
+                                    <FontAwesome name='lock'/>
+                                    <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
+                                    <img src="/images/def_profile.png"/>
+                                    <div><p>{team.firstName}</p><p
+                                      className="small">{team.designation}</p></div>
+                                    <div className="ml_icon_btn">
+                                      <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
+                                      <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
+                                      <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
+                                    </div>
                                   </div>
-                                </div>
-                              </a>
+                                </a>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </ScrollArea>
+
+              {/*principle popover*/}
+              <Popover placement="right" isOpen={this.state.popoverOpenP}
+                       target={"create_clientP" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverContent>
+                  <div className="ml_create_client">
+                    <div className="medium-popover">
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <div className="fileUpload mlUpload_btn">
+                              <span>Upload Pic</span>
+                              <input type="file" className="upload"/>
                             </div>
-                          )
-                        })}
+                            <div className="previewImg ProfileImg">
+                              <img src="/images/def_profile.png"/>
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Title" name="title"
+                                   defaultValue={this.state.data.title}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            {/*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*/}
+                            {/*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*/}
+                            {/*<input type="checkbox" className="lock_input"*/}
+                            {/*checked={this.state.data.isCompanyNamePrivate}/>*/}
+                          </div>
+
+                          <div className="form-group">
+                            <input type="text" placeholder="First Name" name="firstName"
+                                   defaultValue={this.state.data.firstName} className="form-control float-label"
+                                   id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
+                                         onClick={this.onLockChange.bind(this, "isFirstNamePrivate")}/><input
+                            type="checkbox" className="lock_input" id="makePrivate"
+                            checked={this.state.data.isFirstNamePrivate}/>
+                          </div>
+
+                          <div className="form-group">
+                            <input type="text" placeholder="Last Name" name="lastName"
+                                   defaultValue={this.state.data.lastName} className="form-control float-label"
+                                   id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
+                                         onClick={this.onLockChange.bind(this, "isLastNamePrivate")}/><input
+                            type="checkbox" className="lock_input" id="makePrivate"
+                            checked={this.state.data.isLastNamePrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Designation" name="designation"
+                                   defaultValue={this.state.data.designation}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isDesignationPrivate"
+                                         onClick={this.onLockChange.bind(this, "isDesignationPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isDesignationPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Company Name" name="companyName"
+                                   defaultValue={this.state.data.companyName}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
+                                         onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isCompanyNamePrivate}/>
+                          </div>
+
+                          <div className="form-group">
+                            <input type="text" placeholder="Duration" name="duration"
+                                   defaultValue={this.state.data.duration}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
+                                         onClick={this.onLockChange.bind(this, "isDurationPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isDurationPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Years of Experience" name="yearsOfExperience"
+                                   defaultValue={this.state.data.yearsOfExperience}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
+                                         onClick={this.onLockChange.bind(this, "isYearsOfExperiencePrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isYearsOfExperiencePrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Qualification" name="qualification"
+                                   defaultValue={this.state.data.qualification}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"
+                                         onClick={this.onLockChange.bind(this, "isQualificationPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isQualificationPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="About" name="aboutPrincipal"
+                                   defaultValue={this.state.data.aboutPrincipal}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isAboutPrincipalPrivate"
+                                         onClick={this.onLockChange.bind(this, "isAboutPrincipalPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isQualificationPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
+                            <FontAwesome name="linkedin-square" className="password_icon"/>
+                          </div>
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="twitter" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="Youtube" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="Google plus" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          <div className="ml_btn" style={{'textAlign': 'center'}}>
+                            <a className="save_btn" onClick={this.onSavePrincipalAction.bind(this)}>Save</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+                </PopoverContent>
+              </Popover>
 
-                </div>
-              </div>
-            </ScrollArea>
+              {/*team popover*/}
+              <Popover placement="right" isOpen={this.state.popoverOpenT}
+                       target={"create_clientT" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverContent>
+                  <div className="ml_create_client">
+                    <div className="medium-popover">
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div className="form-group">
+                            <div className="fileUpload mlUpload_btn">
+                              <span>Upload Pic</span>
+                              <input type="file" className="upload"/>
+                            </div>
+                            <div className="previewImg ProfileImg">
+                              <img src="/images/def_profile.png"/>
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Title" name="title"
+                                   defaultValue={this.state.data.title}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            {/*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*/}
+                            {/*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*/}
+                            {/*<input type="checkbox" className="lock_input"*/}
+                            {/*checked={this.state.data.isCompanyNamePrivate}/>*/}
+                          </div>
 
-            {/*principle popover*/}
-            <Popover placement="right" isOpen={this.state.popoverOpenP}
-                     target={"create_clientP" + this.state.selectedObject} toggle={this.toggle}>
-              <PopoverContent>
-            <div className="ml_create_client">
-              <div className="medium-popover">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Upload Pic</span>
-                        <input type="file" className="upload"/>
+                          <div className="form-group">
+                            <input type="text" placeholder="First Name" name="firstName"
+                                   defaultValue={this.state.data.firstName} className="form-control float-label"
+                                   id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate"
+                                         onClick={this.onLockChange.bind(this, "isFirstNamePrivate")}/><input
+                            type="checkbox" className="lock_input" id="makePrivate"
+                            checked={this.state.data.isFirstNamePrivate}/>
+                          </div>
+
+                          <div className="form-group">
+                            <input type="text" placeholder="Last Name" name="lastName"
+                                   defaultValue={this.state.data.lastName} className="form-control float-label"
+                                   id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"
+                                         onClick={this.onLockChange.bind(this, "isLastNamePrivate")}/><input
+                            type="checkbox" className="lock_input" id="makePrivate"
+                            checked={this.state.data.isLastNamePrivate}/>
+                          </div>
+
+                          <div className="form-group">
+                            <input type="text" placeholder="Designation" name="designation"
+                                   defaultValue={this.state.data.designation}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isDesignationPrivate"
+                                         onClick={this.onLockChange.bind(this, "isDesignationPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isDesignationPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Company Name" name="companyName"
+                                   defaultValue={this.state.data.companyName}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
+                                         onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isCompanyNamePrivate}/>
+                          </div>
+
+                          <div className="form-group">
+                            <input type="text" placeholder="Duration" name="duration"
+                                   defaultValue={this.state.data.duration}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
+                                         onClick={this.onLockChange.bind(this, "isDurationPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isDurationPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Years of Experience" name="yearsOfExperience"
+                                   defaultValue={this.state.data.yearsOfExperience}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
+                                         onClick={this.onLockChange.bind(this, "isYearsOfExperiencePrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isYearsOfExperiencePrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="Qualification" name="qualification"
+                                   defaultValue={this.state.data.qualification}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"
+                                         onClick={this.onLockChange.bind(this, "isQualificationPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isQualificationPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="About" name="aboutPrincipal"
+                                   defaultValue={this.state.data.aboutTeam}
+                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
+                            <FontAwesome name='unlock' className="input_icon" id="isAboutTeamPrivate"
+                                         onClick={this.onLockChange.bind(this, "isAboutTeamPrivate")}/>
+                            <input type="checkbox" className="lock_input"
+                                   checked={this.state.data.isAboutTeamPrivate}/>
+                          </div>
+                          <div className="form-group">
+                            <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
+                            <FontAwesome name="linkedin-square" className="password_icon"/>
+                          </div>
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="twitter" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="Youtube" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="Google plus" className="form-control float-label"  />*/}
+                          {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
+                          {/*</div>*/}
+                          <div className="ml_btn" style={{'textAlign': 'center'}}>
+                            <a className="save_btn" onClick={this.onSaveTeamAction.bind(this)}>Save</a>
+                          </div>
+                        </div>
                       </div>
-                      <div className="previewImg ProfileImg">
-                        <img src="/images/def_profile.png"/>
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <input type="text" placeholder="Title" name="title"
-                             defaultValue={this.state.data.title}
-                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                      {/*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*/}
-                                   {/*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*/}
-                      {/*<input type="checkbox" className="lock_input"*/}
-                             {/*checked={this.state.data.isCompanyNamePrivate}/>*/}
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate" onClick={this.onLockChange.bind(this, "isFirstNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFirstNamePrivate}/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name"  onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onLockChange.bind(this, "isLastNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isLastNamePrivate}/>
-                    </div>
-                    {/*<div className="form-group">*/}
-                      {/*<Select*/}
-                        {/*name="form-field-name"*/}
-                        {/*options={options}*/}
-                        {/*value='Company Name'*/}
-                        {/*onChange={logChange}*/}
-                      {/*/>*/}
-                    {/*</div>*/}
-                    <div className="form-group">
-                      <input type="text" placeholder="Company Name" name="companyName"
-                             defaultValue={this.state.data.companyName}
-                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
-                                   onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
-                      <input type="checkbox" className="lock_input"
-                             checked={this.state.data.isCompanyNamePrivate}/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="Duration" name="duration"
-                             defaultValue={this.state.data.duration}
-                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
-                                   onClick={this.onLockChange.bind(this, "isDurationPrivate")}/>
-                      <input type="checkbox" className="lock_input"
-                             checked={this.state.data.isDurationPrivate}/>
-                    </div>
-                    <div className="form-group">
-                      <input type="text" placeholder="Years of Experience" name="yearsOfExperience"
-                             defaultValue={this.state.data.yearsOfExperience}
-                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
-                                   onClick={this.onLockChange.bind(this, "isYearsOfExperiencePrivate")}/>
-                      <input type="checkbox" className="lock_input"
-                             checked={this.state.data.isYearsOfExperiencePrivate}/>
-                    </div>
-                    <div className="form-group">
-                      <input type="text" placeholder="Qualification" name="qualification"
-                             defaultValue={this.state.data.qualification}
-                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"
-                                   onClick={this.onLockChange.bind(this, "isQualificationPrivate")}/>
-                      <input type="checkbox" className="lock_input"
-                             checked={this.state.data.isQualificationPrivate}/>
-                    </div>
-                    <div className="form-group">
-                      <input type="text" placeholder="About" name="aboutPrincipal"
-                             defaultValue={this.state.data.aboutPrincipal}
-                             className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isAboutPrincipalPrivate"
-                                   onClick={this.onLockChange.bind(this, "isAboutPrincipalPrivate")}/>
-                      <input type="checkbox" className="lock_input"
-                             checked={this.state.data.isQualificationPrivate}/>
-                    </div>
-                    <div className="form-group">
-                      <input type="text" placeholder="LinkedIn" className="form-control float-label"  />
-                      <FontAwesome name="linkedin-square" className="password_icon"/>
-                    </div>
-                    {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
-                      {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
-                    {/*</div>*/}
-                    {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="twitter" className="form-control float-label"  />*/}
-                      {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
-                    {/*</div>*/}
-                    {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="Youtube" className="form-control float-label"  />*/}
-                      {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
-                    {/*</div>*/}
-                    {/*<div className="form-group">*/}
-                      {/*<input type="text" placeholder="Google plus" className="form-control float-label"  />*/}
-                      {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
-                    {/*</div>*/}
-                    <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn" onClick={this.onSavePrincipalAction.bind(this)}>Save</a>
                     </div>
                   </div>
-                </div>
-              </div>
+                </PopoverContent>
+              </Popover>
             </div>
-              </PopoverContent>
-            </Popover>
-
-            {/*team popover*/}
-            <Popover placement="right" isOpen={this.state.popoverOpenT}
-                     target={"create_clientT" + this.state.selectedObject} toggle={this.toggle}>
-              <PopoverContent>
-                <div className="ml_create_client">
-                  <div className="medium-popover">
-                    <div className="row">
-                      <div className="col-md-12">
-                        <div className="form-group">
-                          <div className="fileUpload mlUpload_btn">
-                            <span>Upload Pic</span>
-                            <input type="file" className="upload"/>
-                          </div>
-                          <div className="previewImg ProfileImg">
-                            <img src="/images/def_profile.png"/>
-                          </div>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Title" name="title"
-                                 defaultValue={this.state.data.title}
-                                 className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                          {/*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*/}
-                          {/*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*/}
-                          {/*<input type="checkbox" className="lock_input"*/}
-                          {/*checked={this.state.data.isCompanyNamePrivate}/>*/}
-                        </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isFirstNamePrivate" onClick={this.onLockChange.bind(this, "isFirstNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFirstNamePrivate}/>
-                        </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name"  onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onLockChange.bind(this, "isLastNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isLastNamePrivate}/>
-                        </div>
-                        {/*<div className="form-group">*/}
-                        {/*<Select*/}
-                        {/*name="form-field-name"*/}
-                        {/*options={options}*/}
-                        {/*value='Company Name'*/}
-                        {/*onChange={logChange}*/}
-                        {/*/>*/}
-                        {/*</div>*/}
-                        <div className="form-group">
-                          <input type="text" placeholder="Company Name" name="companyName"
-                                 defaultValue={this.state.data.companyName}
-                                 className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
-                                       onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
-                          <input type="checkbox" className="lock_input"
-                                 checked={this.state.data.isCompanyNamePrivate}/>
-                        </div>
-
-                        <div className="form-group">
-                          <input type="text" placeholder="Duration" name="duration"
-                                 defaultValue={this.state.data.duration}
-                                 className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon" id="isDurationPrivate"
-                                       onClick={this.onLockChange.bind(this, "isDurationPrivate")}/>
-                          <input type="checkbox" className="lock_input"
-                                 checked={this.state.data.isDurationPrivate}/>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Years of Experience" name="yearsOfExperience"
-                                 defaultValue={this.state.data.yearsOfExperience}
-                                 className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
-                                       onClick={this.onLockChange.bind(this, "isYearsOfExperiencePrivate")}/>
-                          <input type="checkbox" className="lock_input"
-                                 checked={this.state.data.isYearsOfExperiencePrivate}/>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="Qualification" name="qualification"
-                                 defaultValue={this.state.data.qualification}
-                                 className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"
-                                       onClick={this.onLockChange.bind(this, "isQualificationPrivate")}/>
-                          <input type="checkbox" className="lock_input"
-                                 checked={this.state.data.isQualificationPrivate}/>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="About" name="aboutPrincipal"
-                                 defaultValue={this.state.data.aboutTeam}
-                                 className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon" id="isAboutTeamPrivate"
-                                       onClick={this.onLockChange.bind(this, "isAboutTeamPrivate")}/>
-                          <input type="checkbox" className="lock_input"
-                                 checked={this.state.data.isAboutTeamPrivate}/>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" placeholder="LinkedIn" className="form-control float-label"  />
-                          <FontAwesome name="linkedin-square" className="password_icon"/>
-                        </div>
-                        {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
-                        {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
-                        {/*</div>*/}
-                        {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="twitter" className="form-control float-label"  />*/}
-                        {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
-                        {/*</div>*/}
-                        {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Youtube" className="form-control float-label"  />*/}
-                        {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
-                        {/*</div>*/}
-                        {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Google plus" className="form-control float-label"  />*/}
-                        {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
-                        {/*</div>*/}
-                        <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="#" className="save_btn" onClick={this.onSaveTeamAction.bind(this)}>Save</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-      </div>)}
+          </div>)}
       </div>
     )
   }

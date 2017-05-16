@@ -24,6 +24,11 @@ let citiesSchema = `
         isActive    : Boolean
     }
     
+    type citiesSearchResult{
+     result:[Cities],
+     totalCount:Int
+    }
+    
     type Query {
         fetchCities: SearchResp
         fetchCity(cityId: String): Cities
@@ -31,7 +36,7 @@ let citiesSchema = `
         fetchCitiesPerState(stateId: String):[Cities]
         fetchCitiesPerCountry(countryId: String):[Cities]
         searchCities(searchQuery:String,displayAllOption:Boolean):[Cities]
-        fetchCitiesPerCountryAPI(countryId: String):[Cities]
+        fetchCitiesPerCountryAPI(countryId: String,cityName:String,limit:Int):citiesSearchResult
         
     }
     

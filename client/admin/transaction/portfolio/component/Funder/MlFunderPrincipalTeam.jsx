@@ -4,6 +4,7 @@ import ScrollArea from "react-scrollbar";
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
+import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -201,8 +202,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
           }
         }
         let newItem = _.omit(item, "__typename");
-        let updateItem = _.omit(newItem, 'logo');
-        arr.push(updateItem)
+        // let updateItem = _.omit(newItem, 'logo');
+        arr.push(newItem)
       })
       funderPrincipal = arr;
       this.setState({funderPrincipal: funderPrincipal})
@@ -222,8 +223,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
           }
         }
         let newItem = _.omit(item, "__typename");
-        let updateItem = _.omit(newItem, 'logo');
-        arr.push(updateItem)
+        // let updateItem = _.omit(newItem, 'logo');
+        arr.push(newItem)
       })
       funderTeam = arr;
       this.setState({funderTeam: funderTeam})
@@ -238,6 +239,78 @@ export default class MlFunderPrincipalTeam extends React.Component {
       popoverOpenP: false,
       popoverOpenT: false,
     });
+  }
+  onPrincipalLogoFileUpload(e) {
+    if (e.target.files[0].length == 0)
+      return;
+    let file = e.target.files[0];
+    let fileName = e.target.files[0].name;
+    let data = {
+      moduleName: "PORTFOLIO",
+      actionName: "UPLOAD",
+      portfolioDetailsId: this.props.portfolioDetailsId,
+      portfolio: {principal: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
+    };
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+  }
+  onTeamLogoFileUpload(e) {
+    if (e.target.files[0].length == 0)
+      return;
+    let file = e.target.files[0];
+    let fileName = e.target.files[0].name;
+    let data = {
+      moduleName: "PORTFOLIO",
+      actionName: "UPLOAD",
+      portfolioDetailsId: this.props.portfolioDetailsId,
+      portfolio: {team: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
+    };
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+  }
+
+  onFileUploadCallBack(resp) {
+    if (resp) {
+      let result = JSON.parse(resp)
+      if (result.success) {
+        this.setState({loading: true})
+        this.fetchOnlyImages();
+      }
+    }
+  }
+
+  async fetchOnlyImages() {
+
+    if(this.state.selectedTab == "principal"){
+      const response = await fetchfunderPortfolioPrincipal(this.props.portfolioDetailsId);
+      if (response) {
+        let thisState = this.state.selectedIndex;
+        let dataDetails = this.state.funderPrincipal
+        let cloneBackUp = _.cloneDeep(dataDetails);
+        let specificData = cloneBackUp[thisState];
+        if (specificData) {
+          let curUpload = response[thisState]
+          specificData['logo'] = curUpload['logo']
+          this.setState({loading: false, funderPrincipal: cloneBackUp});
+        } else {
+          this.setState({loading: false})
+        }
+      }
+    }else if(this.state.selectedTab == "team" ){
+      const response = await fetchfunderPortfolioTeam(this.props.portfolioDetailsId);
+      if (response) {
+        let thisState = this.state.selectedIndex;
+        let dataDetails = this.state.funderTeam
+        let cloneBackUp = _.cloneDeep(dataDetails);
+        let specificData = cloneBackUp[thisState];
+        if (specificData) {
+          let curUpload = response[thisState]
+          specificData['logo'] = curUpload['logo']
+          this.setState({loading: false, funderTeam: cloneBackUp});
+        } else {
+          this.setState({loading: false})
+        }
+      }
+    }
+
   }
 
   render() {
@@ -281,7 +354,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                        onClick={that.onPrincipalTileClick.bind(that, idx)}>
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                    <img src="/images/def_profile.png"/>
+                                    <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
                                     <div>
                                       <p>{principal.firstName}</p><p className="small">{principal.designation}</p></div>
                                     <div className="ml_icon_btn">
@@ -319,7 +392,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                        onClick={that.onTeamTileClick.bind(that, idx)}>
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                    <img src="/images/def_profile.png"/>
+                                    <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
                                     <div><p>{team.firstName}</p><p
                                       className="small">{team.designation}</p></div>
                                     <div className="ml_icon_btn">
@@ -352,7 +425,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
                               <span>Upload Pic</span>
-                              <input type="file" className="upload"/>
+                              <input type="file" className="upload" onChange={this.onPrincipalLogoFileUpload.bind(this)}/>
                             </div>
                             <div className="previewImg ProfileImg">
                               <img src="/images/def_profile.png"/>
@@ -484,7 +557,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                           <div className="form-group">
                             <div className="fileUpload mlUpload_btn">
                               <span>Upload Pic</span>
-                              <input type="file" className="upload"/>
+                              <input type="file" className="upload" onChange={this.onTeamLogoFileUpload.bind(this)}/>
                             </div>
                             <div className="previewImg ProfileImg">
                               <img src="/images/def_profile.png"/>

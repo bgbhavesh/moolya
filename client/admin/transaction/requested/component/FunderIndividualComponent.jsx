@@ -96,7 +96,7 @@ export default class Individual extends React.Component{
   }
 
   optionsBySelectSubsidaryComapny(val){
-    this.setState({employmentStatus:val.value})
+    this.setState({employmentStatus:val})
   }
   checkIdentity(event){
     console.log(event.target.name)
@@ -240,8 +240,14 @@ export default class Individual extends React.Component{
       }  
     }`;
 
-
-
+    let employementquery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let employmentOption={options: { variables: {type : "EMPLOYMENTTYPE",hierarchyRefId:this.props.clusterId}}};
     let genderOption={options: { variables: {type : "GENDER",hierarchyRefId:this.props.clusterId}}};
     let titlequery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -353,7 +359,8 @@ export default class Individual extends React.Component{
                   <input type="text" ref="qualification" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.qualification}  placeholder="Qualification" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Employment Status" options={subsidary} value={this.state.employmentStatus} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
+                 {/* <Select name="form-field-name" placeholder="Employment Status" options={subsidary} value={this.state.employmentStatus} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>*/}
+                  <Moolyaselect multiSelect={false} placeholder="Employment Status" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.employmentStatus} queryType={"graphql"} query={employementquery}  queryOptions={employmentOption} onSelect={that.optionsBySelectSubsidaryComapny.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="professionalTag" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.professionalTag}  placeholder="Professional Tag" className="form-control float-label" id=""/>

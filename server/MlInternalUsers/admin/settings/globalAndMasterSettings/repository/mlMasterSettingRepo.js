@@ -175,6 +175,14 @@ export default class MlMasterSettingRepo{
           options.push({"label":option.companyTypeInfo.companyName,"value":option._id,"type" : option.companyTypeInfo.companyName})})
 
         break;
+      case "EMPLOYMENTTYPE":
+        result= MlMasterSettings.find({"type":"EMPLOYMENTTYPE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
+
+        let EmploymentResponse=_.each(result,function (option,id) {
+          options.push({"label":option.employmentTypeInfo.employmentName,"value":option._id,"type" : option.employmentTypeInfo.employmentName})
+        })
+
+        break;
       case "LANGUAGE":
         result= MlMasterSettings.find({"type":"LANGUAGE",isActive:true,hierarchyRefId:requestParams.hierarchyRefId}).fetch();
 

@@ -15,12 +15,12 @@ MlResolver.MlQueryResolver['fetchMyOfficeMembers'] = (obj, args, context, info) 
 }
 
 MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => {
-    let ret = "";
+  var ret = "";
     try {
         if(args.myOffice){
             let myOffice = args.myOffice;
             myOffice['userId'] = context.userId;
-            let ret = MlMyOffice.insert({...myOffice});
+            ret = MlMyOffice.insert({...myOffice});
             if(!ret){
                 let code = 400;
                 let response = new MlRespPayload().successPayload("Failed To Create Office", code);

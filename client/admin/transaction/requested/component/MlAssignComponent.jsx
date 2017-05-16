@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {assignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
 import {selfAssignTransactionAction} from '../actions/selfAssignTransactionAction'
-import {unAssignTransactionAction} from '../actions/unAssignTransactionAction'
+import {unAssignTransactionActionHandler} from '../actions/unAssignTransactionAction'
 export default class MlAssignComponent extends Component {
 
   constructor(props){
@@ -91,7 +91,7 @@ export default class MlAssignComponent extends Component {
   }
   async selfAssignTransaction(){
     let transactionType=this.props.transactionType
-    const response = await selfAssignTransactionAction(params,this.props.transactionId);
+    const response = await selfAssignTransactionAction(this.props.transactionId);
     if(response){
       toastr.success("Self Assignment successfull");
       FlowRouter.go("/admin/transactions/requestedList");
@@ -104,7 +104,7 @@ export default class MlAssignComponent extends Component {
 
   async unAssignTransaction(){
     let transactionType=this.props.transactionType
-    const response = await unAssignTransactionAction(params,this.props.transactionId);
+    const response = await unAssignTransactionActionHandler(this.props.transactionId);
     if(response){
       toastr.success("Self Assignment successfull");
       FlowRouter.go("/admin/transactions/requestedList");

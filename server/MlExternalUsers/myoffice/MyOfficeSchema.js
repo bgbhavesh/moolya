@@ -24,10 +24,10 @@ let myOfficeSchema = `
         isRetire:Boolean
     }
 
-    type AvailiableCommunities{
+    type AvailableCommunities{
         communityName:String,
         communityId:String,
-        userCount:String
+        userCount:Int
     }
   
     type MyOffice{
@@ -36,7 +36,7 @@ let myOfficeSchema = `
         totalCount:Int,
         principalUserCount:Int,
         teamUserCount:Int,
-        availiableCommunities:[AvailiableCommunities]
+        availableCommunities:[AvailableCommunities]
         barerCount:Int,
         description:String,
         branchType:String,
@@ -71,27 +71,29 @@ let myOfficeSchema = `
         isRetire:Boolean
     }
 
-    input availiableCommunities{
+    input availableCommunities{
         communityName:String,
         communityId:String,
-        userCount:String
+        userCount:Int
     }
   
     input myOffice{
         totalCount:Int,
         principalUserCount:Int,
         teamUserCount:Int,
-        availiableCommunities:[availiableCommunities]
+        availableCommunities:[availableCommunities]
         barerCount:Int,
         description:String,
         branchType:String,
         location:String,
         landmark:String,
+        streetLocality : String
         area:String,
         city:String,
         state:String,
         country:String,
         zipCode: Int,
+        about : String
         isActive:Boolean,
         officeMembers:[officeMembers],
         paymentLink:String

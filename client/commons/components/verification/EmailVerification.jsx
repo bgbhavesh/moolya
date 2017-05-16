@@ -59,14 +59,17 @@ export default class EmailVerification extends React.Component{
       <div>
       {showLoader===true?( <div className="loader_wrap"></div>):(
       <div className="app_main_wrap email-bg">
-        <div className="col-md-3 col-md-offset-3">
+        <div className="" style={{'width': '600px','marginLeft': '132px'}}>
           <div className="email-body">
             {!mobileNumberVerificationSuccess&&emailVerificationSuccess&&
               <div>
               <img src="../images/success_icon.png" /><br />
-              <h2>Congratulations</h2>
-               You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
-                Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>
+              <h2 style={{'marginBottom':'20px'}}>Congratulations!!</h2>
+             {/*  You have successfully verified your account. You will be notified once your profile is activated.<br /><br />
+                Until then, don't miss to check our&nbsp;<a href="https://blog.moolya.in" style={{'color':'#ef4647'}}>blog</a>*/}
+                <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
+                We will keep you posted on the next steps once <span className="m_red">m</span><span className="m_yel">oo</span><span className="m_red">lya</span> app is ready in the next few weeks.<br/><br/>
+                  Good day and God speed to all your efforts.</p>
               {/*<div className="form-group">
                 <input type="text"  value={mobileNumber} className="form-control sendotp float-label" disabled id="mobileNumber"/>
               </div>
@@ -78,9 +81,9 @@ export default class EmailVerification extends React.Component{
               </div>
             }
             {!emailVerificationSuccess&&<div>
-              <img src="../images/fail_icon.png" /><br /> <h2>Expired!</h2>
-              Your verification link has expired.Please login to continue<br /><br />
-              <a href="/login" className="save_btn" >Login</a>
+              <img src="../images/fail_icon.png" /><br /> <h2 style={{'marginBottom':'20px'}}>Expired!</h2>
+              <p style={{'fontSize':'24px'}}>Your verification link has expired.<br/>Please contact us at <a style={{'color':'#ef4647'}} href="mailto:startup@moolya.in"> startup@moolya.in</a>, if required.</p>
+              {/*<a href="/login" className="save_btn" >Login</a>*/}
              </div>}
 
             {/*{mobileNumberVerificationSuccess&&
@@ -100,3 +103,4 @@ export default class EmailVerification extends React.Component{
     )
   }
 };
+

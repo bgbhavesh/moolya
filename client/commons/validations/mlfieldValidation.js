@@ -16,11 +16,11 @@ export function mlFieldValidations(elements) {
       }
     }else if(element instanceof Moolyaselect){
       var selectObj = element;
-      let isRequired = selectObj.props['data-required'];
-      let value = selectObj.props['selectedValue']
-      let multi= selectObj.props['multiSelect']
+      var isRequired = selectObj.props['data-required'];
+       var value = selectObj.props['selectedValue']
+      var  multi= selectObj.props['multiSelect']
 
-        if (isRequired && value.length==0&&multi) {
+        if (isRequired && multi&&value.length==0) {
           return selectObj.props['data-errMsg']
         }else if (isRequired && !value) {
           return selectObj.props['data-errMsg']

@@ -54,7 +54,17 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
   let response ;
   let hierarchy = args.hierarchy;
   if (hierarchy.id!=''&&hierarchy.id!=null) {
-    let result =  mlDBController.update('MlHierarchyAssignments',hierarchy.id, hierarchy, {$set:true}, context)
+    let hierarchyAssignment = mlDBController.findOne("MlHierarchyAssignments", {"_id": hierarchy.id}, context)
+    let assignedRoles = hierarchyAssignment.teamStructureAssignment;
+    let id = hierarchy.id
+    let hierarchyRoles = hierarchy.teamStructureAssignment;
+    if(hierarchyRoles.length>=1){
+      hierarchyRoles.map(function (role) {
+        MlHierarchyAssignments.update({_id:id}, {$push: {teamStructureAssignment:role}},{$set:{finalApproval:hierarchy.finalApproval}});
+      })
+    }else{
+       MlHierarchyAssignments.update({_id:id}, {$set:{finalApproval:hierarchy.finalApproval}});
+    }
     let code = 200;
     response = new MlRespPayload().successPayload(result, code);
   }else{
@@ -67,3 +77,4 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
     }
   }
 };
+

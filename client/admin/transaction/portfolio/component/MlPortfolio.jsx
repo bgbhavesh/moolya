@@ -94,7 +94,7 @@ class MlPortfolio extends React.Component {
     if(response){
       this.setState({ideaId: response._id, loading: false});
     }else {
-      toastr.error('Portfolio is not initiated');
+      toastr.error('Idea is not initiated');
       this.setState({loading: false})
       FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
     }

@@ -10,8 +10,8 @@ import MlEmailNotification from './mlNotifications/mlEmailNotifications/mlEMailN
 Meteor.startup(function ()
 {
     // console.log("Insider SSL start!!!!");
-    // let sslCert = "/etc/nginx_test/ssl/nginx.crt";
-    // let sslKey = "/etc/nginx_test/ssl/nginx.key";
+    // let sslCert = "/home/venkatsrinag/moolya-core/server.crt";
+    // let sslKey = "/home/venkatsrinag/moolya-core/server.key";
     // let sslPort = 4444;
     // console.log("sslCert "+sslCert);
     // console.log("sslKey "+sslKey);

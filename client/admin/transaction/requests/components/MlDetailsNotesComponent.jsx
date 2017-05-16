@@ -33,8 +33,8 @@ export default class MlDetailsNotesComponent extends React.Component {
  async  onStatusSelect(val){
     this.setState({"status":val.value})
    let status=val.value
-   let transactionId=this.props.id
-   let response = await updateStusForTransactionActionHandler(transactionId,status);
+   let requestId=this.props.id
+   let response = await updateStusForTransactionActionHandler(requestId,status);
     if(response){
       toastr.success("transaction status changed successfully")
       if(status=="Approved"){
@@ -133,6 +133,7 @@ export default class MlDetailsNotesComponent extends React.Component {
                   <div className="form-group">
                     <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status} disabled={that.state.dispalyStatus} onChange={that.onStatusSelect.bind(that)} />
                   </div>
+                  <br className="clearfix" />
                  {/* <div className="ml_btn">
                     /!*<a href="#" className="save_btn">View</a>*!/
                     <a href="#" className="cancel_btn">Actions</a>

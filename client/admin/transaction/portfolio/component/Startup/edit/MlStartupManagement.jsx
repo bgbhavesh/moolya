@@ -116,10 +116,10 @@ export default class MlStartupManagement extends React.Component{
         this.setState({loading: false, startupManagement: response, startupManagementList: response});
       }
     }else{
-      this.setState({loading: false, startupManagement: that.context.startupPortfolio.management});
+      this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
     }
   }
-  onValidFromChange(name, event) {
+  onDateChange(name, event) {
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
       let details =this.state.data;
@@ -282,7 +282,7 @@ export default class MlStartupManagement extends React.Component{
                           <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                     inputProps={{placeholder: "Joining Date to this Company"}}
                                     closeOnSelect={true} value={this.state.data.joiningDate}
-                                    onChange={this.onValidFromChange.bind(this, "joiningDate")}/>
+                                    onChange={this.onDateChange.bind(this, "joiningDate")}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isJoiningDatePrivate" onClick={this.onClick.bind(this, "isJoiningDatePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isJoiningDatePrivate}/>
                         </div>
 
@@ -291,7 +291,7 @@ export default class MlStartupManagement extends React.Component{
                           <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                     inputProps={{placeholder: "First Job Joining Date"}}
                                     closeOnSelect={true} value={this.state.data.firstJobJoiningDate}
-                                    onChange={this.onValidFromChange.bind(this, "firstJobJoiningDate")}/>
+                                    onChange={this.onDateChange.bind(this, "firstJobJoiningDate")}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isFJJDPrivate" onClick={this.onClick.bind(this, "isFJJDPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFJJDPrivate}/>
                         </div>
                       </form>

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import Datetime from "react-datetime";
-import {Popover, PopoverContent} from "reactstrap";
+import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import _ from "lodash";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
@@ -232,6 +232,7 @@ export default class MlFunderSuccessStories extends React.Component {
               {/*popover view*/}
               <Popover placement="right" isOpen={this.state.popoverOpen}
                        target={"team_list" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverTitle>Add New Success Story </PopoverTitle>
                 <PopoverContent>
                   <div className="team_list-main">
                     <div className="medium-popover">

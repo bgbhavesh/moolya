@@ -1,17 +1,13 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {Popover, PopoverContent} from "reactstrap";
+import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
-var options = [
-  {value: 'Company Name', label: 'Company Name'},
-  {value: '2', label: '2'}
-];
 function logChange(val) {
   console.log("Selected: " + val);
 }
@@ -347,6 +343,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
               {/*principle popover*/}
               <Popover placement="right" isOpen={this.state.popoverOpenP}
                        target={"create_clientP" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverTitle> Add New Member </PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">
@@ -478,6 +475,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
               {/*team popover*/}
               <Popover placement="right" isOpen={this.state.popoverOpenT}
                        target={"create_clientT" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverTitle> Add New Member </PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">

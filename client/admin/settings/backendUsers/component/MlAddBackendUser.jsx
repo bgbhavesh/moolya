@@ -28,7 +28,7 @@ class MlAddBackendUser extends React.Component {
       selectedBackendUser: 'Internal User',
       selectedSubChapter: '',
       pwdErrorMsg: '',
-      foundationDate: " ",
+      birthDate: " ",
       genderSelectMale: " ",
       genderSelectFemale: " ",
       genderSelectOthers: " ",
@@ -39,7 +39,7 @@ class MlAddBackendUser extends React.Component {
     this.createBackendUser.bind(this);
     this.onBackendUserTypeSelect.bind(this);
     this.onBackendUserSelect.bind(this);
-    this.onFoundationDateSelection.bind(this);
+    this.onBirthDateSelection.bind(this);
     this.onGenderSelect = this.onGenderSelect.bind(this);
     return this;
   }
@@ -49,19 +49,12 @@ class MlAddBackendUser extends React.Component {
     OnToggleSwitch(false,true);
     passwordVisibilityHandler();
   }
-  onFoundationDateSelection(event) {
+  onBirthDateSelection(event) {
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
-      this.setState({loading: false, foundationDate: value});
+      this.setState({loading: false, birthDate: value});
     }
   }
-
-
-  /*componentWillMount(){
-    let response = mlFieldValidations();
-    return response;
-  }
-*/
 
   async addEventHandler() {
     const resp = await this.createBackendUser();
@@ -77,20 +70,18 @@ class MlAddBackendUser extends React.Component {
       if (response.success) {
         FlowRouter.go("/admin/settings/backendUserList");
       }
-
-    }else {
+    } else {
       console.log(response)
     }
   };
 
- async onGenderSelect(e) {
-   let genderName = e.target.value;
-   if(genderName)
-   this.setState({loading: false, genderSelect:genderName})
- }
+  onGenderSelect(e) {
+    let genderName = e.target.value;
+    if (genderName)
+      this.setState({loading: false, genderSelect: genderName})
+  }
 
   async  createBackendUser() {
-  //  this.updateBackend();
     let firstName= this.refs.firstName.value;
     let lastName= this.refs.lastName.value;
     let displayName= this.refs.displayName.value;
@@ -154,7 +145,7 @@ class MlAddBackendUser extends React.Component {
         isActive:this.refs.deActive.checked,
         InternalUprofile: InternalUprofile,
         genderType:this.state.genderSelect,
-        dateOfBirth: this.state.foundationDate
+        dateOfBirth: this.state.birthDate
       }
       let userObject = {
         username: moolyaProfile.email,
@@ -163,27 +154,8 @@ class MlAddBackendUser extends React.Component {
       }
 
       const response = await addBackendUserActionHandler(userObject)
-      console.log(response);
       return response;
     }
-
-   /* let userroles=[{
-      roleId:this.refs.role.value,
-      clusterId:this.refs.cluster.value,
-      chapterId:this.refs.chapter.value,
-      subChapterId:'',
-      communityId:'',
-      isActive: this.refs.isActive.checked,
-      hierarchyLevel:''
-
-    }]
-    let userprofiles=[{
-      isDefault: this.refs.isDefault.checked,
-      clusterId: this.refs.cluster.value,
-      userRoles:userroles
-    }]*/
-
-
 
   }
   getAssignedDepartments(departments){
@@ -247,11 +219,13 @@ class MlAddBackendUser extends React.Component {
         }
       }
     ]
+
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya' , clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya',clearableValue: true}
-    ];
-    let BackendUserOptions=[
+      {value: 'moolya', label: 'moolya', clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+    ]
+
+    let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},
       {value: 'External User', label: 'External User'}
     ]
@@ -335,7 +309,7 @@ class MlAddBackendUser extends React.Component {
                     </div>
 
                     <div className="form-group mandatory">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onFoundationDateSelection.bind(this)}/>
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onBirthDateSelection.bind(this)}/>
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
 

@@ -3,6 +3,7 @@ import MlRespPayload from "../../../commons/mlPayload";
 import MlRegistrationPreCondition from './registrationPreConditions';
 import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
+import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -23,6 +24,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   validationCheck=MlRegistrationPreCondition.validateEmail(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
+  let date=new Date()
   validationCheck=MlRegistrationPreCondition.validateMobile(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
@@ -33,7 +35,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.chapterName=subChapterDetails.chapterName;
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
-
+  args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
   // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
@@ -78,6 +80,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   var userInfo = mlDBController.findOne('MlRegistration', args.registrationId, context) || {};
   let userRegisterInfo=userInfo.registrationInfo;
   let registrationInfo=args.registration
+  let date=new Date()
   let clusterInfo=MlClusters.findOne({_id:registrationInfo.clusterId})
     registrationInfo.clusterName=clusterInfo.clusterName,
     registrationInfo.clusterId=clusterInfo._id
@@ -90,6 +93,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo.companyUrl=userRegisterInfo.companyUrl
     registrationInfo.remarks=userRegisterInfo.remarks
     registrationInfo.referralType=userRegisterInfo.referralType
+    registrationInfo.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 

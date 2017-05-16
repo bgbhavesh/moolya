@@ -17,7 +17,8 @@ MlResolver.MlMutationResolver['createFunderPortfolio'] = (obj, args, context, in
                 MlFunderPortfolio.insert({
                     userId: args.userId,
                     communityType: args.communityType,
-                    portfolioDetailsId: args.portfolioDetailsId
+                    portfolioDetailsId: args.portfolioDetailsId,
+                    funderAbout:args.funderAbout
                 })
             }
         }

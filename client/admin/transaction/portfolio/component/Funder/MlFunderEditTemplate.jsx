@@ -59,7 +59,13 @@ export default class MlFunderEditTemplate extends React.Component{
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['successStories'] = arr;
+    this.props.getPortfolioDetails({funderPortfolio:data});
   }
 
   getAboutus(details){

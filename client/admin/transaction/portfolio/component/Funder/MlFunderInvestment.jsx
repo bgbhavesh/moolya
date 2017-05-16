@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {Popover, PopoverContent} from "reactstrap";
+import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import Datetime from "react-datetime";
@@ -231,6 +231,7 @@ export default class MlFunderInvestment extends React.Component {
               </ScrollArea>
               <Popover placement="right" isOpen={this.state.popoverOpen}
                        target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverTitle> Add New Member </PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">

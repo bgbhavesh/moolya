@@ -4,7 +4,7 @@ import ScrollArea from "react-scrollbar";
 import _ from "lodash";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
-import {Popover, PopoverContent} from "reactstrap";
+import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
@@ -232,6 +232,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
               {/*popover */}
               <Popover placement="right" isOpen={this.state.popoverOpen}
                        target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverTitle>Add New Area of Interest</PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">

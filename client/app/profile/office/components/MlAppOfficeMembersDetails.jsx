@@ -1,5 +1,5 @@
 /**
- * Created by viswadeep on 12/5/17.
+ * Created by vishwadeep on 12/5/17.
  */
 import React from "react";
 import {render} from "react-dom";
@@ -14,6 +14,13 @@ function logChange(val) {
 
 
 export default class MlAppOfficeMembersDetails extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {loading: true, data: {}};
+    this.findMyOffice.bind(this);
+    return this;
+  }
+
   componentDidMount() {
     $(function () {
       $('.float-label').jvFloat();
@@ -44,6 +51,18 @@ export default class MlAppOfficeMembersDetails extends React.Component {
     });
   }
 
+  componentWillMount() {
+    const resp = this.findMyOffice();
+    return resp;
+  }
+
+  async findMyOffice() {
+    let myOfficeId = this.props.config
+    // const response = await findOfficeActionHandler(myOfficeId);
+    // this.setState({loading:false,data:response});
+    console.log(myOfficeId)
+  }
+
   addNewSpokePerson() {
     FlowRouter.go('/app/newSpokePerson')
   }
@@ -60,7 +79,7 @@ export default class MlAppOfficeMembersDetails extends React.Component {
                   <li>
                     <a onClick={this.addNewSpokePerson.bind(this)}>
                       <div className="team-block details-add-block">
-                        <h2>Bespoke Membe</h2>
+                        <h2>Bespoke Member</h2>
                         <span className="ml ml-plus "></span>
                       </div>
                     </a>
@@ -108,195 +127,71 @@ export default class MlAppOfficeMembersDetails extends React.Component {
 
                 </ul>
               </div>
-
-
             </div>
-
           </div>
-
           <div className="col-lg-12">
-
             <div className="office-members-detail">
 
               <div className="form_inner_block">
-                <div className="add_form_block"><img src="../images/add.png"/></div>
+                <div className="add_form_block"><img src="/images/add.png"/></div>
                 <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="../images/img2.png"/></div>
+                  <div className="team-block marb0"><img src="/images/img2.png"/></div>
                 </div>
                 <div className="col-lg-10 col-md-10 col-sm-9">
                   <div className="row">
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="First Name" className="form-control float-label"/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Last Name" className="form-control float-label"/>
                     </div>
 
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Mobile Number" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Mobile Number" className="form-control float-label"/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Email Id" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Email Id" className="form-control float-label"/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
                       <Select name="form-field-name" options={options} value='Select User Type' onChange={logChange}/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <textarea rows="1" placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea rows="1" placeholder="About" className="form-control float-label"></textarea>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="form_inner_block">
-                <div className="add_form_block"><img src="../images/remove.png"/></div>
+                <div className="add_form_block"><img src="/images/remove.png"/></div>
                 <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="../images/img2.png"/></div>
+                  <div className="team-block marb0"><img src="/images/img2.png"/></div>
                 </div>
                 <div className="col-lg-10 col-md-10 col-sm-9">
                   <div className="row">
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="First Name" className="form-control float-label"/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Last Name" className="form-control float-label"/>
                     </div>
 
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Mobile Number" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Mobile Number" className="form-control float-label"/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Email Id" className="form-control float-label" id=""/>
+                      <input type="text" placeholder="Email Id" className="form-control float-label"/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
                       <Select name="form-field-name" options={options} value='Select User Type' onChange={logChange}/>
                     </div>
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <textarea rows="1" placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea rows="1" placeholder="About" className="form-control float-label"></textarea>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="form_inner_block">
-                <div className="add_form_block"><img src="../images/remove.png"/></div>
-                <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="../images/img2.png"/></div>
-                </div>
-                <div className="col-lg-10 col-md-10 col-sm-9">
-                  <div className="row">
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
-                    </div>
-
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Mobile Number" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Email Id" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <Select name="form-field-name" options={options} value='Select User Type' onChange={logChange}/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <textarea rows="1" placeholder="About" className="form-control float-label" id=""></textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="form_inner_block">
-                <div className="add_form_block"><img src="../images/remove.png"/></div>
-                <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="../images/img2.png"/></div>
-                </div>
-                <div className="col-lg-10 col-md-10 col-sm-9">
-                  <div className="row">
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
-                    </div>
-
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Mobile Number" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Email Id" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <Select name="form-field-name" options={options} value='Select User Type' onChange={logChange}/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <textarea rows="1" placeholder="About" className="form-control float-label" id=""></textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="form_inner_block">
-                <div className="add_form_block"><img src="../images/remove.png"/></div>
-                <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="../images/img2.png"/></div>
-                </div>
-                <div className="col-lg-10 col-md-10 col-sm-9">
-                  <div className="row">
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
-                    </div>
-
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Mobile Number" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Email Id" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <Select name="form-field-name" options={options} value='Select User Type' onChange={logChange}/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <textarea rows="1" placeholder="About" className="form-control float-label" id=""></textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="form_inner_block">
-                <div className="add_form_block"><img src="../images/remove.png"/></div>
-                <div className="col-lg-2 col-md-2 col-sm-3">
-                  <div className="team-block marb0"><img src="../images/img2.png"/></div>
-                </div>
-                <div className="col-lg-10 col-md-10 col-sm-9">
-                  <div className="row">
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="First Name" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Last Name" className="form-control float-label" id=""/>
-                    </div>
-
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Mobile Number" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <input type="text" placeholder="Email Id" className="form-control float-label" id=""/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <Select name="form-field-name" options={options} value='Select User Type' onChange={logChange}/>
-                    </div>
-                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                      <textarea rows="1" placeholder="About" className="form-control float-label" id=""></textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

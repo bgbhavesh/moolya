@@ -210,6 +210,7 @@ export default class Step1forExtenalUser extends React.Component{
     } else {
 
       let Details = {
+        registrationDate :this.refs.datetime.value,
         registrationId: this.props.registrationId,
         registrationDetail: {
           registrationId: this.state.registrationId,
@@ -389,7 +390,7 @@ export default class Step1forExtenalUser extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Date & Time" className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" className="form-control float-label" id=""  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationDate} disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>

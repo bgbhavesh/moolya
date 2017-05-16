@@ -129,13 +129,13 @@ class MlEditTransactionType extends React.Component{
                 <div className="form-group">
                   <input type="text" ref="transactionDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.transactionDisplayName} className="form-control float-label"  disabled="disabled"/>
                 </div>
-               {/*<div className="form-group switch_wrap inline_switch">*/}
-                  {/*<label>Status</label>*/}
-                  {/*<label className="switch">*/}
-                    {/*<input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>*/}
-                    {/*<div className="slider"></div>*/}
-                  {/*</label>*/}
-                {/*</div>*/}
+               <div className="form-group switch_wrap inline_switch">
+                  <label>Status</label>
+                  <label className="switch">
+                    <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
+                    <div className="slider"></div>
+                  </label>
+                </div>
                 </form>
             </div>
           </div>

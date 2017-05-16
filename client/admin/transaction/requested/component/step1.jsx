@@ -211,6 +211,7 @@ export default class step1 extends React.Component{
       let Details = {
         registrationId: this.props.registrationId,
         registrationDetail: {
+          registrationDate :this.refs.datetime.value,
           registrationId: this.state.registrationId,
           firstName: this.refs.firstName.value,
           lastName: this.refs.lastName.value,
@@ -390,7 +391,7 @@ export default class step1 extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Date & Time" className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationDate} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>

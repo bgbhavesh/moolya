@@ -293,10 +293,10 @@ export default class Company extends React.Component{
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
+                <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationDate} disabled="true"/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}/>
+                <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId} disabled="true"/>
               </div>
               {/*<div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>

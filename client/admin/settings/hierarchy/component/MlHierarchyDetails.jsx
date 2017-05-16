@@ -121,6 +121,7 @@ export default class MlHierarchyDetails extends React.Component {
         isChecked           : this.state.finalApproval.isChecked
       };
       hierarchyInfo={
+        id                  : this.state.unassignedRoles.id,
         parentDepartment    : this.state.finalApproval.parentDepartment,
         parentSubDepartment : this.state.finalApproval.parentSubDepartment,
         clusterId           : this.props.clusterId,

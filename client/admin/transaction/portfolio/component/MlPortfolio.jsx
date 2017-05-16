@@ -214,7 +214,9 @@ class MlPortfolio extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => {
+          FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList")
+        }
       },
       {
         showAction: true,

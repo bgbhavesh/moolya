@@ -10,14 +10,21 @@ var _ = require('lodash')
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
       try {
           if (args && args.userId && args.communityType) {
-              user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
+              // user = MlIdeatorPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
+            user = mlDBController.findOne('MlIdeatorPortfolio', {"$and": [{'userId': args.userId}, {'communityId': args.communityType}]}, context)
               if (!user) {
-                  MlIdeatorPortfolio.insert({
-                    userId: args.userId,
-                    communityType: args.communityType,
-                    portfolioDetailsId: args.portfolioDetailsId,
-                    portfolioIdeatorDetails:args.portfolioIdeatorDetails
-                  })
+                  // MlIdeatorPortfolio.insert({
+                  //   userId: args.userId,
+                  //   communityType: args.communityType,
+                  //   portfolioDetailsId: args.portfolioDetailsId,
+                  //   portfolioIdeatorDetails:args.portfolioIdeatorDetails
+                  // })
+                mlDBController.insert('MlIdeatorPortfolio', {
+                  userId: args.userId,
+                  communityType: args.communityType,
+                  portfolioDetailsId: args.portfolioDetailsId,
+                  portfolioIdeatorDetails: args.portfolioIdeatorDetails
+                }, context)
               }
           }
       }catch(e) {
@@ -45,8 +52,9 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
                     }
                 }
 
-                let ret = MlIdeatorPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: ideatorPortfolio}, {upsert: true})
-                if (ret) {
+                // let ret = MlIdeatorPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: ideatorPortfolio})
+              let ret = mlDBController.update('MlIdeatorPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, ideatorPortfolio, {$set: true}, context)
+              if (ret) {
                     let code = 200;
                     let response = new MlRespPayload().successPayload("Updated Successfully", code);
                     return response;
@@ -381,7 +389,8 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
             }
 
             idea.userId = context.userId;
-            let id = MlIdeas.insert({...idea})
+            // let id = MlIdeas.insert({...idea})
+            let id = mlDBController.insert('MlIdeas', idea, context)
             if(!id){
                 let code = 400;
                 let response = new MlRespPayload().errorPayload(e.message, code);
@@ -402,10 +411,12 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
   if(args.idea) {
-    var idea = MlIdeas.findOne({"_id":args.ideaId})
+    // var idea = MlIdeas.findOne({"_id":args.ideaId})
+    var idea = mlDBController.findOne('MlIdeas', {_id: args.ideaId}, context)
     var updatedIdea = args.idea;
     if(idea){
-      let ret = MlIdeas.update({"_id": args.ideaId}, {$set: updatedIdea}, {upsert: true})
+      // let ret = MlIdeas.update({"_id": args.ideaId}, {$set: updatedIdea})
+      let ret = mlDBController.update('MlIdeas', args.ideaId, updatedIdea, {$set:true}, context)
       if (ret) {
         let code = 200;
         let response = new MlRespPayload().successPayload("Updated Successfully", code);

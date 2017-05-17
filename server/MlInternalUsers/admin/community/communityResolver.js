@@ -103,6 +103,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         community["subchapters"] = [communityAccess.subChapterId];
         communities.push(community);
     })
+    context.module = "community"
     return {data:communities, totalRecords:communities&&communities.length?communities.length:0};
 }
 MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>

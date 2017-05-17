@@ -75,13 +75,13 @@ export default class MlAssignDepartmentComponent extends React.Component {
           }
           `;
     }
-    if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){
+    if (selectedUserType == 'non-moolya' && selectedSubChapter != '') {
       // departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:selectedSubChapter}}};
       departmentqueryOptions = {options: {variables: {isMoolya: false, subChapter: selectedSubChapter}}};
-      departmentQuery=gql` query($isMoolya:Boolean,$subChapter:String){
-  data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
-}
-`;
+      departmentQuery = gql` query($isMoolya:Boolean,$subChapter:String){
+        data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
+      }
+      `;
     }
 
 

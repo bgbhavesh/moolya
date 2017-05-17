@@ -211,7 +211,7 @@ export default class Step5 extends React.Component {
           });
           var KYCDocResp = result.map(function (el) {
             var o = Object.assign({}, el);
-            o.status = "Pending";
+            o.status = "Awaiting upload";
             o.docFiles = []
             return o;
           })
@@ -264,6 +264,9 @@ export default class Step5 extends React.Component {
     if(docResponse){
       let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",registrationId:"registration1",documentId:documentId,docTypeId:docTypeId,registrationId:id};
       let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+        if(response){
+          this.props.getRegistrationKYCDetails();
+        }
     }else{
       toastr.error("please provide allowable formate documents")
     }

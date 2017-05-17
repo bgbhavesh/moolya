@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findCityActionHandler} from '../actions/findCityAction'
 import {updateCityActionHandler} from '../actions/updateCityAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditCity extends React.Component{
   constructor(props) {
     super(props);
@@ -103,7 +104,7 @@ class MlEditCity extends React.Component{
 
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="admin_padding_wrap">
             <h2>Edit City</h2>
             <div className="col-md-6 nopadding-left">

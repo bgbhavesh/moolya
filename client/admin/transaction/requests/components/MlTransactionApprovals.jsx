@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import MlDetailsNotesComponent from './MlDetailsNotesComponent'
-import {findTransactionApprovalActionHandler} from '../actions/findTransactionApproval'
+import {findTransactionApprovalActionHandler} from '../actions/findRequestsApproval'
 import moment from 'moment'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import CreateRequestComponent from '../../requested/component/CreateRequestComponent'
@@ -22,7 +22,8 @@ export default class MlTransactionApprovals extends Component {
     return resp;
   }
   async findRequestDetails(){
-    let requestDetails = await findTransactionApprovalActionHandler('All');
+
+    let requestDetails = await findTransactionApprovalActionHandler('ML-REQ-00000053');
     let requestInfo = []
     for (let i = 0; i < requestDetails.length; i++) {
       let json = {

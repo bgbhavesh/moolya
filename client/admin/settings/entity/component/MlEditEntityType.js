@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findEntityTypeActionHandler} from '../actions/findEntityTypeAction'
 import {updateEntityTypeActionHandler} from '../actions/updateEntityTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditEntityType extends React.Component{
   constructor(props) {
     super(props);
@@ -99,7 +100,7 @@ class MlEditEntityType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Entity Type</h2>

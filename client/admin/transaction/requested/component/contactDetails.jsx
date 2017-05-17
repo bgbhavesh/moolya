@@ -13,6 +13,7 @@ import {findRegistrationActionHandler} from '../actions/findRegistration';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
 import update from 'immutability-helper';
 import {findCountryCode} from '../actions/findRegistration'
+import MlLoader from '../../../../commons/components/loader/loader'
 
 export default class ContactDetails extends React.Component{
   constructor(props){
@@ -185,7 +186,7 @@ export default class ContactDetails extends React.Component{
     return (
 
       <div className="panel-body">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
         <div className="ml_tabs">
           <ul  className="nav nav-pills">
             <li className={this.state.activeTab}>

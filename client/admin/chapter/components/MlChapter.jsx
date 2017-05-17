@@ -22,6 +22,7 @@ export default class MlChapterView extends React.Component {
     let infinityViewProps = {viewMode: this.state.viewMode, onViewModeChange:this.viewModeChange.bind(this)};
     let config=this.props;
     let listConfig=this.props.listConfig;
+    //console.log(this.props);
     // listConfig.data=[{displayName:"India"}];
     return (
       <div>

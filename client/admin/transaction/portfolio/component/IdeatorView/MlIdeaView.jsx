@@ -11,6 +11,7 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {fetchIdeaActionHandler} from '../../../../../app/ideators/actions/IdeaActionHandler'
 import _ from 'lodash';
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 
 export default class MlIdeaView extends React.Component {
@@ -146,7 +147,7 @@ export default class MlIdeaView extends React.Component {
 
     return (
       <div className="admin_padding_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
       <div>
         <h2>About Ideas</h2>
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">

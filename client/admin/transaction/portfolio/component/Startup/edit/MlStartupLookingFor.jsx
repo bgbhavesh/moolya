@@ -11,6 +11,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupPortfolioLookingFor} from '../../../actions/findPortfolioStartupDetails'
+import MlLoader from '../../../../../../commons/components/loader/loader'
 
 
 
@@ -214,7 +215,7 @@ export default class MlStartupLookingFor extends React.Component{
     let startupLookingForList = that.state.startupLookingForList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Looking For</h2>
           <div className="requested_input main_wrap_scroll">

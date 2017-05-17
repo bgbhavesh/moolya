@@ -121,6 +121,7 @@ export default class MlHierarchyDetails extends React.Component {
         isChecked           : this.state.finalApproval.isChecked
       };
       hierarchyInfo={
+        id                  : this.state.unassignedRoles.id,
         parentDepartment    : this.state.finalApproval.parentDepartment,
         parentSubDepartment : this.state.finalApproval.parentSubDepartment,
         clusterId           : this.props.clusterId,
@@ -185,6 +186,26 @@ export default class MlHierarchyDetails extends React.Component {
   render() {
 
     let MlActionConfig = [
+      {
+        actionName: 'edit',
+        showAction: true,
+        handler: null
+      },
+      {
+        actionName: 'add',
+        showAction: true,
+        handler: null
+      },
+      {
+        actionName: 'logout',
+        showAction: true,
+        handler: null
+      },
+      {
+        actionName: 'assign',
+        showAction: true,
+        handler: null
+      },
       {
         actionName: 'save',
         showAction: true,

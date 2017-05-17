@@ -91,7 +91,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   }
 
   optionsBySelectSubsidaryComapny(val){
-    this.setState({employmentStatus:val.value})
+    this.setState({employmentStatus:val})
   }
 
 
@@ -242,6 +242,14 @@ export default class ServiceProviderIndividualComponent extends React.Component{
      }
      }
      `;
+    let employementquery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let employmentOption={options: { variables: {type : "EMPLOYMENTTYPE",hierarchyRefId:this.props.clusterId}}};
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.props.clusterId}}};
     /*let citizenshipsquery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -283,16 +291,17 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     return (
 
       <div>
-        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
+            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
             <div className="form_bg">
               <form>
                 <div>
                   <div className="form-group">
-                    <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationDate} disabled="true"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}/>
+                    <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}  disabled="true" />
                   </div>
                   {/*<div className="form-group">
                    <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
@@ -330,16 +339,20 @@ export default class ServiceProviderIndividualComponent extends React.Component{
 
               </form>
             </div>
+            </ScrollArea>
           </div>
           <div className="col-md-6 nopadding-right">
+            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
             <div className="form_bg">
               <form>
                 <div className="form-group">
                   <input type="text" ref="qualification" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.qualification}  placeholder="Qualification" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Employment Status" options={subsidary} value={this.state.employmentStatus} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
-                </div>
+                  {/*<Select name="form-field-name" placeholder="Employment Status" options={subsidary} value={this.state.employmentStatus} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>*/}
+                  <Moolyaselect multiSelect={false} placeholder="Employment Status" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.employmentStatus} queryType={"graphql"} query={employementquery}  queryOptions={employmentOption} onSelect={that.optionsBySelectSubsidaryComapny.bind(this)} isDynamic={true}/>
+                  </div>
                 <div className="form-group">
                   <input type="text" ref="professionalTag" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.professionalTag}  placeholder="Professional Tag" className="form-control float-label" id=""/>
                 </div>
@@ -365,8 +378,8 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                 </div>
               </form>
             </div>
+            </ScrollArea>
           </div>
-        </ScrollArea>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )

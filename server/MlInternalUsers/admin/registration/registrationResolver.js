@@ -3,6 +3,7 @@ import MlRespPayload from "../../../commons/mlPayload";
 import MlRegistrationPreCondition from './registrationPreConditions';
 import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
+import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -23,6 +24,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   validationCheck=MlRegistrationPreCondition.validateEmail(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
+  let date=new Date()
+  validationCheck=MlRegistrationPreCondition.validateMobile(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
   let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
@@ -31,7 +35,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.chapterName=subChapterDetails.chapterName;
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
-
+  args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
   // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
@@ -88,6 +92,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo.companyUrl=userRegisterInfo.companyUrl
     registrationInfo.remarks=userRegisterInfo.remarks
     registrationInfo.referralType=userRegisterInfo.referralType
+    registrationInfo.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
@@ -338,7 +343,16 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
     var randomId= Math.floor(Math.random()*90000) + 10000;
     // let updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId,'docTypeId':args.docTypeId}}},{$push: {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}});
     let updatedResponse = mlDBController.update('MlRegistration', {_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':args.documentId,'docTypeId':args.docTypeId}}}, {"kycDocuments.$.docFiles":{fileId:randomId,fileName:args.document.name, fileSize:args.document.size, fileUrl:args.docUrl}}, {$push:true}, context)
-    return updatedResponse;
+    if(updatedResponse){
+      let statusResponse = mlDBController.update('MlRegistration', {
+        _id: args.registrationId,
+        'kycDocuments': {$elemMatch: {'documentId': args.documentId, 'docTypeId': args.docTypeId}}
+      }, {"kycDocuments.$.status": "Pending Verification"}, {$set: true}, context)
+      if(statusResponse){
+        return updatedResponse;
+      }
+    }
+
   }else if(args.registrationId){
       // MlRegistration.update({_id:args.registrationId},{ $set:{'registrationInfo.profileImage': args.docUrl}})
       mlDBController.update('MlRegistration', args.registrationId, {'registrationInfo.profileImage': args.docUrl}, {$set:true}, context)
@@ -451,7 +465,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 
 
        try{
-          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info);
+         MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info); //portfolio request
        }catch(e){
             console.log(e);
          //send error response;
@@ -559,23 +573,52 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
 MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-    let documentList=args.documentId;
+    let documentList = args.documentId;
     let updatedResponse;
-    let user=MlRegistration.findOne({_id:args.registrationId})
-    let kyc=user.kycDocuments
-     let kycDoc = _.find(kyc, function (item) {
-      return item.documentId == args.documentId&&item.docTypeId==args.docTypeId;
+    let user = MlRegistration.findOne({_id: args.registrationId})
+    let kyc = user.kycDocuments
+    let kycDoc = _.find(kyc, function (item) {
+      return item.documentId == args.documentId && item.docTypeId == args.docTypeId;
     });
-    if(kycDoc.docFiles.length>0&&kycDoc.status!="Approved"){
-      response = mlDBController.update('MlRegistration', {"$and":[{_id:args.registrationId},{'kycDocuments':{$elemMatch: {'docTypeId':args.docTypeId,'documentId':args.documentId}}}]}, { 'kycDocuments.$.docFiles':{'fileId':args.fileId  }}, {$pull:true}, context)
-      if(response){
+    if (kycDoc.docFiles.length > 0 && kycDoc.status != "Approved") {
+      response = mlDBController.update('MlRegistration', {
+        "$and": [{_id: args.registrationId}, {
+          'kycDocuments': {
+            $elemMatch: {
+              'docTypeId': args.docTypeId,
+              'documentId': args.documentId
+            }
+          }
+        }]
+      }, {'kycDocuments.$.docFiles': {'fileId': args.fileId}}, {$pull: true}, context)
+      if (response) {
+        let registrationRecord = MlRegistration.findOne(args.registrationId);
+        let kycDocuments = registrationRecord.kycDocuments
+        if (kycDocuments && kycDocuments.length >= 1) {
+          //if doc not available
+           kycDoc = _.find(kycDocuments,function (item) {
+            return item.docFiles.length<1  && item.docTypeId==args.docTypeId && item.documentId==args.documentId;
+          });
+          if (kycDoc&&kycDoc.docFiles.length<1) {
+            let statusResponse = mlDBController.update('MlRegistration', {
+              _id: args.registrationId,
+              'kycDocuments': {$elemMatch: {'documentId': args.documentId, 'docTypeId': args.docTypeId}}
+            }, {"kycDocuments.$.status": "Awaiting upload"}, {$set: true}, context)
+            if (statusResponse) {
+              let code = 200;
+              let result = {registrationId: response}
+              updatedResponse = new MlRespPayload().successPayload(result, code);
+            }
+          }
+        }
         let code = 200;
-        let result = {registrationId : response}
+        let result = {registrationId: response}
         updatedResponse = new MlRespPayload().successPayload(result, code);
 
       }
+
     }
-    else{
+    else {
       let code = 409;
       updatedResponse = new MlRespPayload().errorPayload("documents can not allowed to remove once approved!!!!");
     }
@@ -585,6 +628,7 @@ MlResolver.MlMutationResolver['RemoveFileFromDocuments'] = (obj, args, context, 
     return updatedResponse;
   }
 }
+
 
 MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, context, info) => {
 

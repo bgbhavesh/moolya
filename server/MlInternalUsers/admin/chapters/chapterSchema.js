@@ -106,9 +106,9 @@ let chapterSchema = `
         clusterId:String, 
         clusterName:String,
         stateId:String,
+        stateName : String,
         chapterId:String,
         chapterName:String,
-        stateName : String,
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
@@ -141,7 +141,7 @@ let chapterSchema = `
         fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String,displayAllOption:Boolean):[SubChapter]
-        fetchActiveSubChapters(id: String):[SubChapter]
+        fetchActiveSubChapters:[SubChapter]
         fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String):[SubChapter] 
         fetchActiveClusterChapters(clusters:[String],displayAllOption:Boolean):[Chapter]
         fetchActiveStatesChapters(states:[String],clusters:[String]):[Chapter]
@@ -153,9 +153,10 @@ let chapterSchema = `
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
-        createSubChapter(subChapter:subChapterObject):String
+        createSubChapter(subChapter:subChapterObject):response
         updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
      }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], chapterSchema]);
+//fetchActiveSubChapters(id: String):[SubChapter]

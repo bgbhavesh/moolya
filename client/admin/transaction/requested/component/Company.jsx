@@ -11,6 +11,7 @@ import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 
 export default class Company extends React.Component{
@@ -251,7 +252,7 @@ export default class Company extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
       <div className="step_form_wrap step2">
 
       <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -259,10 +260,10 @@ export default class Company extends React.Component{
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
+                <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationDate} disabled="true"/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Request Id" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationId}/>
+                <input type="text" placeholder="Request Id" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationId} disabled="true"/>
               </div>
              {/* <div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery}  reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>

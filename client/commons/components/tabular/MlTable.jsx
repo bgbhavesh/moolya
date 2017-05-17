@@ -24,7 +24,7 @@ export default class MlTable extends React.Component {
 
   render() {
     const selectRow = {
-      mode: 'radio',
+      mode: 'checkbox',
       bgColor: '#feeebf',
       onSelect: this.props.handleRowSelect
     };
@@ -77,7 +77,7 @@ export default class MlTable extends React.Component {
     });
 
     return (
-       <BootstrapTable {...config} bodyStyle={{overflow: 'overlay','overflow-x':'hidden'}}>
+       <BootstrapTable {...config} bodyStyle={{overflow: 'overlay','overflowX':'hidden'}}>
                 {columnItems}
        </BootstrapTable>
     );

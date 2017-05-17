@@ -128,22 +128,18 @@ MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, con
 
 MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, info) => {
   let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
-
   //get user details iterate through profiles match with role and get department and update allocation details.
   let user = mlDBController.findOne('users', {_id: context.userId}, context)
-  let userprofile=user.profile.InternalUprofile.moolyaProfile.userProfiles
-  userProfileRoles = _.find(userprofile, function (item) {
-    return item.clusterId == args.params.cluster
+  let userprofiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
+  let userProfile = _.find(userprofiles, function (item) {
+    return item.isDefault == true
   });
-  let roles=userProfileRoles.userRoles
+  let roles=userProfile.userRoles
   roleDetails = roles[0]
-  /*roleDetails=_.find(roles, function (item) {
-   return item.roleId == args.params.role
-   });*/
   let date=new Date();
   let allocation={
     assignee            : user.username,
-    assigneeId          : args.params.user,
+    assigneeId          : user._id,
     assignedDate        : date,
     department          : roleDetails.departmentName,
     departmentId        : roleDetails.departmentId,
@@ -154,11 +150,11 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
   let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
     parentDepartment: roleDetails.departmentId,
     parentSubDepartment: roleDetails.subDepartmentId,
-    clusterId:args.params.cluster
-  }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
+    clusterId:userProfile.clusterId
+  }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleDetails._id}}})
   //update hierarchy from hierarchy result
   transaction.hierarchy=hierarchy._id
-  transaction.userId=args.params.user
+  transaction.userId=user._id
   transaction.status="Pending"
   transaction.allocation = allocation;
   transaction.transactionUpdatedDate=date;

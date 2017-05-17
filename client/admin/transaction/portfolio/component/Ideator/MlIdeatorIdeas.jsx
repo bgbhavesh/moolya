@@ -6,6 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 
 
@@ -89,7 +90,7 @@ export default class MlIdeatorIdeas extends React.Component{
     let lockStatus =  this.state.data.isIdeasPrivate?this.state.data.isIdeasPrivate:false
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
       <div>
         <h2>Ideas</h2>
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">

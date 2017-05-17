@@ -59,4 +59,7 @@ MlModuleCollectionMap['users'] = 'USERS';
 MlModuleCollectionMap['MlIdeatorPortfolio'] = 'IDEATORPORTFOLIO';
 MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 
+//hierarchy
+MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';
+
 module.exports=  MlModuleCollectionMap;

@@ -10,6 +10,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+import MlLoader from '../../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 
 
@@ -188,7 +189,7 @@ export default class MlStartupTechnology extends React.Component{
     return (
       <div>
         <h2>Technology</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
           <ScrollArea
             speed={0.8}

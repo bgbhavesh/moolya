@@ -1,6 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
+import MlLoader from '../../../commons/components/loader/loader'
 import {findSubChapterActionHandler} from '../actions/findSubChapter'
 import {updateSubChapterActionHandler} from '../actions/updateSubChapter'
 import formHandler from '../../../commons/containers/MlFormHandler';
@@ -135,6 +136,7 @@ class MlSubChapterDetails extends React.Component {
   }
 
   componentWillMount() {
+    console.log(this.props);
     const resp = this.findSubChapter();
     return resp;
   }
@@ -150,6 +152,7 @@ class MlSubChapterDetails extends React.Component {
   }
   async findSubChapter() {
     let subChapterId = this.props.params;
+    console.log(this.props)
     const response = await findSubChapterActionHandler(subChapterId);
     // console.log(response);
     if(response && response.internalSubChapterAccess){
@@ -186,9 +189,10 @@ class MlSubChapterDetails extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async (event) => {
-          console.log(this.state.data.chapterId);
-          console.log(this.state.data);
-          FlowRouter.go("/admin/clusters/")
+          let clusterId = this.props.clusterId;
+          let chapterId = this.props.chapterId;
+          FlowRouter.go('/admin/chapters/'+clusterId+'/'+chapterId+'/'+'subChapters');
+
         }
       }
     ]
@@ -197,7 +201,7 @@ class MlSubChapterDetails extends React.Component {
     let loggedInUser = getAdminUserContext()
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
 
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>

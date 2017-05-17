@@ -177,7 +177,7 @@ export default class MlEditFilter extends Component {
                     >
                       <form>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionId} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true} disabled={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Module Name" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionId} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true} disabled={true}/>
                         </div>
                         <MlAssignModulesToFilters filterExistingData = {this.state.data} getFiltersData={this.getFiltersData.bind(this)} filterCatalog={this.state.filterCatalogData}/>
                       </form>

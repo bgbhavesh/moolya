@@ -103,6 +103,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         community["subchapters"] = [communityAccess.subChapterId];
         communities.push(community);
     })
+    context.module = "community"
     return {data:communities, totalRecords:communities&&communities.length?communities.length:0};
 }
 MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
@@ -252,7 +253,7 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
     let communitiesDef = mlDBController.find('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}, context).fetch()
     _.each(communitiesDef, function (community) {
         if(community.isActive){
-            let community = {
+            var communityObj = {
                 clusterId:args.clusterId,
                 chapterId:args.chapterId || null,
                 subChapterId:args.subChapterId || null,
@@ -270,7 +271,7 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
                 hierarchyCode:hierarchy.code
             }
             // MlCommunityAccess.insert(community)
-            mlDBController.insert('MlCommunityAccess', community, context)
+            mlDBController.insert('MlCommunityAccess', communityObj, context)
         }
     })
 }

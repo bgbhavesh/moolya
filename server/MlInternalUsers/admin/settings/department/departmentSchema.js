@@ -58,4 +58,3 @@ let departmentSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
-// findDepartments:String

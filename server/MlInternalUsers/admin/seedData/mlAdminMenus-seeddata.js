@@ -1225,14 +1225,14 @@ if(Meteor.isServer){
               }]
           },
           {
-            "link" : "/admin/settings/templateTypeList",
-            "name" : "Template Types",
+            "link" : "/admin/settings/accountTypeList",
+            "name" : "Account Types",
             "uniqueId" : "settings_templateTypes",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
             subMenu:[{
-              "link": "/admin/settings/addTemplateType",
+              "link": "/admin/settings/addAccountType",
               "name": "Add TemplateType",
               "uniqueId": "settings_AddTemplateType",
               "subMenuMappingId":"settings_templateTypes",
@@ -1242,7 +1242,7 @@ if(Meteor.isServer){
               "image": ""
             },
               {
-                "link": "/admin/settings/templateTypeList",
+                "link": "/admin/settings/accountTypeList",
                 "name": "List TemplateType",
                 "uniqueId": "settings_TemplateTypeList",
                 "subMenuMappingId":"settings_templateTypes",
@@ -1252,7 +1252,7 @@ if(Meteor.isServer){
                 "image": ""
               },
               {
-                "link": "/admin/settings/editTemplateType",
+                "link": "/admin/settings/editAccountType",
                 "name": "Edit TemplateType",
                 "uniqueId": "settings_EditTemplateType",
                 "subMenuMappingId":"settings_templateTypes",

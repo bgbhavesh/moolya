@@ -151,18 +151,19 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
   let subChapters=args.subChapterId;
   let communities=args.communityType;
   let professions=args.profession;
+  let userTypes=args.userType;
   let process=null
   let specificQuery=[];
   //check for specific condition for all criteria fields of processmapping
-  if(clusters!=null&&chapters!=null&&subChapters!=null&&communities!=null&&professions!=null){
-    let val={clusters,chapters,subChapters,communities,professions}
+  if(clusters!=null&&chapters!=null&&subChapters!=null&&communities!=null&&professions!=null&&userTypes!=null){
+    let val={clusters,chapters,subChapters,communities,professions,userTypes}
    process=fetchProcessProxy(val);
     if(process){
       return process
     }
   }
   //check for all or specific condition for all criteria fields of processmapping
-  let val={clusters,chapters,subChapters,communities,professions}
+  let val={clusters,chapters,subChapters,communities,professions,userTypes}
   for (var key in val) {
     let qu={};
     qu[key]={$in:['all',val[key]]};
@@ -174,7 +175,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     return process
   }
   //check for 'all' condition on criteria fields of processmapping
-  let allVal={clusters:"all",chapters:"all",subChapters:"all",communities:"all",professions:"all"}
+  let allVal={clusters:"all",chapters:"all",subChapters:"all",communities:"all",professions:"all",userTypes:"all"}
   process=fetchProcessProxy(allVal);
   if(process){
     return process
@@ -182,7 +183,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function fetchProcessProxy(query){
     console.log(query)
-    let document= MlProcessMapping.findOne({ $and: [query,{"userTypes":{ $in: [args.userType]},"identity":{ $in: [args.identityType]},"industries":{ $in: [args.industry]},"isActive":true}]})
+    let document= MlProcessMapping.findOne({ $and: [query,{"identity":{ $in: [args.identityType]},"industries":{ $in: [args.industry]},"isActive":true}]})
     if(document!=undefined){
       data=document.processDocuments;
       data.map(function (doc,index) {

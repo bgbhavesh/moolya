@@ -46,17 +46,21 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
       var departmentExist = mlDBController.find('MlDepartments', {
         $and: [
           {departmentName: args.department.departmentName},
-          {"depatmentAvailable.cluster": {$in: ["all", args.department.depatmentAvailable[i].cluster]}},
-          {
-            "depatmentAvailable": {
-              $elemMatch: {
-                chapter: args.department.depatmentAvailable[i].chapter,
-                subChapter: args.department.depatmentAvailable[i].subChapter,
-              }
-            }
-          },
+          {displayName: args.department.displayName},
+          // {"depatmentAvailable.cluster": {$in: ["all", args.department.depatmentAvailable[i].cluster]}},
+          // {
+          //   "depatmentAvailable": {
+          //     $elemMatch: {
+          //       chapter: args.department.depatmentAvailable[i].chapter,
+          //       subChapter: args.department.depatmentAvailable[i].subChapter,
+          //     }
+          //   }
+          // },
         ]
       }, context).fetch()
+
+
+
 
       if (departmentExist.length > 0) {
         let code = 409;

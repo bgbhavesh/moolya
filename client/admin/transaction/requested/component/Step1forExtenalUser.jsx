@@ -44,6 +44,7 @@ export default class Step1forExtenalUser extends React.Component{
       profession:null,
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
+      selectedAccountsType: " "
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -148,6 +149,9 @@ export default class Step1forExtenalUser extends React.Component{
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
     return resp;
+  }
+  optionsBySelectTypeOfAccounts(value){
+    this.setState({selectedAccountsType:value})
   }
   optionsBySelectTypeOfIndustry(value){
     this.setState({selectedTypeOfIndustry:value})
@@ -345,9 +349,19 @@ export default class Step1forExtenalUser extends React.Component{
         value:_id
       }
     }`;
+
+    let accountsquery=gql ` query  {
+        FetchAccount {
+         value: _id
+         label: templateName
+  }
+}
+`
+
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
+
     /*let registrationOptions = [
      { value: '0', label: 'simplybrowsing' },
      { value: '1', label: 'ideator' },
@@ -513,7 +527,7 @@ export default class Step1forExtenalUser extends React.Component{
                       <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} disabled="true"/>
+                      <Moolyaselect multiSelect={false} placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery}  queryOptions={accountsOption}  onSelect={that.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
                     </div>
                     <div className="form-group">
                       <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled="true"/>

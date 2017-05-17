@@ -28,7 +28,7 @@ MlModuleCollectionMap['MlStatus'] = 'Status';
 MlModuleCollectionMap['MlSubChapters'] = 'SUBCHAPTER';
 MlModuleCollectionMap['MlSubDepartments'] = 'SUBDEPARTMENT';
 MlModuleCollectionMap['MlTaxation'] = 'TAXATION';
-MlModuleCollectionMap['MlTemplateTypes'] = 'TEMPLATETYPES';
+MlModuleCollectionMap['MlAccountTypes'] = 'ACCOUNTTYPES';
 
 //setttings
 MlModuleCollectionMap['MlBusinessType'] = 'BUSINESSTYPE';

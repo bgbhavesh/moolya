@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import {findBackendUserActionHandler} from '../actions/findUserAction'
 let Select = require('react-select');
-import  {updateStusForTransactionActionHandler} from '../actions/updateStatusTransactionAction'
+import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction'
 export default class MlDetailsNotesComponent extends React.Component {
   constructor(props){
     super(props);

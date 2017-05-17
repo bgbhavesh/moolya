@@ -15,6 +15,7 @@ import moment from "moment";
 import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {fetchIdeaByPortfolioId} from '../../ideators/actions/IdeaActionHandler'
+import MlLoader from '../../../commons/components/loader/loader'
 
 class MlAppPortfolio extends React.Component{
   constructor(props){
@@ -225,7 +226,7 @@ class MlAppPortfolio extends React.Component{
     const showLoader=this.state.loading;
     return(
       <div className="app_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}

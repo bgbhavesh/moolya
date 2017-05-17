@@ -9,8 +9,8 @@ const mlStatesTableConfig=new MlViewer.View({
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   action:"READ",
-  fields:["name","countryCode","isActive"],
-  searchFields:["name","countryCode","isActive"],
+  fields:["name","countryName","isActive"],
+  searchFields:["name","countryName","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.

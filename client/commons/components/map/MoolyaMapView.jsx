@@ -7,6 +7,7 @@ import controllable from 'react-controllables';
 import GoogleMap from 'google-map-react';
 import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
+import MlLoader from '../../../commons/components/loader/loader'
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -33,7 +34,7 @@ export default class MoolyaMapView extends Component {
   {
     const hasCenter=this.state&&this.state.center?this.state.center:null;
     if(!hasCenter){
-      return <div className="loader_wrap"></div>;
+      return <MlLoader />;
     }
     const data=this.props.data&&this.props.data.data?this.props.data.data:[];
     return (

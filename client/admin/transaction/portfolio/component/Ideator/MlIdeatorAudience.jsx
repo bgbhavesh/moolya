@@ -6,6 +6,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUti
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import _ from 'lodash';
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 export default class MlIdeatorAudience extends React.Component{
   constructor(props, context){
@@ -124,7 +125,7 @@ export default class MlIdeatorAudience extends React.Component{
     let isAudiencePrivate = this.state.data.isAudiencePrivate?this.state.data.isAudiencePrivate:false
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
       <div className="requested_input">
         <h2>Audience</h2>
         <div className="col-lg-12">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import {verifyEmailHandler,verifyMobileNumberHandler} from '../../verificationActionHandler';
+import MlLoader from '../../../commons/components/loader/loader'
 
 export default class EmailVerification extends React.Component{
 
@@ -57,7 +58,7 @@ export default class EmailVerification extends React.Component{
      const showLoader=this.state.loading;
     return (
       <div>
-      {showLoader===true?( <div className="loader_wrap"></div>):(
+      {showLoader===true?( <MlLoader/>):(
       <div className="app_main_wrap email-bg">
         <div className="" style={{'width': '600px','marginLeft': '132px'}}>
           <div className="email-body">

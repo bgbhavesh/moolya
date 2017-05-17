@@ -11,6 +11,7 @@ import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 
 export default class Company extends React.Component{
@@ -251,7 +252,7 @@ export default class Company extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
       <div className="step_form_wrap step2">
 
       <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >

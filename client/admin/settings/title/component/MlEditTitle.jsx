@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTitleActionHandler} from '../actions/findTitleAction'
 import {updateTitleActionHandler} from '../actions/updateTitleAction';
+import MlLoader from '../../../../commons/components/loader/loader'
 import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
 
 class MlEditTitle extends React.Component{
@@ -87,7 +88,7 @@ class MlEditTitle extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Edit Title</h2>

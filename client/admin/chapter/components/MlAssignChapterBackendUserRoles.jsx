@@ -8,6 +8,7 @@ import _ from "lodash";
 import Datetime from "react-datetime";
 import moment from "moment";
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import MlLoader from '../../../commons/components/loader/loader'
 let FontAwesome = require('react-fontawesome');
 
 /*let initSwiper = () => {
@@ -313,7 +314,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div>
             {userDepartments.map(function (department, id) {
               let queryOptions = {

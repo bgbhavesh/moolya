@@ -8,6 +8,7 @@ import _ from 'lodash';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import formHandler from '../../../commons/containers/MlFormHandler';
 import {createIdeaActionHandler} from '../actions/IdeaActionHandler'
+import MlLoader from '../../../commons/components/loader/loader'
 
 class MlAppIdeatorAddIdea extends React.Component{
   constructor(props, context){
@@ -78,7 +79,7 @@ class MlAppIdeatorAddIdea extends React.Component{
       return (
           <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
-                  {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+                  {showLoader === true ? ( <MlLoader/>) : (
                       <div>
                           <h2>Add Idea</h2>
                           <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">

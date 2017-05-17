@@ -5,6 +5,7 @@ import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDet
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 export default class MlFunderInvestmentView extends React.Component {
   constructor(props, context) {
@@ -91,7 +92,7 @@ export default class MlFunderInvestmentView extends React.Component {
     this.state.content.annotator('loadAnnotations', quotes);
     return response;
   }
-  
+
   showDetails(id) {
     $("#details-div").show();
     var $frame = $('#forcecentered');
@@ -176,7 +177,7 @@ export default class MlFunderInvestmentView extends React.Component {
     return (
       <div>
         <h2>Investments</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div>
             <div className="requested_input main_wrap_scroll" id="show">
 

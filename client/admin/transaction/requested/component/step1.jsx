@@ -12,6 +12,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [
@@ -380,11 +381,13 @@ export default class step1 extends React.Component{
     let countryOption = {options: { variables: {countryId:this.state.country}}};
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="step_form_wrap step1">
 
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+            {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
               <div className="col-md-6 nopadding-left">
+                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
@@ -506,8 +509,11 @@ export default class step1 extends React.Component{
                     </div>
                   </form>
                 </div>
+                </ScrollArea>
               </div>
               <div className="col-md-6 nopadding-right">
+                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
 
@@ -553,8 +559,9 @@ export default class step1 extends React.Component{
 
                   </form>
                 </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>
         )}

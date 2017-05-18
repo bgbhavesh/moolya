@@ -49,7 +49,7 @@ export default class MlTransactionRequested extends Component {
       userId:Meteor.userId(),
       requestId: " ",
       status:"Pending",
-      requestsCreatedDate: new Date()
+      transactionCreatedDate: new Date()
     }
     const response = await createRequestsActionHandler(requests);
     if(response.success){
@@ -83,7 +83,7 @@ export default class MlTransactionRequested extends Component {
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          requestsCreatedDate:moment(requestDetails[i].requestsCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
+          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
           requestDescription:requestDetails[i].requestDescription,
           requestTypeName:requestDetails[i].requestTypeName,
           requestId: requestDetails[i].requestId,
@@ -98,7 +98,7 @@ export default class MlTransactionRequested extends Component {
     }
 
   isExpandableRow(row) {
-    if (row.requestsCreatedDate!=undefined) return true;
+    if (row.transactionCreatedDate!=undefined) return true;
     else return false;
   }
 
@@ -125,9 +125,9 @@ export default class MlTransactionRequested extends Component {
         handler: this.creatRequestType.bind(this)
       }
     ];
-    const options = {
+   /* const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
-    };
+    };*/
     const selectRow = {
       mode: 'checkbox',
       bgColor: '#feeebf',
@@ -140,33 +140,37 @@ export default class MlTransactionRequested extends Component {
     value:_id
   }
 }`;
+    var WinHeight = $(window).height();
+    var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
+    const config = {
+      maxHeight: tblHeight+'px',
+      striped:true,
+      hover:true,
+    };
+   config['options']={
+      sizePerPage:10,
+      sizePerPageList: [10,20,50,100,200,300,500,700,1000,2000,3000],
+      clearSearch: false,
+     expandRowBgColor: 'rgb(242, 255, 163)'}
     return (
       <div className="admin_main_wrap" >
         <div className="admin_padding_wrap">
           <h2>Requests</h2>
           <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-            <BootstrapTable  data={ this.state.requetsInfo }
-                             options={ options }
-                             hover={true}
+            <BootstrapTable {...config} data={ this.state.requetsInfo }
                              expandableRow={ this.isExpandableRow }
                              expandComponent={ this.expandComponent.bind(this) }
                              selectRow= { selectRow }
-                             pagination
-
+                            pagination
+                            bodyStyle={{overflow: 'overlay','overflowX':'hidden'}}
 >
               <TableHeaderColumn dataField="requestId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
-              <TableHeaderColumn dataField="requestsCreatedDate"   >Date&Time</TableHeaderColumn>
+              <TableHeaderColumn dataField="transactionCreatedDate"   >Date&Time</TableHeaderColumn>
               <TableHeaderColumn dataField="requestId" >RequestId</TableHeaderColumn>
               <TableHeaderColumn dataField="requestTypeName">Request Type</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             </BootstrapTable>
-            </ScrollArea>
+
           </div>
           {/*{this.state.createRequest?(<CreateRequestComponent openPopUp={true}/>):""}*/}
           <div className="overlay"></div>

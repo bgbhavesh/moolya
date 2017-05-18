@@ -183,7 +183,7 @@ class MlEditCommunityFormComponent extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => FlowRouter.go('/admin/community')
       }
     ]
 

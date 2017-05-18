@@ -412,7 +412,7 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
 
         _.each(chapters, function (item) {
             _.each(item.difference, function (chapterid) {
-                resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {isActive:item.isActive}, {$set:true}, context);
+                resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context);
             })
         })
 
@@ -479,6 +479,6 @@ MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, conte
   return communities;
 }
 
-updateDB = (collectionName, query, context) =>{
-    return mlDBController.update(collectionName, query, context)
+updateDB = (collectionName, query, payload, options, context) =>{
+    return mlDBController.update(collectionName, query, payload, options, context)
 }

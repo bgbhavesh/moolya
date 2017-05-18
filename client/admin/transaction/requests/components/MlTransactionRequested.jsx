@@ -49,7 +49,7 @@ export default class MlTransactionRequested extends Component {
       userId:Meteor.userId(),
       requestId: " ",
       status:"Pending",
-      requestsCreatedDate: new Date()
+      transactionCreatedDate: new Date()
     }
     const response = await createRequestsActionHandler(requests);
     if(response.success){
@@ -83,7 +83,7 @@ export default class MlTransactionRequested extends Component {
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          requestsCreatedDate:moment(requestDetails[i].requestsCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
+          transactionCreatedDate:moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
           requestDescription:requestDetails[i].requestDescription,
           requestTypeName:requestDetails[i].requestTypeName,
           requestId: requestDetails[i].requestId,
@@ -98,7 +98,7 @@ export default class MlTransactionRequested extends Component {
     }
 
   isExpandableRow(row) {
-    if (row.requestsCreatedDate!=undefined) return true;
+    if (row.transactionCreatedDate!=undefined) return true;
     else return false;
   }
 
@@ -161,7 +161,7 @@ export default class MlTransactionRequested extends Component {
 
 >
               <TableHeaderColumn dataField="requestId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
-              <TableHeaderColumn dataField="requestsCreatedDate"   >Date&Time</TableHeaderColumn>
+              <TableHeaderColumn dataField="transactionCreatedDate"   >Date&Time</TableHeaderColumn>
               <TableHeaderColumn dataField="requestId" >RequestId</TableHeaderColumn>
               <TableHeaderColumn dataField="requestTypeName">Request Type</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>

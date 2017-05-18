@@ -8,13 +8,19 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     return response;
   }
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
-  args.requests.requestTypeName=requestDetails.requestName;
-  orderNumberGenService.assignRequests(args.requests)
-  let id = mlDBController.insert('MlRequests', args.requests , context)
-  if(id){
-    let code = 200;
-    let result = {requestId : id}
-    let response = new MlRespPayload().successPayload(result, code);
+  if(requestDetails.requestName) {
+    args.requests.requestTypeName = requestDetails.requestName;
+    orderNumberGenService.assignRequests(args.requests)
+    let id = mlDBController.insert('MlRequests', args.requests, context)
+    if (id) {
+      let code = 200;
+      let result = {requestId: id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response;
+    }
+  }else{
+    let result = "Request Types required "
+      let response = new MlRespPayload().errorPayload(result);
     return response;
   }
 }

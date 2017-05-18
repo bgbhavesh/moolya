@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {addAccountActionHandler} from '../actions/addTemplateTypeAction'
+import {addAccountActionHandler} from '../actions/addAccountTypeAction'
 let FontAwesome = require('react-fontawesome');
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 

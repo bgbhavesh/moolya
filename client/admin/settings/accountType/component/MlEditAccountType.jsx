@@ -3,8 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findAccountTypeActionHandler} from '../actions/findTemplateTypeAction'
-import {updateAccountTypeActionHandler} from '../actions/updateTemplateTypeAction'
+import {findAccountTypeActionHandler} from '../actions/findAccountTypeAction'
+import {updateAccountTypeActionHandler} from '../actions/updateAccountTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditTransactionType extends React.Component{

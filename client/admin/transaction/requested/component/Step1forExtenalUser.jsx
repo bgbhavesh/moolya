@@ -527,7 +527,7 @@ export default class Step1forExtenalUser extends React.Component{
                       <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery}  queryOptions={accountsOption}  onSelect={that.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
+                      <Moolyaselect multiSelect={false} placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery} onSelect={that.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
                     </div>
                     <div className="form-group">
                       <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled="true"/>

@@ -421,7 +421,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <input type="file" className="upload" onChange={this.onPrincipalLogoFileUpload.bind(this)}/>
                             </div>
                             <div className="previewImg ProfileImg">
-                              <img src="/images/def_profile.png"/>
+                              <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
                             </div>
                           </div>
                           <div className="form-group">
@@ -553,7 +553,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <input type="file" className="upload" onChange={this.onTeamLogoFileUpload.bind(this)}/>
                             </div>
                             <div className="previewImg ProfileImg">
-                              <img src="/images/def_profile.png"/>
+                              <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
                             </div>
                           </div>
                           <div className="form-group">

@@ -859,6 +859,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "BackendUsers":resolveType= 'BackendUsers';break;
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
+      case "community":resolveType= 'Community';break;
 
     }
 

@@ -103,6 +103,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         community["subchapters"] = [communityAccess.subChapterId];
         communities.push(community);
     })
+    context.module = "community";
     return {data:communities, totalRecords:communities&&communities.length?communities.length:0};
 }
 MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
@@ -332,7 +333,6 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
       return new MlRespPayload().errorPayload("Failed to update community 3", 400);
     }
 
-    // userHierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
     userHierarchy = mlDBController.findOne('MlHierarchy', {level:Number(userProfile.hierarchyLevel)}, context)
     if(!userHierarchy){
       return new MlRespPayload().errorPayload("Failed to update community 4", 400);
@@ -365,7 +365,6 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
 
     if(doEdit)
     {
-        // communityAccess = MlCommunityAccess.findOne({"$and":[{"hierarchyCode":userHierarchy.code, "communityDefCode":args.communityId}]});
         communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":userHierarchy.code, "communityDefCode":args.communityId}]}, context);
         if(communityAccess){
             let isUpdate = false;
@@ -380,17 +379,14 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
                 communityAccess.isActive = args.community.isActive
             }
 
-          if(communityAccess.showOnMap != args.community.showOnMap){
-            isUpdate = true;
-            communityAccess.showOnMap = args.community.showOnMap
-          }
+            if(communityAccess.showOnMap != args.community.showOnMap){
+                isUpdate = true;
+                communityAccess.showOnMap = args.community.showOnMap
+            }
 
           if(isUpdate == true)
-            // resp = MlCommunityAccess.update({"_id":communityAccess._id}, {"$set":communityAccess}, {upsert:true})
             resp = mlDBController.update('MlCommunityAccess', communityAccess._id, communityAccess, {$set:true}, context)
         }
-
-        // communitiesAccess = MlCommunityAccess.find({"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}).fetch();
         communitiesAccess = mlDBController.find('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}, context).fetch();
         if(communitiesAccess.length == 0){
             clusters = {isActive: true, difference:args.clusters || []}
@@ -408,25 +404,45 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
           subchapters = new MlRespPayload().getArrayDifference(subchapterids, args.subchapters)
         }
 
-        clusters.difference.map(function(clusterId){
-          // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {$set:{isActive:clusters.isActive}})
-          resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {isActive:clusters.isActive}, {$set:true}, context)
+        _.each(clusters, function (item) {
+              _.each(item.difference, function (clusterid) {
+                  resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {clusterId:clusterid}, {"hierarchyCode":"CLUSTER"}]}, {isActive:item.isActive}, {$set:true}, context);
+              })
         })
 
-        chapters.difference.map(function(chapterId){
-          // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {$set:{isActive:chapters.isActive}})
-          resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:chapters.isActive}, {$set:true}, context)
+        _.each(chapters, function (item) {
+            _.each(item.difference, function (chapterid) {
+                resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {isActive:item.isActive}, {$set:true}, context);
+            })
         })
 
-        subchapters.difference.map(function(subChapterId){
-          // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
-          resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
-          // resp = MlCommunity.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
-          resp = mlDBController.update('MlCommunity', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
+        _.each(subchapters, function (item) {
+            _.each(item.difference, function (subchapterid) {
+                resp = updateDB('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subchapterid}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context)
+                resp = updateDB('MlCommunity', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subchapterid}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context)
+            })
         })
+
+
+
+      // clusters.difference.map(function(clusterId){
+        //   resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {isActive:clusters.isActive}, {$set:true}, context)
+        // })
+        //
+        // chapters.difference.map(function(chapterId){
+        //   // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {$set:{isActive:chapters.isActive}})
+        //   resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:chapters.isActive}, {$set:true}, context)
+        // })
+        //
+        // subchapters.difference.map(function(subChapterId){
+        //   // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
+        //   resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
+        //   // resp = MlCommunity.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
+        //   resp = mlDBController.update('MlCommunity', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
+        // })
 
         if(resp)
-          return new MlRespPayload().successPayload("Successfully updated", 200);
+            return new MlRespPayload().successPayload("Successfully updated", 200);
 
     }
 
@@ -479,4 +495,8 @@ MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, conte
     communities.push(community);
   })
   return communities;
+}
+
+updateDB = (collectionName, query, context) =>{
+    return mlDBController.update(collectionName, query, context)
 }

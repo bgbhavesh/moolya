@@ -34,7 +34,6 @@ let CoreModules = {
   },
   MlChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
       let query=contextQuery;
-      //User selection filter.
       let clusterId=requestParams&&requestParams.clusterId&&requestParams.clusterId!='all'?requestParams.clusterId:null;
       if(clusterId){
           query={"clusterId":clusterId};
@@ -45,12 +44,11 @@ let CoreModules = {
 
       let citiesId=[];
       let activeChapters = [];
-      // let activeCities = MlCities.find({isActive:true}).fetch();
       let activeCities = mlDBController.find('MlCities', {isActive:true}, context,  {sort:{name: 1}} ).fetch();
-      activeCities.map(function(city){
-        citiesId.push(city._id);
+          activeCities.map(function(city){
+            citiesId.push(city._id);
       })
-      let Chapters = MlChapters.find(query,fieldsProj).fetch();
+      let Chapters = MlChapters.find(query, fieldsProj).fetch();
       citiesId.map(function (id){
         Chapters.map(function(chapter){
           if(chapter.cityId == id){

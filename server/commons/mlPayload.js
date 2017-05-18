@@ -28,7 +28,6 @@ module.exports = class MlRespPayload{
 
     getArrayDifference(a1, a2)
     {
-
         var result = [], longerLength = a1.length >= a2.length ? a1.length : a2.length;
         var activeDiff = [], inactiveDiff = [];
         for (i = 0; i < longerLength; i++){

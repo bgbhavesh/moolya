@@ -57,6 +57,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 }
 MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   var validationCheck=null;
+  var date=new Date()
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -92,7 +93,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo.companyUrl=userRegisterInfo.companyUrl
     registrationInfo.remarks=userRegisterInfo.remarks
     registrationInfo.referralType=userRegisterInfo.referralType
-    registrationInfo.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
+    registrationInfo.registrationDate=moment(date||new Date()).format('DD/MM/YYYY HH:mm:ss')
   validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 

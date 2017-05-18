@@ -3,18 +3,18 @@ import React from 'react';
 import gql from 'graphql-tag'
 const mlTemplateTypeTableConfig=new MlViewer.View({
   name:"templateTypeTable",
-  module:"template",//Module name for filter.
+  module:"accountType",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["templateName","templateDisplayName","isActive"],
-  searchFields:["templateName","templateDisplayName","isActive"],
+  fields:["accountName","accountDisplayName","isActive"],
+  searchFields:["accountName","accountDisplayName","isActive"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "templateName", title: "Template Type",dataSort:true},
-    {dataField: "templateDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "accountName", title: "Account Type",dataSort:true},
+    {dataField: "accountDisplayName", title: "Display Name",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -25,10 +25,10 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editTemplateType/"+data.id)
+          FlowRouter.go("/admin/settings/editAccountType/"+data.id)
         }
         else{
-          toastr.error("Please select a Template Type")
+          toastr.error("Please select a Account Type")
         }
       }
 
@@ -38,9 +38,9 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data&&data.id){
-        FlowRouter.go("/admin/settings/templateTypeList")
+        FlowRouter.go("/admin/settings/accountTypeList")
       }else{
-        FlowRouter.go("/admin/settings/addTemplateType")
+        FlowRouter.go("/admin/settings/addAccountType")
 
       }
       }
@@ -51,15 +51,16 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
     //   handler: (data)=>{console.log(data);}
     // }
   ],
+  forceFetch: true,
   sizePerPage:5,
   graphQlQuery:gql`
                 query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"template",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+                data:SearchQuery(module:"accountType",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
-                     ...on Template{
-                              templateName
-                              templateDisplayName
+                     ...on Account{
+                              accountName
+                              accountDisplayName
                               isActive
                               id:_id
                           }

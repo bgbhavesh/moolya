@@ -504,19 +504,19 @@ adminSection.route('/settings/editDocumentMapping/:id', {
     mount(AdminLayout,{adminContent:<MlEditDocumentMapping config={params.id} />})
   }
 });
-adminSection.route('/settings/templateTypeList', {
+adminSection.route('/settings/accountTypeList', {
   name: 'settings_TemplateTypeList',
   action(){
     mount(AdminLayout,{adminContent:< MlTemplateTypeList/>})
   }
 });
-adminSection.route('/settings/addTemplateType', {
+adminSection.route('/settings/addAccountType', {
   name: 'settings_AddTemplateType',
   action(){
     mount(AdminLayout,{adminContent:<MlAddTemplate />})
   }
 });
-adminSection.route('/settings/editTemplateType/:id', {
+adminSection.route('/settings/editAccountType/:id', {
   name: 'settings_EditTemplateType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditTemplateType config={params.id} />})

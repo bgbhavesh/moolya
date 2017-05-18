@@ -1,18 +1,18 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function addTemplateActionHandler(TemplateDetails) {
-  let templateName = TemplateDetails.templateName;
-  let templateDisplayName = TemplateDetails.templateDisplayName;
-  let templateDescription = TemplateDetails.templateDescription;
-  let isActive = TemplateDetails.isActive;
+export async function addAccountActionHandler(AccountDetails) {
+  let accountName = AccountDetails.accountName;
+  let accountDisplayName = AccountDetails.accountDisplayName;
+  let accountDescription = AccountDetails.accountDescription;
+  let isActive = AccountDetails.isActive;
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($templateName: String, $templateDisplayName: String, $templateDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
-        CreateTemplate(
-          templateName: $templateName,
-          templateDisplayName: $templateDisplayName,
-          templateDescription: $templateDescription,
+    mutation  ($accountName: String, $accountDisplayName: String, $accountDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
+        CreateAccount(
+          accountName: $accountName,
+          accountDisplayName: $accountDisplayName,
+          accountDescription: $accountDescription,
           isActive :$isActive,
           moduleName:$moduleName,
           actionName:$actionName
@@ -24,14 +24,14 @@ export async function addTemplateActionHandler(TemplateDetails) {
       }
     `,
     variables: {
-      templateName,
-      templateDisplayName,
-      templateDescription,
+      accountName,
+      accountDisplayName,
+      accountDescription,
       isActive,
       moduleName:"TEMPLATE",
       actionName:"CREATE"
     }
   })
-  const id = result.data.CreateTemplate;
+  const id = result.data.CreateAccount;
   return id
 }

@@ -105,13 +105,13 @@ let transactionsSchema = `
     }
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
-      updateTransaction(transactionId:TransactionsInput):response
-      assignRegistrationTransaction(params:assignmentParams,transactionId:String,transactionType:String):response
+      updateTransaction(transactionId:TransactionsInput,collection:String):response
+      assignTransaction(params:assignmentParams,transactionId:String,transactionType:String,collection:String):response
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response
-      selfAssignTransaction(transactionId:String):response
-      unAssignTransaction(transactionId:String):response
+      selfAssignTransaction(transactionId:String,collection:String):response
+      unAssignTransaction(transactionId:String,collection:String):response
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]

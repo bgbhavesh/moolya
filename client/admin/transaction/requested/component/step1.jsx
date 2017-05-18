@@ -13,7 +13,7 @@ import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
-import {findAccountTypeActionHandler} from '../../../settings/template/actions/findTemplateTypeAction'
+import {findAccountTypeActionHandler} from '../../../settings/accountType/actions/findAccountTypeAction'
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [

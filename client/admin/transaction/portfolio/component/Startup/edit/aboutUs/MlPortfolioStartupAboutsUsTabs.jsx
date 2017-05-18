@@ -90,10 +90,16 @@ export default class MlStartupTab extends React.Component{
     this.props.getPortfolioStartupAboutUsDetails(data,"branches");
   }
   getStartupTechnology(details){
-    let data = this.state.portfolioStartupTechnologies;
-    data = details;
-    this.setState({portfolioStartupTechnologies : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"technologies");
+    // let data = this.state.portfolioStartupTechnologies;
+    // data = details;
+    this.setState({portfolioStartupTechnologies : details})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    var sendData = ary;
+    this.props.getPortfolioStartupAboutUsDetails(sendData, "technologies");
   }
   getStartupLegalIssue(details){
     let data = this.state.portfolioStartupLegal;

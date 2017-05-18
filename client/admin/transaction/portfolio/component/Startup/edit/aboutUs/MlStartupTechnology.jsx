@@ -69,7 +69,7 @@ export default class MlStartupTechnology extends React.Component{
 
   onLockChange(field, e){
     let details = this.state.data||{};
-    let key = e.target.id;
+    let key = field;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
@@ -97,12 +97,12 @@ export default class MlStartupTechnology extends React.Component{
     })
   }
 
-  onOptionSelected(selectedId){
+  onOptionSelected(selectedId, callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["technologyId"]);
-    details=_.extend(details,{["technologyId"]: selectedId});
+    details=_.extend(details,{["technologyId"]: selectedId, "technologyName": selObject.label});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId})
+      this.setState({"selectedVal" : selectedId, "technologyName": selObject.label})
       this.sendDataToParent()
     })
 
@@ -137,7 +137,6 @@ export default class MlStartupTechnology extends React.Component{
     })
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
-    /*let indexArray = this.state.indexArray;*/
     this.props.getStartupTechnology(startupTechnologies);
   }
   onLogoFileUpload(e){
@@ -239,8 +238,8 @@ export default class MlStartupTechnology extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="Description" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                      <input type="text" name="description" placeholder="Description" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
 
@@ -256,7 +255,7 @@ export default class MlStartupTechnology extends React.Component{
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                      <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                     </div>
                   </div>
                 </div></div>

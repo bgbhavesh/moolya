@@ -83,7 +83,7 @@ export default class MlTransactionRequested extends Component {
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          transactionCreatedDate:moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
+          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
           requestDescription:requestDetails[i].requestDescription,
           requestTypeName:requestDetails[i].requestTypeName,
           requestId: requestDetails[i].requestId,
@@ -144,7 +144,8 @@ export default class MlTransactionRequested extends Component {
     var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
     const config = {
       maxHeight: tblHeight+'px',
-      hover:true
+      striped:true,
+      hover:true,
     };
    config['options']={
       sizePerPage:10,

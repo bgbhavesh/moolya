@@ -12,6 +12,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [
@@ -210,6 +211,7 @@ export default class step1 extends React.Component{
       let Details = {
         registrationId: this.props.registrationId,
         registrationDetail: {
+          registrationDate :this.refs.datetime.value,
           registrationId: this.state.registrationId,
           firstName: this.refs.firstName.value,
           lastName: this.refs.lastName.value,
@@ -379,15 +381,17 @@ export default class step1 extends React.Component{
     let countryOption = {options: { variables: {countryId:this.state.country}}};
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="step_form_wrap step1">
 
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+            {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
               <div className="col-md-6 nopadding-left">
+                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Date & Time" className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationDate} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>
@@ -505,8 +509,11 @@ export default class step1 extends React.Component{
                     </div>
                   </form>
                 </div>
+                </ScrollArea>
               </div>
               <div className="col-md-6 nopadding-right">
+                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
 
@@ -552,8 +559,9 @@ export default class step1 extends React.Component{
 
                   </form>
                 </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>
         )}

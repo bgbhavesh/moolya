@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import MlDetailsNotesComponent from './MlDetailsNotesComponent'
-import {findTransactionRequestActionHandler} from '../actions/findTransactionRequests'
+import {findTransactionRequestActionHandler} from '../actions/findRequests'
 import moment from 'moment'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import CreateRequestComponent from '../../requested/component/CreateRequestComponent'
@@ -13,7 +13,7 @@ import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {createRequestsActionHandler} from '../actions/createRequests'
-import {findRequestssActionHandler} from '../actions/findTransactionRequests'
+import {findRequestssActionHandler} from '../actions/findRequests'
 
 export default class MlTransactionRequested extends Component {
   constructor(props){
@@ -48,7 +48,8 @@ export default class MlTransactionRequested extends Component {
       },
       userId:Meteor.userId(),
       requestId: " ",
-      status:"Pending"
+      status:"Pending",
+      requestsCreatedDate: new Date()
     }
     const response = await createRequestsActionHandler(requests);
     if(response.success){
@@ -82,7 +83,7 @@ export default class MlTransactionRequested extends Component {
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          requestsCreatedDate:requestDetails[i].requestsCreatedDate,
+          requestsCreatedDate:moment(requestDetails[i].requestsCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
           requestDescription:requestDetails[i].requestDescription,
           requestTypeName:requestDetails[i].requestTypeName,
           requestId: requestDetails[i].requestId,

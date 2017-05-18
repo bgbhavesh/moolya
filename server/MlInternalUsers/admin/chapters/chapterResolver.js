@@ -225,10 +225,12 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectMoolya'] = (obj, args, context
 }
 
 
-
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
   // let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
-  let result= mlDBController.find('MlSubChapters', {isActive: true,isDefaultSubChapter:false}, context).fetch()||[];
+  let result = mlDBController.find('MlSubChapters', {
+      isActive: true,
+      isDefaultSubChapter: false
+    }, context).fetch() || [];
   return result
 }
 
@@ -240,7 +242,7 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
     }
     args.subChapter.latitude = data.results[0].geometry.location.lat;
     args.subChapter.longitude = data.results[0].geometry.location.lng;
-
+    args.subChapter.isDefaultSubChapter = false;
     let subChapterId = createSubChapter(args.subChapter, context)
     if (subChapterId) {
       let code = 200;

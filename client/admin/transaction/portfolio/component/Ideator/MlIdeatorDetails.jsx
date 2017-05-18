@@ -5,6 +5,7 @@ import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import MlLoader from '../../../../../commons/components/loader/loader'
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -94,7 +95,7 @@ export default class MlIdeatorDetails extends React.Component{
     const showLoader = this.state.loading;
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
 
         <div>
           <h2>Ideator</h2>

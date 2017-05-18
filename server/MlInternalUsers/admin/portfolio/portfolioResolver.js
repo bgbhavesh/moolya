@@ -91,10 +91,53 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       break;
 
                       case "Funders": {
+                          let funderInfo = {}
+                          let fb = "";
+                          let linkedIn="";
+                          let twitter="";
+                          let googleplus="";
+                          if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
+                              _.each(args.registrationInfo.socialLinksInfo,function(link) {
+                                  if(link.socialLinkType == "FACEBOOK"){
+                                    fb = link.socialLinkUrl
+                                  }else if(link.socialLinkType == "LINKEDIN"){
+                                    linkedIn = link.socialLinkUrl
+                                  }
+                                  else if(link.socialLinkType == "TWITTER"){
+                                    twitter = link.socialLinkUrl
+                                  }
+                                  else if(link.socialLinkType == "GOOGLEPLUS"){
+                                    googleplus = link.socialLinkUrl
+                                  }
+                              })
+                          }
+                          if(args.registrationInfo){
+                              funderInfo = {
+                                firstName: args.registrationInfo.firstName ? args.registrationInfo.firstName : "",
+                                lastName: args.registrationInfo.lastName ? args.registrationInfo.lastName : "",
+                                emailId: args.registrationInfo.userName ? args.registrationInfo.userName : "",
+                                gender: args.registrationInfo.gender ? args.registrationInfo.gender : "",
+                                // dateOfBirth: args.registrationInfo.dateOfBirth ? args.registrationInfo.dateOfBirth : "",
+                                qualification: args.registrationInfo.qualification ? args.registrationInfo.qualification : "",
+                                employmentStatus: args.registrationInfo.employmentStatus ? args.registrationInfo.employmentStatus : "",
+                                professionalTag: args.registrationInfo.professionalTag ? args.registrationInfo.professionalTag : "",
+                                yearsofExperience: args.registrationInfo.experience ? args.registrationInfo.experience : "",
+                                industry: args.registrationInfo.industry ? args.registrationInfo.industry : "",
+                                profession: args.registrationInfo.profession ? args.registrationInfo.profession : "",
+                                // employerName: args.registrationInfo.employerName ? args.registrationInfo.employerName : "",
+                                mobileNumber: args.registrationInfo.contactNumber ? args.registrationInfo.contactNumber : "",
+                                // facebookId: fb,
+                                // linkedInId: linkedIn,
+                                // twitterId: twitter,
+                                // gplusId: googleplus,
+                                logo:{fileUrl: args.registrationInfo.profileImage ? args.registrationInfo.profileImage : ""}
+                              }
+                          }
                           let portfolio = {
                             userId: portfolioDetails.userId,
                             communityType: portfolioDetails.communityType,
-                            portfolioDetailsId: ret
+                            portfolioDetailsId: ret,
+                            funderAbout:funderInfo
                           }
                           MlResolver.MlMutationResolver['createFunderPortfolio'](obj, portfolio, context, info)
                       }

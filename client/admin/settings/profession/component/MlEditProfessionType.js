@@ -10,6 +10,7 @@ import {findProfessionActionHandler} from '../actions/findProfessionTypeAction'
 import {updateProfessionTypeActionHandler} from '../actions/updateProfessionTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditProfessionType extends React.Component{
   constructor(props) {
     super(props);
@@ -120,7 +121,7 @@ class MlEditProfessionType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Profession</h2>

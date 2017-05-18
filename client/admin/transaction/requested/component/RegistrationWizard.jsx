@@ -9,6 +9,7 @@ import Step6 from './step6';
 import Step7 from './step7';
 import _ from 'lodash';
 import {findRegistrationActionHandler} from '../actions/findRegistration'
+import MlLoader from '../../../../commons/components/loader/loader'
 import IdeatorIndividualHardReg from '../component/IdeatorIndividualHardReg';
 import InstitutionHardReg from '../component/InstitutionHardReg';
 import SoftRegistration from '../component/SoftRegistration';
@@ -151,7 +152,7 @@ export default class RegistrationWizard extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="admin_padding_wrap">
             {/*<h2>Registration Process</h2>*/}
             <div className='step-progress' >

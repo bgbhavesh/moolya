@@ -40,8 +40,8 @@ export default class MlFunderSuccessStoriesView extends React.Component {
                       <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                         <div className="list_block notrans funding_list">
                           <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
-                          <div><p>{details.storyTitle}</p></div>
-                          <h3>{details.date?details.date: 'Date :'}</h3>
+                          <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
+                          <h3>{details.date ? details.date : 'Date :'}</h3>
                         </div>
                       </div>
                     )

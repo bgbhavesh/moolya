@@ -14,6 +14,7 @@ import AppContactDetails from "./MlAppContactDetails";
 import AppAddressDetails from "./MlAppAddressDetails";
 import AppEmailDetails from "./MlAppEmailDetails";
 import {findAddressBookActionHandler} from '../actions/findAddressBookAction'
+import MlLoader from '../../../commons/components/loader/loader'
 
 export default class MlAppProfileAddressBook extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ export default class MlAppProfileAddressBook extends React.Component {
     let addressInfo = this.state.data?this.state.data.addressInfo:''
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
         <div className="admin_padding_wrap">
           <h2>Address Book</h2>
           <div className="main_wrap_scroll">

@@ -41,6 +41,9 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
 
   let moduleName=args.module;
   let action="READ";
+  //to resolve the type in data _resolveType for Union
+  context.module=args.module;
+
   //Authorization layer
 
   //Context Specific Search layer
@@ -87,7 +90,25 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
 MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
   __resolveType(data, context, info){
 
-    if (data.clusterCode) {
+    var module=context.module||"";
+    var resolveType='';
+    switch(module) {
+      case "cluster":resolveType= 'Cluster';break;
+      case "chapter":resolveType= 'Chapter';break;
+      case "subChapter":resolveType= 'SubChapter';break;
+      case "community":resolveType= 'Community';break;
+      case "MASTER_SETTINGS":resolveType= 'MasterSettings';break;
+      case "AUDIT_LOG":resolveType= 'AuditLogs';break;
+      case "hierarchySubChapters":resolveType= 'SubChapter';break;
+    }
+
+    if(resolveType){
+      return resolveType;
+    }else{
+      return 'GenericType';
+    }
+
+   /* if (data.clusterCode) {
       return 'Cluster';
     }
 
@@ -112,6 +133,6 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
     if(data.collectionName){
       return 'AuditLogs';
     }
-    return null;
+    return null;*/
   }
 }

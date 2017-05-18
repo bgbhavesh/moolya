@@ -8,6 +8,7 @@ import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
+import MlLoader from '../../../commons/components/loader/loader'
 
 class MlChapterCommunityDetails extends React.Component {
   constructor(props) {
@@ -187,7 +188,7 @@ class MlChapterCommunityDetails extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
 
           <div className="admin_padding_wrap">
             <h2>Edit Community Details</h2>

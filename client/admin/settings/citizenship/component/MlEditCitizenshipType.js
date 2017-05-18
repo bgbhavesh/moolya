@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findCitizenshipActionHandler} from '../actions/findCitizenshipTypeAction'
 import {updateCitizenshipTypeActionHandler} from '../actions/updateCitizenshipTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditCitizenshipType extends React.Component{
   constructor(props) {
     super(props);
@@ -100,7 +101,7 @@ class MlEditCitizenshipType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader />):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Citizenship Type</h2>

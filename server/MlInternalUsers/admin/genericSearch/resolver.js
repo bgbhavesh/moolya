@@ -1,4 +1,4 @@
-import MlResolver from '../../../commons/mlResolverDef'
+  import MlResolver from '../../../commons/mlResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
 import mlTransactionsListRepo from '../../admin/transactions/mlTransactionsListRepo'
 
@@ -32,6 +32,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   let action="READ";
+
+  //to resolve the type in data _resolveType for Union
+  context.module=args.module;
+
   //Authorization layer
 
   if(args.module=="cluster"){
@@ -746,7 +750,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   if(args.module == "Portfoliodetails"){
       data = MlPortfolioDetails.find(query,findOptions).fetch();
-      totalRecords = data.length;
+      // totalRecords = data.length;
+      totalRecords = MlPortfolioDetails.find(query,findOptions).count();
   }
 
   if(args.module=="templates"){
@@ -795,178 +800,246 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
 
-    if(data.registrationType){
-      return 'RegistrationInfo';
-    }
-    if((data.communityType=="Funders") && data.portfolioDetailsId){
-      return 'FunderPortfolio';
-    }
-    if(data.portfolioUserName){
-      return 'Portfoliodetails';
+    var module=context.module||"";
+    var resolveType='';
+    switch(module) {
+      case "cluster":resolveType= 'Cluster';break;
+      case "chapter":resolveType= 'Chapter';break;
+      case "subChapter":resolveType= 'SubChapter';break;
+      case "department":resolveType= 'Department';break;
+      case "subDepartment":resolveType= 'SubDepartment';break;
+      case "countries":resolveType= 'Countries';break;
+      case "states":resolveType= 'States';break;
+      case "cities":resolveType= 'Cities';break;
+      case "userType":resolveType= 'UserTypes';break;
+      case "roleType":resolveType= 'RoleTypes';break;
+      case "process":resolveType='ProcessType';break;
+      case "processdocument":resolveType='ProcessType';break;
+      case "request":resolveType='Requests';break;
+      case "tax":resolveType='Tax';break;
+      case "taxation":resolveType='taxation';break;
+      case "registrationInfo":resolveType= 'RegistrationInfo';break;
+      case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
+      case "FunderPortfolio":resolveType= 'FunderPortfolio';break;
+      case "Portfoliodetails":resolveType= 'Portfoliodetails';break;
+      case "documentType":resolveType= 'DocumentTypes';break;
+      case "documentFormat":resolveType= 'DocumentFormats';break;
+      case "kycCategory":resolveType= 'KycCategories';break;
+      case "documentMapping":resolveType= 'DocumentMapping';break;
+      case "transaction":resolveType= 'Transaction';break;
+      case "template":resolveType= 'Template';break;
+      case "templates":resolveType= 'TemplateDetails';break;
+      case "templateAssignment":resolveType= 'TemplateAssignment';break;
+      case "industry":resolveType= 'Industry';break;
+      case "roles":resolveType= 'Roles';break;
+      case "award":resolveType= 'Award';break;
+      case "specification":resolveType= 'Specification';break;
+      case "profession":resolveType= 'Profession';break;
+      case "entity":resolveType= 'Entity';break;
+      case "stageOfCompany":resolveType= 'StageOfCompany';break;
+      case "businessType":resolveType= 'BusinessType';break;
+      case "citizenship":resolveType= 'Citizenship';break;
+      case "lookingFor":resolveType= 'LookingFor';break;
+      case "Assets":resolveType= 'Assets';break;
+      case "Technologies":resolveType= 'Technologies';break;
+      case "FundingType":resolveType= 'FundingType';break;
+      case "EmployeeType":resolveType= 'EmployeeType';break;
+      case "hierarchy":resolveType= 'Hierarchy';break;
+      case "addressType":resolveType= 'AddressType';break;
+      case "numericalFormat":resolveType= 'NumericalFormat';break;
+      case "companyType":resolveType= 'CompanyType';break;
+      case "emailType":resolveType= 'EmailType';break;
+      case "contactType":resolveType= 'ContactType';break;
+      case "socialLinks":resolveType= 'SocialLinks';break;
+      case "gender":resolveType= 'Gender';break;
+      case "filters":resolveType= 'Filters';break;
+      case "SubDomain":resolveType= 'SubDomain';break;
+      case "dateAndTime":resolveType= 'DateAndTime';break;
+      case "language":resolveType= 'Language';break;
+      case "BackendUsers":resolveType= 'BackendUsers';break;
+      case "regional":resolveType= 'Regional';break;
+      case "title":resolveType= 'Title';break;
+      case "community":resolveType= 'Community';break;
+
     }
 
-    if (data.countryCode && data.country) {
-      return 'Countries';
+    if(resolveType){
+      return resolveType;
+    }else{
+      return 'GenericType';
     }
-    if(data.name && data.countryId&&!data.stateId){
-      return 'States';
-    }
-    if(data.name && data.stateId){
-      return 'Cities';
-    }
-    if (data.countryId) {
-      return 'Cluster';
-    }
-    if (data.chapterName) {
-      return 'Chapter';
-    }
-    if (data.subChapterName) {
-      return 'SubChapter';
-    }
-    if (data.departmentName) {
-      return 'Department';
-    }
-    if (data.subDepartmentName) {
-      return 'SubDepartment';
-    }
-    if(data.requestName){
-      return 'Requests'
-    }
-    if(data.userTypeName){
-      return 'UserTypes'
-    }
-    if(data.roleTypeName){
-      return 'RoleTypes'
-    }
-    if(data.docTypeName){
-      return 'DocumentTypes'
-    }
-    if(data.docFormatName){
-      return 'DocumentFormats'
-    }
-    if(data.docCategoryName){
-      return 'KycCategories'
-    }
-    if(data.documentDisplayName){
-      return 'DocumentMapping'
-    }
-    if(data.transactionName){
-      return 'Transaction'
-    }
-    if(data.templateName){
-      return 'Template'
-    }
-    if(data.username){
-      return 'BackendUsers'
-    }
-    if(data.roleName){
-      return 'Roles'
-    }
-    if(data.professionName){
-      return 'Profession'
-    }
-    if(data.industryName){
-      return 'Industry'
-    }
-    if(data.awardName){
-      return 'Award'
-    }
-    if(data.specificationName){
-      return 'Specification'
-    }
-    if(data.entityName){
-      return 'Entity'
-    }
-    if(data.stageOfCompanyName){
-      return 'StageOfCompany'
-    }
-    if(data.businessTypeName){
-      return 'BusinessType'
-    }
-    if(data.citizenshipTypeName){
-      return 'Citizenship'
-    }
-    if(data.lookingForName){
-      return 'LookingFor'
-    }
+    /*if(data.registrationType){
+     return 'RegistrationInfo';
+     }
+     if((data.communityType=="Funders") && data.portfolioDetailsId){
+     return 'FunderPortfolio';
+     }
+     if(data.portfolioUserName){
+     return 'Portfoliodetails';
+     }
 
-    if(data.assetName){
-      return 'Assets'
-    }
+     if (data.countryCode && data.country) {
+     return 'Countries';
+     }
+     if(data.name && data.countryId&&!data.stateId){
+     return 'States';
+     }
+     if(data.name && data.stateId){
+     return 'Cities';
+     }
+     if (data.countryId) {
+     return 'Cluster';
+     }
+     if (data.chapterName) {
+     return 'Chapter';
+     }
+     if (data.subChapterName) {
+     return 'SubChapter';
+     }
+     if (data.departmentName) {
+     return 'Department';
+     }
+     if (data.subDepartmentName) {
+     return 'SubDepartment';
+     }
+     if(data.requestName){
+     return 'Requests'
+     }
+     if(data.userTypeName){
+     return 'UserTypes'
+     }
+     if(data.roleTypeName){
+     return 'RoleTypes'
+     }
+     if(data.docTypeName){
+     return 'DocumentTypes'
+     }
+     if(data.docFormatName){
+     return 'DocumentFormats'
+     }
+     if(data.docCategoryName){
+     return 'KycCategories'
+     }
+     if(data.documentDisplayName){
+     return 'DocumentMapping'
+     }
+     if(data.transactionName){
+     return 'Transaction'
+     }
+     if(data.templateName){
+     return 'Template'
+     }
+     if(data.username){
+     return 'BackendUsers'
+     }
+     if(data.roleName){
+     return 'Roles'
+     }
+     if(data.professionName){
+     return 'Profession'
+     }
+     if(data.industryName){
+     return 'Industry'
+     }
+     if(data.awardName){
+     return 'Award'
+     }
+     if(data.specificationName){
+     return 'Specification'
+     }
+     if(data.entityName){
+     return 'Entity'
+     }
+     if(data.stageOfCompanyName){
+     return 'StageOfCompany'
+     }
+     if(data.businessTypeName){
+     return 'BusinessType'
+     }
+     if(data.citizenshipTypeName){
+     return 'Citizenship'
+     }
+     if(data.lookingForName){
+     return 'LookingFor'
+     }
 
-    if(data.technologyName){
-      return 'Technologies'
-    }
-    if(data.fundingTypeName){
-      return 'FundingType'
-    }
+     if(data.assetName){
+     return 'Assets'
+     }
 
-    if(data.processId){
-      return 'ProcessType'
-    }
-    if(data.employmentName){
-      return 'EmployeeType'
-    }
-    if(data.taxName){
-      return 'Tax'
-    }
-    if(data.taxationName){
-      return 'taxation'
-    }
-    if(data.titleName){
-      return 'Title'
-    }
-    if(data.regionalCurrencyName){
-      return 'Regional'
-    }
-    if(data.languageName){
-      return 'Language'
-    }
-    if(data.measurementSystem){
-      return 'NumericalFormat'
-    }
-    if(data.addressName){
-      return 'AddressType'
-    }
-    if(data.socialName){
-      return 'SocialLinks'
-    }
-    if(data.genderName){
-      return 'Gender'
-    }
-    if(data.timeFormat){
-      return 'DateAndTime'
-    }
-    if(data.companyName){
-      return 'CompanyType'
-    }
-    if(data.emailName){
-      return 'EmailType'
-    }
-    if(data.contactName){
-      return 'ContactType'
-    }
-    if(data.code&&data.communityName){
-      return 'Community'
-    }
-    if(data.firstName){
-      return 'RegistrationInfo'
-    }
-    if(data.processName){
-      return 'TemplateDetails'
-    }
-    if(data.templateProcessName){
-      return 'TemplateAssignment'
-    }
-    if(data.module){
-      return 'Hierarchy'
-    }
-    if(data.filterName){
-      return 'Filters'
-    }
-    if(data.name){
-      return 'SubDomain'
-    }
+     if(data.technologyName){
+     return 'Technologies'
+     }
+     if(data.fundingTypeName){
+     return 'FundingType'
+     }
+
+     if(data.processId){
+     return 'ProcessType'
+     }
+     if(data.employmentName){
+     return 'EmployeeType'
+     }
+     if(data.taxName){
+     return 'Tax'
+     }
+     if(data.taxationName){
+     return 'taxation'
+     }
+     if(data.titleName){
+     return 'Title'
+     }
+     if(data.regionalCurrencyName){
+     return 'Regional'
+     }
+     if(data.languageName){
+     return 'Language'
+     }
+     if(data.measurementSystem){
+     return 'NumericalFormat'
+     }
+     if(data.addressName){
+     return 'AddressType'
+     }
+     if(data.socialName){
+     return 'SocialLinks'
+     }
+     if(data.genderName){
+     return 'Gender'
+     }
+     if(data.timeFormat){
+     return 'DateAndTime'
+     }
+     if(data.companyName){
+     return 'CompanyType'
+     }
+     if(data.emailName){
+     return 'EmailType'
+     }
+     if(data.contactName){
+     return 'ContactType'
+     }
+     if(data.code&&data.communityName){
+     return 'Community'
+     }
+     if(data.firstName){
+     return 'RegistrationInfo'
+     }
+     if(data.processName){
+     return 'TemplateDetails'
+     }
+     if(data.templateProcessName){
+     return 'TemplateAssignment'
+     }
+     if(data.module){
+     return 'Hierarchy'
+     }
+     if(data.filterName){
+     return 'Filters'
+     }
+     if(data.name){
+     return 'SubDomain'
+     }*/
     return 'GenericType';
   }
 }

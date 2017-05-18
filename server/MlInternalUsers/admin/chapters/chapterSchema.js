@@ -141,7 +141,7 @@ let chapterSchema = `
         fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String,displayAllOption:Boolean):[SubChapter]
-        fetchActiveSubChapters(id: String):[SubChapter]
+        fetchActiveSubChapters:[SubChapter]
         fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String):[SubChapter] 
         fetchActiveClusterChapters(clusters:[String],displayAllOption:Boolean):[Chapter]
         fetchActiveStatesChapters(states:[String],clusters:[String]):[Chapter]
@@ -159,3 +159,4 @@ let chapterSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], chapterSchema]);
+//fetchActiveSubChapters(id: String):[SubChapter]

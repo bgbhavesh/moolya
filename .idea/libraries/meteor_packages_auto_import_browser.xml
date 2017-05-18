@@ -42,9 +42,6 @@
         <item url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/domrange.js" />
         <item url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/exceptions.js" />
         <item url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/template.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/fastclick/1.0.13/web.browser/pre.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/fastclick/1.0.13/web.browser/post.js" />
-        <item url="file://$USER_HOME$/.meteor/packages/fastclick/1.0.13/web.browser/fastclick.js" />
         <item url="file://$USER_HOME$/.meteor/packages/geojson-utils/1.0.10/web.browser/geojson-utils.js" />
         <item url="file://$USER_HOME$/.meteor/packages/geojson-utils/1.0.10/web.browser/main.js" />
         <item url="file://$USER_HOME$/.meteor/packages/aldeed_schema-index/2.0.0/web.browser/indexing.js" />
@@ -227,9 +224,6 @@
       <root url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/domrange.js" />
       <root url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/exceptions.js" />
       <root url="file://$USER_HOME$/.meteor/packages/blaze/2.2.1/web.browser/template.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/fastclick/1.0.13/web.browser/pre.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/fastclick/1.0.13/web.browser/post.js" />
-      <root url="file://$USER_HOME$/.meteor/packages/fastclick/1.0.13/web.browser/fastclick.js" />
       <root url="file://$USER_HOME$/.meteor/packages/geojson-utils/1.0.10/web.browser/geojson-utils.js" />
       <root url="file://$USER_HOME$/.meteor/packages/geojson-utils/1.0.10/web.browser/main.js" />
       <root url="file://$USER_HOME$/.meteor/packages/aldeed_schema-index/2.0.0/web.browser/indexing.js" />

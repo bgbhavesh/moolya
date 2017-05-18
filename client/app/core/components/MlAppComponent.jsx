@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import MlAppContextProvider from '../../../commons/components/appContext/MlAppContextProvider';
 import MlAppHeader from '../components/MlAppHeader'
 import MlAppLeftNav from '../components/MlAppLeftNav'
+import MlLoader from '../../../commons/components/loader/loader'
 
 import { withApollo } from 'react-apollo';
 
@@ -43,7 +44,7 @@ class MlAppComponent extends Component{
         const showLoader = this.state.loading;
         const MlComponent = function (props) {
             if (props.showLoader) {
-                return <div className="loader_wrap"></div>;
+                return <MlLoader/>;
             }
             return (
                 <MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>

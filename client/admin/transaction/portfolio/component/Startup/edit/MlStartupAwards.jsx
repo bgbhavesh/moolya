@@ -21,10 +21,8 @@ export default class MlStartupAwards extends React.Component{
       data:{},
       startupAwards: [],
       popoverOpen:false,
-      // index:"",
       selectedIndex:-1,
       startupAwardsList:[],
-      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -81,11 +79,6 @@ export default class MlStartupAwards extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    // let indexes = this.state.indexArray;
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -168,8 +161,7 @@ export default class MlStartupAwards extends React.Component{
     })
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
-    // let indexArray = this.state.indexArray;
-    this.props.getAwardsDetails(startupAwards);    //indexArray
+    this.props.getAwardsDetails(startupAwards);
   }
 
   onLogoFileUpload(e){

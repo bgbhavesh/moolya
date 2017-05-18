@@ -253,7 +253,7 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
     let communitiesDef = mlDBController.find('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM"}, {"isActive":true}]}, context).fetch()
     _.each(communitiesDef, function (community) {
         if(community.isActive){
-            let community = {
+            var communityObj = {
                 clusterId:args.clusterId,
                 chapterId:args.chapterId || null,
                 subChapterId:args.subChapterId || null,
@@ -271,7 +271,7 @@ MlResolver.MlMutationResolver['createCommunityAccess'] = (obj, args, context, in
                 hierarchyCode:hierarchy.code
             }
             // MlCommunityAccess.insert(community)
-            mlDBController.insert('MlCommunityAccess', community, context)
+            mlDBController.insert('MlCommunityAccess', communityObj, context)
         }
     })
 }
@@ -422,24 +422,6 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
                 resp = updateDB('MlCommunity', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subchapterid}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context)
             })
         })
-
-
-
-      // clusters.difference.map(function(clusterId){
-        //   resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {clusterId:clusterId}, {"hierarchyCode":"CLUSTER"}]}, {isActive:clusters.isActive}, {$set:true}, context)
-        // })
-        //
-        // chapters.difference.map(function(chapterId){
-        //   // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {$set:{isActive:chapters.isActive}})
-        //   resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:chapters.isActive}, {$set:true}, context)
-        // })
-        //
-        // subchapters.difference.map(function(subChapterId){
-        //   // resp = MlCommunityAccess.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
-        //   resp = mlDBController.update('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
-        //   // resp = MlCommunity.update({"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {$set:{isActive:subchapters.isActive}})
-        //   resp = mlDBController.update('MlCommunity', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subChapterId}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:subchapters.isActive}, {$set:true}, context)
-        // })
 
         if(resp)
             return new MlRespPayload().successPayload("Successfully updated", 200);

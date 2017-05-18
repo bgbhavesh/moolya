@@ -1,20 +1,20 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function updateTemplateTypeActionHandler(TemplateType) {
-  let _id=TemplateType.id;
-  let templateName = TemplateType.templateName;
-  let templateDisplayName = TemplateType.templateDisplayName;
-  let templateDescription = TemplateType.templateDescription;
-  let isActive = TemplateType.isActive
+export async function updateAccountTypeActionHandler(AccountType) {
+  let _id=AccountType.id;
+  let accountName = AccountType.accountName;
+  let accountDisplayName = AccountType.accountDisplayName;
+  let accountDescription = AccountType.accountDescription;
+  let isActive = AccountType.isActive
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($_id:String,$templateName: String, $templateDisplayName: String, $templateDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
-        UpdateTemplate(
+    mutation  ($_id:String,$accountName: String, $accountDisplayName: String, $accountDescription: String,$isActive: Boolean, $moduleName:String, $actionName:String){
+        UpdateAccount(
           _id:$_id
-          templateName: $templateName,
-          templateDisplayName: $templateDisplayName,
-          templateDescription: $templateDescription,
+          accountName: $accountName,
+          accountDisplayName: $accountDisplayName,
+          accountDescription: $accountDescription,
           isActive :$isActive,
           moduleName:$moduleName,
           actionName:$actionName
@@ -27,14 +27,14 @@ export async function updateTemplateTypeActionHandler(TemplateType) {
     `,
     variables: {
       _id,
-      templateName,
-      templateDisplayName,
-      templateDescription,
+      accountName,
+      accountDisplayName,
+      accountDescription,
       isActive,
       moduleName:"TEMPLATE",
       actionName:"UPDATE"
     }
   })
-  const id = result.data.UpdateTemplate;
+  const id = result.data.UpdateAccount;
   return id
 }

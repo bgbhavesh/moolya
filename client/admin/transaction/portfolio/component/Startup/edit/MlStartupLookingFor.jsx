@@ -14,7 +14,6 @@ import {fetchStartupPortfolioLookingFor} from '../../../actions/findPortfolioSta
 import MlLoader from '../../../../../../commons/components/loader/loader'
 
 
-
 export default class MlStartupLookingFor extends React.Component{
   constructor(props, context){
     super(props);
@@ -23,10 +22,8 @@ export default class MlStartupLookingFor extends React.Component{
       data:{},
       startupLookingFor: [],
       popoverOpen:false,
-      // index:"",
       selectedIndex:-1,
       startupLookingForList:[],
-      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -64,10 +61,8 @@ export default class MlStartupLookingFor extends React.Component{
   addLookingFor(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupLookingFor){
-      // this.setState({index: this.state.startupLookingFor.length})
       this.setState({selectedIndex: this.state.startupLookingFor.length})
     }else{
-      // this.setState({index:0})
       this.setState({selectedIndex:0})
     }
   }
@@ -79,11 +74,6 @@ export default class MlStartupLookingFor extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details, selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.typeId});
-    // let indexes = this.state.indexArray;    //index:index
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
   onSaveAction(e){
     this.setState({startupLookingForList:this.state.startupLookingFor, popoverOpen : false})

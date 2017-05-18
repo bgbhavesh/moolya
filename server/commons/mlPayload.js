@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 1/2/17.
  */
 "use strict";
-
+import _ from 'lodash'
 
 module.exports = class MlRespPayload{
     constructor(){
@@ -28,15 +28,15 @@ module.exports = class MlRespPayload{
 
     getArrayDifference(a1, a2)
     {
-        if(a1.length == 0)
-          return {difference:a2, isActive:true}
-
-        if(a1.length > a2.length){
-            return {isActive: false, difference:_.difference(a1, a2)}
-        }else if(a2.length > a1.length){
-            return {isActive: true, difference:_.difference(a2, a1)}
-        }else{
-          return {isActive: false, difference:[]}
+        var result = [], longerLength = a1.length >= a2.length ? a1.length : a2.length;
+        var activeDiff = [], inactiveDiff = [];
+        for (i = 0; i < longerLength; i++){
+            if ((a1[i] !== a2[i]) && a2[i]!= undefined) {
+                a1[i]!= undefined && inactiveDiff.push(a1[i])
+                activeDiff.push(a2[i])
+            }
         }
+        result.push({difference:inactiveDiff, isActive:false},{difference:activeDiff, isActive:true});
+        return result;
     }
 }

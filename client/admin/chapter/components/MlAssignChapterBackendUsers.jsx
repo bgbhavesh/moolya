@@ -13,8 +13,8 @@ import {findSubChapterActionHandler} from "../actions/findSubChapter";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
-import MlLoader from '../../../commons/components/loader/loader'
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import MlLoader from "../../../commons/components/loader/loader";
 var _ = require('lodash');
 
 
@@ -66,16 +66,18 @@ class MlAssignChapterBackendUsers extends React.Component {
   async findUserDetails(userId) {
     const userDetails = await findAdminUserDetails(userId);
     if (userDetails) {
-      this.setState({selectedBackendUser: userId})
-      this.setState({username: userDetails.userName})
-      this.setState({userDisplayName: userDetails.displayName})
-      this.setState({isActive:userDetails.deActive})
+      this.setState({
+        selectedBackendUser: userId,
+        username: userDetails.userName,
+        userDisplayName: userDetails.displayName,
+        isActive: userDetails.deActive
+      })
       // this.setState({alsoAssignedAs: userDetails.alsoAssignedas})
       let alsoAs = userDetails.alsoAssignedas;
-      if(alsoAs){
+      if (alsoAs) {
         let alsoArray = _.compact(alsoAs.split(','));
         this.setState({alsoAssignedAs: alsoArray})
-      }else{
+      } else {
         this.setState({alsoAssignedAs: []})
       }
       this.find_Chapter_Roles(userId);

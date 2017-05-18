@@ -1,17 +1,17 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findTemplateTypeActionHandler(TemplateTypeId) {
-  let did=TemplateTypeId
+export async function findAccountTypeActionHandler(AccountTypeId) {
+  let did=AccountTypeId
   const result = await client.query({
     query: gql`
     query  ($id: String){
-        FindTemplate(_id:$id){
+        FindAccount(_id:$id){
          id:_id
-        templateName
-        templateDisplayName
+        accountName
+        accountDisplayName
         isActive
-        templateDescription
+        accountDescription
       }
       }
     `,
@@ -20,6 +20,6 @@ export async function findTemplateTypeActionHandler(TemplateTypeId) {
     },
     forceFetch:true
   })
-  const id = result.data.FindTemplate;
+  const id = result.data.FindAccount;
   return id
 }

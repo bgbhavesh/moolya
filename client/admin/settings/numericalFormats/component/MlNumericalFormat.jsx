@@ -9,6 +9,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {OnToggleSwitch} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 let Select = require('react-select');
 
 
@@ -162,7 +163,7 @@ class MlNumericalFormat extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Numerical Format</h2>

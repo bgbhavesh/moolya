@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTaxTypeActionHandler} from '../actions/findTaxTypeAction'
 import {updateTaxTypeActionHandler} from '../actions/updateTaxTypeAction'
 import {initalizeFloatLabel,OnToggleSwitch} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditTaxType extends React.Component{
 
   componentDidMount(){
@@ -93,7 +94,7 @@ class MlEditTaxType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader/>):(
           <div className="admin_main_wrap">
 
             <div className="admin_padding_wrap">

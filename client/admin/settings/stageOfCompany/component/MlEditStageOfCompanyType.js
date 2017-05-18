@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findStageOfCompanyTypeActionHandler} from '../actions/findStageOfCompanyTypeAction'
 import {updateStageOfCompanyTypeActionHandler} from '../actions/updateStageOfCompanyTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditStageOfCompanyType extends React.Component{
   constructor(props) {
     super(props);
@@ -103,7 +104,7 @@ class MlEditStageOfCompanyType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Stage Of Company Type</h2>

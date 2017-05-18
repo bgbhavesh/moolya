@@ -12,6 +12,8 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
+import {findAccountTypeActionHandler} from '../../../settings/template/actions/findTemplateTypeAction'
 
 var FontAwesome = require('react-fontawesome');
 var options3 = [
@@ -43,7 +45,8 @@ export default class step1 extends React.Component{
       profession:null,
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
-      transactionId:''
+      transactionId:'',
+      selectedAccountsType: " "
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -78,6 +81,7 @@ export default class step1 extends React.Component{
   }
 
   componentWillMount() {
+    console.log(this.props)
     this.fetchIdentityTypesMaster();
 
     let details=this.props.registrationInfo;
@@ -96,7 +100,8 @@ export default class step1 extends React.Component{
       userType:details.userType,
       selectedTypeOfIndustry:details.industry,
       profession:details.profession,
-      transactionId : this.props.registrationData.transactionId
+      transactionId : this.props.registrationData.transactionId,
+      selectedAccountsType:details.accountType
     });
     //this.settingIdentity(details.identityType);
 
@@ -150,6 +155,11 @@ export default class step1 extends React.Component{
   optionsBySelectTypeOfIndustry(value){
     this.setState({selectedTypeOfIndustry:value})
   }
+  optionsBySelectTypeOfAccounts(value){
+    this.setState({selectedAccountsType:value})
+    console.log(value);
+  }
+
   optionsBySelectProfession(val){
     this.setState({profession:val})
   }
@@ -221,7 +231,7 @@ export default class step1 extends React.Component{
           registrationType: this.state.registrationType,
           userName: this.refs.userName.value,
           password: this.refs.password.value,
-          accountType: this.state.subscription,
+          accountType: this.state.selectedAccountsType,
           institutionAssociation: this.state.institutionAssociation,
           companyname: this.refs.companyName.value,
           companyUrl: this.refs.companyUrl.value,
@@ -234,7 +244,7 @@ export default class step1 extends React.Component{
           userType: this.state.userType,
           industry: this.state.selectedTypeOfIndustry,
           profession: this.state.profession,
-          transactionId:this.state.transactionId
+          transactionId:this.state.transactionId,
         }
       }
       const response = await updateRegistrationActionHandler(Details);
@@ -337,6 +347,10 @@ export default class step1 extends React.Component{
     }
     `;
 
+    let accountsquery=gql `query{
+    data: FetchAccount {label:accountName,value: _id}
+}
+`;
     let professionQuery=gql` query($industryId:String){
       data:fetchIndustryBasedProfession(industryId:$industryId) {
         label:professionName
@@ -346,6 +360,7 @@ export default class step1 extends React.Component{
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
+
     /*let registrationOptions = [
      { value: '0', label: 'simplybrowsing' },
      { value: '1', label: 'ideator' },
@@ -379,12 +394,15 @@ export default class step1 extends React.Component{
     let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
     let countryOption = {options: { variables: {countryId:this.state.country}}};
     return (
+
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="step_form_wrap step1">
 
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+            {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
               <div className="col-md-6 nopadding-left">
+                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
@@ -506,8 +524,11 @@ export default class step1 extends React.Component{
                     </div>
                   </form>
                 </div>
+                </ScrollArea>
               </div>
               <div className="col-md-6 nopadding-right">
+                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
 
@@ -518,8 +539,10 @@ export default class step1 extends React.Component{
                       <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <span className="placeHolder active">Account Type</span>
-                      <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} />
+                      {/*<span className="placeHolder active">Account Type</span>*/}
+                      <Moolyaselect multiSelect={false} placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery}  onSelect={that.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
+
+                      {/*<Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} />*/}
                     </div>
                     <div className="form-group">
                       <span className="placeHolder active">Do You Want To Associate To Any Of The Institution</span>
@@ -553,8 +576,9 @@ export default class step1 extends React.Component{
 
                   </form>
                 </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>
         )}

@@ -14,6 +14,7 @@ import update from 'immutability-helper';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 export default class Step4 extends React.Component{
   constructor(props) {
     super(props);
@@ -219,7 +220,7 @@ export default class Step4 extends React.Component{
     let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:this.props.clusterId}}};
     return (
       <div className="step_form_wrap step2">
-        {showLoader===true?( <div className="loader_wrap"></div>):(<div>
+        {showLoader===true?( <MlLoader/>):(<div>
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
 

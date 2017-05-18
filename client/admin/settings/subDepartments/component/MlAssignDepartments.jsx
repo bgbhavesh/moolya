@@ -1,9 +1,8 @@
-import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
+import React from "react";
+import {render} from "react-dom";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
 export default class MlAssignDepartments extends React.Component {
   constructor(props){
     super(props);
@@ -45,65 +44,64 @@ export default class MlAssignDepartments extends React.Component {
     this.props.getDepartmentAvailability(this.state.departmentAvailability)
 
   }
+
   componentWillMount() {
-    let availabilityDetails=this.props.nonMoolya
-    if(availabilityDetails){
-      let availabilityDetailsForm=[]
-      for(let i=0;i<availabilityDetails.length;i++){
-        let json={
-          cluster:availabilityDetails[i].cluster[0],
-          chapter:availabilityDetails[i].chapter,
-          subChapter:availabilityDetails[i].subChapter,
-          email:availabilityDetails[i].email,
-          isActive:availabilityDetails[i].isActive
+    let availabilityDetails = this.props.nonMoolya
+    if (availabilityDetails) {
+      let availabilityDetailsForm = []
+      for (let i = 0; i < availabilityDetails.length; i++) {
+        let json = {
+          cluster: availabilityDetails[i].cluster[0],
+          chapter: availabilityDetails[i].chapter,
+          subChapter: availabilityDetails[i].subChapter,
+          email: availabilityDetails[i].email,
+          isActive: availabilityDetails[i].isActive
 
         }
         availabilityDetailsForm.push(json)
       }
-      this.setState({departmentAvailability:availabilityDetailsForm})
+      this.setState({departmentAvailability: availabilityDetailsForm})
     }
   }
 
-  componentWillReceiveProps(newProps){
-    let availabilityDetails=newProps.nonMoolya
-
-    if(availabilityDetails){
-      let availabilityDetailsForm=[]
-      for(let i=0;i<availabilityDetails.length;i++){
-        let json={
-          cluster:availabilityDetails[i].cluster[0],
-          chapter:availabilityDetails[i].chapter,
-          subChapter:availabilityDetails[i].subChapter,
-          email:availabilityDetails[i].email,
-          isActive:availabilityDetails[i].isActive
+  componentWillReceiveProps(newProps) {
+    let availabilityDetails = newProps.nonMoolya
+    if (availabilityDetails) {
+      let availabilityDetailsForm = []
+      for (let i = 0; i < availabilityDetails.length; i++) {
+        let json = {
+          cluster: availabilityDetails[i].cluster[0],
+          chapter: availabilityDetails[i].chapter,
+          subChapter: availabilityDetails[i].subChapter,
+          email: availabilityDetails[i].email,
+          isActive: availabilityDetails[i].isActive
 
         }
         availabilityDetailsForm.push(json)
       }
-      this.setState({departmentAvailability:availabilityDetailsForm})
+      this.setState({departmentAvailability: availabilityDetailsForm})
     }
   }
-  optionsBySelectCluster(index, selectedIndex){
 
-    let availabilityDetails=this.state.departmentAvailability
-    availabilityDetails[index]['cluster']=selectedIndex
-    this.setState({departmentAvailability:availabilityDetails})
+  optionsBySelectCluster(index, selectedIndex) {
+    let availabilityDetails = this.state.departmentAvailability
+    availabilityDetails[index]['cluster'] = selectedIndex
+    this.setState({departmentAvailability: availabilityDetails})
     this.props.getDepartmentAvailability(this.state.departmentAvailability)
   }
 
   optionsBySelectChapter(index, selectedIndex){
-
     let availabilityDetails=this.state.departmentAvailability
     availabilityDetails[index]['chapter']=selectedIndex
     this.setState({departmentAvailability:availabilityDetails})
     this.props.getDepartmentAvailability(this.state.departmentAvailability)
   }
+
   optionsBySelectSubChapter(index, selectedIndex){
     let availabilityDetails=this.state.departmentAvailability
     availabilityDetails[index]['subChapter']=selectedIndex
     this.setState({departmentAvailability:availabilityDetails})
     this.props.getDepartmentAvailability(this.state.departmentAvailability)
-
   }
   onEmailChange(index,event){
     let availabilityDetails=this.state.departmentAvailability
@@ -146,7 +144,6 @@ export default class MlAssignDepartments extends React.Component {
     return (
 
     <div>
-
       <div className="form-group"> {/*<a onClick={that.AssignDepartmentAvailability.bind(this)} className="mlUpload_btn">Add</a>*/}</div>
         {that.state.departmentAvailability.map(function(options,id){
           let chapterOption={options: { variables: {id:options.cluster}}};
@@ -157,20 +154,16 @@ export default class MlAssignDepartments extends React.Component {
               <div className="panel-body">
 
                 <div className="form-group" >
-                  <Moolyaselect multiSelect={false}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)}  disabled="true"/>
-
+                  <Moolyaselect multiSelect={false} placeholder="Select Cluster"  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)}  disabled={true}/>
                 </div>
 
                 <div className="form-group"  >
                   <div className="form-group">
-                    {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.chapter} queryType={"graphql"} query={query}  isDynamic={true} id={'chapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} />*/}
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true} id={'chapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} disabled="true"/>
-                    {/* <input type="text" id="" placeholder="Select Chapter" className="form-control float-label" disabled="true"/>*/}
+                    <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true} id={'chapter'+id} onSelect={that.optionsBySelectChapter.bind(that,id)} disabled={true}/>
                   </div>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subChapter} queryType={"graphql"} query={subChapterquery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)}  disabled="true" />
-                 {/* <input type="text" id="" placeholder="Select Sub Chapter" className="form-control float-label" disabled="true"/>*/}
+                  <Moolyaselect multiSelect={false} placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={options.subChapter} queryType={"graphql"} query={subChapterquery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true} id={'subChapter'+id} onSelect={that.optionsBySelectSubChapter.bind(that,id)}  disabled={true}/>
                 </div>
                 <div className="form-group">
                   <input  placeholder="Sub Department Email Id" className="form-control float-label" defaultValue={options.email} onBlur={that.onEmailChange.bind(that,id)} />
@@ -184,12 +177,9 @@ export default class MlAssignDepartments extends React.Component {
                 </div>*/}
 
               </div>
-
-
             </div>
           )})}
       </div>
-
     )
   }
 };

@@ -1,4 +1,4 @@
-import MlResolver from '../../../commons/mlResolverDef'
+  import MlResolver from '../../../commons/mlResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
 import mlTransactionsListRepo from '../../admin/transactions/mlTransactionsListRepo'
 
@@ -262,9 +262,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTransactionTypes.find(query,findOptions).fetch();
     totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
-  if(args.module=="template"){
-    data= MlTemplateTypes.find(query,findOptions).fetch();
-    totalRecords=MlTemplateTypes.find(query,findOptions).count();
+  if(args.module=="accountType"){
+    data= MlAccountTypes.find(query,findOptions).fetch();
+    totalRecords=MlAccountTypes.find(query,findOptions).count();
   }
 
   if(args.module == 'BackendUsers'){
@@ -827,7 +827,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "kycCategory":resolveType= 'KycCategories';break;
       case "documentMapping":resolveType= 'DocumentMapping';break;
       case "transaction":resolveType= 'Transaction';break;
-      case "template":resolveType= 'Template';break;
+      case "accountType":resolveType= 'Account';break;
       case "templates":resolveType= 'TemplateDetails';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "industry":resolveType= 'Industry';break;
@@ -859,6 +859,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "BackendUsers":resolveType= 'BackendUsers';break;
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
+      case "community":resolveType= 'Community';break;
 
     }
 

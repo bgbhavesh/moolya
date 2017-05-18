@@ -1,10 +1,10 @@
 /**
  * Created by muralidhar on 14/02/17.
  */
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import passwordUtil from '../../../../commons/passwordUtil'
-import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import passwordUtil from "../../../../commons/passwordUtil";
+import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
 
@@ -455,36 +455,37 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
     return users;
 }
 
-MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context, info) =>{
+MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context, info) => {
   let depts = []
   // let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
   let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
-  if(subChapter && subChapter.isDefaultSubChapter) {
-      depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'](obj, {
-        userId: args.userId,
-        clusterId: subChapter.clusterId
-      }, context, info)
-  }else{
-    // let user = Meteor.users.findOne({"_id":args.userId})
+  if (subChapter && subChapter.isDefaultSubChapter) {
+    depts = MlResolver.MlQueryResolver['fetchUserDepSubDep'](obj, {
+      userId: args.userId,
+      clusterId: subChapter.clusterId
+    }, context, info)
+  } else if (subChapter && !subChapter.isDefaultSubChapter) {
     let user = mlDBController.findOne('users', {_id: args.userId}, context)
     // let subChapterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-    let subChapterDep = mlDBController.find('MlDepartments', {"depatmentAvailable.subChapter":subChapter._id}, context).fetch();
-    if(user && subChapterDep && subChapterDep.length > 0) {
+    let subChapterDep = mlDBController.find('MlDepartments', {
+      $or: [{"depatmentAvailable.subChapter": subChapter._id}, {
+        isSystemDefined: true,
+        isActive: true
+      }]
+    }, context).fetch();
+
+    if (user && subChapterDep && subChapterDep.length > 0) {
       let userDep = (user.profile && user.profile.InternalUprofile && user.profile.InternalUprofile.moolyaProfile && user.profile.InternalUprofile.moolyaProfile.assignedDepartment);
-      for (var i = 0; i < subChapterDep.length; i++) {
-        for (var j = 0; j < userDep.length; j++) {
-          if (userDep[j].department == subChapterDep[i]._id) {
-            depts.push(userDep[j]);
-          }
-        }
-      }
+      userDep.map(function (userDept) {
+        let result = _.find(subChapterDep, {"_id": userDept.department});
+        userDept.isAvailiable = result.isActive;
+        depts.push(userDept)
+      })
     }
     depts.map(function (dept) {
-      // let departmentName = MlDepartments.findOne({"_id":dept.department}).departmentName;
       let departmentName = mlDBController.findOne('MlDepartments', {_id: dept.department}, context).departmentName;
-      // let subDepartmentName = MlSubDepartments.findOne({"_id":dept.subDepartment}).subDepartmentName;
       let subDepartmentName = mlDBController.findOne('MlSubDepartments', {_id: dept.subDepartment}, context).subDepartmentName;
-      dept.departmentName =departmentName;
+      dept.departmentName = departmentName;
       dept.subDepartmentName = subDepartmentName;
     })
   }

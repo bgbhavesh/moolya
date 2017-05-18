@@ -33,12 +33,6 @@ if(Meteor.isServer){
           name:"communityType",
           type:'List',
           resolverName : "Gen_Community",
-          isDynamic:false
-        },
-        {
-          name:"identityType",
-          type:'List',
-          resolverName : "Gen_IdentityType",
           isDynamic:true
         },
         {
@@ -78,33 +72,28 @@ if(Meteor.isServer){
         {
           name:"registrationInfo.clusterId",
           type:'List',
-          resolverName : "Reg_Clusters",
+          resolverName : "Gen_Clusters",
           isDynamic:true
         },
         {
           name:"registrationInfo.chapterId",
           type:'List',
-          resolverName : "Reg_Chapters",
+          resolverName : "Gen_Chapters",
           isDynamic:true
         },
         {
           name:"registrationInfo.subChapterId",
           type:'List',
-          resolverName : "Reg_SubChapters",
+          resolverName : "Gen_SubChapters",
           isDynamic:true
         },
         {
           name:"registrationInfo.communityDefName",
           type:'List',
           resolverName : "Gen_Community",
-          isDynamic:false
-        },
-        {
-          name:"registrationInfo.identityType",
-          type:'List',
-          resolverName : "Gen_IdentityType",
           isDynamic:true
         }
+
       ]
     }})
   }

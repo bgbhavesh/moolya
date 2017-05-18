@@ -10,6 +10,7 @@ import _ from "lodash";
 import Datetime from "react-datetime";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupPortfolioAwards} from "../../../actions/findPortfolioStartupDetails";
+import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlStartupAwards extends React.Component{
@@ -20,10 +21,8 @@ export default class MlStartupAwards extends React.Component{
       data:{},
       startupAwards: [],
       popoverOpen:false,
-      // index:"",
       selectedIndex:-1,
       startupAwardsList:[],
-      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -80,11 +79,6 @@ export default class MlStartupAwards extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    // let indexes = this.state.indexArray;
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -167,8 +161,7 @@ export default class MlStartupAwards extends React.Component{
     })
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
-    // let indexArray = this.state.indexArray;
-    this.props.getAwardsDetails(startupAwards);    //indexArray
+    this.props.getAwardsDetails(startupAwards);
   }
 
   onLogoFileUpload(e){
@@ -221,7 +214,7 @@ export default class MlStartupAwards extends React.Component{
     let startupAwardsList = that.state.startupAwardsList || [];
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Awards</h2>
           <div className="requested_input main_wrap_scroll">

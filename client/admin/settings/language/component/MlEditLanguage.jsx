@@ -7,6 +7,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 class MlEditLanguage extends React.Component{
   constructor(props) {
@@ -97,7 +98,7 @@ class MlEditLanguage extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Edit Language</h2>

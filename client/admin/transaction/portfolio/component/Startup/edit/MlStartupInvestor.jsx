@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
@@ -11,6 +11,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {findStartupInvestorDetailsActionHandler} from '../../../actions/findPortfolioStartupDetails'
+import MlLoader from '../../../../../../commons/components/loader/loader'
 
 
 
@@ -46,22 +47,29 @@ export default class MlStartupInvestor extends React.Component{
     this.fetchPortfolioDetails();
   }
   async fetchPortfolioDetails() {
+    // let that = this;
+    // let portfolioDetailsId=that.props.portfolioDetailsId;
+    // const response = await findStartupInvestorDetailsActionHandler(portfolioDetailsId);
+    // if (response) {
+    //   this.setState({loading: false, startupInvestor: response, startupInvestorList: response});
+    // }
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
-    const response = await findStartupInvestorDetailsActionHandler(portfolioDetailsId);
-    if (response) {
-      this.setState({loading: false, startupInvestor: response, startupInvestorList: response});
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.investor)
+    if(empty){
+      const response = await findStartupInvestorDetailsActionHandler(portfolioDetailsId);
+      if (response) {
+        this.setState({loading: false, startupInvestor: response, startupInvestorList: response});
+      }
+    }else{
+      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.management, startupInvestorList:that.context.startupPortfolio.management});
     }
   }
   addInvestor(){
-    this.setState({selectedObject : "default"})
-    this.setState({popoverOpen : !(this.state.popoverOpen)})
-    this.setState({data : {}})
+    this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupInvestor){
-      // this.setState({index:this.state.startupInvestor.length})
       this.setState({selectedIndex:this.state.startupInvestor.length})
     }else{
-      // this.setState({index:0})
       this.setState({selectedIndex:0})
     }
   }
@@ -73,11 +81,6 @@ export default class MlStartupInvestor extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex: index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen),"selectedVal" : details.fundingTypeId});
-    // let indexes = this.state.indexArray;    //index:index,
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
 
 
@@ -206,7 +209,7 @@ export default class MlStartupInvestor extends React.Component{
     let investorsArray = that.state.startupInvestorList || [];
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="admin_padding_wrap portfolio-main-wrap">
           <h2>Investor</h2>
           <div className="requested_input main_wrap_scroll">
@@ -291,3 +294,6 @@ export default class MlStartupInvestor extends React.Component{
     )
   }
 }
+MlStartupInvestor.contextTypes = {
+  startupPortfolio: PropTypes.object
+};

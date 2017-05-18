@@ -3,20 +3,21 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {findTemplateTypeActionHandler} from '../actions/findTemplateTypeAction'
-import {updateTemplateTypeActionHandler} from '../actions/updateTemplateTypeAction'
+import {findAccountTypeActionHandler} from '../actions/findTemplateTypeAction'
+import {updateAccountTypeActionHandler} from '../actions/updateTemplateTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditTransactionType extends React.Component{
   constructor(props) {
     super(props);
     this.state = {loading:true,data:{}};
-    this.updateTemplateType.bind(this)
-    this.findTemplateType.bind(this);
+    this.updateAccountType.bind(this)
+    this.findAccountType.bind(this);
     return this;
   }
 
   componentWillMount() {
-    const resp=this.findTemplateType();
+    const resp=this.findAccountType();
     return resp;
   }
 
@@ -38,26 +39,26 @@ class MlEditTransactionType extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/templateTypeList");
+        FlowRouter.go("/admin/settings/accountTypeList");
       else
         toastr.error(response.result);
     }
   };
 
-  async findTemplateType(){
-    let TemplateTypeId=this.props.config
-    const response = await findTemplateTypeActionHandler(TemplateTypeId);
+  async findAccountType(){
+    let AccountTypeId = this.props.config
+    const response = await findAccountTypeActionHandler(AccountTypeId);
     this.setState({loading:false,data:response});
   }
-  async  updateTemplateType() {
-    let TemplateType = {
+  async  updateAccountType() {
+    let AccountType = {
       id: this.refs.id.value,
-      templateName: this.refs.templateName.value,
-      templateDisplayName: this.refs.templateDisplayName.value,
-      templateDescription: this.refs.templateDescription.value,
+      accountName: this.refs.accountName.value,
+      accountDisplayName: this.refs.accountDisplayName.value,
+      accountDescription: this.refs.accountDescription.value,
       isActive: this.refs.isActive.checked
     }
-    const response = await updateTemplateTypeActionHandler(TemplateType)
+    const response = await updateAccountTypeActionHandler(AccountType)
     return response;
 
   }
@@ -76,7 +77,7 @@ class MlEditTransactionType extends React.Component{
       {
         actionName: 'save',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateTemplateType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.updateAccountType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       // {
       //   showAction: true,
@@ -88,7 +89,7 @@ class MlEditTransactionType extends React.Component{
         actionName: 'cancel',
         handler: async(event) => {
           this.props.handler(" ");
-          FlowRouter.go("/admin/settings/templateTypeList")
+          FlowRouter.go("/admin/settings/accountTypeList")
         }
       }
     ];
@@ -96,19 +97,19 @@ class MlEditTransactionType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
             <div className="admin_padding_wrap">
-              <h2>Edit Template Type</h2>
+              <h2>Edit Account Type</h2>
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
                   <div className="form-group">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="templateName" placeholder="Name" defaultValue={this.state.data&&this.state.data.templateName} className="form-control float-label" id=""/>
+                    <input type="text" ref="accountName" placeholder="Name" defaultValue={this.state.data&&this.state.data.accountName} className="form-control float-label" id=""/>
 
                   </div>
                   <div className="form-group">
-                    <textarea  ref="templateDescription" placeholder="About" defaultValue={this.state.data&&this.state.data.templateDescription}className="form-control float-label" id=""></textarea>
+                    <textarea  ref="accountDescription" placeholder="About" defaultValue={this.state.data&&this.state.data.accountDescription}className="form-control float-label" id=""></textarea>
 
                   </div>
                     </form>
@@ -118,7 +119,7 @@ class MlEditTransactionType extends React.Component{
                 <div className="form_bg">
                   <form>
                   <div className="form-group">
-                    <input type="text" ref="templateDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.templateDisplayName} className="form-control float-label" id=""/>
+                    <input type="text" ref="accountDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.accountDisplayName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group switch_wrap">
                     <label>Status</label><br/>

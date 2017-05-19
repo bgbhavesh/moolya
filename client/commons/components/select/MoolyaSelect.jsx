@@ -140,12 +140,24 @@ export default class MoolyaSelect extends Component {
     //   queryOptions['options']['variables']['callBackHandler']=this.onChangeCallBackHandler;
     //   QueryExecutor= graphql(query,queryOptions)(QueryHandler);
     // }
+    let activeClass='';
+    let selectedValue=this.props.selectedValue
+    if(this.props.multiSelect){
+      if(selectedValue&&selectedValue.length>0){
+        activeClass="active"
+      }
+    }else{
+      if(selectedValue){
+        activeClass="active"
+      }
+    }
+
     return(
       <div className={`form-group ${mandatoryClass}`}>
-        <span className="placeHolder active">{placeholder}</span>
+        <span className={`placeHolder ${activeClass}`}>{placeholder}</span>
         {/*{executeQuery&&<QueryExecutor />}*/}
         {<Select  multi={this.props.multiSelect} disabled={this.props.disabled} placeholder={placeholder} labelKey={labelKey} valueKey={valueKey} options={options} value={this.props.selectedValue}  onInputChange={this.onInputSearch} onChange={this.onchangeOption}/>}
-        <br className="brclear"/>
+       {/* <br className="brclear"/>*/}
       </div>
     )
   }

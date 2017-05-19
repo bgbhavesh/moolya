@@ -1,15 +1,14 @@
-import React, { Component, PropTypes }  from "react";
+import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import MlIdeatorDetails from "../../Ideator/MlIdeatorDetails";
-import MlStartupManagement from './MlStartupManagement'
-import _ from 'lodash'
-import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage"
-import MlStartupInvestor from "./MlStartupInvestor"
-import MlStartupData from "./MlStartupData"
-import MlStartupAwards from './MlStartupAwards'
-import MlStartupMCL from './MlStartupMCL'
-import MlStartupLookingFor from './MlStartupLookingFor'
+import MlStartupManagement from "./MlStartupManagement";
+import _ from "lodash";
+import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage";
+import MlStartupInvestor from "./MlStartupInvestor";
+import MlStartupData from "./MlStartupData";
+import MlStartupAwards from "./MlStartupAwards";
+import MlStartupMCL from "./MlStartupMCL";
+import MlStartupLookingFor from "./MlStartupLookingFor";
 
 
 export default class MlStartupEditTemplate extends React.Component{
@@ -77,14 +76,16 @@ export default class MlStartupEditTemplate extends React.Component{
   }
 
   getInvestorDetails(details){
-
     let data = this.state.startupPortfolio;
-    if(data && !data.investor){
-      data['investor']=[];
-    }
     data['investor'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['investor'] = arr;
+    this.props.getPortfolioDetails({startupPortfolio: data});
   }
 
   getAwardsDetails(details){

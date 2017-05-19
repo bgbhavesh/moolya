@@ -198,8 +198,6 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
 
     else if(userhierarchy.isParent){
         clusterQuery = {"$and":[{hierarchyCode:"CLUSTER", communityDefCode:args.communityId, "isActive":true}]};
-        // chapterQuery = {"$and":[{hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-        // subChapterQuery = {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
         communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId}]}, context);
         communitiesAccess = mlDBController.find('MlCommunityAccess', clusterQuery, context).fetch();
         clusters = communitiesAccess && _.map(communitiesAccess, 'clusterId');
@@ -208,7 +206,6 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
             chapterQuery = {"$and":[{hierarchyCode:"CHAPTER", communityDefCode:args.communityId, clusterId:clusterid, "isActive":true}]};
             communitiesAccess = mlDBController.find('MlCommunityAccess', chapterQuery, context).fetch();
             Chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
-            // chapters.concat(Chapters);
             _.merge(chapters, Chapters)
         })
 
@@ -217,13 +214,8 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
               subChapterQuery = {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, chapterId:chapterid, "isActive":true}]};
               communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
               SubChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
-              // subChapters.concat(SubChapters);
               _.merge(subChapters, SubChapters)
         })
-        // communitiesAccess = mlDBController.find('MlCommunityAccess', chapterQuery, context).fetch();
-        // chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
-        // communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
-        // subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
     }
 
 

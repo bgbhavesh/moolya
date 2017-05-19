@@ -1,7 +1,5 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar'
+import React from "react";
+import {render} from "react-dom";
 import MlStartupAboutUs from "./MlStartupAboutUs";
 import MlStartupRating from "./MlStartupRating";
 import MlStartupClients from "./MlStartupClients";
@@ -11,7 +9,7 @@ import MlStartupLegal from "./MlStartupLegal";
 import MlStartupSP from "./MlStartupSP";
 import MlStartupTechnology from "./MlStartupTechnology";
 import MlStartupAssets from "./MlStartupAssets";
-import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent"
+import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 
 export default class MlStartupTab extends React.Component{
   constructor(props){
@@ -89,11 +87,18 @@ export default class MlStartupTab extends React.Component{
     this.setState({portfolioStartupInfo : data})
     this.props.getPortfolioStartupAboutUsDetails(data,"information");
   }
-  getStartupBranches(details){
-    let data = this.state.portfolioStartupBranches;
-    data = details;
-    this.setState({portfolioStartupBranches : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"branches");
+
+  getStartupBranches(details) {
+    // let data = this.state.portfolioStartupBranches;
+    // data = details;
+    this.setState({portfolioStartupBranches: details})
+    let ary = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      ary.push(updateItem)
+    })
+    var sendData = ary;
+    this.props.getPortfolioStartupAboutUsDetails(sendData, "branches");
   }
   getStartupTechnology(details){
     // let data = this.state.portfolioStartupTechnologies;

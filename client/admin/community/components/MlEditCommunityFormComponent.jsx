@@ -24,6 +24,7 @@ class MlEditCommunityFormComponent extends React.Component {
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
     this.updateCommunityAccess.bind(this)
+    this.getUpdatedChapters.bind(this)
     return this;
   }
 
@@ -66,6 +67,10 @@ class MlEditCommunityFormComponent extends React.Component {
     });
     $('.Select-control').css({'height':'auto'});
 
+  }
+
+  getUpdatedChapters(data){
+      console.log(data)
   }
 
   async addEventHandler() {
@@ -129,10 +134,13 @@ class MlEditCommunityFormComponent extends React.Component {
       subchapters: this.state.subchapters
     }
     let response;
-    if(data.subchapters.length<1){
-      toastr.error('Please select Sub-Chapter');
-      response = false;
-    }else{
+    // if(data.subchapters.length<1)
+    // {
+    //   toastr.error('Please select Sub-Chapter');
+    //   response = false;
+    // }
+    // else
+    {
       response = await multipartFormHandler(data, null);
     }
     this.setState({loading: false});
@@ -231,7 +239,7 @@ class MlEditCommunityFormComponent extends React.Component {
                     <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
                                   queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}/>
+                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} getUpdatedCallback={this.getUpdatedChapters.bind(this)}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"

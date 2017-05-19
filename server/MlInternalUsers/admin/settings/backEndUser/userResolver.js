@@ -532,6 +532,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
       if(!role.hierarchyCode) {
           if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             (role.communityId && role.communityId != "all")) {
+            let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"chapterId":role.chapterId},{"subChapterId":role.subChapterId},{"communityDefCode":role.communityId},{"hierarchyLevel":"1"}]}, context);
+            if(community){
+              role.communityId = community._id
+            }
             levelCode = "COMMUNITY"
           }
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") && !args.user.isChapterAdmin) {
@@ -556,6 +560,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
             levelCode = "COMMUNITY"
             role.chapterId = "all"
             role.subChapterId = "all"
+            let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"communityDefCode":role.communityId},{"hierarchyLevel":"3"}]}, context);
+            if(community){
+              role.communityId = community._id
+            }
           }
           else if (role.clusterId && role.clusterId != "all") {
             levelCode = "CLUSTER"

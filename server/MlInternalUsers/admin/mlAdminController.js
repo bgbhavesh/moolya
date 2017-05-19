@@ -75,6 +75,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   const graphQLServer = express();
   config.configServer(graphQLServer)
   graphQLServer.use(cors());
+  // graphQLServer.use(authChecker)
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
     try {
@@ -495,5 +496,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
+}
+
+function authChecker(req, res, next) {
+    if (!req.headers['meteor-login-token']) {
+        next();
+    } else {
+      next();
+    }
 }
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

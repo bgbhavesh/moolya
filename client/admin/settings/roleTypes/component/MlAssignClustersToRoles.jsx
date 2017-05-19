@@ -210,10 +210,10 @@ export default class MlAssignClustersToRoles extends React.Component {
         <div className="form-group"></div>
         {that.state.assignRoleToClusters.map(function(assignCluster,id){
           if(selectedUserType=='moolya') {
-            departmentqueryOptions = {options: {variables: {isMoolya: false, clusterId:assignCluster.cluster}}};
+            departmentqueryOptions = {options: {variables: {isMoolya: true, clusterId:assignCluster.cluster}}};
           }
           if(selectedUserType=='non-moolya'&& assignCluster.subChapter!=''){
-            departmentqueryOptions={options: { variables: {isMoolya:true,subChapter:assignCluster.subChapter}}};
+            departmentqueryOptions={options: { variables: {isMoolya:false,subChapter:assignCluster.subChapter}}};
           }
 
           let chapterOption={options: { variables: {id:assignCluster.cluster}}};

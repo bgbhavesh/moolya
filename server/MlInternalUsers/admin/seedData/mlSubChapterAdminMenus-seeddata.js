@@ -1,9 +1,6 @@
 /**
  * Created by venkatasrinag on 20/3/17.
  */
-/**
- * Created by venkatasrinag on 20/3/17.
- */
 if(Meteor.isServer){
   MlMenus.upsert({name:"mlSubChapterAdminMenu"},{$set:{
     "name" : "mlSubChapterAdminMenu",

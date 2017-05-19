@@ -405,7 +405,7 @@ let startupPortfolioSchema = `
     }
     
     input awardsRecognition{
-          award:String
+          awardName:String
           awardId:String
           isAwardPrivate:Boolean
           year:String

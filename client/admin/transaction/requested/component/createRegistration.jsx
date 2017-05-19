@@ -127,6 +127,7 @@ export default class MlCreateRegistration extends React.Component{
      this.setState({"userName" : this.refs.email.value});
   }
 
+
 /*  async handleSuccess(response) {
 
     //FlowRouter.go("/admin/settings/departmentsList");
@@ -216,6 +217,13 @@ export default class MlCreateRegistration extends React.Component{
       {value: 'Yes', label: 'Yes'},
       {value: 'No', label: 'No'}
     ];
+    let institutionAssociationActive='',subscriptionActive
+      if(this.state.institutionAssociation){
+      institutionAssociationActive='active'
+      }
+      if(this.state.subscription){
+        subscriptionActive='active'
+      }
 
     return (
         <div className="admin_main_wrap">
@@ -303,9 +311,11 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="Password" placeholder="Password" ref="password"  className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
+                  <span className={`placeHolder ${subscriptionActive}`}>AccountType </span>
                   <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>
                 </div>
                 <div className="form-group">
+                  <span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Institution</span>
                   <Select name="form-field-name"  placeholder="Do you want to associate to any of the institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
                 </div>
                 <div className="form-group">

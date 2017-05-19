@@ -1,12 +1,10 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
+import React from "react";
+import {render} from "react-dom";
+import {findStartupInvestorDetailsActionHandler} from "../../actions/findPortfolioStartupDetails";
+import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
+import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
+import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 var FontAwesome = require('react-fontawesome');
-import {findStartupInvestorDetailsActionHandler} from '../../actions/findPortfolioStartupDetails'
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
 
 export default class MlStartupViewInvestor extends React.Component {
@@ -115,7 +113,7 @@ export default class MlStartupViewInvestor extends React.Component {
               {investorArray && investorArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4">
                   <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
+                    <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
                     <h3>
                       {details.name} <br /><b>Investor</b>
                     </h3>

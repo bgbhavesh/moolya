@@ -91,7 +91,15 @@ export default class MoolyaSelect extends Component {
       }
 
       if(this.props.getUpdatedCallback){
-          this.props.getUpdatedCallback(items);
+          /*Specific To Communities for Platform Admin*/
+          let updatedValues = [];
+          let self = this
+          _.each(items, function (item) {
+                let isAvailiable = _.indexOf(self.props.selectedValue, item.value)
+                if(isAvailiable >= 0)
+                  updatedValues.push(self.props.selectedValue[isAvailiable])
+          })
+          this.props.getUpdatedCallback(updatedValues);
       }
     }
   };

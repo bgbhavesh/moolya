@@ -206,7 +206,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
             chapterQuery = {"$and":[{hierarchyCode:"CHAPTER", communityDefCode:args.communityId, clusterId:clusterid, "isActive":true}]};
             communitiesAccess = mlDBController.find('MlCommunityAccess', chapterQuery, context).fetch();
             Chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
-            _.merge(chapters, Chapters)
+            chapters = _.concat(chapters, Chapters)
         })
 
         _.each(chapters, function (chapterid) {
@@ -214,7 +214,7 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
               subChapterQuery = {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, chapterId:chapterid, "isActive":true}]};
               communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
               SubChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
-              _.merge(subChapters, SubChapters)
+              subChapters = _.concat(subChapters, SubChapters)
         })
     }
 
@@ -416,7 +416,7 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
 
         _.each(chapters, function (item) {
             _.each(item.difference, function (chapterid) {
-                resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context);
+                resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterid}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context);
             })
         })
 

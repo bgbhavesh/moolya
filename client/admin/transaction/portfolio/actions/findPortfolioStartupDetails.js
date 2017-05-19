@@ -103,8 +103,8 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                 }
                 assets{
+                  assetTypeName
                   assetTypeId
-                  assetName
                   quantity
                   description
                   isAssetTypePrivate

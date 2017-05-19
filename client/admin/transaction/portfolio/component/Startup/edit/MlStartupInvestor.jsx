@@ -158,7 +158,6 @@ export default class MlStartupInvestor extends React.Component{
     })
     startupInvestor = arr;
     this.setState({startupInvestor:startupInvestor})
-    // let indexArray = this.state.indexArray;
     this.props.getInvestorDetails(startupInvestor);
   }
   onLogoFileUpload(e){
@@ -246,7 +245,7 @@ export default class MlStartupInvestor extends React.Component{
             </ScrollArea>
 
             <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-              {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+              <PopoverTitle>Add Investor</PopoverTitle>
               <PopoverContent>
                 <div  className="ml_create_client">
                   <div className="medium-popover"><div className="row">
@@ -257,7 +256,7 @@ export default class MlStartupInvestor extends React.Component{
                       </div>
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                      labelKey={'label'} queryType={"graphql"} query={query}
+                                      labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Funding..'}
                                       isDynamic={true}
                                       onSelect={this.onOptionSelected.bind(this)}
                                       selectedValue={this.state.selectedVal}/>

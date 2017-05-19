@@ -89,6 +89,10 @@ export default class MoolyaSelect extends Component {
       } else {
         this.setState({options: [], executeQuery: false});
       }
+
+      if(this.props.getUpdatedCallback){
+          this.props.getUpdatedCallback(items);
+      }
     }
   };
 

@@ -26,7 +26,7 @@ export default class MlSubChapterList extends Component {
           <a href={chapterRoutes.subChapterDetails(prop.clusterId, prop.chapterId, prop._id, prop.subChapterName)}>
             <div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div>
           </a>
-          <h3>{prop.subChapterName} hhk </h3>
+          <h3>{prop.subChapterName}</h3>
         </div>
       </div>
   );

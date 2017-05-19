@@ -105,8 +105,7 @@ MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
-  console.log(args)
-  var response = mlDBController.findOne('MlChapters', {_id:args.chapterId}, context) || []
+  var response = mlDBController.findOne('MlChapters', {_id: args.chapterId}, context) || []
   return response
 }
 
@@ -238,33 +237,38 @@ MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
   try {
-    let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
-    geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
-      if (err) {
-        return "Invalid Country Name";
-      }
-      args.subChapter.latitude = data.results[0].geometry.location.lat;
-      args.subChapter.longitude = data.results[0].geometry.location.lng;
-      args.subChapter.isDefaultSubChapter = false;
-      let subChapterId = createSubChapter(args.subChapter, context)
-      if (subChapterId) {
-        let code = 200;
-        let response = new MlRespPayload().successPayload(subChapterId, code);
-        return response
-      }
-      else {
-        let code = 400;
-        let response = new MlRespPayload().errorPayload("Unable To Create Subchapter", code);
-        return response
-      }
-    }), {key: Meteor.settings.private.googleApiKey});
+    args.subChapter.isDefaultSubChapter = false;
+    let subChapterId = createSubChapter(args.subChapter, context)
+
+    if (subChapterId) {
+      let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
+
+      geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+        if (err) {
+          return "Invalid Country Name";
+        }
+        let subChapter = MlSubChapters.findOne({"_id": subChapterId})
+        if(subChapter){
+          var latitude = data.results[0].geometry.location.lat;
+          var longitude = data.results[0].geometry.location.lng;
+          mlDBController.update('MlSubChapters', subChapterId, {latitude: latitude, longitude: longitude}, {$set:true}, context)
+        }
+      }));
+
+      let code = 200;
+      let response = new MlRespPayload().successPayload(subChapterId, code);
+      return response
+    }
+    else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("Unable To Create Subchapter", code);
+      return response
+    }
   } catch (e) {
-    console.log(e.message)
     let code = 400;
     let response = new MlRespPayload().errorPayload(e.message, code);
     return response
   }
-
 }
 
 

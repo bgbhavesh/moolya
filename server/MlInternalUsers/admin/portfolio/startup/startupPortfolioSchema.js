@@ -111,7 +111,6 @@ let startupPortfolioSchema = `
     
     type assetsOutput{
         assetTypeId:String,
-        assetName:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,

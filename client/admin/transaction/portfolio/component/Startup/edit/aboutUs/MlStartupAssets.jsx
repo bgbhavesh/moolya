@@ -25,7 +25,6 @@ export default class MlStartupAssets extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       selectedAssetType:null,
-      // selectedAsset:"default"
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
@@ -142,9 +141,9 @@ export default class MlStartupAssets extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      let newItem = _.omit(item, "__typename");
+      // let updateItem = _.omit(newItem, 'logo');
+      arr.push(newItem)
     })
     startupAssets = arr;
     this.setState({startupAssets:startupAssets})
@@ -242,7 +241,7 @@ export default class MlStartupAssets extends React.Component{
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                     labelKey={'label'} queryType={"graphql"} query={assetsQuery}
-                                    isDynamic={true}
+                                    isDynamic={true} placeholder={'Select  Asset..'}
                                     onSelect={this.assetTypeOptionSelected.bind(this)}
                                     selectedValue={this.state.selectedVal}/>
                     </div>

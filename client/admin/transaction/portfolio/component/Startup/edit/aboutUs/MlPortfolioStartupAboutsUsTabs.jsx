@@ -60,10 +60,16 @@ export default class MlStartupTab extends React.Component{
     this.props.getPortfolioStartupAboutUsDetails(data,"aboutUs");
   }
   getStartupAssets(details){
-    let data = this.state.portfolioStartupAssets;
-    data = details;
-    this.setState({portfolioStartupAssets : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"assets");
+    // let data = this.state.portfolioStartupAssets;
+    // data = details;
+    this.setState({portfolioStartupAssets : details})
+    let ary = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      ary.push(updateItem)
+    })
+    var sendData = ary;
+    this.props.getPortfolioStartupAboutUsDetails(sendData,"assets");
   }
   getStartupClients(details){
     let data = this.state.portfolioStartupClients;
@@ -93,10 +99,10 @@ export default class MlStartupTab extends React.Component{
     // let data = this.state.portfolioStartupTechnologies;
     // data = details;
     this.setState({portfolioStartupTechnologies : details})
-    let arr = [];
+    let ary = [];
     _.each(details, function (obj) {
       let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
+      ary.push(updateItem)
     })
     var sendData = ary;
     this.props.getPortfolioStartupAboutUsDetails(sendData, "technologies");

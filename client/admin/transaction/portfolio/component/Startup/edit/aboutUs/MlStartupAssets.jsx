@@ -1,17 +1,16 @@
-import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import ScrollArea from 'react-scrollbar'
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
+import ScrollArea from "react-scrollbar";
+import Moolyaselect from "../../../../../../../commons/components/select/MoolyaSelect";
+import gql from "graphql-tag";
+import {graphql} from "react-apollo";
+import _ from "lodash";
+import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
+import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
-import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import _ from 'lodash';
-import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
-import MlLoader from '../../../../../../../commons/components/loader/loader'
 
 
 export default class MlStartupAssets extends React.Component{
@@ -117,12 +116,13 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
-  assetTypeOptionSelected(selectedId){
+  assetTypeOptionSelected(selectedId, callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["assetTypeId"]);
-    details=_.extend(details,{["assetTypeId"]: selectedId});
+    details=_.omit(details,["assetTypeName"]);
+    details=_.extend(details,{["assetTypeId"]: selectedId, assetTypeName: selObject.label});
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId})
+      this.setState({"selectedVal" : selectedId, assetTypeName: selObject.label})
       this.sendDataToParent()
     })
   }
@@ -224,7 +224,7 @@ export default class MlStartupAssets extends React.Component{
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl" onClick={that.onDeleteAsset.bind(that, idx)}><FontAwesome name='times'/></div>*/}
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                        <h3>{details.description?details.description:""}<span className="assets-list">{details.quantity?details.quantity:"0"}</span></h3>
+                        <h3>{details.assetTypeName?details.assetTypeName:""}<span className="assets-list">{details.quantity?details.quantity:"0"}</span></h3>
                       </div>
                     </a>
                   </div>)
@@ -248,9 +248,14 @@ export default class MlStartupAssets extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="quantity" placeholder="Enter Number of Quantity" className="form-control float-label" id="" defaultValue={this.state.data.quantity} onBlur={this.handleBlur.bind(this)}/>
-                      {/*<FontAwesome name='unlock' className="input_icon"/>*/}
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAssetTypePrivate" defaultValue={this.state.data.isAssetTypePrivate} onClick={this.onLockChange.bind(this, "isAssetTypePrivate")}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={this.state.data.isAssetTypePrivate}/>
+                      <input type="text" name="quantity" placeholder="Enter Number of Quantity"
+                             className="form-control float-label" defaultValue={this.state.data.quantity}
+                             onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
+                                   id="isAssetTypePrivate" defaultValue={this.state.data.isAssetTypePrivate}
+                                   onClick={this.onLockChange.bind(this, "isAssetTypePrivate")}/>
+                      <input type="checkbox" className="lock_input" id="isAssetTypePrivate"
+                             checked={this.state.data.isAssetTypePrivate}/>
                     </div>
 
                     <div className="form-group">
@@ -268,7 +273,7 @@ export default class MlStartupAssets extends React.Component{
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                      <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                     </div>
                   </div>
                 </div></div>

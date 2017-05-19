@@ -244,7 +244,7 @@ export default class step1 extends React.Component{
           userType: this.state.userType,
           industry: this.state.selectedTypeOfIndustry,
           profession: this.state.profession,
-          transactionId:this.state.transactionId,
+          // transactionId:this.state.transactionId,
         }
       }
       const response = await updateRegistrationActionHandler(Details);

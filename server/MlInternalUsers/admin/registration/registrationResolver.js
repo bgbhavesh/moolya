@@ -362,54 +362,67 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 
     let temp=0
         let registrationRecord=MlRegistration.findOne(args.registrationId)
-      if(registrationRecord&&registrationRecord.status!='Approved'){
-        let kycDocuments=registrationRecord.kycDocuments
-        if(kycDocuments&&kycDocuments.length>=1){
-          //mandatory doc exist or not
-           mandatorykycDoc = kycDocuments.filter(function(item) {
-            return item.isMandatory==true;
-          });
-          if(mandatorykycDoc.length>=1){
-            //mandatory document should approved and upload
-            kycDoc = mandatorykycDoc.filter(function(item) {
-              return item.status == 'Approved'&&item.docFiles.length>=1&&item.isMandatory==true;
+    if(registrationRecord&&registrationRecord.emails.length>0){
+     let email=registrationRecord.emails;
+      emailVerified=_.find(email,function(mail){
+       return mail.verified==true
+     })
+      if(emailVerified){
+        if(registrationRecord&&registrationRecord.status!='Approved'){
+          let kycDocuments=registrationRecord.kycDocuments
+          if(kycDocuments&&kycDocuments.length>=1){
+            //mandatory doc exist or not
+            mandatorykycDoc = kycDocuments.filter(function(item) {
+              return item.isMandatory==true;
             });
-            if(kycDoc&&kycDoc.length==mandatorykycDoc.length){
-              //nonmandatory document exist should approved and upload
-            nonMandatorykycDoc = kycDocuments.filter(function(item) {
+            if(mandatorykycDoc.length>=1){
+              //mandatory document should approved and upload
+              kycDoc = mandatorykycDoc.filter(function(item) {
+                return item.status == 'Approved'&&item.docFiles.length>=1&&item.isMandatory==true;
+              });
+              if(kycDoc&&kycDoc.length==mandatorykycDoc.length){
+                //nonmandatory document exist should approved and upload
+                nonMandatorykycDoc = kycDocuments.filter(function(item) {
+                  return item.docFiles.length>=1&&item.isMandatory==false;
+                });
+                if(nonMandatorykycDoc.length>=1){
+                  status = nonMandatorykycDoc.filter(function(item) {
+                    return item.status == 'Approved'
+                  });
+                  if(status&&nonMandatorykycDoc.length==status.length){
+                    temp=1;
+                  }
+                }else{
+                  temp=1;
+                }
+              }
+            }else{
+              nonMandatorykycDoc = kycDocuments.filter(function(item) {
                 return item.docFiles.length>=1&&item.isMandatory==false;
               });
               if(nonMandatorykycDoc.length>=1){
                 status = nonMandatorykycDoc.filter(function(item) {
-                  return item.status == 'Approved'
+                  return  item.status == 'Approved'
                 });
                 if(status&&nonMandatorykycDoc.length==status.length){
-                      temp=1;
-                    }
-              }else{
-                temp=1;
+                  temp=1;
+                }
               }
             }
-          }else{
-           nonMandatorykycDoc = kycDocuments.filter(function(item) {
-              return item.docFiles.length>=1&&item.isMandatory==false;
-            });
-            if(nonMandatorykycDoc.length>=1){
-            status = nonMandatorykycDoc.filter(function(item) {
-                return  item.status == 'Approved'
-              });
-              if(status&&nonMandatorykycDoc.length==status.length){
-                temp=1;
-              }
-            }
-          }
 
-        }
+          }
         }else{
-        let code = 555;
-        let response = new MlRespPayload().errorPayload("User already approved", code);
+          let code = 555;
+          let response = new MlRespPayload().errorPayload("User already approved", code);
+          return response;
+        }
+      }else{
+        let code = 556;
+        let response = new MlRespPayload().errorPayload("Email verification not done", code);
         return response;
       }
+    }
+
     let updatedResponse;
         if(temp==1){
          // updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});

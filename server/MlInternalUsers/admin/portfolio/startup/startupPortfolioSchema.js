@@ -333,6 +333,7 @@ let startupPortfolioSchema = `
     
     input technologies{
        technologyId:String,
+       technologyName:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,

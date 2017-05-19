@@ -318,7 +318,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               }
               let resp = MlResolver.MlMutationResolver['updateRegistrationTransaction'] (obj,{'transactionInfo':transactionInfo},context, info);
               return updatedResponse;
-          }x``
+          }
 
 
       }else {

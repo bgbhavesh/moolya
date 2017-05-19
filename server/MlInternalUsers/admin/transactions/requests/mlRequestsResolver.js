@@ -19,7 +19,7 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
       return response;
     }
   }else{
-    let result = "Request Types required "
+    let result = "Request Type required "
       let response = new MlRespPayload().errorPayload(result);
     return response;
   }

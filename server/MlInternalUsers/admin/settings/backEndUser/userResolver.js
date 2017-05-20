@@ -439,7 +439,12 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
           users = MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'](obj, {clusterId: subChapter.clusterId, subChapterId: args.subChapterId?args.subChapterId:""}, context, info)
         } else {
           // let departments = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-          let departments = mlDBController.find('MlDepartments', {"depatmentAvailable.subChapter": subChapter._id}, context).fetch();
+          let departments = mlDBController.find('MlDepartments', {
+            $or: [{"depatmentAvailable.subChapter": subChapter._id}, {
+              isSystemDefined: true,
+              isActive: true
+            }]
+          }, context).fetch();
           if (departments && departments.length > 0) {
             for (var i = 0; i < departments.length; i++) {
               // let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();

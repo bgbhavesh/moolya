@@ -241,17 +241,41 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
     let subChapterId = createSubChapter(args.subChapter, context)
 
     if (subChapterId) {
+
+      MlResolver.MlMutationResolver['createCommunityAccess'](obj, {
+        clusterId: args.subChapter.clusterId,
+        chapterId: args.subChapter.chapterId,
+        subChapterId: subChapterId,
+        moduleName: "COMMUNITY",
+        actionName: "CREATE"
+      }, context, info)
+
+      MlResolver.MlMutationResolver['createCommunity'](obj, {
+        clusterId: args.subChapter.clusterId,
+        clusterName: args.subChapter.clusterName,
+        chapterId: args.subChapter.chapterId,
+        chapterName: args.subChapter.chapterName,
+        subChapterId: subChapterId,
+        subChapterName: args.subChapter.subChapterName,
+        moduleName: "COMMUNITY",
+        actionName: "CREATE"
+      }, context, info)
+
       let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
 
       geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
         if (err) {
+          console.log('Error while creating sub-chapter')
           return "Invalid Country Name";
         }
         let subChapter = MlSubChapters.findOne({"_id": subChapterId})
-        if(subChapter){
+        if (subChapter) {
           var latitude = data.results[0].geometry.location.lat;
           var longitude = data.results[0].geometry.location.lng;
-          mlDBController.update('MlSubChapters', subChapterId, {latitude: latitude, longitude: longitude}, {$set:true}, context)
+          mlDBController.update('MlSubChapters', subChapterId, {
+            latitude: latitude,
+            longitude: longitude
+          }, {$set: true}, context)
         }
       }));
 

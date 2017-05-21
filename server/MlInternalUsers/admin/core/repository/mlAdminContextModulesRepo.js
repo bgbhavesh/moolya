@@ -152,15 +152,19 @@ let CoreModules = {
     var type=requestParams&&requestParams.type?requestParams.type:"";
     var contextFieldMap={'clusterId':'registrationInfo.clusterId','chapterId':'registrationInfo.chapterId','subChapterId':'registrationInfo.subChapterId','communityId':'registrationInfo.communityId'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+        //construct context query with $in operator for each fields
         resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
     var serverQuery ={};
     switch(type){
+      //custom restriction for registration
       case 'requested':
         serverQuery={'status':{'$in':['Pending','Rejected']}};
         break;
       case 'approved':
         serverQuery={'status':"Approved"};
     }
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
       var result=[];

@@ -439,7 +439,12 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
           users = MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'](obj, {clusterId: subChapter.clusterId, subChapterId: args.subChapterId?args.subChapterId:""}, context, info)
         } else {
           // let departments = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-          let departments = mlDBController.find('MlDepartments', {"depatmentAvailable.subChapter": subChapter._id}, context).fetch();
+          let departments = mlDBController.find('MlDepartments', {
+            $or: [{"depatmentAvailable.subChapter": subChapter._id}, {
+              isSystemDefined: true,
+              isActive: true
+            }]
+          }, context).fetch();
           if (departments && departments.length > 0) {
             for (var i = 0; i < departments.length; i++) {
               // let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
@@ -533,6 +538,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             (role.communityId && role.communityId != "all")) {
             levelCode = "COMMUNITY"
+            let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"chapterId":role.chapterId},{"subChapterId":role.subChapterId},{"communityDefCode":role.communityId},{"hierarchyCode":levelCode}]}, context);
+            if(community){
+              role.communityId = community._id
+            }
           }
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") && !args.user.isChapterAdmin) {
             levelCode = "SUBCHAPTER"
@@ -556,6 +565,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
             levelCode = "COMMUNITY"
             role.chapterId = "all"
             role.subChapterId = "all"
+            let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"communityDefCode":role.communityId},{"hierarchyCode":"CLUSTER"}]}, context);
+            if(community){
+              role.communityId = community._id
+            }
           }
           else if (role.clusterId && role.clusterId != "all") {
             levelCode = "CLUSTER"

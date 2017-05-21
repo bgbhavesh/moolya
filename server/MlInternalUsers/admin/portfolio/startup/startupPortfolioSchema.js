@@ -111,7 +111,7 @@ let startupPortfolioSchema = `
     
     type assetsOutput{
         assetTypeId:String,
-        assetName:String,
+        assetTypeName:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,
@@ -320,15 +320,16 @@ let startupPortfolioSchema = `
     }
     
     input assets{
-        assetTypeId:String,
-        isAssetTypePrivate:Boolean,
-        quantity:String,
-        isQuantityTypePrivate:Boolean,
-        description:String,
-        isDescriptionPrivate:Boolean,
-        logo:logo,
-        makePrivate:Boolean,
-        index:Int
+      assetTypeId:String,
+      assetTypeName:String
+      isAssetTypePrivate:Boolean,
+      quantity:String,
+      isQuantityTypePrivate:Boolean,
+      description:String,
+      isDescriptionPrivate:Boolean,
+      logo:logo,
+      makePrivate:Boolean,
+      index:Int
     }
     
     input technologies{
@@ -404,7 +405,7 @@ let startupPortfolioSchema = `
     }
     
     input awardsRecognition{
-          award:String
+          awardName:String
           awardId:String
           isAwardPrivate:Boolean
           year:String

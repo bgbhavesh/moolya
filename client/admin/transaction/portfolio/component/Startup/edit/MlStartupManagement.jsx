@@ -202,8 +202,7 @@ export default class MlStartupManagement extends React.Component{
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap portfolio-main-wrap">
+      <div>
           <h2>Management</h2>
           <div className="main_wrap_scroll">
             <ScrollArea
@@ -226,7 +225,7 @@ export default class MlStartupManagement extends React.Component{
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                           <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                            <div className="hex_outer"><span className="ml ml-plus "></span></div>
+                            <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"}/></div>
                             <h3>{user.firstName?user.firstName:""}</h3>
                           </div>
                       </div>
@@ -238,11 +237,8 @@ export default class MlStartupManagement extends React.Component{
                 <div id="management-form" className=" management-form-wrap" style={{'display':'none'}}>
 
                   <div className="col-md-6 nopadding-left">
-
-
                     <div className="form_bg">
                       <form>
-
                         <div className="form-group">
                           <input type="text" placeholder="Title" name="title" className="form-control float-label" defaultValue={this.state.data.title} id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isTitlePrivate" onClick={this.onClick.bind(this, "isTitlePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isTitlePrivate}/>
@@ -355,11 +351,8 @@ export default class MlStartupManagement extends React.Component{
                   </div>
                   <br className="brclear"/>
                 </div>
-
             </ScrollArea>
           </div>
-        </div>
-
       </div>)}
       </div>
     )

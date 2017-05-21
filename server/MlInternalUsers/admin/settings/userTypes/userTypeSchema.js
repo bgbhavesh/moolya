@@ -29,9 +29,9 @@ let UserTypesSchema = `
         FindUserType(_id:String): UserTypes
         FetchUserType(communityCode:String,displayAllOption:Boolean):[UserTypes]
         FetchUserTypeForMultiSelect(communityId:[String]):[UserTypes]   
-        FetchUserType1:[UserTypes]
         FetchUserTypeSelect:[UserTypes]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],UserTypesSchema]);
+//FetchUserType1:[UserTypes]

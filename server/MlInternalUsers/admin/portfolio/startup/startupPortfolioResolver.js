@@ -111,7 +111,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
       startAboutUsArray.assets.map(function(asset,index) {
         if(startAboutUsArray.assets[index]){
           let assetData = MlAssets.findOne({"_id":asset.assetTypeId}) || "";
-          startAboutUsArray.assets[index].assetName = assetData.displayName || "";
+          startAboutUsArray.assets[index].assetTypeName = assetData.displayName || "";
         }
 
       })

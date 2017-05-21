@@ -11,7 +11,7 @@ import formHandler from "../../../commons/containers/MlFormHandler";
 import _ from "lodash";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
-import {addSubChapterActionHandler} from '../actions/addSubChapter';
+import {addSubChapterActionHandler} from "../actions/addSubChapter";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
 var Select = require('react-select');
@@ -44,13 +44,11 @@ class MlAddSubChapter extends React.Component {
   };
 
   async handleSuccess(response) {
-    if (response) {
-      if (response.success)
-        window.history.back()
-      else
-        toastr.error(response.result);
-    }
-  };
+    if (response && !response.success)
+      toastr.error(response.result);
+    else
+      window.history.back()
+  }
 
   onStatusChangeActive(e) {
     let updatedData = this.state.data || {};
@@ -117,6 +115,7 @@ class MlAddSubChapter extends React.Component {
     dataGet = _.omit(dataGet, '__typename')
     dataGet.subChapterDisplayName = this.refs.subChapterDisplayName.value
     dataGet.aboutSubChapter = this.refs.aboutSubChapter.value
+    dataGet.subChapterName = this.refs.subChapterName.value
     dataGet.showOnMap = this.refs.showOnMap.checked
     dataGet.isActive = this.refs.isActive.checked
     dataGet.isBespokeWorkFlow = this.refs.isBespokeWorkFlow.checked
@@ -136,7 +135,6 @@ class MlAddSubChapter extends React.Component {
     if(_.isEmpty(data.moolyaSubChapterAccess)){
       data = _.omit(data, 'moolyaSubChapterAccess')
     }
-    console.log(data)
     const response = await addSubChapterActionHandler(data)
     return response;
   }
@@ -184,7 +182,19 @@ class MlAddSubChapter extends React.Component {
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
   }
 
+  selectAssociateChapter(val) {
+    if (val) {
+      this.setState({selectedChapter: val.value})
+    } else {
+      this.setState({selectedChapter: ''})
+    }
+  }
   render() {
+    var options = [
+      {value: 'Chapter 1', label: 'Chapter 1'},
+      {value: 'Chapter 2', label: 'Chapter 2'}
+    ];
+
     let MlActionConfig = [
       {
         actionName: 'save',
@@ -228,6 +238,9 @@ class MlAddSubChapter extends React.Component {
                   <div className="form-group">
                     <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
                            className="form-control float-label"/>
+                  </div>
+                  <div className="form-group">
+                    <Select name="form-field-name" placeholder="Associated Chapters"  className="float-label"  options={options} value={this.state.selectedChapter} onChange={this.selectAssociateChapter.bind(this)}/>
                   </div>
                   <div className="form-group">
                     <textarea placeholder="About" ref="aboutSubChapter" className="form-control float-label"></textarea>

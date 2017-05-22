@@ -4,6 +4,7 @@ let chapterSchema = `
     type Chapter{
         _id:String,
         clusterId:String,
+        clusterName: String 
         chapterCode:String,
         chapterName:String,
         displayName:String,
@@ -19,7 +20,6 @@ let chapterSchema = `
         showOnMap:Boolean,
         isActive:Boolean
         status:status
-        
     }
     
     input chapterObject{
@@ -63,7 +63,7 @@ let chapterSchema = `
     type SubChapter{
         _id:String
         clusterId:String
-        isDefaultSubChapter:String
+        isDefaultSubChapter:Boolean
         clusterName: String
         chapterId:String
         subChapterImageLink:String
@@ -102,7 +102,7 @@ let chapterSchema = `
     
     input subChapterObject{
         subChapterId:String,
-        isDefaultSubChapter:String,
+        isDefaultSubChapter:Boolean,
         clusterId:String, 
         clusterName:String,
         stateId:String,
@@ -134,7 +134,7 @@ let chapterSchema = `
     }
     
     type Query{ 
-        fetchChapter:String
+        fetchChapter(chapterId: String): Chapter
         fetchChapters(id:String):[Chapter]
         fetchChaptersWithoutAll(id:String):[Chapter]
         fetchSubChapter(_id: String):SubChapter
@@ -153,7 +153,7 @@ let chapterSchema = `
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
-        createSubChapter(subChapter:subChapterObject):response
+        createSubChapter(subChapter:subChapterObject, moduleName:String, actionName:String):response
         updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
      }
 `

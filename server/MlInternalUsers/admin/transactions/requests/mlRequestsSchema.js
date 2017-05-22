@@ -15,7 +15,7 @@ let requestsSchema = `
         requestDescription        : String
         transactionAssignedBy     : String
         transactionCompletedBy    : String
-        requestsCreatedDate       : String
+        transactionCreatedDate       : String
         transactionUpdatedDate    : String
         hierarchy                 : String
         cluster                   : String
@@ -58,7 +58,7 @@ let requestsSchema = `
         transactionAssignedBy     : String
         transactionCompletedBy    : String
         requestsStatus            : statusInput
-        requestsCreatedDate       : String
+        transactionCreatedDate       : String
         transactionUpdatedDate    : String
         hierarchy                 : String
         cluster                   : String

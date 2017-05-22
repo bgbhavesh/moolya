@@ -141,6 +141,7 @@ class MlAddBackendUser extends React.Component {
       let profile = {
         isInternaluser: true,
         isExternaluser: false,
+        isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
         email: this.refs.email.value,
         isActive:this.refs.deActive.checked,
         InternalUprofile: InternalUprofile,

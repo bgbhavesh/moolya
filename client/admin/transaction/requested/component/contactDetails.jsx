@@ -14,6 +14,7 @@ import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
 import update from 'immutability-helper';
 import {findCountryCode} from '../actions/findRegistration'
 import MlLoader from '../../../../commons/components/loader/loader'
+import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 export default class ContactDetails extends React.Component{
   constructor(props){
@@ -37,6 +38,9 @@ export default class ContactDetails extends React.Component{
   componentDidMount(){
     this.findRegistration.bind(this);
     this.fetchCountryCode();
+  }
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
   componentWillUpdate(nextProps, nextState) {
 

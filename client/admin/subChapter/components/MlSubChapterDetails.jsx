@@ -105,7 +105,8 @@ class MlSubChapterDetails extends React.Component {
   async updateSubChapter() {
     let loggedInUser = getAdminUserContext()
     let subChapterDetails={};
-    if(loggedInUser.hierarchyLevel != 1){
+    //loggedInUser.hierarchyLevel != 1
+    if(this.state.data.isDefaultSubChapter){
       subChapterDetails = {
         subChapterId: this.refs.id.value,
         subChapterDisplayName: this.refs.subChapterDisplayName.value,
@@ -118,6 +119,8 @@ class MlSubChapterDetails extends React.Component {
         isActive: this.refs.isActive.checked
       }
     }else{
+      // toastr.error('Non-Moolya sub chapter update under construction');
+      // return;
       subChapterDetails = {
         subChapterId: this.refs.id.value,
         subChapterDisplayName: this.refs.subChapterDisplayName.value,
@@ -234,7 +237,8 @@ class MlSubChapterDetails extends React.Component {
                 </form>
               </div>
             </div>
-            {(loggedInUser.hierarchyLevel!=1)?
+            {/*loggedInUser.hierarchyLevel!=1 */}
+            {(this.state.data.isDefaultSubChapter)?
             <div className="col-md-6 nopadding-right">
               <div className="form_bg left_wrap">
                 <ScrollArea

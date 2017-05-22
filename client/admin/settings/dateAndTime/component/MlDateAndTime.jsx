@@ -197,6 +197,16 @@ class MlAddDateAndTime extends React.Component{
       {value: 'pm', label: 'pm'},
       {value: 'p.m', label: 'p.m'}
     ]
+    let amSymbolActive='',pmSymbolActive='',numberOfDaysInWeekActive
+    if(this.state.amSymbol){
+      amSymbolActive='active'
+    }
+    if(this.state.pmSymbol){
+      pmSymbolActive='active'
+    }
+    if(this.state.numberOfDaysInWeek){
+      numberOfDaysInWeekActive='active'
+    }
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -208,6 +218,7 @@ class MlAddDateAndTime extends React.Component{
                   <Moolyaselect multiSelect={false}  placeholder={"Time Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.timeFormat} queryType={"graphql"} query={timeFormatquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectTimeFormat.bind(this)} />
                 </div>
                 <div className="form-group">
+                <span className={`placeHolder ${amSymbolActive}`}>AM Symbol</span>
                   {/*<Moolyaselect multiSelect={false}  placeholder={"AM Symbol"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.amSymbol} queryType={"graphql"} query={timeFormatquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectAmSymbol.bind(this)} />*/}
                   <Select
                     name="form-field-name"  options={amSymbols} placeholder={"AM Symbol"}
@@ -215,6 +226,7 @@ class MlAddDateAndTime extends React.Component{
                     className="float-label"/>
                 </div>
                 <div className="form-group">
+                  <span className={`placeHolder ${pmSymbolActive}`}>PM Symbol</span>
                   {/*<Moolyaselect multiSelect={false}  placeholder={"PM Symbol"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.pmSymbol} queryType={"graphql"} query={timeFormatquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectPmSymbol.bind(this)} />*/}
                   <Select
                     name="form-field-name"  options={pmSymbols} placeholder={"PM Symbol"}
@@ -240,6 +252,7 @@ class MlAddDateAndTime extends React.Component{
                     <Moolyaselect multiSelect={false}  placeholder={"Date Format"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.dateFormat} queryType={"graphql"} query={dateFormatquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectDateFormat.bind(this)} />
                   </div>
                   <div className="form-group">
+                    <span className={`placeHolder ${numberOfDaysInWeekActive}`}>Number of Days in Week</span>
                     {/*<Moolyaselect multiSelect={false}  placeholder={"Number of Days in Week"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.numberOfDaysInWeek} queryType={"graphql"} query={timeFormatquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectNumberOfDaysInWeek.bind(this)} />*/}
                     <Select
                       name="form-field-name"  options={numberOfDays} placeholder={"Number of Days in Week"}

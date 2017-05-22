@@ -14,6 +14,7 @@ import {findDepartmentActionHandler} from '../actions/findDepartmentAction'
 import ScrollArea from 'react-scrollbar';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditSubDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -69,28 +70,32 @@ class MlEditSubDepartment extends React.Component{
 
 
   async  editSubDepartment() {
-    let subDepartment = {
-      subDepartmentName: this.refs.subDepartmentName.value,
-      displayName: this.refs.displayName.value,
-      aboutSubDepartment: this.refs.aboutSubDepartment.value,
-      isActive: this.refs.subDepartmentStatus.checked,
-      departmentId: this.state.department,
-      isMoolya: this.state.data.isMoolya,   //    //this.refs.appType.checked
-      subDepatmentAvailable: this.state.subDepatmentAvailable
-    }
-    let SubDepartmentDetails = {
-      subDepartmentId: this.props.config,
-      subDepartment: subDepartment
-    }
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let subDepartment = {
+        subDepartmentName: this.refs.subDepartmentName.value,
+        displayName: this.refs.displayName.value,
+        aboutSubDepartment: this.refs.aboutSubDepartment.value,
+        isActive: this.refs.subDepartmentStatus.checked,
+        departmentId: this.state.department,
+        isMoolya: this.state.data.isMoolya,   //    //this.refs.appType.checked
+        subDepatmentAvailable: this.state.subDepatmentAvailable
+      }
+      let SubDepartmentDetails = {
+        subDepartmentId: this.props.config,
+        subDepartment: subDepartment
+      }
 
-    const response = await updateSubDepartmentActionHandler(SubDepartmentDetails)
-    if (response) {
+      const response = await updateSubDepartmentActionHandler(SubDepartmentDetails)
+      if (response) {
+
+      }
+      return response;
 
     }
-    return response;
-
   }
-
   async  findSubDepartment() {
     let id = this.props.config
     const response = await findSubDepartmentActionHandler(id);
@@ -159,15 +164,15 @@ class MlEditSubDepartment extends React.Component{
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <form>
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" ref="subDepartmentName"
                                defaultValue={this.state.data && this.state.data.subDepartmentName}
-                               placeholder="Sub Department Name" className="form-control float-label" id=""/>
+                               placeholder="Sub Department Name" className="form-control float-label" id="" data-required={true} data-errMsg="SubDepartment Name is required"/>
                       </div>
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" ref="displayName"
                                defaultValue={this.state.data && this.state.data.displayName} placeholder="Display Name"
-                               className="form-control float-label" id=""/>
+                               className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                       </div>
                       <div className="form-group">
                         <textarea ref="aboutSubDepartment"

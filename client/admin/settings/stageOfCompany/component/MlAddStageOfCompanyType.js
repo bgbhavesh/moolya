@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addStageOfCompanyActionHandler} from '../actions/addStageOfCompanyTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddStageOfCompany extends React.Component {
   constructor(props) {
     super(props);
@@ -32,15 +33,21 @@ class MlAddStageOfCompany extends React.Component {
   };
 
   async  createStageOfCompany() {
-    let StageOfCompanyDetails = {
-      stageOfCompanyName: this.refs.stageOfCompanyName.value,
-      stageOfCompanyDisplayName: this.refs.stageOfCompanyDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let StageOfCompanyDetails = {
+        stageOfCompanyName: this.refs.stageOfCompanyName.value,
+        stageOfCompanyDisplayName: this.refs.stageOfCompanyDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
 
-    const response = await addStageOfCompanyActionHandler(StageOfCompanyDetails)
-    return response;
+      const response = await addStageOfCompanyActionHandler(StageOfCompanyDetails)
+      toastr.success("Created Successfully")
+      return response;
+    }
   }
   componentDidMount()  {
     OnToggleSwitch(false,true);
@@ -79,9 +86,9 @@ class MlAddStageOfCompany extends React.Component {
           <div className="col-md-6 nopadding-left">
           <div className="form_bg">
           <form>
-          <div className="form-group">
+          <div className="form-group mandatory">
           <input type="text" ref="stageOfCompanyName" placeholder="Stage Of Company Name"
-          className="form-control float-label"/>
+          className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
           </div>
           <div className="form-group">
           <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
@@ -92,9 +99,9 @@ class MlAddStageOfCompany extends React.Component {
           <div className="col-md-6 nopadding-right">
           <div className="form_bg">
           <form>
-          <div className="form-group">
+          <div className="form-group mandatory">
           <input type="text" ref="stageOfCompanyDisplayName" placeholder="Display Name"
-          className="form-control float-label"/>
+          className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
           </div>
           <div className="form-group switch_wrap inline_switch">
           <label>Status</label>

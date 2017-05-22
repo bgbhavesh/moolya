@@ -264,12 +264,222 @@ if (Meteor.isServer) {
           "isMenu": true,
         },
         {
-          "image": "/images/db_icon.png",
-          "link": "",
-          "name": "Settings",
-          "uniqueId": "settings",
-          "isLink": true,
-          "isMenu": true,
+          "image" : "/images/settings_icon.png",
+          "link" : "/admin/settings/departmentsList",
+          "name" : "settings",
+          "uniqueId" : "settings",
+          "isLink" : true,
+          "isMenu" : true,
+          "subMenu" : [
+            {
+              "link" : "/admin/settings/departmentsList",
+              "name" : "Departments",
+              "uniqueId" : "settings_Departments",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              "subMenu": [
+
+                {
+                  "link": "/admin/settings/addDepartment",
+                  "name": "Add Departments",
+                  "uniqueId": "settings_AddDepartment",
+                  "subMenuMappingId":"settings_Departments",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/departmentsList",
+                  "name": "List Department",
+                  "uniqueId": "settings_DepartmentList",
+                  "subMenuMappingId":"settings_Departments",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/editDepartment",
+                  "name": "Edit Department",
+                  "uniqueId": "settings_EditDepartment",
+                  "subMenuMappingId":"settings_Departments",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }
+              ]
+            },
+            {
+              "link" : "/admin/settings/subDepartmentsList",
+              "name" : "Sub Departments",
+              "uniqueId" : "settings_SubDepartments",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              subMenu:[{
+                "link": "/admin/settings/addSubDepartment",
+                "name": "Add Sub Departments",
+                "uniqueId": "settings_AddSubDepartments",
+                "subMenuMappingId":"settings_SubDepartments",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+                {
+                  "link": "/admin/settings/subDepartmentsList",
+                  "name": "List Sub Department",
+                  "uniqueId": "settings_SubDepartmentList",
+                  "subMenuMappingId":"settings_SubDepartments",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/editSubDepartment",
+                  "name": "Edit Sub Department",
+                  "uniqueId": "settings_EditSubDepartments",
+                  "subMenuMappingId":"settings_SubDepartments",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }]
+            },
+            {
+              "link" : "/admin/settings/templatesList",
+              "name" : "Templates",
+              "uniqueId" : "settings_templates",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              subMenu:[
+                {
+                  "link": "/admin/settings/templatesList",
+                  "name": "List Templates",
+                  "uniqueId": "settings_templatesList",
+                  "subMenuMappingId":"settings_templates",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+              ]
+            },
+            {
+              "image" : "/images/cluster_icon.png",
+              "link" : "/admin/settings/hierarchy/platformhierarchy",
+              "name" : "Hierarchy",
+              "uniqueId"   :"hierarchy_details",
+              "isLink" : true,
+              "isMenu" : true,
+              "hideSubMenu":true,
+              "subMenu":[
+                {
+                  "link": "/admin/settings/hierarchy/clusterhierarchy/:clusterId/chapters",
+                  "name": "cluster hierarchy",
+                  "uniqueId": "hierarchy",
+                  "subMenuMappingId":"",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": "",
+                  "subMenu":[
+                    {
+                      "link": "/settings/hierarchy/clusterhierarchy/:clusterId/hierarchyDetails",
+                      "name": " cluster hierarchy",
+                      "uniqueId": "hierarchy_chapters",
+                      "subMenuMappingId":"",
+                      "subMenusId":"settings",
+                      "isLink": true,
+                      "isMenu": false,
+                      "image": ""
+                    },
+                  ]
+                },
+              ]
+            },
+            {
+              "link" : "/admin/settings/rolesList",
+              "name" : "Roles & Permissions",
+              "uniqueId" : "settings_roles",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              subMenu:[{
+                "link": "/admin/settings/createRole",
+                "name": "Add Roles",
+                "uniqueId": "settings_createRole",
+                "subMenuMappingId":"settings_roles",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+                {
+                  "link": "/admin/settings/rolesList",
+                  "name": "List Roles",
+                  "uniqueId": "settings_rolesList",
+                  "subMenuMappingId":"settings_roles",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/editRoleType",
+                  "name": "Edit Roles",
+                  "uniqueId": "settings_EditRole",
+                  "subMenuMappingId":"settings_roles",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }]
+            },
+            {
+              "link" : "/admin/settings/backendUserList",
+              "name" : "Backend Users",
+              "uniqueId" : "settings_BackendUsers",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              subMenu:[{
+                "link": "/admin/settings/addBackendUser",
+                "name": "Add BackendUser",
+                "uniqueId": "settings_AddBackendUser",
+                "subMenuMappingId":"settings_BackendUsers",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+                {
+                  "link": "/admin/settings/backendUserList",
+                  "name": "List BackendUser",
+                  "uniqueId": "settings_BackendUserList",
+                  "subMenuMappingId":"settings_BackendUsers",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/editBackendUser",
+                  "name": "Edit BackendUser",
+                  "uniqueId": "settings_EditBackendUser",
+                  "subMenuMappingId":"settings_BackendUsers",
+                  "subMenusId":"settings",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }]
+            },
+          ]
         },
         {
           "image": "/images/db_icon.png",

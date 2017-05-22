@@ -13,7 +13,6 @@ import moment from "moment";
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 
-
 export default class Company extends React.Component{
   constructor(props){
     super(props);
@@ -260,7 +259,7 @@ export default class Company extends React.Component{
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationDate} disabled="true"/>
+                <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={moment(this.props.registrationInfo.registrationDate).format('MM/DD/YYYY HH:mm:ss')} disabled="true"/>
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Request Id" className="form-control float-label" id="" defaultValue={this.props.registrationInfo.registrationId} disabled="true"/>

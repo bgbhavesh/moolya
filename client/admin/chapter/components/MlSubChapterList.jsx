@@ -19,8 +19,8 @@ export default class MlSubChapterList extends Component {
         </div>
       )
     });
-    const list=  data.map((prop) =>
-      <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
+    const list=  data.map((prop, idx) =>
+      <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
         <div className="list_block">
           <div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>
           <a href={chapterRoutes.subChapterDetails(prop.clusterId, prop.chapterId, prop._id, prop.subChapterName)}>

@@ -26,8 +26,11 @@ export default class MlAssignBackendUserList extends React.Component{
     }
 
     async fetchAssignUsers(){
-      let clusterId = this.props.clusterId;
-      const response = await fetchAssignUsersActionHandler(clusterId, "", "", "", "");
+      let clusterId = this.props.clusterId?this.props.clusterId:"";
+      let chapterId = this.props.chapterId?this.props.chapterId:"";
+      let subChapterId = this.props.subChapterId?this.props.subChapterId:"";
+      let communityId = this.props.communityId?this.props.communityId:"";
+      const response = await fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId, "");
       let data = response ? response : []
       this.setState({loading:false, backendUsers:data});
     }
@@ -41,7 +44,7 @@ export default class MlAssignBackendUserList extends React.Component{
         let backendUsers = that.state.backendUsers
         return(
           <div>
-            {backendUsers.map(function (user) {
+            {backendUsers.map(function (user, idx) {
               let status, icon;
               if(user.profile.isActive){
                 status = "active";
@@ -51,7 +54,7 @@ export default class MlAssignBackendUserList extends React.Component{
                 icon = "inactive-user"
               }
                 return(
-                    <div className="col-md-4 col-sm-4" key={user.username} onClick={that.onBackEndUserClick.bind(that,user)}>
+                    <div className="col-md-4 col-sm-4" key={idx} onClick={that.onBackEndUserClick.bind(that,user)}>
                         <div className="list_block provider_block">
                           <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
                             <div className="provider_mask"> <img src="/images/funder_bg.png" /> <img className="user_pic" src="/images/def_profile.png" /> </div>

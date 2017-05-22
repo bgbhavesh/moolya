@@ -15,6 +15,8 @@ import update from 'immutability-helper';
 import {findCountryCode} from '../actions/findRegistration'
 import MlLoader from '../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import _ from 'lodash'
+import _underscore from 'underscore'
 
 export default class ContactDetails extends React.Component{
   constructor(props){
@@ -30,6 +32,8 @@ export default class ContactDetails extends React.Component{
       loading:true
 
     }
+
+
     this.findRegistration.bind(this);
     this.fetchCountryCode.bind(this);
     return this;
@@ -83,6 +87,7 @@ export default class ContactDetails extends React.Component{
           this.refs.countryCode.value="";
           this.refs["contactNumber"].value="";
           this.setState({selectedNumberTypeValue : "",selectedNumberTypeLabel : ""});
+          toastr.success("Contact is created successfully");
         }
 
       }
@@ -99,6 +104,7 @@ export default class ContactDetails extends React.Component{
     if(this.state.selectedNumberTypeValue){
       contactExist = _.contains(dbData,this.state.selectedNumberTypeValue );
     }
+
     if(contactExist){
       toastr.error("Contact TypeAlready Exists!!!!!");
       this.findRegistration();
@@ -119,6 +125,8 @@ export default class ContactDetails extends React.Component{
       if(response){
         if(!response.success){
           toastr.error(response.result);
+        }else{
+          toastr.success("Contact is updated successfully");
         }
         this.findRegistration();
         this.props.registrationDetails();
@@ -130,9 +138,7 @@ export default class ContactDetails extends React.Component{
   }
   async findRegistration(){
     let registrationId=this.props.registerId;
-
     const response = await findRegistrationActionHandler(registrationId);
-
     this.setState({loading:false,contactNumberArray:response.contactInfo});
     //this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
     //return response;
@@ -141,6 +147,7 @@ export default class ContactDetails extends React.Component{
     this.setState({selectedContactTab : true});
     this.setState({activeTab : ""});
     this.findRegistration();
+    this.props.registrationDetails();
   }
 
   async fetchCountryCode(){
@@ -167,8 +174,30 @@ export default class ContactDetails extends React.Component{
       this.findRegistration();
       this.props.registrationDetails();
       this.setState({activeTab : "active"});
+      toastr.success("Contact removed successfully");
     }
   }
+
+  async onClear(index,value){
+
+    this.refs["contactNumber"+index].value = "";
+/*
+    let updatedComment = update(this.state.contactNumberArray[index], {
+      numberType :   {$set: ""}
+    });
+
+    let newData = update(this.state.contactNumberArray, {
+      $splice: [[index, 1, updatedComment]]
+    });
+    this.setState({contactNumberArray : newData});
+    let registrationDetails = _.cloneDeep(this.state.defaultData);
+    let omitData = _.omit(registrationDetails["contactInfo"][index], 'numberType') || [];
+    registrationDetails["contactInfo"][index] = omitData
+    this.setState({defaultData : registrationDetails});*/
+
+  }
+
+
 
 
 
@@ -201,8 +230,8 @@ export default class ContactDetails extends React.Component{
 
               return(
                 <li key={key} onClick={that.tabSelected.bind(that,key)}>
-                  <a data-toggle="pill" href={'#numberType'+key} className="add-contact">
-                    <FontAwesome name='minus-square'/>{options.numberTypeName}</a>
+                  <a data-toggle="pill" href={'#numberType'+key} className="add-contact" >
+                    <FontAwesome name='minus-square' onClick={that.onDeleteContact.bind(that,key)}/>{options.numberTypeName}</a>
                 </li>)
 
 
@@ -244,13 +273,13 @@ export default class ContactDetails extends React.Component{
                          className="form-control float-label" id="" disabled={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" ref={'contactNumber'+key} placeholder="Enter Number" valueKey={options.contactNumber} id="phoneNumber" defaultValue={options.contactNumber}
+                  <input type="text" ref={'contactNumber'+key} placeholder="Enter Number"  id="phoneNumber" defaultValue={options.contactNumber}
                          className="form-control float-label"/>
                 </div>
                 <div className="ml_icon_btn">
                   <a href="#" onClick={that.onEditingContact.bind(that,key)} className="save_btn"><span
                     className="ml ml-save"></span></a>
-                  <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onDeleteContact.bind(that,key)} ><span className="ml ml-delete"></span></a>
+                  <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onClear.bind(that,key)} ><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
             }))}

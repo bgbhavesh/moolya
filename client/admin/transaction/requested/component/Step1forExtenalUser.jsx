@@ -13,7 +13,7 @@ import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
-
+import moment from 'moment'
 var FontAwesome = require('react-fontawesome');
 var options3 = [
   {value: 'Yes', label: 'Yes'},
@@ -404,7 +404,7 @@ export default class Step1forExtenalUser extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="datetime" placeholder="Date & Time" className="form-control float-label" id=""  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationDate} disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" className="form-control float-label" id=""  defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format('MM/DD/YYYY hh:mm:ss')} disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>

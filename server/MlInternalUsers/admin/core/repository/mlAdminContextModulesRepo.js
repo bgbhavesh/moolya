@@ -177,7 +177,18 @@ let CoreModules = {
       });
       data = result;
       return {totalRecords:totalRecords,data:data};
+  },
+  MlTransactionLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+    let query={};
+    if(!fieldsProj.sort){
+      fieldsProj.sort={createdAt: -1}
+    }
+    const data = mlDBController.find('MlTransactionsLog', query, context, fieldsProj).fetch();
+    const totalRecords = mlDBController.find('MlTransactionsLog', query, context,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
+
   }
+
 }
 
 

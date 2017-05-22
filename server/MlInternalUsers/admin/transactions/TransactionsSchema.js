@@ -26,6 +26,16 @@ let transactionsSchema = `
         subDepartment       : String
         subDepartmentId     : String
     }
+    
+    type userAgent{
+        OS                  :String
+        ipAddress           :String
+        browser             :String
+        deviceModel         :String
+        deviceType          :String
+        deviceVendor        :String
+    }
+    
     type Transactions{
        _id                      : String
        status                   : String
@@ -48,10 +58,32 @@ let transactionsSchema = `
       subChapter                : String
       community                 : String
     }
+    
+    type TransactionsLog{
+       _id                      : String
+      userId                    : String
+      userName                  : String
+      action                    : String
+      userAgent                 :[userAgent]
+      createdAt                 :String
+      transactionDetails        :String
+    
+    }
+    
+    input TransactionsLogInput{
+       _id                      : String
+      userId                    : String
+      userName                  : String
+      action                    : String
+      createdAt                 :String
+      transactionDetails        :String
+    }
+       
     input byInput{
       type                      : String
       id                        : String
     }
+    
     input trailInput{
       statusCode                : String
       statusDescription         : String
@@ -112,10 +144,12 @@ let transactionsSchema = `
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response
       selfAssignTransaction(transactionId:String,collection:String):response
       unAssignTransaction(transactionId:String,collection:String):response
+      createTransactionLog(transaction:TransactionsLogInput):response
     }
     type Query{
       fetchTransactionsByUser(userId:String):[Transactions]
       fetchTransactions(transactionType:String,status:[String]):[Transactions]
+      fetchTransactionsLog(userId:String):[TransactionsLog]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);

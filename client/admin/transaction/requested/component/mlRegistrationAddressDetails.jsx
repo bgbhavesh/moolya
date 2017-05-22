@@ -29,8 +29,8 @@ export default class AddressDetails extends React.Component{
       /* selectedValuesList : [],*/
       addressInformation : addressInfoObject,
       addressDetails: this.props.registrationInfo.addressInfo || [],
-      activeTab : "active",
-      defaultData : this.props.registrationInfo
+      activeTab : "active"
+
 
     }
     //this.optionsBySelectNumberType.bind(this)
@@ -150,18 +150,13 @@ export default class AddressDetails extends React.Component{
     const registerid = this.props.registerId;
     if (index !== -1) {
       // do your stuff here
-/*      let registrationDetails = this.props.registrationInfo.addressInfo
+      let registrationDetails = this.props.registrationInfo.addressInfo
       let dbData = _.pluck(registrationDetails, 'addressType') || [];
       let contactExist = null;
       if(this.state.selectedValue){
         contactExist = _.contains(dbData,this.state.selectedValue );
-      }*/
-      let registrationDetails = this.state.defaultData.addressInfo
-      let dbData = _underscore.pluck(registrationDetails, 'addressType') || [];
-      let contactExist = null;
-      if(this.state.selectedValue){
-        contactExist = _underscore.contains(dbData,this.state.selectedValue );
       }
+
       if(contactExist){
         toastr.error("Address Type Already Exists!!!!!");
         this.findRegistration();
@@ -227,17 +222,8 @@ export default class AddressDetails extends React.Component{
     this.refs["addressCountry"+index].value = "";
     this.refs["addressPinCode"+index].value = "";
 
+
 /*
-    let updatedComment = update(this.state.addressDetails[index], {
-      addressType :   {$set: ""}
-    });
-
-    let newData = update(this.state.addressDetails, {
-      $splice: [[index, 1, updatedComment]]
-    });
-    this.setState({addressDetails : newData});
-    this.setState({selectedValue : ""});*/
-
 
     let updatedComment = update(this.state.addressDetails[index], {
       addressType :   {$set: ""}
@@ -252,6 +238,7 @@ export default class AddressDetails extends React.Component{
     registrationDetails["addressInfo"][index] = omitData
     this.setState({defaultData : registrationDetails});
 
+*/
 
 
   }

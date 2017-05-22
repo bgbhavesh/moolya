@@ -28,7 +28,7 @@ export default class EmailDetails extends React.Component{
       emailDetailsObject : {"emailIdType": " ", "emailIdTypeName": " ", 'emailId': ''},
       emailDetails: this.props.registrationInfo.emailInfo || [],
       activeTab: "active",
-      dataClear : null
+
 
     }
     //this.optionsBySelectNumberType.bind(this)
@@ -91,18 +91,13 @@ export default class EmailDetails extends React.Component{
 
       if (index !== -1) {
         // do your stuff here
-     /*   let registrationDetails = this.props.registrationInfo.emailInfo
+        let registrationDetails = this.props.registrationInfo.emailInfo
         let dbData = _underscore.pluck(registrationDetails, 'emailIdType') || [];
-        let contactExist = null;
-        if(this.state.selectedEmailTypeValue && this.state.selectedEmailTypeValue != this.state.dataClear){
-          contactExist = _underscore.contains(dbData,this.state.selectedEmailTypeValue );
-        }*/
-        let registrationDetails = this.state.defaultData.emailInfo
-        let dbData = _underscore.pluck(registrationDetails, 'emailInfo') || [];
         let contactExist = null;
         if(this.state.selectedEmailTypeValue){
           contactExist = _underscore.contains(dbData,this.state.selectedEmailTypeValue );
         }
+
         if(contactExist){
           toastr.error("Email Type Already Exists!!!!!");
           this.findRegistration();
@@ -179,7 +174,6 @@ export default class EmailDetails extends React.Component{
   }
 
   async onClear(index,selectedTabValue,value){
-    alert(selectedTabValue);
     this.refs["emailId"+index].value = "";
    /* let zz = "" || null;
     let updatedComment = update(this.state.emailDetails[index], {
@@ -192,7 +186,7 @@ export default class EmailDetails extends React.Component{
     this.setState({emailDetails : newData});
     this.setState({selectedEmailTypeValue : ""});
 */
-    let updatedComment = update(this.state.emailDetails[index], {
+/*    let updatedComment = update(this.state.emailDetails[index], {
       emailIdType :   {$set: ""}
     });
 
@@ -214,7 +208,7 @@ export default class EmailDetails extends React.Component{
       let omitData = _.omit(registrationDetails["emailInfo"][index], 'emailIdType') || [];
       registrationDetails["emailInfo"][index] = omitData
       this.setState({defaultData : registrationDetails});
-    }
+    }*/
 
   }
 

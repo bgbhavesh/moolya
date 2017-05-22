@@ -32,7 +32,7 @@ export default class Step4 extends React.Component{
       socialLinkArray :[],
       uploadedProfilePic : "/images/ideator_01.png",
       activeTab: "active",
-      defaultData : this.props.registrationData
+
 
 
     }
@@ -142,7 +142,8 @@ export default class Step4 extends React.Component{
     let registerid = this.props.registrationId;
     if (index !== -1) {
       // do your stuff here
-      let registrationDetails = this.state.defaultData.socialLinksInfo
+
+      let registrationDetails = this.props.registrationInfo.socialLinksInfo
       let dbData = _underscore.pluck(registrationDetails, 'socialLinkType') || [];
       let contactExist = null;
       if(this.state.selectedValue){
@@ -197,7 +198,7 @@ export default class Step4 extends React.Component{
 
   async onClear(index,value){
     this.refs["socialLinkTypeUrl"+index].value = "";
-
+/*
     let updatedComment = update(this.state.socialLinkArray[index], {
       socialLinkType :   {$set: ""}
     });
@@ -209,7 +210,7 @@ export default class Step4 extends React.Component{
     let registrationDetails = _.cloneDeep(this.state.defaultData);
     let omitData = _.omit(registrationDetails["socialLinksInfo"][index], 'socialLinkType') || [];
     registrationDetails["socialLinksInfo"][index] = omitData
-    this.setState({defaultData : registrationDetails});
+    this.setState({defaultData : registrationDetails});*/
 
   }
 

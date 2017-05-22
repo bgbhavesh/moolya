@@ -29,8 +29,8 @@ export default class ContactDetails extends React.Component{
       contactNumberArray : this.props.registrationInfo.contactInfo|| [],
       activeTab : "active",
       countryDetails : null,
-      loading:true,
-      defaultData : this.props.registrationInfo
+      loading:true
+
     }
 
 
@@ -98,18 +98,13 @@ export default class ContactDetails extends React.Component{
     let detailsType = "CONTACTTYPE";
     let registerid = this.props.registerId;
 
-   /* let registrationDetails = this.props.registrationInfo.contactInfo
+    let registrationDetails = this.props.registrationInfo.contactInfo
     let dbData = _.pluck(registrationDetails, 'numberType') || [];
     let contactExist = null;
     if(this.state.selectedNumberTypeValue){
       contactExist = _.contains(dbData,this.state.selectedNumberTypeValue );
-    }*/
-    let registrationDetails = this.state.defaultData.contactInfo
-    let dbData = _underscore.pluck(registrationDetails, 'numberType') || [];
-    let contactExist = null;
-    if(this.state.selectedNumberTypeValue){
-      contactExist = _underscore.contains(dbData,this.state.selectedNumberTypeValue );
     }
+
     if(contactExist){
       toastr.error("Contact TypeAlready Exists!!!!!");
       this.findRegistration();
@@ -184,18 +179,9 @@ export default class ContactDetails extends React.Component{
   }
 
   async onClear(index,value){
-/*    this.refs["contactNumber"+index].value = "";
-    let updatedComment = update(this.state.contactNumberArray[index], {
-      numberType :   {$set: ""}
-    });
 
-    let newData = update(this.state.contactNumberArray, {
-      $splice: [[index, 1, updatedComment]]
-    });
-    this.setState({contactNumberArray : newData});
-    this.setState({selectedNumberTypeValue : ""});*/
     this.refs["contactNumber"+index].value = "";
-
+/*
     let updatedComment = update(this.state.contactNumberArray[index], {
       numberType :   {$set: ""}
     });
@@ -207,7 +193,7 @@ export default class ContactDetails extends React.Component{
     let registrationDetails = _.cloneDeep(this.state.defaultData);
     let omitData = _.omit(registrationDetails["contactInfo"][index], 'numberType') || [];
     registrationDetails["contactInfo"][index] = omitData
-    this.setState({defaultData : registrationDetails});
+    this.setState({defaultData : registrationDetails});*/
 
   }
 

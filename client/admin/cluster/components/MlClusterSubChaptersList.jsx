@@ -14,9 +14,23 @@ export default class MlClusterSubChaptersList extends Component
   render(){
     const data=this.props.data||[];
     let list = null;
+    const subChapter =  [{'href':'/admin/myroute'}];
+    const addSubChapter = subChapter.map(function (item,idx) {
+      return (
+        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+          <div className="list_block">
+            <div className="cluster_status"></div>
+            <a href={clusterRoutes.createSubChapterDetails(data[0].clusterId, data[0].chapterId)}>
+              <div className={"hex_outer"}><span className="ml ml-plus"></span></div>
+            </a>
+            <h3>Add Sub Chapter</h3>
+          </div>
+        </div>
+      )
+    });
     if(data.length>0){
-      list=  data.map((prop) =>
-        <div className="col-lg-2 col-md-4 col-sm-4" key={prop.subChapterCode}>
+      list=  data.map((prop, idx) =>
+        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
           <div className="list_block">
             <div className={`cluster_status ${prop.isActive|| ""}_cl `}></div>
             <a href={clusterRoutes.subChapterDetails(prop.clusterId,prop.chapterId,prop._id,prop.subChapterName)}> <div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div></a>
@@ -29,7 +43,7 @@ export default class MlClusterSubChaptersList extends Component
     }
 
 
-    return (<div className="row">{list}</div>);
+    return (<div className="row">{addSubChapter} {list}</div>);
 
   }
 }

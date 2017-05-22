@@ -1,18 +1,18 @@
-import React from 'react';
-import {render} from 'react-dom';
-import MlActionComponent from '../../../commons/components/actions/ActionComponent'
-import MlLoader from '../../../commons/components/loader/loader'
-import {findSubChapterActionHandler} from '../actions/findSubChapter'
-import {updateSubChapterActionHandler} from '../actions/updateSubChapter'
-import formHandler from '../../../commons/containers/MlFormHandler';
-import _ from 'lodash';
-import {OnToggleSwitch,initalizeFloatLabel} from '../../utils/formElemUtil';
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import React from "react";
+import {render} from "react-dom";
+import MlActionComponent from "../../../commons/components/actions/ActionComponent";
+import MlLoader from "../../../commons/components/loader/loader";
+import {findSubChapterActionHandler} from "../actions/findSubChapter";
+import {updateSubChapterActionHandler} from "../actions/updateSubChapter";
+import formHandler from "../../../commons/containers/MlFormHandler";
+import _ from "lodash";
+import {OnToggleSwitch, initalizeFloatLabel} from "../../utils/formElemUtil";
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import ScrollArea from "react-scrollbar";
+import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
+import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
 var Select = require('react-select');
-import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import MlInternalSubChapterAccess from '../components/MlInternalSubChapterAccess'
-import MlMoolyaSubChapterAccess from '../components/MlMoolyaSubChapterAccess'
 
 class MlSubChapterDetails extends React.Component {
   constructor(props) {
@@ -114,18 +114,16 @@ class MlSubChapterDetails extends React.Component {
         // subChapterImageLink: this.refs.subChapterImageLink.value,
         subChapterEmail: this.refs.subChapterEmail.value,
          isEmailNotified:  this.state.data.isEmailNotified,
-        chapterId:this.state.data.chapterId,
+        // chapterId:this.state.data.chapterId,
         showOnMap: this.refs.showOnMap.checked,
         isActive: this.refs.isActive.checked
       }
     }else{
-      // toastr.error('Non-Moolya sub chapter update under construction');
-      // return;
       subChapterDetails = {
         subChapterId: this.refs.id.value,
         subChapterDisplayName: this.refs.subChapterDisplayName.value,
         aboutSubChapter: this.refs.aboutSubChapter.value,
-        chapterId:this.state.data.chapterId,
+        // chapterId:this.state.data.chapterId,
         showOnMap: this.refs.showOnMap.checked,
         isActive: this.refs.isActive.checked,
         isBespokeWorkFlow: this.refs.isBespokeWorkFlow.checked,
@@ -139,13 +137,10 @@ class MlSubChapterDetails extends React.Component {
   }
 
   componentWillMount() {
-    console.log(this.props);
     const resp = this.findSubChapter();
     return resp;
   }
-  componentDidMount(){
-    console.log(this.state.data)
-  }
+
   componentDidUpdate()
   {
     var WinHeight = $(window).height();
@@ -155,9 +150,7 @@ class MlSubChapterDetails extends React.Component {
   }
   async findSubChapter() {
     let subChapterId = this.props.params;
-    console.log(this.props)
     const response = await findSubChapterActionHandler(subChapterId);
-    // console.log(response);
     if(response && response.internalSubChapterAccess){
       this.setState({internalSubChapterAccess:response.internalSubChapterAccess});
     }
@@ -239,141 +232,148 @@ class MlSubChapterDetails extends React.Component {
             </div>
             {/*loggedInUser.hierarchyLevel!=1 */}
             {(this.state.data.isDefaultSubChapter)?
-            <div className="col-md-6 nopadding-right">
-              <div className="form_bg left_wrap">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrollling={true}
-                  default={true}
-                >
-                <form>
-                  <div className="form-group">
-                    <div className="fileUpload mlUpload_btn">
-                      <span>Profile Pic</span>
-                      <input type="file" className="upload" ref="subChapterImageLink"/>
-                    </div>
-                    <div className="previewImg ProfileImg">
-                      <img src={this.state.data && this.state.data.subChapterImageLink}/>
-                      {/*<img src="/images/ideator_01.png"/>*/}
-                    </div>
-                  </div>
-                  <br className="brclear"/>
-                  <div className="form-group">
-                    <input type="text" ref="state" placeholder="State" className="form-control float-label"
-                           defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
-                           defaultValue={this.state.data && this.state.data.subChapterEmail}
-                           className="form-control float-label"/>
-                    <div className="email_notify">
-                      <div className="input_types">
-                        <input ref="isEmailNotified" type="checkbox" name="checkbox"
-                                checked={this.state.data.isEmailNotified}
-                               onChange={this.onStatusChangeNotify.bind(this)}/>
-                        <label htmlFor="checkbox1"><span> </span>Notify</label>
+              <div className="col-md-6 nopadding-right">
+                <div className="form_bg left_wrap">
+                  <ScrollArea
+                    speed={0.8}
+                    className="left_wrap"
+                    smoothScrollling={true}
+                    default={true}
+                  >
+                    <form>
+                      <div className="form-group">
+                        <div className="fileUpload mlUpload_btn">
+                          <span>Profile Pic</span>
+                          <input type="file" className="upload" ref="subChapterImageLink"/>
+                        </div>
+                        <div className="previewImg ProfileImg">
+                          <img src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'} />
+                          {/*<img src="/images/ideator_01.png"/>*/}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="form-group switch_wrap inline_switch">
-                    <label>Show on Map</label>
-                    <label className="switch">
-                      <input type="checkbox" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
-                      onChange={this.onStatusChangeMap.bind(this)} />
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                  <div className="form-group switch_wrap inline_switch">
-                    <label>Status</label>
-                    <label className="switch">
-                      <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
-                        onChange={this.onStatusChangeActive.bind(this)} />
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                  </form>
+                      <br className="brclear"/>
+                      <div className="form-group">
+                        <input type="text" ref="state" placeholder="State" className="form-control float-label"
+                               defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
+                      </div>
+                      <div className="form-group">
+                        <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
+                               defaultValue={this.state.data && this.state.data.subChapterEmail}
+                               className="form-control float-label"/>
+                        <div className="email_notify">
+                          <div className="input_types">
+                            <input ref="isEmailNotified" type="checkbox" name="checkbox"
+                                   checked={this.state.data.isEmailNotified}
+                                   onChange={this.onStatusChangeNotify.bind(this)}/>
+                            <label htmlFor="checkbox1"><span> </span>Notify</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="form-group switch_wrap inline_switch">
+                        <label>Show on Map</label>
+                        <label className="switch">
+                          <input type="checkbox" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
+                                 onChange={this.onStatusChangeMap.bind(this)}/>
+                          <div className="slider"></div>
+                        </label>
+                      </div>
+                      <div className="form-group switch_wrap inline_switch">
+                        <label>Status</label>
+                        <label className="switch">
+                          <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
+                                 onChange={this.onStatusChangeActive.bind(this)}/>
+                          <div className="slider"></div>
+                        </label>
+                      </div>
+                    </form>
                   </ScrollArea>
+                </div>
               </div>
-            </div>
             :
-            <div className="col-md-6 nopadding-right">
-              <div className="form_bg left_wrap">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrollling={true}
-                  default={true}
-                >
-                  <form>
-
-                    <div className="form-group">
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Profile Pic</span>
-                        <input type="file" className="upload" />
-                      </div>
-                      <div className="previewImg ProfileImg">
-                        <img src={this.state.data && this.state.data.subChapterImageLink}/>
-                      </div>
-                    </div>
-
-                    <br className="brclear"/>
-
-                    <div className="panel panel-default">
-                      <div className="panel-body">
-                        <div className="col-md-6">
-                          <div className="form-group switch_wrap inline_switch">
-                            <label className="">Status</label>
-                            <label className="switch">
-                              <input type="checkbox" ref="isActive" checked={this.state.data && this.state.data.isActive}
-                                     onChange={this.onStatusChangeActive.bind(this)} />
-                              <div className="slider"></div>
-                            </label>
-                          </div>
+              <div className="col-md-6 nopadding-right">
+                <div className="form_bg left_wrap">
+                  <ScrollArea
+                    speed={0.8}
+                    className="left_wrap"
+                    smoothScrollling={true}
+                    default={true}
+                  >
+                    <form>
+                      <div className="form-group">
+                        <div className="fileUpload mlUpload_btn">
+                          <span>Profile Pic</span>
+                          <input type="file" className="upload"/>
                         </div>
-                        <div className="col-md-6">
-                          <div className="form-group switch_wrap inline_switch">
-                            <label className="">Show on Map</label>
-                            <label className="switch">
-                              <input type="checkbox" ref="showOnMap" checked={this.state.data && this.state.data.showOnMap}
-                                     onChange={this.onStatusChangeMap.bind(this)} />
-                              <div className="slider"></div>
-                            </label>
-                          </div>
+                        <div className="previewImg ProfileImg">
+                          <img
+                            src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'}/>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="panel panel-default">
-                      <div className="panel-body">
-                        <div className="col-md-6">
-                          <div className="form-group">
-                            <div className="input_types">
-                              <input type="checkbox" ref="isBespokeRegistration" checked={this.state.data && this.state.data.isBespokeRegistration} onChange={this.onStatusChangeBespokeRegistration.bind(this)} />
-                              <label htmlFor="bespoke_reg"><span></span>Bespoke Registration</label></div>
+                      <br className="brclear"/>
+
+                      <div className="panel panel-default">
+                        <div className="panel-body">
+                          <div className="col-md-6">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className="">Status</label>
+                              <label className="switch">
+                                <input type="checkbox" ref="isActive"
+                                       checked={this.state.data && this.state.data.isActive}
+                                       onChange={this.onStatusChangeActive.bind(this)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
                           </div>
-                        </div>
-                        <div className="col-md-6">
-                          <div className="form-group">
-                            <div className="input_types">
-                              <input type="checkbox" ref="isBespokeWorkFlow" checked={this.state.data && this.state.data.isBespokeWorkFlow} onChange={this.onStatusBespokeWorkFlow.bind(this)} />
-                              <label htmlFor="bespoke_workflow"><span></span>Bespoke Workflow</label></div>
+                          <div className="col-md-6">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className="">Show on Map</label>
+                              <label className="switch">
+                                <input type="checkbox" ref="showOnMap"
+                                       checked={this.state.data && this.state.data.showOnMap}
+                                       onChange={this.onStatusChangeMap.bind(this)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="panel panel-default">
-                      <div className="panel-heading">Internal Subchapter Access</div>
-                      <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)} assignedDetails={this.state.internalSubChapterAccess}/>
-                    </div>
-                    <div className="panel panel-default">
-                      <div className="panel-heading">Moolya Subchapter Access</div>
-                      <MlMoolyaSubChapterAccess getMoolyaAccessStatus={this.getMoolyaAccessStatus.bind(this)} assignedDetails={this.state.moolyaSubChapterAccess}/>
-                    </div>
-                  </form>
-                </ScrollArea>
-              </div>
-            </div>}
+                      <div className="panel panel-default">
+                        <div className="panel-body">
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <div className="input_types">
+                                <input type="checkbox" ref="isBespokeRegistration"
+                                       checked={this.state.data && this.state.data.isBespokeRegistration}
+                                       onChange={this.onStatusChangeBespokeRegistration.bind(this)}/>
+                                <label htmlFor="bespoke_reg"><span></span>Bespoke Registration</label></div>
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="form-group">
+                              <div className="input_types">
+                                <input type="checkbox" ref="isBespokeWorkFlow"
+                                       checked={this.state.data && this.state.data.isBespokeWorkFlow}
+                                       onChange={this.onStatusBespokeWorkFlow.bind(this)}/>
+                                <label htmlFor="bespoke_workflow"><span></span>Bespoke Workflow</label></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="panel panel-default">
+                        <div className="panel-heading">Internal Subchapter Access</div>
+                        <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)}
+                                                    assignedDetails={this.state.internalSubChapterAccess}/>
+                      </div>
+                      <div className="panel panel-default">
+                        <div className="panel-heading">Moolya Subchapter Access</div>
+                        <MlMoolyaSubChapterAccess getMoolyaAccessStatus={this.getMoolyaAccessStatus.bind(this)}
+                                                  assignedDetails={this.state.moolyaSubChapterAccess}/>
+                      </div>
+                    </form>
+                  </ScrollArea>
+                </div>
+              </div>}
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName" />
         </div>
         )}

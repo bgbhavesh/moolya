@@ -439,7 +439,12 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
           users = MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'](obj, {clusterId: subChapter.clusterId, subChapterId: args.subChapterId?args.subChapterId:""}, context, info)
         } else {
           // let departments = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-          let departments = mlDBController.find('MlDepartments', {"depatmentAvailable.subChapter": subChapter._id}, context).fetch();
+          let departments = mlDBController.find('MlDepartments', {
+            $or: [{"depatmentAvailable.subChapter": subChapter._id}, {
+              isSystemDefined: true,
+              isActive: true
+            }]
+          }, context).fetch();
           if (departments && departments.length > 0) {
             for (var i = 0; i < departments.length; i++) {
               // let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
@@ -533,6 +538,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             (role.communityId && role.communityId != "all")) {
             levelCode = "COMMUNITY"
+            let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"chapterId":role.chapterId},{"subChapterId":role.subChapterId},{"communityDefCode":role.communityId},{"hierarchyCode":levelCode}]}, context);
+            if(community){
+              role.communityId = community._id
+            }
           }
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") && !args.user.isChapterAdmin) {
             levelCode = "SUBCHAPTER"
@@ -556,6 +565,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
             levelCode = "COMMUNITY"
             role.chapterId = "all"
             role.subChapterId = "all"
+            let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"communityDefCode":role.communityId},{"hierarchyCode":"CLUSTER"}]}, context);
+            if(community){
+              role.communityId = community._id
+            }
           }
           else if (role.clusterId && role.clusterId != "all") {
             levelCode = "CLUSTER"
@@ -587,15 +600,37 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info) => {
+
   let userType = args.userType; // Backend, Funder, Ideator, Startup, etc.
+
+  let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+
+  // If selecting Cluster, Chapter And Subachapter and then coming to Community Priming
   let clusterId = args.clusterId?args.clusterId:"";
   let chapterId = args.chapterId?args.chapterId:"";
   let subChapterId = args.subChapterId?args.subChapterId:"";
 
+  // Directly clicking on Community Priming
+  if(!args.clusterId){
+
+      // If Other Admins logs in and directly clicks on Community Priming
+      if(userProfile.hierarchyCode != "PLATFORM"){
+
+        clusterId = userProfile.defaultProfileHierarchyRefId;
+
+          if(userProfile.defaultChapters[0] != "all"){
+              chapterId = userProfile.defaultChapters[0];
+          }
+          if(userProfile.defaultSubChapters[0] != "all"){
+              subChapterId = userProfile.defaultSubChapters[0];
+          }
+      }
+  }
+
+
   let users = [];
   if(clusterId != "" && chapterId != "" && subChapterId != ""){
         if(userType == "All"){
-          // users = Meteor.users.find({"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}).fetch();
 
           // FOR ALL USERS
           let communityUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isInternaluser":false}]}, context).fetch();
@@ -623,7 +658,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           }
         }else if(userType == "BackendUsers"){
             //   // UserType needed to be introduced
-            //   users = Meteor.users.find({"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}).fetch();
+
             let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
             clusterId = subChapter.clusterId;
             if(subChapter.isActive){
@@ -642,17 +677,23 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               })
             }
         }
+  // } else if(clusterId != "" && chapterId != ""){
+  //
+  // } else if(clusterId != ""){
+
   } else{
-    if(userType == "All"){
-      // users = Meteor.users.find({"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}).fetch();
-      users = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}, context).fetch();
-    }else if(userType == "BackendUsers"){
-      // UserType needed to be introduced
-      // users = Meteor.users.find({"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}).fetch();
-      users = mlDBController.find('users', {"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}, context).fetch();
-    }
+
+      if(userType == "All"){
+
+        users = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true}]}, context).fetch();
+
+      }else if(userType == "BackendUsers"){
+        // UserType needed to be introduced
+        users = mlDBController.find('users', {"$and":[{"profile.isExternaluser":false},{"profile.isActive":true},{"profile.isSystemDefined":null}]}, context).fetch();
+      }
   }
 
+  context.module = "BackendUsers";
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 

@@ -13,7 +13,7 @@ export async function findRequestssActionHandler(requestTypeDetails) {
     status
     requestId
     requestTypeName
-    requestsCreatedDate
+    transactionCreatedDate
     requestTypeId
     requestDescription
   }

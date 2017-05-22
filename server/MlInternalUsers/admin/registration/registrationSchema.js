@@ -173,23 +173,24 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        status          : String,
-        transactionId   : String
-     
+        status          : String   
     }
     
     type RegistrationResponse{
         _id             :   String,
          status          :   String,
-        registrationInfo :  RegistrationInfo,
-        registrationDetails : RegistrationDetails
-        addressInfo     : [AddressInfoSchema]
+         registrationInfo :  RegistrationInfo,
+         registrationDetails : RegistrationDetails
+         addressInfo     : [AddressInfoSchema]
          emailInfo       : [EmailInfoSchema]
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
          kycDocuments: [kycDocumentInfoSchema]
          transactionId : String
-        
+         transactionType : String
+         allocation     : allocation
+         transactionCreatedDate : String
+         transactionUpdatedDate : String
     }
     
     type RegistrationInfo{        

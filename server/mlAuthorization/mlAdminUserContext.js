@@ -16,6 +16,7 @@ class MlAdminUserContext
     let hierarchyLevel =null;
     let hierarchyCode=null;
     let defaultCluster=null;
+    var isMoolya = null
     let defaultChapters = [];
     let defaultSubChapters = [];
     let defaultCommunities = [];
@@ -23,6 +24,7 @@ class MlAdminUserContext
     if(user && user.profile && user.profile.isInternaluser == true)
     {
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+      isMoolya = user.profile.isMoolya
       let user_roles;
       // Selecting Default Profile
       let default_User_Profiles=_.find(user_profiles, {'isDefault': true });
@@ -65,20 +67,25 @@ class MlAdminUserContext
                 defaultProfileHierarchyRefId:defaultCluster,
                 defaultChapters:defaultChapters,
                 defaultSubChapters:defaultSubChapters,
-                defaultCommunities:defaultCommunities};
+                defaultCommunities:defaultCommunities,
+                isMoolya:isMoolya};
   }
 
-  getDefaultMenu(userId){
-       check(userId,String);
-        let userProfile=this.userProfileDetails(userId)||{};
-        let hierarchy=null;
-    if(userProfile&& (userProfile.hierarchyLevel || userProfile.hierarchyLevel ==0)){
-      hierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
-      return hierarchy&&hierarchy.menuName?hierarchy.menuName:null;
+  getDefaultMenu(userId) {
+    check(userId, String);
+    let userProfile = this.userProfileDetails(userId) || {};
+    let hierarchy = null;
+    if (userProfile && (userProfile.hierarchyLevel || userProfile.hierarchyLevel == 0)) {
+      hierarchy = MlHierarchy.findOne({level: Number(userProfile.hierarchyLevel)});
+      if(hierarchy && hierarchy.menuName){
+        var menuSelect = _.find(hierarchy.menuName, {isMoolya:userProfile.isMoolya})
+        return menuSelect && menuSelect.menuName ? menuSelect.menuName : null;
+      }
+      // return hierarchy && hierarchy.menuName ? hierarchy.menuName : null;
     }
-    //return default menu
-       return null;
+    return null;  //return default menu
   }
+
   getDefaultCountry(userId){
     check(userId,String);
     let userProfile=this.userProfileDetails(userId)||{};

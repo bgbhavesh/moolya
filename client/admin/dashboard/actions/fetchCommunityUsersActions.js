@@ -15,16 +15,7 @@ export async function fetchCommunityUsersHandler(clusterId,chapterId,subChapterI
                           isInternaluser,
                           isExternaluser,
                           isActive,
-                          email,
-                          InternalUprofile{
-                              moolyaProfile{
-                                userType,
-                                roleType,
-                                displayName,
-                                globalAssignment,
-                                isActive
-                              }
-                          }    
+                          email
                       }
                   }
               }      

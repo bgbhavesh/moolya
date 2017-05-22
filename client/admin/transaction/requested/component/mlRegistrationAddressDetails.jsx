@@ -12,6 +12,8 @@ import {findUserRegistartionActionHandler} from '../actions/findUserRegistration
 import {findRegistrationActionHandler} from '../actions/findRegistration';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
+import _ from 'lodash'
+import _underscore from 'underscore'
 
 export default class AddressDetails extends React.Component{
   constructor(props){
@@ -27,7 +29,8 @@ export default class AddressDetails extends React.Component{
       /* selectedValuesList : [],*/
       addressInformation : addressInfoObject,
       addressDetails: this.props.registrationInfo.addressInfo || [],
-      activeTab : "active"
+      activeTab : "active",
+      defaultData : this.props.registrationInfo
 
     }
     //this.optionsBySelectNumberType.bind(this)
@@ -90,6 +93,7 @@ export default class AddressDetails extends React.Component{
       this.findRegistration();
       this.props.registrationDetails();
       this.setState({activeTab : "active"});
+      toastr.success("Address removed successfully");
     }
   }
 
@@ -132,6 +136,7 @@ export default class AddressDetails extends React.Component{
           this.refs["addressCountry"].value = "";
           this.refs["addressPinCode"].value = "";
           this.setState({selectedValue : "",selectedAddressLabel : ""});
+          toastr.success("Address created successfully");
         }
 
 
@@ -145,11 +150,17 @@ export default class AddressDetails extends React.Component{
     const registerid = this.props.registerId;
     if (index !== -1) {
       // do your stuff here
-      let registrationDetails = this.props.registrationInfo.addressInfo
+/*      let registrationDetails = this.props.registrationInfo.addressInfo
       let dbData = _.pluck(registrationDetails, 'addressType') || [];
       let contactExist = null;
       if(this.state.selectedValue){
         contactExist = _.contains(dbData,this.state.selectedValue );
+      }*/
+      let registrationDetails = this.state.defaultData.addressInfo
+      let dbData = _underscore.pluck(registrationDetails, 'addressType') || [];
+      let contactExist = null;
+      if(this.state.selectedValue){
+        contactExist = _underscore.contains(dbData,this.state.selectedValue );
       }
       if(contactExist){
         toastr.error("Address Type Already Exists!!!!!");
@@ -182,6 +193,8 @@ export default class AddressDetails extends React.Component{
         if(response){
           if(!response.success){
             toastr.error(response.result);
+          }else{
+            toastr.success("Address updated successfully");
           }
           this.findRegistration();
           this.props.registrationDetails();
@@ -201,6 +214,48 @@ export default class AddressDetails extends React.Component{
      //this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
     //return response;
   }
+
+  async onClear(index,value){
+    this.refs["name"+index].value = "";
+    this.refs["phoneNumber"+index].value = "";
+    this.refs["addressFlat"+index].value = "";
+    this.refs["addressLocality"+index].value = "";
+    this.refs["addressLandmark"+index].value = "";
+    this.refs["addressArea"+index].value = "";
+    this.refs["addressCity"+index].value = "";
+    this.refs["addressState"+index].value = "";
+    this.refs["addressCountry"+index].value = "";
+    this.refs["addressPinCode"+index].value = "";
+
+/*
+    let updatedComment = update(this.state.addressDetails[index], {
+      addressType :   {$set: ""}
+    });
+
+    let newData = update(this.state.addressDetails, {
+      $splice: [[index, 1, updatedComment]]
+    });
+    this.setState({addressDetails : newData});
+    this.setState({selectedValue : ""});*/
+
+
+    let updatedComment = update(this.state.addressDetails[index], {
+      addressType :   {$set: ""}
+    });
+
+    let newData = update(this.state.addressDetails, {
+      $splice: [[index, 1, updatedComment]]
+    });
+    this.setState({addressDetails : newData});
+    let registrationDetails = _.cloneDeep(this.state.defaultData);
+    let omitData = _.omit(registrationDetails["addressInfo"][index], 'addressType') || [];
+    registrationDetails["addressInfo"][index] = omitData
+    this.setState({defaultData : registrationDetails});
+
+
+
+  }
+
 
 
 
@@ -230,7 +285,7 @@ export default class AddressDetails extends React.Component{
               return(
                 <li key={key} onClick={that.addressTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#adressType'+key} className="add-contact">
-                    <FontAwesome name='minus-square'/>{options.addressTypeName}</a>
+                    <FontAwesome name='minus-square' onClick={that.onDeleteAddress.bind(that,key)}/>{options.addressTypeName}</a>
                 </li>)
 
 
@@ -348,7 +403,7 @@ export default class AddressDetails extends React.Component{
                     <a href="#" onClick={that.onEditAddress.bind(that,key)}
                        className="save_btn"><span
                       className="ml ml-save"></span></a>
-                    <a href="#" className="cancel_btn" onClick={that.onDeleteAddress.bind(that,key)}><span className="ml ml-delete"></span></a>
+                    <a href="#" className="cancel_btn" onClick={that.onClear.bind(that,key)}><span className="ml ml-delete"></span></a>
                   </div>
                 </div>)
             }))}

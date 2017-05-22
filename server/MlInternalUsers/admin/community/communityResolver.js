@@ -393,9 +393,9 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
         }
         communitiesAccess = mlDBController.find('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}, context).fetch();
         if(communitiesAccess.length == 0){
-            clusters = {isActive: true, difference:args.clusters || []}
-            chapters = {isActive: true, difference:args.chapters || []};
-            subchapters = {isActive: true, difference:args.subchapters || []};
+            clusters = [{difference:[], isActive:false},{difference:args.clusters, isActive:true}] || []
+            chapters = [{difference:[], isActive:false},{difference:args.chapters, isActive:true}] || [];
+            subchapters = [{difference:[], isActive:false},{difference:args.subchapters , isActive:true}]|| [];
         }
         else{
           clusterids = clusterId == "" && _.map(_.filter(communitiesAccess, {hierarchyCode:"CLUSTER"}), "clusterId") || [];

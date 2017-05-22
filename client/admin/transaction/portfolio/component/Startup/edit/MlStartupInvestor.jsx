@@ -1,18 +1,16 @@
-import React, {Component, PropTypes} from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar'
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
+import Moolyaselect from "../../../../../../commons/components/select/MoolyaSelect";
+import gql from "graphql-tag";
+import {graphql} from "react-apollo";
+import _ from "lodash";
+import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
+import {findStartupInvestorDetailsActionHandler} from "../../../actions/findPortfolioStartupDetails";
+import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
-import Moolyaselect from  '../../../../../../commons/components/select/MoolyaSelect';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import _ from 'lodash';
-import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {findStartupInvestorDetailsActionHandler} from '../../../actions/findPortfolioStartupDetails'
-import MlLoader from '../../../../../../commons/components/loader/loader'
-
 
 
 export default class MlStartupInvestor extends React.Component{
@@ -47,12 +45,6 @@ export default class MlStartupInvestor extends React.Component{
     this.fetchPortfolioDetails();
   }
   async fetchPortfolioDetails() {
-    // let that = this;
-    // let portfolioDetailsId=that.props.portfolioDetailsId;
-    // const response = await findStartupInvestorDetailsActionHandler(portfolioDetailsId);
-    // if (response) {
-    //   this.setState({loading: false, startupInvestor: response, startupInvestorList: response});
-    // }
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.investor)
@@ -62,7 +54,7 @@ export default class MlStartupInvestor extends React.Component{
         this.setState({loading: false, startupInvestor: response, startupInvestorList: response});
       }
     }else{
-      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.management, startupInvestorList:that.context.startupPortfolio.management});
+      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.investor, startupInvestorList:that.context.startupPortfolio.investor});
     }
   }
   addInvestor(){
@@ -137,7 +129,7 @@ export default class MlStartupInvestor extends React.Component{
     this.setState({startupInvestorList:this.state.startupInvestor, popoverOpen : false})
   }
 
-  sendDataToParent(){
+  sendDataToParent() {
     let data = this.state.data;
     let startupInvestor1 = this.state.startupInvestor;
     let startupInvestor = _.cloneDeep(startupInvestor1);
@@ -150,14 +142,14 @@ export default class MlStartupInvestor extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
-      if(item && item.logo){
-        delete item.logo['__typename'];
-      }
+      let newItem = _.omit(item, "__typename")
+      // if(item && item.logo){
+      //   delete item.logo['__typename'];
+      // }
       arr.push(newItem)
     })
     startupInvestor = arr;
-    this.setState({startupInvestor:startupInvestor})
+    this.setState({startupInvestor: startupInvestor})
     this.props.getInvestorDetails(startupInvestor);
   }
   onLogoFileUpload(e){
@@ -207,9 +199,9 @@ export default class MlStartupInvestor extends React.Component{
     const showLoader = that.state.loading;
     let investorsArray = that.state.startupInvestorList || [];
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? ( <MlLoader/>) : (
-        <div className="admin_padding_wrap portfolio-main-wrap">
+        <div>
           <h2>Investor</h2>
           <div className="requested_input main_wrap_scroll">
             <ScrollArea
@@ -230,11 +222,12 @@ export default class MlStartupInvestor extends React.Component{
                   </div>
                   {investorsArray.map(function (details, idx) {
                     return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                      <a href="#" id={"create_client"+idx}>
+                      <a id={"create_client"+idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                          <h3>{details.description}</h3>
+                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
+                            src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
+                          <h3>{details.name ? details.name : ''}</h3>
                         </div>
                       </a>
                     </div>)
@@ -251,7 +244,7 @@ export default class MlStartupInvestor extends React.Component{
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
                       <div className="form-group">
-                        <input type="text" name="name" placeholder="Name" className="form-control float-label" id="" defaultValue={this.state.data.name}  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.name}  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate}  onClick={this.onLockChange.bind(this, "isNamePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isNamePrivate}/>
                       </div>
                       <div className="form-group">

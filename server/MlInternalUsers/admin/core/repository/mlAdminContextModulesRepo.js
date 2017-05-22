@@ -70,7 +70,7 @@ let CoreModules = {
       if(chapterId){
         resultantQuery={"chapterId":chapterId};
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
-            resultantQuery = mergeQueries(query,{ _id: {$in : contextQuery._id}});
+            resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }
       }
       const data= MlSubChapters.find(resultantQuery,fieldsProj).fetch();

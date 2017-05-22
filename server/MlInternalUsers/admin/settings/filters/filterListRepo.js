@@ -146,7 +146,7 @@ export default class MlFilterListRepo{
         }
 
         let communityResponse=_.each(result,function (option,id) {
-          options.push({"label":option.displayName,"value":option._id})
+          options.push({"label":option.displayName,"value":option.name})
         })
 
 

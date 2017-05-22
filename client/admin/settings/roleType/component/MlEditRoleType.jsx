@@ -110,7 +110,7 @@ class MlEditRoleType extends React.Component{
                   <form>
                   <div className="form-group">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" placeholder="User Type Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label"  disabled="disabled"/>
+                    <input type="text" placeholder="Role Type Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label"  disabled="disabled"/>
 
                   </div>
                   <div className="form-group">

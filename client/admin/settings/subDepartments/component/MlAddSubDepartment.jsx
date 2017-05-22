@@ -10,7 +10,7 @@ import MlAssignDepartments from "./MlAssignDepartments";
 import {findDepartmentActionHandler} from "../actions/findDepartmentAction";
 import MlMoolyaAssignDepartment from "./MlMoolyaAssignDepartment";
 import ScrollArea from "react-scrollbar";
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddSubDepartment extends React.Component{
   constructor(props) {
     super(props);
@@ -39,20 +39,24 @@ class MlAddSubDepartment extends React.Component{
   };
 
   async  createSubDepartment() {
-    let SubDepartmentDetails = {
-      subDepartmentName: this.refs.subDepartmentName.value,
-      displayName: this.refs.displayName.value,
-      aboutSubDepartment: this.refs.about.value,
-      isActive: this.refs.subDepartmentStatus.checked,
-      departmentId: this.state.department,
-      isMoolya: this.state.data.isMoolya,  //this.refs.appType.checked
-      subDepatmentAvailable:this.state.subdepartmentAvailability
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let SubDepartmentDetails = {
+        subDepartmentName: this.refs.subDepartmentName.value,
+        displayName: this.refs.displayName.value,
+        aboutSubDepartment: this.refs.about.value,
+        isActive: this.refs.subDepartmentStatus.checked,
+        departmentId: this.state.department,
+        isMoolya: this.state.data.isMoolya,  //this.refs.appType.checked
+        subDepatmentAvailable: this.state.subdepartmentAvailability
+      }
+
+      const response = await addSubDepartmentActionHandler(SubDepartmentDetails);
+      return response;
     }
-
-    const response = await addSubDepartmentActionHandler(SubDepartmentDetails);
-    return response;
   }
-
   optionsBySelectDepartment(val) {
     if (val) {
       this.findDepartment(val);
@@ -100,13 +104,13 @@ class MlAddSubDepartment extends React.Component{
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="subDepartmentName" placeholder="Sub Department Name"
-                           className="form-control float-label"/>
+                           className="form-control float-label" data-required={true} data-errMsg="subDepartment Name is required"/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="displayName" placeholder="Display Name"
-                           className="form-control float-label"/>
+                           className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About Sub Department"

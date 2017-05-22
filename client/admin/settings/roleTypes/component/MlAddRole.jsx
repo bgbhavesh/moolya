@@ -13,6 +13,7 @@ import MlAssignModulesToRoles from './MlAssignModulesToRoles'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 let Select = require('react-select');
 
 class MlAddRole extends React.Component{
@@ -72,22 +73,27 @@ class MlAddRole extends React.Component{
   // }
 
   async  addRole() {
-    let roleDetails = {
-      roleName: this.refs.roleName.value,
-      displayName:this.refs.diplayName.value,
-      roleType:this.state.selectedUserType,
-      subChapter:this.state.selectedSubChapter,
-      userType:this.state.selectedBackendUser,
-      about:this.refs.about.value,
-      assignRoles:this.state.assignRoleToClusters,
-      modules:this.state.assignModulesToRoles,
-      isActive:this.refs.isActive.checked
-    };
-    if(!this.refs.diplayName.value || (this.refs.diplayName.value == "")){
-      alert("Display Name is required")
-    }else{
-      const response = await addRoleActionHandler(roleDetails)
-      return response;
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let roleDetails = {
+        roleName: this.refs.roleName.value,
+        displayName: this.refs.diplayName.value,
+        roleType: this.state.selectedUserType,
+        subChapter: this.state.selectedSubChapter,
+        userType: this.state.selectedBackendUser,
+        about: this.refs.about.value,
+        assignRoles: this.state.assignRoleToClusters,
+        modules: this.state.assignModulesToRoles,
+        isActive: this.refs.isActive.checked
+      };
+      // if (!this.refs.diplayName.value || (this.refs.diplayName.value == "")) {
+      //   alert("Display Name is required")
+      // } else {
+        const response = await addRoleActionHandler(roleDetails)
+        return response;
+      // }
     }
   }
 
@@ -161,21 +167,21 @@ class MlAddRole extends React.Component{
               >
                 <div className="form_bg">
                   <form>
-                    <div className="form-group">
-                      <input type="text"  ref="roleName" placeholder="Role Name" className="form-control float-label" id=""/>
+                    <div className="form-group mandatory">
+                      <input type="text"  ref="roleName" placeholder="Role Name" className="form-control float-label" id="" data-required={true} data-errMsg="Role Name is required"/>
 
                     </div>
-                    <div className="form-group">
-                      <input type="text" ref="diplayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                    <div className="form-group mandatory">
+                      <input type="text" ref="diplayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
 
                     </div>
-                    <div className="form-group">
-                      <Select name="form-field-name" ref="userType" placeholder="Backend User Role Type" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
+                    <div className="form-group mandatory">
+                      <Select name="form-field-name" ref="userType" placeholder="Backend User Role Type" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label" data-required={true} data-errMsg=" Backend User Role Type is required"/>
                     </div>
                     {this.state.selectedUserType=='non-moolya'&&(
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
                     )}
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <Select name="form-field-name" placeholder="Role Type"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true} />
                     </div>
                     <div className="form-group">

@@ -12,6 +12,8 @@ import {findUserRegistartionActionHandler} from '../actions/findUserRegistration
 import {findRegistrationActionHandler} from '../actions/findRegistration';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
+import _ from 'lodash'
+import _underscore from 'underscore'
 
 export default class EmailDetails extends React.Component{
   constructor(props){
@@ -25,7 +27,8 @@ export default class EmailDetails extends React.Component{
       /* selectedValuesList : [],*/
       emailDetailsObject : {"emailIdType": " ", "emailIdTypeName": " ", 'emailId': ''},
       emailDetails: this.props.registrationInfo.emailInfo || [],
-      activeTab: "active"
+      activeTab: "active",
+
 
     }
     //this.optionsBySelectNumberType.bind(this)
@@ -73,6 +76,7 @@ export default class EmailDetails extends React.Component{
           this.props.registrationDetails();
           this.refs["emailId"].value = "";
           this.setState({selectedEmailTypeValue : "",selectedEmailTypeLabel : ""});
+          toastr.success("Email created successfully");
         }
 
       }
@@ -88,11 +92,12 @@ export default class EmailDetails extends React.Component{
       if (index !== -1) {
         // do your stuff here
         let registrationDetails = this.props.registrationInfo.emailInfo
-        let dbData = _.pluck(registrationDetails, 'emailIdType') || [];
+        let dbData = _underscore.pluck(registrationDetails, 'emailIdType') || [];
         let contactExist = null;
         if(this.state.selectedEmailTypeValue){
-          contactExist = _.contains(dbData,this.state.selectedEmailTypeValue );
+          contactExist = _underscore.contains(dbData,this.state.selectedEmailTypeValue );
         }
+
         if(contactExist){
           toastr.error("Email Type Already Exists!!!!!");
           this.findRegistration();
@@ -112,6 +117,11 @@ export default class EmailDetails extends React.Component{
 
           const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
           if(response){
+            if(!response.success){
+              toastr.error(response.result);
+            }else{
+              toastr.success("Email updated successfully");
+            }
             this.findRegistration();
             this.props.registrationDetails();
 
@@ -158,9 +168,51 @@ export default class EmailDetails extends React.Component{
       this.setState({activeTab : "active"});
       this.findRegistration();
       this.props.registrationDetails();
+      toastr.success("Email removed successfully");
     }
 
   }
+
+  async onClear(index,selectedTabValue,value){
+    this.refs["emailId"+index].value = "";
+   /* let zz = "" || null;
+    let updatedComment = update(this.state.emailDetails[index], {
+      emailIdType :   {$set: ""}
+    });
+
+    let newData = update(this.state.emailDetails, {
+      $splice: [[index, 1, updatedComment]]
+    });
+    this.setState({emailDetails : newData});
+    this.setState({selectedEmailTypeValue : ""});
+*/
+/*    let updatedComment = update(this.state.emailDetails[index], {
+      emailIdType :   {$set: ""}
+    });
+
+    let newData = update(this.state.emailDetails, {
+      $splice: [[index, 1, updatedComment]]
+    });
+    this.setState({emailDetails : newData,dataClear : selectedTabValue});
+
+    //let registrationDetails = _.cloneDeep(this.state.defaultData);
+    let emailDetails = registrationDetails["emailInfo"]
+    let dbData = _underscore.pluck(emailDetails, 'emailIdType') || [];
+    let contactExist;
+    if(selectedTabValue){
+      contactExist = _underscore.contains(dbData,selectedTabValue);
+    }
+    if(contactExist){
+     this.findRegistration();
+    }else{
+      let omitData = _.omit(registrationDetails["emailInfo"][index], 'emailIdType') || [];
+      registrationDetails["emailInfo"][index] = omitData
+      this.setState({defaultData : registrationDetails});
+    }*/
+
+  }
+
+
 
   render(){
 
@@ -187,7 +239,7 @@ export default class EmailDetails extends React.Component{
               return(
                 <li key={key} onClick={that.emailTabSelected.bind(that,key)}>
                   <a data-toggle="pill" href={'#emailIdType'+key} className="add-contact">
-                    <FontAwesome name='minus-square'/>{options.emailIdTypeName}</a>
+                    <FontAwesome name='minus-square' onClick = {that.onDeleteEmail.bind(that,key)}/>{options.emailIdTypeName}</a>
                 </li>)
 
 
@@ -228,7 +280,7 @@ export default class EmailDetails extends React.Component{
                 <div className="ml_icon_btn">
                   <a href="#" className="save_btn"  onClick = {that.onUpdatingEmailDetails.bind(that,key)}><span
                     className="ml ml-save"></span></a>
-                  <a href="#" className="cancel_btn" onClick = {that.onDeleteEmail.bind(that,key)}><span className="ml ml-delete"></span></a>
+                  <a href="#" className="cancel_btn" onClick = {that.onClear.bind(that,key,options.emailIdType)}><span className="ml ml-delete"></span></a>
                 </div>
               </div>)
             }))}

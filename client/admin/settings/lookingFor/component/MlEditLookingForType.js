@@ -9,6 +9,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findLookingForActionHandler} from '../actions/findLookingForTypeAction'
 import {updateLookingForTypeActionHandler} from '../actions/updateLookingForTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditLookingForType extends React.Component{
   constructor(props) {
@@ -62,20 +63,24 @@ class MlEditLookingForType extends React.Component{
     this.onCommunitySelect();
   }
   async  updateLookingForType() {
-    let LookingForType = {
-      id: this.refs.id.value,
-      lookingForName: this.refs.lookingForName.value,
-      lookingForDisplayName: this.refs.lookingForDisplayName.value,
-      communityCode: this.state.selectedCommunity,
-      communityName: '',
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let LookingForType = {
+        id: this.refs.id.value,
+        lookingForName: this.refs.lookingForName.value,
+        lookingForDisplayName: this.refs.lookingForDisplayName.value,
+        communityCode: this.state.selectedCommunity,
+        communityName: '',
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await updateLookingForTypeActionHandler(LookingForType)
+      return response;
+
     }
-    const response = await updateLookingForTypeActionHandler(LookingForType)
-    return response;
-
   }
-
   onStatusChange(e){
     const data=this.state.data;
     if(e.currentTarget.checked){
@@ -118,10 +123,10 @@ class MlEditLookingForType extends React.Component{
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                     <input type="text" ref="lookingForName" placeholder="Name" defaultValue={this.state.data&&this.state.data.lookingForName}
-                           className="form-control float-label"/>
+                           className="form-control float-label" data-required={true} data-errMsg="LookingFor Name is required"/>
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" defaultValue={this.state.data&&this.state.data.about} className="form-control float-label"></textarea>
@@ -132,12 +137,12 @@ class MlEditLookingForType extends React.Component{
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="lookingForDisplayName" placeholder="Display Name"
-                           className="form-control float-label" defaultValue={this.state.data&&this.state.data.lookingForDisplayName}/>
+                           className="form-control float-label" defaultValue={this.state.data&&this.state.data.lookingForDisplayName} data-required={true} data-errMsg="Display Name is required"/>
                   </div>
 
-                    <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'}
+                    <Moolyaselect multiSelect={false} placeholder="Select Community" mandatory={true} className="form-control float-label" valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"}
                                   selectedValue={this.state.selectedCommunity}
                                   query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)}/>

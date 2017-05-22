@@ -7,8 +7,8 @@ export default class MlChapterCommunitiesList extends Component {
 
   render(){
     const data=this.props.data||[];
-    const list=  data.map((prop) =>
-      <div className="col-lg-2 col-md-4 col-sm-4" key={prop.code}>
+    const list=  data.map((prop, idx) =>
+      <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
         <div className="list_block">
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}></div>
 

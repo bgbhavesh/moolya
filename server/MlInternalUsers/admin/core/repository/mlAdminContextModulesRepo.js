@@ -70,7 +70,7 @@ let CoreModules = {
       if(chapterId){
         resultantQuery={"chapterId":chapterId};
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
-            resultantQuery = mergeQueries(query,{ _id: {$in : contextQuery._id}});
+            resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }
       }
       const data= MlSubChapters.find(resultantQuery,fieldsProj).fetch();
@@ -152,15 +152,19 @@ let CoreModules = {
     var type=requestParams&&requestParams.type?requestParams.type:"";
     var contextFieldMap={'clusterId':'registrationInfo.clusterId','chapterId':'registrationInfo.chapterId','subChapterId':'registrationInfo.subChapterId','communityId':'registrationInfo.communityId'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+        //construct context query with $in operator for each fields
         resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
     var serverQuery ={};
     switch(type){
+      //custom restriction for registration
       case 'requested':
         serverQuery={'status':{'$in':['Pending','Rejected']}};
         break;
       case 'approved':
         serverQuery={'status':"Approved"};
     }
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
       var result=[];
@@ -177,6 +181,27 @@ let CoreModules = {
       });
       data = result;
       return {totalRecords:totalRecords,data:data};
+  },
+  MlPortfolioRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var type=requestParams&&requestParams.type?requestParams.type:"";
+    //construct context query with $in operator for each fields
+    var resultantQuery=MlAdminContextQueryConstructor.constructQuery(contextQuery,'$in');
+    var serverQuery ={};
+    switch(type){
+      //custom restriction for registration
+      case 'requested':
+       // serverQuery={'status':{'$in':['Pending','Rejected']}};
+        break;
+      case 'approved':
+       // serverQuery={'status':"Approved"};
+    }
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    var data= MlPortfolioDetails.find(resultantQuery,fieldsProj).fetch()||[];
+    var totalRecords=MlPortfolioDetails.find(resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
   },
   MlTransactionLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
     let query={};

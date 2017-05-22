@@ -35,8 +35,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.chapterName=subChapterDetails.chapterName;
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
-  args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
-  let transactionCreatedDate = moment(date).format('DD/MM/YYYY HH:mm:ss')
+ // args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
+  args.registration.registrationDate=date
+  let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
@@ -90,7 +91,8 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo.companyUrl=userRegisterInfo.companyUrl
     registrationInfo.remarks=userRegisterInfo.remarks
     registrationInfo.referralType=userRegisterInfo.referralType
-    registrationInfo.registrationDate=moment(date||new Date()).format('DD/MM/YYYY HH:mm:ss')
+   // registrationInfo.registrationDate=moment(date||new Date()).format('DD/MM/YYYY HH:mm:ss')
+  registrationInfo.registrationDate=new Date()
   validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
@@ -197,7 +199,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         details.chapterName = subChapterDetails.chapterName;
         details.subChapterName = subChapterDetails.subChapterName;
         details.subChapterId = subChapterDetails._id;
-
+        details.registrationDate = registerDetails&&registerDetails.registrationDate?registerDetails.registrationDate:new Date();
         // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
         let communityDetails = mlDBController.findOne('MlCommunity', {
             subChapterId: details.subChapterId,
@@ -446,6 +448,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       "clusterId" :regRecord.registrationInfo.clusterId,
       "chapterId" : regRecord.registrationInfo.chapterId,
       "subChapterId" :regRecord.registrationInfo.subChapterId,
+      "communityId" :regRecord.registrationInfo.communityId,
+      "createdAt":new Date(),
       "source" : "self",
       "createdBy" : "admin",
       "status" : "Yet To Start",

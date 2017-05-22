@@ -53,7 +53,7 @@ class MlAdminContextQueryConstructor
 
 
   /*
-   * This method replaces the context data field keys with module specific context field keys
+   * This method constructs the query for the search
    * @param operator(eg: its $in,$nin,$or,$and operator input for constructing the query)
    * @param queryObj(eg: object containing the fields)
    * returns result Object with the query operators
@@ -68,6 +68,13 @@ class MlAdminContextQueryConstructor
                  queryObj[key] = {'$in':value};
                 }
           });
+        break;
+      case '$nin':
+        _.forIn(queryObj,function(value, key) {
+          if(value && _.isArray(value)){
+            queryObj[key] = {'$nin':value};
+          }
+        });
         break;
       case '$or':
            var orQueryObj=[];

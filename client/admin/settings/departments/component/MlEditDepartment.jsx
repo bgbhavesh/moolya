@@ -8,6 +8,7 @@ import  {updateDepartmentActionHandler} from '../actions/updateDepartmentAction'
 import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import ScrollArea from 'react-scrollbar';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import {OnToggleSwitch, MoolyaToggleSwitch} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditDepartment extends React.Component{
@@ -63,22 +64,26 @@ class MlEditDepartment extends React.Component{
   }
 
   async  editDepartment() {
-    let departmentObject = {
-      departmentName: this.refs.departmentName.value,
-      displayName: this.refs.displayName.value,
-      departmentDesc: this.refs.aboutDepartment.value,
-      isActive: this.refs.departmentStatus.checked,
-      isMoolya: this.refs.appType.checked,
-      depatmentAvailable: this.state.departmentAvailability
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let departmentObject = {
+        departmentName: this.refs.departmentName.value,
+        displayName: this.refs.displayName.value,
+        departmentDesc: this.refs.aboutDepartment.value,
+        isActive: this.refs.departmentStatus.checked,
+        isMoolya: this.state.isMoolya,   //   this.refs.appType.checked
+        depatmentAvailable: this.state.departmentAvailability
+      }
+      let DepartmentDetails = {
+        departmentId: this.props.config,
+        department: departmentObject
+      }
+      const response = await updateDepartmentActionHandler(DepartmentDetails)
+      return response;
     }
-    let DepartmentDetails = {
-      departmentId: this.props.config,
-      department: departmentObject
-    }
-    const response = await updateDepartmentActionHandler(DepartmentDetails)
-    return response;
   }
-
   getDepartmentAvailability(details){
     this.setState({'departmentAvailability':details})
   }
@@ -136,15 +141,15 @@ class MlEditDepartment extends React.Component{
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg">
                     <form>
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input type="text" ref="departmentName"
                                defaultValue={this.state.data && this.state.data.departmentName}
-                               placeholder="Department Name" className="form-control float-label" />
+                               placeholder="Department Name" className="form-control float-label" data-required={true} data-errMsg="Department Name is required" />
                       </div>
 
-                      <div className="form-group">
+                      <div className="form-group mandatory">
                         <input ref="displayName" defaultValue={this.state.data && this.state.data.displayName}
-                               placeholder="Display Name" className="form-control float-label"></input>
+                               placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is required"></input>
                       </div>
                       <div className="form-group">
                         <textarea ref="aboutDepartment" defaultValue={this.state.data && this.state.data.departmentDesc}

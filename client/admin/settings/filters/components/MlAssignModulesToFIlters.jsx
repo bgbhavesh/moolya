@@ -203,7 +203,7 @@ export default class MlAssignModulesToFilters extends React.Component {
                 <div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that, id)}><img
                   src="/images/remove.png"/></div>}
               </div>*/}
-            <div className="panel-heading">Filter fields</div>
+            <div className="panel-heading">Filter Field</div>
 
               <div className="panel-body">
                 <div className="row">

@@ -6,6 +6,7 @@ import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlAssignDepartments from "./MlAssignDepartments";
 import MlMoolyaAssignDepartment from "./MlMoolyaAssignDepartment";
 import ScrollArea from "react-scrollbar";
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddDepartment extends React.Component {
 
   constructor(props) {
@@ -64,22 +65,26 @@ class MlAddDepartment extends React.Component {
   };
 
   async  createDepartment() {
-    let DepartmentDetails = {
-      departmentName: this.refs.departmentName.value,
-      displayName: this.refs.displayName.value,
-      aboutDepartment: this.refs.aboutDepartment.value,
-      departmentStatus: this.refs.departmentStatus.checked,
-      isMoolya: this.state.isMoolya,
-      departmentAvailablity: this.state.departmentAvailability
-    }
-    if (!DepartmentDetails.departmentName) {
-      toastr.error("Department Name is mandatory");
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
     } else {
-      const response = await addDepartmentActionHandler(DepartmentDetails)
-      return response;
+      let DepartmentDetails = {
+        departmentName: this.refs.departmentName.value,
+        displayName: this.refs.displayName.value,
+        aboutDepartment: this.refs.aboutDepartment.value,
+        departmentStatus: this.refs.departmentStatus.checked,
+        isMoolya: this.state.isMoolya,
+        departmentAvailablity: this.state.departmentAvailability
+      }
+      if (!DepartmentDetails.departmentName) {
+        toastr.error("Department Name is mandatory");
+      } else {
+        const response = await addDepartmentActionHandler(DepartmentDetails)
+        return response;
+      }
     }
   }
-
   getMoolyaDepartmentAvailability(details) {
     for (var i = 0; i < details.length; i++) {
       details[i].clusters;
@@ -118,12 +123,12 @@ class MlAddDepartment extends React.Component {
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" ref="departmentName" placeholder="Department Name"
-                         className="form-control float-label"/>
+                         className="form-control float-label" data-required={true} data-errMsg="Department Name is required"/>
                 </div>
-                <div className="form-group">
-                  <input ref="displayName" placeholder="Display Name" className="form-control float-label" ></input>
+                <div className="form-group mandatory">
+                  <input ref="displayName" placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is required" ></input>
                 </div>
                 <div className="form-group">
                   <textarea ref="aboutDepartment" placeholder="About Department" className="form-control float-label" ></textarea>

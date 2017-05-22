@@ -15,8 +15,8 @@ export default class MlClusterSubChaptersList extends Component
     const data=this.props.data||[];
     let list = null;
     if(data.length>0){
-      list=  data.map((prop) =>
-        <div className="col-lg-2 col-md-4 col-sm-4" key={prop.subChapterCode}>
+      list=  data.map((prop,idx) =>
+        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
           <div className="list_block">
             <div className={`cluster_status ${prop.isActive|| ""}_cl `}></div>
             <a href={clusterRoutes.subChapterDetails(prop.clusterId,prop.chapterId,prop._id,prop.subChapterName)}> <div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div></a>

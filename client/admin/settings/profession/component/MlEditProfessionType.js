@@ -147,10 +147,10 @@ class MlEditProfessionType extends React.Component{
                            className="form-control float-label" defaultValue={this.state.data&&this.state.data.professionDisplayName} data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Select Industry" className="form-control float-label" valueKey={'value'}
+                    <Moolyaselect multiSelect={false} ref="industry" placeholder="Select Industry" mandatory={true} className="form-control float-label" valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"}
                                   selectedValue={this.state.selectedIndustry}
-                                  query={query} isDynamic={true} onSelect={this.onIndustrySelect.bind(this)}/>
+                                  query={query} isDynamic={true} onSelect={this.onIndustrySelect.bind(this)} data-required={true} data-errMsg="Industry is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

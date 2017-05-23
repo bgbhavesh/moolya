@@ -403,6 +403,12 @@ Accounts.onLogin(function (transactionsParams) {
   mlTransactionsHandler.insertTransactions(transactionsParams);
 })
 
+Accounts.onLogout(function (transactionsParams) {
+  mlTransactionsHandler = new MlTransactionsHandler();
+  let action = "logout"
+  mlTransactionsHandler.insertTransactions(transactionsParams, action);
+})
+
 validateExternalUserLoginAttempt=(user)=>{
   let userExternal = user.user.profile.isExternaluser;
   //check if email is verified.

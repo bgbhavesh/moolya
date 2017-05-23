@@ -41,16 +41,7 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
                           isInternaluser,
                           isExternaluser,
                           isActive,
-                          email,
-                          InternalUprofile{
-                              moolyaProfile{
-                                userType,
-                                roleType,
-                                displayName,
-                                globalAssignment,
-                                isActive
-                              }
-                          }    
+                          email
                       }
                   }
               }      

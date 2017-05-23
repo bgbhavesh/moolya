@@ -67,10 +67,8 @@ class  MlAdminProfileApp extends Component {
   async getValue() {
     // let Details = {
     //   profilePic: this.refs.upload.value};
-    let userType = this.props.user._id;
-    let response = await findBackendUserActionHandler(userType);
-    // let profilePicResponse = await addProfilePicAction(Details);
-    this.setState({firstName : response.profile.InternalUprofile.moolyaProfile.displayName,
+    let user = Meteor.user();
+    this.setState({firstName : user.profile.InternalUprofile.moolyaProfile.displayName,
       profilePic: this.props.user.profile.profileImage//response.profile.profileImage
     });
   }

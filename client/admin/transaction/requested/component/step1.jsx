@@ -30,6 +30,7 @@ export default class step1 extends React.Component{
       country:'',
       cluster:'',
       chapter:'',
+      subChapter:'',
       selectedCity:'',
       registrationId:'',
       registrationDetails:'',
@@ -96,6 +97,7 @@ export default class step1 extends React.Component{
       refered: details.referralType,
       cluster : details.clusterId,
       chapter :details.chapterId,
+      subChapter: details.subChapterId,
       identityType:details.identityType,
       userType:details.userType,
       selectedTypeOfIndustry:details.industry,
@@ -133,6 +135,9 @@ export default class step1 extends React.Component{
   }
   optionsBySelectChapter(value){
     this.setState({chapter:value})
+  }
+  optionsBySelectSubChapter(value){
+    this.setState({subChapter:value})
   }
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
@@ -239,6 +244,7 @@ export default class step1 extends React.Component{
           referralType: this.state.refered,
           clusterId: this.state.cluster,
           chapterId: this.state.chapter,
+          subChapterId: this.state.subChapter,
           communityName: this.state.coummunityName,
           identityType: this.state.identityType,
           userType: this.state.userType,
@@ -323,6 +329,12 @@ export default class step1 extends React.Component{
     label:chapterName
   }  
 }`;
+    let subChapterQuery= gql`query($id:String,$displayAllOption:Boolean){  
+      data:fetchSubChaptersSelect(id:$id,displayAllOption:$displayAllOption) {
+        value:_id
+        label:subChapterName
+      }  
+    }`;
     /*    let citiesquery = gql`query{
      data:fetchCities {label:name,value:_id
      }
@@ -360,7 +372,7 @@ export default class step1 extends React.Component{
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-
+    let subChapterOption={options: { variables: {id:this.state.chapter,displayAllOption:false}}}
     /*let registrationOptions = [
      { value: '0', label: 'simplybrowsing' },
      { value: '1', label: 'ideator' },
@@ -444,7 +456,7 @@ export default class step1 extends React.Component{
                       <div className="panel-body">
                         <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)}/>
                         <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)}/>
-
+                        <Moolyaselect multiSelect={false} placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)}/>
                         {/* {canSelectIdentity&&
                          <div className="ml_tabs">
                          <ul  className="nav nav-pills">

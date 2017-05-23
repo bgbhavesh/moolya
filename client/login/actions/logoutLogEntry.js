@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import {client} from '../../admin/core/apolloConnection';
 
 export async function updateTransactionLogActionHandler() {
-  pid = pid;
   const result = await client.mutate({
     mutation: gql`
   mutation ($transaction: TransactionsLogInput) {

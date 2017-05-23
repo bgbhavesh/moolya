@@ -173,3 +173,24 @@ MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info
     return response
   }
 }
+
+MlResolver.MlQueryResolver['fetchTransactionsLog']=(obj, args, context, info) => {
+  if (args.userId) {
+    let userId = args.userId;
+    let transactions=mlDBController.find('MlTransactionsLog',{userId:userId}).fetch();
+    return transactions;
+  }
+  return null;
+}
+
+MlResolver.MlMutationResolver['createTransactionLog'] = (obj, args, context, info) => {
+  let transaction = mlDBController.findOne('MlTransactionsLog', {"userId": context.userId}, context)
+  let date=new Date();
+  let id =mlDBController.insert('MlTransactionsLog', {args} ,context)
+  if(id){
+    let code = 200;
+    let result = {transactionId : id}
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+}

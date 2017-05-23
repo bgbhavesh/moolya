@@ -241,7 +241,8 @@ class MlAssignBackendUsers extends React.Component {
                       </div>
                     </div>
                     {/*{that.state.cluster.isActive ? */}
-                      <MlAssignBackendUserList clusterId={that.props.params.clusterId} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
+                      <MlAssignBackendUserList clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId}
+                      subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
                       {/*:*/}
                       {/*<div></div>}*/}
                   </ScrollArea>

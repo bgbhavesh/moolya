@@ -12,6 +12,7 @@ import {mlClusterCommunityListConfig, mlClusterChapterCommunityListConfig} from 
 import {mlClusterSubChaptersListConfig} from '../../admin/cluster/config/mlClusterSubChaptersConfig'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlSubChapterDetails from "../../admin/subChapter/components/MlSubChapterDetails"
+import MlAddSubChapter from "../../admin/subChapter/components/MlAddSubChapter"
 import MlAssignChapterBackendUsers from '../../admin/chapter/components/MlAssignChapterBackendUsers'
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
@@ -77,6 +78,14 @@ adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterNam
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
   }
 });
+
+adminSection.route('/clusters/:clusterId/:chapterId/createSubChapter', {
+  name: 'cluster_chapter_AddSubChapter',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:<MlAddSubChapter clusterId={params.clusterId} chapterId={params.chapterId} />})
+  }
+});
+
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/assignusers', {
   name: 'cluster_chapter_assignusers',
   action(params){

@@ -180,6 +180,9 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     _.remove(roles, {roleName: 'clusteradmin'})
     _.remove(roles, {roleName: 'chapteradmin'})
     _.remove(roles, {roleName: 'subchapteradmin'})
+    if (!userhierarchy.isParent && (userhierarchy.code == "COMMUNITY")) {
+      _.remove(roles, {roleName: 'communityadmin'})
+    }
   }
   return roles;
 }

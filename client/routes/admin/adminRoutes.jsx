@@ -18,6 +18,7 @@ import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlTransactionRequested from '../../admin/transaction/requests/components/MlTransactionRequested'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
+import MlTransactionsLogList from '../../admin/transaction/transactionsLog/component/mlTransactionsLogList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
@@ -202,6 +203,14 @@ adminSection.route('/transactions/registrationRequested', {
   name: 'transaction_registration_requested',
   action(params){
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
+  }
+});
+
+
+adminSection.route('/transactions/transactionsLog', {
+  name: 'transaction_Log',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlTransactionsLogList/>})
   }
 });
 

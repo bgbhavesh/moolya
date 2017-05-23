@@ -320,8 +320,9 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
           }
         }
         if(resp){
-          if(args.subChapterDetails && args.subChapterDetails.chapterId){
-            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
+          if(subChapter && subChapter.chapterId){   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
+            // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
           }
             let code = 200;
             let result = {subChapter: resp}

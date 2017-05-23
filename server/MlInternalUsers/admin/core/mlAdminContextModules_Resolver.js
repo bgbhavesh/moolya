@@ -103,6 +103,9 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type='approved';
       result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'TransactionsLog':
+      result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -125,6 +128,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
       case "PortfolioRequests":resolveType= 'Portfoliodetails';break;
       case "PortfolioApproved":resolveType= 'Portfoliodetails';break;
+      case "TransactionsLog":resolveType='TransactionsLog';break;
     }
 
     if(resolveType){

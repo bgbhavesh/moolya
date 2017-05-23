@@ -2,6 +2,11 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import moment from 'moment';
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+}
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"registrationInfoTable",
   module:"registrationInfo",//Module name for filter.
@@ -16,6 +21,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "firstName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "ContactNo",dataSort:true},
     {dataField: "communityName", title: "Community",dataSort:true},

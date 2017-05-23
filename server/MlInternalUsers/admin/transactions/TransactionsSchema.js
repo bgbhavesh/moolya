@@ -75,8 +75,9 @@ let transactionsSchema = `
       userId                    : String
       userName                  : String
       action                    : String
-      createdAt                 :String
-      transactionDetails        :String
+      createdAt                 : String
+      emailId                     : String
+      transactionDetails        : String
     }
        
     input byInput{

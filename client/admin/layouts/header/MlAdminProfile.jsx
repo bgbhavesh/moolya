@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import {logout} from "../header/actions/logoutAction";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
+import {updateTransactionLogActionHandler} from '../../../login/actions/logoutLogEntry'
 import { createContainer } from 'meteor/react-meteor-data';
 
 
@@ -15,6 +16,7 @@ class  MlAdminProfileApp extends Component {
       profilePic:" "
     }
     this.getValue = this.getValue.bind(this);
+    this.logoutHandler.bind(this);
     // console.log(this.props.user);
     return this;
   }
@@ -38,7 +40,16 @@ class  MlAdminProfileApp extends Component {
     this.getValue();
   }
 
+ async logoutHandler() {
+   let user = Meteor.user();
+   let action = "logout"
+   const resp = await updateTransactionLogActionHandler(user ,action );
+   return resp
+ }
+
+
   logoutUser(){
+    this.logoutHandler();
     logout();
   }
 

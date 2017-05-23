@@ -148,10 +148,10 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
     clusterId:"All"
   }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleDetails._id}}})
 
-  context.userId = user._id;
+/*  context.userId = user._id;
   context.browser = 'Registration API'
   context.url="https://moolya.in"
-  context.ip="10.0.1.127"
+  context.ip="10.0.1.127"*/
   let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:allocation,status:"Pending",userId:user._id,hierarchy:hierarchy._id,transactionUpdatedDate:date}, {$set: true},context)
   if(id){
     let code = 200;
@@ -184,9 +184,9 @@ MlResolver.MlQueryResolver['fetchTransactionsLog']=(obj, args, context, info) =>
 }
 
 MlResolver.MlMutationResolver['createTransactionLog'] = (obj, args, context, info) => {
-  let transaction = mlDBController.findOne('MlTransactionsLog', {"userId": context.userId}, context)
+  // let transaction = mlDBController.findOne('MlTransactionsLog', {"userId": args.transactions.userId}, context)
   let date=new Date();
-  let id =mlDBController.insert('MlTransactionsLog', {args} ,context)
+  let id =mlDBController.insert('MlTransactionsLog', args.transaction ,context)
   if(id){
     let code = 200;
     let result = {transactionId : id}

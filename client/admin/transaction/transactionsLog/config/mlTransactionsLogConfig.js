@@ -7,8 +7,8 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
   module:"TransactionsLog",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["createdAt","action", "userName"],
-  searchFields:["createdAt","action" , "userName"],
+  fields:["createdAt","action", "userName","clusterName", "chapterName", "subChapterName", "communityId"],
+  searchFields:["createdAt","action" , "userName", "clusterName", "chapterName", "subChapterName", "communityId"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -20,6 +20,11 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
     {dataField: "transactionDetails", title: "Details",dataSort:true},
     {dataField: "action", title: "Action",dataSort:true},
     {dataField: "userName", title: "User Name",dataSort:true},
+    {dataField: "clusterName", title: "Cluster",dataSort:true},
+    {dataField: "chapterName", title: "Chapter",dataSort:true},
+    {dataField: "subChapterName", title: "Sub Chapter",dataSort:true},
+    {dataField: "communityId", title: "Community",dataSort:true},
+
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:false,
@@ -40,8 +45,12 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
                         createdAt
                         action
                         transactionDetails
-                          }
+                        clusterName     
+                        chapterName         
+                        subChapterName           
+                        communityId              
                       }
+                    }
               }
               }`
 });

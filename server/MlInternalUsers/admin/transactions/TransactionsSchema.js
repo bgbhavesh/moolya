@@ -67,7 +67,13 @@ let transactionsSchema = `
       userAgent                 :[userAgent]
       createdAt                 :String
       transactionDetails        :String
-    
+      clusterId                 : String
+      chapterId                 : String
+      subChapterId              : String
+      communityId               : String
+      clusterName               : String
+      chapterName               : String
+      subChapterName            : String
     }
     
     input TransactionsLogInput{
@@ -77,6 +83,13 @@ let transactionsSchema = `
       action                    : String
       createdAt                 :String
       transactionDetails        :String
+      clusterId                 : String
+      chapterId                 : String
+      subChapterId              : String
+      communityId               : String
+      clusterName               : String
+      chapterName               : String
+      subChapterName            : String
     }
        
     input byInput{

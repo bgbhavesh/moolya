@@ -157,6 +157,7 @@ var options = {
     isInternaluser : true,
     isExternaluser : false,
     email: 'platformadmin@moolya.com',
+    isMoolya:true,
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{

@@ -49,8 +49,8 @@ let transactionsSchema = `
       transactionStatus         : statusInfo
       transactionAssignedBy     : String
       transactionCompletedBy    : String
-      transactionCreatedDate    : String
-      transactionUpdatedDate    : String
+      transactionCreatedDate    : Date
+      transactionUpdatedDate    : Date
       hierarchy                 : String
       allocation                : allocation
       cluster                   : String
@@ -70,13 +70,24 @@ let transactionsSchema = `
     
     }
     
+    input userAgentInput{
+        OS                  :String
+        ipAddress           :String
+        browser             :String
+        deviceModel         :String
+        deviceType          :String
+        deviceVendor        :String
+    }
+    
     input TransactionsLogInput{
        _id                      : String
       userId                    : String
       userName                  : String
       action                    : String
-      createdAt                 :String
-      transactionDetails        :String
+      createdAt                 : String
+      emailId                   : String
+      userAgent                 : [userAgentInput]
+      transactionDetails        : String
     }
        
     input byInput{
@@ -116,8 +127,8 @@ let transactionsSchema = `
       transactionStatus         : statusInput
       transactionAssignedBy     : String
       transactionCompletedBy    : String
-      transactionCreatedDate    : String
-      transactionUpdatedDate    : String
+      transactionCreatedDate    : Date
+      transactionUpdatedDate    : Date
       hierarchy                 : String
       allocation                : allocationInput
       cluster                   : String

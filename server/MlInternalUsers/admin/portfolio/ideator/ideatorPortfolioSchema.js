@@ -257,7 +257,7 @@ let ideatorPortfolioSchema = `
       firstName:String,
       lastName:String,
       profileImage : String
-      createdAt:String
+      createdAt:Date
     }
     
      type annotationInfo{
@@ -269,7 +269,7 @@ let ideatorPortfolioSchema = `
       userName : String,
       isResolved:Boolean,
       isReopened:Boolean,
-      createdAt:String
+      createdAt:Date
     }
     
     type Idea{

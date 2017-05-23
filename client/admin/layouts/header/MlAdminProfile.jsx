@@ -44,13 +44,14 @@ class  MlAdminProfileApp extends Component {
    let user = Meteor.user();
    let action = "logout"
    const resp = await updateTransactionLogActionHandler(user ,action );
+   logout();
    return resp
  }
 
 
   logoutUser(){
     this.logoutHandler();
-    logout();
+
   }
 
 

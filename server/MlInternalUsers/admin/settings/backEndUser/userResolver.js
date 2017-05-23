@@ -112,12 +112,12 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
+    // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+    // if (!isValidAuth) {
+    //   let code = 401;
+    //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+    //   return response;
+    // }
   let salted = passwordUtil.hashPassword(args.password);
   // let resp = Meteor.users.update({_id: args.userId}, {
   //   $set: {"services.password.bcrypt": salted}

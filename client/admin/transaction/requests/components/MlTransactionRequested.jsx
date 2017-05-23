@@ -15,7 +15,7 @@ import gql from 'graphql-tag';
 import {createRequestsActionHandler} from '../actions/createRequests'
 import {findRequestssActionHandler} from '../actions/findRequests'
 
-export default class MlTransactionRequested extends Component {
+export default class sMlTransactionRequested extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -75,19 +75,19 @@ export default class MlTransactionRequested extends Component {
   }
 
   optionsBySelectCluster(index, selectedIndex){
-    this.setState({cluster:selectedIndex})
+    this.setState({cluster:index})
   }
 
   optionsBySelectChapter(index, selectedIndex){
-    this.setState({chapter:selectedIndex})
+    this.setState({chapter:index})
   }
 
   optionsBySelectSubChapter(index, selectedIndex){
-    this.setState({subChapter:selectedIndex})
+    this.setState({subChapter:index})
   }
 
   optionsBySelectCommunity(index, selectedIndex){
-    this.setState({community:selectedIndex})
+    this.setState({community:index})
   }
 
 
@@ -179,32 +179,32 @@ export default class MlTransactionRequested extends Component {
      expandRowBgColor: 'rgb(242, 255, 163)'}
     let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
 
-    let chapterquery=gql`query($id:String){  
+    let chapterquery=gql`query($id:String){
     data:fetchChapters(id:$id) {
         value:_id,
         label:chapterName
-      }  
+      }
     }`;
 
-    let subDepartmentquery=gql`query($id:String){  
+    let subDepartmentquery=gql`query($id:String){
       data:fetchSubDepartments(id:$id) {
         value:_id
         label:subDepartmentName
-      }  
+      }
     }`;
 
-    let subChapterquery=gql`query($chapterId:String,$clusterId:String){  
+    let subChapterquery=gql`query($chapterId:String,$clusterId:String){
         data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
           value:_id
           label:subChapterName
-        }  
+        }
     }`;
 
-    let communityQuery=gql`query($clusterId:String, $chapterId:String, $subChapterId:String){  
+    let communityQuery=gql`query($clusterId:String, $chapterId:String, $subChapterId:String){
       data:fetchCommunitiesForRolesSelect(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId) {
-          value:code    
+          value:code
           label:name
-      }  
+      }
     }`;
 
     let chapterOption={options: { variables: {id:this.state.cluster}}};
@@ -245,22 +245,22 @@ export default class MlTransactionRequested extends Component {
                       <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(this)} />
                     </div>
 
                     <div className="form-group">
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(that,id)} />
+                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(this)} />
                       </div>
                     </div>
                     <div className="form-group">
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={this.optionsBySelectSubChapter.bind(that,id)} />
+                        <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={this.optionsBySelectSubChapter.bind(this)} />
                       </div>
                     </div>
                     <div className="form-group">
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'} reExecuteQuery={true} queryOptions={communityOption} onSelect={this.optionsBySelectCommunity.bind(that,id)} />
+                        <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'} reExecuteQuery={true} queryOptions={communityOption} onSelect={this.optionsBySelectCommunity.bind(this)} />
                       </div>
                     </div>
                     <div className="assign-popup">

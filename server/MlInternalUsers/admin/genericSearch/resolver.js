@@ -139,14 +139,16 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
       let chapterNamesArray = [];
-      chapterData.map(function (doc) {
+      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+/*      chapterData.map(function (doc) {
         chapterNamesArray.push(doc.chapterName)
-      });
+      });*/
 
       let subchapterNamesArray = [];
-      subchapterData.map(function (doc) {
+    /*  subchapterData.map(function (doc) {
         subchapterNamesArray.push(doc.subChapterName)
-      });
+      });*/
+      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].departmentAliasName = departmentDetails || "";
       data[index].clustersList = clusterNames || [];

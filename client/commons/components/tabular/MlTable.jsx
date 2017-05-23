@@ -30,13 +30,19 @@ export default class MlTable extends React.Component {
     };
     var WinHeight = $(window).height();
     var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
+    let searchEnable = true
+    if(this.props.filter){
+      searchEnable = false
+    }else{
+      searchEnable = true
+    }
     const config = {tableHeaderClass:this.props.tableHeaderClass,
                     maxHeight: tblHeight+'px',
                     striped:true,hover:true,
                     selectRow:(this.props.selectRow?selectRow:{}) ,
                     data:this.props.data,
                     remote:true,
-                    search:true,multiColumnSearch:true,pagination:this.props.pagination,
+                    search:searchEnable,multiColumnSearch:true,pagination:this.props.pagination,
                     fetchInfo:{ dataTotalSize: this.props.totalDataSize }
                    };
    //Note: you can pass the functions for expandRow and expandComponent as properties.

@@ -4,7 +4,7 @@ let Process = `
 
     type ProcessType{
         _id         : String,
-        date        : String,
+        date        : Date,
         processId   : String,
         processName : String,
         process     : String,
@@ -14,6 +14,8 @@ let Process = `
         userTypeNames : [String],
         identity    : String,
         industrieNames : [String],
+        industries  : [String],
+        industries  : [String],
         industries  : [String],
         professions : [String],
         professionNames: [String],
@@ -31,7 +33,7 @@ let Process = `
     }
     type processOutput{
         _id         : String,
-         date        : String,
+         date        : Date,
         processId   : String,
         process     : String,
         communities : [String],
@@ -145,7 +147,7 @@ let Process = `
         
     }
     input processInput{
-        date: String,
+        date: Date,
         processId   : String,
         process     : String,
         communities : [String],

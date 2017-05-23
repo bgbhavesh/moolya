@@ -1,6 +1,7 @@
   import MlResolver from '../../../commons/mlResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
 import mlTransactionsListRepo from '../../admin/transactions/mlTransactionsListRepo'
+  import _ from 'underscore'
 
 let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
@@ -78,19 +79,22 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
       let clusterNames = [];  //@array of strings
-      clusterData.map(function (doc) {
+    /*  clusterData.map(function (doc) {
         clusterNames.push(doc.clusterName)
       });
-
+*/
+      clusterNames = _.pluck(clusterData, 'clusterName') || [];
       let chapterNamesArray = [];
-      chapterData.map(function (doc) {
+     /* chapterData.map(function (doc) {
         chapterNamesArray.push(doc.chapterName)
-      });
+      });*/
+      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
 
       let subchapterNamesArray = [];
-      subchapterData.map(function (doc) {
+  /*    subchapterData.map(function (doc) {
         subchapterNamesArray.push(doc.subChapterName)
-      });
+      });*/
+      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].clustersList = clusterNames || [];
       data[index].chaptersList = chapterNamesArray || [];
@@ -135,14 +139,16 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
       let chapterNamesArray = [];
-      chapterData.map(function (doc) {
+      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+/*      chapterData.map(function (doc) {
         chapterNamesArray.push(doc.chapterName)
-      });
+      });*/
 
       let subchapterNamesArray = [];
-      subchapterData.map(function (doc) {
+    /*  subchapterData.map(function (doc) {
         subchapterNamesArray.push(doc.subChapterName)
-      });
+      });*/
+      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].departmentAliasName = departmentDetails || "";
       data[index].clustersList = clusterNames || [];

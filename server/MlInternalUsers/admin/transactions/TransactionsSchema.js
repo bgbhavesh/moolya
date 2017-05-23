@@ -76,13 +76,24 @@ let transactionsSchema = `
       subChapterName            : String
     }
     
+    input userAgentInput{
+        OS                  :String
+        ipAddress           :String
+        browser             :String
+        deviceModel         :String
+        deviceType          :String
+        deviceVendor        :String
+    }
+    
     input TransactionsLogInput{
        _id                      : String
       userId                    : String
       userName                  : String
       action                    : String
-      createdAt                 :String
-      transactionDetails        :String
+      createdAt                 : String
+      emailId                   : String
+      userAgent                 : [userAgentInput]
+      transactionDetails        : String
       clusterId                 : String
       chapterId                 : String
       subChapterId              : String

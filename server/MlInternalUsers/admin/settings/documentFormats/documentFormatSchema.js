@@ -7,7 +7,7 @@ let DocumentFormatsSchema = `
       docFormatDisplayName :String
       about :String
       _id :String
-      createdDateTime: String
+      createdDateTime: Date
       isActive :Boolean
     }
     input documentFormatObject{

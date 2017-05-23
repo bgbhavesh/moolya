@@ -45,37 +45,50 @@ describe('Payload Module', function () {
         var arr1 = [];
         var arr2 = ["smart", "moolya"];
         var response = mlP.getArrayDifference(arr1, arr2);
-        expect(true).to.be.equal(response.isActive);
-        expect(arr2).to.be.equal(response.difference);
-        expect(arr1).to.not.equal(response.difference);
+        // console.log(response[1].isActive);
+        expect(true).to.be.equal(response[1].isActive);
+        expect(arr2).to.be.equal(response[1].difference);
+        expect(arr1).to.not.equal(response[1].difference);
+        //
+        // When array 2 = empty
+        //
+        var arr2 = [];
+        var arr1 = ["smart", "moolya"];
+        var response = mlP.getArrayDifference(arr1, arr2);
+        expect(true).to.be.equal(response[1].isActive);
+        expect(false).to.be.equal(response[0].isActive);
+        //console.log(response[1].difference);
+        expect(arr1).to.be.equal(response[0].difference);
+        expect(arr1).to.not.equal(response[1].difference);
         //
         // When array 2 length is greater than array 1
         //
         arr1 = ["smart"];
         arr2 = ["smart", "moolya"];
         response = mlP.getArrayDifference(arr1, arr2);
-        expect(true).to.be.equal(response.isActive);
-        expect(_.difference(arr2, arr1)).to.eql(response.difference);
-        expect(["moolya"]).to.eql(response.difference);
-        expect(["smart"]).to.not.eql(response.difference);
+        expect(true).to.be.equal(response[1].isActive);
+        expect(_.difference(arr2, arr1)).to.eql(response[1].difference);
+        expect(["moolya"]).to.eql(response[1].difference);
+        expect(["smart"]).to.not.eql(response[1].difference);
         //
         // When array 2 length is smaller than array 1
         //
         arr1 = ["smart", "moolya"];
         arr2 = ["moolya"];
         response = mlP.getArrayDifference(arr1, arr2);
-        expect(false).to.be.equal(response.isActive);
-        expect(_.difference(arr1, arr2)).to.eql(response.difference);
-        expect(["smart"]).to.eql(response.difference);
-        expect(["moolya"]).to.not.eql(response.difference);
+        expect(false).to.be.equal(response[0].isActive);
+        expect(_.difference(arr1, arr2)).to.eql(response[0].difference);
+        expect(["smart"]).to.eql(response[0].difference);
+        expect(["moolya"]).to.not.eql(response[0].difference);
         //
         // When array 2 length is equal to array 1
         //
         arr1 = ["smart", "moolya"];
         arr2 = ["smart", "moolya"];
         response = mlP.getArrayDifference(arr1, arr2);
-        expect(false).to.be.equal(response.isActive);
-        expect(_.difference(arr1, arr2)).to.eql(response.difference);
-        expect([]).to.eql(response.difference);
+        // console.log(response);
+        expect(false).to.be.equal(response[0].isActive);
+        expect(_.difference(arr1, arr2)).to.eql(response[0].difference);
+        expect([]).to.eql(response[1].difference);
     });
 });

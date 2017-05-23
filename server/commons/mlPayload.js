@@ -51,7 +51,7 @@ module.exports = class MlRespPayload{
             return result;
         }
 
-        for (i = 0; i < longerLength; i++){
+        for (let i = 0; i < longerLength; i++){
             if ((a1[i] !== a2[i]) && a2[i]!= undefined) {
                 a1[i]!= undefined && inactiveDiff.push(a1[i])
                 activeDiff.push(a2[i])

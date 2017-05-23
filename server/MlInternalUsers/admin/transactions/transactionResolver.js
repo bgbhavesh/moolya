@@ -14,6 +14,7 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
   args.transaction.transactionTypeName=requestDetails.transactionType;
   args.transaction.transactionTypeId=requestDetails.transactionId;
   args.transaction.userId=context.userId;
+  args.transaction.transactionCreatedDate= new Date();
   orderNumberGenService.assignTransationRequest(args.transaction)
   let transactionDetails=args.transaction
   let id = mlDBController.insert('MlTransactions', args.transaction, context)

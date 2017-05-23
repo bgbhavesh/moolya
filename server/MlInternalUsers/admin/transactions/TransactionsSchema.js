@@ -39,8 +39,8 @@ let transactionsSchema = `
       transactionStatus         : statusInfo
       transactionAssignedBy     : String
       transactionCompletedBy    : String
-      transactionCreatedDate    : String
-      transactionUpdatedDate    : String
+      transactionCreatedDate    : Date
+      transactionUpdatedDate    : Date
       hierarchy                 : String
       allocation                : allocation
       cluster                   : String
@@ -84,8 +84,8 @@ let transactionsSchema = `
       transactionStatus         : statusInput
       transactionAssignedBy     : String
       transactionCompletedBy    : String
-      transactionCreatedDate    : String
-      transactionUpdatedDate    : String
+      transactionCreatedDate    : Date
+      transactionUpdatedDate    : Date
       hierarchy                 : String
       allocation                : allocationInput
       cluster                   : String

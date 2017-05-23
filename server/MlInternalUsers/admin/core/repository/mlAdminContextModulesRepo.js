@@ -202,7 +202,18 @@ let CoreModules = {
     var data= MlPortfolioDetails.find(resultantQuery,fieldsProj).fetch()||[];
     var totalRecords=MlPortfolioDetails.find(resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
+  },
+  MlTransactionLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+    let query={};
+    if(!fieldsProj.sort){
+      fieldsProj.sort={createdAt: -1}
+    }
+    const data = mlDBController.find('MlTransactionsLog', query, context, fieldsProj).fetch();
+    const totalRecords = mlDBController.find('MlTransactionsLog', query, context,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
+
   }
+
 }
 
 

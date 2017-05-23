@@ -58,7 +58,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var userProfileDep = new MlAdminUserContext().userProfileDetails(context.userId);
     var queryChange;
     if (userProfileDep.defaultChapters.indexOf("all") < 0) {
-      var serverQuery = {depatmentAvailable: {$elemMatch: {subChapter: {$in:userProfile.defaultSubChapters}}}}
+      userProfileDep.defaultSubChapters.push('all')
+      var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query
@@ -103,7 +104,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var userProfileSub = new MlAdminUserContext().userProfileDetails(context.userId);
     var queryChange;
     if (userProfileSub.defaultChapters.indexOf("all") < 0) {
-      var serverQuery = {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfile.defaultSubChapters}}}}
+      userProfileSub.defaultSubChapters.push('all')
+      var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query

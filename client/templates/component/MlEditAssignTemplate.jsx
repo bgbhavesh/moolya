@@ -323,6 +323,7 @@ class MlEditAssignTemplate extends React.Component{
                         </div>
                         <div className="form-group">
                           <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
+                          <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                         </div>
                       </form>
                     </ScrollArea>

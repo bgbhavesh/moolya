@@ -72,7 +72,7 @@ export default class MlCommunityList extends Component {
           <div className={`cluster_status ${prop.profile.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.profile.isActive?"check":"times"}/></div>
           {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}
           <a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
-          <h3>{prop.profile.InternalUprofile.moolyaProfile.displayName}</h3>
+          <h3>{prop.profile.email}</h3>
         </div>
       </div>
   );

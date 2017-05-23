@@ -73,7 +73,7 @@ class MlEditDepartment extends React.Component{
         displayName: this.refs.displayName.value,
         departmentDesc: this.refs.aboutDepartment.value,
         isActive: this.refs.departmentStatus.checked,
-        isMoolya: this.refs.appType.checked,
+        isMoolya: this.state.isMoolya,   //   this.refs.appType.checked
         depatmentAvailable: this.state.departmentAvailability
       }
       let DepartmentDetails = {

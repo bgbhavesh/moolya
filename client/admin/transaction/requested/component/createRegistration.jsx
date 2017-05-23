@@ -31,10 +31,11 @@ export default class MlCreateRegistration extends React.Component{
       refered:'',
       institutionAssociation:'',
       coummunityName:'',
-      userName : ''
+      userName : '',
+      selectedAccountsType:" "
     }
     //this.addEventHandler.bind(this);
-    this.createRegistration.bind(this)
+    this.createRegistration.bind(this);
     return this;
   }
 
@@ -77,6 +78,12 @@ export default class MlCreateRegistration extends React.Component{
     //  FlowRouter.go("/admin/transactions/registrationRequested");
     }
    }
+
+
+  optionsBySelectTypeOfAccounts(value){
+    this.setState({selectedAccountsType:value})
+  }
+
 
 
   optionsBySelectCountry(value){
@@ -193,10 +200,15 @@ export default class MlCreateRegistration extends React.Component{
     let chapterOption={options: { variables: {id:this.state.cluster}}};
     let countryOption = {options: { variables: {}}};
 
-    let subscriptionOptions = [
-      {value: 'Starter', label: 'Starter'},
-      {value: 'Premier', label: 'Premier'}
-    ];
+    // let subscriptionOptions = [
+    //   {value: 'Starter', label: 'Starter'},
+    //   {value: 'Premier', label: 'Premier'}
+    // ];
+
+    let accountsquery=gql `query{
+    data: FetchAccount {label:accountName,value: _id}
+}`;
+
     let referedOption=[
       { value: '0', label: 'friends/collegues reference' },
       { value: '1', label: 'google/searching' },
@@ -311,8 +323,7 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="Password" placeholder="Password" ref="password"  className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <span className={`placeHolder ${subscriptionActive}`}>AccountType </span>
-                  <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)}/>
+                  <Moolyaselect  placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery} onSelect={this.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
                   <span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Institution</span>

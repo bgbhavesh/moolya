@@ -733,7 +733,20 @@ if(Meteor.isServer){
               //   "subMenusId":"portfolio"
               // }
             ]
+          },
+
+          {
+            "link": "/admin/transactions/transactionsLog ",
+            "name": "Transactions Log",
+            "uniqueId": "transaction_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
           }
+      //       "subMenu":[
+      //
       ]
       },
       {

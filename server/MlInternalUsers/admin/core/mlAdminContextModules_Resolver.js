@@ -93,6 +93,19 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type='approved';
       result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case "PortfolioRequests":
+      requestParams=args.context||{};
+      requestParams.type='requested';
+      result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "PortfolioApproved":
+      requestParams=args.context||{};
+      requestParams.type='approved';
+      result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'TransactionsLog':
+      result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -113,6 +126,9 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "hierarchySubChapters":resolveType= 'SubChapter';break;
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
+      case "PortfolioRequests":resolveType= 'Portfoliodetails';break;
+      case "PortfolioApproved":resolveType= 'Portfoliodetails';break;
+      case "TransactionsLog":resolveType='TransactionsLog';break;
     }
 
     if(resolveType){

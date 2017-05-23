@@ -33,7 +33,7 @@ let Role = `
         subChapter:String,
         userType:String,
         about:String,
-        createdDateTime:String,
+        createdDateTime:Date,
         createdBy:String,
         departmentsList : [String],
         subdepartmentsList : [String],

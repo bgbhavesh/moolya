@@ -23,7 +23,11 @@ export default class MlTransactionRequested extends Component {
       requestType: null,
       createRequest:false,
       popoverOpen: false,
-      requestTypeId: " "
+      requestTypeId: " ",
+      cluster:null,
+      chapter:null,
+      subChapter:null,
+      community:null
     }
     this.toggle = this.toggle.bind(this);
     this.findRequestDetails.bind(this);
@@ -42,6 +46,10 @@ export default class MlTransactionRequested extends Component {
     let requests={
       requestTypeId:this.state.requestTypeId,
       requestDescription:this.refs.about.value,
+      cluster:this.state.cluster,
+      chapter:this.state.chapter,
+      subChapter:this.state.subChapter,
+      community:this.state.community,
       requestsStatus:{
         code: "1",
         description:"requested"
@@ -65,6 +73,23 @@ export default class MlTransactionRequested extends Component {
     }
 
   }
+
+  optionsBySelectCluster(index, selectedIndex){
+    this.setState({cluster:selectedIndex})
+  }
+
+  optionsBySelectChapter(index, selectedIndex){
+    this.setState({chapter:selectedIndex})
+  }
+
+  optionsBySelectSubChapter(index, selectedIndex){
+    this.setState({subChapter:selectedIndex})
+  }
+
+  optionsBySelectCommunity(index, selectedIndex){
+    this.setState({community:selectedIndex})
+  }
+
 
   cancel(){
     this.setState({requestType:null})
@@ -152,6 +177,39 @@ export default class MlTransactionRequested extends Component {
       sizePerPageList: [10,20,50,100,200,300,500,700,1000,2000,3000],
       clearSearch: false,
      expandRowBgColor: 'rgb(242, 255, 163)'}
+    let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
+
+    let chapterquery=gql`query($id:String){  
+    data:fetchChapters(id:$id) {
+        value:_id,
+        label:chapterName
+      }  
+    }`;
+
+    let subDepartmentquery=gql`query($id:String){  
+      data:fetchSubDepartments(id:$id) {
+        value:_id
+        label:subDepartmentName
+      }  
+    }`;
+
+    let subChapterquery=gql`query($chapterId:String,$clusterId:String){  
+        data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
+          value:_id
+          label:subChapterName
+        }  
+    }`;
+
+    let communityQuery=gql`query($clusterId:String, $chapterId:String, $subChapterId:String){  
+      data:fetchCommunitiesForRolesSelect(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId) {
+          value:code    
+          label:name
+      }  
+    }`;
+
+    let chapterOption={options: { variables: {id:this.state.cluster}}};
+    let subchapterOption={options: { variables: {chapterId:this.state.chapter,clusterId:this.state.cluster}}};
+    let communityOption={options: { variables: {clusterId:this.state.cluster, chapterId:this.state.chapter, subChapterId:this.state.subChapter}}};
     return (
       <div className="admin_main_wrap" >
         <div className="admin_padding_wrap">
@@ -185,6 +243,25 @@ export default class MlTransactionRequested extends Component {
                     </div>
                     <div className="form-group">
                       <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
+                    </div>
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(that,id)} />
+                    </div>
+
+                    <div className="form-group">
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(that,id)} />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={this.optionsBySelectSubChapter.bind(that,id)} />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'} reExecuteQuery={true} queryOptions={communityOption} onSelect={this.optionsBySelectCommunity.bind(that,id)} />
+                      </div>
                     </div>
                     <div className="assign-popup">
                       <a data-toggle="tooltip" title="Submit" data-placement="top" onClick={this.createRequest.bind(this)} className="hex_btn hex_btn_in">

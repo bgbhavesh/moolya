@@ -183,6 +183,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     var validationCheck=null;
     var result=null;
     var registerDetails=null;
+    var subChapterDetails=null;
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
@@ -192,13 +193,20 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.communityName!=details.communityName)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
        }
-        // let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
-        let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: details.chapterId}, context) || {};
+       //if subChapter is selected by admin
+        if(details.subChapterId){
+           subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: details.subChapterId}, context) || {};
+        }else{  //default moolya subChapter will be taken
+          // let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
+           subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: details.chapterId}, context) || {};
+        }
 
         details.clusterName = subChapterDetails.clusterName;
         details.chapterName = subChapterDetails.chapterName;
         details.subChapterName = subChapterDetails.subChapterName;
         details.subChapterId = subChapterDetails._id;
+
+
         details.registrationDate = registerDetails&&registerDetails.registrationDate?registerDetails.registrationDate:new Date();
         // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
         let communityDetails = mlDBController.findOne('MlCommunity', {

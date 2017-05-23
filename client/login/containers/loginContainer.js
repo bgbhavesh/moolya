@@ -1,3 +1,5 @@
+import {updateTransactionLogActionHandler} from '../actions/logoutLogEntry';
+
 export let loginContainer = {
     login(username, password, callback){
         Meteor.loginWithPassword({username:username},password, function (result)
@@ -18,7 +20,10 @@ export let loginContainer = {
         let originalLogout = Meteor.logout;
         Meteor.logout()
         {
+
             let user = Meteor.user();
+            console.log(user);
+          const resp = updateTransactionLogActionHandler();
             if (user && user.profile && user.profile.isMoolyaBackend === true) {
                 originalLogout.apply(Meteor, arguments);
             }

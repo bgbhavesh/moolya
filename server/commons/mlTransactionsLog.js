@@ -34,7 +34,7 @@ class MlTransactionsHandler {
     return contextData;
   }
 
-  insertTransactions(transactionsParams) {
+  insertTransactions(transactionsParams, actions) {
     let userAgent = {
       OS: '-',
       ipAddress: transactionsParams.connection.clientAddress,

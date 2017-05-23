@@ -34,11 +34,12 @@ class MlTransactionsHandler {
     return contextData;
   }
 
-  insertTransactions(transactionsParams, actions) {
+  insertTransactions(transactionsParams, context, actions) {
     let userAgent = {
-      OS: '-',
-      ipAddress: transactionsParams.connection.clientAddress,
-      browser:transactionsParams.connection.httpHeaders['user-agent'],
+      OS: "-",
+      ipAddress: context.ip?context.ip:" ",
+      browser:context.browser?context.browser:" ",
+      userId:context.userId?context.userId:" ",
       deviceModel: "-",
       deviceType: "-",
       deviceVendor: "-"
@@ -78,7 +79,7 @@ class MlTransactionsHandler {
         emailId: transactionsParams.user.profile.email,
         userId: transactionsParams.user._id,
         userName: transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName,
-        url: transactionsParams.connection.httpHeaders.host,
+        url: context.url?context.url:" ",
         docId: " ",
         action: transactionsParams.methodName? transactionsParams.methodName : actions,
         moduleName: " ",

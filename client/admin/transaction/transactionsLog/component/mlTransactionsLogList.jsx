@@ -14,11 +14,9 @@ export default class MlTransactionsLogList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Transactions Log </h2>
+          <h2>Systems Log </h2>
           <MlTableViewContainer {...mlTransactionsLogTableConfig} />
         </div>
-
-
       </div>
     )
   }

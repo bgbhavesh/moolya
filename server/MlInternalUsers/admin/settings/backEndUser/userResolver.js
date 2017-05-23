@@ -470,6 +470,7 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
             }
           }
         }
+        users = _.uniqBy(users, '_id')
       }
     }
   }

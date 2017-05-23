@@ -190,6 +190,7 @@ MlResolver.MlMutationResolver['createTransactionLog'] = (obj, args, context, inf
   args.transaction.userAgent = {};
   args.transaction.userAgent.ipAddress = context.ip;
   args.transaction.userAgent.browser = context.browser;
+  context.userId = args.transaction.userId;
   let id = mlDBController.insert('MlTransactionsLog', args.transaction ,context)
   if(id){
     let code = 200;

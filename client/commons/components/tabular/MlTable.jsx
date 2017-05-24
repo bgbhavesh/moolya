@@ -25,7 +25,7 @@ export default class MlTable extends React.Component {
   render() {
     const selectRow = {
       mode: 'checkbox',
-      bgColor: this.props.bgColor?this.props.bgColor:'',
+      bgColor: this.props.bgColor?this.props.bgColor:'#feeebf',
       onSelect: this.props.handleRowSelect,
       clickToExpand: this.props.isExpandableRow?true:false
     };

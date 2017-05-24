@@ -9,7 +9,7 @@ if(Meteor.isServer){
       "moduleName" : "registration",
       "filterFields" : [
         {
-          "fieldName" : "createdDate",
+          "fieldName" : "registrationInfo.registrationDate",
           "displayName" : "Created Date",
           "isDynamic" : null,
           "fieldType" : "Date",
@@ -121,6 +121,60 @@ if(Meteor.isServer){
           "fieldResolverName" : "Gen_isActive",
           "isActive":true
         }
+      ]
+    }});
+  }
+
+  //for transaction log
+  let transactionLogFilterExists = MlFilters.findOne({"moduleName":"transactionLog"});
+  if(!transactionLogFilterExists){
+    MlFilters.upsert({"moduleName" : "transactionLog"},{$set:{
+      "filterName" : "TransactionLog Filter",
+      "filterDescription" : "TransactionLog Filter",
+      "isActive" : true,
+      "moduleName" : "transactionLog",
+      "filterFields" : [
+        {
+          "fieldName" : "clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "communityId",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdAt",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
       ]
     }});
   }

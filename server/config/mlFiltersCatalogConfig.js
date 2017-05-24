@@ -60,7 +60,7 @@ if(Meteor.isServer){
     },{$set:{
       fields:[
         {
-          name:"createdDate",
+          name:"registrationInfo.registrationDate",
           type:'Date',
           resolverName : " "
         },
@@ -97,6 +97,55 @@ if(Meteor.isServer){
       ]
     }})
   }
+
+  let transactionLogFilterExists = MlFiltersCatalog.findOne({"moduleName":"transactionLog"});
+  if(!transactionLogFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "transactionLog",
+      "moduleName":"transactionLog"
+    },{$set:{
+      fields:[
+        {
+          name:"clusterId",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"chapterId",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"subChapterId",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+        {
+          name:"communityType",
+          type:'List',
+          resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"isActive",
+          type:'Boolean',
+          resolverName : "Gen_isActive",
+          isDynamic:true
+        },
+        {
+          name:"accountType",
+          type:'List',
+          resolverName : "Gen_SubscriptionType",
+          isDynamic:true
+        }
+      ]
+    }});
+  }
+
+
 
 
   MlFiltersCatalog.upsert({

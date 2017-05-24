@@ -16,23 +16,13 @@ export const mlBackendUserListConfig=new MlViewer.View({
   viewComponent:<MlBackendUserListView />,
   showActionComponent:true,
   actionConfiguration:[
-    // {
-    //   actionName: 'edit',
-    //   showAction: true,
-    //   handler: null
-    // },
     {
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
         FlowRouter.go("/admin/settings/addBackendUser")
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   graphQlQuery:gql`
               query{
@@ -46,6 +36,7 @@ export const mlBackendUserListConfig=new MlViewer.View({
                             profile {
                                       isInternaluser
                                       isExternaluser
+                                      isMoolya
                                       email,
                                       isActive,
                                       profileImage

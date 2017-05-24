@@ -267,21 +267,24 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
     data.map(function (doc,index) {
       let roleIds=[]
-      let hirarichyLevel=[]
+      var hirarichyLevel=[]
+      var roleNames = []
       let userProfiles=doc&&doc.profile.InternalUprofile.moolyaProfile.userProfiles?doc.profile.InternalUprofile.moolyaProfile.userProfiles:[];
       userProfiles.map(function (doc,index) {
         if(doc.isDefault) {
           let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-          userRoles.map(function (doc, index) {
-            hirarichyLevel.push(doc.hierarchyLevel)
-
-          });
+          // userRoles.map(function (doc, index) {
+          //   hirarichyLevel.push(doc.hierarchyLevel)
+          //
+          // });
+          hirarichyLevel = _.pluck(userRoles, 'hierarchyLevel') || [];
           hirarichyLevel.sort(function (a, b) {
             return b - a
           });
           for (let i = 0; i < userRoles.length; i++) {
             if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
-              roleIds.push(userRoles[i].roleId);
+              // roleIds.push(userRoles[i].roleId);
+              roleNames.push(userRoles[i].roleName);
               break
             }
           }
@@ -289,11 +292,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
 
-      let roleNames=[]
-      const rolesData =  MlRoles.find({ _id: { $in: roleIds} } ).fetch() || [];
-      rolesData.map(function (doc) {
-        roleNames.push(doc.roleName)
-      });
+
+      // const rolesData =  MlRoles.find({ _id: { $in: roleIds} } ).fetch() || [];
+      // rolesData.map(function (doc) {
+      //   roleNames.push(doc.roleName)
+      // });
+      // roleNames = _.pluck(rolesData, 'roleName') || [];
       data[index].roleNames = roleNames || [];
     });
 

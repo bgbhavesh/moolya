@@ -637,7 +637,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find(query,findOptions).fetch();
     totalRecords=MlGlobalSettings.find(query,findOptions).count();
   }
-  if(args.module=="registrationInfo"){
+  /*if(args.module=="registrationInfo"){
     let userID=context.userId,isPlatformAdmin=false,hirarichyLevel=[],clusterId='',chapterId=[]
     //get user details iterate through profiles match with role and get clusterId
     let user = mlDBController.findOne('users', {_id: userID}, context)
@@ -695,7 +695,21 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       //data = result;
       totalRecords=MlRegistration.find(queryCount,findOptions).count();
     }
+  }*/
+  if(args.module=="registrationInfo"){
+    data= MlRegistration.find(query,findOptions).fetch();
+    let result=[];
+    data.map(function (doc,index) {
+      let object ;
+      object = doc.registrationInfo;
+      object._id = doc._id;
+      object.transactionId = doc.transactionId
+      result.push(object);
+    });
+    data = result;
+    totalRecords=MlRegistration.find(query,findOptions).count();
   }
+
   if(args.module=="registrationApprovedInfo"){
     let userID=context.userId,hirarichyLevel=[],clusterIds=[]
     //get user details iterate through profiles match with role and get clusterId

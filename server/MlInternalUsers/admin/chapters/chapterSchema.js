@@ -84,6 +84,7 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean
         internalSubChapterAccess:internalSubChapterAccess
         moolyaSubChapterAccess:moolyaSubChapterAccess
+        associatedSubChapters : [String]
     }
     
     input internalSubChapterAccessObject{

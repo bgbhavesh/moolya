@@ -169,7 +169,7 @@ let transactionsSchema = `
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput,collection:String):response
-      assignTransaction(params:assignmentParams,transactionId:String,transactionType:String,collection:String):response
+      assignTransaction(params:assignmentParams,transactionId:String,collection:String):response
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response

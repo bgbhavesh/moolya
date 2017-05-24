@@ -321,15 +321,16 @@ MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context, info) => {
   let users = [];
   if (args.clusterId) {
-    if (args.subChapterId) {
-      let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
-      if (subChapter && subChapter.isActive) {
-        let cluster = mlDBController.findOne('MlClusters', {_id: args.clusterId}, context)
-        if (cluster.isActive) {
-          let departments = mlDBController.find('MlDepartments', {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}, context).fetch();
+    var clusterActive = mlDBController.findOne('MlClusters', {_id: args.clusterId, isActive: true}, context)
+    if (clusterActive) {
+      if (args.subChapterId) {
+        let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId, isActive: true}, context)
+        if (subChapter) {
+          var isMoolya = subChapter.isDefaultSubChapter
+          // {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}
+          let departments = mlDBController.find('MlDepartments', {$and:[{isMoolya:isMoolya}, {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}, context).fetch();
           if (departments && departments.length > 0) {
             departments.map(function (department) {
-              // let depUsers = Meteor.users.find({"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {"profile.InternalUprofile.moolyaProfile.userType": 'moolya'}]}).fetch();
               let depUsers = mlDBController.find('users', {
                 "$and": [{
                   "$or": [{
@@ -338,7 +339,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                     "profile.InternalUprofile.moolyaProfile.globalAssignment": true
                   }]
                 }, {
-                  'profile.isMoolya': true
+                  'profile.isMoolya': isMoolya
                 }]
               }, context).fetch();
               depUsers.map(function (user) {
@@ -353,7 +354,6 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                   userProfiles.map(function (profile) {
                     if (profile.clusterId == args.clusterId) {
                       let userRoles = profile.userRoles;
-                      let activeRoles = _.find(userRoles, {"isActive": true});
                       user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
                       if (_.isEmpty(_.find(users, user))) {
                         users.push(user)
@@ -365,17 +365,19 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
             })
           }
         }
-      }
-    } else {
-      // let cluster = MlClusters.findOne({_id: args.clusterId});
-      let cluster = mlDBController.findOne('MlClusters', {_id: args.clusterId}, context)
-      if (cluster.isActive) {
+      } else {
         // let departments = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
         let departments = mlDBController.find('MlDepartments', {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}, context).fetch();
         if (departments && departments.length > 0) {
           departments.map(function (department) {
-            // let depUsers = Meteor.users.find({"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {"profile.InternalUprofile.moolyaProfile.userType": 'moolya'}]}).fetch();
-            let depUsers = mlDBController.find('users', {"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {"profile.InternalUprofile.moolyaProfile.userType": 'moolya'}]}, context).fetch();
+            // {"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {'profile.isMoolya': true}]}
+            let depUsers = mlDBController.find('users', {
+              "$or": [{
+                "profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id
+              }, {
+                "profile.InternalUprofile.moolyaProfile.globalAssignment": true
+              }]
+            }, context).fetch();
             depUsers.map(function (user) {
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               if ((user.profile.InternalUprofile.moolyaProfile.globalAssignment || user.profile.InternalUprofile.moolyaProfile.userProfiles.length == 0) && (user.profile.isActive)) {
@@ -439,7 +441,6 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, context, info) => {
   let users = [];
   if (args.subChapterId) {
-    // let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
     let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
     if (subChapter && subChapter.isActive) {
       if (subChapter.isDefaultSubChapter) {
@@ -448,7 +449,6 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
           subChapterId: args.subChapterId ? args.subChapterId : ""
         }, context, info)
       } else {
-        // let departments = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
         let departments = mlDBController.find('MlDepartments', {
           $or: [{$and: [{isMoolya: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
             isSystemDefined: true,
@@ -649,23 +649,33 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   if(clusterId != "" && chapterId != "" && subChapterId != ""){
 
       if(userType == "All"){
-          // FOR ALL Community USERS
-          let communityUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
-          if(communityUsers && communityUsers.length>0){
-            communityUsers = _.omit(communityUsers.profile, "externalUserProfiles")
-            users.push(communityUsers);
-          }
-          // FOR BACKEND USERS
           let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
           clusterId = subChapter.clusterId;
+          chapterId = subChapter.chapterId;
           if(subChapter.isActive){
-              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
-              _.each(allUsers, function (user){
+
+            // FOR External Users
+              let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+              if(externalUsers && externalUsers.length>0){
+                  _.each(externalUsers, function (user){
+                      let userProfiles = user.profile.externalUserProfiles;
+                      if(userProfiles){
+                          let profile = _.find(userProfiles, {clusterId:clusterId,chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
+                          if(profile){
+                            users.push(user);
+                          }
+                      }
+                  })
+              }
+
+              // FOR Internal Users
+              let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+              _.each(internalUsers, function (user){
                   if(user.profile.isActive){
                       let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-                      let profile = _.find(userProfiles, {clusterId:clusterId});
+                      let profile = _.find(userProfiles, {clusterId:clusterId, chapterId:(chapterId||"all")});
                       if(profile){
-                          let roles = _.find(profile.userRoles, {subChapterId:subChapterId||"all"});
+                          let roles = _.find(profile.userRoles, {subChapterId:(subChapterId||"all")});
                           if(roles){
                             users.push(user);
                           }
@@ -679,14 +689,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
 
           let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
           clusterId = subChapter.clusterId;
+          chapterId = subChapter.chapterId;
           if(subChapter.isActive){
             let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
             _.each(allUsers, function (user){
               if(user.profile.isActive){
                 let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-                let profile = _.find(userProfiles, {clusterId:clusterId});
+                let profile = _.find(userProfiles, {clusterId:clusterId, chapterId:(chapterId||"all")});
                 if(profile){
-                  let roles = _.find(profile.userRoles, {subChapterId:subChapterId||"all"});
+                  let roles = _.find(profile.userRoles, {subChapterId:(subChapterId||"all")});
                   if(roles){
                     users.push(user);
                   }
@@ -695,33 +706,48 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             })
           }
       }
-      else if (userType == "Ideators" || "Funders" || "StartUps" || "Providers" || "Company" || "Institutions"){
+      else if (userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
           let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
           clusterId = subChapter.clusterId;
+          chapterId = subChapter.chapterId;
           if(subChapter.isActive){
               let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
               _.each(allUsers, function (user){
-
                   let userProfiles = user.profile.externalUserProfiles;
-                  let profile = _.find(userProfiles, {clusterId:clusterId});
-                  profile = _.find(profile, {subChapterId:subChapterId||"all"});
-                  _.each(profile, function (profile) {
-                      if(profile.communityId!="all"){
-                          let community = mlDBController.findOne('MlCommunity', {"$and":[{"_id":profile.communityId}]}, context);
-                          if(community && community.communityName == userType){
-                              if(profile){
-                                users.push(user);
+                  let profile = _.filter(userProfiles, {clusterId:clusterId,chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
+                  if(profile && profile.length>0) {
+                      _.each(profile, function (profile) {
+                          if (profile.communityId && profile.communityId != "all") {
+                              let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
+                              if (community && community.communityName == userType) {
+                                  users.push(user);
+                              }
+                          } else if(profile.communityId && profile.communityId == "all") {
+                              if (profile) {
+                                  users.push(user);
                               }
                           }
-                      }else{
-                          if(profile){
-                            users.push(user);
-                          }
-                      }
-                  })
 
+                      })
+                  }
               })
           }
+      }
+      else{
+        let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
+        clusterId = subChapter.clusterId;
+        if(subChapter.isActive) {
+          let allUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {"profile.isActive": true}]}, context).fetch();
+          _.each(allUsers, function (user) {
+            let registration = mlDBController.findOne('MlRegistration', {"registrationInfo.userName": user.username}, context);
+            if (registration) {
+              let status = registration.status
+              if (status && (status == "Pending")) {
+                users.push(user);
+              }
+            }
+          })
+        }
       }
 
   } else{
@@ -732,25 +758,39 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       else if(userType == "BackendUsers"){
         users = mlDBController.find('users', {"$and":[{"profile.isInternaluser":true},{"profile.isActive":true},{"profile.isSystemDefined":{$exists:false}}]}, context).fetch();
       }
-      else if(userType == "Ideators" || "Funders" || "StartUps" || "Providers" || "Company" || "Institutions"){
+      else if(userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
           let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
           _.each(allUsers, function (user){
               if(user.profile.isActive){
                   let userProfiles = user.profile.externalUserProfiles;
-                  _.each(userProfiles, function (profile) {
-                      if(profile.communityId!="all"){
-                          let community = mlDBController.findOne('MlCommunity', {"$and":[{"_id":profile.communityId}]}, context);
-                          if(community && community.communityName == userType){
-                              if(profile){
-                                users.push(user);
+                  if(userProfiles && userProfiles.length>0) {
+                      _.each(userProfiles, function (profile) {
+                          if (profile && profile.communityId) {
+                              if (profile.communityId && profile.communityId != "all") {
+                                  let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
+                                  if (community && community.communityName == userType) {
+                                      users.push(user);
+                                  }
+                              } else if(profile.communityId && profile.communityId == "all") {
+                                  if (profile) {
+                                      users.push(user);
+                                  }
                               }
                           }
-                      }else{
-                          if(profile){
-                            users.push(user);
-                          }
-                      }
-                  })
+                      })
+                  }
+              }
+          })
+      }
+      else{
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          _.each(allUsers, function (user) {
+              let registration = mlDBController.findOne('MlRegistration', {"registrationInfo.userName":user.username}, context);
+              if(registration){
+                  let status = registration.status
+                  if(status && (status == "Pending")){
+                    users.push(user);
+                  }
               }
           })
       }

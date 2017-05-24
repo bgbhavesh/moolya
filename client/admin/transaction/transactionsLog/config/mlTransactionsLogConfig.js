@@ -26,6 +26,7 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "userAgent",isHidden:true},{dataField: "userId",isHidden:true},{dataField: "emailId",isHidden:true}
 
   ],
   tableHeaderClass:'react_table_head',
@@ -49,6 +50,11 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
                         userName
                         createdAt
                         activity
+                        emailId
+                        userAgent{
+                        ipAddress
+                        browser
+                        }
                         transactionTypeName
                         transactionTypeId
                         transactionDetails

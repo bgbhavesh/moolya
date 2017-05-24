@@ -4,14 +4,13 @@ import { render } from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import ScrollArea from 'react-scrollbar';
-
-function logChange(val) {
-  console.log("Selected: " + val);
-}
+import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 
 
 export default class MlTransactionDetailsComponent extends React.Component {
+  componentDidMount() {
+    initalizeFloatLabel();
+  }
   render() {
     return (
       <div className="ml_tabs">
@@ -145,10 +144,5 @@ export default class MlTransactionDetailsComponent extends React.Component {
   }
 }
 
-const selectRow = {
-  mode: 'checkbox',
-  bgColor: '#feeebf',
-  clickToSelect: true, // click to select, default is false
-  clickToExpand: true // click to expand row, default is false
-};
+
 

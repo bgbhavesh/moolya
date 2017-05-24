@@ -119,7 +119,7 @@ class MlAddSubChapter extends React.Component {
     dataGet.subChapterDisplayName = this.refs.subChapterDisplayName.value
     dataGet.aboutSubChapter = this.refs.aboutSubChapter.value
     dataGet.subChapterName = this.refs.subChapterName.value
-    dataGet.associatedSubChapters = this.state.selectedChapter || []
+    dataGet.associatedSubChapters = this.state.relatedSubChapter || []
     dataGet.showOnMap = this.refs.showOnMap.checked
     dataGet.isActive = this.refs.isActive.checked
     dataGet.isBespokeWorkFlow = this.refs.isBespokeWorkFlow.checked
@@ -191,9 +191,9 @@ class MlAddSubChapter extends React.Component {
 
   selectAssociateChapter(val) {
     if (val) {
-      this.setState({selectedChapter: val})
+      this.setState({relatedSubChapter: val})
     } else {
-      this.setState({selectedChapter: ''})
+      this.setState({relatedSubChapter: ''})
     }
   }
   render() {
@@ -202,7 +202,7 @@ class MlAddSubChapter extends React.Component {
       {value: 'Chapter 2', label: 'Chapter 2'}
     ];
 
-    let clusterquery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
+    let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
 
     let MlActionConfig = [
       {
@@ -250,12 +250,12 @@ class MlAddSubChapter extends React.Component {
                   </div>
                   <div className="form-group">
                     {/*<Select name="form-field-name" placeholder="Associated Chapters" className="float-label"*/}
-                            {/*options={options} value={this.state.selectedChapter}*/}
+                            {/*options={options} value={this.state.relatedSubChapter}*/}
                             {/*onChange={this.selectAssociateChapter.bind(this)}/>*/}
-                    <Moolyaselect multiSelect={true} placeholder="Associated Chapters"
+                    <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
                                   className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                                  selectedValue={this.state.selectedChapter} queryType={"graphql"}
-                                  query={clusterquery} isDynamic={true}
+                                  selectedValue={this.state.relatedSubChapter} queryType={"graphql"}
+                                  query={subChapterQuery} isDynamic={true}
                                   onSelect={this.selectAssociateChapter.bind(this)}/>
                   </div>
                   <div className="form-group">

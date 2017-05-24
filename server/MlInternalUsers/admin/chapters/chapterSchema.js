@@ -44,7 +44,7 @@ let chapterSchema = `
     }
     
     input associatedChapters{ 
-        chapterId:String
+        subChapterId:String
     }
     
     type internalSubChapterAccess{
@@ -84,6 +84,7 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean
         internalSubChapterAccess:internalSubChapterAccess
         moolyaSubChapterAccess:moolyaSubChapterAccess
+        associatedSubChapters : [String]
     }
     
     input internalSubChapterAccessObject{
@@ -112,7 +113,7 @@ let chapterSchema = `
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
-        associatedChapters:[associatedChapters],
+        associatedSubChapters:[String],   
         subChapterUrl:String,
         isUrlNotified:Boolean,
         subChapterEmail:String,
@@ -160,3 +161,4 @@ let chapterSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], chapterSchema]);
 //fetchActiveSubChapters(id: String):[SubChapter]
+//associatedChapters

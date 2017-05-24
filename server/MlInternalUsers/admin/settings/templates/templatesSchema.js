@@ -9,7 +9,7 @@ let Template = `
             subProcessName              : String,
             templates                   : [template],
             createdBy                   : String,
-            createdDate                 : String,
+            createdDate                 : Date,
             isActive                    : Boolean  
     }
     type template{
@@ -18,7 +18,7 @@ let Template = `
             templateCode                : String
             templateName                : String
             isActive                    : Boolean
-            createdDate                 : String
+            createdDate                 : Date
             templateDescription         : String
             templateImage               : String
     }    

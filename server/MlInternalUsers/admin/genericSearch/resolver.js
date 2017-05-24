@@ -1,9 +1,10 @@
-  import MlResolver from '../../../commons/mlResolverDef'
-import getQuery from "../genericSearch/queryConstructor";
-import mlTransactionsListRepo from '../../admin/transactions/mlTransactionsListRepo'
-  import _ from 'underscore'
+  import MlResolver from "../../../commons/mlResolverDef";
+  import getQuery from "../genericSearch/queryConstructor";
+  import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
+  import mlTransactionsListRepo from "../../admin/transactions/mlTransactionsListRepo";
+  import _ from "underscore";
 
-let mergeQueries=function(userFilter,serverFilter){
+  let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
   if (_.isEmpty(query)) {
     query = serverFilter||{};
@@ -53,67 +54,68 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlSubChapters.find({},findOptions).count();
   }
 
-  if(args.module=="department"){
-    data= MlDepartments.find(query,findOptions).fetch() || [];
-    data.map(function (doc,index) {
+  if (args.module == "department") {
+    var userProfileDep = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (userProfileDep.defaultChapters.indexOf("all") < 0) {
+      userProfileDep.defaultSubChapters.push('all')
+      var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      queryChange = mergeQueries(query, serverQuery);
+    }else {
+      queryChange = query
+    }
+    data = MlDepartments.find(queryChange, findOptions).fetch() || [];
+    data.map(function (doc, index) {
       let clusterIds = [];
-      let clusterIdsArray = [];
       let chapterIdsArray = [];
       let subchapterIdsArray = [];
-      let departments=doc&&doc.depatmentAvailable?doc.depatmentAvailable:[];
-      departments.map(function (department) {
-         let currentDepClusterIds = department&&department.cluster&&department.cluster?department.cluster:[];
-         clusterIds = clusterIds.concat(currentDepClusterIds);
 
-        let chapterId =  department&&department.chapter&&department.chapter?department.chapter:"";
-        if(chapterId != "all"){
+      var departments = doc && doc.depatmentAvailable ? doc.depatmentAvailable : [];
+      departments.map(function (department) {
+        let currentDepClusterIds = department && department.cluster && department.cluster ? department.cluster : [];
+        clusterIds = clusterIds.concat(currentDepClusterIds);
+
+        let chapterId = department && department.chapter && department.chapter ? department.chapter : "";
+        if (chapterId != "all") {
           chapterIdsArray.push(chapterId);
         }
-        let subchapterId =  department&&department.subChapter&&department.subChapter?department.subChapter:"";
-        if(subchapterId != "all"){
+        let subchapterId = department && department.subChapter && department.subChapter ? department.subChapter : "";
+        if (subchapterId != "all") {
           subchapterIdsArray.push(subchapterId);
         }
       });
-      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
-      const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
-      const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
+      const clusterData = MlClusters.find({_id: {$in: clusterIds}}).fetch() || [];
+      const chapterData = MlChapters.find({_id: {$in: chapterIdsArray}}).fetch() || [];
+      const subchapterData = MlSubChapters.find({_id: {$in: subchapterIdsArray}}).fetch() || [];
 
-      let clusterNames = [];  //@array of strings
-    /*  clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
-*/
-      clusterNames = _.pluck(clusterData, 'clusterName') || [];
-      let chapterNamesArray = [];
-     /* chapterData.map(function (doc) {
-        chapterNamesArray.push(doc.chapterName)
-      });*/
-      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
-
-      let subchapterNamesArray = [];
-  /*    subchapterData.map(function (doc) {
-        subchapterNamesArray.push(doc.subChapterName)
-      });*/
-      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
+      var clusterNames = _.pluck(clusterData, 'clusterName') || [];
+      var chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+      var subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].clustersList = clusterNames || [];
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];
-
-
-
     });
-    totalRecords=MlDepartments.find({},findOptions).count();
+
+    totalRecords = MlDepartments.find({}, findOptions).count();
   }
 
   if(args.module=="subDepartment"){
-    data= MlSubDepartments.find(query,findOptions).fetch();
+    var userProfileSub = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (userProfileSub.defaultChapters.indexOf("all") < 0) {
+      userProfileSub.defaultSubChapters.push('all')
+      var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      queryChange = mergeQueries(query, serverQuery);
+    }else {
+      queryChange = query
+    }
+    data = MlSubDepartments.find(queryChange, findOptions).fetch();
 
     data.map(function (doc,index) {
       let clusterIds = [];
       let chapterIdsArray = [];
       let subchapterIdsArray = [];
-
       let departments=doc&&doc.subDepatmentAvailable?doc.subDepatmentAvailable:[];
       const departmentDetails =  MlDepartments.findOne({_id : doc.departmentId}).departmentName || "";
       departments.map(function (department) {
@@ -133,22 +135,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
-      let clusterNames = [];  //@array of strings
-      clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
-
-      let chapterNamesArray = [];
-      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
-/*      chapterData.map(function (doc) {
-        chapterNamesArray.push(doc.chapterName)
-      });*/
-
-      let subchapterNamesArray = [];
-    /*  subchapterData.map(function (doc) {
-        subchapterNamesArray.push(doc.subChapterName)
-      });*/
-      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
+      var clusterNames = _.pluck(clusterData, 'clusterNames') || [];
+      var chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+      var subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].departmentAliasName = departmentDetails || "";
       data[index].clustersList = clusterNames || [];

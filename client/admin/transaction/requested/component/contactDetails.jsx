@@ -16,6 +16,7 @@ import {findCountryCode} from '../actions/findRegistration'
 import MlLoader from '../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import _ from 'lodash'
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import _underscore from 'underscore'
 
 export default class ContactDetails extends React.Component{
@@ -70,68 +71,90 @@ export default class ContactDetails extends React.Component{
      let detailsType = "CONTACTTYPE";
      let registerid = this.props.registerId;
 
-      let contactList = this.state.contactNumberObject;
-        contactList.numberType = this.state.selectedNumberTypeValue,
-        contactList.numberTypeName = this.state.selectedNumberTypeLabel,
-        contactList.countryCode = this.refs["countryCode"].value,
-        contactList.contactNumber = this.refs["contactNumber"].value;
-      const response = await addRegistrationStep3Details(contactList,detailsType,registerid);
-      if(response){
-        if(!response.success){
-          toastr.error(response.result);
-          this.findRegistration();
-          this.props.registrationDetails();
-        }else{
-          this.findRegistration();
-          this.props.registrationDetails();
-          this.refs.countryCode.value="";
-          this.refs["contactNumber"].value="";
-          this.setState({selectedNumberTypeValue : "",selectedNumberTypeLabel : ""});
-          toastr.success("Contact is created successfully");
-        }
+     let refs = []
+     refs.push(this.refs["numberType"])
+     refs.push(this.refs["contactNumber"])
+     let ret = mlFieldValidations(refs)
 
-      }
+     if (ret) {
+       toastr.error(ret);
+     }else{
 
+       let contactList = this.state.contactNumberObject;
+       contactList.numberType = this.state.selectedNumberTypeValue,
+         contactList.numberTypeName = this.state.selectedNumberTypeLabel,
+         contactList.countryCode = this.refs["countryCode"].value,
+         contactList.contactNumber = this.refs["contactNumber"].value;
+
+
+       const response = await addRegistrationStep3Details(contactList, detailsType, registerid);
+       if (response) {
+         if (!response.success) {
+           toastr.error(response.result);
+           this.findRegistration();
+           this.props.registrationDetails();
+         } else {
+           this.findRegistration();
+           this.props.registrationDetails();
+           this.refs.countryCode.value = "";
+           this.refs["contactNumber"].value = "";
+           this.setState({selectedNumberTypeValue: "", selectedNumberTypeLabel: ""});
+           toastr.success("Contact is created successfully");
+         }
+
+       }
+     }
 
   }
   async onEditingContact(index,value){
     let detailsType = "CONTACTTYPE";
     let registerid = this.props.registerId;
 
-    let registrationDetails = this.props.registrationInfo.contactInfo
-    let dbData = _.pluck(registrationDetails, 'numberType') || [];
-    let contactExist = null;
-    if(this.state.selectedNumberTypeValue){
-      contactExist = _.contains(dbData,this.state.selectedNumberTypeValue );
-    }
+      let registrationDetails = this.props.registrationInfo.contactInfo
+      let dbData = _underscore.pluck(registrationDetails, 'numberType') || [];
+      let contactExist = null;
+      if (this.state.selectedNumberTypeValue) {
+        contactExist = _underscore.contains(dbData, this.state.selectedNumberTypeValue);
+      }
 
-    if(contactExist){
-      toastr.error("Contact TypeAlready Exists!!!!!");
-      this.findRegistration();
-      this.props.registrationDetails();
-    }else{
-      let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
-      let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;
-      let updatedComment = update(this.state.contactNumberArray[index],{
-        numberTypeName : {$set: labelValue},
-        numberType :   {$set: valueSelected},
-        countryCode : {$set: this.refs["countryCode"+index].value},
-        contactNumber : {$set: this.refs["contactNumber"+index].value}});
-
-      let newData = update(this.state.contactNumberArray, {
-        $splice: [[index, 1, updatedComment]]
-      });
-      const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-      if(response){
-        if(!response.success){
-          toastr.error(response.result);
-        }else{
-          toastr.success("Contact is updated successfully");
-        }
+      if (contactExist) {
+        toastr.error("Contact TypeAlready Exists!!!!!");
         this.findRegistration();
         this.props.registrationDetails();
+      } else {
+        let refs = []
+        refs.push(this.refs["contactNumber" + index])
+        refs.push(this.refs["numberType" + index])
+        let ret = mlFieldValidations(refs)
+
+        if (ret) {
+          toastr.error(ret);
+        }else{
+          let labelValue = this.state.selectedNumberTypeLabel ? this.state.selectedNumberTypeLabel : this.state.contactNumberArray[index].numberTypeName;
+          let valueSelected = this.state.selectedNumberTypeValue ? this.state.selectedNumberTypeValue : this.state.contactNumberArray[index].numberType;
+          let updatedComment = update(this.state.contactNumberArray[index], {
+            numberTypeName: {$set: labelValue},
+            numberType: {$set: valueSelected},
+            countryCode: {$set: this.refs["countryCode" + index].value},
+            contactNumber: {$set: this.refs["contactNumber" + index].value}
+          });
+
+          let newData = update(this.state.contactNumberArray, {
+            $splice: [[index, 1, updatedComment]]
+          });
+          const response = await updateRegistrationInfoDetails(newData, detailsType, registerid);
+          if (response) {
+            if (!response.success) {
+              toastr.error(response.result);
+            } else {
+              toastr.success("Contact is updated successfully");
+            }
+            this.findRegistration();
+            this.props.registrationDetails();
+          }
+        }
+
       }
-    }
 
 
 
@@ -241,17 +264,17 @@ export default class ContactDetails extends React.Component{
           <div className="tab-content clearfix">
             <div className={"tab-pane"+this.state.activeTab} id="contactA">
               <div className="form-group">
-                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType"
+                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType" mandatory={true}
                               className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}
                               valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
                               queryOptions={numberTypeOption} onSelect={this.optionsBySelectNumberType.bind(this)}
-                              isDynamic={true}/>
+                              isDynamic={true} data-required={true} data-errMsg="Number Type is required"/>
               </div>
               <div className="form-group">
                 <input type="text" placeholder="Enter Country Code" defaultValue={defaultCountryCode} ref={'countryCode'} className="form-control float-label" id="" disabled={true}/>
               </div>
-              <div className="form-group">
-                <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber" className="form-control float-label"/>
+              <div className="form-group mandatory">
+                <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber" className="form-control float-label"data-required={true} data-errMsg="Phone Number is required"/>
               </div>
               <div className="ml_icon_btn">
                 <a href="#"  onClick={this.onSavingContact.bind(this)}  className="save_btn" ><span
@@ -262,19 +285,19 @@ export default class ContactDetails extends React.Component{
             {that.state.contactNumberArray && (that.state.contactNumberArray.map(function(options,key) {
               return(<div className="tab-pane" id={'numberType'+key} key={key} >
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType"
+                  <Moolyaselect multiSelect={false} ref={"numberType"+key} placeholder="Select NumberType" mandatory={true}
                                 className="form-control float-label" selectedValue={options.numberType}
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
                                 queryOptions={numberTypeOption} onSelect={that.updateContactOptions.bind(that,key)}
-                                isDynamic={true}/>
+                                isDynamic={true} data-required={true} data-errMsg="Number Type is required"/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Enter Country Code" ref={'countryCode'+key} defaultValue={countryPhoneCode} valueKey={countryPhoneCode}
                          className="form-control float-label" id="" disabled={true}/>
                 </div>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" ref={'contactNumber'+key} placeholder="Enter Number"  id="phoneNumber" defaultValue={options.contactNumber}
-                         className="form-control float-label"/>
+                         className="form-control float-label" data-required={true} data-errMsg="Number is required"/>
                 </div>
                 <div className="ml_icon_btn">
                   <a href="#" onClick={that.onEditingContact.bind(that,key)} className="save_btn"><span

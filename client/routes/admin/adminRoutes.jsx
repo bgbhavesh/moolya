@@ -207,8 +207,8 @@ adminSection.route('/transactions/registrationRequested', {
 });
 
 
-adminSection.route('/transactions/transactionsLog', {
-  name: 'transaction_Log',
+adminSection.route('/transactions/systemsLog', {
+  name: 'systems_Log',
   action(params){
     mount(AdminLayout,{adminContent:<MlTransactionsLogList/>})
   }

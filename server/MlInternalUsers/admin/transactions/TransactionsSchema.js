@@ -66,9 +66,10 @@ let transactionsSchema = `
       activity                  : String
       transactionTypeName       : String
       transactionTypeId         : String
-      userAgent                 :[userAgent]
+      userAgent                 :userAgent
       createdAt                 :String
       transactionDetails        :String
+      emailId                   :String
       clusterId                 : String
       chapterId                 : String
       subChapterId              : String
@@ -97,7 +98,7 @@ let transactionsSchema = `
       activity                  : String
       createdAt                 : String
       emailId                   : String
-      userAgent                 : [userAgentInput]
+      userAgent                 : userAgentInput
       transactionDetails        : String
       clusterId                 : String
       chapterId                 : String

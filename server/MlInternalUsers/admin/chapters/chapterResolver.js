@@ -1,6 +1,7 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import geocoder from "geocoder";
+import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
@@ -233,10 +234,23 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectMoolya'] = (obj, args, context
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
   // let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
-  let result = mlDBController.find('MlSubChapters', {
-      isActive: true,
-      isDefaultSubChapter: false
-    }, context).fetch() || [];
+  var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+  var queryChange;
+  if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+    queryChange = {
+      $and: [{
+        isActive: true,
+        isDefaultSubChapter: false
+      }, {
+        '_id': {
+          $in: curUserProfile.defaultSubChapters
+        }
+      }]
+    }
+  } else {
+    queryChange = {isActive: true, isDefaultSubChapter: false}   //platform_admin
+  }
+  let result = mlDBController.find('MlSubChapters', queryChange, context).fetch() || [];
   return result
 }
 

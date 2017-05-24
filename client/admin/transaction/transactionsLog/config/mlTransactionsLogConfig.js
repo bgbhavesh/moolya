@@ -21,7 +21,7 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
     {dataField: "transactionDetails", title: "Details",dataSort:true,selectRow:true},
     {dataField: "action", title: "Action",dataSort:true,selectRow:true},
     {dataField: "userName", title: "User Name",dataSort:true,selectRow:true},
-    {dataField: "clusterName", title: "Cluster",datsaSort:true,selectRow:true},
+    {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityId", title: "Community",dataSort:true,selectRow:true},

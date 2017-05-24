@@ -2,7 +2,6 @@
  * Created by venkatasrinag on 19/12/16.
  */
 
-import MlTransactionsHandler from '../server/commons/mlTransactionsLog'
 
 let _ = require('lodash'),
   adminPassword = "MoolyaAdmin@123",
@@ -396,29 +395,7 @@ Accounts.validateLoginAttempt(function (user)
 
 
     return true;
-})
-
-Accounts.onLogin(function (transactionsParams) {
-  mlTransactionsHandler = new MlTransactionsHandler();
-  let context={
-    ip: transactionsParams.connection.clientAddress,
-    browser:transactionsParams.connection.httpHeaders['user-agent'],
-    url: transactionsParams.connection.httpHeaders.host
-      }
-     let action= "login";
-  mlTransactionsHandler.insertTransactions(transactionsParams, context , action);
-})
-
-Accounts.onLogout(function (transactionsParams) {
-  mlTransactionsHandler = new MlTransactionsHandler();
-  let context={
-    ip: transactionsParams.connection.clientAddress,
-    browser:transactionsParams.connection.httpHeaders['user-agent'],
-    url: transactionsParams.connection.httpHeaders.host
-  }
-  let action = "logout";
-  if(transactionsParams&&transactionsParams.user) mlTransactionsHandler.insertTransactions(transactionsParams,context, action);
-})
+});
 
 validateExternalUserLoginAttempt=(user)=>{
   let userExternal = user.user.profile.isExternaluser;

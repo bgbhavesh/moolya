@@ -89,18 +89,18 @@ export default class MlCommunityList extends Component {
               <span className="ml ml-funder" onClick={this.onStatusChange.bind(this, "Funders")}></span>
             </a>
             <a data-toggle="tooltip" title="Start Ups" data-placement="bottom" data-filter="startup">
-              <span className="ml ml-startup" onClick={this.onStatusChange.bind(this, "StartUps")}></span>
+              <span className="ml ml-startup" onClick={this.onStatusChange.bind(this, "Startups")}></span>
             </a>
-            <a data-toggle="tooltip" title="Providers" data-placement="bottom" data-filter="provider">
-              <span className="ml ml-users" onClick={this.onStatusChange.bind(this, "Providers")}></span>
+            <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" data-filter="provider">
+              <span className="ml ml-users" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
             </a>
             <a data-toggle="tooltip" title="Browsers" data-placement="bottom" data-filter="browser">
               <span className="ml ml-browser" onClick={this.onStatusChange.bind(this, "Browsers")}></span>
             </a>
-            <a data-toggle="tooltip" title="Company" data-placement="bottom" data-filter="company">
-              <span className="ml ml-company" onClick={this.onStatusChange.bind(this, "Company")}></span>
+            <a data-toggle="tooltip" title="Companies" data-placement="bottom" data-filter="company">
+              <span className="ml ml-company" onClick={this.onStatusChange.bind(this, "Companies")}></span>
             </a>
-            <a data-toggle="tooltip" title="Institutions" data-placement="bottom" data-filter="company">
+            <a data-toggle="tooltip" title="Institutions" data-placement="bottom" data-filter="institution">
               <span className="ml ml-institutions" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
             </a>
             <a data-toggle="tooltip" title="Backend Users" data-placement="bottom" data-filter="internalUser">

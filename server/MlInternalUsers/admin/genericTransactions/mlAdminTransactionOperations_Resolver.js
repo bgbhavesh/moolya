@@ -11,7 +11,7 @@ MlResolver.MlMutationResolver['updateGenericTransaction'] = (obj, args, context,
   if(instance) {
     switch (operation) {
       case 'assignTransaction':
-        return instance.assignTransaction(transactionType,transactionId,args.params.assignedUserId);
+        return instance.assignTransaction(transactionType,transactionId,args.params.assignmentParams);
         break;
       case 'unAssignTransaction':
         return instance.unAssignTransaction(transactionType,transactionId);
@@ -25,10 +25,9 @@ MlResolver.MlMutationResolver['updateGenericTransaction'] = (obj, args, context,
       case 'workflowTransaction':
         return instance.workflowTransaction();
         break;
-
     }
   }
-  return {totalRecords:result.totalRecords||0,data:result.data||[]};
+  return null;
 }
 
 /*MlResolver.MlUnionResolver['ContextSpecSearchResult']= {

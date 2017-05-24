@@ -43,27 +43,38 @@ class MlTransactionsHandler {
   }
 
   /*
-   * This method returns the context fields for transaction lof.
+   * This method returns the context fields for transaction log.
    * @param userId of logged In User
-   * returns result Object containing context values({clusterId,chapterId,subChapterId,communityId,clusterName,chapterName,subChapterName,communityName})
+   * returns result Object containing context values({userName,emailId,userId,clusterId,chapterId,subChapterId,communityId,clusterName,chapterName,subChapterName,communityName})
    */
   contextData(userId){
     var contextData={};
     var user = Meteor.users.findOne({_id:userId});
+    var firstName='';var lastName='';
     try{
-      if(user&&user.profile&&user.profile.isInternaluser) { //resolve internal user context based on default profile
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) { //resolve internal user context based on default profile
         let details = new MlAdminUserContext().userProfileDetails(userId)||{};
-        //let details = new MlAdminContextQueryConstructor(userId).contextQuery();
           contextData = { clusterId: details.defaultProfileHierarchyRefId?details.defaultProfileHierarchyRefId:null,chapterId: details.defaultChapters&&details.defaultChapters[0]?details.defaultChapters[0]:null,
           subChapterId: details.defaultSubChapters&&details.defaultSubChapters[0]?details.defaultSubChapters[0]:null,communityId: details.defaultCommunities&&details.defaultCommunities[0]?details.defaultCommunities[0]:null};
+
+           firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+           lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
 
       }else if(user&&user.profile&&user.profile.isExternaluser){ //resolve external user context based on default profile
         let externalUProfile=new MlAppUserContext(userId).userProfileDetails();
           contextData={clusterId:externalUProfile.defaultCluster,chapterId:externalUProfile.defaultChapter,subChapterId:externalUProfile.defaultSubChapter,
           communityId:externalUProfile.defaultCommunity};
+           firstName=(user.profile || {}).firstName||'';
+           lastName =(user.profile || {}).lastName||'';
       }else{
         contextData={};
       }
+
+      if(user&&user.username){
+        contextData['emailId']=user.username;
+        contextData['userId']=user._id;
+      }
+      contextData['userName']=`${firstName} ${lastName}`;
       //resolve reference names for context fields
       this.contextRefNames(contextData);
     }catch(e){
@@ -72,38 +83,38 @@ class MlTransactionsHandler {
     return contextData;
   }
 
-  insertTransactions(transactionsParams, context, actions) {
+  recordTransaction(transactionsParams) {
+
+    var context=transactionsParams.context?transactionsParams.context:{};
     let userAgent = {
-      OS: "-",
+      OS: context.os?context.os:" ",
       ipAddress: context.ip?context.ip:" ",
       browser:context.browser?context.browser:" ",
-      userId:context.userId?context.userId:" ",
-      deviceModel: "-",
-      deviceType: "-",
-      deviceVendor: "-"
-    }
+      userId:transactionsParams.userId?transactionsParams.userId:" ",
+      deviceModel:context.deviceModel?context.deviceModel:"-",
+      deviceType: context.deviceType?context.deviceType:"-",
+      deviceVendor: context.deviceVendor?context.deviceVendor:"-"
+    };
 
     //resolve the context of User
-    var contextData=this.contextData(transactionsParams.user._id);
+    var contextData=this.contextData(transactionsParams.userId);
 
-    let toInsert =
-      {
-        emailId: transactionsParams.user.profile.email,
-        userId: transactionsParams.user._id,
-        userName: transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName,
-        url: context.url?context.url:" ",
-        docId: " ",
-        action: transactionsParams.methodName? transactionsParams.methodName : actions,
-        moduleName: " ",
+    let transactionRecord =
+      { docId: transactionsParams.docId,
+        transactionTypeId:transactionsParams.transactionTypeId||null,
+        transactionTypeName:transactionsParams.transactionType||null,
+        activity: transactionsParams.activity,
+        moduleName:transactionsParams.moduleName,
         userAgent: userAgent,
         createdAt: new Date(),
-        transactionDetails: `User ${transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName} performed ${transactionsParams.methodName? transactionsParams.methodName : actions} action at ${new Date()} `
+        //transactionDetails: `User ${transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName} performed ${transactionsParams.methodName? transactionsParams.methodName : actions} action at ${new Date()} `
+        transactionDetails:transactionsParams.transactionDetails
       }
 
-      toInsert=_.extend(toInsert,contextData);
+    transactionRecord=_.extend(transactionRecord,contextData);
 
-    const resp = MlTransactionsLog.insert(toInsert);
-    return resp
+    const resp = MlTransactionsLog.insert(transactionRecord);
+    return resp;
   }
 }
 

@@ -9,8 +9,8 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
   module:"TransactionsLog",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["createdAt","action", "userName","clusterName", "chapterName", "subChapterName", "communityId"],
-  searchFields:["createdAt","action" , "userName", "clusterName", "chapterName", "subChapterName", "communityId"],
+  fields:["createdAt","activity","transactionTypeName", "userName","clusterName", "chapterName", "subChapterName", "communityId"],
+  searchFields:["createdAt","activity" ,"transactionTypeName" ,"userName", "clusterName", "chapterName", "subChapterName", "communityId"],
   throttleRefresh:false,
   pagination:true,//To display pagination
    // filter:true,
@@ -18,13 +18,15 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},
-    {dataField: "transactionDetails", title: "Details",dataSort:true,selectRow:true},
-    {dataField: "action", title: "Action",dataSort:true,selectRow:true},
     {dataField: "userName", title: "User Name",dataSort:true,selectRow:true},
+    {dataField: "activity", title: "Activity",dataSort:true,selectRow:true},
+    {dataField: "transactionDetails", title: "Details",dataSort:true,selectRow:true},
+    {dataField: "transactionTypeName", title: "TransactionTypeName",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
-    {dataField: "communityId", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "userAgent",isHidden:true},{dataField: "userId",isHidden:true},{dataField: "emailId",isHidden:true}
 
   ],
   tableHeaderClass:'react_table_head',
@@ -47,12 +49,20 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
                         userId
                         userName
                         createdAt
-                        action
+                        activity
+                        emailId
+                        userAgent{
+                        ipAddress
+                        browser
+                        }
+                        transactionTypeName
+                        transactionTypeId
                         transactionDetails
                         clusterName     
                         chapterName         
                         subChapterName           
-                        communityId              
+                        communityId  
+                        communityName
                       }
                     }
               }

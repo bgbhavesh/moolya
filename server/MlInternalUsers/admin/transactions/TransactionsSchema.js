@@ -63,10 +63,13 @@ let transactionsSchema = `
        _id                      : String
       userId                    : String
       userName                  : String
-      action                    : String
-      userAgent                 :[userAgent]
+      activity                  : String
+      transactionTypeName       : String
+      transactionTypeId         : String
+      userAgent                 :userAgent
       createdAt                 :String
       transactionDetails        :String
+      emailId                   :String
       clusterId                 : String
       chapterId                 : String
       subChapterId              : String
@@ -74,6 +77,7 @@ let transactionsSchema = `
       clusterName               : String
       chapterName               : String
       subChapterName            : String
+      communityName             : String
     }
     
     input userAgentInput{
@@ -89,10 +93,12 @@ let transactionsSchema = `
        _id                      : String
       userId                    : String
       userName                  : String
-      action                    : String
+      transactionTypeName       : String
+      transactionTypeId         : String
+      activity                  : String
       createdAt                 : String
       emailId                   : String
-      userAgent                 : [userAgentInput]
+      userAgent                 : userAgentInput
       transactionDetails        : String
       clusterId                 : String
       chapterId                 : String
@@ -101,6 +107,7 @@ let transactionsSchema = `
       clusterName               : String
       chapterName               : String
       subChapterName            : String
+      communityName             : String
     }
        
     input byInput{
@@ -162,7 +169,7 @@ let transactionsSchema = `
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput,collection:String):response
-      assignTransaction(params:assignmentParams,transactionId:String,transactionType:String,collection:String):response
+      assignTransaction(params:assignmentParams,transactionId:String,collection:String):response
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response

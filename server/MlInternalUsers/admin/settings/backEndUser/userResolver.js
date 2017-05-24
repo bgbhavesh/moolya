@@ -321,15 +321,16 @@ MlResolver.MlQueryResolver['fetchAssignedUsers'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context, info) => {
   let users = [];
   if (args.clusterId) {
-    if (args.subChapterId) {
-      let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
-      if (subChapter && subChapter.isActive) {
-        let cluster = mlDBController.findOne('MlClusters', {_id: args.clusterId}, context)
-        if (cluster.isActive) {
-          let departments = mlDBController.find('MlDepartments', {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}, context).fetch();
+    var clusterActive = mlDBController.findOne('MlClusters', {_id: args.clusterId, isActive: true}, context)
+    if (clusterActive) {
+      if (args.subChapterId) {
+        let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId, isActive: true}, context)
+        if (subChapter) {
+          var isMoolya = subChapter.isDefaultSubChapter
+          // {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}
+          let departments = mlDBController.find('MlDepartments', {$and:[{isMoolya:isMoolya}, {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}, context).fetch();
           if (departments && departments.length > 0) {
             departments.map(function (department) {
-              // let depUsers = Meteor.users.find({"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {"profile.InternalUprofile.moolyaProfile.userType": 'moolya'}]}).fetch();
               let depUsers = mlDBController.find('users', {
                 "$and": [{
                   "$or": [{
@@ -338,7 +339,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                     "profile.InternalUprofile.moolyaProfile.globalAssignment": true
                   }]
                 }, {
-                  'profile.isMoolya': true
+                  'profile.isMoolya': isMoolya
                 }]
               }, context).fetch();
               depUsers.map(function (user) {
@@ -353,7 +354,6 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                   userProfiles.map(function (profile) {
                     if (profile.clusterId == args.clusterId) {
                       let userRoles = profile.userRoles;
-                      let activeRoles = _.find(userRoles, {"isActive": true});
                       user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
                       if (_.isEmpty(_.find(users, user))) {
                         users.push(user)
@@ -365,17 +365,19 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
             })
           }
         }
-      }
-    } else {
-      // let cluster = MlClusters.findOne({_id: args.clusterId});
-      let cluster = mlDBController.findOne('MlClusters', {_id: args.clusterId}, context)
-      if (cluster.isActive) {
+      } else {
         // let departments = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
         let departments = mlDBController.find('MlDepartments', {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}, context).fetch();
         if (departments && departments.length > 0) {
           departments.map(function (department) {
-            // let depUsers = Meteor.users.find({"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {"profile.InternalUprofile.moolyaProfile.userType": 'moolya'}]}).fetch();
-            let depUsers = mlDBController.find('users', {"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {"profile.InternalUprofile.moolyaProfile.userType": 'moolya'}]}, context).fetch();
+            // {"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {'profile.isMoolya': true}]}
+            let depUsers = mlDBController.find('users', {
+              "$or": [{
+                "profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id
+              }, {
+                "profile.InternalUprofile.moolyaProfile.globalAssignment": true
+              }]
+            }, context).fetch();
             depUsers.map(function (user) {
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               if ((user.profile.InternalUprofile.moolyaProfile.globalAssignment || user.profile.InternalUprofile.moolyaProfile.userProfiles.length == 0) && (user.profile.isActive)) {
@@ -439,7 +441,6 @@ MlResolver.MlQueryResolver['fetchUserDepSubDep'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, context, info) => {
   let users = [];
   if (args.subChapterId) {
-    // let subChapter = MlSubChapters.findOne({"_id":args.subChapterId});
     let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
     if (subChapter && subChapter.isActive) {
       if (subChapter.isDefaultSubChapter) {
@@ -448,7 +449,6 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
           subChapterId: args.subChapterId ? args.subChapterId : ""
         }, context, info)
       } else {
-        // let departments = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
         let departments = mlDBController.find('MlDepartments', {
           $or: [{$and: [{isMoolya: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
             isSystemDefined: true,

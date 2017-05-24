@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import backendUserRoute from "../actions/routesBackendUserLIst";
 let FontAwesome = require('react-fontawesome');
 
-export default class MlClusterListView extends Component {
+export default class MlBackendUserListView extends Component {
 
   render() {
     const data = this.props.data || [];

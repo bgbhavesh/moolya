@@ -7,8 +7,8 @@ export const mlBackendUserListConfig=new MlViewer.View({
   name:"backendUserList",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
-  fields:["username","eMail","city","regType"],
-  searchFields:["username","eMail","city","regType"],
+  fields:["username",'profile.InternalUprofile.moolyaProfile.firstName'],
+  searchFields:["username", 'profile.InternalUprofile.moolyaProfile.firstName'],
   throttleRefresh:true,
   pagination:true,
   moduleName:"BackendUsers",
@@ -25,8 +25,8 @@ export const mlBackendUserListConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"BackendUsers"){
+              query SearchQuery( $offset: Int, $limit: Int,$fieldsData:[GenericFilter], $sortData:[SortFilter]) {
+              data:SearchQuery(module:"BackendUsers",offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
                     totalRecords
                     data{
                      ...on BackendUsers{

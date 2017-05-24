@@ -8,27 +8,26 @@ import MlRespPayload from "../../../../commons/mlPayload";
 class MlGenericTransactions{
 
 
-
-  assignTransaction(transactionType,transactionId,assignedUserId) {
-    let resp =MlResolver.MlMutationResolver['assignTransaction'] = ("", {'collection':this.collectionConfig().get(transactionType), 'transactionId':transactionId,'assignedUserId':assignedUserId}, context, "")
-    if(!resp.success){
+  assignTransaction(transactionType,transactionId,params) {
+    let resp =MlResolver.MlMutationResolver['assignTransaction'] ("", {'params':params,'collection':this.collectionConfig().get(transactionType), 'transactionId':transactionId}, context, "")
+    if(resp.success){
       return resp;
     }else{
       let code = 401;
-      let result =  {message:"Transaction Error"}
+      let result =  {message:"Not available in hierarchy"}
       let response = new MlRespPayload().errorPayload(result, code);
       console.log(response);
-      res.send(response);
+      return response;
     }
   }
 
   unAssignTransaction(transactionType,transactionId){
-    let resp =MlResolver.MlMutationResolver['unAssignTransaction'] = ("", {'collection':this.collectionConfig().get(transactionType), 'transactionId':transactionId}, context, "")
-    if(!resp.success){
-      return resp;s
+    let resp =MlResolver.MlMutationResolver['unAssignTransaction']  ("", {'collection':this.collectionConfig().get(transactionType), 'transactionId':transactionId}, context, "")
+    if(resp.success){
+      return resp;
     }else{
       let code = 401;
-      let result =  {message:"Transaction Error"}
+      let result =  {message:"Not available in hierarchy"}
       let response = new MlRespPayload().errorPayload(result, code);
       console.log(response);
       res.send(response);
@@ -37,11 +36,11 @@ class MlGenericTransactions{
 
   selfAssignTransaction(transactionType,transactionId){
     let resp = MlResolver.MlMutationResolver['selfAssignTransaction'] ("",{'collection':this.collectionConfig().get(transactionType), 'transactionId':transactionId},context, "");
-    if(!resp.success){
+    if(resp.success){
       return resp;
     }else{
       let code = 401;
-      let result =  {message:"Transaction Error"}
+      let result =  {message:"Not available in hierarchy"}
       let response = new MlRespPayload().errorPayload(result, code);
       console.log(response);
       res.send(response);

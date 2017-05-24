@@ -7,10 +7,12 @@ import {updateSubChapterActionHandler} from "../actions/updateSubChapter";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import _ from "lodash";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../utils/formElemUtil";
-import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
+import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import gql from "graphql-tag";
+// import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 
@@ -33,13 +35,11 @@ class MlSubChapterDetails extends React.Component {
   };
 
   async handleSuccess(response) {
-    if (response){
-      if(response.success)
-        window.history.back()
-      else
-        toastr.error(response.result);
-    }
-  };
+    if (response && response.success)
+      window.history.back()
+    else
+      toastr.error(response.result);
+  }
 
   onStatusChangeActive(e) {
     let updatedData = this.state.data||{};
@@ -103,7 +103,8 @@ class MlSubChapterDetails extends React.Component {
   }
 
   async updateSubChapter() {
-    let loggedInUser = getAdminUserContext()
+    // let loggedInUser = getAdminUserContext()
+    console.log(this.state.data.associatedSubChapters)
     let subChapterDetails={};
     //loggedInUser.hierarchyLevel != 1
     if(this.state.data.isDefaultSubChapter){
@@ -111,25 +112,26 @@ class MlSubChapterDetails extends React.Component {
         subChapterId: this.refs.id.value,
         subChapterDisplayName: this.refs.subChapterDisplayName.value,
         aboutSubChapter: this.refs.aboutSubChapter.value,
-        // subChapterImageLink: this.refs.subChapterImageLink.value,
         subChapterEmail: this.refs.subChapterEmail.value,
-         isEmailNotified:  this.state.data.isEmailNotified,
-        // chapterId:this.state.data.chapterId,
+        isEmailNotified: this.state.data.isEmailNotified,
         showOnMap: this.refs.showOnMap.checked,
         isActive: this.refs.isActive.checked
+        // subChapterImageLink: this.refs.subChapterImageLink.value,
+        // chapterId:this.state.data.chapterId,
       }
     }else{
       subChapterDetails = {
         subChapterId: this.refs.id.value,
         subChapterDisplayName: this.refs.subChapterDisplayName.value,
         aboutSubChapter: this.refs.aboutSubChapter.value,
-        // chapterId:this.state.data.chapterId,
         showOnMap: this.refs.showOnMap.checked,
         isActive: this.refs.isActive.checked,
+        associatedSubChapters: this.state.data.associatedSubChapters,
         isBespokeWorkFlow: this.refs.isBespokeWorkFlow.checked,
         isBespokeRegistration: this.refs.isBespokeRegistration.checked,
         internalSubChapterAccess: this.state.internalSubChapterAccess,
         moolyaSubChapterAccess: this.state.moolyaSubChapterAccess
+        // chapterId:this.state.data.chapterId,
       }
     }
     const response = await updateSubChapterActionHandler(subChapterDetails)
@@ -166,12 +168,25 @@ class MlSubChapterDetails extends React.Component {
     }
     this.setState({internalSubChapterAccess:internalSubChapterAccess})
   }
-  getMoolyaAccessStatus(details){
-    let moolyaSubChapterAccess={
-      backendUser:details.backendUser?details.backendUser:this.state.moolyaSubChapterAccess.backendUser,
-      externalUser:details.externalUser?details.externalUser:this.state.moolyaSubChapterAccess.externalUser
+
+  getMoolyaAccessStatus(details) {
+    let moolyaSubChapterAccess = {
+      backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
+      externalUser: details.externalUser ? details.externalUser : this.state.moolyaSubChapterAccess.externalUser
     }
-    this.setState({moolyaSubChapterAccess:moolyaSubChapterAccess})
+    this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
+  }
+
+  selectAssociateChapter(val) {
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["associatedSubChapters"]);
+    if (val) {
+      var z=_.extend(updatedData,{associatedSubChapters:val});
+      this.setState({data:z});
+    } else {
+      var z=_.extend(updatedData,{associatedSubChapters:''});
+      this.setState({data:z});
+    }
   }
 
   render() {
@@ -192,9 +207,10 @@ class MlSubChapterDetails extends React.Component {
         }
       }
     ]
+    let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
      // let chapterData=this.state.data;
     const showLoader = this.state.loading;
-    let loggedInUser = getAdminUserContext()
+    // let loggedInUser = getAdminUserContext()
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -222,6 +238,13 @@ class MlSubChapterDetails extends React.Component {
                     <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
                            className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                   </div>
+                  {(this.state.data.isDefaultSubChapter) ? <div></div> : <div className="form-group">
+                    <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
+                                  className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                  selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
+                                  query={subChapterQuery} isDynamic={true}
+                                  onSelect={this.selectAssociateChapter.bind(this)}/>
+                  </div>}
                   <div className="form-group">
                   <textarea placeholder="About" ref="aboutSubChapter" defaultValue={this.state.data && this.state.data.aboutSubChapter}
                     className="form-control float-label">

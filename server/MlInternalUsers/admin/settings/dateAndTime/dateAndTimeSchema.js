@@ -40,7 +40,7 @@ let dateFormat = `
       dateFormatName :String
       dateFormatDisplayName :String
       about: String
-      createdDateTime: String
+      createdDateTime: Date
       _id:String
       isActive:Boolean
     }
@@ -49,7 +49,7 @@ let dateFormat = `
       timeFormatName :String
       timeFormatDisplayName :String
       about: String
-      createdDateTime: String
+      createdDateTime: Date
       _id:String
       isActive:Boolean
     }
@@ -58,7 +58,7 @@ let dateFormat = `
       dayName :String
       displayName :String
       about: String
-      createdDateTime: String
+      createdDateTime: Date
       _id:String
       isActive:Boolean
     }

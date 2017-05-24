@@ -14,7 +14,7 @@ import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
 import _ from 'lodash'
 import _underscore from 'underscore'
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 export default class EmailDetails extends React.Component{
   constructor(props){
     super(props);
@@ -59,80 +59,87 @@ export default class EmailDetails extends React.Component{
   async onSavingEmailDetails(index,value){
     let detailsType = "EMAILTYPE";
     let registerid = this.props.registerId;
-
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
 
       let emailList = this.state.emailDetailsObject;
       emailList.emailIdType = this.state.selectedEmailTypeValue,
-      emailList.emailIdTypeName = this.state.selectedEmailTypeLabel,
-      emailList.emailId = this.refs["emailId"].value;
-      const response = await addRegistrationStep3Details(emailList,detailsType,registerid);
-      if(response){
-        if(!response.success){
+        emailList.emailIdTypeName = this.state.selectedEmailTypeLabel,
+        emailList.emailId = this.refs["emailId"].value;
+      const response = await addRegistrationStep3Details(emailList, detailsType, registerid);
+      if (response) {
+        if (!response.success) {
           toastr.error(response.result);
           this.findRegistration();
           this.props.registrationDetails();
-        }else{
+        } else {
           this.findRegistration()
           this.props.registrationDetails();
           this.refs["emailId"].value = "";
-          this.setState({selectedEmailTypeValue : "",selectedEmailTypeLabel : ""});
+          this.setState({selectedEmailTypeValue: "", selectedEmailTypeLabel: ""});
           toastr.success("Email created successfully");
         }
 
       }
-
+    }
 
     //this.findRegistration.bind(this);
   }
   async onUpdatingEmailDetails(index,value){
     let detailsType = "EMAILTYPE";
     let registerid = this.props.registerId;
-
-
       if (index !== -1) {
         // do your stuff here
         let registrationDetails = this.props.registrationInfo.emailInfo
         let dbData = _underscore.pluck(registrationDetails, 'emailIdType') || [];
         let contactExist = null;
-        if(this.state.selectedEmailTypeValue){
-          contactExist = _underscore.contains(dbData,this.state.selectedEmailTypeValue );
+        if (this.state.selectedEmailTypeValue) {
+          contactExist = _underscore.contains(dbData, this.state.selectedEmailTypeValue);
         }
 
-        if(contactExist){
+        if (contactExist) {
           toastr.error("Email Type Already Exists!!!!!");
           this.findRegistration();
-        }else{
-          let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.emailDetails[index].emailIdTypeName;
-          let valueSelected = this.state.selectedEmailTypeValue ? this.state.selectedEmailTypeValue : this.state.emailDetails[index].emailIdType;
+        } else {
+          let refs = []
+          refs.push(this.refs["emailIdType" + index])
+          refs.push(this.refs["emailId" + index])
+          let ret = mlFieldValidations(refs)
+
+          if (ret) {
+            toastr.error(ret);
+          } else {
+            let labelValue = this.state.selectedEmailTypeLabel ? this.state.selectedEmailTypeLabel : this.state.emailDetails[index].emailIdTypeName;
+            let valueSelected = this.state.selectedEmailTypeValue ? this.state.selectedEmailTypeValue : this.state.emailDetails[index].emailIdType;
             let updatedComment = update(this.state.emailDetails[index],
-              {emailIdTypeName : {$set: labelValue},
-              emailIdType : {$set: valueSelected},
-              emailId : {$set: this.refs["emailId"+index].value}}
-              );
+              {
+                emailIdTypeName: {$set: labelValue},
+                emailIdType: {$set: valueSelected},
+                emailId: {$set: this.refs["emailId" + index].value}
+              }
+            );
 
-          let newData = update(this.state.emailDetails, {
-            $splice: [[index, 1, updatedComment]]
-          });
+            let newData = update(this.state.emailDetails, {
+              $splice: [[index, 1, updatedComment]]
+            });
 
 
-          const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-          if(response){
-            if(!response.success){
-              toastr.error(response.result);
-            }else{
-              toastr.success("Email updated successfully");
+            const response = await updateRegistrationInfoDetails(newData, detailsType, registerid);
+            if (response) {
+              if (!response.success) {
+                toastr.error(response.result);
+              } else {
+                toastr.success("Email updated successfully");
+              }
+              this.findRegistration();
+              this.props.registrationDetails();
+
             }
-            this.findRegistration();
-            this.props.registrationDetails();
-
           }
         }
       }
-
-
-
-
-
   }
   optionsBySelectEmailType(selectedIndex,handler,selectedObj){
 
@@ -250,14 +257,14 @@ export default class EmailDetails extends React.Component{
             <div className={"tab-pane"+this.state.activeTab} id="emailA">
               <div className="form-group">
                 <Moolyaselect multiSelect={false} ref={'emailType'}
-                              placeholder="Select Email Type"
+                              placeholder="Select Email Type" mandatory={true}
                               className="form-control float-label" selectedValue={this.state.selectedEmailTypeValue}
                               valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}
                               queryOptions={emailTypeOption} onSelect={this.optionsBySelectEmailType.bind(this)}
-                              isDynamic={true}/>
+                              isDynamic={true} data-required={true} data-errMsg="Email Type is required"/>
               </div>
-              <div className="form-group">
-                <input type="text" placeholder="Enter Email Id" ref={'emailId'} className="form-control float-label" id=""/>
+              <div className="form-group mandatory">
+                <input type="text" placeholder="Enter Email Id" ref={'emailId'} className="form-control float-label" id="" data-required={true} data-errMsg="Email Id is required"/>
               </div>
               <div className="ml_icon_btn">
                 <a href="#" className="save_btn" onClick={this.onSavingEmailDetails.bind(this)}><span
@@ -268,14 +275,14 @@ export default class EmailDetails extends React.Component{
               return(<div className="tab-pane" id={'emailIdType'+key} key={key}>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} ref={'emailIdType'+key}
-                                placeholder="Select Email Type"
+                                placeholder="Select Email Type" mandatory={true}
                                 className="form-control float-label" selectedValue={options.emailIdType}
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={emailTypeQuery}
                                 queryOptions={emailTypeOption} onSelect={that.updateEmailOptions.bind(that,key)}
-                                isDynamic={true}/>
+                                isDynamic={true} data-required={true} data-errMsg="Email Type is required"/>
                 </div>
-                <div className="form-group">
-                  <input type="text" ref={'emailId'+key} placeholder="Enter URL" valueKey={options.emailId} className="form-control float-label" defaultValue={options.emailId}/>
+                <div className="form-group mandatory">
+                  <input type="text" ref={'emailId'+key} placeholder="Enter URL" valueKey={options.emailId} className="form-control float-label" defaultValue={options.emailId} data-required={true} data-errMsg="Email Id is required"/>
                 </div>
                 <div className="ml_icon_btn">
                   <a href="#" className="save_btn"  onClick = {that.onUpdatingEmailDetails.bind(that,key)}><span

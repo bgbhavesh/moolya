@@ -49,8 +49,8 @@ let transactionsSchema = `
       transactionStatus         : statusInfo
       transactionAssignedBy     : String
       transactionCompletedBy    : String
-      transactionCreatedDate    : String
-      transactionUpdatedDate    : String
+      transactionCreatedDate    : Date
+      transactionUpdatedDate    : Date
       hierarchy                 : String
       allocation                : allocation
       cluster                   : String
@@ -63,20 +63,51 @@ let transactionsSchema = `
        _id                      : String
       userId                    : String
       userName                  : String
-      action                    : String
-      userAgent                 :[userAgent]
+      activity                  : String
+      transactionTypeName       : String
+      transactionTypeId         : String
+      userAgent                 :userAgent
       createdAt                 :String
       transactionDetails        :String
+      emailId                   :String
+      clusterId                 : String
+      chapterId                 : String
+      subChapterId              : String
+      communityId               : String
+      clusterName               : String
+      chapterName               : String
+      subChapterName            : String
+      communityName             : String
+    }
     
+    input userAgentInput{
+        OS                  :String
+        ipAddress           :String
+        browser             :String
+        deviceModel         :String
+        deviceType          :String
+        deviceVendor        :String
     }
     
     input TransactionsLogInput{
        _id                      : String
       userId                    : String
       userName                  : String
-      action                    : String
-      createdAt                 :String
-      transactionDetails        :String
+      transactionTypeName       : String
+      transactionTypeId         : String
+      activity                  : String
+      createdAt                 : String
+      emailId                   : String
+      userAgent                 : userAgentInput
+      transactionDetails        : String
+      clusterId                 : String
+      chapterId                 : String
+      subChapterId              : String
+      communityId               : String
+      clusterName               : String
+      chapterName               : String
+      subChapterName            : String
+      communityName             : String
     }
        
     input byInput{
@@ -116,8 +147,8 @@ let transactionsSchema = `
       transactionStatus         : statusInput
       transactionAssignedBy     : String
       transactionCompletedBy    : String
-      transactionCreatedDate    : String
-      transactionUpdatedDate    : String
+      transactionCreatedDate    : Date
+      transactionUpdatedDate    : Date
       hierarchy                 : String
       allocation                : allocationInput
       cluster                   : String
@@ -138,7 +169,7 @@ let transactionsSchema = `
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput,collection:String):response
-      assignTransaction(params:assignmentParams,transactionId:String,transactionType:String,collection:String):response
+      assignTransaction(params:assignmentParams,transactionId:String,collection:String):response
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response

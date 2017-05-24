@@ -183,7 +183,7 @@ MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, contex
       $and: [{
         isMoolya: args.isMoolya,
         isActive: true
-      }, {depatmentAvailable: {$elemMatch: {subChapter: args.subChapter}}}]
+      }, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', args.subChapter]}}}}]
     }, {isSystemDefined: true, isActive: true}]
   }).fetch();
 

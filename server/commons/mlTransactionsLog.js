@@ -34,11 +34,12 @@ class MlTransactionsHandler {
     return contextData;
   }
 
-  insertTransactions(transactionsParams) {
+  insertTransactions(transactionsParams, context, actions) {
     let userAgent = {
-      OS: '-',
-      ipAddress: transactionsParams.connection.clientAddress,
-      browser:transactionsParams.connection.httpHeaders['user-agent'],
+      OS: "-",
+      ipAddress: context.ip?context.ip:" ",
+      browser:context.browser?context.browser:" ",
+      userId:context.userId?context.userId:" ",
       deviceModel: "-",
       deviceType: "-",
       deviceVendor: "-"
@@ -78,9 +79,9 @@ class MlTransactionsHandler {
         emailId: transactionsParams.user.profile.email,
         userId: transactionsParams.user._id,
         userName: transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName,
-        url: transactionsParams.connection.httpHeaders.host,
+        url: context.url?context.url:" ",
         docId: " ",
-        action: transactionsParams.methodName,
+        action: transactionsParams.methodName? transactionsParams.methodName : actions,
         moduleName: " ",
         userAgent: userAgent,
         clusterId : contextData&&contextData.clusterId&&contextData.clusterId[0]?contextData.clusterId[0]:"",
@@ -91,7 +92,7 @@ class MlTransactionsHandler {
         chapterName               : chapterName,
         subChapterName            : subChapterName,
         createdAt: new Date(),
-        transactionDetails: `User ${transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName} performed ${transactionsParams.methodName} action at ${new Date()} `
+        transactionDetails: `User ${transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName} performed ${transactionsParams.methodName? transactionsParams.methodName : actions} action at ${new Date()} `
       }
       //toInsert=_.extend(toInsert,contextData);
 

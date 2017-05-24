@@ -400,7 +400,24 @@ Accounts.validateLoginAttempt(function (user)
 
 Accounts.onLogin(function (transactionsParams) {
   mlTransactionsHandler = new MlTransactionsHandler();
-  mlTransactionsHandler.insertTransactions(transactionsParams);
+  let context={
+    ip: transactionsParams.connection.clientAddress,
+    browser:transactionsParams.connection.httpHeaders['user-agent'],
+    url: transactionsParams.connection.httpHeaders.host
+      }
+     let action= "login";
+  mlTransactionsHandler.insertTransactions(transactionsParams, context , action);
+})
+
+Accounts.onLogout(function (transactionsParams) {
+  mlTransactionsHandler = new MlTransactionsHandler();
+  let context={
+    ip: transactionsParams.connection.clientAddress,
+    browser:transactionsParams.connection.httpHeaders['user-agent'],
+    url: transactionsParams.connection.httpHeaders.host
+  }
+  let action = "logout";
+  if(transactionsParams&&transactionsParams.user) mlTransactionsHandler.insertTransactions(transactionsParams,context, action);
 })
 
 validateExternalUserLoginAttempt=(user)=>{

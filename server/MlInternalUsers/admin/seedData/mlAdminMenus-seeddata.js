@@ -736,9 +736,9 @@ if(Meteor.isServer){
           },
 
           {
-            "link": "/admin/transactions/transactionsLog ",
-            "name": "Transactions Log",
-            "uniqueId": "transaction_Log",
+            "link": "/admin/transactions/systemsLog ",
+            "name": "System",
+            "uniqueId": "systems_Log",
             "isLink": true,
             "isMenu": true,
             "image": "",

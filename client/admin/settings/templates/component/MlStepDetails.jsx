@@ -4,6 +4,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import {findStepTemplatesActionHandler} from '../actions/findTemplatesAction'
 import FontAwesome from 'react-fontawesome'
 import ActiveFormater from './ActiveFormater'
+import moment from 'moment';
 import _ from 'underscore'
 import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 export default class MlStepDetails extends Component {
@@ -35,7 +36,7 @@ export default class MlStepDetails extends Component {
       for(let i=0;i<assignedTemplates.length;i++){
         let json = {
           templateCode:assignedTemplates[i].templateCode,
-          date: assignedTemplates[i].createdDate,
+          date: moment(assignedTemplates[i].createdDate).format('MM-DD-YYYY hh:mm:ss'),
           templateName: assignedTemplates[i].templateName,
           isActive:assignedTemplates[i].isActive,
           view: 'Yes',

@@ -208,8 +208,13 @@ let CoreModules = {
     if(!fieldsProj.sort){
       fieldsProj.sort={createdAt: -1}
     }
-    const data = mlDBController.find('MlTransactionsLog', query, context, fieldsProj).fetch();
-    const totalRecords = mlDBController.find('MlTransactionsLog', query, context,fieldsProj).count();
+    var resultantQuery=MlAdminContextQueryConstructor.constructQuery(contextQuery,'$in');
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery),'$and');
+
+    const data = mlDBController.find('MlTransactionsLog', resultantQuery, context, fieldsProj).fetch();
+    const totalRecords = mlDBController.find('MlTransactionsLog', resultantQuery, context,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
   }

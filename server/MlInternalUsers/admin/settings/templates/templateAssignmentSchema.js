@@ -6,7 +6,7 @@ let TemplateAssignment = `
             processName     : String
             subProcessName  : String
             createdBy       : String      
-            createdDate     : String
+            createdDate     : Date
             steps           : [step]      
     }
     type step{
@@ -21,7 +21,7 @@ let TemplateAssignment = `
             templateCode: String
             templateName: String
             isActive          : Boolean
-            createdDate       : String
+            createdDate       : Date
     }
     type stepsTemplates{
             step        : String
@@ -35,9 +35,9 @@ let TemplateAssignment = `
             templateSubProcessName    : String
             assignedTemplates         : [template]    
             createdBy                 : String      
-            createdDate               : String  
+            createdDate               : Date  
             modifiedBy                : String      
-            modifiedDate              : String
+            modifiedDate              : Date
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String
@@ -56,7 +56,7 @@ let TemplateAssignment = `
             templateCode: String
             templateName: String
             isActive          : Boolean
-            createdDate       : String
+            createdDate       : Date
     }
     input stepsTemplatesInput{
             step        : String
@@ -70,9 +70,9 @@ let TemplateAssignment = `
             templateSubProcessName    : String
             assignedTemplates         : [stepInput]    
             createdBy                 : String      
-            createdDate               : String  
+            createdDate               : Date  
             modifiedBy                : String      
-            modifiedDate              : String 
+            modifiedDate              : Date 
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String

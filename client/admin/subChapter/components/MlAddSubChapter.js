@@ -14,8 +14,11 @@ import ScrollArea from "react-scrollbar";
 import {addSubChapterActionHandler} from "../actions/addSubChapter";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
+import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import gql from "graphql-tag";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
+
 
 class MlAddSubChapter extends React.Component {
   constructor(props) {
@@ -116,6 +119,7 @@ class MlAddSubChapter extends React.Component {
     dataGet.subChapterDisplayName = this.refs.subChapterDisplayName.value
     dataGet.aboutSubChapter = this.refs.aboutSubChapter.value
     dataGet.subChapterName = this.refs.subChapterName.value
+    dataGet.associatedSubChapters = this.state.relatedSubChapter || []
     dataGet.showOnMap = this.refs.showOnMap.checked
     dataGet.isActive = this.refs.isActive.checked
     dataGet.isBespokeWorkFlow = this.refs.isBespokeWorkFlow.checked
@@ -129,6 +133,9 @@ class MlAddSubChapter extends React.Component {
       }
     }
 
+    if (_.isEmpty(data.associatedSubChapters) && data.associatedSubChapters.length<1){
+      data = _.omit(data, 'associatedSubChapters')
+    }
     if(_.isEmpty(data.internalSubChapterAccess)){
       data = _.omit(data, 'internalSubChapterAccess')
     }
@@ -184,9 +191,9 @@ class MlAddSubChapter extends React.Component {
 
   selectAssociateChapter(val) {
     if (val) {
-      this.setState({selectedChapter: val.value})
+      this.setState({relatedSubChapter: val})
     } else {
-      this.setState({selectedChapter: ''})
+      this.setState({relatedSubChapter: ''})
     }
   }
   render() {
@@ -194,6 +201,8 @@ class MlAddSubChapter extends React.Component {
       {value: 'Chapter 1', label: 'Chapter 1'},
       {value: 'Chapter 2', label: 'Chapter 2'}
     ];
+
+    let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
 
     let MlActionConfig = [
       {
@@ -240,7 +249,14 @@ class MlAddSubChapter extends React.Component {
                            className="form-control float-label"/>
                   </div>
                   <div className="form-group">
-                    <Select name="form-field-name" placeholder="Associated Chapters"  className="float-label"  options={options} value={this.state.selectedChapter} onChange={this.selectAssociateChapter.bind(this)}/>
+                    {/*<Select name="form-field-name" placeholder="Associated Chapters" className="float-label"*/}
+                            {/*options={options} value={this.state.relatedSubChapter}*/}
+                            {/*onChange={this.selectAssociateChapter.bind(this)}/>*/}
+                    <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
+                                  className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                  selectedValue={this.state.relatedSubChapter} queryType={"graphql"}
+                                  query={subChapterQuery} isDynamic={true}
+                                  onSelect={this.selectAssociateChapter.bind(this)}/>
                   </div>
                   <div className="form-group">
                     <textarea placeholder="About" ref="aboutSubChapter" className="form-control float-label"></textarea>

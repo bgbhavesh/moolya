@@ -596,6 +596,16 @@ if(Meteor.isServer){
                 "subMenusId":"portfolio"
               }
             ]
+          },
+          {
+            "link": "/admin/transactions/systemsLog ",
+            "name": "System",
+            "uniqueId": "systems_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
           }
         ]
       },

@@ -1,33 +1,38 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import MlTransactionDetailsComponent from '../component/MlTransactionDetailsComponent'
+
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 const mlTransactionsLogTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
   module:"TransactionsLog",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["createdAt","action", "userName","clusterName", "chapterName", "subChapterName", "communityId"],
-  searchFields:["createdAt","action" , "userName", "clusterName", "chapterName", "subChapterName", "communityId"],
+  fields:["createdAt","activity","transactionTypeName", "userName","clusterName", "chapterName", "subChapterName", "communityId"],
+  searchFields:["createdAt","activity" ,"transactionTypeName" ,"userName", "clusterName", "chapterName", "subChapterName", "communityId"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  selectRow:true,  //Enable checkbox/radio button to select the row.
-  // filter:true,
+   // filter:true,
   // filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
   columns:[
-    {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "createdAt", title: "Created At",dataSort:true},
-    {dataField: "transactionDetails", title: "Details",dataSort:true},
-    {dataField: "action", title: "Action",dataSort:true},
-    {dataField: "userName", title: "User Name",dataSort:true},
-    {dataField: "clusterName", title: "Cluster",dataSort:true},
-    {dataField: "chapterName", title: "Chapter",dataSort:true},
-    {dataField: "subChapterName", title: "Sub Chapter",dataSort:true},
-    {dataField: "communityId", title: "Community",dataSort:true},
+    {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
+    {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},
+    {dataField: "userName", title: "User Name",dataSort:true,selectRow:true},
+    {dataField: "activity", title: "Activity",dataSort:true,selectRow:true},
+    {dataField: "transactionDetails", title: "Details",dataSort:true,selectRow:true},
+    {dataField: "transactionTypeName", title: "TransactionTypeName",dataSort:true,selectRow:true},
+    {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
+    {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
+    {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
+    {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
 
   ],
   tableHeaderClass:'react_table_head',
+  isExpandableRow:(row)=>{return true;},
+  expandComponent:MlTransactionDetailsComponent,
   showActionComponent:false,
+  // expandableRow:_id,
   actionConfiguration:[],
   // queryOptions:true,
   // buildQueryOptions:()=>{
@@ -43,12 +48,15 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
                         userId
                         userName
                         createdAt
-                        action
+                        activity
+                        transactionTypeName
+                        transactionTypeId
                         transactionDetails
                         clusterName     
                         chapterName         
                         subChapterName           
-                        communityId              
+                        communityId  
+                        communityName
                       }
                     }
               }

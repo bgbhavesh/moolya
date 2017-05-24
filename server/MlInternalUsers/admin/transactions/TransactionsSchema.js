@@ -63,7 +63,9 @@ let transactionsSchema = `
        _id                      : String
       userId                    : String
       userName                  : String
-      action                    : String
+      activity                  : String
+      transactionTypeName       : String
+      transactionTypeId         : String
       userAgent                 :[userAgent]
       createdAt                 :String
       transactionDetails        :String
@@ -74,6 +76,7 @@ let transactionsSchema = `
       clusterName               : String
       chapterName               : String
       subChapterName            : String
+      communityName             : String
     }
     
     input userAgentInput{
@@ -89,7 +92,9 @@ let transactionsSchema = `
        _id                      : String
       userId                    : String
       userName                  : String
-      action                    : String
+      transactionTypeName       : String
+      transactionTypeId         : String
+      activity                  : String
       createdAt                 : String
       emailId                   : String
       userAgent                 : [userAgentInput]
@@ -101,6 +106,7 @@ let transactionsSchema = `
       clusterName               : String
       chapterName               : String
       subChapterName            : String
+      communityName             : String
     }
        
     input byInput{

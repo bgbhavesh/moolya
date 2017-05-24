@@ -2,7 +2,6 @@
  * Created by venkatasrinag on 19/12/16.
  */
 
-import MlTransactionsHandler from '../server/commons/mlTransactionsLog'
 
 let _ = require('lodash'),
   adminPassword = "MoolyaAdmin@123",
@@ -396,12 +395,7 @@ Accounts.validateLoginAttempt(function (user)
 
 
     return true;
-})
-
-Accounts.onLogin(function (transactionsParams) {
-  mlTransactionsHandler = new MlTransactionsHandler();
-  mlTransactionsHandler.insertTransactions(transactionsParams);
-})
+});
 
 validateExternalUserLoginAttempt=(user)=>{
   let userExternal = user.user.profile.isExternaluser;

@@ -2,8 +2,8 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import MlTransactionDetailsComponent from '../component/MlTransactionDetailsComponent'
-
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+
 const mlTransactionsLogTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
   module:"TransactionsLog",//Module name for filter.
@@ -13,8 +13,8 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
   searchFields:["createdAt","activity" ,"transactionTypeName" ,"userName", "clusterName", "chapterName", "subChapterName", "communityId"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-   // filter:true,
-  // filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  filter:true,
+  filterComponent: <MlCustomFilter module="transactionLog" moduleName="transactionLog" />,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},

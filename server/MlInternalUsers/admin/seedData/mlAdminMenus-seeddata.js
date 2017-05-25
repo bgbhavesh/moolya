@@ -733,7 +733,40 @@ if(Meteor.isServer){
               //   "subMenusId":"portfolio"
               // }
             ]
+          },
+
+          {
+            "link": "/admin/transactions/systemsLog ",
+            "name": "System",
+            "uniqueId": "systems_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/interactionsLog ",
+            "name": "Interactions",
+            "uniqueId": "Interactions_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/conversationsLog ",
+            "name": "Conversations",
+            "uniqueId": "Conversations_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
           }
+      //       "subMenu":[
+      //
       ]
       },
       {
@@ -1225,14 +1258,14 @@ if(Meteor.isServer){
               }]
           },
           {
-            "link" : "/admin/settings/templateTypeList",
-            "name" : "Template Types",
+            "link" : "/admin/settings/accountTypeList",
+            "name" : "Account Types",
             "uniqueId" : "settings_templateTypes",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
             subMenu:[{
-              "link": "/admin/settings/addTemplateType",
+              "link": "/admin/settings/addAccountType",
               "name": "Add TemplateType",
               "uniqueId": "settings_AddTemplateType",
               "subMenuMappingId":"settings_templateTypes",
@@ -1242,7 +1275,7 @@ if(Meteor.isServer){
               "image": ""
             },
               {
-                "link": "/admin/settings/templateTypeList",
+                "link": "/admin/settings/accountTypeList",
                 "name": "List TemplateType",
                 "uniqueId": "settings_TemplateTypeList",
                 "subMenuMappingId":"settings_templateTypes",
@@ -1252,7 +1285,7 @@ if(Meteor.isServer){
                 "image": ""
               },
               {
-                "link": "/admin/settings/editTemplateType",
+                "link": "/admin/settings/editAccountType",
                 "name": "Edit TemplateType",
                 "uniqueId": "settings_EditTemplateType",
                 "subMenuMappingId":"settings_templateTypes",

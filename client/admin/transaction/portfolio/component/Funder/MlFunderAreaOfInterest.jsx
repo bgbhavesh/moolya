@@ -4,10 +4,11 @@ import ScrollArea from "react-scrollbar";
 import _ from "lodash";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
-import {Popover, PopoverContent} from "reactstrap";
+import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
+import MlLoader from '../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderAreaOfInterest extends React.Component {
@@ -183,7 +184,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
     let subDomainOption = {options: {variables: {industryId: this.state.data.industryTypeId}}};
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="portfolio-main-wrap">
             <h2>Area of Interest</h2>
             <div className="requested_input main_wrap_scroll">
@@ -231,6 +232,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
               {/*popover */}
               <Popover placement="right" isOpen={this.state.popoverOpen}
                        target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverTitle>Add New Area of Interest</PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">

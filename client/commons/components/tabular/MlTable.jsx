@@ -25,18 +25,25 @@ export default class MlTable extends React.Component {
   render() {
     const selectRow = {
       mode: 'checkbox',
-      bgColor: '#feeebf',
-      onSelect: this.props.handleRowSelect
+      bgColor: this.props.bgColor?this.props.bgColor:'#feeebf',
+      onSelect: this.props.handleRowSelect,
+      clickToExpand: this.props.isExpandableRow?true:false
     };
     var WinHeight = $(window).height();
     var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
+    let searchEnable = true
+    if(this.props.filter){
+      searchEnable = false
+    }else{
+      searchEnable = true
+    }
     const config = {tableHeaderClass:this.props.tableHeaderClass,
                     maxHeight: tblHeight+'px',
                     striped:true,hover:true,
                     selectRow:(this.props.selectRow?selectRow:{}) ,
                     data:this.props.data,
                     remote:true,
-                    search:true,multiColumnSearch:true,pagination:this.props.pagination,
+                    search:searchEnable,multiColumnSearch:true,pagination:this.props.pagination,
                     fetchInfo:{ dataTotalSize: this.props.totalDataSize }
                    };
    //Note: you can pass the functions for expandRow and expandComponent as properties.
@@ -77,7 +84,7 @@ export default class MlTable extends React.Component {
     });
 
     return (
-       <BootstrapTable {...config} bodyStyle={{overflow: 'overlay','overflow-x':'hidden'}}>
+       <BootstrapTable {...config} bodyStyle={{overflow: 'overlay','overflowX':'hidden'}}>
                 {columnItems}
        </BootstrapTable>
     );

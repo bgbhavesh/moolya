@@ -9,11 +9,13 @@ import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
 import MlAssignChapterBackendUserList from "./MlAssignChapterBackendUserList";
 import MlAssignChapterBackendUserRoles from "./MlAssignChapterBackendUserRoles";
 import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
-import {findSubChapterActionHandler} from "../actions/findSubChapter";
+// import {findSubChapterActionHandler} from "../actions/findSubChapter";
+import {findSubChapterActionHandler} from "../../../../client/admin/subChapter/actions/findSubChapter";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import MlLoader from "../../../commons/components/loader/loader";
 var _ = require('lodash');
 
 
@@ -35,13 +37,15 @@ class MlAssignChapterBackendUsers extends React.Component {
 
     this.addEventHandler.bind(this);
     this.assignBackendUsers.bind(this);
-    this.findSubChapter.bind(this);
+    this.findSubChapterDetails.bind(this);
     this.updateSelectedBackEndUser.bind(this);
     this.filterClusterBasedRoles.bind(this);
     return this;
   }
 
   componentWillMount() {
+    const resp = this.findSubChapterDetails();
+    return resp;
   }
 
   componentDidUpdate() {
@@ -50,31 +54,35 @@ class MlAssignChapterBackendUsers extends React.Component {
     OnToggleSwitch(true, true);
   }
 
-  async findSubChapter() {
-    let subChapterId = this.props.params.subChaterId;
-    const response = await findSubChapterActionHandler(subChapterId);
-    this.setState({loading: false, data: response});
+  async findSubChapterDetails() {
+    let subChapterId = this.props.params.subChapterId;
+    const response = await findSubChapterActionHandler(subChapterId);   //findSubChapterActionHandler
+    if(response){
+      let isDefaultSubChapter= response.isDefaultSubChapter
+      this.setState({isDefaultSubChapter: isDefaultSubChapter});
+    }
   }
 
   optionsBySelectUser(index, selectedIndex) {
-    this.setState({loading: true});
-    this.setState({selectedBackendUser: index})
+    this.setState({loading: true, selectedBackendUser: index})
     const resp = this.findUserDetails(index);
   }
 
   async findUserDetails(userId) {
     const userDetails = await findAdminUserDetails(userId);
     if (userDetails) {
-      this.setState({selectedBackendUser: userId})
-      this.setState({username: userDetails.userName})
-      this.setState({userDisplayName: userDetails.displayName})
-      this.setState({isActive:userDetails.deActive})
+      this.setState({
+        selectedBackendUser: userId,
+        username: userDetails.userName,
+        userDisplayName: userDetails.displayName,
+        isActive: userDetails.deActive
+      })
       // this.setState({alsoAssignedAs: userDetails.alsoAssignedas})
       let alsoAs = userDetails.alsoAssignedas;
-      if(alsoAs){
+      if (alsoAs) {
         let alsoArray = _.compact(alsoAs.split(','));
         this.setState({alsoAssignedAs: alsoArray})
-      }else{
+      } else {
         this.setState({alsoAssignedAs: []})
       }
       this.find_Chapter_Roles(userId);
@@ -199,9 +207,9 @@ class MlAssignChapterBackendUsers extends React.Component {
     let username = this.state.username || "";
     const showLoader = this.state.loading;
     let userid = this.state.selectedBackendUser || "";
-    let clusterId = this.state.data && this.state.data.clusterId || "";
-    let chapterId = this.state.data && this.state.data.chapterId || "";
-    let loggedInUser = getAdminUserContext();
+    // let clusterId = this.state.data && this.state.data.clusterId || "";
+    // let chapterId = this.state.data && this.state.data.chapterId || "";
+    // let loggedInUser = getAdminUserContext();
     const alsoUser = this.state.alsoAssignedAs && this.state.alsoAssignedAs.length > 0 ? this.state.alsoAssignedAs : [" "];
     const alsoAssignList = alsoUser.map(function (userAlso, id) {
       return (
@@ -213,7 +221,7 @@ class MlAssignChapterBackendUsers extends React.Component {
 
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Assign Backend Users to Sub Chapter</h2>
@@ -290,6 +298,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                                                                       subChapterId={that.props.params.subChapterId}
                                                                       communityId={that.props.params.communityId}
                                                                       isActive={that.state.isActive}
+                                                                      isDefaultSubChapter={this.state.isDefaultSubChapter}
                                                                       getAssignedRoles={this.getAssignedRoles.bind(this)}
                                                                       getChapterAdmin={this.isChapterAdmin.bind(this)}/>) :
                             <div></div>}

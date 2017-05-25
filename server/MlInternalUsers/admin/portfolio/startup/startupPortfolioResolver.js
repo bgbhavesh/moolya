@@ -1,5 +1,5 @@
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
 
 var extendify = require('extendify');
 var _ = require('lodash')
@@ -9,11 +9,16 @@ MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, i
     if (args && args.userId && args.communityType) {
       user = MlStartupPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
       if (!user) {
-        MlStartupPortfolio.insert({
+        mlDBController.insert('MlStartupPortfolio', {
           userId: args.userId,
           communityType: args.communityType,
           portfolioDetailsId: args.portfolioDetailsId
-        })
+        }, context)
+        // MlStartupPortfolio.insert({
+        //   userId: args.userId,
+        //   communityType: args.communityType,
+        //   portfolioDetailsId: args.portfolioDetailsId
+        // })
       }
     }
   } catch (e) {
@@ -46,8 +51,9 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
                   }
               }
 
-              let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio})
-              if (ret) {
+              // let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio})
+            let ret = mlDBController.update('MlStartupPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, startupPortfolio, {$set: true}, context)
+            if (ret) {
                 let code = 200;
                 let response = new MlRespPayload().successPayload("Updated Successfully", code);
                 return response;
@@ -105,7 +111,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
       startAboutUsArray.assets.map(function(asset,index) {
         if(startAboutUsArray.assets[index]){
           let assetData = MlAssets.findOne({"_id":asset.assetTypeId}) || "";
-          startAboutUsArray.assets[index].assetName = assetData.displayName || "";
+          startAboutUsArray.assets[index].assetTypeName = assetData.displayName || "";
         }
 
       })

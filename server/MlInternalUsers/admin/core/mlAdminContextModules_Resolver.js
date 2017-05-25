@@ -15,8 +15,8 @@ let mergeQueries=function(userFilter,serverFilter){
 
 
 MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
-  let totalRecords=0;
-  let findOptions = {};
+  var totalRecords=0;
+  var findOptions = {};
 
   // `offset` may be `null`
   if(args.offset && args.offset >0){
@@ -39,8 +39,8 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     findOptions.sort=sortObj||{};
   }
 
-  let moduleName=args.module;
-  let action="READ";
+  var moduleName=args.module;
+  var action="READ";
   //to resolve the type in data _resolveType for Union
   context.module=args.module;
 
@@ -48,31 +48,32 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
 
   //Context Specific Search layer
 
-  let contextQuery={};
-  let queryCount;
+  var contextQuery={};
+  var queryCount;
   contextQuery=new MlAdminContextQueryConstructor(context.userId,{module:args.module,action:args.action}).contextQuery();
-  let bool = _.isEmpty(userFilterQuery)
-  if(!bool)
-    queryCount = mergeQueries(contextQuery, userFilterQuery);
-  else
-    queryCount = contextQuery;
+  // var bool = _.isEmpty(userFilterQuery)
+  //if(!bool)
+  //  queryCount = mergeQueries(contextQuery, userFilterQuery);
+  //else
+  //  queryCount = contextQuery;
 
-  let result=null;
+  var result=null;
+  var  requestParams=null;
   switch(moduleName){
     case "cluster":
-      result=CoreModulesRepo.MlClusterRepo(args.context,queryCount,findOptions, context);
+      result=CoreModulesRepo.MlClusterRepo(args.context,userFilterQuery,contextQuery,findOptions, context);
       break;
     case "chapter":
-      result=CoreModulesRepo.MlChapterRepo(args.context,queryCount,findOptions, context);
+      result=CoreModulesRepo.MlChapterRepo(args.context,userFilterQuery,contextQuery,findOptions, context);
       break;
     case "subChapter":
-      result=CoreModulesRepo.MlSubChapterRepo(args.context,queryCount,findOptions, context);
+      result=CoreModulesRepo.MlSubChapterRepo(args.context,userFilterQuery,contextQuery,findOptions, context);
       break;
     case "community":
-      result=CoreModulesRepo.MlCommunityRepo(args.context,contextQuery,findOptions, context);
+      result=CoreModulesRepo.MlCommunityRepo(args.context,userFilterQuery,contextQuery,findOptions, context);
       break;
     case "MASTER_SETTINGS":
-      let requestParams=args.context;
+      requestParams=args.context;
       requestParams.userId=context.userId;
       result=CoreModulesRepo.MlMasterSettingsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
@@ -81,6 +82,41 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       result=CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context);
     case "hierarchySubChapters":
       result=CoreModulesRepo.MlHierarchySubChapterRepo(args.context,contextQuery,findOptions, context);
+      break;
+    case "registrationInfo":
+      requestParams=args.context||{};
+      requestParams.type='requested';
+      result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "registrationApprovedInfo":
+      requestParams=args.context||{};
+      requestParams.type='approved';
+      result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "PortfolioRequests":
+      requestParams=args.context||{};
+      requestParams.type='requested';
+      result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "PortfolioApproved":
+      requestParams=args.context||{};
+      requestParams.type='approved';
+      result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'TransactionsLog':
+      requestParams=args.context || {};
+      // requestParams.type = _.map(requestParams, _.pick('activity'))
+      result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'InteractionsLog':
+      requestParams=args.context;
+      requestParams.type=args.context.transactionTypeName
+      result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'ConversationsLog':
+      requestParams=args.context;
+      requestParams.type=args.context.transactionTypeName
+      result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
   }
 
@@ -100,6 +136,14 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "MASTER_SETTINGS":resolveType= 'MasterSettings';break;
       case "AUDIT_LOG":resolveType= 'AuditLogs';break;
       case "hierarchySubChapters":resolveType= 'SubChapter';break;
+      case "registrationInfo":resolveType= 'RegistrationInfo';break;
+      case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
+      case "PortfolioRequests":resolveType= 'Portfoliodetails';break;
+      case "PortfolioApproved":resolveType= 'Portfoliodetails';break;
+      case "TransactionsLog":resolveType='TransactionsLog';break;
+      case "InteractionsLog":resolveType='TransactionsLog';break;
+      case "ConversationsLog":resolveType='TransactionsLog';break;
+
     }
 
     if(resolveType){
@@ -107,32 +151,5 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
     }else{
       return 'GenericType';
     }
-
-   /* if (data.clusterCode) {
-      return 'Cluster';
-    }
-
-
-    if (data.communityName) {
-      return 'Community';
-    }
-
-
-    if (data.subChapterName&&!data.communityName) {
-      return 'SubChapter';
-    }
-
-    if (data.chapterName&&!data.subChapterName&&!data.communityName) {
-      return 'Chapter';
-    }
-
-    if(data.hierarchyLevel&&data.type){
-      return 'MasterSettings';
-    }
-
-    if(data.collectionName){
-      return 'AuditLogs';
-    }
-    return null;*/
   }
 }

@@ -203,13 +203,13 @@ export default class MlAssignModulesToFilters extends React.Component {
                 <div className="pull-right block_action" onClick={that.RemoveModuleToRoles.bind(that, id)}><img
                   src="/images/remove.png"/></div>}
               </div>*/}
-            <div className="panel-heading">Add Filter</div>
+            <div className="panel-heading">Filter Field</div>
 
               <div className="panel-body">
                 <div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                        <input type="text" placeholder="Field Type" className="form-control float-label" defaultValue={options.fieldName}  disabled={true}/>
+                        <input type="text" placeholder="Field Name" className="form-control float-label" defaultValue={options.fieldName}  disabled={true}/>
 
 
 

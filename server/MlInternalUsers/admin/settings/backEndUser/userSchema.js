@@ -16,6 +16,7 @@ let BackEndUser = `
     type userProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,
+        isMoolya      : Boolean
         isActive: Boolean,
         isChapterAdmin :Boolean,
         email: String,
@@ -180,6 +181,7 @@ let BackEndUser = `
     input profile{
         isInternaluser    : Boolean,
         isExternaluser    : Boolean,
+        isMoolya          : Boolean
         email             : String,
         isActive          : Boolean,
         isChapterAdmin    : Boolean,

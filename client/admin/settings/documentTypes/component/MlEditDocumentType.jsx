@@ -7,6 +7,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 class MlEditDocumentType extends React.Component{
   constructor(props) {
@@ -102,7 +103,7 @@ class MlEditDocumentType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
         <div className="admin_padding_wrap">
           <h2>Edit Document Type</h2>
@@ -126,13 +127,13 @@ class MlEditDocumentType extends React.Component{
                   <div className="form-group">
                     <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docTypeDisplayName} readOnly="true" className="form-control float-label"  disabled="disabled"/>
                   </div>
-                  <div className="form-group switch_wrap inline_switch">
-                    <label>Status</label>
-                    <label className="switch">
-                      <input type="checkbox" ref="documentTypeStatus" checked={this.state.data&&this.state.data.isActive} />
-                      <div className="slider"></div>
-                    </label>
-                  </div>
+                  {/*<div className="form-group switch_wrap inline_switch">*/}
+                    {/*<label>Status</label>*/}
+                    {/*<label className="switch">*/}
+                      {/*<input type="checkbox" ref="documentTypeStatus" checked={this.state.data&&this.state.data.isActive} />*/}
+                      {/*<div className="slider"></div>*/}
+                    {/*</label>*/}
+                  {/*</div>*/}
 
                 </form>
 

@@ -8,6 +8,8 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addLookingForActionHandler} from '../actions/addLookingForTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlAddLookingFor extends React.Component {
   constructor(props) {
     super(props);
@@ -43,17 +45,23 @@ class MlAddLookingFor extends React.Component {
   };
 
   async  CreateLookingFor() {
-    let LookingForDetails = {
-      lookingForName: this.refs.lookingForName.value,
-      lookingForDisplayName: this.refs.lookingForDisplayName.value,
-      communityCode: this.state.selectedCommunity,
-      communityName: '',
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let LookingForDetails = {
+        lookingForName: this.refs.lookingForName.value,
+        lookingForDisplayName: this.refs.lookingForDisplayName.value,
+        communityCode: this.state.selectedCommunity,
+        communityName: '',
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
 
-    const response = await addLookingForActionHandler(LookingForDetails)
-    return response;
+      const response = await addLookingForActionHandler(LookingForDetails)
+      toastr.success("Created Successfully");
+      return response;
+    }
   }
   componentDidMount()  {
     OnToggleSwitch(false,true);
@@ -89,7 +97,7 @@ class MlAddLookingFor extends React.Component {
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Create Looking For</h2>
@@ -97,14 +105,14 @@ class MlAddLookingFor extends React.Component {
                 <div className="form_bg">
                   <form>
 
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                    <Moolyaselect multiSelect={false} ref="community" className="form-control float-label" mandatory={true} valueKey={'value'}
                                   labelKey={'label'} queryType={"graphql"} placeholder="Select Community"
                                   selectedValue={this.state.selectedCommunity}
-                                  query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)}/>
+                                  query={query} isDynamic={true} onSelect={this.onCommunitySelect.bind(this)} data-required={true} data-errMsg="Community Needed"/>
 
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="lookingForDisplayName" placeholder="Display Name"
-                           className="form-control float-label"/>
+                           className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   </form>
                 </div>
@@ -112,9 +120,9 @@ class MlAddLookingFor extends React.Component {
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="lookingForName" placeholder="Looking For Name"
-                           className="form-control float-label"/>
+                           className="form-control float-label" data-required={true} data-errMsg="Looking For Name is required"/>
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>

@@ -10,6 +10,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
+import MlLoader from '../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 
@@ -283,18 +284,19 @@ export default class Company extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
       <div className="step_form_wrap step2">
 
-      <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
         <div className="col-md-6 nopadding-left">
+          <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
+                <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={moment(this.props.registrationInfo.registrationDate).format('MM/DD/YYYY hh:mm:ss')} disabled="true"/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}/>
+                <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId} disabled="true"/>
               </div>
               {/*<div className="form-group">
                 <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
@@ -350,8 +352,11 @@ export default class Company extends React.Component{
               </div>
             </form>
           </div>
+          </ScrollArea>
         </div>
         <div className="col-md-6 nopadding-right">
+          <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
           <div className="form_bg">
             <form>
               <div className="form-group">
@@ -400,8 +405,8 @@ export default class Company extends React.Component{
 
             </form>
           </div>
+          </ScrollArea>
         </div>
-      </ScrollArea>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div> )}
       </div>

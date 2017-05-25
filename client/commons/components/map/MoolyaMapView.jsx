@@ -7,6 +7,8 @@ import controllable from 'react-controllables';
 import GoogleMap from 'google-map-react';
 import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
+import MlLoader from '../../../commons/components/loader/loader'
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -17,14 +19,19 @@ export default class MoolyaMapView extends Component {
   }
   async componentWillMount() {
     let that = this;
+    let zoom = 1;
+    let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel != 4){
+      zoom = 4;
+    }
     let hasCenter=that.props.fetchCenter||false;
     if(hasCenter){
       let center= await that.props.fetchCenterHandler(that.props);
-      this.setState({center:center||defaultCenter,zoom:1});
+      this.setState({center:center||defaultCenter,zoom:zoom});
      }else{
       this.setState({
         center:defaultCenter,
-        zoom: 1,
+        zoom: zoom,
       });
     }
   }
@@ -33,7 +40,7 @@ export default class MoolyaMapView extends Component {
   {
     const hasCenter=this.state&&this.state.center?this.state.center:null;
     if(!hasCenter){
-      return <div className="loader_wrap"></div>;
+      return <MlLoader />;
     }
     const data=this.props.data&&this.props.data.data?this.props.data.data:[];
     return (

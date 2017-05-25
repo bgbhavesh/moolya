@@ -1,13 +1,14 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {Popover, PopoverContent} from "reactstrap";
+import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
+import MlLoader from '../../../../../commons/components/loader/loader'
 import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 
@@ -185,7 +186,7 @@ export default class MlFunderInvestment extends React.Component {
     let funderInvestmentList = that.state.funderInvestmentList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="portfolio-main-wrap">
             <h2>Investments</h2>
             <div className="requested_input main_wrap_scroll">
@@ -231,6 +232,7 @@ export default class MlFunderInvestment extends React.Component {
               </ScrollArea>
               <Popover placement="right" isOpen={this.state.popoverOpen}
                        target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
+                <PopoverTitle> Add New Member </PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">

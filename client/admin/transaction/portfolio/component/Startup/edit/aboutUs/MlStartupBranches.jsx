@@ -11,6 +11,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+import MlLoader from '../../../../../../../commons/components/loader/loader'
 
 export default class MlStartupBranches extends React.Component{
   constructor(props, context){
@@ -127,9 +128,9 @@ export default class MlStartupBranches extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      let newItem = _.omit(item, "__typename");
+      // let updateItem = _.omit(newItem, 'logo');
+      arr.push(newItem)
     })
     startupBranches = arr;
     this.setState({startupBranches:startupBranches})
@@ -184,7 +185,7 @@ export default class MlStartupBranches extends React.Component{
     return (
       <div>
         <h2>Branches</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
 
           <ScrollArea
@@ -219,7 +220,7 @@ export default class MlStartupBranches extends React.Component{
             </div>
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-            {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+            <PopoverTitle>Add Branches</PopoverTitle>
             <PopoverContent>
               <div className="ml_create_client">
                 <div className="medium-popover scrollbar-wrap">
@@ -234,7 +235,7 @@ export default class MlStartupBranches extends React.Component{
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                         labelKey={'label'} queryType={"graphql"} query={branchesQuery}
-                                        isDynamic={true}
+                                        isDynamic={true} placeholder={'Select Branches..'}
                                         onSelect={this.onOptionSelected.bind(this)}
                                         selectedValue={this.state.selectedVal}/>
                         </div>

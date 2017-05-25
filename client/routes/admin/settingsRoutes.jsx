@@ -44,9 +44,9 @@ import MlAddTransaction from '../../admin/settings/transactions/component/MlAddT
 import MlTransactionTypeList from '../../admin/settings/transactions/component/MlTransactionTypeList'
 import MlEditTransactionType from '../../admin/settings/transactions/component/MlEditTransactionType'
 import MlSubChapterView from '../../admin/dashboard/component/MlSubChapterList'
-import MlAddTemplate from '../../admin/settings/template/component/MlAddTemplateType'
-import MlTemplateTypeList from '../../admin/settings/template/component/MlTemplateTypeList'
-import MlEditTemplateType from '../../admin/settings/template/component/MlEditTemplateType'
+import MlAddTemplate from '../../admin/settings/accountType/component/MlAddAccountType'
+import MlTemplateTypeList from '../../admin/settings/accountType/component/MlAccountTypeList'
+import MlEditTemplateType from '../../admin/settings/accountType/component/MlEditAccountType'
 import MlAddBackendUser from  '../../admin/settings/backendUsers/component/MlAddBackendUser'
 import MlEditBackendUser from '../../admin/settings/backendUsers/component/MlEditBackendUser'
 import MlBackendUserList from '../../admin/settings/backendUsers/component/MlBackendUserList'
@@ -504,19 +504,19 @@ adminSection.route('/settings/editDocumentMapping/:id', {
     mount(AdminLayout,{adminContent:<MlEditDocumentMapping config={params.id} />})
   }
 });
-adminSection.route('/settings/templateTypeList', {
+adminSection.route('/settings/accountTypeList', {
   name: 'settings_TemplateTypeList',
   action(){
     mount(AdminLayout,{adminContent:< MlTemplateTypeList/>})
   }
 });
-adminSection.route('/settings/addTemplateType', {
+adminSection.route('/settings/addAccountType', {
   name: 'settings_AddTemplateType',
   action(){
     mount(AdminLayout,{adminContent:<MlAddTemplate />})
   }
 });
-adminSection.route('/settings/editTemplateType/:id', {
+adminSection.route('/settings/editAccountType/:id', {
   name: 'settings_EditTemplateType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditTemplateType config={params.id} />})

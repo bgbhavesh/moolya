@@ -12,7 +12,8 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
-
+import MlLoader from '../../../../commons/components/loader/loader'
+import moment from 'moment'
 var FontAwesome = require('react-fontawesome');
 var options3 = [
   {value: 'Yes', label: 'Yes'},
@@ -43,6 +44,7 @@ export default class Step1forExtenalUser extends React.Component{
       profession:null,
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
+      selectedAccountsType: " "
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -148,6 +150,9 @@ export default class Step1forExtenalUser extends React.Component{
     this.setState({institutionAssociation:val.value})
     return resp;
   }
+  optionsBySelectTypeOfAccounts(value){
+    this.setState({selectedAccountsType:value})
+  }
   optionsBySelectTypeOfIndustry(value){
     this.setState({selectedTypeOfIndustry:value})
   }
@@ -209,6 +214,7 @@ export default class Step1forExtenalUser extends React.Component{
     } else {
 
       let Details = {
+        registrationDate :this.refs.datetime.value,
         registrationId: this.props.registrationId,
         registrationDetail: {
           registrationId: this.state.registrationId,
@@ -343,9 +349,16 @@ export default class Step1forExtenalUser extends React.Component{
         value:_id
       }
     }`;
+
+    let accountsquery=gql `query{
+    data: FetchAccount {label:accountName,value: _id}
+}`;
+
+
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
+
     /*let registrationOptions = [
      { value: '0', label: 'simplybrowsing' },
      { value: '1', label: 'ideator' },
@@ -357,10 +370,10 @@ export default class Step1forExtenalUser extends React.Component{
      { value: '7', label: 'iam not sure' },
      ];*/
 
-    let subscriptionOptions = [
-      {value: 'Starter', label: 'Starter'},
-      {value: 'Premier', label: 'Premier'}
-    ];
+    // let subscriptionOptions = [
+    //   {value: 'Starter', label: 'Starter'},
+    //   {value: 'Premier', label: 'Premier'}
+    // ];
     let referedOption=[
       { value: '0', label: 'friends/collegues reference' },
       { value: '1', label: 'google/searching' },
@@ -380,7 +393,7 @@ export default class Step1forExtenalUser extends React.Component{
     let countryOption = {options: { variables: {countryId:this.state.country}}};
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="step_form_wrap step1">
 
             <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -388,7 +401,7 @@ export default class Step1forExtenalUser extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Date & Time" className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" className="form-control float-label" id=""  defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format('MM/DD/YYYY hh:mm:ss')} disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>
@@ -511,7 +524,7 @@ export default class Step1forExtenalUser extends React.Component{
                       <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} disabled="true"/>
+                      <Moolyaselect  placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery} onSelect={that.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
                     </div>
                     <div className="form-group">
                       <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled="true"/>

@@ -1,6 +1,7 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 const mlApprovedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
   module:"portfolioInfo",//Module name for filter.
@@ -11,6 +12,8 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  filter:true,
+  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "firstName", title: "Date & Time",dataSort:true},
@@ -55,20 +58,44 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
       }
     }
   ],
-  graphQlQuery:gql`
+  graphQlQuery:/*gql`
               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
               data:SearchQuery(module:"registrationInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on RegistrationInfo{
-                              firstName 
+                              firstName
                               lastName
                               id:_id
                           }
                       }
               }
               }
-              `
+              `*/
+    gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"PortfolioApproved",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    totalRecords
+                    data{
+                      ...on Portfoliodetails{
+                          id:_id
+                          portfolioId
+                          transactionType,
+                          portfolioUserName,
+                          contactNumber
+                          communityType
+                          clusterName
+                          chapterName
+                          subChapterName
+                          accountType
+                          source
+                          createdBy
+                          createdAt
+                          status
+                          assignedTo
+                     }
+                      }
+              }
+              }`
 });
 
 export {mlApprovedPortfolioTableConfig};

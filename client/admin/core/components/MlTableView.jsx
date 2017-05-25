@@ -12,7 +12,7 @@ export default class MlTableView extends Component {
       sort: null,
       selectedRow: null,
       searchValue:"",
-      filterValue:{},
+      filterValue:[],
     }
 
     this.onPageChange.bind(this);
@@ -54,6 +54,9 @@ export default class MlTableView extends Component {
       _.find(this.props.options.searchFields, function (num) {
         fieldsAry.push({fieldName: num, value: search.trim()})
       });
+    }
+    if(this.props.filter=true){
+      fieldsAry=this.state.filterValue||[];
     }
     return fieldsAry;
   }

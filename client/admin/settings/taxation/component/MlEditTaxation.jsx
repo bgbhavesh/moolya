@@ -9,6 +9,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTaxationActionHandler} from '../actions/findTaxationAction';
 import {updateTaxationActionHandler} from '../actions/updateTaxationAction';
 import {initalizeFloatLabel, OnToggleSwitch} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 class MlAddTaxation extends React.Component{
   constructor(props) {
@@ -122,7 +123,7 @@ class MlAddTaxation extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
       <div className="admin_main_wrap">
 

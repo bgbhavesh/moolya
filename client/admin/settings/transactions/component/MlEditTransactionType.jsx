@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTransactionTypeActionHandler} from '../actions/findTransactionypeAction'
 import {updateTransactionTypeActionHandler} from '../actions/updateTransactionTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditTransactionType extends React.Component{
   constructor(props) {
     super(props);
@@ -103,7 +104,7 @@ class MlEditTransactionType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
         <div className="admin_padding_wrap">
           <h2>Edit Transaction Type</h2>
@@ -128,13 +129,13 @@ class MlEditTransactionType extends React.Component{
                 <div className="form-group">
                   <input type="text" ref="transactionDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.transactionDisplayName} className="form-control float-label"  disabled="disabled"/>
                 </div>
-               <div className="form-group switch_wrap inline_switch">
-                  <label>Status</label>
-                  <label className="switch">
-                    <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
-                    <div className="slider"></div>
-                  </label>
-                </div>
+               {/*<div className="form-group switch_wrap inline_switch">*/}
+                  {/*<label>Status</label>*/}
+                  {/*<label className="switch">*/}
+                    {/*<input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>*/}
+                    {/*<div className="slider"></div>*/}
+                  {/*</label>*/}
+                {/*</div>*/}
                 </form>
             </div>
           </div>

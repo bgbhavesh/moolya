@@ -1,18 +1,17 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
-import formHandler from '../../../../commons/containers/MlFormHandler'
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
-import MlContactFormComponent from './MlContactFormComponent'
-import {findBackendUserActionHandler} from '../actions/findBackendUserAction'
-import {updateBackendUserActionHandler} from '../actions/updateBackendUserAction'
-import {resetPasswordActionHandler} from '../actions/resetPasswordAction'
-import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
+import React from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import MlAssignDepartmentComponent from "./MlAssignDepartmentComponent";
+import MlContactFormComponent from "./MlContactFormComponent";
+import {findBackendUserActionHandler} from "../actions/findBackendUserAction";
+import {updateBackendUserActionHandler} from "../actions/updateBackendUserAction";
+import {resetPasswordActionHandler} from "../actions/resetPasswordAction";
+import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import Datetime from "react-datetime";
@@ -119,8 +118,6 @@ class MlEditBackendUser extends React.Component{
   };
 
   componentWillMount() {
-
-   // this.getValue();
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
       this.setState({pageLable:"Backend User Details"})
@@ -142,69 +139,66 @@ class MlEditBackendUser extends React.Component{
   }
 
 
-
-  async   findBackendUser(){
-    let userTypeId=this.props.config;
+  async  findBackendUser() {
+    let userTypeId = this.props.config;
     const response = await findBackendUserActionHandler(userTypeId);
-    this.setState({loading:false,data:response});
-   if(response){
-     this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
-     this.setState({selectedSubChapter:this.state.data.profile.InternalUprofile.moolyaProfile.subChapter})
-     this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
-     this.setState({deActive:this.state.data.profile.isActive})
-     this.setState({isActive:this.state.data.profile.InternalUprofile.moolyaProfile.isActive})
-     this.setState({globalStatus:this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment})
-     this.setState({genderSelect : response.profile.genderType, dateOfBirth:response.profile.dateOfBirth});
-     this.setState({profilePic: response.profile.profileImage})
-     let clusterId="",chapterId='',subChapterId='',communityId=''
-     let dataDetails=this.state.data
-       if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
-       let userProfiles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"]
-         let userProfilesDetails=[]
+    this.setState({loading: false, data: response});
+    if (response) {
+      this.setState({
+        selectedBackendUserType: this.state.data.profile.InternalUprofile.moolyaProfile.userType,
+        selectedSubChapter: this.state.data.profile.InternalUprofile.moolyaProfile.subChapter,
+        selectedBackendUser: this.state.data.profile.InternalUprofile.moolyaProfile.roleType,
+        deActive: this.state.data.profile.isActive,
+        isActive: this.state.data.profile.InternalUprofile.moolyaProfile.isActive,
+        globalStatus: this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment,
+        genderSelect: response.profile.genderType, dateOfBirth: response.profile.dateOfBirth,
+        profilePic: response.profile.profileImage
+      })
+      let clusterId = "", chapterId = '', subChapterId = '', communityId = ''
+      let dataDetails = this.state.data
+      if (dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]) {
+        let userProfiles = dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"]
+        let userProfilesDetails = []
           ;
-         for(let i=0;i<userProfiles.length;i++){
-           let userRolesDetails=[]
-           let userRole=userProfiles[i].userRoles
-           for(let j=0;j<userRole.length;j++){
-             let json={
-               roleId:userRole[j].roleId,
-               roleName:userRole[j].roleName,
-               clusterId:userRole[j].clusterId,
-               chapterId:userRole[j].chapterId,
-               validFrom:userRole[j].validFrom,
-               validTo:userRole[j].validTo,
-               subChapterId:userRole[j].subChapterId,
-               communityId:userRole[j].communityId,
-               isActive:userRole[j].isActive,
-               hierarchyLevel:userRole[j].hierarchyLevel,
-               hierarchyCode:userRole[j].hierarchyCode,
-               departmentId:userRole[j].departmentId,
-               departmentName:userRole[j].departmentName,
-               subDepartmentId:userRole[j].subDepartmentId,
-               subDepartmentName:userRole[j].subDepartmentName,
-               chapterName:userRole[j].chapterName,
-               subChapterName:userRole[j].subChapterName,
-               communityName:userRole[j].communityName
-             }
-             userRolesDetails.push(json)
-           }
-         let json={
-           isDefault:userProfiles[i].isDefault,
-           clusterId:userProfiles[i].clusterId,
-           clusterName:userProfiles[i].clusterName,
-           userRoles:userRolesDetails
-         }
-           userProfilesDetails.push(json)
-         }
-       this.setState({'userProfiles':userProfilesDetails});
-
-
-       }
-
-     this.getGender();
-   }
-
+        for (let i = 0; i < userProfiles.length; i++) {
+          let userRolesDetails = []
+          let userRole = userProfiles[i].userRoles
+          for (let j = 0; j < userRole.length; j++) {
+            let json = {
+              roleId: userRole[j].roleId,
+              roleName: userRole[j].roleName,
+              clusterId: userRole[j].clusterId,
+              chapterId: userRole[j].chapterId,
+              validFrom: userRole[j].validFrom,
+              validTo: userRole[j].validTo,
+              subChapterId: userRole[j].subChapterId,
+              communityId: userRole[j].communityId,
+              isActive: userRole[j].isActive,
+              hierarchyLevel: userRole[j].hierarchyLevel,
+              hierarchyCode: userRole[j].hierarchyCode,
+              departmentId: userRole[j].departmentId,
+              departmentName: userRole[j].departmentName,
+              subDepartmentId: userRole[j].subDepartmentId,
+              subDepartmentName: userRole[j].subDepartmentName,
+              chapterName: userRole[j].chapterName,
+              subChapterName: userRole[j].subChapterName,
+              communityName: userRole[j].communityName
+            }
+            userRolesDetails.push(json)
+          }
+          let json = {
+            isDefault: userProfiles[i].isDefault,
+            clusterId: userProfiles[i].clusterId,
+            clusterName: userProfiles[i].clusterName,
+            userRoles: userRolesDetails
+          }
+          userProfilesDetails.push(json)
+        }
+        this.setState({'userProfiles': userProfilesDetails});
+      }
+      this.getGender();
     }
+  }
 
   onGlobalStatusChanged(e){
     if(e.currentTarget.checked){
@@ -215,7 +209,6 @@ class MlEditBackendUser extends React.Component{
   }
 
   onisActiveChanged(event){
-
     let dataDetails=this.state.data;
     if(event.currentTarget.checked){
       this.setState({"deActive":true})
@@ -224,7 +217,6 @@ class MlEditBackendUser extends React.Component{
     }
   }
   onMakeDefultChange(id,event){
-    //this.updateBackendUser();
       let userProfilesDetails=this.state.userProfiles
     if(event.currentTarget.checked){
         let decision = false;
@@ -251,7 +243,6 @@ class MlEditBackendUser extends React.Component{
   }
 
   async  updateBackendUser() {
-   // this.updateBackend();
     let dataDetails=this.state.data
     let userprofiles=[]
     if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
@@ -311,6 +302,7 @@ class MlEditBackendUser extends React.Component{
       isInternaluser: true,
       isExternaluser: false,
       email: this.refs.email.value,
+      isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
       isActive:this.refs.deActive.checked,
       InternalUprofile: InternalUprofile,
       genderType:this.state.genderSelect,
@@ -334,7 +326,7 @@ class MlEditBackendUser extends React.Component{
   }
 
   async resetPassword() {
-    if(this.state.showPasswordFields == true){
+    if(this.state.showPasswordFields){
       let userDetails={
         userId:this.refs.id.value,
         password:this.refs.confirmPassword.value
@@ -355,7 +347,6 @@ class MlEditBackendUser extends React.Component{
         showPasswordFields:true
       })
     }
-
   }
 
   // ondateOfBirthSelection(event) {
@@ -553,7 +544,7 @@ class MlEditBackendUser extends React.Component{
                   <br className="brclear"/>
                   {that.state.userProfiles.map(function (userProfiles, idx) {
                     return(
-                    <div>
+                    <div key={idx}>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
                           <div key={RId} className="panel panel-default">

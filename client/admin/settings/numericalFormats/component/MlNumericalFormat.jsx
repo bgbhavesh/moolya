@@ -9,6 +9,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {OnToggleSwitch} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 let Select = require('react-select');
 
 
@@ -158,11 +159,21 @@ class MlNumericalFormat extends React.Component{
       {value: ':', label: ':'},
       {value: '-', label: '-'},
     ]
+    let numberOfDigitsAfterDecimalActive='',measurementSystemActive='',valueSeparatorActive=''
+    if(this.state.numberOfDigitsAfterDecimal){
+      numberOfDigitsAfterDecimalActive='active'
+    }
+    if(this.state.measurementSystem){
+      measurementSystemActive='active'
+    }
+    if(this.state.valueSeparator){
+      valueSeparatorActive='active'
+    }
 
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Numerical Format</h2>
@@ -171,6 +182,7 @@ class MlNumericalFormat extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
+                      <span className={`placeHolder ${numberOfDigitsAfterDecimalActive}`}>Number Of Digits After Decimal </span>
                       {/*<Moolyaselect multiSelect={false}  placeholder={"Number Of Digits After Decimal"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.numberOfDigitsAfterDecimal} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'}  onSelect={this.optionsBySelectNumberOfDigitsAfterDecimal.bind(this)} />*/}
                       <Select
                         name="form-field-name"  options={decimalsLimit} placeholder={"Number Of Digits After Decimal"}
@@ -194,6 +206,7 @@ class MlNumericalFormat extends React.Component{
                   >
                     <form>
                       <div className="form-group">
+                        <span className={`placeHolder ${measurementSystemActive}`}>Measurement System </span>
                         <Select
                           name="form-field-name"  options={measurementType} placeholder={"Measurement System"}
                           value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}
@@ -201,6 +214,7 @@ class MlNumericalFormat extends React.Component{
                         {/*<Moolyaselect multiSelect={false}  placeholder={"Measurement System"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.measurementSystem} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectMeasurementSystem.bind(this)} />*/}
                       </div>
                       <div className="form-group">
+                        <span className={`placeHolder ${valueSeparatorActive}`}>Value Separator</span>
                         <Select
                           name="form-field-name"  options={valueSeperators} placeholder={"Value Separator"}
                           value={this.state.valueSeparator} onChange={this.optionsBySelectValueSeparator.bind(this)}

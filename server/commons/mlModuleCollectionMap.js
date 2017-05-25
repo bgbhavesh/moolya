@@ -28,7 +28,7 @@ MlModuleCollectionMap['MlStatus'] = 'Status';
 MlModuleCollectionMap['MlSubChapters'] = 'SUBCHAPTER';
 MlModuleCollectionMap['MlSubDepartments'] = 'SUBDEPARTMENT';
 MlModuleCollectionMap['MlTaxation'] = 'TAXATION';
-MlModuleCollectionMap['MlTemplateTypes'] = 'TEMPLATETYPES';
+MlModuleCollectionMap['MlAccountTypes'] = 'ACCOUNTTYPES';
 
 //setttings
 MlModuleCollectionMap['MlBusinessType'] = 'BUSINESSTYPE';
@@ -56,8 +56,13 @@ MlModuleCollectionMap['MlRegistration'] = 'REGISTRATION';
 MlModuleCollectionMap['users'] = 'USERS';
 
 //portfolio
-MlModuleCollectionMap['MlIdeatorPortfolio'] = 'IDEATORPORTFOLIO';
+MlModuleCollectionMap['MlPortfolioDetails'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlIdeatorPortfolio'] = 'PORTFOLIO';   //IDEATORPORTFOLIO
+MlModuleCollectionMap['MlIdeas'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlFunderPortfolio'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlStartupPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
+
 
 //hierarchy
 MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';

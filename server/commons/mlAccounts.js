@@ -3,6 +3,9 @@
  * Created by mohammed.mohasin on 26/04/17.
  */
 import mlSms from './mlSms';
+import MlDBController from './mlDBController';
+import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
+
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
 
@@ -39,6 +42,7 @@ export default MlAccounts=class MlAccounts {
     // Make sure the user exists, and address is one of their addresses.
     // var user = Meteor.users.findOne(regId);
     var userId=regId;
+    mlDBController = new MlDBController();
     var user=mlDBController.findOne('MlRegistration', {_id:regId},emailOptions.context||{});
     if (!user) throw new Error("Can't find user"); // pick the first unverified address if we weren't passed an address.
     //
@@ -319,4 +323,20 @@ export default MlAccounts=class MlAccounts {
   }
 
 }
+
+Accounts.onLogin(function (details) {
+  var userId=(details.user || {})._id;
+  let context={ip: details.connection.clientAddress,browser:details.connection.httpHeaders['user-agent'],url: details.connection.httpHeaders.host};
+  let transactionDetails=`User logged in to application at ${new Date()} `;
+  new MlTransactionsHandler().recordTransaction({'activity':'login','transactionType':'system','userId':userId,'transactionDetails':transactionDetails,'context':context});
+});
+
+Accounts.onLogout(function (details) {
+  var userId=(details.user || {})._id;
+  let context={ip: details.connection.clientAddress,browser:details.connection.httpHeaders['user-agent'],url:details.connection.httpHeaders.host};
+  let transactionDetails=`User logged out of application at ${new Date()} `;
+  if(details&&details.user){
+    new MlTransactionsHandler().recordTransaction({'activity':'logout','transactionType':'system','userId':userId,'transactionDetails':transactionDetails,'context':context});
+  }
+});
 

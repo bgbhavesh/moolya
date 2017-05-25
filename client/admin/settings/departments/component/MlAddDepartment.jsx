@@ -1,65 +1,62 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import {addDepartmentActionHandler} from '../actions/addDepartmentAction'
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import formHandler from '../../../../commons/containers/MlFormHandler'
-import MlAssignDepartments from './MlAssignDepartments'
-import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
-import ScrollArea from 'react-scrollbar';
-class MlAddDepartment extends React.Component{
+import React from "react";
+import {render} from "react-dom";
+import {addDepartmentActionHandler} from "../actions/addDepartmentAction";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlAssignDepartments from "./MlAssignDepartments";
+import MlMoolyaAssignDepartment from "./MlMoolyaAssignDepartment";
+import ScrollArea from "react-scrollbar";
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+class MlAddDepartment extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state={
-      departmentAvailability:[],
-      ismoolya:false
+    this.state = {
+      departmentAvailability: [],
+      isMoolya: true
     }
     this.addEventHandler.bind(this);
     this.createDepartment.bind(this)
     return this;
   }
-  componentDidMount()
-  {
-    $(function() {
+
+  componentDidMount() {
+    $(function () {
       $('.float-label').jvFloat();
     });
 
-    $('.switch input').change(function() {
-      if($(this).parent().hasClass('nocolor-switch')){
+    $('.switch input').change(function () {
+      if ($(this).parent().hasClass('nocolor-switch')) {
 
         if ($(this).is(':checked')) {
           $('.state_label:nth-of-type(1)').removeClass('acLabel');
           $('.state_label:nth-of-type(2)').addClass('acLabel');
-        }else{
+        } else {
           $('.state_label:nth-of-type(2)').removeClass('acLabel');
           $('.state_label:nth-of-type(1)').addClass('acLabel');
         }
-      }else{
+      } else {
         if ($(this).is(':checked')) {
           $(this).parent('.switch').addClass('on');
-        }else{
+        } else {
           $(this).parent('.switch').removeClass('on');
         }
       }
     });
   }
+
   async addEventHandler() {
-    const resp=await this.createDepartment();
+    const resp = await this.createDepartment();
     return resp;
   }
 
   async handleError(response) {
-   // alert(response)
-   // console.log(response)
     toastr.error(response);
   };
 
   async handleSuccess(response) {
-
-    //FlowRouter.go("/admin/settings/departmentsList");
-    if (response){
-      if(response.success)
+    if (response) {
+      if (response.success)
         FlowRouter.go("/admin/settings/departmentsList");
       else
         toastr.error(response.result);
@@ -68,47 +65,42 @@ class MlAddDepartment extends React.Component{
   };
 
   async  createDepartment() {
-    let DepartmentDetails = {
-      departmentName: this.refs.departmentName.value,
-      displayName: this.refs.displayName.value,
-      aboutDepartment: this.refs.aboutDepartment.value,
-      departmentStatus: this.refs.departmentStatus.checked,
-      //isSystemDefined: this.refs.isSystemDefined.checked,
-      appType:this.refs.appType.checked,
-      departmentAvailablity:this.state.departmentAvailability
-    }
-    console.log(DepartmentDetails)
-      if(DepartmentDetails.departmentName==undefined||DepartmentDetails.departmentName==""){
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let DepartmentDetails = {
+        departmentName: this.refs.departmentName.value,
+        displayName: this.refs.displayName.value,
+        aboutDepartment: this.refs.aboutDepartment.value,
+        departmentStatus: this.refs.departmentStatus.checked,
+        isMoolya: this.state.isMoolya,
+        departmentAvailablity: this.state.departmentAvailability
+      }
+      if (!DepartmentDetails.departmentName) {
         toastr.error("Department Name is mandatory");
-      }else{
+      } else {
         const response = await addDepartmentActionHandler(DepartmentDetails)
         return response;
       }
-
-
-  }
-  getMoolyaDepartmentAvailability(details){
-    for(var i = 0; i < details.length; i++){
-        details[i].clusters;
-    }
-    this.setState({'departmentAvailability':details})
-  }
-  getDepartmentAvailability(details){
-    console.log(details);
-    this.setState({'departmentAvailability':details})
-  }
-  onSubmit(){
-    console.log(this.state.departmentAvailability)
-  }
-  onStatusChange(e){
-    if(e.currentTarget.checked){
-      this.setState({"ismoolya":true});
-    }else{
-      this.setState({"ismoolya":false});
     }
   }
+  getMoolyaDepartmentAvailability(details) {
+    for (var i = 0; i < details.length; i++) {
+      details[i].clusters;
+    }
+    this.setState({'departmentAvailability': details})
+  }
 
-  render(){
+  getDepartmentAvailability(details) {
+    this.setState({'departmentAvailability': details})
+  }
+
+  onStatusChange(e) {
+    this.setState({"isMoolya": !e.currentTarget.checked});
+  }
+
+  render() {
     let MlActionConfig = [
       {
         showAction: true,
@@ -131,33 +123,25 @@ class MlAddDepartment extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-                <div className="form-group">
-                  <input type="text" ref="departmentName" placeholder="Department Name" className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text" ref="departmentName" placeholder="Department Name"
+                         className="form-control float-label" data-required={true} data-errMsg="Department Name is required"/>
                 </div>
-
-                <div className="form-group">
-                  <input ref="displayName" placeholder="Display Name" className="form-control float-label" id=""></input>
+                <div className="form-group mandatory">
+                  <input ref="displayName" placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is required" ></input>
                 </div>
                 <div className="form-group">
-                  <textarea ref="aboutDepartment" placeholder="About Department" className="form-control float-label" id=""></textarea>
+                  <textarea ref="aboutDepartment" placeholder="About Department" className="form-control float-label" ></textarea>
                 </div>
 
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" ref="departmentStatus" />
+                    <input type="checkbox" ref="departmentStatus"/>
                     <div className="slider"></div>
                   </label>
                 </div>
-
-               {/* <div className="form-group switch_wrap inline_switch">
-                  <label>Is SystemDefined </label>
-                  <label className="switch">
-                    <input type="checkbox" ref="isSystemDefined" />
-                    <div className="slider"></div>
-                  </label>
-                </div>*/}
-</form>
+              </form>
             </div>
           </div>
 
@@ -170,21 +154,25 @@ class MlAddDepartment extends React.Component{
                 smoothScrolling={true}
                 default={true}
               >
-              <form>
+                <form>
 
-                <div className="form-group switch_wrap switch_names">
-                  <label>Select Type</label><br/>
-                  <span className="state_label acLabel">moolya</span><label className="switch nocolor-switch">
-                  <input type="checkbox" ref="appType" onChange={this.onStatusChange.bind(this)} />
-                  <div className="slider"></div>
-                </label>
-                  <span className="state_label">non-moolya</span>
-                </div><br className="brclear"/>
+                  <div className="form-group switch_wrap switch_names">
+                    <label>Select Type</label><br/>
+                    <span className="state_label acLabel">moolya</span><label className="switch nocolor-switch">
+                    <input type="checkbox" ref="appType" onChange={this.onStatusChange.bind(this)}/>
+                    <div className="slider"></div>
+                  </label>
+                    <span className="state_label">non-moolya</span>
+                  </div>
+                  <br className="brclear"/>
 
-                {this.state.ismoolya?<MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)}/>:<MlMoolyaAssignDepartment getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)}/>}
+                  {this.state.isMoolya ?
+                  <MlMoolyaAssignDepartment
+                    getMoolyaDepartmentAvailability={this.getMoolyaDepartmentAvailability.bind(this)}/>:
+                    <MlAssignDepartments getDepartmentAvailability={this.getDepartmentAvailability.bind(this)}/>
+                  }
 
-
-              </form>
+                </form>
               </ScrollArea>
             </div>
           </div>
@@ -195,6 +183,7 @@ class MlAddDepartment extends React.Component{
       </div>
     )
   }
-};
+}
+;
 
 export default MoolyaAddDepartment = formHandler()(MlAddDepartment);

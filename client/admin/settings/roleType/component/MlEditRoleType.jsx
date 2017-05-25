@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findRoleTypeActionHandler} from '../actions/findRoleTypeAction'
 import {updateRoleTypeActionHandler} from '../actions/updateRoleTypeAction';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 class MlEditRoleType extends React.Component{
   constructor(props) {
@@ -100,7 +101,7 @@ class MlEditRoleType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Role Type</h2>
@@ -109,7 +110,7 @@ class MlEditRoleType extends React.Component{
                   <form>
                   <div className="form-group">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" placeholder="User Type Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label"  disabled="disabled"/>
+                    <input type="text" placeholder="Role Type Name" defaultValue={this.state.data&&this.state.data.roleTypeName} className="form-control float-label"  disabled="disabled"/>
 
                   </div>
                   <div className="form-group">
@@ -125,13 +126,13 @@ class MlEditRoleType extends React.Component{
                   <div className="form-group">
                     <input type="text" ref="roleTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.roleTypeDisplayName} className="form-control float-label"  disabled="disabled"/>
                   </div>
-                  <div className="form-group switch_wrap">
-                    <label>Status</label><br/>
-                    <label className="switch">
-                      <input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
+                  {/*<div className="form-group switch_wrap">*/}
+                    {/*<label>Status</label><br/>*/}
+                    {/*<label className="switch">*/}
+                      {/*<input type="checkbox" ref="isActive" checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}/>*/}
+                      {/*<div className="slider"></div>*/}
+                    {/*</label>*/}
+                  {/*</div>*/}
                   </form>
                 </div>
               </div>

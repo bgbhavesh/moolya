@@ -5,7 +5,7 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
-
+import MlLoader from '../../../../../commons/components/loader/loader'
 export default class MlFunderAboutView extends React.Component{
   constructor(props, context){
     super(props);
@@ -50,7 +50,7 @@ export default class MlFunderAboutView extends React.Component{
     }
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div>
             <h2>About Us</h2>
             <div className="main_wrap_scroll">

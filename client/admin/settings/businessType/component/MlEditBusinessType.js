@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findBusinessTypeActionHandler} from '../actions/findBusinessTypeAction'
 import {updateBusinessTypeActionHandler} from '../actions/updateBusinessTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditBusinessType extends React.Component{
   constructor(props) {
     super(props);
@@ -101,7 +102,7 @@ class MlEditBusinessType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Business Type</h2>

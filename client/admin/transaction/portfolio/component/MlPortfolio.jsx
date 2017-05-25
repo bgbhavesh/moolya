@@ -13,6 +13,7 @@ import {
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/IdeaActionHandler";
+import MlLoader from '../../../../commons/components/loader/loader'
 
 
 class MlPortfolio extends React.Component {
@@ -250,7 +251,7 @@ class MlPortfolio extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_padding_wrap">
             <div className='step-progress'>
               {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}

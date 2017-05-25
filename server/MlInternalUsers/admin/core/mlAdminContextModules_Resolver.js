@@ -104,7 +104,18 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case 'TransactionsLog':
-
+      requestParams=args.context || {};
+      // requestParams.type = _.map(requestParams, _.pick('activity'))
+      result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'InteractionsLog':
+      requestParams=args.context;
+      requestParams.type=args.context.transactionTypeName
+      result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'ConversationsLog':
+      requestParams=args.context;
+      requestParams.type=args.context.transactionTypeName
       result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
   }
@@ -130,6 +141,9 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "PortfolioRequests":resolveType= 'Portfoliodetails';break;
       case "PortfolioApproved":resolveType= 'Portfoliodetails';break;
       case "TransactionsLog":resolveType='TransactionsLog';break;
+      case "InteractionsLog":resolveType='TransactionsLog';break;
+      case "ConversationsLog":resolveType='TransactionsLog';break;
+
     }
 
     if(resolveType){

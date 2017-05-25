@@ -1,12 +1,12 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-import MlTransactionDetailsComponent from '../component/MlTransactionDetailsComponent'
+import MlInteractionDetailsComponent from '../component/MlInteractionDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 
-const mlTransactionsLogTableConfig=new MlViewer.View({
+const mlInteractionsLogTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
-  module:"TransactionsLog",//Module name for filter.
+  module:"InteractionsLog",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["createdAt","activity","transactionTypeName", "userName","clusterName", "chapterName", "subChapterName", "communityId"],
@@ -31,17 +31,20 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
-  expandComponent:MlTransactionDetailsComponent,
+  expandComponent:MlInteractionDetailsComponent,
   showActionComponent:false,
   // expandableRow:_id,
   actionConfiguration:[],
-  // queryOptions:true,
+  queryOptions:true,
   // buildQueryOptions:()=>{
   //   return {userId:"wJyiTdQandDyhcmKY"}
   // },
+  buildQueryOptions:(config)=>{
+    return {context:{transactionTypeName:"interactions"}}
+  },
   graphQlQuery:
-  gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"TransactionsLog",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+  gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"InteractionsLog", context:$context, offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
                       ...on TransactionsLog{
@@ -69,5 +72,5 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
               }`
 });
 
-export {mlTransactionsLogTableConfig};
+export {mlInteractionsLogTableConfig};
 

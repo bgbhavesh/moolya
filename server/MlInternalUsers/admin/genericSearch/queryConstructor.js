@@ -15,7 +15,7 @@ export function searchFunction(args) {
       }else if(s.fieldType == "Date"){
         if(s.value){
           let dateObject =  JSON.parse(s.value)
-          json[s.fieldName]={$gte: new Date(dateObject.$gte),$lt : new Date(dateObject.$lt)}
+          json[s.fieldName]={$gte: new Date(dateObject.$gte),$lte : new Date(dateObject.$lt)}
         }
 
       }else  if(s.fieldType == "Boolean"){

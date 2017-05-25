@@ -132,12 +132,13 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
 };
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
+  //TODO: Auth to be here with roles and permission
+  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  // if (!isValidAuth) {
+  //   let code = 401;
+  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+  //   return response;
+  // }
 
   // let user = Meteor.users.findOne({_id: args.userId});
   let user = mlDBController.findOne('users', {_id: args.userId}, context)

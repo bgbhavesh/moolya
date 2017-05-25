@@ -28,7 +28,7 @@ class MlAddBackendUser extends React.Component {
       selectedBackendUser: 'Internal User',
       selectedSubChapter: '',
       pwdErrorMsg: '',
-      birthDate: " ",
+      birthDate:null,
       genderSelectMale: " ",
       genderSelectFemale: " ",
       genderSelectOthers: " ",
@@ -51,7 +51,7 @@ class MlAddBackendUser extends React.Component {
   }
   onBirthDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, birthDate: value});
     }
   }

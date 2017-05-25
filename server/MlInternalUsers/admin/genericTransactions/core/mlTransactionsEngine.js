@@ -18,8 +18,6 @@ class MlTransactionsEngine{
          let transaction=mlGenericTransactions;
          return transaction;
         break;
-      case 'Portfolio':
-        break;
     }
   }
 }

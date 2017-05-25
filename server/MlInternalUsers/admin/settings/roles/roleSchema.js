@@ -15,8 +15,8 @@ let Role = `
   type Modules{
       moduleId:String,
       moduleName:String,
-      validFrom:String,
-      validTo:String,
+      validFrom:Date,
+      validTo:Date,
       isActive:Boolean,
       actions : [Actions]
   }
@@ -77,8 +77,8 @@ let Role = `
       moduleId:String,
       actions : [actions],
       moduleName:String,
-      validFrom:String,
-      validTo:String,
+      validFrom:Date,
+      validTo:Date,
       isActive:Boolean
   }
   

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import clusterRoutes from '../actions/clustersRoutes';
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 export default class MlClusterSubChaptersList extends Component
 {
   constructor(props){
@@ -14,7 +15,8 @@ export default class MlClusterSubChaptersList extends Component
   render(){
     const data=this.props.data||[];
     let list = null;
-    const subChapter =  [{'href':'/admin/myroute'}];
+    var loggedInUser = getAdminUserContext();
+    const subChapter =  (loggedInUser && loggedInUser.hierarchyLevel > 1) ? [{'href': '/admin/myroute'}] : []
     const addSubChapter = subChapter.map(function (item,idx) {
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>

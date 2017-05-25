@@ -35,6 +35,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.chapterName=subChapterDetails.chapterName;
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
+
  // args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   args.registration.registrationDate=date
   let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
@@ -260,7 +261,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           communityDefName: details.communityDefName,
           communityType: '',
           isDefault: false,
-          isActive: false,
+          isActive: true,
+          isApprove:false,
           accountType: details.accountType,
           optional: false,
           userType: details.userType || null,
@@ -442,6 +444,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 
     if(updatedResponse===1){
         mlRegistrationRepo.updateExternalProfileInfo(args.registrationId,'all',context);
+        mlRegistrationRepo.ApproveExternalProfileInfo(args.registrationId,'all',context)
     }
 
     //Portfolio Request Generation

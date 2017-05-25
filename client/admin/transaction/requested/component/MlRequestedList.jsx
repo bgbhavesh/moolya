@@ -8,7 +8,7 @@ import _ from 'lodash';
 export default class MlRequestedList extends Component {
   constructor(props){
      super(props);
-     this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null,canAssign:false,canUnAssign:false};
+     this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null};
      this.assignActionHandler.bind(this);
   }
   componentDidMount() {
@@ -24,7 +24,7 @@ export default class MlRequestedList extends Component {
   }
   assignActionHandler(data){
     if(data&&data.id){
-    this.setState({requestId:data.id,show:true,transactionId:data.transactionId,canAssign:data.canAssign,canUnAssign:data.canUnAssign});
+    this.setState({requestId:data.id,show:true,transactionId:data.registrationId});
     console.log(data);
     console.log("yipppe its working");
     }else {
@@ -54,8 +54,6 @@ export default class MlRequestedList extends Component {
           {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} canAssign={this.state.canAssign} canUnAssign={this.state.canUnAssign}/>}
           {showCreateComponent&&<CreateRequestComponent openPopUp={true}/>}
         </div>
-
-
       </div>
     )
   }

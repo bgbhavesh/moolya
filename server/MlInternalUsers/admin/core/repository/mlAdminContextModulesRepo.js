@@ -204,12 +204,30 @@ let CoreModules = {
     return {totalRecords:totalRecords,data:data};
   },
   MlTransactionLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+    var type=requestParams&&requestParams.transactionTypeName?requestParams.transactionTypeName:"";
+    var serverQuery ={};
     let query={};
     if(!fieldsProj.sort){
       fieldsProj.sort={createdAt: -1}
     }
-    const data = mlDBController.find('MlTransactionsLog', query, context, fieldsProj).fetch();
-    const totalRecords = mlDBController.find('MlTransactionsLog', query, context,fieldsProj).count();
+    switch(type){
+      case 'interactions':
+        serverQuery={'transactionTypeName': "interactions"};
+        break;
+      case 'system':
+        serverQuery={'transactionTypeName': "system"};
+        break;
+      case 'conversations':
+        serverQuery={'transactionTypeName': "conversations"};
+        break;
+    }
+    var resultantQuery=MlAdminContextQueryConstructor.constructQuery(contextQuery,'$in');
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    const data = mlDBController.find('MlTransactionsLog', resultantQuery, context, fieldsProj).fetch();
+    const totalRecords = mlDBController.find('MlTransactionsLog', resultantQuery, context,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
   }

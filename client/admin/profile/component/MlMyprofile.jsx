@@ -67,7 +67,7 @@ export default class MlMyProfile extends React.Component{
   }
   onFoundationDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format('');
       this.setState({loading: false, foundationDate: value});
     }
   }

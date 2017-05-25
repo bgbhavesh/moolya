@@ -4,9 +4,8 @@ import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import {assignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
-import {selfAssignTransactionAction} from '../actions/selfAssignTransactionAction'
-import {unAssignTransactionActionHandler} from '../actions/unAssignTransactionAction'
+import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+
 export default class MlAssignComponent extends Component {
 
   constructor(props){
@@ -77,26 +76,26 @@ export default class MlAssignComponent extends Component {
       "user": this.state.selectedUser
     }
     let transactionType=this.props.transactionType
-    const response = await assignUserForTransactionAction(params,this.props.transactionId,transactionType);
-    if(response){
+    const response = await assignUserForTransactionAction("Registration",params,this.props.transactionId,"Registration","assignTransaction");
+    if(response.success){
       this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
-      toastr.success("User Assigned to transaction successfully");
+      toastr.success("Transaction assigned to user successfully");
       FlowRouter.go("/admin/transactions/requestedList");
     }else{
-      toastr.error(response.result);
+      toastr.error("Wrong Hierarchy");
       this.setState({show:false})
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
-
   }
+
   async selfAssignTransaction(){
     let transactionType=this.props.transactionType
-    const response = await selfAssignTransactionAction(this.props.transactionId);
-    if(response){
+    const response = await selfAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","selfAssignTransaction");
+    if(response.success){
       toastr.success("Self Assignment successfull");
       FlowRouter.go("/admin/transactions/requestedList");
     }else{
-      toastr.error(response.result);
+      toastr.error("Wrong Hierarchy");
       this.setState({show:false})
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
@@ -104,12 +103,12 @@ export default class MlAssignComponent extends Component {
 
   async unAssignTransaction(){
     let transactionType=this.props.transactionType
-    const response = await unAssignTransactionActionHandler(this.props.transactionId);
-    if(response){
-      toastr.success("Self Assignment successfull");
+    const response = await unAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","unAssignTransaction");
+    if(response.success){
+      toastr.success("UnAssignment successfull");
       FlowRouter.go("/admin/transactions/requestedList");
     }else{
-      toastr.error(response.result);
+      toastr.error("Wrong Hierarchy");
       this.setState({show:false})
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
@@ -149,20 +148,18 @@ export default class MlAssignComponent extends Component {
         label:subDepartmentName
       }  
     }`;
-    let roleQuery=gql`query($cluster:String,$chapter:String,$subChapter:String,$department:String,$subDepartment:String){  
-      data:fetchRolesForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter,department:$department,subDepartment:$subDepartment) {
-        value:_id
+    let roleQuery=gql`query($clusterId:String,$departmentId:String,$subDepartmentId:String){  
+      data:fetchHierarchyRoles(clusterId:$clusterId,departmentId:$departmentId,subDepartmentId:$subDepartmentId) {
+        value:roleId
         label:roleName
       }  
     }`;
-    let usersQuery=gql`query($clusterId:String,$chapterId:String,$subChapterId:String,$communityId:String,$departmentId:String,$subDepartmentId:String,$roleId:String){  
-      data:fetchUserForReistration(clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId,communityId:$communityId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,roleId:$roleId) {
+    let usersQuery=gql`query($clusterId:String,$departmentId:String,$subDepartmentId:String,$roleId:String){  
+      data:fetchHierarchyUsers(clusterId:$clusterId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,roleId:$roleId) {
         value:_id
         label:username
       }  
     }`;
-
-
 
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
@@ -171,20 +168,14 @@ export default class MlAssignComponent extends Component {
     let roleOption={
                     options: {
                       variables: {
-                        cluster:this.state.selectedCluster,
-                        chapter:this.state.selectedChapter,
-                        subChapter:this.state.selectedSubChapter,
-                        department:this.state.selectedDepartment,
-                        subDepartment:this.state.selectedSubDepartment
+                        clusterId:this.state.selectedCluster,
+                        departmentId:this.state.selectedDepartment,
+                        subDepartmentId:this.state.selectedSubDepartment
                     }}};
     let usersOption = {
                   options: {
                     variables: {
                       clusterId:this.state.selectedCluster,
-                      chapterId:this.state.selectedChapter,
-                      subChapterId:this.state.selectedSubChapter,
-                      departmentId:this.state.selectedDepartment,
-                      subDepartmentId:this.state.selectedSubDepartment,
                       departmentId:this.state.selectedDepartment,
                       subDepartmentId:this.state.selectedSubDepartment,
                       roleId:this.state.selectedRole
@@ -238,19 +229,21 @@ export default class MlAssignComponent extends Component {
           </a>
         </div>
 
-        {this.props.canAssign?
+       {/* {this.props.canAssign?*/}
         <div className="assign-popup">
           <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.selfAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-assign-user"></span>
           </a>
-        </div>:<div></div>}
+        </div>
+          {/*:<div></div>}*/}
 
-        {this.props.canUnAssign?
+        {/*{this.props.canUnAssign?*/}
         <div className="assign-popup">
           <a data-toggle="tooltip" title="Cancel" data-placement="top" onClick={this.unAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-unassign-user"></span>
           </a>
-        </div>:<div></div>}
+        </div>
+          {/*:<div></div>}*/}
 
 
       </div>

@@ -166,11 +166,6 @@ class MlAssignBackendUsers extends React.Component {
 
   render() {
       let MlActionConfig = [
-          // {
-          //   actionName: 'edit',
-          //   showAction: true,
-          //   handler: null
-          // },
           {
             showAction: true,
             actionName: 'save',

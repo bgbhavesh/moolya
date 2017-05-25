@@ -26,7 +26,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
     }
     
@@ -149,7 +149,7 @@ let BackEndUser = `
         profileImage:String,
          numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
         
     }
@@ -196,7 +196,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String,
         profileImage: String
     }
@@ -214,7 +214,7 @@ let BackEndUser = `
       lastName: String,
       userName: String,
       genderType: String,
-      dateOfBirth: String
+      dateOfBirth: Date
     }
     
     input settingsAttributesObject{

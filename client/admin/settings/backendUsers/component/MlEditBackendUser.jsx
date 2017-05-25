@@ -68,9 +68,6 @@ class MlEditBackendUser extends React.Component{
     this.getGender.bind(this);
     return this;
   }
-  componentDidMount()
-  {
-  }
 
   componentDidUpdate(){
     OnToggleSwitch(true,true);

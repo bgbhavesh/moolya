@@ -151,7 +151,7 @@ class MlEditBackendUser extends React.Component{
         deActive: this.state.data.profile.isActive,
         isActive: this.state.data.profile.InternalUprofile.moolyaProfile.isActive,
         globalStatus: this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment,
-        genderSelect: response.profile.genderType, dateOfBirth: response.profile.dateOfBirth,
+        genderSelect: response.profile.genderType, dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat),
         profilePic: response.profile.profileImage
       })
       let clusterId = "", chapterId = '', subChapterId = '', communityId = ''
@@ -505,7 +505,7 @@ class MlEditBackendUser extends React.Component{
 
                     <div className="form-group">
                       {/*<Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} defaultValue={this.state.dateofbirth} onChange={this.ondateOfBirthSelection.bind(this)}/>*/}
-                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={that.state.data&&that.state.data.profile.dateOfBirth} disabled="disabled" />
+                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={moment(that.state.data&&that.state.data.profile.dateOfBirth).format('DD-MM-YYYY')} disabled="disabled" />
                       <FontAwesome name="calendar" className="password_icon"/>
 
                     </div>

@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
-import {mlTransactionsLogTableConfig} from "../config/mlTransactionsLogConfig";
-export default class MlTransactionsLogList extends Component {
+import {mlInteractionsLogTableConfig} from "../config/MlInteractionsLogConfig";
+export default class MlInteractionsLogList extends Component {
   constructor(props){
     super(props);
     // this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null,canAssign:false,canUnAssign:false};
@@ -14,8 +14,8 @@ export default class MlTransactionsLogList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Systems Log </h2>
-          <MlTableViewContainer {...mlTransactionsLogTableConfig} />
+          <h2>Interactions Log </h2>
+          <MlTableViewContainer {...mlInteractionsLogTableConfig} />
         </div>
       </div>
     )

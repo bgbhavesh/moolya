@@ -11,6 +11,7 @@ import MlContactFormComponent from "./MlContactFormComponent";
 import {findBackendUserActionHandler} from "../actions/findBackendUserAction";
 import {updateBackendUserActionHandler} from "../actions/updateBackendUserAction";
 import {resetPasswordActionHandler} from "../actions/resetPasswordAction";
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -140,11 +141,13 @@ class MlEditBackendUser extends React.Component{
 
 
   async  findBackendUser() {
+    const loggedInUser = getAdminUserContext();
     let userTypeId = this.props.config;
     const response = await findBackendUserActionHandler(userTypeId);
     this.setState({loading: false, data: response});
     if (response) {
       this.setState({
+        loginUserDetails: loggedInUser,
         selectedBackendUserType: this.state.data.profile.InternalUprofile.moolyaProfile.userType,
         selectedSubChapter: this.state.data.profile.InternalUprofile.moolyaProfile.subChapter,
         selectedBackendUser: this.state.data.profile.InternalUprofile.moolyaProfile.roleType,
@@ -398,10 +401,10 @@ class MlEditBackendUser extends React.Component{
       }
     ];
 
-    let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya'},
-      {value: 'non-moolya', label: 'non-moolya'}
-    ];
+    let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
+      {value: 'moolya', label: 'moolya', clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
 
     let BackendUserOptions=[
       {value: 'Internal User', label: 'Internal User'},
@@ -544,7 +547,7 @@ class MlEditBackendUser extends React.Component{
                   <br className="brclear"/>
                   {that.state.userProfiles.map(function (userProfiles, idx) {
                     return(
-                    <div>
+                    <div key={idx}>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
                           <div key={RId} className="panel panel-default">

@@ -195,7 +195,7 @@ MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info
 MlResolver.MlQueryResolver['fetchTransactionsLog']=(obj, args, context, info) => {
   if (args.userId) {
     let userId = args.userId;
-    let transactions=mlDBController.find('MlTransactionsLog',{userId:userId}).fetch();
+    let transactions=mlDBController.find('MlTransactionsLog',{userId:userId,transactionTypeName:args.transactionTypeName}).fetch();
     return transactions;
   }
   return null;

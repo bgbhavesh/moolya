@@ -1,11 +1,13 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import chapterRoutes from "../actions/chapterRoutes";
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 export default class MlSubChapterList extends Component {
 
   render(){
     const data=this.props.data||[]
-    const subChapter =  [{'href':'/admin/myroute'}];
+    var loggedInUser = getAdminUserContext();
+    const subChapter = (loggedInUser && loggedInUser.hierarchyLevel > 1) ? [{'href': '/admin/myroute'}] : []
     const addSubChapter = subChapter.map(function (item,idx) {
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>

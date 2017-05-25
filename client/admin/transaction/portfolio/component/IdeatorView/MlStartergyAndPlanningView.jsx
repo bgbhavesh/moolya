@@ -127,7 +127,7 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
 
       <div className="col-lg-12 col-sm-12">
         <div className="row">
-          <h2>Startergy and Planning</h2>
+          <h2>Strategy and Planning</h2>
           <div id="strategyPlansContent" className="panel panel-default panel-form-view">
 
             <div className="panel-body">

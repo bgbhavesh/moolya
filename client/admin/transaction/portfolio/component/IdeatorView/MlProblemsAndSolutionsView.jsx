@@ -18,7 +18,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       this.state = {
           portfolioIdeatorInfo: {},
           annotations:[],
-          content:{}
+        content:{}
       }
 
       this.createAnnotations.bind(this);

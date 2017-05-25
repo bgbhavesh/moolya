@@ -459,7 +459,6 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
         }, context).fetch();
         if (departments && departments.length > 0) {
           for (var i = 0; i < departments.length; i++) {
-            // let depusers = Meteor.users.find({"profile.InternalUprofile.moolyaProfile.assignedDepartment.department":departments[i]._id}).fetch();
             let depusers = mlDBController.find('users', {
               $and: [{
                 "profile.InternalUprofile.moolyaProfile.assignedDepartment.department": departments[i]._id
@@ -468,7 +467,11 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
               }]
             }, context).fetch();
             if (depusers && depusers.length > 0) {
-              users = users.concat(depusers)
+              _.each(depusers,function (user,key) {
+                user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
+                users.push(user)
+              })
+              // users = users.concat(depusers)
             }
           }
         }

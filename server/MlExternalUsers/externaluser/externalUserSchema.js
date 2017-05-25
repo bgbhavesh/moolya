@@ -119,7 +119,7 @@ let externalUser = `
         isDefault:Boolean,
         isActive:Boolean,
         accountType:String,
-        isProfileActive:Boolean,
+        isActive:Boolean,
         optional:Boolean,
         userType :String,
         identityType:String

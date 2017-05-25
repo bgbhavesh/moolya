@@ -105,7 +105,7 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
     var userProfiles = user.profile.isExternaluser?user.profile.externalUserProfiles:[];
 
     //todo: add isApproved Attribute to the profile
-    userProfiles=_.filter(userProfiles, {'isProfileActive': true })||[];
+    userProfiles=_.filter(userProfiles, {'isActive': true })||[];
     return userProfiles;
   }else {
     let code = 409;
@@ -121,7 +121,7 @@ MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, in
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
     result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
-      {"profile.externalUserProfiles.$.isProfileActive": true}, {$set: true}, context);
+      {"profile.externalUserProfiles.$.isActive": true}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
   }else {
     let code = 409;

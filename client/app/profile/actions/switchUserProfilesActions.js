@@ -32,7 +32,7 @@ export async function fetchExternalUserProfilesActionHandler() {
         isDefault
         isActive
         accountType
-        isProfileActive
+        isActive
         optional
         userType
         identityType

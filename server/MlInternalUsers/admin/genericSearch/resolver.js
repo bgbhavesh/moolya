@@ -321,30 +321,24 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
       let departmentNames = [];  //@array of strings
-      departmentData.map(function (doc) {
+/*      departmentData.map(function (doc) {
         departmentNames.push(doc.departmentName)
-      });
+      });*/
+      departmentNames = _.pluck(departmentData, 'departmentName') || [];
 
       let subdepartmentsNames = [];  //@array of strings
-      subdepartmentData.map(function (doc) {
-        subdepartmentsNames.push(doc.subDepartmentName)
-      });
+      subdepartmentsNames = _.pluck(subdepartmentData, 'subDepartmentName') || [];
 
 
       let clusterNames = [];  //@array of strings
-      clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
+      clusterNames = _.pluck(clusterData, 'clusterName') || [];
 
       let chapterNamesArray = [];
-      chapterData.map(function (doc) {
-        chapterNamesArray.push(doc.chapterName)
-      });
+      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+
 
       let subchapterNamesArray = [];
-      subchapterData.map(function (doc) {
-        subchapterNamesArray.push(doc.subChapterName)
-      });
+      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].departmentsList = departmentNames || [];
       data[index].subdepartmentsList = subdepartmentsNames || [];

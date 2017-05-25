@@ -101,6 +101,10 @@ class MlRegistrationRepo{
       let resp = mlDBController.update('users', user.userId, {"profile.externalUserAdditionalInfo": profileInfo}, {$set:true}, context)
     }
   }
+  ApproveExternalProfileInfo(regId,type,context) {
+    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': regId}}},
+      {"profile.externalUserProfiles.$.isApprove": true}, {$set: true}, context);
+  }
 
 }
 const mlRegistrationRepo = new MlRegistrationRepo();

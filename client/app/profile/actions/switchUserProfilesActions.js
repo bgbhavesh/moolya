@@ -70,7 +70,7 @@ export async function deActivateProfileProfileActionHandler(profileId) {
 
   const result = await appClient.mutate({
     mutation: gql`
-          mutation($profileId: String){
+          mutation($profileId: String!){
               deActivateUserProfile(profileId:$profileId){
                   success,
                   code,
@@ -83,5 +83,25 @@ export async function deActivateProfileProfileActionHandler(profileId) {
     }
   })
   const id = result.data.deActivateUserProfile;
+  return id;
+}
+
+export async function blockProfileActionHandler(profileId) {
+
+  const result = await appClient.mutate({
+    mutation: gql`
+          mutation($profileId: String!){
+              blockUserProfile(profileId:$profileId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      profileId:profileId
+    }
+  })
+  const id = result.data.blockUserProfile;
   return id;
 }

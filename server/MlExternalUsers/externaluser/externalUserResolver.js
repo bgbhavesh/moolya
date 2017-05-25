@@ -121,7 +121,26 @@ MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, in
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
     result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
-      {"profile.externalUserProfiles.$.isActive": true}, {$set: true}, context);
+      {"profile.externalUserProfiles.$.isActive": false}, {$set: true}, context);
+    response = new MlRespPayload().successPayload({}, 200);
+  }else {
+    let code = 409;
+    response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+
+  return response;
+
+}
+
+
+MlResolver.MlMutationResolver['blockUserProfile'] = (obj, args, context, info) => {
+  let userId=context.userId;
+  var response=null;
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user&&args&&args.profileId){
+    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+      {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
   }else {
     let code = 409;

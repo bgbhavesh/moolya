@@ -1,0 +1,43 @@
+{
+  "public": {
+    "graphqlUrl": "http://pit.moolya.in:2306/graphql",
+    "graphqlPort":8090,
+    "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
+    "LEADSQUARED_URL":"https://api.leadsquared.com/v2/LeadManagement.svc/Lead.Capture?accessKey=u$rf80902d50b1b4a630551bbbfb1c95ef3&secretKey=2dda53b546b6e068978f2c68415b6967ec3331fb",
+    "LEADSQUARED_ACTIVITY_URL":"https://api.leadsquared.com/v2/ProspectActivity.svc/Create?accessKey=u$rf80902d50b1b4a630551bbbfb1c95ef3&secretKey=2dda53b546b6e068978f2c68415b6967ec3331fb",
+    "isLeadSquaredTrackingEnabled":true,
+    "createNewUser":{
+      "code"    : 209,
+      "message" : "New User Created"
+    }
+  },
+  "private": {
+    "subChapterName":"Moolya",
+    "HierarchyCount": 10,
+    "emailConfig":{
+      "username": "raksanconsulting",
+      "key": "IMRne62ShKE6Q8zU0NJBsQ"
+    },
+    "smsConfig":{
+      "isWhiteListEnabled":true
+    },
+    "aws":{
+      "s3Config":{
+        "accessKeyId":"",
+        "secretAccessKey":"",
+        "maxAsyncS3":20,
+        "s3RetryCount":3,
+        "s3RetryDelay":1000,
+        "multipartUploadThreshold": 20971520,
+        "multipartUploadSize": 15728640,
+        "urlExpirationTime":4000
+      }
+    },
+    "graphql_proxy_url":"http://localhost:8090/graphql",
+    "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
+    "smtpMailUrl":"smtp://qasmtp%40moolya.in:Moolya123@smtp.moolya.in:25",
+    "fromEmailAddr":"qasmtp@moolya.in",
+    "isEmailDomainCheckEnabled":true,
+    "isAuditEnabled":true
+  }
+}

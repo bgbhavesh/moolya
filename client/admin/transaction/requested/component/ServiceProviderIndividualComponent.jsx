@@ -170,9 +170,16 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     }
   }
   ondateOfBirthSelection(event) {
+    var ageDifMs = Date.now() - event._d.getTime();
+    var ageDate = new Date(ageDifMs);
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
       this.setState({loading: false, dateOfBirth: value});
+    }
+    if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+    }
+    else{
+      toastr.error("age limit exceeded")
     }
   }
   onemploymentDateSelection(event) {
@@ -186,6 +193,10 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let MlActionConfig
     let userType=this.props.userType;
     if(userType=='external'){
@@ -323,9 +334,9 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group mandatory" id="date-of-birth">
-                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} data-required={true} data-errMssg="Date Of Birth is required"/>
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}  isValidDate={ valid }  data-required={true} data-errMssg="Date Of Birth is required"/>
                     <FontAwesome name="calendar" className="password_icon"  onClick={that.openDatePickerDateOfBirth.bind(that)} />
-                    <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
+                    {/*<br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>*/}
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>

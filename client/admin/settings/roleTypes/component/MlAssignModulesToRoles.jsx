@@ -16,8 +16,8 @@ export default class MlAssignModulesToRoles extends React.Component {
       assignModulesToRoles: [{
         moduleId: '',
         moduleName: '',
-        validFrom: '',
-        validTo: '',
+        validFrom: null,
+        validTo: null,
         isActive: '',
         actions: [{actionId: ''}]
       }]
@@ -34,8 +34,8 @@ export default class MlAssignModulesToRoles extends React.Component {
       assignModulesToRoles: this.state.assignModulesToRoles.concat([{
         moduleId: '',
         moduleName: '',
-        validFrom: '',
-        validTo: '',
+        validFrom: null,
+        validTo: null,
         isActive: '',
         actions: []
       }])
@@ -80,11 +80,30 @@ export default class MlAssignModulesToRoles extends React.Component {
             actionVal.push({"actionId": actions[j].actionId})
           }
         }
+        let validFromDate = null;
+        let validToDate = null;
+
+        if(assignModulesToRolesDetails[i] && assignModulesToRolesDetails[i].validFrom){
+          if((assignModulesToRolesDetails[i].validFrom) == "Invalid Date" ){
+            validFromDate = null
+          }else{
+            validFromDate = moment(assignModulesToRolesDetails[i].validFrom).format(Meteor.settings.public.dateFormat)
+          }
+        }
+
+        if(assignModulesToRolesDetails[i] && assignModulesToRolesDetails[i].validTo){
+          if((assignModulesToRolesDetails[i].validTo) == "Invalid Date" ){
+            validToDate = null
+          }else{
+            validToDate = moment(assignModulesToRolesDetails[i].validTo).format(Meteor.settings.public.dateFormat)
+          }
+        }
+
         let json = {
           moduleId: assignModulesToRolesDetails[i].moduleId,
           moduleName: assignModulesToRolesDetails[i].moduleName,
-          validFrom: assignModulesToRolesDetails[i].validFrom,
-          validTo: assignModulesToRolesDetails[i].validTo,
+          validFrom: validFromDate,
+          validTo: validToDate,
           isActive: assignModulesToRolesDetails[i].isActive,
           actions: actionVal
         }
@@ -148,8 +167,8 @@ export default class MlAssignModulesToRoles extends React.Component {
       assignModulesToRoles: this.state.assignModulesToRoles.concat([{
         moduleId: '',
         moduleName: '',
-        validFrom: '',
-        validTo: '',
+        validFrom: null,
+        validTo: null,
         isActive: '',
         actions: []
       }])
@@ -172,6 +191,9 @@ export default class MlAssignModulesToRoles extends React.Component {
   }
 
   onmoduleNameChange(index, event) {
+    alert("Testtttttttttttttttttt");
+    console.log("**************************************************");
+    console.log(this.state.assignModulesToRoles);
     let assignModulesToRoles = this.state.assignModulesToRoles
     assignModulesToRoles[index]['moduleName'] = event.target.value
     this.setState({assignModulesToRoles: assignModulesToRoles})
@@ -181,7 +203,7 @@ export default class MlAssignModulesToRoles extends React.Component {
 
   onvalidFromChange(index, event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       let assignModulesToRoles = this.state.assignModulesToRoles;
       assignModulesToRoles[index]['validFrom'] = value
       this.setState({assignModulesToRoles: assignModulesToRoles})
@@ -191,7 +213,7 @@ export default class MlAssignModulesToRoles extends React.Component {
 
   onvalidToChange(index, event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       let assignModulesToRoles = this.state.assignModulesToRoles;
       assignModulesToRoles[index]['validTo'] = value
       this.setState({assignModulesToRoles: assignModulesToRoles})
@@ -230,6 +252,19 @@ export default class MlAssignModulesToRoles extends React.Component {
               statusCreate=true;
             }
           })
+
+          let validFrom=that.state.assignModulesToRoles[id].validFrom
+          let validTo=that.state.assignModulesToRoles[id].validTo
+          if(validFrom&&validFrom!="Invalid date"){
+            validFrom=moment(validFrom).format('MM-DD-YYYY')
+          }else{
+            validFrom=null
+          }
+          if(validTo&&validTo!="Invalid date"){
+            validTo=moment(validTo).format('MM-DD-YYYY')
+          }else {
+            validTo=null
+          }
           return (
 
             <div className="panel panel-default" key={id}>
@@ -260,12 +295,12 @@ export default class MlAssignModulesToRoles extends React.Component {
 
                   <div className="col-md-3">
                     <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active From"}} closeOnSelect={true} value={that.state.assignModulesToRoles[id].validFrom} onChange={that.onvalidFromChange.bind(that, id)}/>
+                      <Datetime dateFormat={true}  timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active From"}} closeOnSelect={true} value={validFrom} onChange={that.onvalidFromChange.bind(that, id)}/>
                     </div>
                   </div>
                   <div className="col-md-3">
                     <div className="form-group">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active Till"}}  closeOnSelect={true} value={that.state.assignModulesToRoles[id].validTo} onChange={that.onvalidToChange.bind(that, id)}/>
+                      <Datetime dateFormat={true} timeFormat={false} isValidDate={validDate} inputProps={{placeholder: "Active Till"}}  closeOnSelect={true} value={validTo} onChange={that.onvalidToChange.bind(that, id)}/>
                     </div>
                   </div>
                   <div className="col-md-6">

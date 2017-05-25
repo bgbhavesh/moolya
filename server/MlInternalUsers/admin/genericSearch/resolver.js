@@ -1,7 +1,6 @@
   import MlResolver from "../../../commons/mlResolverDef";
   import getQuery from "../genericSearch/queryConstructor";
   import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
-  import mlTransactionsListRepo from "../../admin/transactions/mlTransactionsListRepo";
   import _ from "underscore";
 
   let mergeQueries=function(userFilter,serverFilter){
@@ -57,7 +56,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if (args.module == "department") {
     var userProfileDep = new MlAdminUserContext().userProfileDetails(context.userId);
     var queryChange;
-    if (userProfileDep.defaultChapters.indexOf("all") < 0) {
+    if (userProfileDep.defaultSubChapters.indexOf("all") < 0) {
       userProfileDep.defaultSubChapters.push('all')
       var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
       queryChange = mergeQueries(query, serverQuery);
@@ -103,7 +102,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   if(args.module=="subDepartment"){
     var userProfileSub = new MlAdminUserContext().userProfileDetails(context.userId);
     var queryChange;
-    if (userProfileSub.defaultChapters.indexOf("all") < 0) {
+    if (userProfileSub.defaultSubChapters.indexOf("all") < 0) {
       userProfileSub.defaultSubChapters.push('all')
       var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
       queryChange = mergeQueries(query, serverQuery);
@@ -263,41 +262,39 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module == 'BackendUsers'){
-      data = Meteor.users.find({"profile.isInternaluser":true}).fetch();
+    var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+      queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    } else {
+      queryChange = {'profile.isExternaluser': false}   //platform_admin
+    }
+    let queryList = mergeQueries(query, queryChange);
+    data = Meteor.users.find(queryList, findOptions).fetch();
 
     data.map(function (doc,index) {
-      let roleIds=[]
-      let hirarichyLevel=[]
+      var hirarichyLevel=[]
+      var roleNames = []
       let userProfiles=doc&&doc.profile.InternalUprofile.moolyaProfile.userProfiles?doc.profile.InternalUprofile.moolyaProfile.userProfiles:[];
       userProfiles.map(function (doc,index) {
         if(doc.isDefault) {
           let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-          userRoles.map(function (doc, index) {
-            hirarichyLevel.push(doc.hierarchyLevel)
-
-          });
+          hirarichyLevel = _.pluck(userRoles, 'hierarchyLevel') || [];
           hirarichyLevel.sort(function (a, b) {
             return b - a
           });
           for (let i = 0; i < userRoles.length; i++) {
             if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
-              roleIds.push(userRoles[i].roleId);
+              roleNames.push(userRoles[i].roleName);
               break
             }
           }
         }
       });
-
-
-      let roleNames=[]
-      const rolesData =  MlRoles.find({ _id: { $in: roleIds} } ).fetch() || [];
-      rolesData.map(function (doc) {
-        roleNames.push(doc.roleName)
-      });
       data[index].roleNames = roleNames || [];
     });
 
-    totalRecords=Meteor.users.find({},findOptions).count();
+    totalRecords=Meteor.users.find(queryList,findOptions).count();
   }
   if(args.module == 'roles'){
     data= MlRoles.find(query,findOptions).fetch();

@@ -544,7 +544,7 @@ class MlEditBackendUser extends React.Component{
                   <br className="brclear"/>
                   {that.state.userProfiles.map(function (userProfiles, idx) {
                     return(
-                    <div>
+                    <div key={idx}>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
                           <div key={RId} className="panel panel-default">

@@ -1,9 +1,6 @@
 /**
  * Created by venkatasrinag on 20/3/17.
  */
-/**
- * Created by venkatasrinag on 20/3/17.
- */
 if(Meteor.isServer){
   MlMenus.upsert({name:"mlSubChapterAdminMenu"},{$set:{
     "name" : "mlSubChapterAdminMenu",
@@ -619,6 +616,36 @@ if(Meteor.isServer){
                 "subMenusId":"portfolio"
               }
             ]
+          },
+          {
+            "link": "/admin/transactions/systemsLog  ",
+            "name": "System",
+            "uniqueId": "systems_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/interactionsLog ",
+            "name": "Interactions",
+            "uniqueId": "Interactions_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/conversationsLog ",
+            "name": "Conversations",
+            "uniqueId": "Conversations_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
           }
         ]
       },

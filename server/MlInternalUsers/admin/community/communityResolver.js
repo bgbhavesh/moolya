@@ -84,9 +84,9 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         let platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode}, context)
         let community = {};
         // let iscommunityActive = userProfile.defaultCommunities.indexOf('all') || userProfile.defaultCommunities.indexOf(communityAccess.communityDefCode);
-        let iscommunityActive = _.indexOf(userProfile.defaultCommunities, 'all')
-        if(iscommunityActive)
-            iscommunityActive = _.indexOf(userProfile.defaultCommunities, communityAccess.communityDefCode)
+        let iscommunityActive = _.findIndex(userProfile.defaultCommunities, {communityCode:'all'})
+        if(iscommunityActive < 0)
+            iscommunityActive = _.findIndex(userProfile.defaultCommunities, {communityCode:communityAccess.communityDefCode})
 
         if(!platformCommunity.isActive || iscommunityActive < 0)
           communityAccess.isActive  = false
@@ -197,21 +197,25 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     }
 
     else if(userhierarchy.isParent){
-      clusterQuery = {"$and":[{hierarchyCode:"CLUSTER", communityDefCode:args.communityId, "isActive":true}]};
-      chapterQuery = {"$and":[{hierarchyCode:"CHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-      subChapterQuery = {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, "isActive":true}]};
-      // communityAccess = MlCommunityAccess.findOne({"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId}]});
-      communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId}]}, context);
-      // communitiesAccess = MlCommunityAccess.find(clusterQuery).fetch();
-      communitiesAccess = mlDBController.find('MlCommunityAccess', clusterQuery, context).fetch();
-      clusters = communitiesAccess && _.map(communitiesAccess, 'clusterId');
-      // communitiesAccess = MlCommunityAccess.find(chapterQuery).fetch();
-      communitiesAccess = mlDBController.find('MlCommunityAccess', chapterQuery, context).fetch();
-      chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
-      // communitiesAccess = MlCommunityAccess.find(subChapterQuery).fetch();
-      communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
-      subChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
+        clusterQuery = {"$and":[{hierarchyCode:"CLUSTER", communityDefCode:args.communityId, "isActive":true}]};
+        communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":"PLATFORM", "communityDefCode":args.communityId}]}, context);
+        communitiesAccess = mlDBController.find('MlCommunityAccess', clusterQuery, context).fetch();
+        clusters = communitiesAccess && _.map(communitiesAccess, 'clusterId');
+        _.each(clusters, function (clusterid) {
+            var Chapters = [];
+            chapterQuery = {"$and":[{hierarchyCode:"CHAPTER", communityDefCode:args.communityId, clusterId:clusterid, "isActive":true}]};
+            communitiesAccess = mlDBController.find('MlCommunityAccess', chapterQuery, context).fetch();
+            Chapters = communitiesAccess && _.map(communitiesAccess, 'chapterId');
+            chapters = _.concat(chapters, Chapters)
+        })
 
+        _.each(chapters, function (chapterid) {
+              var SubChapters = [];
+              subChapterQuery = {"$and":[{hierarchyCode:"SUBCHAPTER", communityDefCode:args.communityId, chapterId:chapterid, "isActive":true}]};
+              communitiesAccess = mlDBController.find('MlCommunityAccess', subChapterQuery, context).fetch();
+              SubChapters = communitiesAccess && _.map(communitiesAccess, 'subChapterId');
+              subChapters = _.concat(subChapters, SubChapters)
+        })
     }
 
 
@@ -389,9 +393,9 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
         }
         communitiesAccess = mlDBController.find('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId, "isActive":true, "hierarchyCode":{"$ne":"PLATFORM"}}]}, context).fetch();
         if(communitiesAccess.length == 0){
-            clusters = {isActive: true, difference:args.clusters || []}
-            chapters = {isActive: true, difference:args.chapters || []};
-            subchapters = {isActive: true, difference:args.subchapters || []};
+            clusters = [{difference:[], isActive:false},{difference:args.clusters, isActive:true}] || []
+            chapters = [{difference:[], isActive:false},{difference:args.chapters, isActive:true}] || [];
+            subchapters = [{difference:[], isActive:false},{difference:args.subchapters , isActive:true}]|| [];
         }
         else{
           clusterids = clusterId == "" && _.map(_.filter(communitiesAccess, {hierarchyCode:"CLUSTER"}), "clusterId") || [];
@@ -412,7 +416,7 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
 
         _.each(chapters, function (item) {
             _.each(item.difference, function (chapterid) {
-                resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterId}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {isActive:item.isActive}, {$set:true}, context);
+                resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterid}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context);
             })
         })
 
@@ -479,6 +483,6 @@ MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, conte
   return communities;
 }
 
-updateDB = (collectionName, query, context) =>{
-    return mlDBController.update(collectionName, query, context)
+updateDB = (collectionName, query, payload, options, context) =>{
+    return mlDBController.update(collectionName, query, payload, options, context)
 }

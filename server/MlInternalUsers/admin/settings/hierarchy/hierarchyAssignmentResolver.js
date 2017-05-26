@@ -1,5 +1,6 @@
 import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
+import mlAssignHierarchy from '../../../admin/../admin/genericTransactions/impl/MlHierarchyAssignment'
 import _ from 'lodash';
 
 MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context, info) => {
@@ -77,4 +78,85 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
     }
   }
 };
+
+MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) => {
+  let response;
+  let levelCode = "";
+  let finalRoles = []
+  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
+  if (department && department.isActive) {
+    response= mlDBController.findOne('MlHierarchyAssignments', {
+      $and: [
+        {parentDepartment:args.departmentId},
+        {parentSubDepartment:args.subDepartmentId},
+        {clusterId:args.clusterId}
+      ]},context)
+  }
+  if(response){
+    let teamStructureAssignment = response.teamStructureAssignment;
+    let userRole = mlAssignHierarchy.getUserRoles(context.userId)
+    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin"){
+      return teamStructureAssignment;
+    }else{
+      let currentRole = null;
+      let isParentRole = false;
+      teamStructureAssignment.map(function (role, key){
+        if(role.roleId==userRole.roleId){
+          //self role for same level hierarchy
+          finalRoles.push(role);
+          currentRole = role
+          if (role.assignedLevel=='cluster' && role.reportingRole=='') {
+            teamStructureAssignment.splice(key,1)
+            finalRoles = teamStructureAssignment;
+            isParentRole = true;
+          }
+        }
+      })
+      if(isParentRole === false){
+        let reportingRole = userRole.roleId
+        //recursively follow reporting hierarchy
+        teamStructureAssignment.map(function (role, key){
+          if(role.reportingRole==reportingRole){
+            reportingRole = role.roleId
+            finalRoles.push(role)
+          }
+        })
+      }
+    }
+    return finalRoles;
+  }
+}
+
+
+MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) => {
+  let hierarchy;
+  let levelCode = "";
+  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
+  if (department && department.isActive) {
+    hierarchy= mlDBController.findOne('MlHierarchyAssignments', {
+      $and: [
+        {parentDepartment:args.departmentId},
+        {parentSubDepartment:args.subDepartmentId},
+        {clusterId:args.clusterId}
+      ]},context)
+  }
+  if(hierarchy){
+    //get all users associated with the hierarchy
+    let usersList = []
+    if(args.clusterId && args.departmentId && args.subDepartmentId && args.roleId){
+        usersList = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId} ,{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.departmentId":args.departmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subDepartmentId":args.subDepartmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":args.roleId},{"profile.isActive":true}]}, context).fetch()
+     }
+    if(usersList){
+      usersList.map(function (user,key) {
+        //remove self user
+        user.username = user.profile.InternalUprofile.moolyaProfile.firstName+" "+user.profile.InternalUprofile.moolyaProfile.lastName;
+        if(context.userId == user._id){
+          usersList.splice(key,1)
+        }
+      })
+    }
+
+    return usersList;
+  }
+}
 

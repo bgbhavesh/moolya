@@ -1,18 +1,16 @@
 
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
-import formHandler from '../../../../commons/containers/MlFormHandler'
-// import {findRoleActionHandler} from '../actions/findRoleAction'
-import {addRoleActionHandler} from '../actions/addRoleAction'
-import MlAssignClustersToRoles from './MlAssignClustersToRoles'
-import MlAssignModulesToRoles from './MlAssignModulesToRoles'
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import React from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import {addRoleActionHandler} from "../actions/addRoleAction";
+import MlAssignClustersToRoles from "./MlAssignClustersToRoles";
+import MlAssignModulesToRoles from "./MlAssignModulesToRoles";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import {OnToggleSwitch, initalizeFloatLabel} from "../../../utils/formElemUtil";
+import {mlFieldValidations} from "../../../../commons/validations/mlfieldValidation";
 let Select = require('react-select');
 
 class MlAddRole extends React.Component{
@@ -61,33 +59,30 @@ class MlAddRole extends React.Component{
   getassignModulesToRoles(details){
     this.setState({'assignModulesToRoles':details})
   }
-  onSubmit(){
-    console.log(this.state.assignRoleToClusters)
-  }
 
-  // async findRole(){
-  //   let roleId=this.props.config;
-  //   const response = await findRoleActionHandler(roleId);
-  //   this.setState({loading:false,data:response});
-  // }
 
   async  addRole() {
-    let roleDetails = {
-      roleName: this.refs.roleName.value,
-      displayName:this.refs.diplayName.value,
-      roleType:this.state.selectedUserType,
-      subChapter:this.state.selectedSubChapter,
-      userType:this.state.selectedBackendUser,
-      about:this.refs.about.value,
-      assignRoles:this.state.assignRoleToClusters,
-      modules:this.state.assignModulesToRoles,
-      isActive:this.refs.isActive.checked
-    };
-    if(!this.refs.diplayName.value || (this.refs.diplayName.value == "")){
-      alert("Display Name is required")
-    }else{
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let roleDetails = {
+        roleName: this.refs.roleName.value,
+        displayName: this.refs.diplayName.value,
+        roleType: this.state.selectedUserType,
+        // subChapter: this.state.selectedSubChapter,
+        userType: this.state.selectedBackendUser,
+        about: this.refs.about.value,
+        assignRoles: this.state.assignRoleToClusters,
+        modules: this.state.assignModulesToRoles,
+        isActive: this.refs.isActive.checked
+      };
+      // if (!this.refs.diplayName.value || (this.refs.diplayName.value == "")) {
+      //   alert("Display Name is required")
+      // } else {
       const response = await addRoleActionHandler(roleDetails)
       return response;
+      // }
     }
   }
 
@@ -101,9 +96,9 @@ class MlAddRole extends React.Component{
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
   }
-  optionsBySelectSubChapter(val){
-    this.setState({selectedSubChapter:val})
-  }
+  // optionsBySelectSubChapter(val){
+  //   this.setState({selectedSubChapter:val})
+  // }
 
 
 
@@ -123,10 +118,10 @@ class MlAddRole extends React.Component{
       }
     ]
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya' , clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya',clearableValue: true}
+      {value: 'moolya', label: 'moolya', clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
     ];
-    let BackendUserOptions=[
+    let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},
       {value: 'External User', label: 'External User'}
     ]
@@ -134,10 +129,10 @@ class MlAddRole extends React.Component{
   data:fetchCountriesSearch{label:country,value:countryCode}
 }
 `;
-    let subChapterQuery=gql` query{
-  data:fetchActiveSubChapters{label:subChapterName,value:_id}
-}
-`;
+//     let subChapterQuery=gql` query{
+//   data:fetchActiveSubChapters{label:subChapterName,value:_id}
+// }
+// `;
 
 
    return (
@@ -161,28 +156,29 @@ class MlAddRole extends React.Component{
               >
                 <div className="form_bg">
                   <form>
-                    <div className="form-group">
-                      <input type="text"  ref="roleName" placeholder="Role Name" className="form-control float-label" id=""/>
+                    <div className="form-group mandatory">
+                      <input type="text"  ref="roleName" placeholder="Role Name" className="form-control float-label" id="" data-required={true} data-errMsg="Role Name is required"/>
 
                     </div>
-                    <div className="form-group">
-                      <input type="text" ref="diplayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                    <div className="form-group mandatory">
+                      <input type="text" ref="diplayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
 
                     </div>
-                    <div className="form-group">
-                      <Select name="form-field-name" ref="userType" placeholder="Backend User Role Type" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label"/>
+                    <div className="form-group mandatory">
+                      <Select name="form-field-name" ref="userType" placeholder="Backend User Role Type" options={UserTypeOptions}  value={this.state.selectedUserType}  onChange={this.onUserTypeSelect.bind(this)} className="float-label" data-required={true} data-errMsg=" Backend User Role Type is required"/>
                     </div>
-                    {this.state.selectedUserType=='non-moolya'&&(
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />
-                    )}
-                    <div className="form-group">
+                    {/*{this.state.selectedUserType=='non-moolya'&&(*/}
+                      {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} />*/}
+                    {/*)}*/}
+                    <div className="form-group mandatory">
                       <Select name="form-field-name" placeholder="Role Type"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true} />
                     </div>
                     <div className="form-group">
                       <textarea placeholder="About" ref="about" className="form-control float-label"></textarea>
                     </div>
 
-                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} selectedBackendUserType={this.state.selectedUserType} selectedSubChapter={this.state.selectedSubChapter}/>
+                    {/*<MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} selectedBackendUserType={this.state.selectedUserType} selectedSubChapter={this.state.selectedSubChapter}/>*/}
+                    <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)} selectedBackendUserType={this.state.selectedUserType} />
 
                     <div className="form-group switch_wrap inline_switch">
                       <label className="">Overall Role Status</label>

@@ -620,6 +620,36 @@ if(Meteor.isServer){
                 "subMenusId":"portfolio"
               }
             ]
+          },
+         {
+            "link": "/admin/transactions/systemsLog  ",
+            "name": "System",
+            "uniqueId": "systems_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/interactionsLog ",
+            "name": "Interactions",
+            "uniqueId": "Interactions_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/conversationsLog ",
+            "name": "Conversations",
+            "uniqueId": "Conversations_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
           }
         ]
       },

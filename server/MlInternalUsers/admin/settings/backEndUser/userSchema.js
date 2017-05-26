@@ -10,12 +10,15 @@ let BackEndUser = `
         password: String,
         username: String,
         profile:userProfile,
-        roleNames:[String]
+        roleNames:[String],
+        latitude:Float,
+        longitude:Float
     }
     
     type userProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,
+        isMoolya      : Boolean
         isActive: Boolean,
         isChapterAdmin :Boolean,
         email: String,
@@ -23,7 +26,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
     }
     
@@ -60,6 +63,8 @@ let BackEndUser = `
         validTo: String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
+        communityHierarchyLevel:Int,
         isActive:Boolean,
         hierarchyLevel:String,
         hierarchyCode:String,
@@ -109,8 +114,10 @@ let BackEndUser = `
         chapterId:String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
         isActive:Boolean,
         hierarchyLevel:Int,
+        communityHierarchyLevel:Int,
         hierarchyCode:String,
         roleName:String,
         departmentId: String,
@@ -142,7 +149,7 @@ let BackEndUser = `
         profileImage:String,
          numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
         
     }
@@ -180,6 +187,7 @@ let BackEndUser = `
     input profile{
         isInternaluser    : Boolean,
         isExternaluser    : Boolean,
+        isMoolya          : Boolean
         email             : String,
         isActive          : Boolean,
         isChapterAdmin    : Boolean,
@@ -188,7 +196,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String,
         profileImage: String
     }
@@ -206,7 +214,7 @@ let BackEndUser = `
       lastName: String,
       userName: String,
       genderType: String,
-      dateOfBirth: String
+      dateOfBirth: Date
     }
     
     input settingsAttributesObject{
@@ -281,6 +289,8 @@ let BackEndUser = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude:Float,
+        longitude:Float
      }
      
        type SocialLinkInfoSchema{

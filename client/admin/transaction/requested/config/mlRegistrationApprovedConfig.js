@@ -1,14 +1,19 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+}
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"registrationInfoTable",
   module:"registrationInfo",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["firstName","lastName"],
-  searchFields:["registrationInfo.firstName","registrationInfo.lastName"],
+  searchFields:["registrationInfo.firstName","status","registrationInfo.lastName"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -16,6 +21,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "firstName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "ContactNo",dataSort:true},
     {dataField: "communityName", title: "Community",dataSort:true},
@@ -59,14 +65,14 @@ const mlUserTypeTableConfig=new MlViewer.View({
     //   handler: (data)=>{console.log(data);}
     // }
   ],
-  graphQlQuery:gql`
+  graphQlQuery:/*gql`
              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
               data:SearchQuery(module:"registrationApprovedInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on RegistrationInfo{
-              
-                              firstName 
+
+                              firstName
                               lastName
                               id:_id
                               contactNumber
@@ -79,13 +85,35 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               assignedUser
               								registrationStatus
                       				registrationDate
-                               
-                 
+
+
                           }
                       }
               }
               }
-              `
+              `*/
+    gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"registrationApprovedInfo",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    totalRecords
+                    data{
+                      ...on RegistrationInfo{
+                              firstName
+                              lastName
+                              id:_id
+                              contactNumber
+                              communityName
+                      			  clusterName
+                      				chapterName
+                              subChapterName
+                              accountType
+                      				source
+                              assignedUser
+              								registrationStatus
+                      				registrationDate
+                          }
+                      }
+              }
+              }`
 });
 
 export {mlUserTypeTableConfig};

@@ -13,7 +13,7 @@ import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
-
+import moment from 'moment'
 var FontAwesome = require('react-fontawesome');
 var options3 = [
   {value: 'Yes', label: 'Yes'},
@@ -29,6 +29,7 @@ export default class Step1forExtenalUser extends React.Component{
       country:'',
       cluster:'',
       chapter:'',
+      subChapter:'',
       selectedCity:'',
       registrationId:'',
       registrationDetails:'',
@@ -44,35 +45,33 @@ export default class Step1forExtenalUser extends React.Component{
       profession:null,
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
+      transactionId:'',
       selectedAccountsType: " "
     }
 
     this.fetchIdentityTypesMaster.bind(this);
     this.updateregistrationInfo.bind(this);
-   this.settingIdentity.bind(this);
+    //this.settingIdentity.bind(this);
 
     return this;
   }
-  async settingIdentity(identity){
+  /*async settingIdentity(identity){
 
-    if(identity == "Individual"){
-      $('#companyId').hide();
-      this.setState({identityType:"Individual"})
-      this.setState({defaultIdentityIndividual:true, defaultIdentityCompany: false})
+   if(identity == "Individual"){
+   this.setState({defaultIdentityIndividual:true, defaultIdentityCompany: false})
+   $('#companyId').hide();
+   }
+   if(identity == "Company"){
+   this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
+   $('#individualId').hide();
+   }
+   if(identity === null){
+   this.setState({defaultIdentityCompany: false, defaultIdentityIndividual:false})
+   i = 0;
+   }
+   }
 
-    }
-    if(identity == "Company"){
-      this.setState({identityType:"Company"})
-     this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
-      $('#individualId').hide();
-    }
-    if(identity === null){
-      this.setState({defaultIdentityCompany: false, defaultIdentityIndividual:false})
-      i = 0;
-    }
-  }
-
-
+   */
   async fetchIdentityTypesMaster() {
     const response = await fetchIdentityTypes(this.props.config);
     this.setState({identityTypesData: response});
@@ -82,6 +81,7 @@ export default class Step1forExtenalUser extends React.Component{
   }
 
   componentWillMount() {
+    console.log(this.props)
     this.fetchIdentityTypesMaster();
 
     let details=this.props.registrationInfo;
@@ -96,12 +96,15 @@ export default class Step1forExtenalUser extends React.Component{
       refered: details.referralType,
       cluster : details.clusterId,
       chapter :details.chapterId,
+      subChapter: details.subChapterId,
       identityType:details.identityType,
       userType:details.userType,
       selectedTypeOfIndustry:details.industry,
-      profession:details.profession
+      profession:details.profession,
+      transactionId : this.props.registrationData.transactionId,
+      selectedAccountsType:details.accountType
     });
-    this.settingIdentity(details.identityType);
+    //this.settingIdentity(details.identityType);
 
   }
 
@@ -132,6 +135,9 @@ export default class Step1forExtenalUser extends React.Component{
   optionsBySelectChapter(value){
     this.setState({chapter:value})
   }
+  optionsBySelectSubChapter(value){
+    this.setState({subChapter:value})
+  }
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
   }
@@ -150,12 +156,14 @@ export default class Step1forExtenalUser extends React.Component{
     this.setState({institutionAssociation:val.value})
     return resp;
   }
-  optionsBySelectTypeOfAccounts(value){
-    this.setState({selectedAccountsType:value})
-  }
   optionsBySelectTypeOfIndustry(value){
     this.setState({selectedTypeOfIndustry:value})
   }
+  optionsBySelectTypeOfAccounts(value){
+    this.setState({selectedAccountsType:value})
+    console.log(value);
+  }
+
   optionsBySelectProfession(val){
     this.setState({profession:val})
   }
@@ -164,44 +172,44 @@ export default class Step1forExtenalUser extends React.Component{
     this.setState({identityType: event.target.name});
     i++;
     if(event.target.name=="Individual"){
-    // this.settingIdentity(event.target.name);
+      // this.settingIdentity(event.target.name);
       $('#companyId').hide();
       this.setState({defaultIdentityIndividual: true, defaultIdentityCompany:false})
 
       if (i>1){
         i = 0;
-       // this.setState({identityType: " "});
-    $('#individualId').show();
+        // this.setState({identityType: " "});
+        $('#individualId').show();
         $('#companyId').show();
       }
     }else if(event.target.name=="Company"){
-     //this.settingIdentity(event.target.name);
+      //this.settingIdentity(event.target.name);
       this.setState({defaultIdentityCompany: true, defaultIdentityIndividual:false})
       $('#individualId').hide();
       if (i>1){
         i = 0;
-       // this.setState({identityType: " "});
-       $('#individualId').show();
+        // this.setState({identityType: " "});
+        $('#individualId').show();
         $('#companyId').show();
       }
-    }
-   }
-
-
- /* checkIdentityCompany(event) {
-    this.setState({identityType: event.target.name});
-    i++;
-    $('#indi').hide();
-    if (i > 1){
-      i = 0;
-      this.setState({identityType: " "});
-      $('#indi').show();
-      $('#comp').show();
     }
   }
 
 
-*/
+  /* checkIdentityCompany(event) {
+   this.setState({identityType: event.target.name});
+   i++;
+   $('#indi').hide();
+   if (i > 1){
+   i = 0;
+   this.setState({identityType: " "});
+   $('#indi').show();
+   $('#comp').show();
+   }
+   }
+
+
+   */
   optionsBySelectUserType(value){
     this.setState({userType:value})
   }
@@ -214,9 +222,9 @@ export default class Step1forExtenalUser extends React.Component{
     } else {
 
       let Details = {
-        registrationDate :this.refs.datetime.value,
         registrationId: this.props.registrationId,
         registrationDetail: {
+          //  registrationDate :this.refs.datetime.value,
           registrationId: this.state.registrationId,
           firstName: this.refs.firstName.value,
           lastName: this.refs.lastName.value,
@@ -227,7 +235,7 @@ export default class Step1forExtenalUser extends React.Component{
           registrationType: this.state.registrationType,
           userName: this.refs.userName.value,
           password: this.refs.password.value,
-          accountType: this.state.subscription,
+          accountType: this.state.selectedAccountsType,
           institutionAssociation: this.state.institutionAssociation,
           companyname: this.refs.companyName.value,
           companyUrl: this.refs.companyUrl.value,
@@ -235,12 +243,13 @@ export default class Step1forExtenalUser extends React.Component{
           referralType: this.state.refered,
           clusterId: this.state.cluster,
           chapterId: this.state.chapter,
+          subChapterId: this.state.subChapter,
           communityName: this.state.coummunityName,
           identityType: this.state.identityType,
           userType: this.state.userType,
           industry: this.state.selectedTypeOfIndustry,
-          profession: this.state.profession
-
+          profession: this.state.profession,
+          // transactionId:this.state.transactionId,
         }
       }
       const response = await updateRegistrationActionHandler(Details);
@@ -319,6 +328,12 @@ export default class Step1forExtenalUser extends React.Component{
     label:chapterName
   }  
 }`;
+    let subChapterQuery= gql`query($id:String,$displayAllOption:Boolean){  
+      data:fetchSubChaptersSelect(id:$id,displayAllOption:$displayAllOption) {
+        value:_id
+        label:subChapterName
+      }  
+    }`;
     /*    let citiesquery = gql`query{
      data:fetchCities {label:name,value:_id
      }
@@ -343,25 +358,20 @@ export default class Step1forExtenalUser extends React.Component{
     }
     `;
 
+    let accountsquery=gql `query{
+    data: FetchAccount {label:accountName,value: _id}
+}
+`;
     let professionQuery=gql` query($industryId:String){
       data:fetchIndustryBasedProfession(industryId:$industryId) {
         label:professionName
         value:_id
       }
     }`;
-
-    let accountsquery=gql ` query  {
-        FetchAccount {
-         value: _id
-         label: templateName
-  }
-}
-`
-
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-
+    let subChapterOption={options: { variables: {id:this.state.chapter,displayAllOption:false}}}
     /*let registrationOptions = [
      { value: '0', label: 'simplybrowsing' },
      { value: '1', label: 'ideator' },
@@ -394,23 +404,33 @@ export default class Step1forExtenalUser extends React.Component{
     console.log(identityTypez);
     let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
     let countryOption = {options: { variables: {countryId:this.state.country}}};
+    let referedActive='',institutionAssociationActive=''
+    if(this.state.refered){
+      referedActive='active'
+    }
+    if(this.state.institutionAssociation){
+      institutionAssociationActive='active'
+    }
     return (
+
       <div>
         {showLoader===true?(<MlLoader/>):(
           <div className="step_form_wrap step1">
 
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
-              <div className="col-md-6 nopadding-left">
+            {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
+            <div className="col-md-6 nopadding-left">
+              <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="datetime" placeholder="Date & Time" className="form-control float-label" id=""  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationDate} disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format('MM/DD/YYYY hh:mm:ss')} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" data-required={true} data-errMsg="First Name is required"  disabled="true"/>
+                      <input type="text" ref="firstName" placeholder="First Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.firstName} className="form-control float-label" data-required={true} data-errMsg="First Name is required" disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required" disabled="true"/>
@@ -422,10 +442,10 @@ export default class Step1forExtenalUser extends React.Component{
                       <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""data-required={true} data-errMsg="Contact Number is required" disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
+                      <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required" />
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} disabled={true}/>
+                      <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} disabled={true} />
                     </div>
                     {/*<div className="form-group">*/}
                     {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
@@ -435,64 +455,71 @@ export default class Step1forExtenalUser extends React.Component{
                       <div className="panel-body">
                         <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} disabled={true}/>
                         <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} disabled={true}/>
+                        <Moolyaselect multiSelect={false} placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} disabled={true}/>
+                        {/* {canSelectIdentity&&
+                         <div className="ml_tabs">
+                         <ul  className="nav nav-pills">
 
-                       {/* {canSelectIdentity&&
-                        <div className="ml_tabs">
-                        <ul  className="nav nav-pills">
+                         {identityTypez.map((i)=>{
 
-                        {identityTypez.map((i)=>{
-
-                        return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
-                        <a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>
-                        </li>);
-                        })}
-                        /!* <li className={this.state.identityType==="Individual"?"active":""}>
-                        <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
-                        </li>
-                        <li className={this.state.identityType==="Company"?"active":""}>
-                        <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
-                        </li>*!/
-                        </ul>
-                        </div>
-                        }*/}
+                         return (<li key={i.identityTypeName} className={that.state.identityType===i.identityTypeName?"active":""}>
+                         <a href={i.identityTypeName==="Individual?"?"#3a":"#4a"} data-toggle="tab" name={i.identityTypeName} onClick={that.checkIdentity.bind(that)}>{i.identityTypeName}&nbsp;</a>
+                         </li>);
+                         })}
+                         /!* <li className={this.state.identityType==="Individual"?"active":""}>
+                         <a  href="#3a" data-toggle="tab" name="Individual" onClick={this.checkIdentity.bind(this)}>Individual&nbsp;</a>
+                         </li>
+                         <li className={this.state.identityType==="Company"?"active":""}>
+                         <a href="#4a" data-toggle="tab" name="Company" onClick={this.checkIdentity.bind(this)}>Company&nbsp;</a>
+                         </li>*!/
+                         </ul>
+                         </div>
+                         }*/}
                         {canSelectIdentity &&
-                        <div className="form-group">
+                        <div className="form-group nomarginbot">
                           {identityTypez.map((i) => {
-                            let checked=null
-                                if(i._id=='individual'){
-                                  checked=that.state.defaultIdentityIndividual
-                                }else if(i._id=='company'){
-                                  checked=that.state.defaultIdentityCompany
-                                }
+                            let checked=null,showRadioChecked=false
+                            let identity=this.state.identityType
+                            if(identity=="Individual"&&i._id=='individual'){
+                              showRadioChecked=true
+                              checked=true
+                            }else if(identity=="Company"&&i._id=='company'){
+                              showRadioChecked=true
+                              checked=true
+                            }else{
+                              showRadioChecked=true
+                              checked=false
+                            }
                             return (
-                            <div key={i._id}>
-                              <div id={`${i._id}Id`}  className="input_types">
+                              <div>{showRadioChecked&&<div key={i._id}>
+                                <div id={`${i._id}Id`}  className="input_types">
 
-                                <input type="checkbox" name={i.identityTypeName} value={i._id}
-                                       onChange={that.checkIdentityIndividual.bind(that) }
-                                       defaultChecked={checked}/><label
-                                htmlFor="radio1"><span><span></span></span>{i.identityTypeName}</label>
-                              </div>
-                             {/* <div id="comp" className="input_types">
-                                <input type="checkbox" name="Company" value="Company"
-                                       onChange={that.checkIdentityCompany.bind(that)}
-                                       defaultChecked={this.state.defaultIdentityCompany}/><label
-                                htmlFor="radio2"><span><span></span></span>Company</label>
-                              </div>*/}
-                            </div>)
+                                  <input type="checkbox" name={i.identityTypeName} value={i._id}
+                                         onChange={that.checkIdentityIndividual.bind(that) }
+                                         checked ={checked} id={i._id}/><label
+                                  htmlFor={i._id}><span><span></span></span>{i.identityTypeName}</label>
+                                </div>
+                                {/* <div id="comp" className="input_types">
+                                 <input type="checkbox" name="Company" value="Company"
+                                 onChange={that.checkIdentityCompany.bind(that)}
+                                 defaultChecked={this.state.defaultIdentityCompany}/><label
+                                 htmlFor="radio2"><span><span></span></span>Company</label>
+                                 </div>*/}
+                              </div>}</div>)
                           })
                           }
+                          <br className="brclear"/>
                         </div>
                         }
                         <div className="clearfix"></div>
                         <div className="form-group mart20">
-                          <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true} disabled="true"/>
+                          <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true} disabled={true}/>
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true} disabled={true}/>
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} disabled={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} disabled={true} />
 
                         </div>
 
@@ -515,8 +542,11 @@ export default class Step1forExtenalUser extends React.Component{
                     </div>
                   </form>
                 </div>
-              </div>
-              <div className="col-md-6 nopadding-right">
+              </ScrollArea>
+            </div>
+            <div className="col-md-6 nopadding-right">
+              <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
                 <div className="form_bg">
                   <form>
 
@@ -527,10 +557,14 @@ export default class Step1forExtenalUser extends React.Component{
                       <input type="Password" placeholder="Password" ref="password" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.password} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery}  queryOptions={accountsOption}  onSelect={that.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
+                      {/*<span className="placeHolder active">Account Type</span>*/}
+                      <Moolyaselect multiSelect={false} placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery}  onSelect={that.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true} disabled={true}/>
+
+                      {/*<Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} />*/}
                     </div>
                     <div className="form-group">
-                      <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled="true"/>
+                      <span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Institution</span>
+                      <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true} />
                     </div>
                     <div className="form-group">
                       <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyname}  className="form-control float-label" id="" disabled="true"/>
@@ -539,28 +573,30 @@ export default class Step1forExtenalUser extends React.Component{
                       <input type="text" ref="companyUrl" placeholder="Company URL"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyUrl}  className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id="" disabled="true" />
                     </div>
                     <div className="form-group mandatory">
-                      <Select name="form-field-name" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required" disabled="true"/>
+                      <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
+                      <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required" overflow="scroll" disabled={true}/>
                     </div>
 
-                   {/* <div className="panel panel-default">
-                      <div className="panel-heading">Process Status</div>
-                      <div className="panel-body button-with-icon">
-                        <button type="button" className="btn btn-labeled btn-success"  onClick={this.sendSmsVerification.bind(this)} >
-                          <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
-                        <button type="button" className="btn btn-labeled btn-success" onClick={this.sendEmailVerification.bind(this)}>
-                          <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
-                        /!*<button type="button" className="btn btn-labeled btn-success" >
-                         <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*!/
-                      </div>
-                    </div>*/}
+                    {/* <div className="panel panel-default">
+                     <div className="panel-heading">Process Status</div>
+                     <div className="panel-body button-with-icon">
+                     <button type="button" className="btn btn-labeled btn-success"  onClick={this.sendSmsVerification.bind(this)} >
+                     <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
+                     <button type="button" className="btn btn-labeled btn-success" onClick={this.sendEmailVerification.bind(this)}>
+                     <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
+                     /!*<button type="button" className="btn btn-labeled btn-success" >
+                     <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*!/
+                     </div>
+                     </div>*/}
 
                   </form>
                 </div>
-              </div>
-            </ScrollArea>
+              </ScrollArea>
+            </div>
+
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>
         )}
@@ -568,4 +604,3 @@ export default class Step1forExtenalUser extends React.Component{
     )
   }
 };
-/*export default Step1 = formHandler()(Step1);*/

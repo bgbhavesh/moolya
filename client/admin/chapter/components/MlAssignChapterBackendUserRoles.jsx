@@ -276,7 +276,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.setState({roleForm: data});
     this.rolesArrayCreate(data, this.props.assignedRoles)
     const userDefaultObj = getAdminUserContext();
-    if (userDefaultObj.hierarchyCode == 'PLATFORM' || userDefaultObj.hierarchyCode == "CLUSTER")
+    if ((userDefaultObj.hierarchyCode == 'PLATFORM' || userDefaultObj.hierarchyCode == "CLUSTER") && this.props.isDefaultSubChapter)
       this.setState({showIsChapterAdmin: true})
     else
       this.setState({showIsChapterAdmin: false});

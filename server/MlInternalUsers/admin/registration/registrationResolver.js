@@ -35,14 +35,13 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.chapterName=subChapterDetails.chapterName;
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
-  args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
+
+ // args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
+  args.registration.registrationDate=date
+  let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
-  // let id = MlRegistration.insert({registrationInfo : args.registration,status:"Pending"});
-  //create transaction
-  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
-  args.registration.transactionId = resp.result;
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails, transactionId: resp.result}, context)
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
 
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
@@ -93,7 +92,8 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     registrationInfo.companyUrl=userRegisterInfo.companyUrl
     registrationInfo.remarks=userRegisterInfo.remarks
     registrationInfo.referralType=userRegisterInfo.referralType
-    registrationInfo.registrationDate=moment(date||new Date()).format('DD/MM/YYYY HH:mm:ss')
+   // registrationInfo.registrationDate=moment(date||new Date()).format('DD/MM/YYYY HH:mm:ss')
+  registrationInfo.registrationDate=new Date()
   validationCheck=MlRegistrationPreCondition.validateEmailClusterCommunity(registrationInfo);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
@@ -184,6 +184,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     var validationCheck=null;
     var result=null;
     var registerDetails=null;
+    var subChapterDetails=null;
       var id = args.registrationId;
       if (args.registrationDetails) {
         let details = args.registrationDetails || {};
@@ -193,14 +194,21 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.communityName!=details.communityName)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
        }
-        // let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
-        let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: details.chapterId}, context) || {};
+       //if subChapter is selected by admin
+        if(details.subChapterId){
+           subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: details.subChapterId}, context) || {};
+        }else{  //default moolya subChapter will be taken
+          // let subChapterDetails=MlSubChapters.findOne({chapterId:details.chapterId})||{};
+           subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: details.chapterId}, context) || {};
+        }
 
         details.clusterName = subChapterDetails.clusterName;
         details.chapterName = subChapterDetails.chapterName;
         details.subChapterName = subChapterDetails.subChapterName;
         details.subChapterId = subChapterDetails._id;
 
+
+        details.registrationDate = registerDetails&&registerDetails.registrationDate?registerDetails.registrationDate:new Date();
         // let communityDetails=MlCommunity.findOne({subChapterId:details.subChapterId,communityDefCode:details.registrationType})||{};
         let communityDetails = mlDBController.findOne('MlCommunity', {
             subChapterId: details.subChapterId,
@@ -253,7 +261,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           communityDefName: details.communityDefName,
           communityType: '',
           isDefault: false,
-          isActive: false,
+          isActive: true,
+          isApprove:false,
           accountType: details.accountType,
           optional: false,
           userType: details.userType || null,
@@ -321,7 +330,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               }
               let resp = MlResolver.MlMutationResolver['updateRegistrationTransaction'] (obj,{'transactionInfo':transactionInfo},context, info);
               return updatedResponse;
-          }x``
+          }
 
 
       }else {
@@ -365,54 +374,67 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 
     let temp=0
         let registrationRecord=MlRegistration.findOne(args.registrationId)
-      if(registrationRecord&&registrationRecord.status!='Approved'){
-        let kycDocuments=registrationRecord.kycDocuments
-        if(kycDocuments&&kycDocuments.length>=1){
-          //mandatory doc exist or not
-           mandatorykycDoc = kycDocuments.filter(function(item) {
-            return item.isMandatory==true;
-          });
-          if(mandatorykycDoc.length>=1){
-            //mandatory document should approved and upload
-            kycDoc = mandatorykycDoc.filter(function(item) {
-              return item.status == 'Approved'&&item.docFiles.length>=1&&item.isMandatory==true;
+    if(registrationRecord&&registrationRecord.emails.length>0){
+     let email=registrationRecord.emails;
+      emailVerified=_.find(email,function(mail){
+       return mail.verified==true
+     })
+      if(emailVerified){
+        if(registrationRecord&&registrationRecord.status!='Approved'){
+          let kycDocuments=registrationRecord.kycDocuments
+          if(kycDocuments&&kycDocuments.length>=1){
+            //mandatory doc exist or not
+            mandatorykycDoc = kycDocuments.filter(function(item) {
+              return item.isMandatory==true;
             });
-            if(kycDoc&&kycDoc.length==mandatorykycDoc.length){
-              //nonmandatory document exist should approved and upload
-            nonMandatorykycDoc = kycDocuments.filter(function(item) {
+            if(mandatorykycDoc.length>=1){
+              //mandatory document should approved and upload
+              kycDoc = mandatorykycDoc.filter(function(item) {
+                return item.status == 'Approved'&&item.docFiles.length>=1&&item.isMandatory==true;
+              });
+              if(kycDoc&&kycDoc.length==mandatorykycDoc.length){
+                //nonmandatory document exist should approved and upload
+                nonMandatorykycDoc = kycDocuments.filter(function(item) {
+                  return item.docFiles.length>=1&&item.isMandatory==false;
+                });
+                if(nonMandatorykycDoc.length>=1){
+                  status = nonMandatorykycDoc.filter(function(item) {
+                    return item.status == 'Approved'
+                  });
+                  if(status&&nonMandatorykycDoc.length==status.length){
+                    temp=1;
+                  }
+                }else{
+                  temp=1;
+                }
+              }
+            }else{
+              nonMandatorykycDoc = kycDocuments.filter(function(item) {
                 return item.docFiles.length>=1&&item.isMandatory==false;
               });
               if(nonMandatorykycDoc.length>=1){
                 status = nonMandatorykycDoc.filter(function(item) {
-                  return item.status == 'Approved'
+                  return  item.status == 'Approved'
                 });
                 if(status&&nonMandatorykycDoc.length==status.length){
-                      temp=1;
-                    }
-              }else{
-                temp=1;
+                  temp=1;
+                }
               }
             }
-          }else{
-           nonMandatorykycDoc = kycDocuments.filter(function(item) {
-              return item.docFiles.length>=1&&item.isMandatory==false;
-            });
-            if(nonMandatorykycDoc.length>=1){
-            status = nonMandatorykycDoc.filter(function(item) {
-                return  item.status == 'Approved'
-              });
-              if(status&&nonMandatorykycDoc.length==status.length){
-                temp=1;
-              }
-            }
-          }
 
-        }
+          }
         }else{
-        let code = 555;
-        let response = new MlRespPayload().errorPayload("User already approved", code);
+          let code = 555;
+          let response = new MlRespPayload().errorPayload("User already approved", code);
+          return response;
+        }
+      }else{
+        let code = 556;
+        let response = new MlRespPayload().errorPayload("Email verification not done", code);
         return response;
       }
+    }
+
     let updatedResponse;
         if(temp==1){
          // updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Approved"}});
@@ -422,6 +444,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 
     if(updatedResponse===1){
         mlRegistrationRepo.updateExternalProfileInfo(args.registrationId,'all',context);
+        mlRegistrationRepo.ApproveExternalProfileInfo(args.registrationId,'all',context)
     }
 
     //Portfolio Request Generation
@@ -436,6 +459,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       "clusterId" :regRecord.registrationInfo.clusterId,
       "chapterId" : regRecord.registrationInfo.chapterId,
       "subChapterId" :regRecord.registrationInfo.subChapterId,
+      "communityId" :regRecord.registrationInfo.communityId,
+      "createdAt":new Date(),
       "source" : "self",
       "createdBy" : "admin",
       "status" : "Yet To Start",

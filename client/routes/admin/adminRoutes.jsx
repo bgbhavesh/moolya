@@ -18,6 +18,7 @@ import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlTransactionRequested from '../../admin/transaction/requests/components/MlTransactionRequested'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
+import MlSystemsLogList from '../../admin/transaction/systemsLog/component/MlSystemsLogList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
@@ -38,10 +39,16 @@ import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 
+import  MlAdminSwitchProfile from '../../admin/profile/component/MlAdminSwitchProfile'
 import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio'
 import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
 import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
 import MlTransactionApprovals from '../../admin/transaction/requests/components/MlTransactionApprovals'
+import MlInteractionsLogList from '../../admin/transaction/interactions/component/MlinteractionsLogList'
+import MlConversationsLogList from '../../admin/transaction/conversations/component/MlConversationsLogList'
+
+
+
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
   FlowRouter._askedToWait = true;
@@ -88,13 +95,18 @@ adminSection.route('/myprofile/AddressBook', {
   }
 });
 
-adminSection.route('/myprofile/Settings', {
+adminSection.route('/myprofile/', {
   name: 'myprofile',
   action(){
     mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileSettings/>})
   }
 });
-
+adminSection.route('/switchprofile', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAdminSwitchProfile/>})
+  }
+});
 
 adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',
@@ -204,6 +216,29 @@ adminSection.route('/transactions/registrationRequested', {
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }
 });
+
+
+adminSection.route('/transactions/systemsLog', {
+  name: 'systems_Log',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlSystemsLogList/>})
+  }
+});
+
+adminSection.route('/transactions/interactionsLog', {
+  name: 'Interactions_Log',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlInteractionsLogList/>})
+  }
+});
+
+adminSection.route('/transactions/conversationsLog', {
+  name: 'Conversations_Log',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlConversationsLogList/>})
+  }
+});
+
 
 adminSection.route('/transactions/portfolioRequested/edit', {
     name: 'transaction_portfolio_requested_edit',

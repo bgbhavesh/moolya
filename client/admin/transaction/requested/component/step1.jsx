@@ -13,8 +13,8 @@ import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
-import {findAccountTypeActionHandler} from '../../../settings/template/actions/findTemplateTypeAction'
-
+import {findAccountTypeActionHandler} from '../../../settings/accountType/actions/findAccountTypeAction'
+import moment from 'moment'
 var FontAwesome = require('react-fontawesome');
 var options3 = [
   {value: 'Yes', label: 'Yes'},
@@ -30,6 +30,7 @@ export default class step1 extends React.Component{
       country:'',
       cluster:'',
       chapter:'',
+      subChapter:'',
       selectedCity:'',
       registrationId:'',
       registrationDetails:'',
@@ -96,6 +97,7 @@ export default class step1 extends React.Component{
       refered: details.referralType,
       cluster : details.clusterId,
       chapter :details.chapterId,
+      subChapter: details.subChapterId,
       identityType:details.identityType,
       userType:details.userType,
       selectedTypeOfIndustry:details.industry,
@@ -133,6 +135,9 @@ export default class step1 extends React.Component{
   }
   optionsBySelectChapter(value){
     this.setState({chapter:value})
+  }
+  optionsBySelectSubChapter(value){
+    this.setState({subChapter:value})
   }
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
@@ -220,7 +225,7 @@ export default class step1 extends React.Component{
       let Details = {
         registrationId: this.props.registrationId,
         registrationDetail: {
-          registrationDate :this.refs.datetime.value,
+        //  registrationDate :this.refs.datetime.value,
           registrationId: this.state.registrationId,
           firstName: this.refs.firstName.value,
           lastName: this.refs.lastName.value,
@@ -239,12 +244,13 @@ export default class step1 extends React.Component{
           referralType: this.state.refered,
           clusterId: this.state.cluster,
           chapterId: this.state.chapter,
+          subChapterId: this.state.subChapter,
           communityName: this.state.coummunityName,
           identityType: this.state.identityType,
           userType: this.state.userType,
           industry: this.state.selectedTypeOfIndustry,
           profession: this.state.profession,
-          transactionId:this.state.transactionId,
+          // transactionId:this.state.transactionId,
         }
       }
       const response = await updateRegistrationActionHandler(Details);
@@ -323,6 +329,12 @@ export default class step1 extends React.Component{
     label:chapterName
   }  
 }`;
+    let subChapterQuery= gql`query($id:String,$displayAllOption:Boolean){  
+      data:fetchSubChaptersSelect(id:$id,displayAllOption:$displayAllOption) {
+        value:_id
+        label:subChapterName
+      }  
+    }`;
     /*    let citiesquery = gql`query{
      data:fetchCities {label:name,value:_id
      }
@@ -360,7 +372,7 @@ export default class step1 extends React.Component{
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-
+    let subChapterOption={options: { variables: {id:this.state.chapter,displayAllOption:false}}}
     /*let registrationOptions = [
      { value: '0', label: 'simplybrowsing' },
      { value: '1', label: 'ideator' },
@@ -393,6 +405,13 @@ export default class step1 extends React.Component{
     console.log(identityTypez);
     let canSelectIdentity=identityTypez&&identityTypez.length>0?true:false;
     let countryOption = {options: { variables: {countryId:this.state.country}}};
+    let referedActive='',institutionAssociationActive=''
+    if(this.state.refered){
+      referedActive='active'
+    }
+    if(this.state.institutionAssociation){
+      institutionAssociationActive='active'
+    }
     return (
 
       <div>
@@ -406,7 +425,7 @@ export default class step1 extends React.Component{
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.registrationDate} className="form-control float-label" id="" disabled="true"/>
+                      <input type="text" ref="datetime" placeholder="Date & Time" defaultValue={moment(that.state.registrationDetails&&that.state.registrationDetails.registrationDate).format('MM/DD/YYYY hh:mm:ss')} className="form-control float-label" id="" disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID"  defaultValue={that.state.registrationId} className="form-control float-label" id="" disabled="true"/>
@@ -437,7 +456,7 @@ export default class step1 extends React.Component{
                       <div className="panel-body">
                         <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)}/>
                         <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)}/>
-
+                        <Moolyaselect multiSelect={false} placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)}/>
                         {/* {canSelectIdentity&&
                          <div className="ml_tabs">
                          <ul  className="nav nav-pills">
@@ -545,7 +564,7 @@ export default class step1 extends React.Component{
                       {/*<Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} />*/}
                     </div>
                     <div className="form-group">
-                      <span className="placeHolder active">Do You Want To Associate To Any Of The Institution</span>
+                      <span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Institution</span>
                       <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" />
                     </div>
                     <div className="form-group">
@@ -558,7 +577,7 @@ export default class step1 extends React.Component{
                       <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id="" />
                     </div>
                     <div className="form-group mandatory">
-                      <span className="placeHolder active">How Did You Know About Us</span>
+                      <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
                       <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required" />
                     </div>
 

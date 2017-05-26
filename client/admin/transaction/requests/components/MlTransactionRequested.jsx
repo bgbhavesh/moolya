@@ -15,7 +15,7 @@ import gql from 'graphql-tag';
 import {createRequestsActionHandler} from '../actions/createRequests'
 import {findRequestssActionHandler} from '../actions/findRequests'
 
-export default class MlTransactionRequested extends Component {
+export default class sMlTransactionRequested extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -23,7 +23,11 @@ export default class MlTransactionRequested extends Component {
       requestType: null,
       createRequest:false,
       popoverOpen: false,
-      requestTypeId: " "
+      requestTypeId: " ",
+      cluster:null,
+      chapter:null,
+      subChapter:null,
+      community:null
     }
     this.toggle = this.toggle.bind(this);
     this.findRequestDetails.bind(this);
@@ -42,6 +46,10 @@ export default class MlTransactionRequested extends Component {
     let requests={
       requestTypeId:this.state.requestTypeId,
       requestDescription:this.refs.about.value,
+      cluster:this.state.cluster,
+      chapter:this.state.chapter,
+      subChapter:this.state.subChapter,
+      community:this.state.community,
       requestsStatus:{
         code: "1",
         description:"requested"
@@ -49,7 +57,7 @@ export default class MlTransactionRequested extends Component {
       userId:Meteor.userId(),
       requestId: " ",
       status:"Pending",
-      requestsCreatedDate: new Date()
+      transactionCreatedDate: new Date()
     }
     const response = await createRequestsActionHandler(requests);
     if(response.success){
@@ -65,6 +73,23 @@ export default class MlTransactionRequested extends Component {
     }
 
   }
+
+  optionsBySelectCluster(index, selectedIndex){
+    this.setState({cluster:index})
+  }
+
+  optionsBySelectChapter(index, selectedIndex){
+    this.setState({chapter:index})
+  }
+
+  optionsBySelectSubChapter(index, selectedIndex){
+    this.setState({subChapter:index})
+  }
+
+  optionsBySelectCommunity(index, selectedIndex){
+    this.setState({community:index})
+  }
+
 
   cancel(){
     this.setState({requestType:null})
@@ -83,7 +108,7 @@ export default class MlTransactionRequested extends Component {
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {
-          requestsCreatedDate:moment(requestDetails[i].requestsCreatedDate).format('MM/DD/YYYY HH:mm:ss'),
+          transactionCreatedDate: moment(requestDetails[i].transactionCreatedDate).format('MM/DD/YYYY hh:mm:ss'),
           requestDescription:requestDetails[i].requestDescription,
           requestTypeName:requestDetails[i].requestTypeName,
           requestId: requestDetails[i].requestId,
@@ -98,7 +123,7 @@ export default class MlTransactionRequested extends Component {
     }
 
   isExpandableRow(row) {
-    if (row.requestsCreatedDate!=undefined) return true;
+    if (row.transactionCreatedDate!=undefined) return true;
     else return false;
   }
 
@@ -125,9 +150,9 @@ export default class MlTransactionRequested extends Component {
         handler: this.creatRequestType.bind(this)
       }
     ];
-    const options = {
+   /* const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
-    };
+    };*/
     const selectRow = {
       mode: 'checkbox',
       bgColor: '#feeebf',
@@ -140,33 +165,70 @@ export default class MlTransactionRequested extends Component {
     value:_id
   }
 }`;
+    var WinHeight = $(window).height();
+    var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
+    const config = {
+      maxHeight: tblHeight+'px',
+      striped:true,
+      hover:true,
+    };
+   config['options']={
+      sizePerPage:10,
+      sizePerPageList: [10,20,50,100,200,300,500,700,1000,2000,3000],
+      clearSearch: false,
+     expandRowBgColor: 'rgb(242, 255, 163)'}
+    let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
+
+    let chapterquery=gql`query($id:String){
+    data:fetchChapters(id:$id) {
+        value:_id,
+        label:chapterName
+      }
+    }`;
+
+    let subDepartmentquery=gql`query($id:String){
+      data:fetchSubDepartments(id:$id) {
+        value:_id
+        label:subDepartmentName
+      }
+    }`;
+
+    let subChapterquery=gql`query($chapterId:String,$clusterId:String){
+        data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
+          value:_id
+          label:subChapterName
+        }
+    }`;
+
+    let communityQuery=gql`query($clusterId:String, $chapterId:String, $subChapterId:String){
+      data:fetchCommunitiesForRolesSelect(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId) {
+          value:code
+          label:name
+      }
+    }`;
+
+    let chapterOption={options: { variables: {id:this.state.cluster}}};
+    let subchapterOption={options: { variables: {chapterId:this.state.chapter,clusterId:this.state.cluster}}};
+    let communityOption={options: { variables: {clusterId:this.state.cluster, chapterId:this.state.chapter, subChapterId:this.state.subChapter}}};
     return (
       <div className="admin_main_wrap" >
         <div className="admin_padding_wrap">
           <h2>Requests</h2>
           <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-            <BootstrapTable  data={ this.state.requetsInfo }
-                             options={ options }
-                             hover={true}
+            <BootstrapTable {...config} data={ this.state.requetsInfo }
                              expandableRow={ this.isExpandableRow }
                              expandComponent={ this.expandComponent.bind(this) }
                              selectRow= { selectRow }
-                             pagination
-
+                            pagination
+                            bodyStyle={{overflow: 'overlay','overflowX':'hidden'}}
 >
               <TableHeaderColumn dataField="requestId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
-              <TableHeaderColumn dataField="requestsCreatedDate"   >Date&Time</TableHeaderColumn>
+              <TableHeaderColumn dataField="transactionCreatedDate"   >Date&Time</TableHeaderColumn>
               <TableHeaderColumn dataField="requestId" >RequestId</TableHeaderColumn>
               <TableHeaderColumn dataField="requestTypeName">Request Type</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             </BootstrapTable>
-            </ScrollArea>
+
           </div>
           {/*{this.state.createRequest?(<CreateRequestComponent openPopUp={true}/>):""}*/}
           <div className="overlay"></div>
@@ -181,6 +243,25 @@ export default class MlTransactionRequested extends Component {
                     </div>
                     <div className="form-group">
                       <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
+                    </div>
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(this)} />
+                    </div>
+
+                    <div className="form-group">
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(this)} />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={this.optionsBySelectSubChapter.bind(this)} />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'} reExecuteQuery={true} queryOptions={communityOption} onSelect={this.optionsBySelectCommunity.bind(this)} />
+                      </div>
                     </div>
                     <div className="assign-popup">
                       <a data-toggle="tooltip" title="Submit" data-placement="top" onClick={this.createRequest.bind(this)} className="hex_btn hex_btn_in">

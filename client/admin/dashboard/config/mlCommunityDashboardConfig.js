@@ -1,6 +1,6 @@
 import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import gql from 'graphql-tag'
-import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
+import MlCommunityMapView from "../component/MlCommunityMapView"
 import MlCommunityList from '../component/MlCommunityList'
 import React from 'react';
 
@@ -41,16 +41,7 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
                           isInternaluser,
                           isExternaluser,
                           isActive,
-                          email,
-                          InternalUprofile{
-                              moolyaProfile{
-                                userType,
-                                roleType,
-                                displayName,
-                                globalAssignment,
-                                isActive
-                              }
-                          }    
+                          email
                       }
                   }
               }      
@@ -60,41 +51,44 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
 
 const mlCommunityDashboardMapConfig=new MlViewer.View({
   name:"communityDashBoardMap",
+  module:"community",
   viewType:MlViewerTypes.MAP,
   extraFields:[],
   throttleRefresh:true,
   pagination:false,
   sort:false,
-  viewComponent:<MlMapViewContainer />,
   queryOptions:true,
   buildQueryOptions:(config)=>{
     if(!config.params){
       let userDefaultObj = getAdminUserContext()
-      return {context:{clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}}
+      return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+        chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+        userType:config.params&&config.params.userType?config.params.userType:"All"}
     }
     else
       return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
         chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null}
+        subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+        userType:config.params&&config.params.userType?config.params.userType:"All"}
   },
+  viewComponent:<MlCommunityMapView params={this.params}/>,
   graphQlQuery:gql`
-    query($clusterId:String, $chapterId:String, $subChapterId:String){
-      data:fetchCommunities(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
-        totalRecords
-          data{
-            ...on Community{
-              name,
-              displayName,
-              code,
-              communityImageLink,
-              showOnMap,
-              aboutCommunity,
-              isActive
-            }
+    query($clusterId:String, $chapterId:String, $subChapterId:String, $userType:String){
+          data:fetchUsersForDashboard(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, userType:$userType){
+              totalRecords
+              data{
+                  ...on BackendUsers{
+                      _id,
+                      text:profile{email}
+                      isActive:profile{isActive}                      
+                      lat:latitude
+                      lng:longitude
+                      
+                  }
+              }      
           }
-        }
-      }
-  `
+      }`
 });
 
 export {mlCommunityDashboardListConfig,mlCommunityDashboardMapConfig};

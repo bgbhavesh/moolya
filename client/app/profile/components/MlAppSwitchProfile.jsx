@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler} from '../actions/switchUserProfilesActions';
+import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler,blockProfileActionHandler} from '../actions/switchUserProfilesActions';
 import _ from 'lodash';
 
 export default class MlAppSwitchProfile extends React.Component{
@@ -11,6 +11,7 @@ export default class MlAppSwitchProfile extends React.Component{
       this.fetchExternalUserProfiles.bind(this);
       this.setDefaultUserProfile.bind(this);
       this.deactivateUserProfile.bind(this);
+      this.blockUserProfile.bind(this);
       this.onSlideIndexChange.bind(this);
       this.initializeSwiper.bind(this);
     return this;
@@ -67,6 +68,8 @@ export default class MlAppSwitchProfile extends React.Component{
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
     const response = await setDefaultProfileActionHandler(profileDetails.registrationId);
     if(response&&response.success){
+      var resp=await this.fetchExternalUserProfiles();
+      this.initializeSwiper();
       toastr.success("Default Profile set successfully");
     }else{
       //throw error
@@ -78,10 +81,23 @@ export default class MlAppSwitchProfile extends React.Component{
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
     const response = await deActivateProfileProfileActionHandler(profileDetails.registrationId);
     if(response&&response.success){
+      var resp=await this.fetchExternalUserProfiles();
+      this.initializeSwiper();
       toastr.success("Profile deactivated successfully");
     }else{
       //throw error
       toastr.success("Failed to deactivate the profile");
+    }
+  }
+
+  async blockUserProfile(){
+    let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+    const response = await blockProfileActionHandler(profileDetails.registrationId);
+    if(response&&response.success){
+      toastr.success("Profile blocked successfully");
+    }else{
+      //throw error
+      toastr.success("Failed to block the profile");
     }
   }
 
@@ -153,7 +169,7 @@ export default class MlAppSwitchProfile extends React.Component{
                 <input type="text" placeholder="City" className="form-control float-label"  value={profileDetails.chapterName} disabled/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Status" className="form-control float-label"  value={profileDetails.isProfileActive} disabled/>
+                <input type="text" placeholder="Status" className="form-control float-label"  value={profileDetails.isActive} disabled/>
               </div>
             </div>
 
@@ -163,6 +179,9 @@ export default class MlAppSwitchProfile extends React.Component{
               </div>
               <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
                 <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
+              </div>
+              <div className="col-md-4" onClick={this.blockUserProfile.bind(this)}>
+                <a href="#" className="fileUpload mlUpload_btn">Block Profile</a>
               </div>
             </div>
 

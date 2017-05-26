@@ -1,6 +1,7 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import geocoder from "geocoder";
+import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
@@ -35,7 +36,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             subChapterCode: "ML_" + chapter.chapterName + "_" + subChapterName,
             subChapterName: subChapterName+"-"+chapter.chapterName,
             subChapterDisplayName: subChapterName,
-            associatedChapters: [],
+            // associatedChapters: [],
             subChapterUrl: "",
             isUrlNotified: false,
             subChapterEmail: "",
@@ -105,7 +106,8 @@ MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
-
+  var response = mlDBController.findOne('MlChapters', {_id: args.chapterId}, context) || []
+  return response
 }
 
 MlResolver.MlQueryResolver['fetchChaptersWithoutAll'] = (obj, args, context, info) => {
@@ -137,7 +139,6 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) => {
-  // let result=MlChapters.find({isActive:true}).fetch()||[];
   let result = mlDBController.find('MlChapters', {isActive:true}, context).fetch()||[];
   return result;
 }
@@ -190,11 +191,17 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
          result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:false,isActive: true}, context).fetch()||[];
          result.push({"subChapterName" : "All","_id" : "all"});
        }
-    }else{
-         result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
-        if(result.length > 0){
-             result.push({"subChapterName" : "All","_id" : "all"});
-        }
+    }else {
+      // result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
+      var query = args.chapterId ? {
+        chapterId: args.chapterId,
+        isDefaultSubChapter: false,
+        isActive: true
+      } : {isDefaultSubChapter: false, isActive: true}
+      result = mlDBController.find('MlSubChapters', query, context).fetch() || [];
+      if (result.length > 0 && args.chapterId) {
+        result.push({"subChapterName": "All", "_id": "all"});
+      }
     }
   return result
 }
@@ -227,24 +234,70 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectMoolya'] = (obj, args, context
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
   // let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
-  let result = mlDBController.find('MlSubChapters', {
-      isActive: true,
-      isDefaultSubChapter: false
-    }, context).fetch() || [];
+  var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+  var queryChange;
+  if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+    queryChange = {
+      $and: [{
+        isActive: true,
+        isDefaultSubChapter: false
+      }, {
+        '_id': {
+          $in: curUserProfile.defaultSubChapters
+        }
+      }]
+    }
+  } else {
+    queryChange = {isActive: true, isDefaultSubChapter: false}   //platform_admin
+  }
+  let result = mlDBController.find('MlSubChapters', queryChange, context).fetch() || [];
   return result
 }
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
-  let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
-  geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
-    if (err) {
-      return "Invalid Country Name";
-    }
-    args.subChapter.latitude = data.results[0].geometry.location.lat;
-    args.subChapter.longitude = data.results[0].geometry.location.lng;
+  try {
     args.subChapter.isDefaultSubChapter = false;
     let subChapterId = createSubChapter(args.subChapter, context)
+
     if (subChapterId) {
+
+      MlResolver.MlMutationResolver['createCommunityAccess'](obj, {
+        clusterId: args.subChapter.clusterId,
+        chapterId: args.subChapter.chapterId,
+        subChapterId: subChapterId,
+        moduleName: "COMMUNITY",
+        actionName: "CREATE"
+      }, context, info)
+
+      MlResolver.MlMutationResolver['createCommunity'](obj, {
+        clusterId: args.subChapter.clusterId,
+        clusterName: args.subChapter.clusterName,
+        chapterId: args.subChapter.chapterId,
+        chapterName: args.subChapter.chapterName,
+        subChapterId: subChapterId,
+        subChapterName: args.subChapter.subChapterName,
+        moduleName: "COMMUNITY",
+        actionName: "CREATE"
+      }, context, info)
+
+      let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
+
+      geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+        if (err) {
+          console.log('Error while creating sub-chapter')
+          return "Invalid Country Name";
+        }
+        let subChapter = MlSubChapters.findOne({"_id": subChapterId})
+        if (subChapter) {
+          var latitude = data.results[0].geometry.location.lat;
+          var longitude = data.results[0].geometry.location.lng;
+          mlDBController.update('MlSubChapters', subChapterId, {
+            latitude: latitude,
+            longitude: longitude
+          }, {$set: true}, context)
+        }
+      }));
+
       let code = 200;
       let response = new MlRespPayload().successPayload(subChapterId, code);
       return response
@@ -254,7 +307,11 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
       let response = new MlRespPayload().errorPayload("Unable To Create Subchapter", code);
       return response
     }
-  }), {key: Meteor.settings.private.googleApiKey});
+  } catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(e.message, code);
+    return response
+  }
 }
 
 
@@ -282,8 +339,9 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
           }
         }
         if(resp){
-          if(args.subChapterDetails && args.subChapterDetails.chapterId){
-            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
+          if(subChapter && subChapter.chapterId){   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
+            // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
           }
             let code = 200;
             let result = {subChapter: resp}

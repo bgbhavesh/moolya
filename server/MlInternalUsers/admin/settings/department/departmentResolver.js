@@ -166,7 +166,13 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartment'] = (obj, args, context, 
 
 MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentRoles'] = (obj, args, context, info) => {
   // let resp = MlDepartments.find({isMoolya: args.isMoolya, isActive: true}).fetch();
-  let resp = mlDBController.find('MlDepartments', {isMoolya: args.isMoolya, isActive: true,"depatmentAvailable.cluster": {$in: ["all",args.clusterId]}}, context).fetch();
+  let resp = mlDBController.find('MlDepartments', {
+    $or: [{
+      isMoolya: args.isMoolya,
+      isActive: true,
+      "depatmentAvailable.cluster": {$in: ["all", args.clusterId]}
+    }, {isSystemDefined: true, isActive: true}]
+  }, context).fetch();
     return resp;
 }
 
@@ -177,7 +183,7 @@ MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, contex
       $and: [{
         isMoolya: args.isMoolya,
         isActive: true
-      }, {depatmentAvailable: {$elemMatch: {subChapter: args.subChapter}}}]
+      }, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', args.subChapter]}, isActive: true}}}]
     }, {isSystemDefined: true, isActive: true}]
   }).fetch();
 
@@ -254,6 +260,7 @@ MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, cont
   return resp;
 }
 
+<<<<<<< HEAD
 MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] = (obj, args, context, info) => {
   if(!args.cluster || !args.chapter || !args.subChapter || typeof args.isMoolya == undefined ) {
     return [];
@@ -289,5 +296,12 @@ MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] 
       }
     ];
   let resp = mlDBController.aggregate('MlDepartments', pipeline, context);
+=======
+MlResolver.MlQueryResolver['fetcHierarchyMoolyaDepartment'] = (obj, args, context, info) => {
+  let resp = mlDBController.find('MlDepartments', {
+      isMoolya: args.isMoolya,
+      isActive: true
+  }, context).fetch();
+>>>>>>> b648a6ea6e2f90520bcff6bafb9a52612a1b8782
   return resp;
 }

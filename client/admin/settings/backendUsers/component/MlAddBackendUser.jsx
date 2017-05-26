@@ -9,6 +9,7 @@ import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
 import MlAssignDepartmentComponent from "./MlAssignDepartmentComponent";
 import MlContactFormComponent from "./MlContactFormComponent";
 import {addBackendUserActionHandler} from "../actions/addBackendUserAction";
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import Datetime from "react-datetime";
 import moment from "moment";
@@ -28,7 +29,7 @@ class MlAddBackendUser extends React.Component {
       selectedBackendUser: 'Internal User',
       selectedSubChapter: '',
       pwdErrorMsg: '',
-      birthDate: " ",
+      birthDate:null,
       genderSelectMale: " ",
       genderSelectFemale: " ",
       genderSelectOthers: " ",
@@ -51,7 +52,7 @@ class MlAddBackendUser extends React.Component {
   }
   onBirthDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, birthDate: value});
     }
   }
@@ -74,6 +75,12 @@ class MlAddBackendUser extends React.Component {
       console.log(response)
     }
   };
+
+  componentWillMount() {
+    const loggedInUser = getAdminUserContext();
+    this.setState({loginUserDetails: loggedInUser})
+    return loggedInUser;
+  }
 
   onGenderSelect(e) {
     let genderName = e.target.value;
@@ -141,6 +148,7 @@ class MlAddBackendUser extends React.Component {
       let profile = {
         isInternaluser: true,
         isExternaluser: false,
+        isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
         email: this.refs.email.value,
         isActive:this.refs.deActive.checked,
         InternalUprofile: InternalUprofile,
@@ -220,10 +228,10 @@ class MlAddBackendUser extends React.Component {
       }
     ]
 
-    let UserTypeOptions = [
+    let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
       {value: 'moolya', label: 'moolya', clearableValue: true},
       {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
-    ]
+    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
 
     let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},

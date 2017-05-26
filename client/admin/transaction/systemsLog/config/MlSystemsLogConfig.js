@@ -26,7 +26,8 @@ const mlSystemsLogTableConfig=new MlViewer.View({
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "userAgent",isHidden:true},{dataField: "userId",isHidden:true},{dataField: "emailId",isHidden:true}
+    {dataField: "userAgent",isHidden:true},{dataField: "userId",isHidden:true},{dataField: "emailId",isHidden:true},{dataField: "transactionTypeId",isHidden:true}
+
 
   ],
   tableHeaderClass:'react_table_head',
@@ -66,6 +67,7 @@ const mlSystemsLogTableConfig=new MlViewer.View({
                         subChapterName           
                         communityId  
                         communityName
+                        transactionTypeId
                       }
                     }
               }

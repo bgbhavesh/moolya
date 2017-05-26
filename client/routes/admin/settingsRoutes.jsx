@@ -122,6 +122,14 @@ import MlSubDomainList from '../../admin/settings/subDomain/component/MlSubDomai
 import MlAddSubDomain from '../../admin/settings/subDomain/component/MlAddSubDomain'
 import MlEditSubDomain from '../../admin/settings/subDomain/component/MlEditSubDomain'
 
+/*
+    Import Action and Statuses components
+ */
+import MlActionAndStatusList from '../../admin/settings/actionsAndStatuses/component/ActionsAndStatusesList'
+import MlAddActionsAndStatuses from '../../admin/settings/actionsAndStatuses/component/MlAddActionsAndStatuses'
+import MlEditActionsAndStatuses from '../../admin/settings/actionsAndStatuses/component/MlEditActionsAndStatuses'
+import MlEditGenericActionsAndStatuses from '../../admin/settings/actionsAndStatuses/component/MlEditGenericActionAndStatuses'
+
 
 // @Created By Sireesha on 23-02-2017
 // @For Cluster Admin Settings Employee Type
@@ -1065,6 +1073,47 @@ adminSection.route('/settings/editFilter/:id', {
     mount(AdminLayout,{adminContent:<MlEditFilter config={params.id}/>})
   }
 });
+
+/*
+    Route for Actions and Status List
+ */
+adminSection.route('/settings/actionsAndStatusesList', {
+  name: 'settings_ActionsAndStatuses_List',
+  action(){
+    mount(AdminLayout,{adminContent:<MlActionAndStatusList />})
+  }
+});
+
+/*
+ Route for Add Actions and Status
+ */
+adminSection.route('/settings/addActionsAndStatuses', {
+  name: 'settings_ActionsAndStatuses_Add',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAddActionsAndStatuses />})
+  }
+});
+
+/*
+ Route for Edit Actions and Status
+ */
+adminSection.route('/settings/editActionsAndStatuses/:id', {
+  name: 'settings_ActionsAndStatuses_Edit',
+  action(){
+    mount(AdminLayout,{adminContent:<MlEditActionsAndStatuses />})
+  }
+});
+
+/*
+ Route for Edit Actions and Status
+ */
+adminSection.route('/settings/editActionsAndStatuses/:id/:Did', {
+  name: 'settings_Generic_ActionsAndStatuses_Edit',
+  action(){
+    mount(AdminLayout,{adminContent:<MlEditGenericActionsAndStatuses />})
+  }
+});
+
 
 
 //  @End

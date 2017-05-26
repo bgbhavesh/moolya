@@ -5,8 +5,9 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import _ from 'underscore'
 
-var _ = require('lodash');
+
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -1112,3 +1113,163 @@ MlResolver.MlMutationResolver['uploadUserImage'] = (obj, args, context, info) =>
   }
 }
 
+MlResolver.MlQueryResolver['fetchInternalUserProfiles'] = (obj, args, context, info) => {
+  let userId=context.userId
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user){
+    var internalUserProfile = user&&user.profile&&user.profile.isInternaluser?user.profile.InternalUprofile:{};
+    let moolyaProfile = internalUserProfile&&internalUserProfile.moolyaProfile?internalUserProfile.moolyaProfile:{}
+    let userProfiles = moolyaProfile&&moolyaProfile.isActive&&moolyaProfile.userProfiles?moolyaProfile.userProfiles:[]
+   /* for (var k = 0; k < userProfiles.length; k++) {
+
+      let cName = "";
+      if(userProfiles[k]){
+        const clusterData = mlDBController.findOne('MlClusters', {_id: userProfiles[k].clusterId}, context) || {};
+        cName = clusterData.displayName;
+      }else if( userProfiles[k].clusterId == 'all'){
+        cName = "All";
+      }
+      userProfiles[k].clusterName = cName
+    }*/
+
+    userProfiles.map(function (user,index) {
+      let cName = null
+      if(user){
+        let clusterData = mlDBController.findOne('MlClusters', {_id: user.clusterId}, context) || {};
+        cName = clusterData.displayName;
+      }else if( user.clusterId == 'all'){
+        cName = "All";
+      }
+      userProfiles[index].clusterName = cName
+    })
+
+
+    /* userProfiles=_.filter(userProfiles, {'isDefault': true })||[];*/
+    return userProfiles;
+  }else {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+
+}
+
+MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, info) => {
+  let userId=context.userId;
+  var response=null;
+  var update=null;
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user&&args&&args.clusterId){
+
+    let result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'isDefault': true}}},
+      {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+    result= mlDBController.update('users',{'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
+      {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true}, {$set: true}, context);
+    response = new MlRespPayload().successPayload({}, 200);
+
+
+  }else {
+    let code = 409;
+    response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+  return response;
+}
+
+MlResolver.MlMutationResolver['deActivateAdminUserProfile'] = (obj, args, context, info) => {
+  let userId=context.userId;
+  var response=null;
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user&&args&&args.clusterId){
+    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
+      {"profile.externalUserProfiles.$.isActive": true}, {$set: true}, context);
+    response = new MlRespPayload().successPayload({}, 200);
+  }else {
+    let code = 409;
+    response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+
+  return response;
+
+}
+
+
+MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) => {
+  let userId=context.userId
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user){
+    var internalUserProfile = user&&user.profile&&user.profile.isInternaluser?user.profile.InternalUprofile:{};
+    let moolyaProfile = internalUserProfile&&internalUserProfile.moolyaProfile?internalUserProfile.moolyaProfile:{}
+    let userProfiles = moolyaProfile&&moolyaProfile.isActive&&moolyaProfile.userProfiles?moolyaProfile.userProfiles:[]
+    if(args&&args.clusterId){
+      userProfiles=_.filter(userProfiles, {'clusterId':args.clusterId})||[]
+    }
+    let hirarichyLevel = [];
+    let userProfileData = userProfiles&&userProfiles[0]?userProfiles[0]:{}
+    let userRolesData = userProfileData&&userProfileData.userRoles?userProfileData.userRoles:[];
+    hirarichyLevel = _.pluck(userRolesData, 'hierarchyLevel') || [];
+    hirarichyLevel.sort(function (a, b) {
+      return b - a
+    });
+    let defaultRole = {}
+    for (let i = 0; i < userRolesData.length; i++) {
+      if (userRolesData[i].hierarchyLevel == hirarichyLevel[0]) {
+        defaultRole = userRolesData[i]
+        break
+      }
+    }
+
+    if(defaultRole && defaultRole.clusterId && defaultRole.clusterId != 'all'){
+      const clusterData = mlDBController.findOne('MlClusters', {_id: defaultRole.clusterId}, context) || {};
+      defaultRole.clusterName = clusterData.displayName;
+    }else if( defaultRole.clusterId == 'all'){
+      defaultRole.clusterName = "All";
+    }
+
+    if(defaultRole && defaultRole.subChapterId && defaultRole.subChapterId != 'all'){
+      const subChapterData = mlDBController.findOne('MlSubChapters', {_id: defaultRole.subChapterId}, context) || {};
+      defaultRole.subChapterName = subChapterData.subChapterDisplayName;
+    }else if( defaultRole.subChapterId == 'all'){
+      defaultRole.subChapterName = "All";
+    }
+
+    if(defaultRole && defaultRole.chapterId && defaultRole.chapterId != 'all'){
+      const chapterData = mlDBController.findOne('MlChapters', {_id: defaultRole.chapterId}, context) || {};
+      defaultRole.chapterName = chapterData.chapterName;
+    }else if( defaultRole.chapterId == 'all'){
+      defaultRole.chapterName = "All";
+    }
+
+    if(defaultRole && defaultRole.communityId && defaultRole.communityId != 'all'){
+      const communityData= mlDBController.findOne('MlCommunityDefinition', {code: defaultRole.communityId}, context)|| {};
+      defaultRole.communityName = communityData.name;
+    }else if( defaultRole.communityId == 'all'){
+      defaultRole.communityName = "All";
+    }
+
+    if(defaultRole && defaultRole.departmentId && defaultRole.departmentId != 'all'){
+      const departmentData= MlDepartments.findOne({_id:defaultRole.departmentId}) || {}
+      defaultRole.departmentName = departmentData.displayName;
+    }else if( defaultRole.departmentId == 'all'){
+      defaultRole.departmentName = "All";
+    }
+
+    if(defaultRole && defaultRole.subDepartmentId && defaultRole.subDepartmentId != 'all'){
+      const subdepartmentData= MlSubDepartments.findOne({_id:defaultRole.subDepartmentId}) || {}
+      defaultRole.subDepartmentName = subdepartmentData.displayName;
+    }else if( defaultRole.subDepartmentId == 'all'){
+      defaultRole.subDepartmentName = "All";
+    }
+
+
+
+    /* userProfiles=_.filter(userProfiles, {'isDefault': true })||[];*/
+    return defaultRole;
+  }else {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+
+}

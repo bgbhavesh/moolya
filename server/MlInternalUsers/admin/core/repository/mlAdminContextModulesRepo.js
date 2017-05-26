@@ -175,8 +175,9 @@ let CoreModules = {
         object = doc.registrationInfo;
         object._id = doc._id;
         object.registrationStatus =doc.status;
-       // object.canAssign = false;
-       // object.canUnAssign = false;
+        if(doc.allocation){
+            object.assignedUser = doc.allocation.assignee
+        }
         result.push(object);
       });
       data = result;

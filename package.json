@@ -119,6 +119,7 @@
     "react-rating": "^0.7.1",
     "react-responsive-tabs": "^1.0.1",
     "react-scrollbar": "^0.5.1",
+    "react-scrollbar-js": "^1.0.1",
     "react-select": "^1.0.0-rc.3",
     "react-tab-panel": "^2.2.7",
     "react-toastr": "^2.8.2",

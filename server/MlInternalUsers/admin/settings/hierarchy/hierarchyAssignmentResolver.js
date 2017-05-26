@@ -1,7 +1,6 @@
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import mlAssignHierarchy from '../../../admin/../admin/genericTransactions/impl/MlHierarchyAssignment'
-import _ from 'lodash';
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import mlAssignHierarchy from "../../../admin/../admin/genericTransactions/impl/MlHierarchyAssignment";
 
 MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context, info) => {
   let response;
@@ -67,13 +66,14 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
        MlHierarchyAssignments.update({_id:id}, {$set:{finalApproval:hierarchy.finalApproval}});
     }
     let code = 200;
-    response = new MlRespPayload().successPayload(result, code);
-  }else{
+    response = new MlRespPayload().successPayload('Updated Successfully', code);
+    return response
+  } else {
     let id = MlHierarchyAssignments.insert({...hierarchy});
     if (id) {
       let code = 200;
       let result = {appovalId: id}
-      let response = new MlRespPayload().successPayload(result, code);
+      let response = new MlRespPayload().successPayload('Created Successfully', code);
       return response
     }
   }

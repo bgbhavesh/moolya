@@ -12,6 +12,14 @@ MlResolver.MlMutationResolver['CreateSpecification'] = (obj, args, context, info
   }
 
   // let id = MlSpecifications.insert({...args});
+
+  let isFind = mlDBController.find('MlSpecifications', { $or:[{specificationName: args.specificationName},{specificationDisplayName: args.specificationDisplayName}]}, context).fetch();
+  if(isFind.length){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    return response;
+  }
+
   let id = mlDBController.insert('MlSpecifications', args, context)
   if (id) {
     let code = 200;
@@ -32,6 +40,12 @@ MlResolver.MlMutationResolver['UpdateSpecification'] = (obj, args, context, info
 
   if (args._id) {
     var id= args._id;
+    let isFind = mlDBController.find('MlSpecifications', {_id:{ $ne: id }, $or:[{specificationName: args.specificationName},{specificationDisplayName: args.specificationDisplayName}]}, context).fetch();
+    if(isFind.length) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      return response;
+    }
     args=_.omit(args,'_id');
     // let result= MlSpecifications.update(id, {$set: args});
     let result = mlDBController.update('MlSpecifications', id, args, {$set:true}, context)

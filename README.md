@@ -18,7 +18,3 @@ To pass a different settings file other than settingss-development.json, use `me
 Run tests with `meteor npm test`
 
 visit http://localhost:5000 to see test results
-
----
-
-Forked from [Meteor Chef](http://themeteorchef.com/base)

@@ -16,6 +16,12 @@ MlResolver.MlMutationResolver['CreateBusinessType'] = (obj, args, context, info)
     let response = new MlRespPayload().errorPayload("Business Name is Required", code);
     return response;
   }else {
+    let isFind = MlBusinessType.find({ $or:[{businessTypeName: args.businessTypeName},{businessTypeDisplayName: args.businessTypeDisplayName}]}).fetch();
+    if(isFind.length){
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      return response;
+    }
     let id = MlBusinessType.insert({...args});
     if (id) {
       let code = 200;
@@ -42,6 +48,12 @@ MlResolver.MlMutationResolver['UpdateBusinessType'] = (obj, args, context, info)
   }else {
     if (args._id) {
       var id = args._id;
+      let isFind = MlBusinessType.find({_id:{ $ne: id }, $or:[{businessTypeName: args.businessTypeName},{businessTypeDisplayName: args.businessTypeDisplayName}]}).fetch();
+      if(isFind.length) {
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+        return response;
+      }
       args = _.omit(args, '_id');
       let result = MlBusinessType.update(id, {$set: args});
       let code = 200;

@@ -89,7 +89,7 @@ class MlEditCommunityFormComponent extends React.Component {
     const response = await findCommunityDefActionHandler(Id);
 
     if (response) {
-      this.setState({loading: false, data: response});
+      this.setState({data: response});
 
       // if (this.state.data.aboutCommunity) {
       //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
@@ -115,6 +115,7 @@ class MlEditCommunityFormComponent extends React.Component {
       if(this.state.data.showOnMap){
         this.setState({showOnMap:this.state.data.showOnMap})
       }
+      this.setState({loading: false})
     }
   }
 
@@ -132,7 +133,10 @@ class MlEditCommunityFormComponent extends React.Component {
       communityId: this.props.params,
       clusters: this.state.clusters,
       chapters: this.state.chapters,
-      subchapters: this.state.subchapters
+      subchapters: this.state.subchapters,
+      clusterId:this.props.params.clusterId?this.props.params.clusterId:"",
+      chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
+      subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
     let response;
     // if(data.subchapters.length<1)
@@ -141,10 +145,10 @@ class MlEditCommunityFormComponent extends React.Component {
     //   response = false;
     // }
     // else
-    {
+    // {
       response = await multipartFormHandler(data, null);
-    }
-    this.setState({loading: false});
+    // }
+    // this.setState({loading: false});
     return response;
   }
 

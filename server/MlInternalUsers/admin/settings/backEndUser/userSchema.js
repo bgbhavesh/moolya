@@ -70,7 +70,8 @@ let BackEndUser = `
         subDepartmentName : String,
         chapterName:String,
         subChapterName:String,
-        communityName:String
+        communityName:String,
+        clusterName : String
     }
     
     type MoolyaProfile{
@@ -408,6 +409,8 @@ let BackEndUser = `
         kycDocuments       : [KycDocumentInfo]
     }
     
+    
+    
    
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
@@ -420,6 +423,8 @@ let BackEndUser = `
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
+        setAdminDefaultProfile(clusterId:String!):response
+        deActivateAdminUserProfile(clusterId:String!):response
     }
     
     type Query{
@@ -438,6 +443,8 @@ let BackEndUser = `
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
         fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
         FindUserOnToken(token: String):response
+        fetchInternalUserProfiles(userId: String):[UserProfiles]
+        fetchUserRoleDetails(clusterId:String):UserRoles
     }
 `
 

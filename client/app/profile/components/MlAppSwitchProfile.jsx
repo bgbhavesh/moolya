@@ -153,7 +153,7 @@ export default class MlAppSwitchProfile extends React.Component{
                 <input type="text" placeholder="City" className="form-control float-label"  value={profileDetails.chapterName} disabled/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Status" className="form-control float-label"  value={profileDetails.isActive} disabled/>
+                <input type="text" placeholder="Status" className="form-control float-label"  value={profileDetails.isProfileActive} disabled/>
               </div>
             </div>
 

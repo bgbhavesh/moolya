@@ -34,8 +34,7 @@ class  MlAdminProfileApp extends Component {
   }
 
   componentWillReceiveProps(){
-    console.log(this.props.user);
-    this.getValue();
+   this.getValue();
   }
 
   logoutUser(){

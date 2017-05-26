@@ -114,7 +114,6 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
   }
 
 }
-
 MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, info) => {
   let userId=context.userId;
   var response=null;

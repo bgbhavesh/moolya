@@ -253,3 +253,41 @@ MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, cont
   }
   return resp;
 }
+
+MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] = (obj, args, context, info) => {
+  if(!args.cluster || !args.chapter || !args.subChapter || typeof args.isMoolya == undefined ) {
+    return [];
+  }
+
+  let pipeline = [
+      { $match:
+        {
+          isActive: true,
+          isMoolya: args.isMoolya,
+          "depatmentAvailable.cluster": {$in: [ 'all', args.cluster ]},
+          "depatmentAvailable.chapter": {$in: [ 'all', args.chapter ]},
+          "depatmentAvailable.subChapter": {$in: [ 'all', args.subChapter ]}
+        }
+      },
+      {$lookup:
+        {
+          from: "mlSubDepartments",
+          localField: "_id",
+          foreignField: "departmentId",
+          as: "subDep"
+        }
+      },
+      {$unwind: '$subDep'},
+      {
+        $project: {
+          _id: 0,
+          departmentId: '$_id',
+          departmentName: '$displayName',
+          subDepartmentId: '$subDep._id',
+          subDepartmentName: '$subDep.displayName'
+        }
+      }
+    ];
+  let resp = mlDBController.aggregate('MlDepartments', pipeline, context);
+  return resp;
+}

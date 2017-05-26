@@ -259,3 +259,11 @@ MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, cont
   }
   return resp;
 }
+
+MlResolver.MlQueryResolver['fetcHierarchyMoolyaDepartment'] = (obj, args, context, info) => {
+  let resp = mlDBController.find('MlDepartments', {
+      isMoolya: args.isMoolya,
+      isActive: true
+  }, context).fetch();
+  return resp;
+}

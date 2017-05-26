@@ -1,48 +1,14 @@
 import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
+
 export async function findUserActionHandler() {
   let did=Meteor.userId()
   const result = await client.query({
     query: gql`
     
           query($id: String){
-            fetchUser(userId:$id){
-              _id,
-              profile{
-                isInternaluser,
-                isExternaluser,
-                isMoolya
-                isActive,
-                email,
-                profileImage,
-          			numericalFormat,
-                currencyTypes, 
-                dateOfBirth,
-                genderType
-                InternalUprofile{
-                  moolyaProfile{
-                    firstName,
-                  middleName,
-                  lastName,
-                  userType,
-                  subChapter,
-                  roleType,
-                  assignedDepartment{
-                    department,
-                    subDepartment
-                  },
-                  displayName,
-                  email,
-                  contact{
-                    contactNumberType,
-                    countryCode,
-                    number,
-                    isOTPValidated
-                  },
-                  globalAssignment,
-                  isActive,
-                  userProfiles{
+            fetchInternalUserProfiles(userId:$id){
                     isDefault,
                     clusterId,
                     clusterName,
@@ -66,12 +32,7 @@ export async function findUserActionHandler() {
                       subChapterName,
                       communityName
                     }
-                  }
-                    
-                  }
-                }
-                
-              }
+                 
             }
           }
     `,
@@ -80,6 +41,87 @@ export async function findUserActionHandler() {
     },
     forceFetch:true
   })
-  const id = result.data.fetchUser;
+
+  const id = result.data.fetchInternalUserProfiles;
   return id
 }
+
+export async function setAdminDefaultProfileActionHandler(clusterId) {
+
+  const result = await client.mutate({
+    mutation: gql`
+          mutation($clusterId:String!){
+              setAdminDefaultProfile(clusterId:$clusterId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      clusterId:clusterId
+    }
+  })
+  const id = result.data.setAdminDefaultProfile;
+  return id;
+}
+
+export async function deActivateAdminProfileActionHandler(clusterId) {
+
+  const result = await client.mutate({
+    mutation: gql`
+          mutation($clusterId: String){
+              deActivateAdminUserProfile(clusterId:$clusterId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      clusterId:clusterId
+    }
+  })
+  const id = result.data.deActivateAdminUserProfile;
+  return id;
+}
+
+export async function fetchClusterDetails(clusterId) {
+
+
+  const result = await client.query({
+    query: gql`
+            query($clusterId: String){  
+                fetchUserRoleDetails(clusterId:$clusterId){          
+                    roleId
+                    roleName
+                    clusterId
+                    chapterId
+                    validFrom
+                    validTo
+                    subChapterId
+                    communityId
+                    isActive
+                    hierarchyLevel
+                    hierarchyCode
+                     clusterName
+                    departmentId
+                    departmentName
+                    subDepartmentId
+                    subDepartmentName
+                    chapterName
+                    subChapterName
+                    communityName
+                }
+            }`,
+    variables: {
+      clusterId: clusterId
+    },
+    forceFetch: true
+  });
+  const id = result.data.fetchUserRoleDetails;
+  return id;
+
+}
+
+

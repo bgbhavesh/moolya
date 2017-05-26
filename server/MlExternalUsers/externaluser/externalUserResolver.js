@@ -114,7 +114,6 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
   }
 
 }
-
 MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, info) => {
   let userId=context.userId;
   var response=null;
@@ -159,7 +158,7 @@ MlResolver.MlMutationResolver['setDefaultProfile'] = (obj, args, context, info) 
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
 
-    result= mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'isDefault': true}}},
+    result= mlDBController.update('users', {_id:userId,'profile.externalUserProfiles':{$elemMatch: {'isDefault': true}}},
       {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
     result= mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},

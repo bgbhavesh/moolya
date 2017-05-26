@@ -12,6 +12,7 @@ export async function findUserActionHandler() {
                     isDefault,
                     clusterId,
                     clusterName,
+                    clusterFlag,
                     userRoles{
                       roleId,
                       roleName,

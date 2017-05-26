@@ -221,7 +221,8 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
 
     if(communityAccess){
         community["name"] = communityAccess.communityDefName;
-        community["aboutCommunity"] = communityAccess.about;
+      // community["aboutCommunity"] = communityAccess.about;
+        community["aboutCommunity"] = communityAccess.aboutCommunity;
         community["displayName"] = communityAccess.displayName;
         community["code"] = communityAccess.communityDefCode;
         community["showOnMap"] = communityAccess.showOnMap;
@@ -341,10 +342,13 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
     if(!userHierarchy){
       return new MlRespPayload().errorPayload("Failed to update community 4", 400);
     }
+  // let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
+  // let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
+  // let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
 
-    let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
-    let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
-    let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
+  let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userHierarchy.isParent) ? args.clusterId : "";
+    let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userHierarchy.isParent) ? args.chapterId: "";
+    let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userHierarchy.isParent) ? args.subChapterId: ""
 
 
 
@@ -363,19 +367,22 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
 
     // let hierarchy = (levelCode && MlHierarchy.findOne({code:levelCode})) || "";
     let hierarchy = (levelCode &&  mlDBController.findOne('MlHierarchy', {code:levelCode}, context)) || "";
-    if(hierarchy != "" && (hierarchy.isParent || userHierarchy.hierarchyLevel <= hierarchy.hierarchyLevel)) {
+  // if(hierarchy != "" && (hierarchy.isParent || userHierarchy.hierarchyLevel <= hierarchy.hierarchyLevel)) {
+    if(hierarchy != "" && (hierarchy.isParent || userHierarchy.level >= hierarchy.level)) {
       doEdit = true;
     }
 
     if(doEdit)
     {
-        communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":userHierarchy.code, "communityDefCode":args.communityId}]}, context);
-        if(communityAccess){
+        // communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":userHierarchy.code, "communityDefCode":args.communityId}]}, context);
+      communityAccess = mlDBController.findOne('MlCommunityAccess', {"$and":[{"hierarchyCode":levelCode, clusterId:args.clusterId?args.clusterId:null, chapterId:args.chapterId?args.chapterId:null, subChapterId:args.subChapterId?args.subChapterId:null, "communityDefCode":args.communityId}]}, context);
+      if(communityAccess){
             let isUpdate = false;
 
             if(communityAccess.about != args.community.aboutCommunity){
                 isUpdate = true;
-                communityAccess.about = args.community.aboutCommunity
+              // communityAccess.about = args.community.aboutCommunity
+                communityAccess.aboutCommunity = args.community.aboutCommunity
             }
 
             if(communityAccess.isActive != args.community.isActive){
@@ -386,6 +393,11 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
             if(communityAccess.showOnMap != args.community.showOnMap){
                 isUpdate = true;
                 communityAccess.showOnMap = args.community.showOnMap
+            }
+
+            if(communityAccess.displayName != args.community.displayName){
+              isUpdate = true;
+              communityAccess.displayName = args.community.displayName
             }
 
           if(isUpdate == true)

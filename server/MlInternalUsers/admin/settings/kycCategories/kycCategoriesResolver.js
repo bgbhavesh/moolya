@@ -17,6 +17,12 @@ MlResolver.MlMutationResolver['updateKycCategory'] = (obj, args, context, info) 
   }else {
     if (args._id) {
       var id= args._id;
+      let isFind = mlDBController.find('MlDocumentCategories', {_id:{ $ne: id }, $or:[{docCategoryName: args.docCategoryName},{docCategoryDisplayName: args.docCategoryDisplayName}]}, context).fetch();
+      if(isFind.length) {
+        let code = 409;
+        let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+        return response;
+      }
       args=_.omit(args,'_id');
       // let result= MlDocumentCategories.update(id, {$set: args});
       let result= mlDBController.update('MlDocumentCategories', id, args, {$set:true}, context)

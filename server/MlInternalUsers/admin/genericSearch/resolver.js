@@ -790,8 +790,57 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       obj.industryId = industryName;
       modArray.push(obj)
     })
-    data= modArray
+    data= modArray;
     totalRecords=MlSubDomain.find(query,findOptions).count();
+  }
+  if(args.module == "actionAndStatus") {
+    var pipeline = [
+      {
+        '$match':{}
+      }];
+
+    if(findOptions.skip && findOptions.skip != undefined){
+      pipeline.push({
+        '$skip':parseInt(findOptions.skip)
+      });
+    }
+    if(findOptions.limit != undefined){
+      pipeline.push({
+        '$limit': parseInt(findOptions.limit)
+      });
+    }
+    if(findOptions.sort != undefined){
+      pipeline.push({
+        '$sort':findOptions.sort
+      });
+    }
+    pipeline.push({
+      '$lookup':{
+        from: 'users',
+        localField: 'createdBy',
+        foreignField: '_id',
+        as: 'createdBy'
+      }
+    });
+    pipeline.push({
+      '$lookup': {
+        from: 'users',
+        localField: 'updatedBy',
+        foreignField: '_id',
+        as: 'updatedBy'
+      }
+    });
+    data = mlDBController.aggregate('MlActionAndStatus', pipeline, context);
+    data = data.map(function (doc) {
+      if(doc.createdBy && doc.createdBy[0]){
+        doc.createdBy = doc.createdBy[0].profile.InternalUprofile.moolyaProfile.displayName;
+      }
+      if(doc.updatedBy && doc.updatedBy[0]){
+        doc.updatedBy = doc.updatedBy[0].profile.InternalUprofile.moolyaProfile.displayName;
+      }
+      return doc;
+    });
+    totalRecords = mlDBController.find('MlActionAndStatus', query, context, findOptions).count();
   }
 
   return {'totalRecords':totalRecords,'data':data};
@@ -801,6 +850,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
 
     var module=context.module||"";
+    console.log(module);
     var resolveType='';
     switch(module) {
       case "cluster":resolveType= 'Cluster';break;
@@ -860,6 +910,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
       case "community":resolveType= 'Community';break;
+      case 'actionAndStatus':resolveType='ActionAndStatusType';break
 
     }
 

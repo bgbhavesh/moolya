@@ -338,10 +338,11 @@ if(details.type =="password") {
     'transactionType': 'system',
     'userId': userId,
     'transactionDetails': transactionDetails,
-    'context': context
+    'context': context,
+    'transactionTypeId': " "
   });
 }else{
-console.log("Not recorded")
+
 }
 });
 

@@ -107,11 +107,10 @@ class MlTransactionsHandler {
         moduleName:transactionsParams.moduleName,
         userAgent: userAgent,
         createdAt: new Date(),
-        //transactionDetails: `User ${transactionsParams.user.profile.InternalUprofile.moolyaProfile.firstName} performed ${transactionsParams.methodName? transactionsParams.methodName : actions} action at ${new Date()} `
-        transactionDetails:transactionsParams.transactionDetails
+        transactionDetails: transactionsParams.transactionDetails
       }
-
-    transactionRecord=_.extend(transactionRecord,contextData);
+    orderNumberGenService.assignTransationRequest(transactionRecord),
+      transactionRecord=_.extend(transactionRecord,contextData);
 
     const resp = MlTransactionsLog.insert(transactionRecord);
     return resp;

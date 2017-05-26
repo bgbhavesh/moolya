@@ -2,18 +2,23 @@ import React from 'react';
 import { render } from 'react-dom';
 //import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler} from '../actions/switchUserProfilesActions';
 import {findUserActionHandler}  from '../actions/switchProfileActions'
+import {setAdminDefaultProfileActionHandler} from '../actions/switchProfileActions'
+import {deActivateAdminProfileActionHandler} from '../actions/switchProfileActions'
+import {fetchClusterDetails} from '../actions/switchProfileActions'
 import _ from 'lodash';
 
 export default class MlAdminSwitchProfile extends React.Component{
 
   constructor(props, context){
     super(props);
-    this.state= {loading: true,swiper:null,userProfiles:[],currentSlideIndex:0};
+    this.state= {loading: true,swiper:null,userProfiles:[],currentSlideIndex:0,clusterData:{}};
     this.fetchExternalUserProfiles.bind(this);
     this.setDefaultUserProfile.bind(this);
     this.deactivateUserProfile.bind(this);
     this.onSlideIndexChange.bind(this);
     this.initializeSwiper.bind(this);
+    this.clusterDetailsDisplay.bind(this);
+    this.onChange.bind(this);
     return this;
   }
 
@@ -49,6 +54,7 @@ export default class MlAdminSwitchProfile extends React.Component{
     $(function () {
       $('.float-label').jvFloat();
     });
+    this.onChange.bind(this);
     // this.initializeSwiper();
   }
 
@@ -57,29 +63,36 @@ export default class MlAdminSwitchProfile extends React.Component{
   async fetchExternalUserProfiles(){
     const response = await findUserActionHandler();
     if(response){
-      alert("dsdsds");
-      console.log(response)
       let index=_.findIndex(response, {'isDefault':true })||0;
       let initialSlideIndex=index>=0?index:0;
       this.setState({loading: false, userProfiles: response,'currentSlideIndex':initialSlideIndex});
+      this.clusterDetailsDisplay();
     }
   }
 
   async setDefaultUserProfile(){
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    /*const response = await setDefaultProfileActionHandler(profileDetails.registrationId);
-    if(response&&response.success){
+    const response = await setAdminDefaultProfileActionHandler(profileDetails.clusterId);
+
+    if(response){
       toastr.success("Default Profile set successfully");
     }else{
       //throw error
-      toastr.success("Failed to set the default profile");
-    }*/
+      toastr.error("Failed to set the default profile");
+    }
+  }
+
+  async clusterDetailsDisplay(){
+    let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+    const response = await fetchClusterDetails(profileDetails.clusterId);
+    this.setState({clusterData : response});
+
   }
 
   async deactivateUserProfile(){
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-   /* const response = await deActivateProfileProfileActionHandler(profileDetails.registrationId);
+/*    const response = await deActivateAdminProfileActionHandler(profileDetails.clusterId);
     if(response&&response.success){
       toastr.success("Profile deactivated successfully");
     }else{
@@ -94,14 +107,20 @@ export default class MlAdminSwitchProfile extends React.Component{
     this.initializeSwiper();
   }
 
+  onChange(){
+    this.clusterDetailsDisplay();
+  }
+
   render(){
     const showLoader=false;
     if (showLoader) {
       return <div className="loader_wrap"></div>;
     }
+    let that = this
+    let profileDetails=that.state.userProfiles[that.state.currentSlideIndex]||{};
+    let profileExists=that.state.userProfiles&&that.state.userProfiles.length>0?true:false;
+    let clusterData = that.state.clusterData || {}
 
-    let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    let profileExists=this.state.userProfiles&&this.state.userProfiles.length>0?true:false;
 
     return (
       <div className="app_main_wrap">
@@ -115,11 +134,11 @@ export default class MlAdminSwitchProfile extends React.Component{
                 <div className="swiper-container profile_container">
                   <div className="swiper-wrapper">
 
-                    {this.state.userProfiles.map(function (prf, idx) {
+                    {that.state.userProfiles.map(function (prf, idx) {
                       return(
-                        <div className="swiper-slide profile_accounts" key={idx} name={idx}>
-                          <img src={prf.countryFlag?prf.countryFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
-                          <h2>{prf.communityDefName?prf.communityDefName:""}</h2>
+                        <div className="swiper-slide profile_accounts" key={idx} name={idx} onClick={that.onChange.bind(that)}>
+                          <img src={prf.clusterFlag?prf.clusterFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
+                          <h2>{prf.clusterName?prf.clusterName:""}</h2>
                         </div>
                       )
                     })}
@@ -137,36 +156,37 @@ export default class MlAdminSwitchProfile extends React.Component{
 
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Community" className="form-control float-label"  value={profileDetails.communityDefName}  disabled/>
+                  <input type="text" placeholder="Cluster" className="form-control float-label"  value={clusterData.clusterName?clusterData.clusterName:""}  disabled/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Country" className="form-control float-label"  value={profileDetails.clusterName} disabled/>
+                  <input type="text" placeholder="Chapter" className="form-control float-label"  value={clusterData.chapterName?clusterData.chapterName:""} disabled/>
                 </div>
 
                 <div className="form-group">
-                  <input type="text" placeholder="Subscription Type" className="form-control float-label"  value={profileDetails.accountType} disabled/>
+                  <input type="text" placeholder="Sub Chapter" className="form-control float-label"  value={clusterData.subChapterName?clusterData.subChapterName:""} disabled/>
                 </div>
               </div>
 
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Identity" className="form-control float-label"  value={profileDetails.identityType} disabled/>
+                  <input type="text" placeholder="Community" className="form-control float-label"  value={clusterData.communityName?clusterData.communityName:""} disabled/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="City" className="form-control float-label"  value={profileDetails.chapterName} disabled/>
+                  <input type="text" placeholder="Department" className="form-control float-label"  value={clusterData.departmentName?clusterData.departmentName:""} disabled/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Status" className="form-control float-label"  value={profileDetails.isActive} disabled/>
+                  <input type="text" placeholder="Sub Department" className="form-control float-label"  value={clusterData.subDepartmentName?clusterData.subDepartmentName:""} disabled/>
                 </div>
+
               </div>
 
               <div className="col-md-12 text-center">
                 <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
                 </div>
-                <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
+               {/* <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
-                </div>
+                </div>*/}
               </div>
 
             </div>:<div>No Profiles Available</div>

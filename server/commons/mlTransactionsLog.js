@@ -1,10 +1,6 @@
-import async from 'async';
-import each from 'async/each';
-import moment from'moment'
-import _ from 'underscore';
-import MlAdminContextQueryConstructor from "../MlInternalUsers/admin/core/repository/mlAdminContextQueryConstructor";
-import MlAppUserContext from '../mlAuthorization/mlAppUserContext';
-import MlAdminUserContext from '../mlAuthorization/mlAdminUserContext'
+import _ from "underscore";
+import MlAppUserContext from "../mlAuthorization/mlAppUserContext";
+import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
 class MlTransactionsHandler {
   constructor() {
     this.contextData.bind(this);
@@ -54,15 +50,22 @@ class MlTransactionsHandler {
     try{
       if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) { //resolve internal user context based on default profile
         let details = new MlAdminUserContext().userProfileDetails(userId)||{};
-          contextData = { clusterId: details.defaultProfileHierarchyRefId?details.defaultProfileHierarchyRefId:null,chapterId: details.defaultChapters&&details.defaultChapters[0]?details.defaultChapters[0]:null,
-          subChapterId: details.defaultSubChapters&&details.defaultSubChapters[0]?details.defaultSubChapters[0]:null,communityId: details.defaultCommunities&&details.defaultCommunities[0]?details.defaultCommunities[0]:null};
+        contextData = {
+          clusterId: details.defaultProfileHierarchyRefId ? details.defaultProfileHierarchyRefId : null,
+          chapterId: details.defaultChapters && details.defaultChapters[0] ? details.defaultChapters[0] : null,
+          subChapterId: details.defaultSubChapters && details.defaultSubChapters[0] ? details.defaultSubChapters[0] : null,
+          communityId: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityId : null
+        };
 
            firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
            lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
 
       }else if(user&&user.profile&&user.profile.isExternaluser){ //resolve external user context based on default profile
         let externalUProfile=new MlAppUserContext(userId).userProfileDetails();
-          contextData={clusterId:externalUProfile.defaultCluster,chapterId:externalUProfile.defaultChapter,subChapterId:externalUProfile.defaultSubChapter,
+        contextData = {
+          clusterId: externalUProfile.defaultCluster,
+          chapterId: externalUProfile.defaultChapter,
+          subChapterId: externalUProfile.defaultSubChapter,
           communityId:externalUProfile.defaultCommunity};
            firstName=(user.profile || {}).firstName||'';
            lastName =(user.profile || {}).lastName||'';

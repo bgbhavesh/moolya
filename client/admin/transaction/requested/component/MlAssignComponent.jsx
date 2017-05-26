@@ -136,12 +136,19 @@ export default class MlAssignComponent extends Component {
       data:fetchCommunityDefinition{label:name,value:code}
     }
     `;
-    let departmentQuery=gql`query($cluster:String,$chapter:String,$subChapter:String){  
+   /* let departmentQuery=gql`query($cluster:String,$chapter:String,$subChapter:String){
       data:fetchDepartmentsForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter) {
+        value:_id
+        label:departmentName
+      }
+    }`;*/
+    let departmentQuery=gql`query($isMoolya:Boolean,$clusterId:String){  
+      data:fetcHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId) {
         value:_id
         label:departmentName
       }  
     }`;
+
     let subDepartmentQuery=gql`query($id:String){  
       data:fetchSubDepartmentsForRegistration(id:$id) {
         value:_id
@@ -163,7 +170,8 @@ export default class MlAssignComponent extends Component {
 
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
-    let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}
+   /* let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}*/
+    let departmentOption={options: { variables: {isMoolya:true,clusterId:this.state.selectedCluster}}}
     let subDepartmentOption={options: { variables: {id:this.state.selectedDepartment}}};
     let roleOption={
                     options: {

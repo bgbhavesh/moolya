@@ -7,6 +7,7 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let response = new MlRespPayload().errorPayload("Request Type is mandatory!!!!",code);
     return response;
   }
+
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;

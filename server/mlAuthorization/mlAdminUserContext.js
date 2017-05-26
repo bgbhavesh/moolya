@@ -57,7 +57,8 @@ class MlAdminUserContext
               if(defaultSubChapters.indexOf(userRole.subChapterId< 0))
                 defaultSubChapters.push(userRole.subChapterId)
               if(defaultCommunities.indexOf(userRole.communityId< 0))
-                defaultCommunities.push(userRole.communityId)
+                defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
+                // defaultCommunities.push(userRole.communityId)
           })
 
       }

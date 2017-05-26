@@ -16,7 +16,7 @@ class MlHierarchyAssignment{
     return hierarchy;
   }
 
-  canSelfAssignTransaction(transactionId,collection,userId) { //need to pass collection
+  canSelfAssignTransaction(transactionId,collection,userId) {
     var isValidAssignment = false;
     let userID=userId,isPlatformAdmin=false,clusterId='',chapterId=[]
     let transaction = mlDBController.findOne(collection, {transactionId: transactionId});
@@ -39,6 +39,7 @@ class MlHierarchyAssignment{
       }
     });
     if(isPlatformAdmin){
+      return false;
       //platform admin cannot assign to himself
     }
     else if(clusterId!='' || chapterId.length>=1){
@@ -77,8 +78,10 @@ class MlHierarchyAssignment{
   }
 
   assignTransaction(transactionId,collection,userId,assignedUserId){
-
     let userRole = this.getUserRoles(userId);
+    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin"){
+      return true;
+    }
     let assignedRole = this.getUserRoles(assignedUserId);
     let userhierarchy = this.findHierarchy(userRole.clusterId,userRole.departmentId,userRole.subDepartmentId,userRole.roleId);
     let assignedRolehierarchy = this.findHierarchy(assignedRole.clusterId,assignedRole.departmentId,assignedRole.subDepartmentId,assignedRole.roleId);

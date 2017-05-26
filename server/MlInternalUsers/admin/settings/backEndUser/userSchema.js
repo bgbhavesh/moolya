@@ -10,7 +10,9 @@ let BackEndUser = `
         password: String,
         username: String,
         profile:userProfile,
-        roleNames:[String]
+        roleNames:[String],
+        latitude:Float,
+        longitude:Float
     }
     
     type userProfile{
@@ -61,6 +63,8 @@ let BackEndUser = `
         validTo: String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
+        communityHierarchyLevel:Int,
         isActive:Boolean,
         hierarchyLevel:String,
         hierarchyCode:String,
@@ -111,8 +115,10 @@ let BackEndUser = `
         chapterId:String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
         isActive:Boolean,
         hierarchyLevel:Int,
+        communityHierarchyLevel:Int,
         hierarchyCode:String,
         roleName:String,
         departmentId: String,
@@ -284,6 +290,8 @@ let BackEndUser = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude:Float,
+        longitude:Float
      }
      
        type SocialLinkInfoSchema{

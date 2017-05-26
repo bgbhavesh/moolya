@@ -25,7 +25,9 @@ export default class MlFilterListRepo{
     let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
     let chapterIds = userProfile && userProfile.defaultChapters?userProfile.defaultChapters:[];
     let subChapterIds = userProfile && userProfile.defaultSubChapters?userProfile.defaultSubChapters:[];
-    let communityIds = userProfile && userProfile.defaultCommunities?userProfile.defaultCommunities:[];
+    // let communityIds = userProfile && userProfile.defaultCommunities?userProfile.defaultCommunities:[];
+    let communityCode = userProfile && userProfile.defaultCommunities?userProfile.defaultCommunities:[];
+    communityCode = _.pluck(communityCode, 'communityCode')
     userProfiles.map(function (doc,index) {
 
       let userRoles = doc && doc.userRoles ? doc.userRoles : [];
@@ -133,7 +135,8 @@ export default class MlFilterListRepo{
       case "Gen_Community":
 
         if(listData.length < 1){
-          let allCommuntities = _.contains(communityIds,"all");
+          // let allCommuntities = _.contains(communityIds,"all");
+          let allCommuntities = _.contains(communityCode,"all");
           if(allCommuntities){
             result = MlCommunityDefinition.find({isActive : true}).fetch();
           }else{

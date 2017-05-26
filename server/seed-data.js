@@ -133,7 +133,8 @@ if(!communityAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"communityadmin",
@@ -461,7 +462,7 @@ validateinternalUserLoginAttempt=(user)=>{
               subChapterActive = true
             }
 
-            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityId}, {isActive:true}]})
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityCode}, {isActive:true}]})
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }

@@ -1,17 +1,15 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import React from "react";
+import {render} from "react-dom";
+import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
+import ScrollArea from "react-scrollbar";
+import {findDeptAndsubDeptActionHandler} from "../actions/findDeptAndsubDeptAction";
+import MlAssignHierarchy from "./MlAssignHierarchy";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import {updateRolesActionHandler} from "../actions/updateRolesAction";
+import {updateHierarchyAssignmentsActionHandler} from "../actions/updateFinalApprovalAction";
+import {OnToggleSwitch} from "../../../utils/formElemUtil";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import ScrollArea from 'react-scrollbar';
-import {findDeptAndsubDeptActionHandler} from '../actions/findDeptAndsubDeptAction';
-import MlAssignHierarchy from './MlAssignHierarchy';
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import formHandler from '../../../../commons/containers/MlFormHandler';
-import {updateRolesActionHandler} from '../actions/updateRolesAction'
-import {updateHierarchyAssignmentsActionHandler} from '../actions/updateFinalApprovalAction'
-import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
 
 export default class MlHierarchyDetails extends React.Component {
 
@@ -131,6 +129,8 @@ export default class MlHierarchyDetails extends React.Component {
       console.log(hierarchyInfo);
       const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
       //this.state.isExpanded=true
+      if (response && response.result)
+        toastr.success(response.result);
       return response;
     }
   }
@@ -167,7 +167,7 @@ export default class MlHierarchyDetails extends React.Component {
     const assigned = this.updateunassignedRoles();
     const upAssigned = this.updateassignRoles();
     const hierarchyAssignment = this.updatehierarchyAssignments();
-    toastr.success("Update Successful");
+
     FlowRouter.go("/admin/settings/hierarchy/clusterhierarchy/"+this.props.clusterId+"/hierarchyDetails");
     return assigned;
   }

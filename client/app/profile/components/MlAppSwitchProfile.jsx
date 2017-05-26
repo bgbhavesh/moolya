@@ -73,7 +73,7 @@ export default class MlAppSwitchProfile extends React.Component{
       toastr.success("Default Profile set successfully");
     }else{
       //throw error
-      toastr.success("Failed to set the default profile");
+      toastr.error("Failed to set the default profile");
     }
   }
 
@@ -86,7 +86,7 @@ export default class MlAppSwitchProfile extends React.Component{
       toastr.success("Profile deactivated successfully");
     }else{
       //throw error
-      toastr.success("Failed to deactivate the profile");
+      toastr.error("Failed to deactivate the profile");
     }
   }
 
@@ -97,7 +97,7 @@ export default class MlAppSwitchProfile extends React.Component{
       toastr.success("Profile blocked successfully");
     }else{
       //throw error
-      toastr.success("Failed to block the profile");
+      toastr.error("Failed to block the profile");
     }
   }
 

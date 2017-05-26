@@ -260,7 +260,6 @@ MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, cont
   return resp;
 }
 
-<<<<<<< HEAD
 MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] = (obj, args, context, info) => {
   if(!args.cluster || !args.chapter || !args.subChapter || typeof args.isMoolya == undefined ) {
     return [];
@@ -296,12 +295,13 @@ MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] 
       }
     ];
   let resp = mlDBController.aggregate('MlDepartments', pipeline, context);
-=======
+  return resp;
+}
+
 MlResolver.MlQueryResolver['fetcHierarchyMoolyaDepartment'] = (obj, args, context, info) => {
   let resp = mlDBController.find('MlDepartments', {
       isMoolya: args.isMoolya,
       isActive: true
   }, context).fetch();
->>>>>>> b648a6ea6e2f90520bcff6bafb9a52612a1b8782
   return resp;
 }

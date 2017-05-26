@@ -55,6 +55,7 @@ export default class MlAssignClustersToRoles extends React.Component {
           cluster:assignedClusterDetails[i].cluster,
           chapter:assignedClusterDetails[i].chapter,
           subChapter:assignedClusterDetails[i].subChapter,
+          community:assignedClusterDetails[i].community,
           department:assignedClusterDetails[i].department,
           subDepartment:assignedClusterDetails[i].subDepartment,
           isActive:assignedClusterDetails[i].isActive

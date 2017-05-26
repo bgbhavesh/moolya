@@ -11,6 +11,13 @@ MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) =
     return response;
   }
 
+  let isFind = MlLookingFor.find({ $or:[{lookingForName: args.lookingForName},{lookingForDisplayName: args.lookingForDisplayName}]}).fetch();
+  if(isFind.length){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    return response;
+  }
+
   if (MlCommunityDefinition.findOne({code:args.communityCode})){
     args.communityName=MlCommunityDefinition.findOne({code:args.communityCode}).name;
   }
@@ -36,6 +43,12 @@ MlResolver.MlMutationResolver['UpdateLookingFor'] = (obj, args, context, info) =
   }
   if (args._id) {
     var id= args._id;
+    let isFind = MlLookingFor.find({_id:{ $ne: id }, $or:[{lookingForName: args.lookingForName},{lookingForDisplayName: args.lookingForDisplayName}]}).fetch();
+    if(isFind.length) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      return response;
+    }
     args=_.omit(args,'_id');
     let result = MlLookingFor.update(id, {$set: args});
     let code = 200;

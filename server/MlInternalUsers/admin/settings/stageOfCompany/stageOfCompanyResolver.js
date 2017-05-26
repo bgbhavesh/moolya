@@ -10,6 +10,13 @@ MlResolver.MlMutationResolver['CreateStageOfCompany'] = (obj, args, context, inf
     return response;
   }
 
+  let isFind = MlStageOfCompany.find({ $or:[{stageOfCompanyName: args.stageOfCompanyName},{stageOfCompanyDisplayName: args.stageOfCompanyDisplayName}]}).fetch();
+  if(isFind.length){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    return response;
+  }
+
   let id = MlStageOfCompany.insert({...args});
   if (id) {
     let code = 200;
@@ -29,6 +36,12 @@ MlResolver.MlMutationResolver['UpdateStageOfCompany'] = (obj, args, context, inf
 
   if (args._id) {
     var id= args._id;
+    let isFind = MlStageOfCompany.find({_id:{ $ne: id }, $or:[{stageOfCompanyName: args.stageOfCompanyName},{stageOfCompanyDisplayName: args.stageOfCompanyDisplayName}]}).fetch();
+    if(isFind.length) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      return response;
+    }
     args=_.omit(args,'_id');
     let result = MlStageOfCompany.update(id, {$set: args});
     let code = 200;

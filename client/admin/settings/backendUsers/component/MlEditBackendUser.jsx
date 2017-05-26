@@ -11,6 +11,7 @@ import MlContactFormComponent from "./MlContactFormComponent";
 import {findBackendUserActionHandler} from "../actions/findBackendUserAction";
 import {updateBackendUserActionHandler} from "../actions/updateBackendUserAction";
 import {resetPasswordActionHandler} from "../actions/resetPasswordAction";
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
@@ -66,9 +67,6 @@ class MlEditBackendUser extends React.Component{
     this.genderSelect = this.genderSelect.bind(this);
     this.getGender.bind(this);
     return this;
-  }
-  componentDidMount()
-  {
   }
 
   componentDidUpdate(){
@@ -140,18 +138,20 @@ class MlEditBackendUser extends React.Component{
 
 
   async  findBackendUser() {
+    const loggedInUser = getAdminUserContext();
     let userTypeId = this.props.config;
     const response = await findBackendUserActionHandler(userTypeId);
     this.setState({loading: false, data: response});
     if (response) {
       this.setState({
+        loginUserDetails: loggedInUser,
         selectedBackendUserType: this.state.data.profile.InternalUprofile.moolyaProfile.userType,
         selectedSubChapter: this.state.data.profile.InternalUprofile.moolyaProfile.subChapter,
         selectedBackendUser: this.state.data.profile.InternalUprofile.moolyaProfile.roleType,
         deActive: this.state.data.profile.isActive,
         isActive: this.state.data.profile.InternalUprofile.moolyaProfile.isActive,
         globalStatus: this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment,
-        genderSelect: response.profile.genderType, dateOfBirth: response.profile.dateOfBirth,
+        genderSelect: response.profile.genderType, dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat),
         profilePic: response.profile.profileImage
       })
       let clusterId = "", chapterId = '', subChapterId = '', communityId = ''
@@ -172,7 +172,6 @@ class MlEditBackendUser extends React.Component{
               validFrom: userRole[j].validFrom,
               validTo: userRole[j].validTo,
               subChapterId: userRole[j].subChapterId,
-              communityId: userRole[j].communityId,
               isActive: userRole[j].isActive,
               hierarchyLevel: userRole[j].hierarchyLevel,
               hierarchyCode: userRole[j].hierarchyCode,
@@ -182,7 +181,10 @@ class MlEditBackendUser extends React.Component{
               subDepartmentName: userRole[j].subDepartmentName,
               chapterName: userRole[j].chapterName,
               subChapterName: userRole[j].subChapterName,
-              communityName: userRole[j].communityName
+              communityName: userRole[j].communityName,
+              communityId: userRole[j].communityId,
+              communityCode : userRole[j].communityCode,
+              communityHierarchyLevel : userRole[j].communityHierarchyLevel
             }
             userRolesDetails.push(json)
           }
@@ -258,7 +260,6 @@ class MlEditBackendUser extends React.Component{
             validFrom:userRole[j].validFrom,
             validTo:userRole[j].validTo,
             subChapterId:userRole[j].subChapterId,
-            communityId:userRole[j].communityId,
             isActive:userRole[j].isActive,
             hierarchyLevel:userRole[j].hierarchyLevel,
             hierarchyCode:userRole[j].hierarchyCode,
@@ -266,7 +267,10 @@ class MlEditBackendUser extends React.Component{
             departmentId:userRole[j].departmentId,
             departmentName:userRole[j].departmentName,
             subDepartmentId:userRole[j].subDepartmentId,
-            subDepartmentName:userRole[j].subDepartmentName
+            subDepartmentName:userRole[j].subDepartmentName,
+            communityId:userRole[j].communityId,
+            communityCode : userRole[j].communityCode,
+            communityHierarchyLevel : userRole[j].communityHierarchyLevel
           }
           userRolesDetails.push(json)
         }
@@ -398,10 +402,10 @@ class MlEditBackendUser extends React.Component{
       }
     ];
 
-    let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya'},
-      {value: 'non-moolya', label: 'non-moolya'}
-    ];
+    let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
+      {value: 'moolya', label: 'moolya', clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
 
     let BackendUserOptions=[
       {value: 'Internal User', label: 'Internal User'},
@@ -505,7 +509,7 @@ class MlEditBackendUser extends React.Component{
 
                     <div className="form-group">
                       {/*<Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} defaultValue={this.state.dateofbirth} onChange={this.ondateOfBirthSelection.bind(this)}/>*/}
-                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={that.state.data&&that.state.data.profile.dateOfBirth} disabled="disabled" />
+                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={moment(that.state.data&&that.state.data.profile.dateOfBirth).format('DD-MM-YYYY')} disabled="disabled" />
                       <FontAwesome name="calendar" className="password_icon"/>
 
                     </div>
@@ -544,7 +548,7 @@ class MlEditBackendUser extends React.Component{
                   <br className="brclear"/>
                   {that.state.userProfiles.map(function (userProfiles, idx) {
                     return(
-                    <div>
+                    <div key={idx}>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
                           <div key={RId} className="panel panel-default">

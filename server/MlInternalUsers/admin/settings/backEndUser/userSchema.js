@@ -10,7 +10,9 @@ let BackEndUser = `
         password: String,
         username: String,
         profile:userProfile,
-        roleNames:[String]
+        roleNames:[String],
+        latitude:Float,
+        longitude:Float
     }
     
     type userProfile{
@@ -24,7 +26,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
     }
     
@@ -61,6 +63,8 @@ let BackEndUser = `
         validTo: String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
+        communityHierarchyLevel:Int,
         isActive:Boolean,
         hierarchyLevel:String,
         hierarchyCode:String,
@@ -70,7 +74,8 @@ let BackEndUser = `
         subDepartmentName : String,
         chapterName:String,
         subChapterName:String,
-        communityName:String
+        communityName:String,
+        clusterName : String
     }
     
     type MoolyaProfile{
@@ -110,8 +115,10 @@ let BackEndUser = `
         chapterId:String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
         isActive:Boolean,
         hierarchyLevel:Int,
+        communityHierarchyLevel:Int,
         hierarchyCode:String,
         roleName:String,
         departmentId: String,
@@ -143,7 +150,7 @@ let BackEndUser = `
         profileImage:String,
          numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
         
     }
@@ -190,7 +197,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String,
         profileImage: String
     }
@@ -208,7 +215,7 @@ let BackEndUser = `
       lastName: String,
       userName: String,
       genderType: String,
-      dateOfBirth: String
+      dateOfBirth: Date
     }
     
     input settingsAttributesObject{
@@ -283,6 +290,8 @@ let BackEndUser = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude:Float,
+        longitude:Float
      }
      
        type SocialLinkInfoSchema{
@@ -408,6 +417,8 @@ let BackEndUser = `
         kycDocuments       : [KycDocumentInfo]
     }
     
+    
+    
    
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
@@ -420,6 +431,8 @@ let BackEndUser = `
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
+        setAdminDefaultProfile(clusterId:String!):response
+        deActivateAdminUserProfile(clusterId:String!):response
     }
     
     type Query{
@@ -438,6 +451,8 @@ let BackEndUser = `
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
         fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
         FindUserOnToken(token: String):response
+        fetchInternalUserProfiles(userId: String):[UserProfiles]
+        fetchUserRoleDetails(clusterId:String):UserRoles
     }
 `
 

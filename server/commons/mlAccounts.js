@@ -325,10 +325,25 @@ export default MlAccounts=class MlAccounts {
 }
 
 Accounts.onLogin(function (details) {
-  var userId=(details.user || {})._id;
-  let context={ip: details.connection.clientAddress,browser:details.connection.httpHeaders['user-agent'],url: details.connection.httpHeaders.host};
-  let transactionDetails=`User logged in to application at ${new Date()} `;
-  new MlTransactionsHandler().recordTransaction({'activity':'login','transactionType':'system','userId':userId,'transactionDetails':transactionDetails,'context':context});
+if(details.type =="password") {
+  var userId = (details.user || {})._id;
+  let context = {
+    ip: details.connection.clientAddress,
+    browser: details.connection.httpHeaders['user-agent'],
+    url: details.connection.httpHeaders.host
+  };
+  let transactionDetails = `User logged in to application at ${new Date()} `;
+  new MlTransactionsHandler().recordTransaction({
+    'activity': 'login',
+    'transactionType': 'system',
+    'userId': userId,
+    'transactionDetails': transactionDetails,
+    'context': context,
+    'transactionTypeId': " "
+  });
+}else{
+
+}
 });
 
 Accounts.onLogout(function (details) {

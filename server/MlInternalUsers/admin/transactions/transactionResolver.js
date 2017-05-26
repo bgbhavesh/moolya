@@ -126,9 +126,15 @@ MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, con
 
 MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, info) => {
   var collection = args.collection
+  var hierarchyDesicion = false
   let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
+  if(transaction.allocation){
+    hierarchyDesicion = false;
+  }else{
+    hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransaction(args.transactionId,collection,context.userId)
+  }
   //get user details iterate through profiles match with role and get department and update allocation details.
-  let hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransaction(args.transactionId,collection,context.userId)
+
   if(hierarchyDesicion === true) {
     let user = mlDBController.findOne('users', {_id: context.userId}, context)
     let userprofiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
@@ -195,7 +201,7 @@ MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info
 MlResolver.MlQueryResolver['fetchTransactionsLog']=(obj, args, context, info) => {
   if (args.userId) {
     let userId = args.userId;
-    let transactions=mlDBController.find('MlTransactionsLog',{userId:userId}).fetch();
+    let transactions=mlDBController.find('MlTransactionsLog',{userId:userId,transactionTypeName:args.transactionTypeName}).fetch();
     return transactions;
   }
   return null;

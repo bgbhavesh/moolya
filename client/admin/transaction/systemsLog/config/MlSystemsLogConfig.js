@@ -1,10 +1,10 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-import MlTransactionDetailsComponent from '../component/MlTransactionDetailsComponent'
-
+import MlSystemDetailsComponent from '../component/MlSystemsDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
-const mlTransactionsLogTableConfig=new MlViewer.View({
+
+const mlSystemsLogTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
   module:"TransactionsLog",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
@@ -13,8 +13,8 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
   searchFields:["createdAt","activity" ,"transactionTypeName" ,"userName", "clusterName", "chapterName", "subChapterName", "communityId"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-   // filter:true,
-  // filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  filter:true,
+  filterComponent: <MlCustomFilter module="transactionLog" moduleName="transactionLog" />,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},
@@ -26,22 +26,26 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "userAgent",isHidden:true},{dataField: "userId",isHidden:true},{dataField: "emailId",isHidden:true}
+    {dataField: "userAgent",isHidden:true},{dataField: "userId",isHidden:true},{dataField: "emailId",isHidden:true},{dataField: "transactionTypeId",isHidden:true}
+
 
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
-  expandComponent:MlTransactionDetailsComponent,
+  expandComponent:MlSystemDetailsComponent,
   showActionComponent:false,
   // expandableRow:_id,
   actionConfiguration:[],
-  // queryOptions:true,
+  queryOptions:true,
   // buildQueryOptions:()=>{
   //   return {userId:"wJyiTdQandDyhcmKY"}
   // },
+  buildQueryOptions:(config)=>{
+    return {context:{transactionTypeName:"system"}}
+  },
   graphQlQuery:
-  gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"TransactionsLog",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+  gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"TransactionsLog",offset:$offset, context:$context, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
                       ...on TransactionsLog{
@@ -63,11 +67,12 @@ const mlTransactionsLogTableConfig=new MlViewer.View({
                         subChapterName           
                         communityId  
                         communityName
+                        transactionTypeId
                       }
                     }
               }
               }`
 });
 
-export {mlTransactionsLogTableConfig};
+export {mlSystemsLogTableConfig};
 

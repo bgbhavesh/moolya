@@ -175,8 +175,9 @@ let CoreModules = {
         object = doc.registrationInfo;
         object._id = doc._id;
         object.registrationStatus =doc.status;
-       // object.canAssign = false;
-       // object.canUnAssign = false;
+        if(doc.allocation){
+            object.assignedUser = doc.allocation.assignee
+        }
         result.push(object);
       });
       data = result;
@@ -204,14 +205,27 @@ let CoreModules = {
     return {totalRecords:totalRecords,data:data};
   },
   MlTransactionLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+    var type=requestParams&&requestParams.transactionTypeName?requestParams.transactionTypeName:"";
+    var serverQuery ={};
     let query={};
     if(!fieldsProj.sort){
       fieldsProj.sort={createdAt: -1}
     }
+    switch(type){
+      case 'interactions':
+        serverQuery={'transactionTypeName': "interactions"};
+        break;
+      case 'system':
+        serverQuery={'transactionTypeName': "system"};
+        break;
+      case 'conversations':
+        serverQuery={'transactionTypeName': "conversations"};
+        break;
+    }
     var resultantQuery=MlAdminContextQueryConstructor.constructQuery(contextQuery,'$in');
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
-    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery),'$and');
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
     const data = mlDBController.find('MlTransactionsLog', resultantQuery, context, fieldsProj).fetch();
     const totalRecords = mlDBController.find('MlTransactionsLog', resultantQuery, context,fieldsProj).count();

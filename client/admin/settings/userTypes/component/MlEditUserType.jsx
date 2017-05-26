@@ -8,6 +8,8 @@ import formHandler from "../../../../commons/containers/MlFormHandler";
 import {findUserTypeActionHandler} from "../actions/findUserTypeAction";
 import {updateUserTypeActionHandler} from "../actions/updateUserTypeAction";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../../utils/formElemUtil";
+import MlLoader from '../../../../commons/components/loader/loader'
+
 class MlEditUserType extends React.Component{
   constructor(props) {
     super(props);

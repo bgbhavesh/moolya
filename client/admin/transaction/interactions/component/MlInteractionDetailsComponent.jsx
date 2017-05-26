@@ -4,14 +4,13 @@ import { render } from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
-import ScrollArea from 'react-scrollbar';
-
-function logChange(val) {
-  console.log("Selected: " + val);
-}
+import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 
 
-export default class MlTransactionDetailsComponent extends React.Component {
+export default class MlInteractionDetailsComponent extends React.Component {
+  componentDidMount() {
+    initalizeFloatLabel();
+  }
   render() {
     return (
       <div className="ml_tabs">
@@ -82,7 +81,7 @@ export default class MlTransactionDetailsComponent extends React.Component {
                   <input type="text" placeholder="Activity Name"  defaultValue = {this.props.data.activity} disabled={true} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Activity Time"  defaultValue = {this.props.data.userId} disabled={true} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Activity Time"  defaultValue = {this.props.data.createdAt} disabled={true} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Current Status" disabled={true} className="form-control float-label" id=""/>
@@ -145,10 +144,5 @@ export default class MlTransactionDetailsComponent extends React.Component {
   }
 }
 
-const selectRow = {
-  mode: 'checkbox',
-  bgColor: '#feeebf',
-  clickToSelect: true, // click to select, default is false
-  clickToExpand: true // click to expand row, default is false
-};
+
 

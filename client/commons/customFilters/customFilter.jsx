@@ -42,14 +42,14 @@ export default class MlCustomFilter extends Component {
   }
   onFromDateSelection(fieldName,subType,event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedFromDate: value});
       this.setFilterData(fieldName,value,"Date",subType)
     }
   }
   onToDateSelection(fieldName,subType,event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedToDate: value});
       this.setFilterData(fieldName,value,"Date",subType)
     }
@@ -87,7 +87,7 @@ export default class MlCustomFilter extends Component {
         });
 
         if(selectedType == "Date"){
-          let dateSelect = {"fieldName" : selectedFieldName,"value" :  JSON.stringify(this.state.dateQuery),"fieldType" : selectedType,"operator" : selectedSubType}
+          let dateSelect = {"fieldName" : selectedFieldName,"value" :  JSON.stringify(this.state.dateQuery),"fieldType" : selectedType,"operator" :'$and' }
           queries.push(dateSelect)
         }else{
           queries.push(selector);

@@ -172,7 +172,6 @@ class MlEditBackendUser extends React.Component{
               validFrom: userRole[j].validFrom,
               validTo: userRole[j].validTo,
               subChapterId: userRole[j].subChapterId,
-              communityId: userRole[j].communityId,
               isActive: userRole[j].isActive,
               hierarchyLevel: userRole[j].hierarchyLevel,
               hierarchyCode: userRole[j].hierarchyCode,
@@ -182,7 +181,10 @@ class MlEditBackendUser extends React.Component{
               subDepartmentName: userRole[j].subDepartmentName,
               chapterName: userRole[j].chapterName,
               subChapterName: userRole[j].subChapterName,
-              communityName: userRole[j].communityName
+              communityName: userRole[j].communityName,
+              communityId: userRole[j].communityId,
+              communityCode : userRole[j].communityCode,
+              communityHierarchyLevel : userRole[j].communityHierarchyLevel
             }
             userRolesDetails.push(json)
           }
@@ -258,7 +260,6 @@ class MlEditBackendUser extends React.Component{
             validFrom:userRole[j].validFrom,
             validTo:userRole[j].validTo,
             subChapterId:userRole[j].subChapterId,
-            communityId:userRole[j].communityId,
             isActive:userRole[j].isActive,
             hierarchyLevel:userRole[j].hierarchyLevel,
             hierarchyCode:userRole[j].hierarchyCode,
@@ -266,7 +267,10 @@ class MlEditBackendUser extends React.Component{
             departmentId:userRole[j].departmentId,
             departmentName:userRole[j].departmentName,
             subDepartmentId:userRole[j].subDepartmentId,
-            subDepartmentName:userRole[j].subDepartmentName
+            subDepartmentName:userRole[j].subDepartmentName,
+            communityId:userRole[j].communityId,
+            communityCode : userRole[j].communityCode,
+            communityHierarchyLevel : userRole[j].communityHierarchyLevel
           }
           userRolesDetails.push(json)
         }

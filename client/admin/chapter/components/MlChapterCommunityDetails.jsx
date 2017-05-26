@@ -82,7 +82,7 @@ class MlChapterCommunityDetails extends React.Component {
     const response = await findCommunityActionHandler(clusterId,chapterId,subChapterId,communityId);
 
     if (response) {
-      this.setState({loading: false, data: response});
+      this.setState({data: response});
 
       // if (this.state.data.aboutCommunity) {
       //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
@@ -105,6 +105,7 @@ class MlChapterCommunityDetails extends React.Component {
       if (this.state.data.subchapters) {
         this.setState({subchapters: this.state.data.subchapters});
       }
+      this.setState({loading: false})
     }
   }
 
@@ -125,7 +126,7 @@ class MlChapterCommunityDetails extends React.Component {
       subchapters: this.state.subchapters
     }
     let response = await multipartFormHandler(data, null);
-    this.setState({loading: false});
+    // this.setState({loading: false});
     return response;
   }
 

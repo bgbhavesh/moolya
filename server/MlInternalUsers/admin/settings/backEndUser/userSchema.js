@@ -50,6 +50,7 @@ let BackEndUser = `
         isDefault: Boolean,
         clusterId: String,
         clusterName:String,
+        clusterFlag:String,
         userRoles:[UserRoles],
     }
     

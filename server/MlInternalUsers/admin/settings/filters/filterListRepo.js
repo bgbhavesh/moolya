@@ -136,7 +136,7 @@ export default class MlFilterListRepo{
 
         if(listData.length < 1){
           // let allCommuntities = _.contains(communityIds,"all");
-          let allCommuntities = _.contains(communityCode,"all");
+          let allCommuntities = _.contains(communityCode,"all") || [];
           if(allCommuntities){
             result = MlCommunityDefinition.find({isActive : true}).fetch();
           }else{
@@ -205,7 +205,7 @@ export default class MlFilterListRepo{
       case "Gen_Chapters":
 
         if(listData.length < 1){
-          if(userProfile.hierarchyLevel == 4){
+          if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3){
             let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
           }else{

@@ -174,7 +174,7 @@ export default class MlAssignClustersToRoles extends React.Component {
     }`;
 
     let selectedUserType=this.props.selectedBackendUserType
-    let selectedSubChapter=this.props.selectedSubChapter
+    // let selectedSubChapter=this.props.selectedSubChapter
     if(selectedUserType=='moolya'){
       departmentQuery=gql`  query($isMoolya:Boolean,$clusterId:String){
             data:fetchMoolyaBasedDepartmentRoles(isMoolya:$isMoolya,clusterId:$clusterId){label:departmentName,value:_id}
@@ -187,10 +187,12 @@ export default class MlAssignClustersToRoles extends React.Component {
         }  
       }`;
     }
-    if(selectedUserType=='non-moolya'&&selectedSubChapter==''){
-      clusterquery = [];
-    }
-    if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){
+    // if(selectedUserType=='non-moolya'&&selectedSubChapter==''){
+    //   clusterquery = [];
+    // }
+
+    //&&selectedSubChapter!=''
+    if(selectedUserType=='non-moolya'){
       departmentQuery=gql` query($isMoolya:Boolean,$subChapter:String){
       data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
     }
@@ -220,7 +222,8 @@ export default class MlAssignClustersToRoles extends React.Component {
           let subchapterOption = null;
           if(selectedUserType=='moolya'){
              subchapterOption={options: { variables: {chapterId:assignCluster.chapter,clusterId:assignCluster.cluster}}};
-          }else if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){
+          {/*}else if(selectedUserType=='non-moolya'&&selectedSubChapter!=''){*/}
+          }else if(selectedUserType=='non-moolya'){
              subchapterOption={options: { variables: {chapterId:assignCluster.chapter,clusterId:assignCluster.cluster}}};
           }
 

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import {client} from '../../../core/apolloConnection';
+import {client} from '../../core/apolloConnection';
 
-export async function findBackendUserActionHandler(userTypeId) {
-  let did=userTypeId
+export async function findUserActionHandler() {
+  let did=Meteor.userId()
   const result = await client.query({
     query: gql`
     
@@ -64,9 +64,7 @@ export async function findBackendUserActionHandler(userTypeId) {
                       subDepartmentName,
                       chapterName,
                       subChapterName,
-                      communityName,
-                      communityCode,
-                      communityHierarchyLevel
+                      communityName
                     }
                   }
                     

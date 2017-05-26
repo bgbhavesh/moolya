@@ -39,6 +39,7 @@ import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 
+import  MlAdminSwitchProfile from '../../admin/profile/component/MlAdminSwitchProfile'
 import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio'
 import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
 import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
@@ -94,13 +95,18 @@ adminSection.route('/myprofile/AddressBook', {
   }
 });
 
-adminSection.route('/myprofile/Settings', {
+adminSection.route('/myprofile/', {
   name: 'myprofile',
   action(){
     mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileSettings/>})
   }
 });
-
+adminSection.route('/switchprofile', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAdminSwitchProfile/>})
+  }
+});
 
 adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',

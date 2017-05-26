@@ -119,7 +119,7 @@ let externalUser = `
         isDefault:Boolean,
         isActive:Boolean,
         accountType:String,
-        isProfileActive:Boolean,
+        isActive:Boolean,
         optional:Boolean,
         userType :String,
         identityType:String
@@ -142,6 +142,7 @@ let externalUser = `
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
       deActivateUserProfile(profileId:String!):response
+      blockUserProfile(profileId:String!):response
       setDefaultProfile(profileId:String!):response
     }
     

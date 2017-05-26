@@ -84,9 +84,9 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         let platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyCode":"PLATFORM", "communityDefCode":communityAccess.communityDefCode}, context)
         let community = {};
         // let iscommunityActive = userProfile.defaultCommunities.indexOf('all') || userProfile.defaultCommunities.indexOf(communityAccess.communityDefCode);
-        let iscommunityActive = _.indexOf(userProfile.defaultCommunities, 'all')
-        if(iscommunityActive)
-            iscommunityActive = _.indexOf(userProfile.defaultCommunities, communityAccess.communityDefCode)
+        let iscommunityActive = _.findIndex(userProfile.defaultCommunities, {communityCode:'all'})
+        if(iscommunityActive < 0)
+            iscommunityActive = _.findIndex(userProfile.defaultCommunities, {communityCode:communityAccess.communityDefCode})
 
         if(!platformCommunity.isActive || iscommunityActive < 0)
           communityAccess.isActive  = false

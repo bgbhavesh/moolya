@@ -487,11 +487,15 @@ MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, conte
 
   let communitiesAccess = MlCommunityAccess.find(query).fetch();
   communitiesAccess.map(function (communityAccess) {
+
     let community = {};
     community["name"] = communityAccess.communityDefName;
     community["code"] = communityAccess.communityDefCode;
     communities.push(community);
   })
+  communities = _.uniqBy(communities, 'code')
+
+
   return communities;
 }
 

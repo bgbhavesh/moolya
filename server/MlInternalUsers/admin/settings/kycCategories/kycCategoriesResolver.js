@@ -17,7 +17,23 @@ MlResolver.MlMutationResolver['updateKycCategory'] = (obj, args, context, info) 
   }else {
     if (args._id) {
       var id= args._id;
-      let isFind = mlDBController.find('MlDocumentCategories', {_id:{ $ne: id }, $or:[{docCategoryName: args.docCategoryName},{docCategoryDisplayName: args.docCategoryDisplayName}]}, context).fetch();
+      let query ={
+        "_id":{
+          "$ne": id
+        },
+        "$or":[
+          {
+            docCategoryName: {
+              "$regex" : new RegExp('^' + args.docCategoryName + '$', 'i')
+            }
+          },
+          {
+            docCategoryDisplayName: {
+              "$regex" :new RegExp("^" + args.docCategoryDisplayName + '$','i')}
+          }
+        ]
+      };
+      let isFind = mlDBController.find('MlDocumentCategories', query, context).fetch();
       if(isFind.length) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -56,11 +72,32 @@ MlResolver.MlMutationResolver['createKycCategory'] = (obj, args, context, info) 
     return response;
   }else {
     // if(MlDocumentCategories.find({docCategoryName:args.kycCategory.docCategoryName}).count() > 0){
-    if(mlDBController.find('MlDocumentCategories', {docCategoryName:args.kycCategory.docCategoryName}, context).count() > 0){
+
+    let query ={
+      "$or":[
+        {
+          docCategoryName: {
+            "$regex" : new RegExp('^' + args.kycCategory.docCategoryName + '$', 'i')
+          }
+        },
+        {
+          docCategoryDisplayName: {
+            "$regex" :new RegExp("^" + args.kycCategory.docCategoryDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = mlDBController.find('MlDocumentCategories', query, context).fetch();
+    if(isFind.length){
       let code = 409;
-      let response = new MlRespPayload().errorPayload("Already Exist", code);
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
       return response;
     }
+
+    // if(mlDBController.find('MlDocumentCategories', {docCategoryName:args.kycCategory.docCategoryName}, context).count() > 0){
+    //   let code = 409;
+    //   let response = new MlRespPayload().errorPayload("Already Exist", code);
+    //   return response;
+    // }
 
     // let id = MlDocumentCategories.insert({...args.kycCategory});
     let id = mlDBController.insert('MlDocumentCategories', args.kycCategory, context)

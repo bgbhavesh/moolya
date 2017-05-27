@@ -83,8 +83,8 @@ class MlClusterCommunityDetails extends React.Component {
   async findComDef() {
     let communityId = this.props.params.communityId;
     let clusterId = this.props.params.clusterId;
-    let chapterId = this.props.params.chapterId;
-    let subChapterId = this.props.params.subChapterId;
+    let chapterId = this.props.params.chapterId?this.props.params.chapterId:"";
+    let subChapterId = this.props.params.subChapterId?this.props.params.subChapterId:"";
     const response = await findCommunityActionHandler(clusterId,chapterId,subChapterId,communityId);
 
     if (response) {

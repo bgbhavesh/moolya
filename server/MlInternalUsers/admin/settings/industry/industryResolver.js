@@ -11,7 +11,20 @@ MlResolver.MlMutationResolver['CreateIndustry'] = (obj, args, context, info) => 
   }
 
   // let id = MlIndustries.insert({...args});
-  let isFind = mlDBController.find('MlIndustries', { $or:[{industryName: args.industryName},{industryDisplayName: args.industryDisplayName}]}, context).fetch();
+  let query ={
+    "$or":[
+      {
+        industryName: {
+          "$regex" : new RegExp('^' + args.industryName + '$', 'i')
+        }
+      },
+      {
+        industryDisplayName: {
+          "$regex" :new RegExp("^" + args.industryDisplayName + '$','i')}
+      }
+    ]
+  };
+  let isFind = mlDBController.find('MlIndustries', query, context).fetch();
   if(isFind.length){
     let code = 409;
     let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -36,7 +49,23 @@ MlResolver.MlMutationResolver['UpdateIndustry'] = (obj, args, context, info) => 
   if (args._id) {
     var id= args._id;
     // MlProfessions.update({industryId:id},{$set:{industryName : args.industryName}},{multi:true});
-    let isFind = mlDBController.find('MlIndustries', {_id:{ $ne: id }, $or:[{industryName: args.industryName},{industryDisplayName: args.industryDisplayName}]}, context).fetch();
+    let query ={
+      "_id":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          industryName: {
+            "$regex" : new RegExp('^' + args.industryName + '$', 'i')
+          }
+        },
+        {
+          industryDisplayName: {
+            "$regex" :new RegExp("^" + args.industryDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = mlDBController.find('MlIndustries', query, context).fetch();
     if(isFind.length) {
       let code = 409;
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);

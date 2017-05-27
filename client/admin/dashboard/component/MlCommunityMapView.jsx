@@ -34,6 +34,20 @@ export default class MlCommunityMapView extends Component {
       });
     }
   }
+  componentDidMount() {
+    $(".community_icons a").click(function(){
+      $('.community_icons a').removeClass('active_community');
+      $(this).addClass('active_community');
+      var value = $(this).attr('data-filter');
+      if(value == "all") {
+        $('.filter-block').show('1000');
+      }
+      else {
+        $(".filter-block").not('.'+value).hide('3000');
+        $('.filter-block').filter('.'+value).show('3000');
+      }
+    });
+  }
   onStatusChange(userType,e) {
     // const data = this.state.data;
     if (userType) {
@@ -66,7 +80,7 @@ export default class MlCommunityMapView extends Component {
     if(!hasCenter){
       return <MlLoader />;
     }
-    const data=this.props.data&&this.props.data.data?this.props.data.data:[];
+    const data=this.props.data?this.props.data:[];
     const communityIconList=
       <div className="community_icons">
         <a data-toggle="tooltip" title="All" data-placement="bottom" className="active_community" data-filter="all">

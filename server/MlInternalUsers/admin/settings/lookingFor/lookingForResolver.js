@@ -10,8 +10,20 @@ MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) =
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
-
-  let isFind = MlLookingFor.find({ $or:[{lookingForName: args.lookingForName},{lookingForDisplayName: args.lookingForDisplayName}]}).fetch();
+  let query ={
+    "$or":[
+      {
+        lookingForName: {
+          "$regex" : new RegExp('^' + args.lookingForName + '$', 'i')
+        }
+      },
+      {
+        lookingForDisplayName: {
+          "$regex" :new RegExp("^" + args.lookingForDisplayName + '$','i')}
+      }
+    ]
+  };
+  let isFind = MlLookingFor.find(query).fetch();
   if(isFind.length){
     let code = 409;
     let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -43,7 +55,23 @@ MlResolver.MlMutationResolver['UpdateLookingFor'] = (obj, args, context, info) =
   }
   if (args._id) {
     var id= args._id;
-    let isFind = MlLookingFor.find({_id:{ $ne: id }, $or:[{lookingForName: args.lookingForName},{lookingForDisplayName: args.lookingForDisplayName}]}).fetch();
+    let query ={
+      "_id":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          lookingForName: {
+            "$regex" : new RegExp('^' + args.lookingForName + '$', 'i')
+          }
+        },
+        {
+          lookingForDisplayName: {
+            "$regex" :new RegExp("^" + args.lookingForDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = MlLookingFor.find(query).fetch();
     if(isFind.length) {
       let code = 409;
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);

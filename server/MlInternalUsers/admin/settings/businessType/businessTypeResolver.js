@@ -16,7 +16,20 @@ MlResolver.MlMutationResolver['CreateBusinessType'] = (obj, args, context, info)
     let response = new MlRespPayload().errorPayload("Business Name is Required", code);
     return response;
   }else {
-    let isFind = MlBusinessType.find({ $or:[{businessTypeName: args.businessTypeName},{businessTypeDisplayName: args.businessTypeDisplayName}]}).fetch();
+    let query ={
+      "$or":[
+        {
+          businessTypeName: {
+            "$regex" : new RegExp('^' + args.businessTypeName + '$', 'i')
+          }
+        },
+        {
+          businessTypeDisplayName: {
+            "$regex" :new RegExp("^" + args.businessTypeDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = MlBusinessType.find(query).fetch();
     if(isFind.length){
       let code = 409;
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -48,7 +61,23 @@ MlResolver.MlMutationResolver['UpdateBusinessType'] = (obj, args, context, info)
   }else {
     if (args._id) {
       var id = args._id;
-      let isFind = MlBusinessType.find({_id:{ $ne: id }, $or:[{businessTypeName: args.businessTypeName},{businessTypeDisplayName: args.businessTypeDisplayName}]}).fetch();
+      let query ={
+        "_id":{
+          "$ne": id
+        },
+        "$or":[
+          {
+            businessTypeName: {
+              "$regex" : new RegExp('^' + args.businessTypeName + '$', 'i')
+            }
+          },
+          {
+            businessTypeDisplayName: {
+              "$regex" :new RegExp("^" + args.businessTypeDisplayName + '$','i')}
+          }
+        ]
+      };
+      let isFind = MlBusinessType.find(query).fetch();
       if(isFind.length) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);

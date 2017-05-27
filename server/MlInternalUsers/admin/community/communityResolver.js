@@ -109,7 +109,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
 {
     // TODO : Authorization
-    let clusterQuery,
+    var clusterQuery,
       chapterQuery,
       subChapterQuery,
       community = {},
@@ -132,13 +132,13 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
         return community
     }
 
-    let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    var userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
     if(!userProfile||(!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
       return community
     }
 
     // let userhierarchy = MlHierarchy.findOne({level:Number(userProfile.hierarchyLevel)});
-    let userhierarchy = mlDBController.findOne('MlHierarchy', {level:Number(userProfile.hierarchyLevel)}, context)
+    var userhierarchy = mlDBController.findOne('MlHierarchy', {level:Number(userProfile.hierarchyLevel)}, context)
     if(!userhierarchy){
       return community
     }
@@ -146,9 +146,12 @@ MlResolver.MlQueryResolver['fetchCommunityDef'] = (obj, args, context, info) =>
     // let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
     // let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userhierarchy.isParent) ? args.chapterId: "";
     // let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
+
     clusterId = (!args.clusterId && !userhierarchy.isParent ? args.clusterId = userProfile.defaultProfileHierarchyRefId: "") || (args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "");
-    chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = ((_.find(userProfile.defaultChapters, args.chapterId))!="all"): "") || (args.chapterId && ((userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId: "");
-    subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = ((_.find(userProfile.defaultSubChapters, args.subChapterId))!="all"): "") || (args.subChapterId && ((userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId: "");
+    // chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = ((_.find(userProfile.defaultChapters, args.chapterId))!="all"): "") || (args.chapterId && ((userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId: "");
+    // subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = ((_.find(userProfile.defaultSubChapters, args.subChapterId))!="all"): "") || (args.subChapterId && ((userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId: "");
+    chapterId = (!args.chapterId && !userhierarchy.isParent ? args.chapterId = (_.findIndex(userProfile.defaultChapters, args.chapterId)): "") || (args.chapterId && ((userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId: "");
+    subChapterId = (!args.subChapterId && !userhierarchy.isParent ? args.subChapterId = (_.findIndex(userProfile.defaultSubChapters, args.subChapterId)): "") || (args.subChapterId && ((userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId: "");
 
     if(clusterId != "" && chapterId != "" && subChapterId != "")
     {
@@ -347,8 +350,10 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
   // let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userhierarchy.isParent) ? args.subChapterId: ""
 
   let clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userHierarchy.isParent) ? args.clusterId : "";
-    let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userHierarchy.isParent) ? args.chapterId: "";
-    let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userHierarchy.isParent) ? args.subChapterId: ""
+    // let chapterId = args.chapterId && ((_.find(userProfile.defaultChapters, args.chapterId)) || userHierarchy.isParent) ? args.chapterId: "";
+    // let subChapterId = args.subChapterId && ((_.find(userProfile.defaultSubChapters, args.subChapterId)) || userHierarchy.isParent) ? args.subChapterId: ""
+  let chapterId = args.chapterId && ((_.findIndex(userProfile.defaultChapters, args.chapterId)) || userHierarchy.isParent) ? args.chapterId: "";
+  let subChapterId = args.subChapterId && ((_.findIndex(userProfile.defaultSubChapters, args.subChapterId)) || userHierarchy.isParent) ? args.subChapterId: ""
 
 
 

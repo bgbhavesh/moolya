@@ -555,6 +555,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   roles.map(function (role)
   {
       if(!role.hierarchyCode) {
+        //community Admin @ subChapter level
           if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             (role.communityId && role.communityId != "all")) {
             levelCode = "COMMUNITY"
@@ -565,10 +566,13 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
               role.communityHierarchyLevel = 1
             }
           }
+          //sub chapter Admin
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") && !args.user.isChapterAdmin) {
             levelCode = "SUBCHAPTER"
-            role.communityId = "all"
+            role.communityId = "all";
+            role.communityCode = "all";
           }
+          //chapter Admin
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             args.user.isChapterAdmin) {
             if (role.departmentName == "operations") {
@@ -578,11 +582,15 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
               role.roleId = chapterAdminRole._id
               role.subChapterId = "all"
               role.communityId = "all"
+              role.communityCode = "all";
             } else {
               levelCode = "SUBCHAPTER"
               role.communityId = "all"
+              role.communityCode = "all";
             }
           }
+
+          //community Admin @ cluster level
           else if ((role.clusterId && role.clusterId != "all") && (role.communityId && role.communityId != "all")) {
             levelCode = "COMMUNITY"
             role.chapterId = "all"
@@ -590,15 +598,17 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
             // let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"communityDefCode":role.communityId},{"hierarchyCode":"SUBCHAPTER"}]}, context);
             // if(community){
               role.communityCode = role.communityId;
-              role.communityId = "";
+              role.communityId = "all";
               role.communityHierarchyLevel = 3
             // }
           }
+          //cluster Admin
           else if (role.clusterId && role.clusterId != "all") {
             levelCode = "CLUSTER"
             role.chapterId = "all"
             role.subChapterId = "all"
             role.communityId = "all"
+            role.communityCode = "all";
           }
 
           if (levelCode) {

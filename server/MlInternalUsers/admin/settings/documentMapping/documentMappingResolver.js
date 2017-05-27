@@ -9,7 +9,25 @@ MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => 
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
-
+  let query ={
+    "$or":[
+      {
+        documentName: {
+          "$regex" : new RegExp('^' + args.document.documentName + '$', 'i')
+        }
+      },
+      {
+        documentDisplayName: {
+          "$regex" :new RegExp("^" + args.document.documentDisplayName + '$','i')}
+      }
+    ]
+  };
+  let isFind = MlDocumentMapping.find(query).fetch();
+  if(isFind.length){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    return response;
+  }
   let id = MlDocumentMapping.insert({...args.document});
   if (id) {
     let code = 200;
@@ -27,6 +45,31 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
   }
 
   if (args.documentId) {
+    let id = args.documentId;
+    let query = {
+      "_id":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          documentName: {
+            "$regex" : new RegExp('^' + args.document.documentName + '$', 'i')
+          }
+        },
+        {
+          documentDisplayName: {
+            "$regex" :new RegExp("^" + args.document.documentDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = MlDocumentMapping.find(query).fetch();
+    if(isFind.length) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      return response;
+    }
+
+
     args=_.omit(args,'_id');
     let result= MlDocumentMapping.update({documentId:args.documentId}, {$set: args.document});
     let code = 200;

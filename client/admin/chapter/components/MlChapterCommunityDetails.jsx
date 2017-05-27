@@ -77,8 +77,8 @@ class MlChapterCommunityDetails extends React.Component {
   async findComDef() {
     let communityId = this.props.params.communityId;
     let clusterId = this.props.params.clusterId;
-    let chapterId = this.props.params.chapterId;
-    let subChapterId = this.props.params.subChapterId;
+    let chapterId = this.props.params.chapterId?this.props.params.chapterId:"";
+    let subChapterId = this.props.params.subChapterId?this.props.params.subChapterId:"";
     const response = await findCommunityActionHandler(clusterId,chapterId,subChapterId,communityId);
 
     if (response) {
@@ -123,7 +123,10 @@ class MlChapterCommunityDetails extends React.Component {
       communityId: this.props.params.communityId,
       clusters: this.state.clusters,
       chapters: this.state.chapters,
-      subchapters: this.state.subchapters
+      subchapters: this.state.subchapters,
+      clusterId:this.props.params.clusterId?this.props.params.clusterId:"",
+      chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
+      subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
     let response = await multipartFormHandler(data, null);
     // this.setState({loading: false});

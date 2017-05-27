@@ -11,7 +11,21 @@ MlResolver.MlMutationResolver['CreateEntity'] = (obj, args, context, info) => {
     return response;
   }
 
-  let isFind = MlEntity.find({ $or:[{entityName: args.entityName},{entityDisplayName: args.entityDisplayName}]}).fetch();
+  let query ={
+    "$or":[
+      {
+        entityName: {
+          "$regex" : new RegExp('^' + args.entityName + '$', 'i')
+        }
+      },
+      {
+        entityDisplayName: {
+          "$regex" :new RegExp("^" + args.entityDisplayName + '$','i')}
+      }
+    ]
+  };
+
+  let isFind = MlEntity.find(query).fetch();
   if(isFind.length){
     let code = 409;
     let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -39,7 +53,24 @@ MlResolver.MlMutationResolver['UpdateEntity'] = (obj, args, context, info) => {
   if (args._id) {
     var id= args._id;
 
-    let isFind = MlEntity.find({_id:{ $ne: id }, $or:[{entityName: args.entityName},{entityDisplayName: args.entityDisplayName}]}).fetch();
+    let query ={
+      "_id":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          entityName: {
+            "$regex" : new RegExp('^' + args.entityName + '$', 'i')
+          }
+        },
+        {
+          entityDisplayName: {
+            "$regex" :new RegExp("^" + args.entityDisplayName + '$','i')}
+        }
+      ]
+    };
+
+    let isFind = MlEntity.find(query).fetch();
     if(isFind.length) {
       let code = 409;
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);

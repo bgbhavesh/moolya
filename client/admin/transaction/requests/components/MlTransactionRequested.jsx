@@ -50,6 +50,7 @@ export default class sMlTransactionRequested extends Component {
       chapter:this.state.chapter,
       subChapter:this.state.subChapter,
       community:this.state.community,
+      communityName: " ",
       requestsStatus:{
         code: "1",
         description:"requested"

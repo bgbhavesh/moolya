@@ -127,21 +127,20 @@ let CoreModules = {
 
   },
 
-  MlAuditLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
-    if(!fieldsProj.sort){
-      fieldsProj.sort={timeStamp: -1}
+  MlAuditLogRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context)=> {
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {timeStamp: -1}
     }
-    let serverQuery={};
+    let serverQuery = {};
     let query = {};
-    requestParams=requestParams?requestParams:null;
+    requestParams = requestParams ? requestParams : null;
     // let reqArray=requestParams.moduleName.split(',');
     // serverQuery={moduleName:{$in:reqArray}}
-    query=mergeQueries(userFilterQuery,serverQuery);
-    const data  = MlAudit.find(query ,fieldsProj).fetch();
+    query = mergeQueries(userFilterQuery, serverQuery);
+    const data = MlAudit.find(query, fieldsProj).fetch();
     const totalRecords = mlDBController.find('MlAudit', query, context, fieldsProj).count();
 
-    return {totalRecords:totalRecords,data:data};
-
+    return {totalRecords: totalRecords, data: data};
   },
 
   MlHierarchySubChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{

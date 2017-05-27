@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { graphql,compose } from 'react-apollo';
 import MoolyaMapView from "../../../commons/components/map/MoolyaMapView"
-
+import _ from 'lodash';
 const DataComposerType='graphQl';
 export default class  MlMapViewComposer extends Component {
   constructor(props) {
@@ -13,6 +13,8 @@ export default class  MlMapViewComposer extends Component {
     let queryOptions={
       forceFetch: true,
       variables: {
+        offset: 0,
+        limit: config.sizePerPage||50,   //config.sizePerPage|| 10
         context:null,
         searchSpec:null,
         fieldsData:config.fieldsData||null,
@@ -32,7 +34,20 @@ export default class  MlMapViewComposer extends Component {
         options: props => (queryOptions),
         props: ({data: {loading, data, fetchMore}}) => ({
           loading,
-          data
+          data,
+          fetchMore: (variables) => fetchMore({
+            variables: variables?variables:{
+              offset: data
+            },
+            updateQuery: (prev, {fetchMoreResult}) => {
+              if (!fetchMoreResult.data) {
+                return prev;
+              }
+              return {
+                data: fetchMoreResult.data.data
+              };
+            },
+          }),
         })
       })(MoolyaMapView);
       return (<Composer {...config}/>);

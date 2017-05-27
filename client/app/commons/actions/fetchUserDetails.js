@@ -33,7 +33,7 @@ export async function fetchPortfolioDetails() {
     query: gql`
          query{
         fetchPortfolioDetailsByUserId {
-          _id
+          portfolioId : _id
           communityType
           communityCode
         }

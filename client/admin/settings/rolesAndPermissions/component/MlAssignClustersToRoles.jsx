@@ -55,6 +55,7 @@ export default class MlAssignClustersToRoles extends React.Component {
           cluster:assignedClusterDetails[i].cluster,
           chapter:assignedClusterDetails[i].chapter,
           subChapter:assignedClusterDetails[i].subChapter,
+          community:assignedClusterDetails[i].community,
           department:assignedClusterDetails[i].department,
           subDepartment:assignedClusterDetails[i].subDepartment,
           isActive:assignedClusterDetails[i].isActive
@@ -94,7 +95,6 @@ export default class MlAssignClustersToRoles extends React.Component {
 
   optionsBySelectDepartment(index, selectedIndex){
     let availabilityDetails=this.state.assignRoleToClusters
-    console.log("Selected--"+availabilityDetails);
     availabilityDetails[index]['department']=selectedIndex
     this.setState({assignRoleToClusters:availabilityDetails})
     this.props.getassignRoleToClusters(this.state.assignRoleToClusters)

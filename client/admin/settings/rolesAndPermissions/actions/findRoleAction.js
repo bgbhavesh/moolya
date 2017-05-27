@@ -16,6 +16,7 @@ export async function findRoleActionHandler(roleId) {
           assignRoles{
             cluster
             chapter
+            community
             subChapter
             department
             subDepartment

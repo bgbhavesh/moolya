@@ -2,7 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findStartupManagementActionHandler} from '../../../actions/findPortfolioStartupDetails'
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
@@ -12,7 +12,6 @@ import moment from "moment";
 import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-
 
 export default class MlStartupManagement extends React.Component{
   constructor(props, context){
@@ -45,6 +44,7 @@ export default class MlStartupManagement extends React.Component{
   }
   componentDidUpdate()
   {
+    initalizeFloatLabel();
     OnLockSwitch();
     dataVisibilityHandler();
   }

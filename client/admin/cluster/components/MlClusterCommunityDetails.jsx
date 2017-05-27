@@ -23,6 +23,7 @@ class MlClusterCommunityDetails extends React.Component {
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
     this.updateCommunityAccess.bind(this)
+    this.getUpdatedChapters.bind(this)
     return this;
   }
 
@@ -41,6 +42,10 @@ class MlClusterCommunityDetails extends React.Component {
   componentWillMount() {
     const resp = this.findComDef();
     return resp;
+  }
+  getUpdatedChapters(data){
+    if(data.length > 0)
+      this.setState({chapters:data})
   }
 
   componentDidUpdate() {
@@ -78,12 +83,12 @@ class MlClusterCommunityDetails extends React.Component {
   async findComDef() {
     let communityId = this.props.params.communityId;
     let clusterId = this.props.params.clusterId;
-    let chapterId = this.props.params.chapterId;
-    let subChapterId = this.props.params.subChapterId;
+    let chapterId = this.props.params.chapterId?this.props.params.chapterId:"";
+    let subChapterId = this.props.params.subChapterId?this.props.params.subChapterId:"";
     const response = await findCommunityActionHandler(clusterId,chapterId,subChapterId,communityId);
 
     if (response) {
-      this.setState({loading: false, data: response});
+      this.setState({data: response});
 
       // if (this.state.data.aboutCommunity) {
       //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
@@ -106,6 +111,7 @@ class MlClusterCommunityDetails extends React.Component {
       if (this.state.data.subchapters) {
         this.setState({subchapters: this.state.data.subchapters});
       }
+      this.setState({loading: false})
     }
   }
 
@@ -123,10 +129,13 @@ class MlClusterCommunityDetails extends React.Component {
       communityId: this.props.params.communityId,
       clusters: this.state.clusters,
       chapters: this.state.chapters,
-      subchapters: this.state.subchapters
+      subchapters: this.state.subchapters,
+      clusterId:this.props.params.clusterId?this.props.params.clusterId:"",
+      chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
+      subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
     let response = await multipartFormHandler(data, null);
-    this.setState({loading: false});
+    // this.setState({loading: false});
     return response;
   }
 
@@ -172,20 +181,20 @@ class MlClusterCommunityDetails extends React.Component {
     ]
 
     let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let chapterOption = this.state.clusters.length>0?{options: {variables: {clusters: this.state.clusters}}}:{options: {variables: {clusters: []}}};
     let chapterquery = gql`query($clusters:[String]){  
         data:fetchActiveClusterChapters(clusters:$clusters) {
           value:_id
           label:chapterName
         }  
     }`;
+    let subChapterOption = this.state.chapters.length>0&&this.state.clusters.length>0?{options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}}:{options: {variables: {chapters: [],clusters: []}}};
     let subChapterquery = gql`query($chapters:[String],$clusters:[String]){  
         data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
         }  
     }`;
-    let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
-    let subChapterOption = {options: {variables: {chapters: this.state.chapters,clusters:this.state.clusters}}};
     let isEditable, isClusterEditable;
     if(this.props.params.communityId && this.props.params.subChapterId) {
       isEditable = "disabled";
@@ -229,7 +238,7 @@ class MlClusterCommunityDetails extends React.Component {
                       : <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
                                       valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
                                       queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
-                                      isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}/>
+                                      isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} getUpdatedCallback={this.getUpdatedChapters.bind(this)}/>
                     }
                   </div>
                   <div className="form-group">

@@ -15,6 +15,11 @@ export default class MlAssignDepartments extends React.Component {
   AssignDepartmentAvailability(id){
     this.setState({
       departmentAvailability: this.state.departmentAvailability.concat([{cluster: [],chapter:'',subChapter:'',email:'',isActive:false }])
+    }, function () {
+      setTimeout(function () {
+        this.context.scrollArea.refresh();
+        this.context.scrollArea.scrollBottom();
+      }.bind(this));
     });
   }
 
@@ -182,3 +187,6 @@ export default class MlAssignDepartments extends React.Component {
   }
 };
 
+MlAssignDepartments.contextTypes = {
+  scrollArea: React.PropTypes.object
+};

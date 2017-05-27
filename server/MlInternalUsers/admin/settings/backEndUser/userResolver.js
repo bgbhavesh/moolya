@@ -46,15 +46,14 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
       let response = new MlRespPayload().errorPayload("Username is required", code);
       return response;
     }
-
+  let extEmailExists = mlDBController.find('users', {'profile.email':args.user.profile.email, 'profile.isExternaluser':true }, context).count();
       // if(Meteor.users.find({username:args.user.username}).count() > 0) {
-    if(mlDBController.find('users', {username:args.user.username}, context).count() > 0){
+    if(mlDBController.find('users', {username:args.user.username}, context).count() > 0 || extEmailExists ){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
         return response;
     }
-
-    // let userId = Accounts.createUser(args.user);
+  // let userId = Accounts.createUser(args.user);
     let userId = mlDBController.insert('users', args.user, context)
     if(userId){
         let code = 200;
@@ -121,14 +120,12 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     //   return response;
     // }
   let salted = passwordUtil.hashPassword(args.password);
-  // let resp = Meteor.users.update({_id: args.userId}, {
-  //   $set: {"services.password.bcrypt": salted}
-  // });
-  let resp = mlDBController.update('users', args.userId, {"services.password.bcrypt": salted}, {$set:true}, context)
-  if (resp) {
-    let code = 200;
-    let response = new MlRespPayload().successPayload("Password Reset complete", code);
-    return response
+    let resp = mlDBController.update('users', args.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
+    if (resp) {
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Password Reset complete", code);
+      return response
+
   }
 };
 

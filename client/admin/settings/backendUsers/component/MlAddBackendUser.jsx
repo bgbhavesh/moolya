@@ -162,6 +162,9 @@ class MlAddBackendUser extends React.Component {
       }
 
       const response = await addBackendUserActionHandler(userObject)
+      if(!response.success){
+        toastr.error("Email already exists")
+      }
       return response;
     }
 

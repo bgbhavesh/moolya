@@ -15,7 +15,20 @@ MlResolver.MlMutationResolver['CreateCitizenship'] = (obj, args, context, info) 
     let response = new MlRespPayload().errorPayload("Citizenship Name is Required", code);
     return response;
   }else {
-    let isFind = MlCitizenship.find({ $or:[{citizenshipTypeName: args.citizenshipTypeName},{citizenshipTypeDisplayName: args.citizenshipTypeDisplayName}]}).fetch();
+    let query ={
+      "$or":[
+        {
+          citizenshipTypeName: {
+            "$regex" : new RegExp('^' + args.citizenshipTypeName + '$', 'i')
+          }
+        },
+        {
+          citizenshipTypeDisplayName: {
+            "$regex" :new RegExp("^" + args.citizenshipTypeDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = MlCitizenship.find(query).fetch();
     if(isFind.length){
       let code = 409;
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -46,7 +59,24 @@ MlResolver.MlMutationResolver['UpdateCitizenship'] = (obj, args, context, info) 
   }else {
     if (args._id) {
       var id= args._id;
-      let isFind = MlCitizenship.find({_id:{ $ne: id }, $or:[{citizenshipTypeName: args.citizenshipTypeName},{citizenshipTypeDisplayName: args.citizenshipTypeDisplayName}]}).fetch();
+      let query ={
+        "_id":{
+          "$ne": id
+        },
+        "$or":[
+          {
+            citizenshipTypeName: {
+              "$regex" : new RegExp('^' + args.citizenshipTypeName + '$', 'i')
+            }
+          },
+          {
+            citizenshipTypeDisplayName: {
+              "$regex" :new RegExp("^" + args.citizenshipTypeDisplayName + '$','i')}
+          }
+        ]
+      };
+
+      let isFind = MlCitizenship.find(query).fetch();
       if(isFind.length){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);

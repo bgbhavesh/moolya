@@ -12,8 +12,20 @@ MlResolver.MlMutationResolver['CreateSpecification'] = (obj, args, context, info
   }
 
   // let id = MlSpecifications.insert({...args});
-
-  let isFind = mlDBController.find('MlSpecifications', { $or:[{specificationName: args.specificationName},{specificationDisplayName: args.specificationDisplayName}]}, context).fetch();
+  let query ={
+    "$or":[
+      {
+        specificationName: {
+          "$regex" : new RegExp('^' + args.specificationName + '$', 'i')
+        }
+      },
+      {
+        specificationDisplayName: {
+          "$regex" :new RegExp("^" + args.specificationDisplayName + '$','i')}
+      }
+    ]
+  };
+  let isFind = mlDBController.find('MlSpecifications', query, context).fetch();
   if(isFind.length){
     let code = 409;
     let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -40,7 +52,24 @@ MlResolver.MlMutationResolver['UpdateSpecification'] = (obj, args, context, info
 
   if (args._id) {
     var id= args._id;
-    let isFind = mlDBController.find('MlSpecifications', {_id:{ $ne: id }, $or:[{specificationName: args.specificationName},{specificationDisplayName: args.specificationDisplayName}]}, context).fetch();
+    let query ={
+      "_id":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          specificationName: {
+            "$regex" : new RegExp('^' + args.specificationName + '$', 'i')
+          }
+        },
+        {
+          specificationDisplayName: {
+            "$regex" :new RegExp("^" + args.specificationDisplayName + '$','i')}
+        }
+      ]
+    };
+
+    let isFind = mlDBController.find('MlSpecifications', query, context).fetch();
     if(isFind.length) {
       let code = 409;
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);

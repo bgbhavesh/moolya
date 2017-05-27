@@ -176,7 +176,15 @@ class MlClusterCommunityDetails extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler:async(event) => FlowRouter.go('/admin/community')
+        handler:async function(event) {
+          if(FlowRouter.getRouteName() == 'cluster_chapter_communities_communityDetails') {
+            FlowRouter.go('/admin/clusters/' + FlowRouter.getParam('clusterId') + '/'
+              + FlowRouter.getParam('chapterId') + '/' + FlowRouter.getParam('subChapterId') + '/'
+              + FlowRouter.getParam('subChapterName') + '/communities');
+          } else {
+            FlowRouter.go('/admin/clusters/' + FlowRouter.getParam('clusterId') + '/communities')
+          }
+        }
       }
     ]
 

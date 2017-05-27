@@ -3,17 +3,26 @@
  */
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
+import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 import _ from "lodash";
 
 MlResolver.MlQueryResolver['fetchPortfolioDetails'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, context, info) => {
-  var portfolio = MlPortfolioDetails.findOne({'userId': context.userId})
-  if(portfolio)
-    return portfolio;
-  else
-    return {};
+  if (context.userId) {
+    let defaultProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+    if (defaultProfile) {
+      var defaultCommunity = defaultProfile.communityDefCode || {};
+      var portfolio = MlPortfolioDetails.findOne({$and: [{userId: context.userId}, {communityCode: defaultCommunity}]})
+      if (portfolio)
+        return portfolio;
+      else
+        console.log("portfolio not found")
+    }
+  } else {
+    console.log("NOt a valid user");
+  }
 }
 
 MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, info) => {

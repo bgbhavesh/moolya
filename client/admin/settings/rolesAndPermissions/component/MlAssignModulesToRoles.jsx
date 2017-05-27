@@ -39,6 +39,11 @@ export default class MlAssignModulesToRoles extends React.Component {
         isActive: '',
         actions: []
       }])
+    }, function () {
+      setTimeout(function () {
+        this.context.scrollArea.refresh();
+        this.context.scrollArea.scrollBottom();
+      }.bind(this));
     });
   }
 
@@ -345,3 +350,6 @@ export default class MlAssignModulesToRoles extends React.Component {
   }
 };
 
+MlAssignModulesToRoles.contextTypes = {
+  scrollArea: React.PropTypes.object
+};

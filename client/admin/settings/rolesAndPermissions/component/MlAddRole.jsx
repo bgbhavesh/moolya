@@ -11,6 +11,7 @@ import MlAssignModulesToRoles from "./MlAssignModulesToRoles";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../../utils/formElemUtil";
 import {mlFieldValidations} from "../../../../commons/validations/mlfieldValidation";
+import _ from "lodash";
 let Select = require('react-select');
 
 class MlAddRole extends React.Component{
@@ -77,12 +78,20 @@ class MlAddRole extends React.Component{
         modules: this.state.assignModulesToRoles,
         isActive: this.refs.isActive.checked
       };
-      // if (!this.refs.diplayName.value || (this.refs.diplayName.value == "")) {
-      //   alert("Display Name is required")
-      // } else {
-      const response = await addRoleActionHandler(roleDetails)
-      return response;
-      // }
+
+      var emptyCluster = _.filter(roleDetails.assignRoles, ['cluster', ''])
+      var emptyChapter = _.filter(roleDetails.assignRoles, ['chapter', ''])
+      var emptySubChapter = _.filter(roleDetails.assignRoles, ['subChapter', ''])
+      var emptyCommunity = _.filter(roleDetails.assignRoles, ['community', ''])
+      var emptyDepartment = _.filter(roleDetails.assignRoles, ['department', ''])
+      var emptySubDepartment = _.filter(roleDetails.assignRoles, ['subDepartment', ''])
+
+      if (_.isEmpty(emptyCluster) && _.isEmpty(emptyChapter) && _.isEmpty(emptySubChapter) && _.isEmpty(emptyCommunity) && _.isEmpty(emptyDepartment) && _.isEmpty(emptySubDepartment)) {
+        const response = await addRoleActionHandler(roleDetails)
+        return response;
+      } else {
+        toastr.error("All Assign role fields Required");
+      }
     }
   }
 

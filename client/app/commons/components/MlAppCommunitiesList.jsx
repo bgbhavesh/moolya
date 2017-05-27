@@ -1,13 +1,13 @@
-import React, { Component, PropTypes } from 'react';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
-import { render } from 'react-dom';
-import {fetchCommunitiesHandler} from '../actions/fetchCommunitiesActionHandler'
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import Moolyaselect from '../../../commons/components/select/MoolyaSelect'
-import {fetchUserDetailsHandler} from '../actions/fetchUserDetails'
+import React, {Component, PropTypes} from "react";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import {render} from "react-dom";
+import {fetchCommunitiesHandler} from "../actions/fetchCommunitiesActionHandler";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import {fetchUserDetailsHandler} from "../actions/fetchUserDetails";
+import {registerAsInfo} from "../../../admin/transaction/requested/actions/registrationAs";
 let Select = require('react-select');
-import {registerAsInfo} from  '../../../admin/transaction/requested/actions/registrationAs'
 export default class MlAppCommunitiesList extends Component {
     constructor(props){
         super(props);
@@ -28,22 +28,25 @@ export default class MlAppCommunitiesList extends Component {
       this.fetchUserDetails();
 
     }
-      async fetchUserDetails(){
-            let response=await fetchUserDetailsHandler()
-        if(response){
-            let registrationInfo=response.registrationInfo
-          this.setState({status:response.status})
-          this.setState({registerId:response._id})
-          this.setState({firstName:registrationInfo.firstName});
-          this.setState({lastName:registrationInfo.lastName});
-          this.setState({contactNumber:registrationInfo.contactNumber});
-          this.setState({email:registrationInfo.email});
-          this.setState({userName:registrationInfo.userName})
-          this.setState({country:registrationInfo.countryId})
-          this.setState({communityId:registrationInfo.registrationType});
-          this.fetchCommunities();
-        }
-      }
+
+  async fetchUserDetails() {
+    let response = await fetchUserDetailsHandler()
+    if (response) {
+      let registrationInfo = response.registrationInfo
+      this.setState({
+        status: response.status,
+        registerId: response._id,
+        firstName: registrationInfo.firstName,
+        lastName: registrationInfo.lastName,
+        contactNumber: registrationInfo.contactNumber,
+        email: registrationInfo.email,
+        userName: registrationInfo.userName,
+        country: registrationInfo.countryId,
+        communityId: registrationInfo.registrationType
+      });
+      this.fetchCommunities();
+    }
+  }
 
     setSelectedCommunity(selCommunity,idx, e){
         this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})

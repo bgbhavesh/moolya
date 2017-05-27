@@ -1131,13 +1131,17 @@ MlResolver.MlQueryResolver['fetchInternalUserProfiles'] = (obj, args, context, i
 
     userProfiles.map(function (user,index) {
       let cName = null
-      if(user){
+      let cFlag = null
+      if(user &&  user.clusterId  && user.clusterId != 'all'){
         let clusterData = mlDBController.findOne('MlClusters', {_id: user.clusterId}, context) || {};
         cName = clusterData.displayName;
+        cFlag = clusterData.countryFlag;
+
       }else if( user.clusterId == 'all'){
         cName = "All";
       }
       userProfiles[index].clusterName = cName
+      userProfiles[index].clusterFlag = cFlag
     })
 
 

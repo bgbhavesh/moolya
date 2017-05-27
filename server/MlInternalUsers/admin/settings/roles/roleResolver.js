@@ -111,7 +111,8 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
   chapterId = args.chapterId && ((userProfile.defaultChapters.indexOf("all") >= 0 || userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId : "";
   subChapterId = args.subChapterId && ((userProfile.defaultSubChapters.indexOf("all") >= 0 || userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId : ""
-  communityId = args.communityId && ((userProfile.defaultCommunities.indexOf("all") >= 0 || userProfile.defaultCommunities.indexOf(args.communityId) > -1) || userhierarchy.isParent) ? args.communityId : ""
+  // communityId = args.communityId && ((userProfile.defaultCommunities.indexOf("all") >= 0 || userProfile.defaultCommunities.indexOf(args.communityId) > -1) || userhierarchy.isParent) ? args.communityId : ""
+  communityId = args.communityId && ((_.findIndex(userProfile.defaultCommunities, {communityCode:'all'}) >= 0 || _.findIndex(userProfile.defaultCommunities, {communityCode:args.communityId}) > -1) || userhierarchy.isParent) ? args.communityId : ""
 
   if (clusterId != "" && chapterId != "" && subChapterId != "" && communityId != "") {
     levelCode = "COMMUNITY"
@@ -135,7 +136,39 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   // let department = MlDepartments.findOne({"_id":args.departmentId})
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    // let valueGet  = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}, {"isActive":true}]}).fetch()
+    // // let valueGet  = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}, {"isActive":true}]}).fetch()
+    // let query = {
+    //   "$and":[
+    //     {"isActive": true},
+    //     {"assignRoles.isActive": true}
+    //   ]
+    // };
+    // if(args.departmentId){
+    //   query["$and"].push({
+    //     "assignRoles.department": {"$in": [args.departmentId]}
+    //   });
+    // }
+    // if(args.clusterId){
+    //   query['$and'].push({
+    //     "assignRoles.cluster": {"$in": ["all", args.clusterId]}
+    //   });
+    // }
+    // if(args.chapterId){
+    //   query['$and'].push({
+    //     "assignRoles.chapter": {"$in": ["all", args.chapterId]}
+    //   });
+    // }
+    // if(args.subChapterId){
+    //   query['$and'].push({
+    //     "assignRoles.subChapter": {"$in": ["all", args.subChapterId]}
+    //   });
+    // }
+    // if(args.communityId){
+    //   query['$and'].push({
+    //     "assignRoles.community": {"$in": ["all", args.communityId]}
+    //   });
+    // }
+    // let valueGet = mlDBController.find('MlRoles', query, context).fetch()
     let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
     _.each(valueGet, function (item, say) {
       let ary = []

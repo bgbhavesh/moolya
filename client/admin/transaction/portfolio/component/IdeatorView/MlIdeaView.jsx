@@ -125,17 +125,23 @@ export default class MlIdeaView extends React.Component {
             </div>
             <div className="form_bg col-lg-8 col-lg-offset-2">
               <div className="form-group">
-                <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name"
-                       defaultValue={this.state.portfolioIdeatorInfo.title} name="title" readOnly="true"/>
-                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                             id="isIdeasTitlePrivate"/><input
-                type="checkbox" className="lock_input" id="makePrivate"
-                checked={this.state.portfolioIdeatorInfo.isIdeaTitlePrivate}/>
+
+              {/*  <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name"
+                       defaultValue={this.state.portfolioIdeatorInfo.title} name="title" readOnly="true"/>*/}
+
+                    <p><b>Title:</b>{this.state.portfolioIdeatorInfo.title}</p>
+                    <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
+                                 id="isIdeasTitlePrivate"/><input
+                    type="checkbox" className="lock_input" id="makePrivate"
+                    checked={this.state.portfolioIdeatorInfo.isIdeaTitlePrivate}/>
+
+
               </div>
               <div className="form-group">
-                  <textarea placeholder="Describe..." className="form-control" id="cl_about"
+                <p><b>Description:</b>{this.state.portfolioIdeatorInfo.description}</p>
+                 {/* <textarea placeholder="Describe..." className="form-control" id="cl_about"
                             defaultValue={this.state.portfolioIdeatorInfo.description} name="description"
-                            readOnly="true"></textarea>
+                            readOnly="true"></textarea>*/}
                 <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                              id="isIdeasPrivate"/><input type="checkbox" className="lock_input" id="makePrivate"
                                                          checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/>

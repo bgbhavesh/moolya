@@ -256,7 +256,7 @@ export default class MlFilterListRepo{
 
 
         let genSubChapterResponse=_.each(result,function (option,id) {
-          options.push({"label":option.subChapterDisplayName,"value":option._id})
+          options.push({"label":option.subChapterName,"value":option._id})
         })
 
         break;

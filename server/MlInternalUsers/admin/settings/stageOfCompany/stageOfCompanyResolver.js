@@ -10,7 +10,21 @@ MlResolver.MlMutationResolver['CreateStageOfCompany'] = (obj, args, context, inf
     return response;
   }
 
-  let isFind = MlStageOfCompany.find({ $or:[{stageOfCompanyName: args.stageOfCompanyName},{stageOfCompanyDisplayName: args.stageOfCompanyDisplayName}]}).fetch();
+  let query ={
+    "$or":[
+      {
+        stageOfCompanyName: {
+          "$regex" : new RegExp('^' + args.stageOfCompanyName + '$', 'i')
+        }
+      },
+      {
+        stageOfCompanyDisplayName: {
+          "$regex" :new RegExp("^" + args.stageOfCompanyDisplayName + '$','i')}
+      }
+    ]
+  };
+
+  let isFind = MlStageOfCompany.find(query).fetch();
   if(isFind.length){
     let code = 409;
     let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
@@ -36,7 +50,23 @@ MlResolver.MlMutationResolver['UpdateStageOfCompany'] = (obj, args, context, inf
 
   if (args._id) {
     var id= args._id;
-    let isFind = MlStageOfCompany.find({_id:{ $ne: id }, $or:[{stageOfCompanyName: args.stageOfCompanyName},{stageOfCompanyDisplayName: args.stageOfCompanyDisplayName}]}).fetch();
+    let query ={
+      "_id":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          stageOfCompanyName: {
+            "$regex" : new RegExp('^' + args.stageOfCompanyName + '$', 'i')
+          }
+        },
+        {
+          stageOfCompanyDisplayName: {
+            "$regex" :new RegExp("^" + args.stageOfCompanyDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = MlStageOfCompany.find(query).fetch();
     if(isFind.length) {
       let code = 409;
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);

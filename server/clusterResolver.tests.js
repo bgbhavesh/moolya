@@ -6,7 +6,7 @@ import MlResolver from './commons/mlResolverDef';
 import MlAuthorization from './mlAuthorization/mlAuthorization'
 import ClusterResolver from './MlInternalUsers/admin/clusters/clusterResolver'
 
-//Need to import the communityResolver file because the functions of this file needs to be defined 
+//Need to import the communityResolver file because the functions of this file needs to be defined
 //already for the test cases to run
 import {} from './MlInternalUsers/admin/community/communityResolver';
 import MlRespPayload from './commons/mlPayload'
@@ -19,10 +19,11 @@ import MlEmailNotification from './mlNotifications/mlEmailNotifications/mlEMailN
 
 //To be used by the clusterResolver.js since the test file runs even before the clusterResolver.js starts
 //and it does not have the MlAuthorization instance.
-mlAuthorization = new MlAuthorization(); 
+mlAuthorization = new MlAuthorization();
 mlDbcontroller = new MlDBController();
 
 describe('clusterResolver Module for createCluster', function(){
+
   before(function(){
     mlDbInsertStub = sinon.stub(mlDBController, 'insert');
     mlResolverStub = sinon.stub(MlResolver.MlMutationResolver, 'createCommunityAccess');
@@ -195,7 +196,7 @@ describe('clusterResolver Module for upsertCluster', function(){
     mlDbFindOneStub.returns(cluster);
     mlDbUpdateStub.returns(cluster);
     var fn = MlResolver.MlMutationResolver['upsertCluster'](obj, {cluster:cluster, moduleName:"CLUSTER", actionName:"UPDATE"}, context, info)
-    expect(fn).to.be.equal(true); 
+    expect(fn).to.be.equal(true);
   });
 
   it('should verify that the clusterVerficationEmail function executes only once', function(){
@@ -279,7 +280,7 @@ describe('clusterResolver Module for fetchCluster', function(){
     var info = {};
     mlDbFindOneStub.returns(true);
     var fn = MlResolver.MlQueryResolver['fetchCluster'](obj, {cluster:cluster, _id: '123', moduleName:"CLUSTER", actionName:"GET"}, context, info)
-    expect(fn).to.be.equal(true); 
+    expect(fn).to.be.equal(true);
   });
 });
 
@@ -296,7 +297,7 @@ describe('clusterResolver Module for updateCluster', function(){
     var cluster = 'siudsi';
     var info = {};
     var fn = MlResolver.MlMutationResolver['updateCluster'](obj, {cluster:cluster, moduleName:"CLUSTER", actionName:"GET"}, context, info)
-    expect(fn).to.be.equal(undefined); 
+    expect(fn).to.be.equal(undefined);
   });
 
   it('should return updated response object if the clusterId is present in the args', function(){

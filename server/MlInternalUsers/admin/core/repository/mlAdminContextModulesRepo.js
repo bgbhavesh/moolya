@@ -34,7 +34,7 @@ let CoreModules = {
       return {totalRecords:totalRecords,data:data};
   },
   MlChapterRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
-      var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
+      var resultantQuery = mergeQueries(userFilterQuery, contextQuery);
       //let query=contextQuery;
       if (!fieldsProj.sort) {
         fieldsProj.sort = {
@@ -43,7 +43,7 @@ let CoreModules = {
       }
       let clusterId=requestParams&&requestParams.clusterId&&requestParams.clusterId!='all'?requestParams.clusterId:null;
       if(clusterId){
-        resultantQuery = mergeQueries(resultantQuery, {"clusterId": clusterId}) //{"clusterId":clusterId};
+          resultantQuery = {"clusterId":clusterId}; // mergeQueries(resultantQuery, {"clusterId":clusterId})
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
             resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }

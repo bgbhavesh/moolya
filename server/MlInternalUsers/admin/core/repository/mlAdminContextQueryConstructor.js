@@ -20,11 +20,28 @@ class MlAdminContextQueryConstructor
    */
   contextData(userProfile,hierarchyDetails,contextObject){
    var hierarchyModuleFieldRefMap={'clusterId':'defaultProfileHierarchyRefId','chapterId':'defaultChapters','subChapterId':'defaultSubChapters',
-    'communityId':'defaultCommunities'};
+    'communityId':'defaultCommunities','communityCode':'communityCode'};
     // module field names defined in Heirarchy definition clusterId,chapterId,subChapterId,communityId
+
     var moduleFieldRefId=hierarchyDetails.moduleFieldRef;
     var contextFieldRefId=hierarchyModuleFieldRefMap[moduleFieldRefId]||moduleFieldRefId;
     var contextFieldValue=userProfile[contextFieldRefId];
+
+    //moolya hierarchy level-0 has custom requirement of multiple community codes  for communityIds
+    if(hierarchyDetails.level===0){
+      var communityCodes = _.map(contextFieldValue, 'communityCode');
+      var communityIds = _.map(contextFieldValue, 'communityId');
+      if(_.isArray(communityCodes)&&!_.isEmpty(communityCodes)&&_.indexOf(communityCodes, "all") < 0) {
+        //communityCode field ref is resolved
+        let communityCodeFieldRef=hierarchyModuleFieldRefMap['communityCode']||'communityCode';
+        contextObject[communityCodeFieldRef] = communityCodes;
+      }
+      if(_.isArray(communityIds)&&!_.isEmpty(communityIds)&&_.indexOf(communityIds, "all") < 0) {
+        contextObject[moduleFieldRefId] = communityIds;
+      }
+      return contextObject;
+    }
+
     //check if value is specific or 'all'
     if(_.isArray(contextFieldValue)&&!_.isEmpty(contextFieldValue)&&_.indexOf(contextFieldValue, "all") < 0){
       contextObject[moduleFieldRefId]=contextFieldValue;

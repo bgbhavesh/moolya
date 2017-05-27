@@ -55,7 +55,7 @@ export default class MlTableView extends Component {
         fieldsAry.push({fieldName: num, value: search.trim()})
       });
     }
-    if(this.props.filter=true){
+    if(this.props.filter){
       fieldsAry=this.state.filterValue||[];
     }
     return fieldsAry;

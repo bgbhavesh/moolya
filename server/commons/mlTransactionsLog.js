@@ -54,7 +54,9 @@ class MlTransactionsHandler {
           clusterId: details.defaultProfileHierarchyRefId ? details.defaultProfileHierarchyRefId : null,
           chapterId: details.defaultChapters && details.defaultChapters[0] ? details.defaultChapters[0] : null,
           subChapterId: details.defaultSubChapters && details.defaultSubChapters[0] ? details.defaultSubChapters[0] : null,
-          communityId: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityId : null
+          communityId: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityId : null,
+          communityCode: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityCode : null
+
         };
 
            firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';

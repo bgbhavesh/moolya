@@ -136,58 +136,58 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   // let department = MlDepartments.findOne({"_id":args.departmentId})
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    // let valueGet  = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}, {"isActive":true}]}).fetch()
-    let query = {
-      "$and":[
-        {"isActive": true},
-        {"assignRoles.isActive": true}
-      ]
-    };
-    if(args.departmentId){
-      query["$and"].push({
-        "assignRoles.department": {"$in": [args.departmentId]}
-      });
-    }
-    if(args.clusterId){
-      query['$and'].push({
-        "assignRoles.cluster": {"$in": ["all", args.clusterId]}
-      });
-    }
-    if(args.chapterId){
-      query['$and'].push({
-        "assignRoles.chapter": {"$in": ["all", args.chapterId]}
-      });
-    }
-    if(args.subChapterId){
-      query['$and'].push({
-        "assignRoles.subChapter": {"$in": ["all", args.subChapterId]}
-      });
-    }
-    if(args.communityId){
-      query['$and'].push({
-        "assignRoles.community": {"$in": ["all", args.communityId]}
-      });
-    }
-    let valueGet = mlDBController.find('MlRoles', query, context).fetch()
-    //let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
-    // _.each(valueGet, function (item, say) {
-    //   let ary = []
-    //   _.each(item.assignRoles, function (value, key) {
-    //     if (value.cluster == args.clusterId || value.cluster == 'all') {
-    //       if (value.isActive) {
-    //         ary.push(value);
-    //       }
-    //     }
-    //   })
-    //   item.assignRoles = ary
-    // })
-    // _.each(valueGet, function (item, key) {
-    //   if (item) {
-    //     if (item.assignRoles.length < 1) {
-    //       valueGet.splice(key, 1)
-    //     }
-    //   }
-    // })
+    // // let valueGet  = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}, {"isActive":true}]}).fetch()
+    // let query = {
+    //   "$and":[
+    //     {"isActive": true},
+    //     {"assignRoles.isActive": true}
+    //   ]
+    // };
+    // if(args.departmentId){
+    //   query["$and"].push({
+    //     "assignRoles.department": {"$in": [args.departmentId]}
+    //   });
+    // }
+    // if(args.clusterId){
+    //   query['$and'].push({
+    //     "assignRoles.cluster": {"$in": ["all", args.clusterId]}
+    //   });
+    // }
+    // if(args.chapterId){
+    //   query['$and'].push({
+    //     "assignRoles.chapter": {"$in": ["all", args.chapterId]}
+    //   });
+    // }
+    // if(args.subChapterId){
+    //   query['$and'].push({
+    //     "assignRoles.subChapter": {"$in": ["all", args.subChapterId]}
+    //   });
+    // }
+    // if(args.communityId){
+    //   query['$and'].push({
+    //     "assignRoles.community": {"$in": ["all", args.communityId]}
+    //   });
+    // }
+    // let valueGet = mlDBController.find('MlRoles', query, context).fetch()
+    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
+    _.each(valueGet, function (item, say) {
+      let ary = []
+      _.each(item.assignRoles, function (value, key) {
+        if (value.cluster == args.clusterId || value.cluster == 'all') {
+          if (value.isActive) {
+            ary.push(value);
+          }
+        }
+      })
+      item.assignRoles = ary
+    })
+    _.each(valueGet, function (item, key) {
+      if (item) {
+        if (item.assignRoles.length < 1) {
+          valueGet.splice(key, 1)
+        }
+      }
+    })
     roles = valueGet;
   }
 

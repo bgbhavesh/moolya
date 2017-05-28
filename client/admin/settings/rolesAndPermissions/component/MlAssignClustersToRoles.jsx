@@ -19,6 +19,11 @@ export default class MlAssignClustersToRoles extends React.Component {
   AssignassignRoleToClusters(id){
     this.setState({
       assignRoleToClusters: this.state.assignRoleToClusters.concat([{cluster: '',chapter:'',subChapter:'',community:'',department:'',subDepartment:'',isActive:false }])
+    }, function () {
+      setTimeout(function () {
+        this.context.scrollArea.refresh();
+        this.context.scrollArea.scrollBottom();
+      }.bind(this));
     });
   }
 
@@ -280,3 +285,6 @@ export default class MlAssignClustersToRoles extends React.Component {
   }
 };
 
+MlAssignClustersToRoles.contextTypes = {
+  scrollArea: React.PropTypes.object
+};

@@ -45,14 +45,19 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
   var collection = args.collection
   var params = args.params;
   let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
+  if(transaction.allocation){
+    hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(args.transactionId,collection,context.userId,transaction.allocation.assigneeId)
+  }else{
+    let hierarchyDesicion = mlHierarchyAssignment.assignTransaction(args.transactionId,collection,context.userId,params.user)
+  }
   //get user details iterate through profiles match with role and get department and update allocation details.
-  let hierarchyDesicion = mlHierarchyAssignment.assignTransaction(args.transactionId,collection,context.userId,params.user)
+
   if(hierarchyDesicion === true){
     let user = mlDBController.findOne('users', {_id: params.user}, context)
 
     let date=new Date();
     let allocation={
-      assignee            : user.username,
+      assignee            : user.profile.InternalUprofile.moolyaProfile.displayName,
       assigneeId          : user._id,
       assignedDate        : date,
       department          : params.department,
@@ -129,7 +134,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
   var hierarchyDesicion = false
   let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
   if(transaction.allocation){
-    hierarchyDesicion = false;
+    hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(args.transactionId,collection,context.userId,transaction.allocation.assigneeId)
   }else{
     hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransaction(args.transactionId,collection,context.userId)
   }
@@ -154,7 +159,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
       subDepartmentId: roleDetails.subDepartmentId,
     }
     //find hierarchy
-    let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails._id)
+    let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails.roleId)
     let id = mlDBController.update(collection, {transactionId: args.transactionId}, {
       allocation: allocation,
       status: "Pending",

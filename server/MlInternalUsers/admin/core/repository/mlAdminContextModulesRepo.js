@@ -75,8 +75,8 @@ let CoreModules = {
       let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
       let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
       if(chapterId){
-        resultantQuery = mergeQueries(resultantQuery, {"chapterId":chapterId})
-        // resultantQuery={"chapterId":chapterId};
+        // resultantQuery = mergeQueries(resultantQuery, {"chapterId":chapterId})
+        resultantQuery={"chapterId":chapterId};
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
             resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }
@@ -184,6 +184,7 @@ let CoreModules = {
         object.registrationStatus =doc.status;
         if(doc.allocation){
             object.assignedUser = doc.allocation.assignee
+            object.userName = doc.allocation.assigneeId
         }
         result.push(object);
       });

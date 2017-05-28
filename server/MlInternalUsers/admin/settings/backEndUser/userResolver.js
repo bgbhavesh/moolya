@@ -5,7 +5,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
-import _ from 'underscore'
+import _ from 'lodash'
 
 
 
@@ -738,16 +738,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   }
               })
               // For Browsers
-              let allUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {"profile.isActive": true}]}, context).fetch();
-              _.each(allUsers, function (user) {
-                let registration = mlDBController.findOne('MlRegistration',{"$and": [{"registrationInfo.userName": user.username}, {"registrationInfo.clusterId": clusterId},{"registrationInfo.chapterId": chapterId}, {"registrationInfo.subChapterId": subChapterId}]}, context);
-                if (registration) {
-                  let status = registration.status
-                  if (status && (status == "Pending")) {
-                    users.push(user);
+              let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+              if(browserUsers && browserUsers.length>0) {
+                _.each(browserUsers, function (user) {
+                  let userProfiles = user.profile.externalUserProfiles;
+                  if (!userProfiles || userProfiles.length<1) {
+                      users.push(user);
                   }
-                }
-              })
+                })
+              }
           }
           else if(userType == "BackendUsers"){
               let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
@@ -785,16 +784,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               })
           }
           else{
-              let allUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {"profile.isActive": true}]}, context).fetch();
-              _.each(allUsers, function (user) {
-                let registration = mlDBController.findOne('MlRegistration', {"$and": [{"registrationInfo.userName": user.username}, {"registrationInfo.clusterId": clusterId},{"registrationInfo.chapterId": chapterId}, {"registrationInfo.subChapterId": subChapterId}]}, context);
-                if (registration) {
-                  let status = registration.status
-                  if (status && (status == "Pending")) {
-                    users.push(user);
-                  }
+            let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+            if(browserUsers && browserUsers.length>0) {
+              _.each(browserUsers, function (user) {
+                let userProfiles = user.profile.externalUserProfiles;
+                if (!userProfiles || userProfiles.length<1) {
+                  users.push(user);
                 }
               })
+            }
           }
       }
 
@@ -830,16 +828,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               }
           })
           // For Browsers
-          let allUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {"profile.isActive": true}]}, context).fetch();
-          _.each(allUsers, function (user) {
-            let registration = mlDBController.findOne('MlRegistration', {"$and": [{"registrationInfo.userName": user.username}, {"registrationInfo.clusterId": clusterId},{"registrationInfo.chapterId": chapterId}]}, context);
-            if (registration) {
-              let status = registration.status
-              if (status && (status == "Pending")) {
+          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+          if(browserUsers && browserUsers.length>0) {
+            _.each(browserUsers, function (user) {
+              let userProfiles = user.profile.externalUserProfiles;
+              if (!userProfiles || userProfiles.length<1) {
                 users.push(user);
               }
-            }
-          })
+            })
+          }
       }
       else if(userType == "BackendUsers"){
         //   // UserType needed to be introduced
@@ -878,16 +875,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-          let allUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {"profile.isActive": true}]}, context).fetch();
-          _.each(allUsers, function (user) {
-            let registration = mlDBController.findOne('MlRegistration', {"$and": [{"registrationInfo.userName": user.username}, {"registrationInfo.clusterId": clusterId},{"registrationInfo.chapterId": chapterId}]}, context);
-            if (registration) {
-              let status = registration.status
-              if (status && (status == "Pending")) {
-                users.push(user);
-              }
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        if(browserUsers && browserUsers.length>0) {
+          _.each(browserUsers, function (user) {
+            let userProfiles = user.profile.externalUserProfiles;
+            if (!userProfiles || userProfiles.length<1) {
+              users.push(user);
             }
           })
+        }
       }
     }
 
@@ -951,16 +947,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               }
           })
           // For Browsers
-          let allUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {"profile.isActive": true}]}, context).fetch();
-          _.each(allUsers, function (user) {
-            let registration = mlDBController.findOne('MlRegistration', {"$and": [{"registrationInfo.userName": user.username}, {"registrationInfo.clusterId": clusterId}]}, context);
-            if (registration) {
-              let status = registration.status
-              if (status && (status == "Pending")) {
+          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+          if(browserUsers && browserUsers.length>0) {
+            _.each(browserUsers, function (user) {
+              let userProfiles = user.profile.externalUserProfiles;
+              if (!userProfiles || userProfiles.length<1) {
                 users.push(user);
               }
-            }
-          })
+            })
+          }
       }
       else if(userType == "BackendUsers"){
         //   // UserType needed to be introduced
@@ -996,16 +991,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-          let allUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {"profile.isActive": true}]}, context).fetch();
-          _.each(allUsers, function (user) {
-            let registration = mlDBController.findOne('MlRegistration', {"$and": [{"registrationInfo.userName": user.username}, {"registrationInfo.clusterId": clusterId}]}, context);
-            if (registration) {
-              let status = registration.status
-              if (status && (status == "Pending")) {
-                users.push(user);
-              }
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        if(browserUsers && browserUsers.length>0) {
+          _.each(browserUsers, function (user) {
+            let userProfiles = user.profile.externalUserProfiles;
+            if (!userProfiles || userProfiles.length<1) {
+              users.push(user);
             }
           })
+        }
       }
     }
 
@@ -1041,16 +1035,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
-          _.each(allUsers, function (user) {
-              let registration = mlDBController.findOne('MlRegistration', {"registrationInfo.userName":user.username}, context);
-              if(registration){
-                  let status = registration.status
-                  if(status && (status == "Pending")){
-                    users.push(user);
-                  }
-              }
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        if(browserUsers && browserUsers.length>0) {
+          _.each(browserUsers, function (user) {
+            let userProfiles = user.profile.externalUserProfiles;
+            if (!userProfiles || userProfiles.length<1) {
+              users.push(user);
+            }
           })
+        }
       }
   }
 

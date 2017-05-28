@@ -62,7 +62,7 @@ let departmentSchema = `
         fetchDepartmentsForRegistration(cluster:String,chapter:String,subChapter:String):[Department]    
         fetchMoolyaBasedDepartmentRoles(isMoolya:Boolean,clusterId:String):[Department]
         fetchClusterChapterSubChapterBasedDepartmentRoles(isMoolya: Boolean, cluster: String, chapter: String, subChapter: String): [DepartmentBasedOnClusterChapterAndSubChapter]
-        fetcHierarchyMoolyaDepartment(isMoolya:Boolean,clusterId:String):[Department]
+        fetchHierarchyMoolyaDepartment(isMoolya:Boolean,clusterId:String):[Department]
     }
 `
 

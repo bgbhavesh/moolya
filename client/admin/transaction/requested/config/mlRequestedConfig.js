@@ -52,8 +52,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
 
-        if(data && data.id){
+        if(data && data.id && Meteor.userId()==data.userName){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+        }else if(data && data.id && Meteor.userId()!=data.userName){
+          toastr.error("User does not have access to edit record");
         } else{
           toastr.error("Please Select a record");
         }
@@ -130,7 +132,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
               								registrationStatus
                       				registrationDate
                               transactionId                              
-                              assignedUser
+                              userName
                           }
                       }
               }

@@ -94,6 +94,16 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type='approved';
       result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case "internalRequests":
+      requestParams=args.context||{};
+      requestParams.type='requested';
+      result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "internalApprovedRequests":
+      requestParams=args.context||{};
+      requestParams.type='approved';
+      result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
     case "PortfolioRequests":
       requestParams=args.context||{};
       requestParams.type='requested';
@@ -144,6 +154,8 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "TransactionsLog":resolveType='TransactionsLog';break;
       case "InteractionsLog":resolveType='TransactionsLog';break;
       case "ConversationsLog":resolveType='TransactionsLog';break;
+      case "internalRequests":resolveType='requests';break;
+      case "internalApprovedRequests":resolveType='requests';break;
 
     }
 

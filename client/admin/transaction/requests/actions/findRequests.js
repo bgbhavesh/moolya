@@ -16,6 +16,10 @@ export async function findRequestssActionHandler(requestTypeDetails) {
     transactionCreatedDate
     requestTypeId
     requestDescription
+    clusterName
+    chapterName
+    subChapterName
+    communityName
   }
 }
 

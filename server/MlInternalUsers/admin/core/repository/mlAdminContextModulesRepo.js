@@ -196,6 +196,12 @@ let CoreModules = {
       case 'approved':
         serverQuery={'status':"Approved"};
     }
+
+    //To display the latest record based on date
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'registrationInfo.registrationDate': -1}
+    }
+
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');

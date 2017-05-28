@@ -99,18 +99,21 @@ export default class MlStartupTechnology extends React.Component{
   onOptionSelected(selectedId, callback, selObject) {
     if (selectedId) {
       let details = this.state.data;
+      // this.setState({aboutShow:selObject.about})
       details = _.omit(details, ["technologyId"]);
-      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label});
+      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, description: selObject.about});
       this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedId, "technologyName": selObject.label})
+        this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "description": selObject.about})
         this.sendDataToParent()
       })
     } else {
       let details = this.state.data;
+      // this.setState({aboutShow:''})
       details = _.omit(details, ["technologyId"]);
       details = _.omit(details, ["technologyName"]);
+      details = _.omit(details, ["description"]);
       this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', "technologyName": ''})
+        this.setState({"selectedVal": '', "technologyName": '', description:''})
         this.sendDataToParent()
       })
     }
@@ -186,6 +189,7 @@ export default class MlStartupTechnology extends React.Component{
   render(){
     let query=gql`query{
       data:fetchTechnologies {
+        about : about
         label:displayName
         value:_id
       }
@@ -246,7 +250,7 @@ export default class MlStartupTechnology extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description} disabled="true"  onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>

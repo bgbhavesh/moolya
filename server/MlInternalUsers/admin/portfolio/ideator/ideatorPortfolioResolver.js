@@ -221,14 +221,26 @@ MlResolver.MlQueryResolver['fetchComments'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context, info) => {
-    if(args.portfoliodetailsId){
-        let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-        if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
-            return ideatorPortfolio['portfolioIdeatorDetails'];
-        }
+  if (args.portfoliodetailsId) {
+    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
+      let details = ideatorPortfolio.portfolioIdeatorDetails
+      let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
+      details.industry = extendData.industryName || "";
+      details.profession = extendData.professionName || ""
+      let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
+      details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
+      let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
+      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
+      return details;
     }
+    // if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
+    //
+    //     return ideatorPortfolio['portfolioIdeatorDetails'];
+    // }
+  }
 
-    return {};
+  return {};
 }
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
   if(args.ideaId){

@@ -121,7 +121,7 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
                     </div>
 
@@ -131,7 +131,7 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Employment Status" name="employmentStatus" defaultValue={this.state.data.employmentStatus} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Employment Status" name="employmentStatus" defaultValue={this.state.data.employmentStatus} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isEmploymentStatusPrivate" onClick={this.onClick.bind(this, "isEmploymentStatusPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmploymentStatusPrivate}/>
                     </div>
 
@@ -168,12 +168,12 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
                     <br className="brclear"/>
                     <div className="form-group">
-                      <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industry} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industry} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate" onClick={this.onClick.bind(this, "isIndustryPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Profession" name="profession" defaultValue={this.state.data.profession} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Profession" name="profession" defaultValue={this.state.data.profession} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionPrivate" onClick={this.onClick.bind(this, "isProfessionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProfessionPrivate}/>
                     </div>
 

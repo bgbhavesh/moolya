@@ -8,10 +8,11 @@ import MlRespPayload from "../../../../commons/mlPayload";
 class MlHierarchyAssignment{
 
   findHierarchy(clusterId,departmentId,subDepartmentId,roleId){
+    let roleDetails = mlDBController.findOne('MlRoles', {_id:roleId})
     let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
       parentDepartment: departmentId,
       parentSubDepartment: subDepartmentId,
-      clusterId:clusterId
+      clusterId:roleDetails.isSystemDefined?"All":clusterId
     }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
     return hierarchy;
   }
@@ -63,6 +64,11 @@ class MlHierarchyAssignment{
       return false;
     }
   }
+
+  canSelfAssignTransactionAssignedTransaction(transactionId,collection,userId,assignedUserId) {
+    return this.assignTransaction(transactionId, collection, userId, assignedUserId)
+  }
+
 
   canUnAssignTransaction(transactionId,collection,userId){
      //check his team hierarchy below

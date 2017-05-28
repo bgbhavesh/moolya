@@ -298,10 +298,11 @@ MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] 
   return resp;
 }
 
-MlResolver.MlQueryResolver['fetcHierarchyMoolyaDepartment'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchHierarchyMoolyaDepartment'] = (obj, args, context, info) => {
   let resp = mlDBController.find('MlDepartments', {
       isMoolya: args.isMoolya,
-      isActive: true
+      isActive: true,
+      "depatmentAvailable.cluster": {$in: [ 'all', args.clusterId ]}
   }, context).fetch();
   return resp;
 }

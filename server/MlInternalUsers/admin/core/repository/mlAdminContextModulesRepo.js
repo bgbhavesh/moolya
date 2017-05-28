@@ -155,6 +155,32 @@ let CoreModules = {
     return {totalRecords:totalRecords,data:data};
 
   },
+  MlInternalRequestRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var type=requestParams&&requestParams.type?requestParams.type:"";
+    var contextFieldMap={'clusterId':'cluster','chapterId':'chapter','subChapterId':'subChapter','communityId':'communityId','communityCode':'community'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+    switch(type){
+      //custom restriction for registration
+      case 'requested':
+        serverQuery={'status':{'$in':['Pending','WIP']}};
+        break;
+      case 'approved':
+        serverQuery={'status':"Approved"};
+    }
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    var result=[];
+    var data= MlRequests.find(resultantQuery,fieldsProj).fetch()||[];
+    var totalRecords=MlRequests.find(resultantQuery,fieldsProj).count();
+
+    data = result;
+    return {totalRecords:totalRecords,data:data};
+  },
   MlRegistrationRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
     var type=requestParams&&requestParams.type?requestParams.type:"";
     var contextFieldMap={'clusterId':'registrationInfo.clusterId','chapterId':'registrationInfo.chapterId','subChapterId':'registrationInfo.subChapterId','communityId':'registrationInfo.communityId','communityCode':'registrationInfo.communityDefCode'};

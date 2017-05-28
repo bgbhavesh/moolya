@@ -7,8 +7,21 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let response = new MlRespPayload().errorPayload("Request Type is mandatory!!!!",code);
     return response;
   }
-  let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
-  args.requests.communityName = communityDetails.name;
+
+    let clusterDetails = mlDBController.findOne('MlClusters', {_id: args.requests.cluster},context) || {};
+    args.requests.clusterName=clusterDetails.clusterName?clusterDetails.clusterName:null;
+
+    let chapterDetails = mlDBController.findOne('MlChapters', {_id: args.requests.chapter},context) || {};
+    args.requests.chapterName=chapterDetails.chapterName?chapterDetails.chapterName:null;
+
+    let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: args.requests.subChapter},context) || {};
+    args.requests.subChapterName=subChapterDetails.subChapterName?subChapterDetails.subChapterName:null;
+
+    let communityRecord = mlDBController.findOne('MlCommunity', {subChapterId: args.requests.subChapter,communityDefCode: args.requests.community},context) || {};
+    args.requests.communityId = communityRecord._id;
+
+    let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
+    args.requests.communityName = communityDetails.name;
 
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   if(requestDetails.requestName) {

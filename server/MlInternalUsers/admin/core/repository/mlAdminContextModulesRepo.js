@@ -184,6 +184,7 @@ let CoreModules = {
         object.registrationStatus =doc.status;
         if(doc.allocation){
             object.assignedUser = doc.allocation.assignee
+            object.userName = doc.allocation.assigneeId
         }
         result.push(object);
       });

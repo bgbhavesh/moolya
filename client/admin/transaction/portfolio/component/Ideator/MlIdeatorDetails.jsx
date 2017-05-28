@@ -163,7 +163,7 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group steps_pic_upload">
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.data.profilePic?this.state.data.profilePic:""}/>
+                        <img src={this.state.data.profilePic?this.state.data.profilePic:'/images/def_profile.png'}/>
                       </div>
                     </div>
                     <br className="brclear"/>

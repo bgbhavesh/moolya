@@ -89,13 +89,27 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
       $and: [
         {parentDepartment:args.departmentId},
         {parentSubDepartment:args.subDepartmentId},
-        {clusterId:args.clusterId}
+        {clusterId:department.isSystemDefined?"All":args.clusterId}
       ]},context)
   }
   if(response){
     let teamStructureAssignment = response.teamStructureAssignment;
     let userRole = mlAssignHierarchy.getUserRoles(context.userId)
-    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin"){
+    if(userRole.roleName ==  "platformadmin" ){
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "clusteradmin"){
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "chapteradmin"){
+      _.remove(teamStructureAssignment, {roleName: 'clusteradmin'})
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "subchapteradmin"){
+      _.remove(teamStructureAssignment, {roleName: 'clusteradmin'})
+      _.remove(teamStructureAssignment, {roleName: 'chapteradmin'})
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "communityadmin"){
+      _.remove(teamStructureAssignment, {roleName: 'clusteradmin'})
+      _.remove(teamStructureAssignment, {roleName: 'chapteradmin'})
+      _.remove(teamStructureAssignment, {roleName: 'subchapteradmin'})
       return teamStructureAssignment;
     }else{
       let currentRole = null;
@@ -155,7 +169,6 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
         }
       })
     }
-
     return usersList;
   }
 }

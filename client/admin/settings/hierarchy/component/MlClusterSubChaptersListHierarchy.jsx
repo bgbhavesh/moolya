@@ -18,7 +18,7 @@ export default class MlClusterSubChaptersListHierarchy extends Component
       let data=[]
       for(let i=0;i<subChapterData.length;i++){
 
-        if(subChapterData[i].isDefaultSubChapter=="true") {
+        if(subChapterData[i].isDefaultSubChapter===true) {
           temp = temp + 1;
           if (temp == 1) {
             data.push(subChapterData[i])

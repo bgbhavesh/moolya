@@ -200,8 +200,8 @@ class MlSubChapterDetails extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async (event) => {
-          let clusterId = this.props.clusterId;
-          let chapterId = this.props.chapterId;
+          let clusterId = FlowRouter.getParam('clusterId');
+          let chapterId = FlowRouter.getParam('chapterId');
           FlowRouter.go('/admin/chapters/'+clusterId+'/'+chapterId+'/'+'subChapters');
 
         }

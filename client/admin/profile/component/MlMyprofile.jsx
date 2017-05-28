@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
 import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
-import {initalizeFloatLabel} from '../../utils/formElemUtil';
+import {initalizeFloatLabel, passwordVisibilityHandler} from '../../utils/formElemUtil';
 //import {addProfilePicAction} from "../actions/addProfilePicAction"
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
@@ -42,6 +42,7 @@ export default class MlMyProfile extends React.Component{
       password:'',
       confirmPassword:'',
       showPasswordFields:true,
+      passwordState: " "
 
       // Details:{
       //   firstName: " ",
@@ -60,6 +61,7 @@ export default class MlMyProfile extends React.Component{
     this.updateProfile.bind(this);
     this.genderSelect = this.genderSelect.bind(this);
     this.onfoundationDateSelection.bind(this);
+    this.checkExistingPassword.bind(this);
    // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
    // this.firstNameUpdation.bind(this);
@@ -71,6 +73,21 @@ export default class MlMyProfile extends React.Component{
       this.setState({loading: false, foundationDate: value});
     }
   }
+  async checkExistingPassword(){
+    const that =  this;
+    let pwd = this.refs.existingPassword.value;
+    var digest = Package.sha.SHA256(pwd);
+    Meteor.call('checkPassword', digest, function(err, result) {
+      if (result) {
+        that.setState({passwordState:'Passwords match!'})
+      }else{
+        that.setState({passwordState:'Passwords do not match!'})
+      }
+    });
+  }
+
+
+
 
   componentDidMount()
   {
@@ -166,7 +183,7 @@ async showImage(temp){
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
         genderSelect: "Male", //response.profile.genderType
-        // dateOfBirth: response.profile.dateOfBirth
+        dateOfBirth: response.profile.dateOfBirth
       });
     }else{
       let response = await findBackendUserActionHandler(userType);
@@ -189,6 +206,7 @@ async showImage(temp){
   }
   componentDidUpdate(){
     initalizeFloatLabel();
+    passwordVisibilityHandler();
   }
 
 
@@ -247,9 +265,13 @@ async showImage(temp){
     console.log(response);
   }
   async updateProfile(){
-    this.resetPassword();
-    const resp=this.onFileUpload();
-    return resp;
+    if(this.state.passwordState ==='Passwords match!') {
+      this.resetPassword();
+    }    else
+      {
+        const resp = this.onFileUpload();
+        return resp;
+      }
   }
 
   onCheckPassword(){
@@ -345,6 +367,12 @@ async showImage(temp){
                     <div className="form-group">
                       <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
                     </div>
+                    {this.state.showPasswordFields ?
+                      <div className="form-group">
+                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
+                        <input type="Password" ref="existingPassword"  placeholder="Existing Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password"/>
+                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                      </div> : <div></div>}
                     {this.state.showPasswordFields ?
                       <div className="form-group">
                         <input type="Password" ref="password" defaultValue={this.state.password} placeholder="New Password" className="form-control float-label" id="password"/>

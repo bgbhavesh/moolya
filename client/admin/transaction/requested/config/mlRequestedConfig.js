@@ -1,8 +1,8 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
-import React from 'react';
-import gql from 'graphql-tag'
-import MlCustomFilter from '../../../../commons/customFilters/customFilter';
-import moment from 'moment';
+import {MlViewer, MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import React from "react";
+import gql from "graphql-tag";
+import MlCustomFilter from "../../../../commons/customFilters/customFilter";
+import moment from "moment";
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
   return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
@@ -19,6 +19,17 @@ const mlUserTypeTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  fieldsMap: {
+    'registrationDate': 'registrationInfo.registrationDate',
+    'firstName': 'registrationInfo.firstName',
+    'contactNumber': 'registrationInfo.contactNumber',
+    'communityName': 'registrationInfo.communityName',
+    'clusterName': 'registrationInfo.clusterName',
+    'chapterName': 'registrationInfo.chapterName',
+    'accountType': 'registrationInfo.accountType',
+    'assignedUser': 'registrationInfo.assignedUser',
+    'subChapterName': 'registrationInfo.subChapterName'
+  },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
@@ -41,8 +52,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
 
-        if(data && data.id){
+        if(data && data.id && Meteor.userId()==data.userName){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+        }else if(data && data.id && Meteor.userId()!=data.userName){
+          toastr.error("User does not have access to edit record");
         } else{
           toastr.error("Please Select a record");
         }
@@ -119,7 +132,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
               								registrationStatus
                       				registrationDate
                               transactionId                              
-                              assignedUser
+                              userName
                           }
                       }
               }

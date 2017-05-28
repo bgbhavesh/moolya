@@ -143,7 +143,7 @@ export default class MlAssignComponent extends Component {
       }
     }`;*/
     let departmentQuery=gql`query($isMoolya:Boolean,$clusterId:String){  
-      data:fetcHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId) {
+      data:fetchHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId) {
         value:_id
         label:departmentName
       }  

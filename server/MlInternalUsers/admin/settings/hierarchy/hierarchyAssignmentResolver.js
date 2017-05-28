@@ -1,7 +1,6 @@
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import mlAssignHierarchy from '../../../admin/../admin/genericTransactions/impl/MlHierarchyAssignment'
-import _ from 'lodash';
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import mlAssignHierarchy from "../../../admin/../admin/genericTransactions/impl/MlHierarchyAssignment";
 
 MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context, info) => {
   let response;
@@ -67,13 +66,14 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
        MlHierarchyAssignments.update({_id:id}, {$set:{finalApproval:hierarchy.finalApproval}});
     }
     let code = 200;
-    response = new MlRespPayload().successPayload(result, code);
-  }else{
+    response = new MlRespPayload().successPayload('Updated Successfully', code);
+    return response
+  } else {
     let id = MlHierarchyAssignments.insert({...hierarchy});
     if (id) {
       let code = 200;
       let result = {appovalId: id}
-      let response = new MlRespPayload().successPayload(result, code);
+      let response = new MlRespPayload().successPayload('Created Successfully', code);
       return response
     }
   }
@@ -89,13 +89,27 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
       $and: [
         {parentDepartment:args.departmentId},
         {parentSubDepartment:args.subDepartmentId},
-        {clusterId:args.clusterId}
+        {clusterId:department.isSystemDefined?"All":args.clusterId}
       ]},context)
   }
   if(response){
     let teamStructureAssignment = response.teamStructureAssignment;
     let userRole = mlAssignHierarchy.getUserRoles(context.userId)
-    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin"){
+    if(userRole.roleName ==  "platformadmin" ){
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "clusteradmin"){
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "chapteradmin"){
+      _.remove(teamStructureAssignment, {roleName: 'clusteradmin'})
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "subchapteradmin"){
+      _.remove(teamStructureAssignment, {roleName: 'clusteradmin'})
+      _.remove(teamStructureAssignment, {roleName: 'chapteradmin'})
+      return teamStructureAssignment;
+    }else if(userRole.roleName == "communityadmin"){
+      _.remove(teamStructureAssignment, {roleName: 'clusteradmin'})
+      _.remove(teamStructureAssignment, {roleName: 'chapteradmin'})
+      _.remove(teamStructureAssignment, {roleName: 'subchapteradmin'})
       return teamStructureAssignment;
     }else{
       let currentRole = null;
@@ -155,7 +169,6 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
         }
       })
     }
-
     return usersList;
   }
 }

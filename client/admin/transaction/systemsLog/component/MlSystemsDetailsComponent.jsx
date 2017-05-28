@@ -99,11 +99,6 @@ export default class MlSystemDetailsComponent extends React.Component {
 
             </div>
           </div>
-
-
-
-
-
           <div className="tab-pane active" id={`DeviceDetails${this.props.data._id}`}>
             <div className="row">
               <div className="col-md-6">

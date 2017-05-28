@@ -65,6 +65,7 @@ let requestsSchema = `
         chapter                   : String
         subChapter                : String
         community                 : String
+        communityName             : String
       }
     type Mutation{
       createRequestss(requests:requestsInput):response
@@ -73,7 +74,7 @@ let requestsSchema = `
       }
 
     type Query{
-      fetchRequestss(userId: String ): [requests]
+      fetchRequestss(userId: String, status: [String] ): [requests]
       fetchRequestsForApproval(transactionType:String):[requests]
 
     }`;

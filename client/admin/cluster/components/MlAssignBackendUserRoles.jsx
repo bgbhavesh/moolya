@@ -116,7 +116,12 @@ export default class MlAssignBackednUserRoles extends React.Component {
       let specificDepartment = allData[did];
       let rolesArray = specificDepartment.roles;
       rolesArray.push(emptyRoleBox);
-      this.setState({rolesData: allData});
+      this.setState({rolesData: allData}, function () {
+        setTimeout(function () {
+          this.context.scrollArea.refresh();
+          this.context.scrollArea.scrollBottom();
+        }.bind(this));
+      });
     }
   }
 
@@ -373,3 +378,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     )
   }
 }
+
+MlAssignBackednUserRoles.contextTypes = {
+  scrollArea: React.PropTypes.object
+};

@@ -55,7 +55,7 @@ export default class MlTableView extends Component {
         fieldsAry.push({fieldName: num, value: search.trim()})
       });
     }
-    if(this.props.filter=true){
+    if(this.props.filter){
       fieldsAry=this.state.filterValue||[];
     }
     return fieldsAry;
@@ -81,6 +81,10 @@ export default class MlTableView extends Component {
 
   onSortChange(sortName, sortOrder) {
     let sortObj = [];
+
+    if(this.props.fieldsMap){
+        sortName=this.props.fieldsMap[sortName]||sortName;
+    }
     if (sortOrder === "asc") {
       sortObj.push({fieldName : sortName, sort : "asc"});
     } else {

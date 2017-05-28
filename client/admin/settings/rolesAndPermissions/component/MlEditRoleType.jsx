@@ -4,6 +4,7 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag'
+import _ from 'lodash'
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import {updateRoleActionHandler} from '../actions/updateRoleAction'
 import {findRoleActionHandler} from '../actions/findRoleAction'
@@ -95,9 +96,20 @@ class MlEditRole extends React.Component {
       id: this.props.config,
       roleObject: roleObject
     }
-    const response = await updateRoleActionHandler(roleDetails)
-    return response;
 
+    var emptyCluster = _.filter(roleObject.assignRoles, ['cluster', ''])
+    var emptyChapter = _.filter(roleObject.assignRoles, ['chapter', ''])
+    var emptySubChapter = _.filter(roleObject.assignRoles, ['subChapter', ''])
+    var emptyCommunity = _.filter(roleObject.assignRoles, ['community', ''])
+    var emptyDepartment = _.filter(roleObject.assignRoles, ['department', ''])
+    var emptySubDepartment = _.filter(roleObject.assignRoles, ['subDepartment', ''])
+
+    if (_.isEmpty(emptyCluster) && _.isEmpty(emptyChapter) && _.isEmpty(emptySubChapter) && _.isEmpty(emptyCommunity) && _.isEmpty(emptyDepartment) && _.isEmpty(emptySubDepartment)) {
+      const response = await updateRoleActionHandler(roleDetails)
+      return response;
+    } else {
+      toastr.error("All Assign role fields Required");
+    }
   }
 
   getAssignedDepartments(departments) {
@@ -213,13 +225,13 @@ class MlEditRole extends React.Component {
                                   value={this.state.selectedUserType} onChange={this.onUserTypeSelect.bind(this)}
                                   className="float-label"/>
                         </div>
-                        {this.state.selectedUserType == 'non-moolya' && (<div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                        labelKey={'label'} placeholder="Select Subchapter"
-                                        selectedValue={this.state.selectedSubChapter} queryType={"graphql"}
-                                        query={subChapterQuery} isDynamic={true}
-                                        onSelect={this.optionsBySelectSubChapter.bind(this)}/>
-                        </div>)}
+                        {/*{this.state.selectedUserType == 'non-moolya' && (<div className="form-group">*/}
+                          {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}*/}
+                                        {/*labelKey={'label'} placeholder="Select Subchapter"*/}
+                                        {/*selectedValue={this.state.selectedSubChapter} queryType={"graphql"}*/}
+                                        {/*query={subChapterQuery} isDynamic={true}*/}
+                                        {/*onSelect={this.optionsBySelectSubChapter.bind(this)}/>*/}
+                        {/*</div>)}*/}
                         <div className="form-group">
                           <Select
                             name="form-field-name" ref="roleType" options={BackendUserOptions}
@@ -235,9 +247,8 @@ class MlEditRole extends React.Component {
                         {this.state.data && this.state.data.assignRoles ? (
                           <MlAssignClustersToRoles getassignRoleToClusters={this.getassignRoleToClusters.bind(this)}
                                                    selectedBackendUserType={this.state.data && this.state.selectedUserType}
-                                                   selectedSubChapter={this.state.data && this.state.selectedSubChapter}
                                                    assignedClusterDetails={this.state.data && this.state.data.assignRoles}/>) : ""}
-
+                        {/*selectedSubChapter={this.state.data && this.state.selectedSubChapter}*/}
                         <div className="form-group switch_wrap inline_switch">
                           <label className="">Overall Role Status</label>
                           <label className="switch">

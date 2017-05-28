@@ -125,7 +125,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
             }
             break;
             case "COMMUNITY":{
-              response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {communityId:data.communityId, community:data.community, clusters:data.clusters, chapters:data.chapters, subchapters:data.subchapters}, context, null);
+              response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {communityId:data.communityId, clusterId:data.clusterId, chapterId:data.chapterId, subChapterId:data.subChapterId, community:data.community, clusters:data.clusters, chapters:data.chapters, subchapters:data.subchapters}, context, null);
             }
             break;
             case "PROFILE":{

@@ -40,6 +40,8 @@ const mltemplatesassignmetConfig=new MlViewer.View({
     {dataField: "templatechapterName", title: "Chapter",dataSort:true},
     {dataField: "templatesubChapterName", title: "Sub Chapter",dataSort:true},
     {dataField: "templatecommunityName", title: "Community",dataSort:true},
+    {dataField: "templateuserType", title: "User Type",dataSort:true},
+    {dataField: "templateidentity", title: "Identity",dataSort:true},
     {dataField: "createdBy", title: "Created By", dataSort:true},
     {dataField: "modifiedBy", title: "Modified By", dataSort:true},
     {dataField: "modifiedDate", title: "Modified Date", customComponent: modifiedDateFormatter},
@@ -82,7 +84,9 @@ const mltemplatesassignmetConfig=new MlViewer.View({
                               templateclusterName     
                               templatechapterName    
                               templatesubChapterName  
-                              templatecommunityName  
+                              templatecommunityName 
+                              templateuserType
+                              templateidentity
                               modifiedBy
                               modifiedDate
                           }

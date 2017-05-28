@@ -16,6 +16,9 @@ export default class MoolyaMapView extends Component {
 
   constructor(props){
     super(props);
+    this.state = {
+      pubSelector: null
+    }
   }
   async componentWillMount() {
     let that = this;
@@ -35,6 +38,36 @@ export default class MoolyaMapView extends Component {
       });
     }
   }
+  componentWillUpdate(nextProps, nextState) {
+    if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
+
+      let hasQueryOptions = this.props.queryOptions ? true : false;
+      let variables = {
+        offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
+        limit: nextState.sizePerPage || 20  //5
+      }
+      if (hasQueryOptions) {
+        let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
+        // let extendedVariables = _.extend(dynamicQueryOptions);
+        let extendedVariables = _.merge(dynamicQueryOptions, variables);
+        this.props.fetchMore(extendedVariables);
+      }
+      if(this.state.searchValue!==nextState.searchValue){
+        let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
+        variables.fieldsData=searchCriteria||null
+        this.props.fetchMore(variables);
+      }
+      this.props.fetchMore(variables);
+    }
+    else if(this.state.searchValue!==nextState.searchValue){
+      let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
+      let variables = {
+        offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
+        fieldsData :searchCriteria||null
+      }
+      this.props.fetchMore(variables);
+    }
+  }
 
   render()
   {
@@ -43,8 +76,19 @@ export default class MoolyaMapView extends Component {
       return <MlLoader />;
     }
     const data=this.props.data&&this.props.data.data?this.props.data.data:[];
+    let MapComponent = null;
+    // Fix me
+    var path = window.location.pathname;
+    if(path.indexOf("communities") !== -1){
+      MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
+    }
     return (
-      <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+      <span>
+        {MapComponent?MapComponent:
+          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+        }
+      </span>
+
       );
 
     /*

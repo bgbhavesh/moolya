@@ -137,7 +137,7 @@ export default class MlAdminSwitchProfile extends React.Component{
                     {that.state.userProfiles.map(function (prf, idx) {
                       return(
                         <div className="swiper-slide profile_accounts" key={idx} name={idx} onClick={that.onChange.bind(that)}>
-                          <img src={prf.countryFlag?prf.countryFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
+                          <img src={prf.clusterFlag?prf.clusterFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
                           <h2>{prf.clusterName?prf.clusterName:""}</h2>
                         </div>
                       )
@@ -156,26 +156,26 @@ export default class MlAdminSwitchProfile extends React.Component{
 
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" className="form-control float-label"  value={clusterData.clusterName}  disabled/>
+                  <input type="text" placeholder="Cluster" className="form-control float-label"  value={clusterData.clusterName?clusterData.clusterName:""}  disabled/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" className="form-control float-label"  value={clusterData.chapterName} disabled/>
+                  <input type="text" placeholder="Chapter" className="form-control float-label"  value={clusterData.chapterName?clusterData.chapterName:""} disabled/>
                 </div>
 
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" className="form-control float-label"  value={clusterData.subChapterName} disabled/>
+                  <input type="text" placeholder="Sub Chapter" className="form-control float-label"  value={clusterData.subChapterName?clusterData.subChapterName:""} disabled/>
                 </div>
               </div>
 
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Community" className="form-control float-label"  value={clusterData.communityName} disabled/>
+                  <input type="text" placeholder="Community" className="form-control float-label"  value={clusterData.communityName?clusterData.communityName:""} disabled/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Department" className="form-control float-label"  value={clusterData.departmentName} disabled/>
+                  <input type="text" placeholder="Department" className="form-control float-label"  value={clusterData.departmentName?clusterData.departmentName:""} disabled/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Department" className="form-control float-label"  value={clusterData.subDepartmentName} disabled/>
+                  <input type="text" placeholder="Sub Department" className="form-control float-label"  value={clusterData.subDepartmentName?clusterData.subDepartmentName:""} disabled/>
                 </div>
 
               </div>

@@ -46,15 +46,14 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
       let response = new MlRespPayload().errorPayload("Username is required", code);
       return response;
     }
-
+  let extEmailExists = mlDBController.find('users', {'profile.email':args.user.profile.email, 'profile.isExternaluser':true }, context).count();
       // if(Meteor.users.find({username:args.user.username}).count() > 0) {
-    if(mlDBController.find('users', {username:args.user.username}, context).count() > 0){
+    if(mlDBController.find('users', {username:args.user.username}, context).count() > 0 || extEmailExists ){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
         return response;
     }
-
-    // let userId = Accounts.createUser(args.user);
+  // let userId = Accounts.createUser(args.user);
     let userId = mlDBController.insert('users', args.user, context)
     if(userId){
         let code = 200;
@@ -121,14 +120,12 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     //   return response;
     // }
   let salted = passwordUtil.hashPassword(args.password);
-  // let resp = Meteor.users.update({_id: args.userId}, {
-  //   $set: {"services.password.bcrypt": salted}
-  // });
-  let resp = mlDBController.update('users', args.userId, {"services.password.bcrypt": salted}, {$set:true}, context)
-  if (resp) {
-    let code = 200;
-    let response = new MlRespPayload().successPayload("Password Reset complete", code);
-    return response
+    let resp = mlDBController.update('users', args.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
+    if (resp) {
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Password Reset complete", code);
+      return response
+
   }
 };
 
@@ -558,6 +555,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   roles.map(function (role)
   {
       if(!role.hierarchyCode) {
+        //community Admin @ subChapter level
           if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             (role.communityId && role.communityId != "all")) {
             levelCode = "COMMUNITY"
@@ -568,10 +566,13 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
               role.communityHierarchyLevel = 1
             }
           }
+          //sub chapter Admin
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") && !args.user.isChapterAdmin) {
             levelCode = "SUBCHAPTER"
-            role.communityId = "all"
+            role.communityId = "all";
+            role.communityCode = "all";
           }
+          //chapter Admin
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             args.user.isChapterAdmin) {
             if (role.departmentName == "operations") {
@@ -581,11 +582,15 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
               role.roleId = chapterAdminRole._id
               role.subChapterId = "all"
               role.communityId = "all"
+              role.communityCode = "all";
             } else {
               levelCode = "SUBCHAPTER"
               role.communityId = "all"
+              role.communityCode = "all";
             }
           }
+
+          //community Admin @ cluster level
           else if ((role.clusterId && role.clusterId != "all") && (role.communityId && role.communityId != "all")) {
             levelCode = "COMMUNITY"
             role.chapterId = "all"
@@ -593,15 +598,17 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
             // let community = mlDBController.findOne('MlCommunity', {"$and":[{"clusterId":role.clusterId},{"communityDefCode":role.communityId},{"hierarchyCode":"SUBCHAPTER"}]}, context);
             // if(community){
               role.communityCode = role.communityId;
-              role.communityId = "";
+              role.communityId = "all";
               role.communityHierarchyLevel = 3
             // }
           }
+          //cluster Admin
           else if (role.clusterId && role.clusterId != "all") {
             levelCode = "CLUSTER"
             role.chapterId = "all"
             role.subChapterId = "all"
             role.communityId = "all"
+            role.communityCode = "all";
           }
 
           if (levelCode) {
@@ -636,6 +643,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   var clusterId = args.clusterId?args.clusterId:"";
   var chapterId = args.chapterId?args.chapterId:"";
   var subChapterId = args.subChapterId?args.subChapterId:"";
+  var communityCode = args.communityCode?args.communityCode:"";
 
   // Directly clicking on Community Priming
   if(!args.clusterId){
@@ -651,11 +659,50 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           if(loggedInUser.defaultSubChapters[0] != "all"){
               subChapterId = loggedInUser.defaultSubChapters[0];
           }
+        if(loggedInUser.defaultCommunities[0].communityCode != "all"){
+          communityCode = loggedInUser.defaultCommunities[0].communityCode;
+        }
       }
   }
   var users = [];
 
-  if(clusterId != "" && chapterId != "" && subChapterId != ""){
+  if(clusterId != "" && chapterId != "" && subChapterId != "" && communityCode != ""){
+    let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
+    let chapter = mlDBController.findOne('MlChapters', {_id: chapterId}, context)
+    let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
+    if(cluster.isActive && chapter.isActive && subChapter.isActive){
+        let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+        if(externalUsers && externalUsers.length>0) {
+          _.each(externalUsers, function (user) {
+            let userProfiles = user.profile.externalUserProfiles;
+            if (userProfiles) {
+              let profile = _.find(userProfiles, {
+                clusterId: clusterId,
+                chapterId: chapterId,
+                subChapterId: subChapterId,
+                communityDefCode:(communityCode||"all"),
+              });
+              if (profile) {
+                users.push(user);
+              }
+            }
+          })
+        }
+      //   // FOR Internal Users
+        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        _.each(internalUsers, function (user){
+          let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+          let profile = _.find(userProfiles, {clusterId:clusterId});
+          if(profile){
+            let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all"), communityCode:(communityCode||"all")});
+            if(roles){
+              users.push(user);
+            }
+          }
+        })
+    }
+
+  }else if(clusterId != "" && chapterId != "" && subChapterId != ""){
       let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
       let chapter = mlDBController.findOne('MlChapters', {_id: chapterId}, context)
       let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
@@ -844,7 +891,39 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
     }
 
-  } else if(clusterId != ""){
+  }else if(clusterId != "" && communityCode != ""){
+    let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
+    if(cluster.isActive ){
+        let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+        if(externalUsers && externalUsers.length>0) {
+          _.each(externalUsers, function (user) {
+            let userProfiles = user.profile.externalUserProfiles;
+            if (userProfiles) {
+              let profile = _.find(userProfiles, {
+                clusterId: clusterId,
+                communityDefCode:(communityCode||"all"),
+              });
+              if (profile) {
+                users.push(user);
+              }
+            }
+          })
+        }
+      //   // FOR Internal Users
+        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        _.each(internalUsers, function (user){
+          let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+          let profile = _.find(userProfiles, {clusterId:clusterId});
+          if(profile){
+            let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
+            if(roles){
+              users.push(user);
+            }
+          }
+        })
+    }
+
+  }else if(clusterId != ""){
 
     let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
     if(cluster.isActive ){
@@ -1134,13 +1213,17 @@ MlResolver.MlQueryResolver['fetchInternalUserProfiles'] = (obj, args, context, i
 
     userProfiles.map(function (user,index) {
       let cName = null
-      if(user){
+      let cFlag = null
+      if(user &&  user.clusterId  && user.clusterId != 'all'){
         let clusterData = mlDBController.findOne('MlClusters', {_id: user.clusterId}, context) || {};
         cName = clusterData.displayName;
+        cFlag = clusterData.countryFlag;
+
       }else if( user.clusterId == 'all'){
         cName = "All";
       }
       userProfiles[index].clusterName = cName
+      userProfiles[index].clusterFlag = cFlag
     })
 
 

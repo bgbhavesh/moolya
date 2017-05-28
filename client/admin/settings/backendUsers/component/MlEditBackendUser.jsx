@@ -397,7 +397,11 @@ class MlEditBackendUser extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/backendUserList")
+          if(FlowRouter.getRouteName() == "settings_EditBackendUser") {
+            FlowRouter.go("/admin/settings/backendUserList");
+          } else if(FlowRouter.getRouteName() == "dashboard_backendUserDetails") {
+            FlowRouter.go("/admin/dashboard/communities");
+          }
         }
       }
     ];

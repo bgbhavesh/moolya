@@ -70,39 +70,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
         }
       }
     }
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
   ],
-  graphQlQuery:/*gql`
-             query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"registrationApprovedInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on RegistrationInfo{
-
-                              firstName
-                              lastName
-                              id:_id
-                              contactNumber
-                              communityName
-                      			  clusterName
-                      				chapterName
-                              subChapterName
-                              accountType
-                      				source
-                              assignedUser
-              								registrationStatus
-                      				registrationDate
-
-
-                          }
-                      }
-              }
-              }
-              `*/
+  graphQlQuery:
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
                     data:ContextSpecSearch(module:"registrationApprovedInfo",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords

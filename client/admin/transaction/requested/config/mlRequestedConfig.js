@@ -72,46 +72,9 @@ const mlUserTypeTableConfig=new MlViewer.View({
           toastr.error("Please Select a record");
         }
       }
-    }/*,
-    {
-      showAction: true,
-      actionName: 'add',
-      iconID:'createRegistrationRequest',
-      handler: null
-    }*/
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
-  graphQlQuery:/*gql`
-             query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"registrationInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on RegistrationInfo{
-   registrationInfo.firstName:firstName
-                              lastName
-                              id:_id
-                              contactNumber
-                              communityName
-                      			  clusterName
-                      				chapterName
-                              subChapterName
-                              accountType
-                      				source
-                              assignedUser
-              								registrationStatus
-                      				registrationDate
-                              transactionId
-                              canAssign
-                              canUnAssign
-                          }
-                      }
-                  }
-              }
-              `*/
+  graphQlQuery:
   gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
                     data:ContextSpecSearch(module:"registrationInfo",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords

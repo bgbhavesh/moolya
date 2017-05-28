@@ -19,7 +19,7 @@ if(!department) {
     displayName: "Operations",
     departmentDesc: "Operations Department",
     isActive: true,
-    isMoolya: false,
+    isMoolya: true,
     depatmentAvailable: departmentAvailiable,
     isSystemDefined: true
   };

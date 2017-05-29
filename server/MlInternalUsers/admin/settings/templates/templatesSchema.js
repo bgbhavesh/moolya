@@ -35,12 +35,10 @@ let Template = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Template]);
-
 let supportedApi = [
-  {api:'updateStepAssignedTemplate', actionName:'UPDATE', moduleName:"TEMPLATES"},
-
-  {api:'findStepAssignedTemplates', actionName:'READ', moduleName:"TEMPLATES"},
-  {api:'findTemplates', actionName:'READ', moduleName:"TEMPLATES"},
-  {api:'findTemplatesSelect', actionName:'READ', moduleName:"TEMPLATES"}
-]
+  {api:'findStepAssignedTemplates', actionName:'READ', moduleName:"TEMPLATE"},
+  {api:'findTemplates', actionName:'READ', moduleName:"TEMPLATE"},
+  {api:'findTemplatesSelect', actionName:'READ', moduleName:"TEMPLATE"},
+  {api:'updateStepAssignedTemplate', actionName:'UPDATE', moduleName:"TEMPLATE"}
+];
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let AccountType = `        
     type Account{
       accountName :String
@@ -19,3 +21,11 @@ let AccountType = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],AccountType]);
+let supportedApi = [
+    {api:'CreateAccount', actionName:'CREATE', moduleName:"ACCOUNTTYPE"},
+    {api:'UpdateAccount', actionName:'UPDATE', moduleName:"ACCOUNTTYPE"},
+    {api:'FindAccount', actionName:'READ', moduleName:"ACCOUNTTYPE"},
+    {api:'FetchAccount', actionName:'READ', moduleName:"ACCOUNTTYPE"}
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

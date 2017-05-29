@@ -100,6 +100,7 @@ class MlAuthorization
         {
             let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
             let hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
+
             if(hierarchy.isParent===true){
               return true;
             }

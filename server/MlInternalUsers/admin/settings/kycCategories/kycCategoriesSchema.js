@@ -32,10 +32,10 @@ let KycCategoriesSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],KycCategoriesSchema]);
 let supportedApi = [
-  {api:'createKycCategory', actionName:'CREATE', moduleName:"KYCCATEGORY"},
-  {api:'updateKycCategory', actionName:'UPDATE', moduleName:"KYCCATEGORY"},
-
-  {api:'findKycCategory', actionName:'READ', moduleName:"KYCCATEGORY"},
-  {api:'fetchKYCCategories', actionName:'READ', moduleName:"KYCCATEGORY"}
+  {api:'findKycCategory', actionName:'READ', moduleName:"DOCUMENTS"},
+  {api:'fetchKYCCategories', actionName:'READ', moduleName:"DOCUMENTS"},
+  {api:'createKycCategory', actionName:'CREATE', moduleName:"DOCUMENTS"},
+  {api:'updateKycCategory', actionName:'UPDATE', moduleName:"DOCUMENTS"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+

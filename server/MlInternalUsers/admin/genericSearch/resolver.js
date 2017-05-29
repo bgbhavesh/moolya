@@ -360,7 +360,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlIndustries.find(query,findOptions).fetch();
     totalRecords=MlIndustries.find(query, findOptions).count();
   }
-  if(args.module=="award"){
+  if(args.module=="awards"){
     data= MlAwards.find(query,findOptions).fetch();
     totalRecords=MlAwards.find(query, findOptions).count();
   }
@@ -839,7 +839,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "industry":resolveType= 'Industry';break;
       case "roles":resolveType= 'Roles';break;
-      case "award":resolveType= 'Award';break;
+      case "awards":resolveType= 'Award';break;
       case "specification":resolveType= 'Specification';break;
       case "profession":resolveType= 'Profession';break;
       case "entity":resolveType= 'Entity';break;

@@ -46,8 +46,8 @@ import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component
 import MlTransactionApprovals from '../../admin/transaction/requests/components/MlTransactionApprovals'
 import MlInteractionsLogList from '../../admin/transaction/interactions/component/MlinteractionsLogList'
 import MlConversationsLogList from '../../admin/transaction/conversations/component/MlConversationsLogList'
-
-
+import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
+import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -184,14 +184,16 @@ adminSection.route('/documents/:pid/:kycid/:docid', {
 adminSection.route('/transactions/requestedList', {
   name: 'transaction_RequestList',
   action(){
-    mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
+    mount(AdminLayout,{adminContent:<MlInternalRequestsList/>})
   }
 });
 
 adminSection.route('/transactions/approvedList', {
   name: 'transaction_ApprovedList',
   action(){
-    mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
+    mount(AdminLayout,{adminContent:<MlApprovedInternalRequestsList/>})
   }
 });
 

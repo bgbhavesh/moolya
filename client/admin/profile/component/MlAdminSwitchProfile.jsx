@@ -5,7 +5,9 @@ import {findUserActionHandler}  from '../actions/switchProfileActions'
 import {setAdminDefaultProfileActionHandler} from '../actions/switchProfileActions'
 import {deActivateAdminProfileActionHandler} from '../actions/switchProfileActions'
 import {fetchClusterDetails} from '../actions/switchProfileActions'
-import _ from 'lodash';
+import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import _ from 'underscore';
 
 export default class MlAdminSwitchProfile extends React.Component{
 
@@ -56,6 +58,8 @@ export default class MlAdminSwitchProfile extends React.Component{
     });
     this.onChange.bind(this);
     // this.initializeSwiper();
+    initalizeFloatLabel();
+
   }
 
 
@@ -120,7 +124,7 @@ export default class MlAdminSwitchProfile extends React.Component{
     let profileDetails=that.state.userProfiles[that.state.currentSlideIndex]||{};
     let profileExists=that.state.userProfiles&&that.state.userProfiles.length>0?true:false;
     let clusterData = that.state.clusterData || {}
-
+    var loggedInUser = getAdminUserContext();
 
     return (
       <div className="app_main_wrap">
@@ -158,36 +162,46 @@ export default class MlAdminSwitchProfile extends React.Component{
                 <div className="form-group">
                   <input type="text" placeholder="Cluster" className="form-control float-label"  value={clusterData.clusterName?clusterData.clusterName:""}  disabled/>
                 </div>
+
+                <div className="form-group">
+                  <input type="text" placeholder="Sub Chapter" className="form-control float-label"  value={clusterData.subChapterName?clusterData.subChapterName:""} disabled/>
+                </div>
+
+                <div className="form-group">
+                  <input type="text" placeholder="Sub Department" className="form-control float-label"  value={clusterData.subDepartmentName?clusterData.subDepartmentName:""} disabled/>
+                </div>
+
+
+
+              </div>
+
+              <div className="col-md-6">
+
                 <div className="form-group">
                   <input type="text" placeholder="Chapter" className="form-control float-label"  value={clusterData.chapterName?clusterData.chapterName:""} disabled/>
                 </div>
 
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" className="form-control float-label"  value={clusterData.subChapterName?clusterData.subChapterName:""} disabled/>
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input type="text" placeholder="Community" className="form-control float-label"  value={clusterData.communityName?clusterData.communityName:""} disabled/>
-                </div>
-                <div className="form-group">
                   <input type="text" placeholder="Department" className="form-control float-label"  value={clusterData.departmentName?clusterData.departmentName:""} disabled/>
                 </div>
+
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Department" className="form-control float-label"  value={clusterData.subDepartmentName?clusterData.subDepartmentName:""} disabled/>
+                  <input type="text" placeholder="Role" className="form-control float-label"  value={clusterData.roleName?clusterData.roleName:""} disabled/>
                 </div>
+
+
+
 
               </div>
 
-              <div className="col-md-12 text-center">
+              {loggedInUser&&loggedInUser.hierarchyLevel<4?<div className="col-md-12 text-center">
                 <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
                 </div>
                {/* <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
                 </div>*/}
-              </div>
+              </div>:""}
 
             </div>:<div>No Profiles Available</div>
 

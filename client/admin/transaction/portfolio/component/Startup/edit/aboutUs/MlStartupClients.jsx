@@ -24,7 +24,6 @@ export default class MlStartupClients extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       startupClientsList:this.props.clientsDetails || [],
-      /*indexArray:[],*/
       selectedVal:null,
       selectedObject:"default"
     }

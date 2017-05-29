@@ -373,11 +373,48 @@ if(Meteor.isServer){
       },
       {
         "image" : "/images/services_icon.png",
-        "link" : "/admin/services",
+        "link" : "/admin/templates/templateList",
         "name" : "templates",
-        "uniqueId" : "services",
         "isLink" : true,
-        "isMenu" : true
+        "isMenu" : true,
+        "uniqueId" : "templates",
+        "subMenu": [
+          {
+            "link": "/admin/templates/templateList",
+            "name": "Template List",
+            "uniqueId": "templates_List",
+            "subMenuMappingId":"",
+            "subMenusId":"templates",
+            "isLink": true,
+            "isMenu": false,
+            "image": "",
+            "subMenu":[
+              {
+                "link": "/templates/assignTemplate/:id",
+                "name": "Edit Template",
+                "uniqueId": "templates_assignment_edit",
+                "subMenuMappingId":"",
+                "subMenusId":"templates",
+                "isLink": true,
+                "isMenu": false,
+                "image": "",
+                "subMenu":[
+                  {
+                    "link": "/templates/assignTemplate/",
+                    "name": " Assign Template",
+                    "uniqueId": "templates_assignment",
+                    "subMenuMappingId":"",
+                    "subMenusId":"templates",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  }
+
+                ]
+              },
+            ]
+          }
+        ]
       },
       {
         "image" : "/images/transactions-icon.png",

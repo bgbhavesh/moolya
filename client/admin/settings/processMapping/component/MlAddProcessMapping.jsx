@@ -97,24 +97,32 @@ class MlAddProcessMapping extends React.Component{
     if (ret) {
       toastr.error(ret);
     } else {
-      let processDetails = {
-        processId: this.refs.processId.value,
-        process: this.state.process,
-        communities: this.state.communities,
-        userTypes: this.state.userTypes,
-        identity: this.state.identity,
-        industries: this.state.industries,
-        professions: this.state.professions,
-        clusters: this.state.clusters,
-        states: this.state.states,
-        chapters: this.state.chapters,
-        subChapters: this.state.subChapters,
-        isActive: this.refs.status.checked,
-        documents: this.state.assignDocument
+      let type=this.state.assignDocument[0].type;
+      let category=this.state.assignDocument[0].category;
+      if(!type) {
+        toastr.error("Document type is required");
+      }else if(!category){
+        toastr.error("Kyc category is required");
+      }else{
+        let processDetails = {
+          processId: this.refs.processId.value,
+          process: this.state.process,
+          communities: this.state.communities,
+          userTypes: this.state.userTypes,
+          identity: this.state.identity,
+          industries: this.state.industries,
+          professions: this.state.professions,
+          clusters: this.state.clusters,
+          states: this.state.states,
+          chapters: this.state.chapters,
+          subChapters: this.state.subChapters,
+          isActive: this.refs.status.checked,
+          documents: this.state.assignDocument
+        }
+        const response = await addProcessActionHandler(processDetails)
+        toastr.success("Created Successfully")
+        return response;
       }
-      const response = await addProcessActionHandler(processDetails)
-      toastr.success("Created Successfully")
-      return response;
     }
   }
   getAssignedDocuments(departments){

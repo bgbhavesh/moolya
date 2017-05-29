@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../../../client/commons/components/select/MoolyaSelect";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
@@ -35,12 +35,14 @@ export default class MlStartupAwards extends React.Component{
 
   componentDidUpdate(){
     OnLockSwitch();
-    dataVisibilityHandler();
+    dataVisibilityHandler()
+    initalizeFloatLabel();
   }
 
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    //initalizeFloatLabel();
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -115,11 +117,20 @@ export default class MlStartupAwards extends React.Component{
     let details = this.state.data;
     details = _.omit(details, ["awardId"]);
     details = _.omit(details, ["awardName"]);
-    details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
-    this.setState({data: details}, function () {
-      this.setState({"selectedVal": selectedAward, awardName: selObject.label})
-      this.sendDataToParent()
-    })
+    if(selectedAward){
+      details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": selectedAward, awardName: selObject.label})
+        this.sendDataToParent()
+      })
+    }else {
+      details = _.extend(details, {["awardId"]: '', "awardName": ''});
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": '', awardName: ''})
+        this.sendDataToParent()
+      })
+    }
+
   }
 
   handleBlur(e){
@@ -265,11 +276,11 @@ export default class MlStartupAwards extends React.Component{
                       </div>
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                  inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year}
+                                  inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
                                   closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                       </div>
                       <div className="form-group">
-                        <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
                       </div>
                       <div className="form-group">

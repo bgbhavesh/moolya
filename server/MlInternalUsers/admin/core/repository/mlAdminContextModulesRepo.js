@@ -172,20 +172,17 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        serverQuery={'status':{'$in':['Pending','WIP']}};
+        serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};
         break;
       case 'approved':
-        serverQuery={'status':"Approved"};
+        serverQuery={'userId':context.userId,'status':"Approved"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
-    var result=[];
     var data= MlRequests.find(resultantQuery,fieldsProj).fetch()||[];
     var totalRecords=MlRequests.find(resultantQuery,fieldsProj).count();
-
-    data = result;
     return {totalRecords:totalRecords,data:data};
   },
   MlRegistrationRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){

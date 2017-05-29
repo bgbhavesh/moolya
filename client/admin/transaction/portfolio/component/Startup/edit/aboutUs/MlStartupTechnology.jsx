@@ -1,15 +1,15 @@
-import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar'
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import _ from 'lodash';
-import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
+import Moolyaselect from "../../../../../../../commons/components/select/MoolyaSelect";
+import gql from "graphql-tag";
+import {graphql} from "react-apollo";
+import _ from "lodash";
+import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
+import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
 
@@ -68,7 +68,7 @@ export default class MlStartupTechnology extends React.Component{
 
   onLockChange(field, e){
     let details = this.state.data||{};
-    let key = e.target.id;
+    let key = field;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
@@ -96,15 +96,24 @@ export default class MlStartupTechnology extends React.Component{
     })
   }
 
-  onOptionSelected(selectedId){
-    let details =this.state.data;
-    details=_.omit(details,["technologyId"]);
-    details=_.extend(details,{["technologyId"]: selectedId});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId})
-      this.sendDataToParent()
-    })
-
+  onOptionSelected(selectedId, callback, selObject) {
+    if (selectedId) {
+      let details = this.state.data;
+      details = _.omit(details, ["technologyId"]);
+      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label});
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": selectedId, "technologyName": selObject.label})
+        this.sendDataToParent()
+      })
+    } else {
+      let details = this.state.data;
+      details = _.omit(details, ["technologyId"]);
+      details = _.omit(details, ["technologyName"]);
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": '', "technologyName": ''})
+        this.sendDataToParent()
+      })
+    }
   }
 
   handleBlur(e){
@@ -130,13 +139,12 @@ export default class MlStartupTechnology extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      let newItem = _.omit(item, "__typename");
+      // let updateItem = _.omit(newItem, 'logo');
+      arr.push(newItem)
     })
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
-    /*let indexArray = this.state.indexArray;*/
     this.props.getStartupTechnology(startupTechnologies);
   }
   onLogoFileUpload(e){
@@ -188,7 +196,7 @@ export default class MlStartupTechnology extends React.Component{
     return (
       <div>
         <h2>Technology</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
           <ScrollArea
             speed={0.8}
@@ -224,22 +232,22 @@ export default class MlStartupTechnology extends React.Component{
             </div>
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-            {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+             <PopoverTitle>Add New Technology</PopoverTitle>
             <PopoverContent>
               <div className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={query}
+                                    labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Technology'}
                                     isDynamic={true}
                                     onSelect={this.onOptionSelected.bind(this)}
                                     selectedValue={this.state.selectedVal}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="Description" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                      <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
 
@@ -255,7 +263,7 @@ export default class MlStartupTechnology extends React.Component{
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                      <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                     </div>
                   </div>
                 </div></div>

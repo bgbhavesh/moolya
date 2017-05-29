@@ -11,6 +11,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {fetchFilterCatalogActionHandler} from '../actions/fetchFilterCatalogActionHandler'
 import {updateFilterActionHandler} from '../actions/createFilterActionHandler'
 import {fetchSelectedFilterDataActionHandler} from '../actions/fetchSelectedFilterDataActionHandler'
+import MlLoader from '../../../../commons/components/loader/loader'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 export default class MlEditFilter extends Component {
 
@@ -128,7 +129,7 @@ export default class MlEditFilter extends Component {
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/> ):(
           <div className="admin_padding_wrap">
             <h2>Edit Filter</h2>
 
@@ -177,7 +178,7 @@ export default class MlEditFilter extends Component {
                     >
                       <form>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionId} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true} disabled={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Module Name" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionId} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true} disabled={true}/>
                         </div>
                         <MlAssignModulesToFilters filterExistingData = {this.state.data} getFiltersData={this.getFiltersData.bind(this)} filterCatalog={this.state.filterCatalogData}/>
                       </form>

@@ -83,7 +83,7 @@ MlResolver.MlQueryResolver['fetchSubProcess'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['createTemplateAssignment'] = (obj, args, context, info) => {
   if (args.template) {
-      // let resp = MlTemplateAssignment.insert({...args.template});
+      // let resp = MlTemplateAssignment.insert({...args.accountType});
       args.template.createdDate = new Date()
       if(Meteor.users.findOne({_id : context.userId}))
       {

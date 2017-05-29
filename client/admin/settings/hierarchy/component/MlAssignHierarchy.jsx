@@ -119,13 +119,22 @@ export default class MlAssignHierarchy extends React.Component {
     this.props.getFinalApprovalDetails(finalApproval);
   }
   optionsBySelectParentNode(index, value){
-    let roles=this.state.unAssignedRoles
-    roles.teamStructureAssignment[index].assignedLevel = value.value
-    if(value.value=="cluster"){
-      roles.teamStructureAssignment[index].isAssigned = true
+
+    let roles = this.state.unAssignedRoles
+    if(value === null){
+      setTimeout(function () {
+        roles.assignedLevel = value
+        roles.teamStructureAssignment[index].assignedLevel = value;
+        this.setState({unAssignedRoles: roles});
+      }.bind(this));
+    }else {
+      roles.teamStructureAssignment[index].assignedLevel = value.value
+      if (value.value == "cluster") {
+        roles.teamStructureAssignment[index].isAssigned = true
+      }
+      this.setState({unAssignedRoles: roles})
+      this.props.getUnAssignRoleDetails(roles)
     }
-    this.setState({unAssignedRoles:roles})
-    this.props.getUnAssignRoleDetails(roles)
   }
   optionsBySelectReportingRole(index, selectedIndex){
     let roles=this.state.unAssignedRoles
@@ -286,8 +295,8 @@ export default class MlAssignHierarchy extends React.Component {
                     </div>
                   </div>
                   <div className="col-md-4">
-                    <div className="form-group">
-                      <Select name="form-field-name"   options={unAssignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                    <div className="form-group" id="select-parent-node">
+                      <Select name="form-field-name"   options={unAssignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectParentNode.bind(that,id)} placeholder="Parent Node"  />
                     </div>
                   </div>
                   <div className="col-md-4">
@@ -352,7 +361,7 @@ export default class MlAssignHierarchy extends React.Component {
                           </div>
                         </div>
                         <br className="brclear" />
-                        <hr />
+                        <br />
                       </div>
                     )
                   })

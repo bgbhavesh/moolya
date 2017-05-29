@@ -56,4 +56,14 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
     return {'isValid':true};
   }
+  static  validateMobile(registration) {
+    var validate = MlRegistration.findOne({"registrationInfo.contactNumber":registration.contactNumber})
+    if(validate && validate.status != 'Rejected'){
+      let code = 409;
+      let message ="Registration Exist with the Mobile Number"
+      let errResp = new MlRespPayload().errorPayload(message, code);
+      return {'isValid':false,'validationResponse':errResp};
+    }
+    return {'isValid':true};
+  }
 }

@@ -89,6 +89,10 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
                     isUserIdPrivate
                   }
                   index
+                  logo{
+                    fileUrl,
+                    fileName
+                  }
             }
           }
       `,
@@ -130,6 +134,10 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
                     isUserIdPrivate
                   }
                   index
+                  logo{
+                    fileUrl,
+                    fileName
+                  }
             }
           }
       `,

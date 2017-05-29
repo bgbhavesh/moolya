@@ -9,6 +9,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addProfessionActionHandler} from '../actions/addProfessionTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlAddProfession extends React.Component {
   constructor(props) {
     super(props);
@@ -96,7 +97,7 @@ class MlAddProfession extends React.Component {
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader/>):(
 
         <div className="admin_padding_wrap">
           <h2>Create Profession</h2>
@@ -121,10 +122,10 @@ class MlAddProfession extends React.Component {
                        className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select Industry" className="form-control float-label" valueKey={'value'}
+                <Moolyaselect multiSelect={false} ref="industry" placeholder="Select Industry" mandatory={true} className="form-control float-label" valueKey={'value'}
                               labelKey={'label'} queryType={"graphql"}
                               selectedValue={this.state.selectedIndustry}
-                              query={query} isDynamic={true} onSelect={this.onIndustrySelect.bind(this)}/>
+                              query={query} isDynamic={true} onSelect={this.onIndustrySelect.bind(this)} data-required={true} data-errMsg="Industry is required"/>
               </div>
               <div className="form-group switch_wrap inline_switch">
                 <label>Status</label>

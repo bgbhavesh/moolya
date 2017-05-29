@@ -105,7 +105,8 @@ MlResolver.MlMutationResolver['updateChapter'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchChapter'] = (obj, args, context, info) => {
-
+  var response = mlDBController.findOne('MlChapters', {_id: args.chapterId}, context) || []
+  return response
 }
 
 MlResolver.MlQueryResolver['fetchChaptersWithoutAll'] = (obj, args, context, info) => {
@@ -235,16 +236,49 @@ MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info
 }
 
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
-  let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
-  geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
-    if (err) {
-      return "Invalid Country Name";
-    }
-    args.subChapter.latitude = data.results[0].geometry.location.lat;
-    args.subChapter.longitude = data.results[0].geometry.location.lng;
+  try {
     args.subChapter.isDefaultSubChapter = false;
     let subChapterId = createSubChapter(args.subChapter, context)
+
     if (subChapterId) {
+
+      MlResolver.MlMutationResolver['createCommunityAccess'](obj, {
+        clusterId: args.subChapter.clusterId,
+        chapterId: args.subChapter.chapterId,
+        subChapterId: subChapterId,
+        moduleName: "COMMUNITY",
+        actionName: "CREATE"
+      }, context, info)
+
+      MlResolver.MlMutationResolver['createCommunity'](obj, {
+        clusterId: args.subChapter.clusterId,
+        clusterName: args.subChapter.clusterName,
+        chapterId: args.subChapter.chapterId,
+        chapterName: args.subChapter.chapterName,
+        subChapterId: subChapterId,
+        subChapterName: args.subChapter.subChapterName,
+        moduleName: "COMMUNITY",
+        actionName: "CREATE"
+      }, context, info)
+
+      let geoCIty = args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName ? args.subChapter.chapterName + ", " + args.subChapter.stateName + ", " + args.subChapter.clusterName : "";
+
+      geocoder.geocode(geoCIty, Meteor.bindEnvironment(function (err, data) {
+        if (err) {
+          console.log('Error while creating sub-chapter')
+          return "Invalid Country Name";
+        }
+        let subChapter = MlSubChapters.findOne({"_id": subChapterId})
+        if (subChapter) {
+          var latitude = data.results[0].geometry.location.lat;
+          var longitude = data.results[0].geometry.location.lng;
+          mlDBController.update('MlSubChapters', subChapterId, {
+            latitude: latitude,
+            longitude: longitude
+          }, {$set: true}, context)
+        }
+      }));
+
       let code = 200;
       let response = new MlRespPayload().successPayload(subChapterId, code);
       return response
@@ -254,7 +288,11 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
       let response = new MlRespPayload().errorPayload("Unable To Create Subchapter", code);
       return response
     }
-  }), {key: Meteor.settings.private.googleApiKey});
+  } catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(e.message, code);
+    return response
+  }
 }
 
 

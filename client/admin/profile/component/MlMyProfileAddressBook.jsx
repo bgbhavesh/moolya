@@ -56,7 +56,7 @@ export default class Step3 extends React.Component{
   {
     var WinHeight = $(window).height();
     //$('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-    $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    $('.left_wrap').height(WinHeight-(84+$('.admin_header').outerHeight(true)));
     //this.props.getRegistrationContactDetails();
     initalizeFloatLabel();
 
@@ -75,19 +75,17 @@ export default class Step3 extends React.Component{
 
   render(){
     return (
-
 <div className="admin_main_wrap">
-  <div className="admin_padding_wrap">
+
     <h2>Address book</h2>
-    <div className="main_wrap_scroll">
-    <ScrollArea
-      speed={0.8}
-      className="main_wrap_scroll"
-      smoothScrolling={true}
-      default={true}
-    >
-    <div className="row">
     <div className="col-lg-6 ">
+      <div className="form_bg left_wrap">
+      <ScrollArea
+        speed={0.8}
+        className="left_wrap"
+        smoothScrolling={true}
+        default={true}
+      >
       {/*registrationDetails={this.getRegistrationContactDetails(this)}*/}
           <form>
             <div className="panel panel-default new_profile_tabs">
@@ -104,13 +102,17 @@ export default class Step3 extends React.Component{
               <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
             </div>
           </form>
-
+      </ScrollArea>
+      </div>
     </div>
-
-
     <div className="col-lg-6 ">
-
-
+      <div className="form_bg left_wrap">
+      <ScrollArea
+        speed={0.8}
+        className="left_wrap"
+        smoothScrolling={true}
+        default={true}
+      >
       <form>
       <div className="panel panel-default new_profile_tabs">
       <div className="panel-heading">
@@ -119,13 +121,10 @@ export default class Step3 extends React.Component{
       <AddressDetails registerId={this.state.registerId}  registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
   </div>
     </form>
+      </ScrollArea>
+      </div>
+    </div>
 
-
-    </div>
-    </div>
-    </ScrollArea>
-    </div>
-  </div>
 </div>
 
 

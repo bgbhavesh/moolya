@@ -60,7 +60,8 @@ let FunderPortfolioSchema = `
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
         socialLinks:[SocialLinks]
-        index: Int
+        index: Int,
+        logo:imagesTypeSchema,
     }
 
     type Principal{
@@ -81,7 +82,8 @@ let FunderPortfolioSchema = `
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
         socialLinks:[SocialLinks],
-        index:Int
+        index:Int,
+        logo:imagesTypeSchema,
     }
     
     type Investments{

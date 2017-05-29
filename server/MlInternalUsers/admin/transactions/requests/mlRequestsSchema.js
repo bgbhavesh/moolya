@@ -15,7 +15,7 @@ let requestsSchema = `
         requestDescription        : String
         transactionAssignedBy     : String
         transactionCompletedBy    : String
-        requestsCreatedDate    : String
+        transactionCreatedDate       : String
         transactionUpdatedDate    : String
         hierarchy                 : String
         cluster                   : String
@@ -58,7 +58,7 @@ let requestsSchema = `
         transactionAssignedBy     : String
         transactionCompletedBy    : String
         requestsStatus            : statusInput
-        requestsCreatedDate       : String
+        transactionCreatedDate       : String
         transactionUpdatedDate    : String
         hierarchy                 : String
         cluster                   : String
@@ -68,7 +68,7 @@ let requestsSchema = `
       }
     type Mutation{
       createRequestss(requests:requestsInput):response
-      updateTransactionStatuss(transactionId:String,status:String):response
+      updateRequestsStatus(requestsId:String,status:String):response
 
       }
 

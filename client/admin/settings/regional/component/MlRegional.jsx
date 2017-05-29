@@ -6,6 +6,7 @@ import {findRegionalActionHandler} from '../actions/findRegionalAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 
 import ScrollArea from 'react-scrollbar';
 
@@ -93,7 +94,7 @@ class MlRegional extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
           <div className="admin_main_wrap">
             <div className="admin_padding_wrap">
               <h2>Regional</h2>

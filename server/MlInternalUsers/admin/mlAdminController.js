@@ -23,7 +23,7 @@ let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
 
-const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
+const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver,MlResolver.MlScalarResolver);
 const typeDefs = MlSchemaDef['schema']
   const executableSchema = makeExecutableSchema({
   typeDefs,
@@ -75,6 +75,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   const graphQLServer = express();
   config.configServer(graphQLServer)
   graphQLServer.use(cors());
+  // graphQLServer.use(authChecker)
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
   {
     try {
@@ -495,5 +496,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
+}
+
+function authChecker(req, res, next) {
+    if (!req.headers['meteor-login-token']) {
+        next();
+    } else {
+      next();
+    }
 }
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

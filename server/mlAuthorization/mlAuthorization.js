@@ -58,42 +58,6 @@ class MlAuthorization
                   if(ret)
                     return ret;
                 })
-                // if(moduleName == "COMMUNITY" && req.chapterId != "" && req.subChapterId != "" && req.communityId != ""){
-                //     let userRole = _.find(user_roles, {chapterId:"all" || req.chapterId, subChapterId:"all" || req.subChapterId, communityId:"all" || req.communityId})
-                //     return self.validateRole(userRole.roleId, module, action)
-                //   // isAuthorized= self.validateRole(userRole.roleId, module, action)
-                // }
-                //
-                // else if(moduleName == "SUBCHAPTER" && req.chapterId != "" && req.subChapterId != ""){
-                //     let userRole = _.find(user_roles, {chapterId: "all", subChapterId: "all"})
-                //     if(!userRole)
-                //       userRole = _.find(user_roles, {chapterId:req.chapterId, subChapterId:req.subChapterId})
-                //     if(!userRole)
-                //       userRole = _.find(user_roles, {chapterId:req.chapterId, subChapterId: 'all'})
-                //     return self.validateRole(userRole.roleId, module, action)
-                //   // isAuthorized= self.validateRole(userRole.roleId, module, action)
-                // }
-                //
-                // else if(moduleName == "CHAPTER" && req.chapterId != ""){
-                //     let userRole = _.find(user_roles, {chapterId:req.chapterId || "all"})
-                //     return self.validateRole(userRole.roleId, module, action)
-                //   // isAuthorized= self.validateRole(userRole.roleId, module, action)
-                // }
-                //
-                // else if(moduleName == 'CLUSTER'){
-                //     let userRole = _.find(user_roles, {clusterId:"all"})
-                //     if(!userRole)
-                //         userRole = _.find(user_roles, {clusterId:req.clusterId, hierarchyCode:"CLUSTER"})
-                //     return self.validateRole(userRole, module, action)
-                // }
-                //
-                // else {
-                //     user_roles.map(function (role) {
-                //       ret = self.validateRole(role.roleId, module, action)
-                //       if(ret)
-                //         return ret;
-                //     })
-                // }
             }
         }
         else if(user && user.profile && user.profile.isExternaluser == true){

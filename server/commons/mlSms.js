@@ -28,7 +28,7 @@ class MlSms{
   }
 
   sendSMS(to,msg){
-      if(!to || !msg) new Error("To Address/Message is required");
+      if(!to || !msg) { throw new Error("To Address/Message is required"); }
       var whiteListed = false;
       to = to.trim();
       if(isWhiteListEnabled){

@@ -26,8 +26,8 @@ MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) 
 }
 
 MlResolver.MlMutationResolver['updateTransactionStatus'] = (obj, args, context, info) => {
-
-  let id = mlDBController.update('MlTransactions', {_id:args.transactionId},{status: args.status},  {$set: true},context)
+  var collection = args.collection
+  let id = mlDBController.update(collection, {_id:args.transactionId},{status: args.status},  {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}
@@ -37,24 +37,22 @@ MlResolver.MlMutationResolver['updateTransactionStatus'] = (obj, args, context, 
 }
 
 
-MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, context, info) => {
-  let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
+MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) => {
 
+  var collection = args.collection
+  let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
   //get user details iterate through profiles match with role and get department and update allocation details.
-  let user = mlDBController.findOne('users', {_id: args.params.user}, context)
-  let userprofile=user.profile.InternalUprofile.moolyaProfile.userProfiles
-  userProfileRoles = _.find(userprofile, function (item) {
-    return item.clusterId == args.params.cluster
+  let user = mlDBController.findOne('users', {_id: args.assignedUserId}, context)
+  let userprofiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
+  let userProfile = _.find(userprofiles, function (item) {
+    return item.isDefault == true
   });
-  let roles=userProfileRoles.userRoles
+  let roles=userProfile.userRoles
   roleDetails = roles[0]
-    /*roleDetails=_.find(roles, function (item) {
-      return item.roleId == args.params.role
-    });*/
   let date=new Date();
   let allocation={
     assignee            : user.username,
-    assigneeId          : args.params.user,
+    assigneeId          : user._id,
     assignedDate        : date,
     department          : roleDetails.departmentName,
     departmentId        : roleDetails.departmentId,
@@ -65,15 +63,11 @@ MlResolver.MlMutationResolver['assignRegistrationTransaction'] = (obj, args, con
   let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
     parentDepartment: roleDetails.departmentId,
     parentSubDepartment: roleDetails.subDepartmentId,
-    clusterId:args.params.cluster
-  }, context, {teamStructureAssignment: {$elemMatch: {roleId: args.params.role}}})
+    clusterId:userProfile.clusterId
+  }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleDetails._id}}})
   //update hierarchy from hierarchy result
-  transaction.hierarchy=hierarchy._id
-  transaction.userId=args.params.user
-  transaction.status="Pending"
-  transaction.allocation = allocation;
-  transaction.transactionUpdatedDate=date.date;
-  let id =mlDBController.update('MlTransactions', {requestId:args.transactionId},transaction, {$set: true},context)
+
+  let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:allocation,status:"Pending",userId:user._id,hierarchy:"TBD",transactionUpdatedDate:date}, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}
@@ -114,9 +108,9 @@ MlResolver.MlMutationResolver['createRegistrationTransaction'] = (obj, args, con
 MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, context, info) => {
   let transaction = MlTransactions.findOne({"requestId":args.transactionInfo.requestId})|| {};
   let date=new Date();
- /* transaction.cluster=args.transactionInfo.cluster;
+ transaction.cluster=args.transactionInfo.cluster;
   transaction.chapter=args.transactionInfo.chapter;
-  transaction.transactionUpdatedDate=date.date;*/
+  transaction.transactionUpdatedDate=date.date;
   let id =mlDBController.update('MlTransactions', {requestId:args.transactionInfo.requestId},{'cluster':args.transactionInfo.cluster,'chapter':args.transactionInfo.chapter,'transactionUpdatedDate':date.date}, {$set: true},context)
   if(id){
     let code = 200;
@@ -127,9 +121,10 @@ MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, con
 }
 
 MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, info) => {
-  let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
+  var collection = args.collection
+  let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
   //get user details iterate through profiles match with role and get department and update allocation details.
-  let user = mlDBController.findOne('users', {_id: context.userId}, context)
+  let user = mlDBController.findOne('users', {_id: args._id}, context)
   let userprofiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
   let userProfile = _.find(userprofiles, function (item) {
     return item.isDefault == true
@@ -150,15 +145,14 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
   let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
     parentDepartment: roleDetails.departmentId,
     parentSubDepartment: roleDetails.subDepartmentId,
-    clusterId:userProfile.clusterId
+    clusterId:"All"
   }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleDetails._id}}})
-  //update hierarchy from hierarchy result
-  transaction.hierarchy=hierarchy._id
-  transaction.userId=user._id
-  transaction.status="Pending"
-  transaction.allocation = allocation;
-  transaction.transactionUpdatedDate=date;
-  let id =mlDBController.update('MlTransactions', {requestId:args.transactionId},transaction, {$set: true},context)
+
+  context.userId = user._id;
+  context.browser = 'Registration API'
+  context.url="https://moolya.in"
+  context.ip="10.0.1.127"
+  let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:allocation,status:"Pending",userId:user._id,hierarchy:hierarchy._id,transactionUpdatedDate:date}, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}
@@ -168,15 +162,10 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
 }
 
 MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info) => {
-  let transaction = MlTransactions.findOne({"requestId":args.transactionId})|| {};
+  var collection = args.collection
+  let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
   let date=new Date();
-  let allocation=null
-  transaction.hierarchy=null
-  transaction.userId=null
-  transaction.status="Pending"
-  transaction.allocation = allocation;
-  transaction.transactionUpdatedDate=date;
-  let id =mlDBController.update('MlTransactions', {requestId:args.transactionId},transaction, {$set: true},context)
+  let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:"",status:"Pending",userId:"",hierarchy:"",transactionUpdatedDate:date}, {$set: true},context)
   if(id){
     let code = 200;
     let result = {transactionId : id}

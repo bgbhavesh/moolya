@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
-
+import MlAdminContextQueryConstructor from './mlAdminContextQueryConstructor';
 let mergeQueries=function(userFilter,serverFilter)
 {
   let query=userFilter||{};
@@ -12,15 +12,16 @@ let mergeQueries=function(userFilter,serverFilter)
     return query;
 }
 let CoreModules = {
-  MlClusterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
-      let query=contextQuery;
+  MlClusterRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+      var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
+      //let query=contextQuery;
       let countriesId=[]; 
       let activeCluster = [];
       let activeCountries = mlDBController.find('MlCountries', {isActive:true}, context, {sort:{country: 1}}).fetch();
       activeCountries.map(function(country){ 
         countriesId.push(country._id);
        })
-      let Clusters = mlDBController.find('MlClusters', query, context, fieldsProj).fetch();
+      let Clusters = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
       countriesId.map(function (id){
         Clusters.map(function(cluster){
           if(cluster.countryId == id){
@@ -29,28 +30,27 @@ let CoreModules = {
         })
       })
       const data = activeCluster;
-      const totalRecords = mlDBController.find('MlClusters', query, context, fieldsProj).count();
+      const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
       return {totalRecords:totalRecords,data:data};
   },
-  MlChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
-      let query=contextQuery;
-      //User selection filter.
+  MlChapterRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+      var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
+      //let query=contextQuery;
       let clusterId=requestParams&&requestParams.clusterId&&requestParams.clusterId!='all'?requestParams.clusterId:null;
       if(clusterId){
-          query={"clusterId":clusterId};
+        resultantQuery={"clusterId":clusterId};
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
-            query = mergeQueries(query,{ _id: {$in : contextQuery._id}});
+            resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }
       }
 
       let citiesId=[];
       let activeChapters = [];
-      // let activeCities = MlCities.find({isActive:true}).fetch();
       let activeCities = mlDBController.find('MlCities', {isActive:true}, context,  {sort:{name: 1}} ).fetch();
-      activeCities.map(function(city){
-        citiesId.push(city._id);
+          activeCities.map(function(city){
+            citiesId.push(city._id);
       })
-      let Chapters = MlChapters.find(query,fieldsProj).fetch();
+      let Chapters = MlChapters.find(resultantQuery, fieldsProj).fetch();
       citiesId.map(function (id){
         Chapters.map(function(chapter){
           if(chapter.cityId == id){
@@ -59,24 +59,25 @@ let CoreModules = {
         })
       })
       const data = activeChapters;
-      const totalRecords=MlChapters.find(query,fieldsProj).count();
+      const totalRecords=MlChapters.find(resultantQuery,fieldsProj).count();
       return {totalRecords:totalRecords,data:data};
   },
-  MlSubChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
-      let query=contextQuery;
+  MlSubChapterRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
+     var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
+      //let query=contextQuery;
       let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
       let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
       if(chapterId){
-          query={"chapterId":chapterId};
+        resultantQuery={"chapterId":chapterId};
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
-              query = mergeQueries(query,{ _id: {$in : contextQuery._id}});
+            resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }
       }
-      const data= MlSubChapters.find(query,fieldsProj).fetch();
-      const totalRecords = mlDBController.find('MlChapters', query, context, fieldsProj).count();
+      const data= MlSubChapters.find(resultantQuery,fieldsProj).fetch();
+      const totalRecords = mlDBController.find('MlChapters', resultantQuery, context, fieldsProj).count();
       return {totalRecords:totalRecords,data:data};
   },
-  MlCommunityRepo:(requestParams,contextQuery,fieldsProj, context)=>{
+  MlCommunityRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
     //TODO:User Data Context Query
     //Filter as applied by user.
     // let contextQuery=contextQuery||{};
@@ -146,6 +147,40 @@ let CoreModules = {
     const totalRecords = mlDBController.find('MlSubChapters', query, context, fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
+  },
+  MlRegistrationRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var type=requestParams&&requestParams.type?requestParams.type:"";
+    var contextFieldMap={'clusterId':'registrationInfo.clusterId','chapterId':'registrationInfo.chapterId','subChapterId':'registrationInfo.subChapterId','communityId':'registrationInfo.communityId'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+        //construct context query with $in operator for each fields
+        resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+    switch(type){
+      //custom restriction for registration
+      case 'requested':
+        serverQuery={'status':{'$in':['Pending','Rejected']}};
+        break;
+      case 'approved':
+        serverQuery={'status':"Approved"};
+    }
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+      var result=[];
+      var data= MlRegistration.find(resultantQuery,fieldsProj).fetch()||[];
+      var totalRecords=MlRegistration.find(resultantQuery,fieldsProj).count();
+        data.map(function (doc,index) {
+        let object ;
+        object = doc.registrationInfo;
+        object._id = doc._id;
+        object.registrationStatus =doc.status;
+       // object.canAssign = false;
+       // object.canUnAssign = false;
+        result.push(object);
+      });
+      data = result;
+      return {totalRecords:totalRecords,data:data};
   }
 }
 

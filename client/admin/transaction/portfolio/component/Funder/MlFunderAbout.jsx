@@ -7,6 +7,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import _ from 'lodash';
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 export default class MlFunderAbout extends React.Component {
   constructor(props, context){
@@ -175,7 +176,7 @@ export default class MlFunderAbout extends React.Component {
     }
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
       <div>
         <h2>About Us</h2>
         <div className="main_wrap_scroll">

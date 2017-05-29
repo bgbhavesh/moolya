@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {Popover, PopoverContent} from "reactstrap";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../../../client/commons/components/select/MoolyaSelect";
 import gql from "graphql-tag";
@@ -10,6 +10,7 @@ import _ from "lodash";
 import Datetime from "react-datetime";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupPortfolioAwards} from "../../../actions/findPortfolioStartupDetails";
+import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlStartupAwards extends React.Component{
@@ -20,10 +21,8 @@ export default class MlStartupAwards extends React.Component{
       data:{},
       startupAwards: [],
       popoverOpen:false,
-      // index:"",
       selectedIndex:-1,
       startupAwardsList:[],
-      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -80,11 +79,6 @@ export default class MlStartupAwards extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    // let indexes = this.state.indexArray;
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -117,16 +111,17 @@ export default class MlStartupAwards extends React.Component{
     })
   }
 
-  onOptionSelected(selectedAward){
-    let details =this.state.data;
-    details=_.omit(details,["awardId"]);
-    details=_.extend(details,{["awardId"]: selectedAward});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedAward})
+  onOptionSelected(selectedAward, callback, selObject) {
+    let details = this.state.data;
+    details = _.omit(details, ["awardId"]);
+    details = _.omit(details, ["awardName"]);
+    details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
+    this.setState({data: details}, function () {
+      this.setState({"selectedVal": selectedAward, awardName: selObject.label})
       this.sendDataToParent()
     })
-
   }
+
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -167,8 +162,7 @@ export default class MlStartupAwards extends React.Component{
     })
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
-    // let indexArray = this.state.indexArray;
-    this.props.getAwardsDetails(startupAwards);    //indexArray
+    this.props.getAwardsDetails(startupAwards);
   }
 
   onLogoFileUpload(e){
@@ -220,12 +214,11 @@ export default class MlStartupAwards extends React.Component{
     const showLoader = that.state.loading;
     let startupAwardsList = that.state.startupAwardsList || [];
     return (
-      <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-        <div className="admin_padding_wrap portfolio-main-wrap">
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (
+        <div>
           <h2>Awards</h2>
           <div className="requested_input main_wrap_scroll">
-
             <ScrollArea
               speed={0.8}
               className="main_wrap_scroll"
@@ -247,7 +240,8 @@ export default class MlStartupAwards extends React.Component{
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
+                            src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
                           <h3>{details.awardName?details.awardName:""}</h3>
                         </div>
                       </a>
@@ -257,6 +251,7 @@ export default class MlStartupAwards extends React.Component{
               </div>
             </ScrollArea>
             <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
+              <PopoverTitle>Add Award</PopoverTitle>
               <PopoverContent>
                 <div  className="ml_create_client">
                   <div className="medium-popover"><div className="row">
@@ -270,7 +265,7 @@ export default class MlStartupAwards extends React.Component{
                       </div>
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                  inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year?this.state.data.year:" "}
+                                  inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year}
                                   closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
                       </div>
                       <div className="form-group">

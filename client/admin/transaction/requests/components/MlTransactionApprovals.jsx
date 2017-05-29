@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import MlDetailsNotesComponent from './MlDetailsNotesComponent'
-import {findTransactionApprovalActionHandler} from '../actions/findTransactionApproval'
+import {findTransactionApprovalActionHandler} from '../actions/findRequestsApproval'
 import moment from 'moment'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import CreateRequestComponent from '../../requested/component/CreateRequestComponent'
@@ -22,7 +22,8 @@ export default class MlTransactionApprovals extends Component {
     return resp;
   }
   async findRequestDetails(){
-    let requestDetails = await findTransactionApprovalActionHandler('All');
+
+    let requestDetails = await findTransactionApprovalActionHandler('ML-REQ-00000053');
     let requestInfo = []
     for (let i = 0; i < requestDetails.length; i++) {
       let json = {
@@ -64,33 +65,40 @@ export default class MlTransactionApprovals extends Component {
         handler: this.creatRequestType.bind(this)
       }
     ];
-    const options = {
+   /* const options = {
       expandRowBgColor: 'rgb(242, 255, 163)'
-    };
+    };*/
     const selectRow = {
       mode: 'checkbox',
       bgColor: '#feeebf',
       clickToSelect: true,  // click to select, default is false
       clickToExpand: true  // click to expand row, default is false// click to expand row, default is false
     }
+    var WinHeight = $(window).height();
+    var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
+    const config = {
+      maxHeight: tblHeight+'px',
+      striped:true,
+      hover:true,
+    };
+    config['options']={
+      sizePerPage:10,
+      sizePerPageList: [10,20,50,100,200,300,500,700,1000,2000,3000],
+      clearSearch: false,
+      expandRowBgColor: 'rgb(242, 255, 163)'}
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Approvals</h2>
           <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <BootstrapTable  data={ this.state.requetsInfo }
-                               options={ options }
-                               hover={true}
+
+              <BootstrapTable {...config} data={ this.state.requetsInfo }
+                              hover={true}
                                expandableRow={ this.isExpandableRow }
                                expandComponent={ this.expandComponent.bind(this) }
                                selectRow={ selectRow }
                                pagination
+                              bodyStyle={{overflow: 'overlay','overflowX':'hidden'}}
               >
                 <TableHeaderColumn dataField="transactionId" isKey={true} dataSort={true} width='62px' dataAlign='center' hidden={true}>Id</TableHeaderColumn>
                 <TableHeaderColumn dataField="transactionCreatedDate" >Date&Time</TableHeaderColumn>
@@ -98,7 +106,7 @@ export default class MlTransactionApprovals extends Component {
                 <TableHeaderColumn dataField="requestTypeName">Type</TableHeaderColumn>
                 <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
               </BootstrapTable>
-            </ScrollArea>
+
           </div>
           {this.state.createRequest?(<CreateRequestComponent openPopUp={true}/>):""}
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>

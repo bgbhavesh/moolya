@@ -113,6 +113,7 @@ export async function fetchClusterDetails(clusterId) {
                     chapterName
                     subChapterName
                     communityName
+                    roleName
                 }
             }`,
     variables: {

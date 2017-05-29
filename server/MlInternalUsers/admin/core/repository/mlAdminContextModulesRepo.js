@@ -224,6 +224,8 @@ let CoreModules = {
         if(doc.allocation){
             object.assignedUser = doc.allocation.assignee
             object.userName = doc.allocation.assigneeId
+        }else{
+            object.assignedUser = "Un Assigned"
         }
         result.push(object);
       });

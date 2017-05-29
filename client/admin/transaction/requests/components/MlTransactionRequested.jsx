@@ -50,6 +50,7 @@ export default class sMlTransactionRequested extends Component {
       chapter:this.state.chapter,
       subChapter:this.state.subChapter,
       community:this.state.community,
+      communityName: " ",
       requestsStatus:{
         code: "1",
         description:"requested"
@@ -115,7 +116,11 @@ export default class sMlTransactionRequested extends Component {
           userId: requestDetails[i].userId,
           transactionTypeName: requestDetails[i].transactionTypeName,
           status:requestDetails[i].status,
-          transactionId:requestDetails[i]._id
+          transactionId:requestDetails[i]._id,
+          clusterName:requestDetails[i].clusterName,
+          chapterName:requestDetails[i].chapterName,
+          subChapterName:requestDetails[i].subChapterName,
+          communityName:requestDetails[i].communityName
         }
         requestInfo.push(json)
       }
@@ -174,7 +179,7 @@ export default class sMlTransactionRequested extends Component {
     };
    config['options']={
       sizePerPage:10,
-      sizePerPageList: [10,20,50,100,200,300,500,700,1000,2000,3000],
+      sizePerPageList: [10,20,50,100],
       clearSearch: false,
      expandRowBgColor: 'rgb(242, 255, 163)'}
     let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
@@ -226,6 +231,10 @@ export default class sMlTransactionRequested extends Component {
               <TableHeaderColumn dataField="transactionCreatedDate"   >Date&Time</TableHeaderColumn>
               <TableHeaderColumn dataField="requestId" >RequestId</TableHeaderColumn>
               <TableHeaderColumn dataField="requestTypeName">Request Type</TableHeaderColumn>
+              <TableHeaderColumn dataField="clusterName">Cluster</TableHeaderColumn>
+              <TableHeaderColumn dataField="chapterName">Chapter</TableHeaderColumn>
+              <TableHeaderColumn dataField="subChapterName">Sub Chapter</TableHeaderColumn>
+              <TableHeaderColumn dataField="communityName">Sub Chapter</TableHeaderColumn>
               <TableHeaderColumn dataField="status">Status</TableHeaderColumn>
             </BootstrapTable>
 

@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlLoader from '../../../commons/components/loader/loader'
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 
 class MlEditCommunityFormComponent extends React.Component {
   constructor(props) {
@@ -215,6 +216,15 @@ class MlEditCommunityFormComponent extends React.Component {
           label:subChapterName
         }  
     }`;
+    let loggedInUser = getAdminUserContext();
+    let clusterDisabled = "";
+    let chapterDisabled = "";
+    if(loggedInUser.hierarchyLevel < 4){
+      clusterDisabled = "disabled"
+    }else if(loggedInUser.hierarchyLevel < 3){
+      clusterDisabled = "disabled"
+      chapterDisabled  = "disabled"
+    }
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -238,12 +248,12 @@ class MlEditCommunityFormComponent extends React.Component {
                     <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters}
                                   queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
-                                  onSelect={this.optionsBySelectClusters.bind(this)}/>
+                                  onSelect={this.optionsBySelectClusters.bind(this)} disabled={clusterDisabled}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
-                                  queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
+                                  queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} disabled={chapterDisabled}
                                   isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} getUpdatedCallback={this.getUpdatedChapters.bind(this)}/>
                   </div>
                   <div className="form-group">

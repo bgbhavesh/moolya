@@ -44,15 +44,21 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
 
   var collection = args.collection
   var params = args.params;
+  var hierarchyDesicion = false
   let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
+  if(transaction.allocation){
+     hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(args.transactionId,collection,context.userId,transaction.allocation.assigneeId)
+  }else{
+     hierarchyDesicion = mlHierarchyAssignment.assignTransaction(args.transactionId,collection,context.userId,params.user)
+  }
   //get user details iterate through profiles match with role and get department and update allocation details.
-  let hierarchyDesicion = mlHierarchyAssignment.assignTransaction(args.transactionId,collection,context.userId,params.user)
+
   if(hierarchyDesicion === true){
     let user = mlDBController.findOne('users', {_id: params.user}, context)
 
     let date=new Date();
     let allocation={
-      assignee            : user.username,
+      assignee            : user.profile.InternalUprofile.moolyaProfile.displayName,
       assigneeId          : user._id,
       assignedDate        : date,
       department          : params.department,
@@ -63,7 +69,7 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
     //find hierarchy
     let hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role)
 
-    let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:allocation,status:"Pending",userId:params.user,hierarchy:hierarchy._id,transactionUpdatedDate:date}, {$set: true},context)
+    let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:allocation,status:"WIP",userId:params.user,hierarchy:hierarchy._id,transactionUpdatedDate:date}, {$set: true},context)
     if(id){
       let code = 200;
       let result = {transactionId : id}
@@ -129,7 +135,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
   var hierarchyDesicion = false
   let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
   if(transaction.allocation){
-    hierarchyDesicion = false;
+    hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(args.transactionId,collection,context.userId,transaction.allocation.assigneeId)
   }else{
     hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransaction(args.transactionId,collection,context.userId)
   }
@@ -154,10 +160,10 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
       subDepartmentId: roleDetails.subDepartmentId,
     }
     //find hierarchy
-    let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails._id)
+    let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails.roleId)
     let id = mlDBController.update(collection, {transactionId: args.transactionId}, {
       allocation: allocation,
-      status: "Pending",
+      status: "WIP",
       userId: user._id,
       hierarchy: hierarchy._id,
       transactionUpdatedDate: date
@@ -182,7 +188,7 @@ MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info
   let hierarchyDesicion = mlHierarchyAssignment.canUnAssignTransaction(args.transactionId,collection,context.userId)
   if(hierarchyDesicion === true){
     let date=new Date();
-    let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:"",status:"Pending",userId:"",hierarchy:"",transactionUpdatedDate:date}, {$set: true},context)
+    let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:"",status:"Yet To Start",userId:"",hierarchy:"",transactionUpdatedDate:date}, {$set: true},context)
     if(id){
       let code = 200;
       let result = {transactionId : id}

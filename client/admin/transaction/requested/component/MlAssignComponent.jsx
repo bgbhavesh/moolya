@@ -80,7 +80,7 @@ export default class MlAssignComponent extends Component {
     if(response.success){
       this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
       toastr.success("Transaction assigned to user successfully");
-      FlowRouter.go("/admin/transactions/requestedList");
+      FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
       this.setState({show:false})
@@ -93,7 +93,7 @@ export default class MlAssignComponent extends Component {
     const response = await selfAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","selfAssignTransaction");
     if(response.success){
       toastr.success("Self Assignment successfull");
-      FlowRouter.go("/admin/transactions/requestedList");
+      FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
       this.setState({show:false})
@@ -106,7 +106,7 @@ export default class MlAssignComponent extends Component {
     const response = await unAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","unAssignTransaction");
     if(response.success){
       toastr.success("UnAssignment successfull");
-      FlowRouter.go("/admin/transactions/requestedList");
+      FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
       this.setState({show:false})
@@ -143,7 +143,7 @@ export default class MlAssignComponent extends Component {
       }
     }`;*/
     let departmentQuery=gql`query($isMoolya:Boolean,$clusterId:String){  
-      data:fetcHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId) {
+      data:fetchHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId) {
         value:_id
         label:departmentName
       }  

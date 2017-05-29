@@ -8,6 +8,21 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     return response;
   }
 
+    let clusterDetails = mlDBController.findOne('MlClusters', {_id: args.requests.cluster},context) || {};
+    args.requests.clusterName=clusterDetails.clusterName?clusterDetails.clusterName:null;
+
+    let chapterDetails = mlDBController.findOne('MlChapters', {_id: args.requests.chapter},context) || {};
+    args.requests.chapterName=chapterDetails.chapterName?chapterDetails.chapterName:null;
+
+    let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: args.requests.subChapter},context) || {};
+    args.requests.subChapterName=subChapterDetails.subChapterName?subChapterDetails.subChapterName:null;
+
+    let communityRecord = mlDBController.findOne('MlCommunity', {subChapterId: args.requests.subChapter,communityDefCode: args.requests.community},context) || {};
+    args.requests.communityId = communityRecord._id;
+
+    let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
+    args.requests.communityName = communityDetails.name;
+
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;
@@ -26,14 +41,11 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
   }
 }
 MlResolver.MlQueryResolver['fetchRequestss'] = (obj, args, context, info) => {
-  if (args.userId) {
     let requestType=args.requestType;
-    let requests=mlDBController.find('MlRequests',({userId:args.userId  })).fetch();
+    let statuses = args.status;
+  let requests=mlDBController.find('MlRequests',{status:{$in:statuses}}).fetch();
     return requests;
-  }
-  return null
 }
-
 
 MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, info) => {
 

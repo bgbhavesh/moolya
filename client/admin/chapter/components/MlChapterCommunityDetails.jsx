@@ -170,7 +170,16 @@ class MlChapterCommunityDetails extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) =>FlowRouter.go('/admin/community')
+        handler: async function(event) {
+          if(FlowRouter.getRouteName() == "chapter_communities_communityDetails"){
+            let pararms = FlowRouter._current.params;
+            FlowRouter.go("/admin/chapters/" +
+              pararms.clusterId+"/"+pararms.chapterId+"/"+
+              pararms.subChapterId+"/"+pararms.subChapterName+"/communities");
+          } else {
+            FlowRouter.go('/admin/community')
+          }
+        }
       }
     ]
 

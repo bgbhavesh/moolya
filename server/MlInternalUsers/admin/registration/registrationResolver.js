@@ -3,6 +3,8 @@ import MlRespPayload from "../../../commons/mlPayload";
 import MlRegistrationPreCondition from './registrationPreConditions';
 import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
+import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
+
 import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
@@ -41,7 +43,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
 
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
@@ -137,7 +139,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     args.registration.userName = args.registration.email;
     var emails=[{address:args.registration.userName,verified:false}];
     orderNumberGenService.assignRegistrationId(args.registration);
-    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Pending",emails:emails,registrationDetails:{identityType:args.registration.identityType}}, context)
+    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,registrationDetails:{identityType:args.registration.identityType}}, context)
     if(response){
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:response}, context, info);
      // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
@@ -488,7 +490,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       registrationData.emailId = regRecord.registrationInfo.userName;
       registrationData.industry = regRecord.registrationInfo.industry;
       registrationData.profession = regRecord.registrationInfo.profession;
-
+      registrationData.userName = regRecord.registrationInfo.userName;
+      registrationData.profileImage = regRecord.registrationInfo.profileImage;
 
        try{
          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info); //portfolio request
@@ -970,4 +973,78 @@ MlResolver.MlMutationResolver['verifyMobileNumber'] = (obj, args, context, info)
   }else{
     return new MlRespPayload().errorPayload("Mobile Number/Otp is mandatory",403);
   }
+}
+
+MlResolver.MlQueryResolver['fetchContextClusters'] = (obj, args, context, info) =>{
+  let userProfile=new MlAdminUserContext().userProfileDetails(context.userId)||{};
+  let user = Meteor.users.findOne({_id:context.userId});
+  let roleIds=[];
+  let hirarichyLevel=userProfile.hierarchyLevel;
+  let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+  let listData = [];
+  let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
+  let chapterIds = userProfile && userProfile.defaultChapters?userProfile.defaultChapters:[];
+  let subChapterIds = userProfile && userProfile.defaultSubChapters?userProfile.defaultSubChapters:[];
+  let result = null;
+  if(hirarichyLevel==4){
+    result= mlDBController.find('MlClusters', {isActive : true}, context, {sort: {clusterName:1,displayName:1}}).fetch()
+  }else{
+    result=  mlDBController.find('MlClusters', { _id: clusterIds ,isActive : true}, context, {sort: {clusterName:1,displayName:1}}).fetch()
+  }
+  let code = 200;
+  let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  return result
+}
+
+MlResolver.MlQueryResolver['fetchContextChapters'] = (obj, args, context, info) =>{
+
+  let userProfile=new MlAdminUserContext().userProfileDetails(context.userId)||{};
+  let user = Meteor.users.findOne({_id:context.userId});
+  let roleIds=[];
+  let hirarichyLevel=userProfile.hierarchyLevel;
+  let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+  let listData = [];
+  let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
+  let chapterIds = userProfile && userProfile.defaultChapters?userProfile.defaultChapters:[];
+  let subChapterIds = userProfile && userProfile.defaultSubChapters?userProfile.defaultSubChapters:[];
+  let result = null;
+  if(hirarichyLevel==4){
+    result= mlDBController.find('MlChapters',{clusterId:args.id,isActive : true}, context, {sort: {chapterName:1,displayName:1}}).fetch()
+  }else{
+    if(chapterIds[0]=="all"){
+      result=  mlDBController.find('MlChapters', { clusterId: args.id,isActive : true}, context, {sort: {chapterName:1,displayName:1}}).fetch()
+    }else{
+      result=  mlDBController.find('MlChapters', { _id: { $in: chapterIds },isActive : true}, context, {sort: {chapterName:1,displayName:1}}).fetch()
+    }
+
+  }
+  let code = 200;
+  let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  return result
+}
+
+MlResolver.MlQueryResolver['fetchContextSubChapters'] = (obj, args, context, info) =>{
+
+  let userProfile=new MlAdminUserContext().userProfileDetails(context.userId)||{};
+  let user = Meteor.users.findOne({_id:context.userId});
+  let roleIds=[];
+  let hirarichyLevel=userProfile.hierarchyLevel;
+  let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
+  let listData = [];
+  let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
+  let chapterIds = userProfile && userProfile.defaultChapters?userProfile.defaultChapters:[];
+  let subChapterIds = userProfile && userProfile.defaultSubChapters?userProfile.defaultSubChapters:[];
+  let result = null;
+  if(hirarichyLevel==4){
+    result= mlDBController.find('MlSubChapters', {chapterId:args.id,isActive : true}, context, {sort: {subChapterName:1,subChapterDisplayName:1}}).fetch()
+  }else{
+    if(subChapterIds[0]=="all"){
+      result=  mlDBController.find('MlSubChapters', { chapterId: args.id,isActive : true}, context, {sort: {chapterName:1,displayName:1}}).fetch()
+    }else{
+      result=  mlDBController.find('MlSubChapters', { _id: { $in: subChapterIds },isActive : true}, context, {sort: {subChapterName:1,subChapterDisplayName:1}}).fetch()
+    }
+  }
+  let code = 200;
+  let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+  return result
 }

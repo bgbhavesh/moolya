@@ -6,6 +6,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formE
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+var Rating = require('react-rating');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 
@@ -59,7 +60,15 @@ export default class MlStartupAboutUs extends React.Component{
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
             <div className="panel-body">
-              Rating
+              <div className="star_ratings">
+                <Rating
+                  empty="fa fa-star-o empty"
+                  full="fa fa-star fill"
+                  fractions={2}
+                  initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? this.state.startupAboutUs.rating.rating : 0}
+                  readonly={true}
+                />
+              </div>
             </div>
           </div>
           <div className="clearfix"></div>

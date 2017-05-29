@@ -78,7 +78,7 @@ class  MlAdminProfileApp extends Component {
           <img className="logo" src="/images/logo.png" />
         </a>
         <div className="ml_profile" role="navigation">
-          <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center -5px`}}
+          <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center center`}}
           ></h1>
           <ol>
             <li><a href="/admin/myprofile/personalInfo"><img className="profile-img" src="/images/1.png" /></a></li>

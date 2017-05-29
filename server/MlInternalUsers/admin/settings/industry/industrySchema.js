@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let Industry = `        
     type Industry{
       industryName :String
@@ -19,3 +21,10 @@ let Industry = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Industry]);
+let supportedApi = [
+  {api:'FindIndustry', actionName:'READ', moduleName:"INDUSTRY"},
+  {api:'fetchIndustries', actionName:'READ', moduleName:"INDUSTRY"},
+  {api:'CreateIndustry', actionName:'CREATE', moduleName:"INDUSTRY"},
+  {api:'UpdateIndustry', actionName:'UPDATE', moduleName:"INDUSTRY"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

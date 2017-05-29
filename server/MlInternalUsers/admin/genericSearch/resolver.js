@@ -257,7 +257,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTransactionTypes.find(query,findOptions).fetch();
     totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
-  if(args.module=="accountType"){
+  if(args.module=="ACCOUNTTYPE"){
     data= MlAccountTypes.find(query,findOptions).fetch();
     totalRecords=MlAccountTypes.find(query,findOptions).count();
   }
@@ -380,7 +380,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlStageOfCompany.find(query,findOptions).fetch();
     totalRecords=MlStageOfCompany.find(query,findOptions).count();
   }
-  if(args.module=="process"){
+  if(args.module=="processmapping"){
     data= MlProcessMapping.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
@@ -449,7 +449,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     totalRecords=MlProcessMapping.find(query,findOptions).count();
   }
-  if(args.module=="processdocument"){
+  if(args.module=="documents"){
     data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
@@ -820,8 +820,8 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "cities":resolveType= 'Cities';break;
       case "userType":resolveType= 'UserTypes';break;
       case "roleType":resolveType= 'RoleTypes';break;
-      case "process":resolveType='ProcessType';break;
-      case "processdocument":resolveType='ProcessType';break;
+      case "processmapping":resolveType='ProcessType';break;
+      case "documents":resolveType='ProcessType';break;
       case "request":resolveType='Requests';break;
       case "tax":resolveType='Tax';break;
       case "taxation":resolveType='taxation';break;
@@ -834,7 +834,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "kycCategory":resolveType= 'KycCategories';break;
       case "documentMapping":resolveType= 'DocumentMapping';break;
       case "transaction":resolveType= 'Transaction';break;
-      case "accountType":resolveType= 'Account';break;
+      case "ACCOUNTTYPE":resolveType= 'Account';break;
       case "templates":resolveType= 'TemplateDetails';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "industry":resolveType= 'Industry';break;

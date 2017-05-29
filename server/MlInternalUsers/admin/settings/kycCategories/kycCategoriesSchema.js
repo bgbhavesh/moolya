@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let KycCategoriesSchema = `
     type KycCategories
     {
@@ -29,3 +31,11 @@ let KycCategoriesSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],KycCategoriesSchema]);
+let supportedApi = [
+  {api:'findKycCategory', actionName:'READ', moduleName:"DOCUMENTS"},
+  {api:'fetchKYCCategories', actionName:'READ', moduleName:"DOCUMENTS"},
+  {api:'createKycCategory', actionName:'CREATE', moduleName:"DOCUMENTS"},
+  {api:'updateKycCategory', actionName:'UPDATE', moduleName:"DOCUMENTS"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)
+

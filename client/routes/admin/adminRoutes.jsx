@@ -95,7 +95,7 @@ adminSection.route('/myprofile/AddressBook', {
   }
 });
 
-adminSection.route('/myprofile/', {
+adminSection.route('/myprofile/Settings', {
   name: 'myprofile',
   action(){
     mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileSettings/>})

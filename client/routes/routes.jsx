@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import {mount} from 'react-mounter';
 import {findUserActionHandler} from './actions/findCurrentUserDetails'
 import loginActions,{loginActionHandler} from '../login/actions/loginActions';
+import MlAccessDenied from '../admin/MlAccessDenied'
 
 let userId = Meteor.userId();
 const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
@@ -51,6 +52,6 @@ FlowRouter.route('/login', {
 FlowRouter.route('/unauthorize', {
   name:'unauthorize',
   action:()=>{
-    mount(MlLoginLayout, {content:<div>Unauthorized</div>})
+    mount(MlLoginLayout, {content:<MlAccessDenied/>})
   }
 });

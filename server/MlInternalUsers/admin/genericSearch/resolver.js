@@ -148,7 +148,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
     totalRecords=MlSubDepartments.find({},findOptions).count();
   }
-  if(args.module=="request"){
+  if(args.module=="REQUESTTYPE"){
     data= MlRequestType.find(query,findOptions).fetch();
     totalRecords=MlRequestType.find(query,findOptions).count();
   }

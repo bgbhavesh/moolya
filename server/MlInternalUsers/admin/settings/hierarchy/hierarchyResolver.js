@@ -7,6 +7,7 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
   let list = [];
   let resp = mlDBController.find('MlDepartments', {
     $and: [
+      {isMoolya:true},
       {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]}}
     ]
   }, context).fetch()

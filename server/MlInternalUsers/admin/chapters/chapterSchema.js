@@ -68,6 +68,7 @@ let chapterSchema = `
         isDefaultSubChapter:Boolean
         clusterName: String
         chapterId:String
+        associatedSubChapters:[String]
         subChapterImageLink:String
         chapterName :String
         stateName : String
@@ -114,7 +115,7 @@ let chapterSchema = `
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
-        associatedChapters:[String] ,
+        associatedSubChapters:[String] ,
         subChapterUrl:String,
         isUrlNotified:Boolean,
         subChapterEmail:String,

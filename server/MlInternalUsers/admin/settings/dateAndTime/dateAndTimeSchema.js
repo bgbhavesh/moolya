@@ -75,14 +75,14 @@ let dateFormat = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],dateFormat]);
 
 let supportedApi = [
-  {api:'createDateAndTime', actionName:'CREATE', moduleName:"DATEANDTIME"},
-  {api:'updateDateAndTime', actionName:'UPDATE', moduleName:"DATEANDTIME"},
+  {api:'createDateAndTime', actionName:'CREATE', moduleName:"GLOBALSETTINGS"},
+  {api:'updateDateAndTime', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
 
-  {api:'findDateAndTime', actionName:'READ', moduleName:"DATEANDTIME"},
-  {api:'fetchDateAndTime', actionName:'READ', moduleName:"DATEANDTIME"},
+  {api:'findDateAndTime', actionName:'READ', moduleName:"GLOBALSETTINGS"},
+  {api:'fetchDateAndTime', actionName:'READ', moduleName:"GLOBALSETTINGS"},
 
-  {api:'findWeekDays', actionName:'READ', moduleName:"DATEFORMAT"},
-  {api:'findDateFormat', actionName:'READ', moduleName:"DATEFORMAT"},
-  {api:'findTimeFormat', actionName:'READ', moduleName:"DATEFORMAT"}
+  {api:'findWeekDays', actionName:'READ', moduleName:"GLOBALSETTINGS"},
+  {api:'findDateFormat', actionName:'READ', moduleName:"GLOBALSETTINGS"},
+  {api:'findTimeFormat', actionName:'READ', moduleName:"GLOBALSETTINGS"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -180,9 +180,12 @@ class MlAuthorization
 
             case 'SUBCHAPTER':
             {
-                if(isContextSpecSearch && (roleDetails['chapterId'] == 'all' || (roleDetails['chapterId'] == req.variables.context['chapterId'] && roleDetails['clusterId'] == req.variables['clusterId']))){
+                if(isContextSpecSearch && (roleDetails['chapterId'] == req.variables.context['chapterId'] && roleDetails['clusterId'] == req.variables['clusterId'])){
                     return true
                 }
+
+                if(roleDetails['subChapterId'] == 'all')
+                    return true;
             }
             break;
 

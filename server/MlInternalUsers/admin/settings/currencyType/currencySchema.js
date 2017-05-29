@@ -23,6 +23,6 @@ MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], currencySchema]);
 
 let supportedApi = [
 
-  {api:'findTimeFormat', actionName:'READ', moduleName:"NUMERICAL"}
+  {api:'fetchCurrency', actionName:'READ', moduleName:"GLOBALSETTINGS"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

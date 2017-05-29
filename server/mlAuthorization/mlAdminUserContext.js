@@ -20,6 +20,7 @@ class MlAdminUserContext
     let defaultChapters = [];
     let defaultSubChapters = [];
     let defaultCommunities = [];
+    let defaultCommunityHierarchyLevel;
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -52,6 +53,9 @@ class MlAdminUserContext
                   hierarchyLevel=userRole.hierarchyLevel;
                   hierarchyCode=userRole.hierarchyCode;
               }
+              if(userRole.communityHierarchyLevel){
+                  defaultCommunityHierarchyLevel = userRole.communityHierarchyLevel
+              }
               if(defaultChapters.indexOf(userRole.chapterId < 0))
                 defaultChapters.push(userRole.chapterId)
               if(defaultSubChapters.indexOf(userRole.subChapterId< 0))
@@ -69,6 +73,7 @@ class MlAdminUserContext
                 defaultChapters:defaultChapters,
                 defaultSubChapters:defaultSubChapters,
                 defaultCommunities:defaultCommunities,
+                defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
                 isMoolya:isMoolya};
   }
 

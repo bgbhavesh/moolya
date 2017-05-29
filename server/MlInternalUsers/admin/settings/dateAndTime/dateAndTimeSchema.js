@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let DateAndTimeSchema = `
     type DateAndTime
     {
@@ -71,3 +73,16 @@ let dateFormat = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],dateFormat]);
+
+let supportedApi = [
+  {api:'createDateAndTime', actionName:'CREATE', moduleName:"DATEANDTIME"},
+  {api:'updateDateAndTime', actionName:'UPDATE', moduleName:"DATEANDTIME"},
+
+  {api:'findDateAndTime', actionName:'READ', moduleName:"DATEANDTIME"},
+  {api:'fetchDateAndTime', actionName:'READ', moduleName:"DATEANDTIME"},
+
+  {api:'findWeekDays', actionName:'READ', moduleName:"DATEFORMAT"},
+  {api:'findDateFormat', actionName:'READ', moduleName:"DATEFORMAT"},
+  {api:'findTimeFormat', actionName:'READ', moduleName:"DATEFORMAT"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -192,11 +192,11 @@ let CoreModules = {
     var contextFieldMap={'clusterId':'templateclusterId','chapterId':'templatechapterId','subChapterId':'templatesubChapterId','communityId':'communityId','communityCode':'templatecommunityCode'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
     //this is specific to template assignment
+    //community is is not captured in template assignment
     _.omit(resultantQuery, ['communityId']);
     //add all for each option
     _.each(resultantQuery,function(r){if(_.isArray(r)){r.push('all');}});
 
-    console.log(resultantQuery);
     //construct context query with $in operator for each fields
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
 

@@ -185,6 +185,29 @@ let CoreModules = {
     var totalRecords=MlRequests.find(resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
   },
+  MlTemplatesAssignmentRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var contextFieldMap={'clusterId':'templateclusterId','chapterId':'templatechapterId','subChapterId':'templatesubChapterId','communityId':'communityId','communityCode':'templatecommunityCode'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+    //this is specific to template assignment
+    //community is is not captured in template assignment
+    _.omit(resultantQuery, ['communityId']);
+    //add all for each option
+    _.each(resultantQuery,function(r){if(_.isArray(r)){r.push('all');}});
+
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'createdDate': -1}
+    }
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery),'$and');
+    var data= MlTemplateAssignment.find(resultantQuery,fieldsProj).fetch();
+    var totalRecords=MlTemplateAssignment.find(resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
+  },
   MlRegistrationRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
     var type=requestParams&&requestParams.type?requestParams.type:"";
     var contextFieldMap={'clusterId':'registrationInfo.clusterId','chapterId':'registrationInfo.chapterId','subChapterId':'registrationInfo.subChapterId','communityId':'registrationInfo.communityId','communityCode':'registrationInfo.communityDefCode'};

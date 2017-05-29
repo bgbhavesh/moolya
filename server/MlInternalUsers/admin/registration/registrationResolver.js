@@ -490,7 +490,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       registrationData.emailId = regRecord.registrationInfo.userName;
       registrationData.industry = regRecord.registrationInfo.industry;
       registrationData.profession = regRecord.registrationInfo.profession;
-
+      registrationData.userName = regRecord.registrationInfo.userName;
+      registrationData.profileImage = regRecord.registrationInfo.profileImage;
 
        try{
          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info); //portfolio request

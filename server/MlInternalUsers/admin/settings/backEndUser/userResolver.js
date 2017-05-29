@@ -6,6 +6,7 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import _ from 'lodash'
+import _underscore from 'underscore'
 
 
 
@@ -1284,7 +1285,7 @@ MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) 
     let hirarichyLevel = [];
     let userProfileData = userProfiles&&userProfiles[0]?userProfiles[0]:{}
     let userRolesData = userProfileData&&userProfileData.userRoles?userProfileData.userRoles:[];
-    hirarichyLevel = _.pluck(userRolesData, 'hierarchyLevel') || [];
+    hirarichyLevel = _underscore.pluck(userRolesData, 'hierarchyLevel') || [];
     hirarichyLevel.sort(function (a, b) {
       return b - a
     });
@@ -1324,7 +1325,7 @@ MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) 
       defaultRole.communityName = "All";
     }
 
-    if(defaultRole && defaultRole.departmentId && defaultRole.departmentId != 'all'){
+/*    if(defaultRole && defaultRole.departmentId && defaultRole.departmentId != 'all'){
       const departmentData= MlDepartments.findOne({_id:defaultRole.departmentId}) || {}
       defaultRole.departmentName = departmentData.displayName;
     }else if( defaultRole.departmentId == 'all'){
@@ -1336,7 +1337,7 @@ MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) 
       defaultRole.subDepartmentName = subdepartmentData.displayName;
     }else if( defaultRole.subDepartmentId == 'all'){
       defaultRole.subDepartmentName = "All";
-    }
+    }*/
 
 
 

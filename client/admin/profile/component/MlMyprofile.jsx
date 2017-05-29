@@ -36,7 +36,7 @@ export default class MlMyProfile extends React.Component{
       genderStateMale: " ",
       genderStateFemale: " ",
       genderStateOthers: " ",
-      dateOfBirth:" ",
+      dateOfBirth:null,
       genderSelect:" ",
       responsePic:" ",
       password:'',
@@ -69,7 +69,7 @@ export default class MlMyProfile extends React.Component{
   }
   onFoundationDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, foundationDate: value});
     }
   }
@@ -183,7 +183,7 @@ async showImage(temp){
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
         genderSelect: "Male", //response.profile.genderType
-        dateOfBirth: moment(response.profile.dateOfBirth).toDate().getTime()
+        dateOfBirth:moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     }else{
       let response = await findBackendUserActionHandler(userType);
@@ -194,7 +194,7 @@ async showImage(temp){
         userName: response.profile.InternalUprofile.moolyaProfile.displayName,
         uploadedProfilePic:response.profile.profileImage,
         genderSelect:response.profile.genderType,
-        dateOfBirth: moment(response.profile.dateOfBirth).toDate().getTime()
+        dateOfBirth:moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     }
     this.genderSelect();
@@ -225,7 +225,7 @@ async showImage(temp){
 
   onfoundationDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, dateOfBirth: value});
     }
   }
@@ -396,7 +396,7 @@ async showImage(temp){
                     {/*</div>*/}
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onfoundationDateSelection.bind(this)} />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={moment(this.state.dateOfBirth).format('DD-MM-YYYY')} onChange={this.onfoundationDateSelection.bind(this)} />
                       <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

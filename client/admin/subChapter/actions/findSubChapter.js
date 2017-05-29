@@ -21,6 +21,7 @@ export async function findSubChapterActionHandler(subChapterId) {
         isEmailNotified
         showOnMap
         isActive
+        associatedSubChapters
         isBespokeRegistration
         isBespokeWorkFlow
         internalSubChapterAccess {

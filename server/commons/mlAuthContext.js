@@ -15,7 +15,8 @@ export default function ({req})
   // Get the user from the database
   const user = Meteor.users.findOne({'services.resume.loginTokens.hashedToken': hashedToken}, { fields: { _id: 1, 'services.resume.loginTokens.$': 1 } })
 
-  if (!user) return {}
+  if (!user) return {ip: req.headers['x-forwarded-for']||req.headers['X-Forwarded-For'],url: req.headers['referer'],
+                     browser: req.headers['user-agent']};
   const expiresAt = Accounts._tokenExpiration(user.services.resume.loginTokens[0].when)
   const isExpired = expiresAt < new Date()
   if (isExpired) return {}

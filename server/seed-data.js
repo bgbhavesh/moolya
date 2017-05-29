@@ -166,6 +166,7 @@ var options = {
     isInternaluser : true,
     isExternaluser : false,
     email: 'platformadmin@moolya.com',
+    isMoolya:true,
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
@@ -404,7 +405,7 @@ Accounts.validateLoginAttempt(function (user)
 
 
     return true;
-})
+});
 
 validateExternalUserLoginAttempt=(user)=>{
   let userExternal = user.user.profile.isExternaluser;

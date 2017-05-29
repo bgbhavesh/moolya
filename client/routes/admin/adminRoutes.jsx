@@ -18,6 +18,7 @@ import MlViews from '../../admin/core/components/MlViews'
 import {mlClusterListConfig,mlClusterMapConfig} from '../../admin/cluster/config/mlClusterConfig'
 import MlTransactionRequested from '../../admin/transaction/requests/components/MlTransactionRequested'
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
+import MlSystemsLogList from '../../admin/transaction/systemsLog/component/MlSystemsLogList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
@@ -42,6 +43,11 @@ import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio
 import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
 import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
 import MlTransactionApprovals from '../../admin/transaction/requests/components/MlTransactionApprovals'
+import MlInteractionsLogList from '../../admin/transaction/interactions/component/MlinteractionsLogList'
+import MlConversationsLogList from '../../admin/transaction/conversations/component/MlConversationsLogList'
+
+
+
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
   FlowRouter._askedToWait = true;
@@ -204,6 +210,29 @@ adminSection.route('/transactions/registrationRequested', {
     mount(AdminLayout,{adminContent:<MlRequestedList/>})
   }
 });
+
+
+adminSection.route('/transactions/systemsLog', {
+  name: 'systems_Log',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlSystemsLogList/>})
+  }
+});
+
+adminSection.route('/transactions/interactionsLog', {
+  name: 'Interactions_Log',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlInteractionsLogList/>})
+  }
+});
+
+adminSection.route('/transactions/conversationsLog', {
+  name: 'Conversations_Log',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlConversationsLogList/>})
+  }
+});
+
 
 adminSection.route('/transactions/portfolioRequested/edit', {
     name: 'transaction_portfolio_requested_edit',

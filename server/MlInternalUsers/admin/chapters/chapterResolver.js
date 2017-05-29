@@ -1,6 +1,7 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import geocoder from "geocoder";
+import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
@@ -35,7 +36,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) =>{
             subChapterCode: "ML_" + chapter.chapterName + "_" + subChapterName,
             subChapterName: subChapterName+"-"+chapter.chapterName,
             subChapterDisplayName: subChapterName,
-            associatedChapters: [],
+            // associatedChapters: [],
             subChapterUrl: "",
             isUrlNotified: false,
             subChapterEmail: "",
@@ -138,7 +139,6 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) => {
-  // let result=MlChapters.find({isActive:true}).fetch()||[];
   let result = mlDBController.find('MlChapters', {isActive:true}, context).fetch()||[];
   return result;
 }
@@ -191,11 +191,17 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
          result = mlDBController.find('MlSubChapters', {clusterId:args.clusterId,isDefaultSubChapter:false,isActive: true}, context).fetch()||[];
          result.push({"subChapterName" : "All","_id" : "all"});
        }
-    }else{
-         result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
-        if(result.length > 0){
-             result.push({"subChapterName" : "All","_id" : "all"});
-        }
+    }else {
+      // result = mlDBController.find('MlSubChapters', {"$and": [{chapterId: args.chapterId,isDefaultSubChapter:false,isActive: true}]}, context).fetch()||[];
+      var query = args.chapterId ? {
+        chapterId: args.chapterId,
+        isDefaultSubChapter: false,
+        isActive: true
+      } : {isDefaultSubChapter: false, isActive: true}
+      result = mlDBController.find('MlSubChapters', query, context).fetch() || [];
+      if (result.length > 0 && args.chapterId) {
+        result.push({"subChapterName": "All", "_id": "all"});
+      }
     }
   return result
 }
@@ -228,10 +234,23 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectMoolya'] = (obj, args, context
 
 MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info) => {
   // let result=MlSubChapters.find({isActive: true,isDefaultSubChapter:false}).fetch()||[];
-  let result = mlDBController.find('MlSubChapters', {
-      isActive: true,
-      isDefaultSubChapter: false
-    }, context).fetch() || [];
+  var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+  var queryChange;
+  if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+    queryChange = {
+      $and: [{
+        isActive: true,
+        isDefaultSubChapter: false
+      }, {
+        '_id': {
+          $in: curUserProfile.defaultSubChapters
+        }
+      }]
+    }
+  } else {
+    queryChange = {isActive: true, isDefaultSubChapter: false}   //platform_admin
+  }
+  let result = mlDBController.find('MlSubChapters', queryChange, context).fetch() || [];
   return result
 }
 
@@ -320,8 +339,9 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
           }
         }
         if(resp){
-          if(args.subChapterDetails && args.subChapterDetails.chapterId){
-            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
+          if(subChapter && subChapter.chapterId){   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+            MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
+            // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
           }
             let code = 200;
             let result = {subChapter: resp}

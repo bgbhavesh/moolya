@@ -14,7 +14,7 @@ MlResolver.MlQueryResolver['fetchGlobalSettings'] = (obj, args, context, info) =
 
 MlResolver.MlMutationResolver['updateGlobalSetting'] = (obj, args, context, info) => {
   // TODO : Authorization
-     let globalSettingRecord=new MlGlobalSettingRepo(context.userId).updateGlobalSetting(args, context);
+     let globalSettingRecord = new MlGlobalSettingRepo(context.userId).updateGlobalSetting(args, context);
      return globalSettingRecord;
 }
 

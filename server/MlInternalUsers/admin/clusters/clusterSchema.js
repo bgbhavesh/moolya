@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
+
 let clusterSchema = `
     type Cluster{
         _id:String
@@ -51,7 +53,7 @@ let clusterSchema = `
     }
     
     type Query{ 
-        fetchCluster(_id: String, moduleName:String!, actionName:String!):Cluster
+        fetchCluster(docId: String, moduleName:String!, actionName:String!):response1
         fetchClustersForMap:[Cluster]
         fetchActiveClusters:[Cluster]
     }
@@ -66,3 +68,12 @@ let clusterSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], clusterSchema]);
+let supportedApi = [
+    {api:'fetchCluster', actionName:'READ', moduleName:"CLUSTER"},
+    {api:'fetchClustersForMap', actionName:'READ', moduleName:"CLUSTER"},
+    {api:'fetchActiveClusters', actionName:'READ', moduleName:"CLUSTER"},
+    {api:'createCluster', actionName:'CREATE', moduleName:"CLUSTER"},
+    {api:'upsertCluster', actionName:'UPDATE', moduleName:"CLUSTER"},
+    {api:'updateCluster', actionName:'UPDATE', moduleName:"CLUSTER"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

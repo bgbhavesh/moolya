@@ -26,7 +26,10 @@ export default function ({req})
     url: req.headers['referer'],
     browser: req.headers['user-agent']
   }
+
+
   // This allows us to pass the userId to other parts in meteor
   Fiber.current.graphQLContext = context
   return context
 }
+

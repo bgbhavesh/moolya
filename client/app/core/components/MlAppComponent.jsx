@@ -73,7 +73,7 @@ const defaultQuery = gql`fragment subMenu on Menu{
                   showInBreadCrum
               }
 
-              query LeftNavQuery($name: String!) {
+              query($name: String!) {
                 data:fetchExternalUserMenu(name: $name){
                     name
                     menu{
@@ -106,7 +106,7 @@ const profileMenuQuery = gql`fragment subMenu on Menu{
                   showInBreadCrum
               }
 
-              query LeftNavQuery($name: String!) {
+              query($name: String!) {
                 data:fetchExternalUserProfileMenu(name: $name){
                     name
                     menu{

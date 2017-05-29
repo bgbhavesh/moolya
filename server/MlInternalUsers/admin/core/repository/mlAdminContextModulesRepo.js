@@ -38,7 +38,7 @@ let CoreModules = {
       //let query=contextQuery;
       let clusterId=requestParams&&requestParams.clusterId&&requestParams.clusterId!='all'?requestParams.clusterId:null;
       if(clusterId){
-        resultantQuery={"clusterId":clusterId};
+          resultantQuery={"clusterId":clusterId};
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
             resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }

@@ -803,7 +803,7 @@ MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) 
       return user.profile;
 }
 
-MlResolver.MlQueryResolver['FindUserOnToken'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
   const hashedToken = Accounts._hashLoginToken(args.token)
   const user = Meteor.users.findOne({'services.resume.loginTokens.hashedToken':hashedToken})    //
   if(user){

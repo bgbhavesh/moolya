@@ -36,6 +36,10 @@ class MlClusterDetails extends React.Component {
   async findCluster() {
     let clusterId = this.props.params;
     const response = await findClusterTypeActionHandler(clusterId);
+    if(response){
+
+    }
+
     this.setState({loading: false, data: response});
   }
 
@@ -169,7 +173,7 @@ class MlClusterDetails extends React.Component {
                       <div className="email_notify">
                         <div className="input_types">
                           <input ref="isEmailNotified" type="checkbox" name="checkbox"
-                                 checked={this.state.data.isEmailNotified}
+                                 checked={this.state.data && this.state.data.isEmailNotified}
                                  onChange={this.onStatusChangeNotify.bind(this)}/>
                           <label htmlFor="checkbox1"><span> </span>Notify</label>
                         </div>

@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
+
 let modules = `
     type Module{
         _id:String
@@ -19,3 +21,7 @@ let modules = `
 //TODO: Update Role
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], modules]);
+let supportedApi = [
+    {api:'fetchModules', actionName:'READ', moduleName:"MODULELIST"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

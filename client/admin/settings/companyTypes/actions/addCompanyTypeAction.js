@@ -11,7 +11,7 @@ export async function addCompanyTypeActionHandler(CompanyTypeDetails) {
     mutation: gql`
     mutation  ($masterData:MasterSettingsRequest){
        createMasterSetting(
-          moduleName:"MASTER_SETTINGS",
+          moduleName:"MASTERSETTINGS",
           actionName:"CREATE",
           type:COMPANYTYPE,
           masterData:$masterData

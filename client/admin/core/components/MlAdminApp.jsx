@@ -71,24 +71,23 @@ const query = gql`fragment subMenu on Menu{
                   showInBreadCrum
               }
 
-              query LeftNavQuery($name: String!) {
-        data:FetchMenu(name: $name){
-            name
-            menu{
-              ...subMenu
-                 subMenu{
-                  ...subMenu
-                    subMenu{
-                      ...subMenu
-                          subMenu{
-                             ...subMenu
-                                 }
-                           }
-                      }
-                   }
-            }
-
-      }`
+              query($name: String!) {
+                  data:FetchMenu(name: $name){
+                      name
+                      menu{
+                        ...subMenu
+                           subMenu{
+                            ...subMenu
+                              subMenu{
+                                ...subMenu
+                                    subMenu{
+                                       ...subMenu
+                                           }
+                                     }
+                                }
+                             }
+                  }
+              }`
 
 //export default  MlAdminApp = graphql(query,{options: { variables: { name:'mlAdminMenu' }}})(MlAdminAppComponent);
 export default  MlAdminApp = MlAdminAppComponent;

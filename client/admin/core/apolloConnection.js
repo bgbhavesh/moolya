@@ -44,6 +44,25 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
           next();
         }
       }]);
+
+      networkInterface.useAfter([{
+        applyAfterware({ response }, next) {
+          if (response.status === 401) {
+            logout();
+          }
+
+          const clonedResponse = response.clone();
+
+          clonedResponse.json().then(data => {
+            const { errors = [] } = data;
+            if(data && data.unAuthorized){
+                FlowRouter.go('/unauthorize')
+            }
+            else
+              next();
+          });
+        }
+      }]);
     }
   }
   return networkInterface;
@@ -60,7 +79,6 @@ const networkInterface = defaultClientConfig.networkInterface;
 const dataIdFromObject = defaultClientConfig.dataIdFromObject;
 
 export const client = new ApolloClient({networkInterface, dataIdFromObject});
-
 
 /*
 const networkInterace=createNetworkInterface(Meteor.settings.public.graphUrl);

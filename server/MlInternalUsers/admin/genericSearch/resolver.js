@@ -267,7 +267,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlAccountTypes.find(query,findOptions).count();
   }
 
-  if(args.module == 'BackendUsers'){
+  if(args.module == 'Users'){
       data = Meteor.users.find({"profile.isInternaluser":true}).fetch();
 
     data.map(function (doc,index) {
@@ -856,7 +856,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "SubDomain":resolveType= 'SubDomain';break;
       case "dateAndTime":resolveType= 'DateAndTime';break;
       case "language":resolveType= 'Language';break;
-      case "BackendUsers":resolveType= 'BackendUsers';break;
+      case "Users":resolveType= 'BackendUsers';break;
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
       case "community":resolveType= 'Community';break;
@@ -1042,4 +1042,11 @@ MlResolver.MlUnionResolver['SearchResult']= {
      }*/
     return 'GenericType';
   }
+}
+
+
+MlResolver.MlUnionResolver['ResponseResult']= {
+    __resolveType(data, context, info){
+        return context.type;
+    }
 }

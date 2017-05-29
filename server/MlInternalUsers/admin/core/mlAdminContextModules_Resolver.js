@@ -72,7 +72,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "community":
       result=CoreModulesRepo.MlCommunityRepo(args.context,userFilterQuery,contextQuery,findOptions, context);
       break;
-    case "MASTER_SETTINGS":
+    case "MASTERSETTINGS":
       requestParams=args.context;
       requestParams.userId=context.userId;
       result=CoreModulesRepo.MlMasterSettingsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);

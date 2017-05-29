@@ -12,13 +12,13 @@ module.exports = class MlRespPayload{
         response.success = true;
         response.code = code;
         if(typeof result == 'object')
-          response.result = JSON.stringify(result);
+          response.result = result;
         else
           response.result = result;
         return response;
     }
 
-    errorPayload(errMsg, code){
+    errorPayload(errMsg, type, code){
         let response = {};
         response.success = false;
         response.code = code;

@@ -47,3 +47,10 @@ FlowRouter.route('/login', {
     mount(MlLoginLayout, {content:<MlLoginContent formSubmit={loginActionHandler.onLoginFormSubmit}/>})
   }
 });
+
+FlowRouter.route('/unauthorize', {
+  name:'unauthorize',
+  action:()=>{
+    mount(MlLoginLayout, {content:<div>Unauthorized</div>})
+  }
+});

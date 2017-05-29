@@ -70,8 +70,10 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   getUpdatedChapters(data){
-      if(data.length > 0)
-        this.setState({chapters:data})
+      if(data.length > 0){
+          this.setState({chapters:data})
+      }
+
   }
 
   async addEventHandler() {

@@ -32,7 +32,7 @@ export async function updateSocialListsTypeActionHandler(Details)
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
-        updateMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"UPDATE",type:SOCIALLINKS,masterData:$masterData) 
+        updateMasterSetting(moduleName:"MASTERSETTINGS",actionName:"UPDATE",type:SOCIALLINKS,masterData:$masterData) 
       }
     `,
     variables: {

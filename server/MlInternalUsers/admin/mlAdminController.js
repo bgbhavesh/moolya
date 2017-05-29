@@ -3,8 +3,10 @@
  */
 
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
-
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import { parse, buildASTSchema } from 'graphql';
+import { build } from 'graphql-utilities';
+import { traverse } from 'graphql-parser'
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import { check } from 'meteor/check';
@@ -19,6 +21,8 @@ import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
 let cors = require('cors');
+const Fiber = Npm.require('fibers')
+var _language = require('graphql/language');
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -75,17 +79,25 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   const graphQLServer = express();
   config.configServer(graphQLServer)
   graphQLServer.use(cors());
-  // graphQLServer.use(authChecker)
-  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
+  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
   {
     try {
+      // getGraphQLParams(request).then(params => {
+      //   // do something...
+      // })
       const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
       const options = {
         ...executableSchema,
         ...defaultGraphQLOptions,
         ...customOptionsObject,
       };
-      context = getContext({req});
+
+      context = getContext({req, res});
+      var isAut = mlAuthorization.authChecker({req, context})
+      if(!isAut){
+          res.json({unAuthorized:true,message:"Not Authorized"})
+          return;
+      }
 
       return {
         schema  : executableSchema,
@@ -498,11 +510,56 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }
 
-function authChecker(req, res, next) {
-    if (!req.headers['meteor-login-token']) {
-        next();
-    } else {
-      next();
+function authChecker(req, context)
+{
+    let query = parse(req.body.query);
+    let schemaDef;
+    let queryTypeName;
+    let mutationTypeName;
+    let moduleName;
+    let actionName;
+    let operation;
+    let typeName = '';
+    for(var i = 0; i < query.definitions.length; i++){
+        const d = query.definitions[i];
+        console.log(d.kind)
+        switch (d.kind){
+            case 'OperationDefinition':
+                if (schemaDef) {
+                    throw new Error('Must provide only one schema definition.');
+                }
+                schemaDef = d;
+            break;
+        }
     }
+    operation = schemaDef.operation;
+    schemaDef.selectionSet.selections.forEach(operationType => {
+        typeName = operationType.name.value
+    })
+    let modules = MlResolver.MlModuleResolver;
+    _.each(modules, function (module) {
+          let isValid = _.indexOf(module.apis, typeName)
+          if(isValid >= 0){
+              moduleName = module.moduleName;
+          }
+    })
+
+    if(operation == 'query'){
+        actionName = ['READ']
+    }
+    else if(operation == 'mutation'){
+        actionName = ['CREATE', 'UPDATE']
+    }
+
+    if(moduleName) {
+        for(var i = 0; i < actionName.length; i++){
+            let isValidAuth = mlAuthorization.validteAuthorization(context.userId, moduleName, actionName[i], req.body);
+            return isValidAuth;
+        }
+    }
+
+
+    return false;
 }
+
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

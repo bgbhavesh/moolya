@@ -3,6 +3,8 @@
 
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
+
 let moolya = `
     interface moolya {
      id : String
@@ -14,9 +16,9 @@ let moolya = `
       displayName: String
     }    
     type Chapter implements moolya {
-      id : String
-      clusterId: String
-      chapterName: String
+        id : String
+        clusterId: String
+        chapterName: String
     }
     
     
@@ -56,6 +58,8 @@ type Query {
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);
+let supportedApi = [{api:'SearchQuery', actionName:'READ', moduleName:"GENERIC"}];
+MlResolver.MlModuleResolver.push(supportedApi)
 
 //have to integrate to search
 // valueType: String || Boolean || Date,

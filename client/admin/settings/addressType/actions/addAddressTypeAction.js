@@ -12,7 +12,7 @@ export async function addAddressTypeActionHandler(addressDetails)
   const result = await client.mutate({
     mutation: gql`
     mutation ($masterData:MasterSettingsRequest){
-        createMasterSetting(moduleName:"MASTER_SETTINGS",actionName:"CREATE",type:ADDRESSTYPE,masterData:$masterData) 
+        createMasterSetting(moduleName:"MASTERSETTINGS",actionName:"CREATE",type:ADDRESSTYPE,masterData:$masterData) 
       }
     `,
     variables: {

@@ -215,6 +215,10 @@ export default class MlStartupAwards extends React.Component{
 
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let query=gql`query{
       data:fetchActiveAwards {
         label:awardDisplayName
@@ -277,7 +281,7 @@ export default class MlStartupAwards extends React.Component{
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
                                   inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
+                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={ valid }/>
                       </div>
                       <div className="form-group">
                         <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>

@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
+import {findBackendUserActionHandler} from '../actions/findUserAction'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction'
 
@@ -24,6 +25,62 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
   }
   componentDidMount() {
     initalizeFloatLabel();
+    console.log(this.props.data)
+  }
+  componentWillReceiveProps(newProps){
+   /* let type=newProps.type;
+    if(type=="approval"){
+      this.setState({"dispalyStatus":true})
+    }*/
+    let userId=newProps.data.userId
+    this.setState({"status":newProps.data.status})
+    if(userId){
+      const resp=this.findBackendUser()
+      return resp;
+    }
+
+  }
+
+  async findBackendUser() {
+    let userTypeId = this.props.data.userId
+    const response = await findBackendUserActionHandler(userTypeId);
+    if(response){
+      this.setState({userDetais:response, role:response.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleName, firstName:response.profile.InternalUprofile.moolyaProfile.firstName})
+      let userDetails=this.state.userDetais
+      if(userDetails.profile.isInternaluser){
+        let userInternalProfile=userDetails.profile.InternalUprofile.moolyaProfile.userProfiles
+        if(userInternalProfile){
+          let roleIds=[]
+          let hirarichyLevel=[]
+          userInternalProfile.map(function (doc,index) {
+            if(doc.isDefault) {
+              let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+              userRoles.map(function (doc, index) {
+                hirarichyLevel.push(doc.hierarchyLevel)
+
+              });
+              hirarichyLevel.sort(function (a, b) {
+                return b - a
+              });
+              for (let i = 0; i < userRoles.length; i++) {
+                if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
+                  roleIds.push(userRoles[i]);
+                  break
+                }
+              }
+            }
+          });
+
+          if(roleIds.length==1){
+            this.setState({"role":roleIds[0].roleName})
+            this.setState({"departmentName":roleIds[0].departmentName})
+            this.setState({"subDepartmentName":roleIds[0].subDepartmentName})
+          }
+
+        }
+        this.setState({profileImage:userDetails.profile.profileImage})
+      }
+    }
   }
   async  onStatusSelect(val){
     this.setState({"status":val.value})
@@ -66,14 +123,14 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
                   <input type="text" placeholder="Approval for" defaultValue={this.props.data.requestTypeName} className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group col-md-6 nopadding-left">
-                  <input type="text" placeholder="Department" value={this.props.data.requestTypeName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Department" value={this.state.departmentName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group col-md-6 nopadding-right">
-                  <input type="text" placeholder="Sub-Department" value={this.props.data.requestTypeName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Sub-Department" value={this.state.subDepartmentName} className="form-control float-label" id=""/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">
-                  <input type="text" placeholder="Role" value={this.props.data.requestTypeName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Role" value={this.state.role} className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">

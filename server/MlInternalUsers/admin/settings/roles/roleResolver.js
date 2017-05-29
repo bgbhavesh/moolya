@@ -1,6 +1,6 @@
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
 
@@ -134,60 +134,61 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   }
 
   // let department = MlDepartments.findOne({"_id":args.departmentId})
-  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive) {
-    // // let valueGet  = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}, {"isActive":true}]}).fetch()
-    // let query = {
-    //   "$and":[
-    //     {"isActive": true},
-    //     {"assignRoles.isActive": true}
-    //   ]
-    // };
-    // if(args.departmentId){
-    //   query["$and"].push({
-    //     "assignRoles.department": {"$in": [args.departmentId]}
-    //   });
-    // }
-    // if(args.clusterId){
-    //   query['$and'].push({
-    //     "assignRoles.cluster": {"$in": ["all", args.clusterId]}
-    //   });
-    // }
-    // if(args.chapterId){
-    //   query['$and'].push({
-    //     "assignRoles.chapter": {"$in": ["all", args.chapterId]}
-    //   });
-    // }
-    // if(args.subChapterId){
-    //   query['$and'].push({
-    //     "assignRoles.subChapter": {"$in": ["all", args.subChapterId]}
-    //   });
-    // }
-    // if(args.communityId){
-    //   query['$and'].push({
-    //     "assignRoles.community": {"$in": ["all", args.communityId]}
-    //   });
-    // }
-    // let valueGet = mlDBController.find('MlRoles', query, context).fetch()
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
-    _.each(valueGet, function (item, say) {
-      let ary = []
-      _.each(item.assignRoles, function (value, key) {
-        if (value.cluster == args.clusterId || value.cluster == 'all') {
-          if (value.isActive) {
-            ary.push(value);
-          }
-        }
-      })
-      item.assignRoles = ary
-    })
-    _.each(valueGet, function (item, key) {
-      if (item) {
-        if (item.assignRoles.length < 1) {
-          valueGet.splice(key, 1)
-        }
-      }
-    })
+  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive:true}, context)
+  if (department) {
+
+
+    let query = {};
+    query.isActive = true;
+    if(args.clusterId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].cluster = {$in: ['all', args.clusterId]};
+    }
+    if(args.chapterId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].chapter = {$in: ['all', args.chapterId] };
+    }
+    if(args.subChapterId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].subChapter = {$in: ['all', args.subChapterId] };
+    }
+    if(args.communityId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].community = {$in: ['all', args.communityId] };
+    }
+    if(args.departmentId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].department = {$in: ['all', args.departmentId] };
+    }
+    if(args.subDepartmentId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : query.assignRoles = {}; query.assignRoles['$elemMatch']={} ;
+      query.assignRoles['$elemMatch'].subDepartment = {$in: ['all', args.subDepartmentId] };
+    }
+    if(query.assignRoles && query.assignRoles['$elemMatch']){
+      query.assignRoles['$elemMatch'].isActive = true;
+    }
+    let finalQuery = {$or: [query, {isSystemDefined: true, isActive: true}]}
+
+    let valueGet = mlDBController.find('MlRoles', finalQuery, context).fetch()
+    // let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
+    // _.each(valueGet, function (item, say) {
+    //   let ary = []
+    //   _.each(item.assignRoles, function (value, key) {
+    //     if (value.cluster == args.clusterId || value.cluster == 'all') {
+    //       if (value.isActive) {
+    //         ary.push(value);
+    //       }
+    //     }
+    //   })
+    //   item.assignRoles = ary
+    // })
+    // _.each(valueGet, function (item, key) {
+    //   if (item) {
+    //     if (item.assignRoles.length < 1) {
+    //       valueGet.splice(key, 1)
+    //     }
+    //   }
+    // })
     roles = valueGet;
   }
 

@@ -1,6 +1,8 @@
   import MlResolver from '../../../commons/mlResolverDef'
 import getQuery from "../genericSearch/queryConstructor";
+import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext';
 import mlTransactionsListRepo from '../../admin/transactions/mlTransactionsListRepo'
+
 
 let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
@@ -861,7 +863,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "SubDomain":resolveType= 'SubDomain';break;
       case "dateAndTime":resolveType= 'DateAndTime';break;
       case "language":resolveType= 'Language';break;
-      case "BackendUsers":resolveType= 'BackendUsers';break;
+      case "Users":resolveType= 'BackendUsers';break;
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
       case "community":resolveType= 'Community';break;

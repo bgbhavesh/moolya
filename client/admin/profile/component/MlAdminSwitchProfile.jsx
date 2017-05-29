@@ -6,6 +6,7 @@ import {setAdminDefaultProfileActionHandler} from '../actions/switchProfileActio
 import {deActivateAdminProfileActionHandler} from '../actions/switchProfileActions'
 import {fetchClusterDetails} from '../actions/switchProfileActions'
 import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import _ from 'underscore';
 
 export default class MlAdminSwitchProfile extends React.Component{
@@ -58,6 +59,7 @@ export default class MlAdminSwitchProfile extends React.Component{
     this.onChange.bind(this);
     // this.initializeSwiper();
     initalizeFloatLabel();
+
   }
 
 
@@ -122,7 +124,7 @@ export default class MlAdminSwitchProfile extends React.Component{
     let profileDetails=that.state.userProfiles[that.state.currentSlideIndex]||{};
     let profileExists=that.state.userProfiles&&that.state.userProfiles.length>0?true:false;
     let clusterData = that.state.clusterData || {}
-
+    var loggedInUser = getAdminUserContext();
 
     return (
       <div className="app_main_wrap">
@@ -192,14 +194,14 @@ export default class MlAdminSwitchProfile extends React.Component{
 
               </div>
 
-              <div className="col-md-12 text-center">
+              {loggedInUser&&loggedInUser.hierarchyLevel<4?<div className="col-md-12 text-center">
                 <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
                 </div>
                {/* <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
                 </div>*/}
-              </div>
+              </div>:""}
 
             </div>:<div>No Profiles Available</div>
 

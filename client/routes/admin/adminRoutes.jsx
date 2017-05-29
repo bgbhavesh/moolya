@@ -49,6 +49,9 @@ import MlConversationsLogList from '../../admin/transaction/conversations/compon
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 
+import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
+import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
+
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -185,14 +188,16 @@ adminSection.route('/documents/:pid/:kycid/:docid', {
 adminSection.route('/transactions/requestedList', {
   name: 'transaction_RequestList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlTransactionRequested/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlInternalRequestsList/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
   }
 });
 
 adminSection.route('/transactions/approvedList', {
   name: 'transaction_ApprovedList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'approvels'}} />, adminContent:<MlTransactionApprovals/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'approvels'}} />, adminContent:<MlApprovedInternalRequestsList/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
   }
 });
 

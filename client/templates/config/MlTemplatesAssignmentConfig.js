@@ -33,7 +33,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter},
+    {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter,dataSort:true},
     {dataField: "templateProcessName", title: "Process",dataSort:true},
     {dataField: "templateSubProcessName", title: "Sub Process",dataSort:true},
     {dataField: "templateclusterName", title: "Cluster",dataSort:true},
@@ -70,7 +70,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
     },
   ],
   sizePerPage:5,
-  graphQlQuery:gql`
+  graphQlQuery:/*gql`
  query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
               data:SearchQuery(module:"templateAssignment",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
@@ -81,10 +81,10 @@ const mltemplatesassignmetConfig=new MlViewer.View({
                               createdBy
                               createdDate
                               id:_id
-                              templateclusterName     
-                              templatechapterName    
-                              templatesubChapterName  
-                              templatecommunityName 
+                              templateclusterName
+                              templatechapterName
+                              templatesubChapterName
+                              templatecommunityName
                               templateuserType
                               templateidentity
                               modifiedBy
@@ -93,8 +93,30 @@ const mltemplatesassignmetConfig=new MlViewer.View({
                       }
               }
               }
-            
-              `
+
+              `*/
+    gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"templateAssignment",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    totalRecords
+                    data{
+                      ...on TemplateAssignment{
+                              templateProcessName
+                              templateSubProcessName
+                              createdBy
+                              createdDate
+                              id:_id
+                              templateclusterName
+                              templatechapterName
+                              templatesubChapterName
+                              templatecommunityName
+                              templateuserType
+                              templateidentity
+                              modifiedBy
+                              modifiedDate
+                          }
+                      }
+              }
+              }`
 });
 
 export {mltemplatesassignmetConfig};

@@ -8,6 +8,7 @@ export default class VerticalBreadCrum extends Component {
     this.state={'breadCrumList':[]};
     this.getHierarchyDetails.bind(this);
     this.setBreadCrumHierarchyCallback.bind(this);
+    console.log(this.props);
     return this;
   }
 
@@ -36,7 +37,28 @@ export default class VerticalBreadCrum extends Component {
     if(breadCrum&&breadCrum.type==='hierarchy'){
         let params = FlowRouter.current().params;
         getBreadCrumListBasedOnhierarchy(breadCrum.module,params,this.setBreadCrumHierarchyCallback.bind(this));
+    } else if(breadCrum && breadCrum.type === 'setting'){
+      let text = breadCrum.module;
+      let result = text.replace( /([A-Z])/g, " $1" );
+      let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+      let breadCrumObject = [
+        {linkName:'Setting', linkId:"setting"},
+        {linkName: finalResult, linkId:"module"}
+      ];
+      if(breadCrum.subModule){
+        let text = breadCrum.subModule;
+        let result = text.replace( /([A-Z])/g, " $1" );
+        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+        breadCrumObject.push({
+          linkName: finalResult,
+          linkId:"subModule"
+        });
+      }
+      this.setBreadCrumHierarchyCallback(
+        breadCrumObject
+        );
     }
+    console.log(breadCrumList);
     return breadCrumList;
   }
    render(){

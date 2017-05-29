@@ -4,7 +4,7 @@
   "description": "Application description.",
   "scripts": {
     "start": "meteor --settings settings-dev.json",
-    "test": "meteor test --driver-package practicalmeteor:mocha --port 5000",
+    "test": "TEST_BROWSER_DRIVER=chrome meteor test --driver-package dispatch:mocha-browser --port 5000 --settings settings-dev.json",
     "chimp-watch": "chimp --ddp=http://localhost:3000 --watch --mocha --path=tests",
     "chimp-test": "chimp --ddp=http://localhost:3000 --mocha --path=tests",
     "staging": "meteor deploy staging.meteor.com --settings settings-dev.json",

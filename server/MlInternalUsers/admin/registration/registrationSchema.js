@@ -150,7 +150,7 @@ let registrationSchema = `
         userName        :   String,
         password        :   String,
         accountType     :   String,
-        institutionAssociation    :   String,
+        institutionAssociation:   String,
         companyname     :   String,
         companyUrl      :   String,
         remarks         :   String,

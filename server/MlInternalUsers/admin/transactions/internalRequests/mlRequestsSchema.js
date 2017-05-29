@@ -1,6 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
-
+import MlResolver from '../../../../commons/mlResolverDef'
 
 let requestsSchema = ` 
         type requests{
@@ -79,3 +79,10 @@ let requestsSchema = `
     }`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], requestsSchema]);
+let supportedApi = [
+  {api:'fetchRequestss', actionName:'READ', moduleName:"REQUESTTYPE"},
+  {api:'fetchRequestsForApproval', actionName:'READ', moduleName:"REQUESTTYPE"},
+  {api:'createRequestss', actionName:'CREATE', moduleName:"REQUESTTYPE"},
+  {api:'updateRequestsStatus', actionName:'UPDATE', moduleName:"REQUESTTYPE"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

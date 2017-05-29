@@ -98,8 +98,8 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
-  if (args.docId) {
-    var id= args.docId;
+  if (args.clusterId) {
+    var id= args.clusterId;
     let response = mlDBController.findOne('MlClusters', {"_id":id}, context)
     return response;
   }

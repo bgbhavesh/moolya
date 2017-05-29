@@ -78,6 +78,9 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions}
                   ]
     let role = {
       roleName:"clusteradmin",

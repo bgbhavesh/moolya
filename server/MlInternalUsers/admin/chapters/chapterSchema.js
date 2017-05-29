@@ -114,7 +114,7 @@ let chapterSchema = `
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
-        associatedChapters:[associatedChapters],
+        associatedChapters:[String] ,
         subChapterUrl:String,
         isUrlNotified:Boolean,
         subChapterEmail:String,
@@ -172,9 +172,9 @@ let supportedApi = [
     {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchActiveSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchSubChaptersSelectNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchActiveClusterChapters', actionName:'READ', moduleName:"CHAPTER"},
+    {api:'fetchActiveClusterChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
     {api:'fetchActiveStatesChapters', actionName:'READ', moduleName:"CHAPTER"},
-    {api:'fetchActiveChaptersSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'fetchActiveChaptersSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchSubChaptersForRegistration', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchSubChaptersSelectMoolya', actionName:'READ', moduleName:"SUBCHAPTER"}
 ]

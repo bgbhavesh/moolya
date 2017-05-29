@@ -550,8 +550,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
     return response
   }
   let hierarchy = "";
-  roles.map(function (role)
-  {
+  roles.map(function (role){
       if(!role.hierarchyCode) {
           if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             (role.communityId && role.communityId != "all")) {

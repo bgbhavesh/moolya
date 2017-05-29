@@ -462,13 +462,13 @@ let supportedApi = [
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'resetPassword', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'resetPassword', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'addUserProfile', actionName:'UPDATE', moduleName:"USERS"},
     {api:'assignUsers', actionName:'UPDATE', moduleName:"USERS"},
     {api:'deActivateUser', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'updateDataEntry', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'updateSettings', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'updateAddressBookInfo', actionName:'UPDATE', moduleName:"USERS"},
-    {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'updateDataEntry', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'updateSettings', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'updateAddressBookInfo', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

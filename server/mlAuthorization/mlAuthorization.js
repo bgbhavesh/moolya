@@ -14,70 +14,75 @@ class MlAuthorization
     }
 
     authChecker({req, context, res}){
-      let query = parse(req.body.query);
-        let schemaDef;
-        let moduleName;
-        let actionName;
-        let operation;
-        let typeName = '';
-        let isValidAuth = false;
-        let isWhiteList = false;
-        for(var i = 0; i < query.definitions.length; i++){
-          const d = query.definitions[i];
-          console.log(d.kind)
-          switch (d.kind){
-            case 'OperationDefinition':
-              if (schemaDef) {
-                throw new Error('Must provide only one schema definition.');
-              }
-              schemaDef = d;
-              break;
+          let query = parse(req.body.query);
+          let schemaDef;
+          let moduleName;
+          let actionName;
+          let operation;
+          let typeName = '';
+          let isValidAuth = false;
+          let isWhiteList = false;
+          let isContextSpecSearch = false
+          for(var i = 0; i < query.definitions.length; i++){
+            const d = query.definitions[i];
+            console.log(d.kind)
+            switch (d.kind){
+              case 'OperationDefinition':
+                if (schemaDef) {
+                  throw new Error('Must provide only one schema definition.');
+                }
+                schemaDef = d;
+                break;
+            }
           }
-        }
-        operation = schemaDef.operation;
-        schemaDef.selectionSet.selections.forEach(operationType => {
-          typeName = operationType.name.value
-        })
-        let modules = MlResolver.MlModuleResolver;
-        _.each(modules, function (module)
-        {
-            let validApi = _.find(module, {api:typeName})
-            if(validApi && validApi.isWhiteList){
-                isWhiteList = true
-                return;
-            }
-            if(validApi){
-                moduleName = validApi.moduleName;
-                actionName = validApi.actionName;
-                return;
-            }
-        })
-
-
-        if(isWhiteList)
-            return true
-
-
-        if((typeName == 'ContextSpecSearch' || typeName == 'SearchQuery') && moduleName == 'GENERIC' && actionName == 'READ'){
-            var startToken = schemaDef.loc.startToken
-            do{
-              if(startToken .value == 'module'){
-                  moduleName = startToken.next.next.value.toUpperCase();
-                  break;
+          operation = schemaDef.operation;
+          schemaDef.selectionSet.selections.forEach(operationType => {
+            typeName = operationType.name.value
+          })
+          let modules = MlResolver.MlModuleResolver;
+          _.each(modules, function (module)
+          {
+              let validApi = _.find(module, {api:typeName})
+              if(validApi && validApi.isWhiteList){
+                  isWhiteList = true
+                  return;
               }
-              startToken = startToken.next
-            }while(startToken)
-        }
+              if(validApi){
+                  moduleName = validApi.moduleName;
+                  actionName = validApi.actionName;
+                  return;
+              }
+          })
+
+
+          if(isWhiteList)
+              return true
+
+
+          if((typeName == 'ContextSpecSearch' || typeName == 'SearchQuery') && moduleName == 'GENERIC' && actionName == 'READ'){
+              var startToken = schemaDef.loc.startToken
+              do{
+                  if(startToken.value == 'module'){
+                      moduleName = startToken.next.next.value.toUpperCase();
+                      if(moduleName == 'REGISTRATIONINFO' || moduleName == 'REGISTRATIONAPPROVEDINFO'){
+                          moduleName = 'REGISTRATION';
+                      }
+                      isContextSpecSearch = true;
+                      break;
+                  }
+                  startToken = startToken.next
+              }while(startToken)
+          }
 
           if(!moduleName){
-          return false;
-        }
+            return false;
+          }
 
-        isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, req.body);
-        return isValidAuth
+          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, req.body, isContextSpecSearch);
+          return isValidAuth
     }
 
-    validteAuthorization(userId, moduleName, actionName, req)
+    validteAuthorization(userId, moduleName, actionName, req, isContextSpecSearch)
     {
         check(userId, String)
         check(moduleName, String)
@@ -120,11 +125,10 @@ class MlAuthorization
             if(user_roles && user_roles.length > 0){
                 let role;
                 // _.each(user_roles, function (role)
-                for(var i = 0; i < user_roles.length; i++)
-                {
+                for(var i = 0; i < user_roles.length; i++){
                     ret = this.validateRole(user_roles[i].roleId, module, action)
                     if(ret){
-                      return this.validateDataContext(user_roles[i], moduleName, actionName, req)
+                      return this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch)
                     }
                 }
             }
@@ -154,32 +158,81 @@ class MlAuthorization
         return ret;
     }
 
-    validateDataContext(roleDetails, moduleName, actionName, req){
+    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch){
         switch (moduleName){
-            case 'CLUSTER':
+
+            case 'CLUSTER':{
+                if(isContextSpecSearch && req.variables.context == null ){
+                    return true;
+                }
+                if(roleDetails['clusterId'] && roleDetails['clusterId'] == req.variables['clusterId'] || (req.variables.context && roleDetails['clusterId'] == req.variables.context['clusterId'])){
+                    return true
+                }
+            }
+            break;
             case 'CHAPTER':
+            {
+                if(isContextSpecSearch && req.variables.context['clusterId'] == roleDetails['clusterId']){
+                  return true;
+                }
+            }
+            break;
+
             case 'SUBCHAPTER':
+            {
+                if(isContextSpecSearch && (roleDetails['chapterId'] == 'all' || (roleDetails['chapterId'] == req.variables.context['chapterId'] && roleDetails['clusterId'] == req.variables['clusterId']))){
+                    return true
+                }
+            }
+            break;
+
             case 'COMMUNITY':
+            {
+               return true
+            }
+            break;
+
             case 'DEPARTMENT':
             case 'SUBDEPARTMENT':
             {
                 for(key in roleDetails){
-                    if(roleDetails[key] == 'all' || roleDetails[key] == req.variables.docId){
+                    if(roleDetails[key] == req.variables.docId){
                         return true
                     }
                 }
             }
             break;
             case 'USERS':{
-                  if(actionName == 'CREATE'){
-                      return true;
+                  if(actionName == 'READ'){
+                      if(roleDetails['clusterId'] == req.variables['clusterId']){
+                          // cluster admin context
+                          if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+                              return true;
+                          }
+                          // chapter admin context
+                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+                             return true
+                          }
+
+                          // sub chapter admin context
+                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
+                            return true
+                          }
+
+                          // community admin context
+                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
+                            return true
+                          }
+
+                      }
                   }
+
             }
             break;
             case 'TAXATION':
             case 'GLOBALSETTINGS':
             case 'MASTERSETTINGS':{
-                      if(actionName == 'CREATE'){
+                if(actionName == 'CREATE'){
                   return true;
                 }
                 else if(actionName == 'UPDATE'){
@@ -189,6 +242,11 @@ class MlAuthorization
                 }
             }
             break;
+          case 'FILTERS':
+          case 'REGISTRATION':
+          case 'REQUESTTYPE':{
+              return true;
+          }
         }
 
         return false

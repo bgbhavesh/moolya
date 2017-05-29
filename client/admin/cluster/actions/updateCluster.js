@@ -15,7 +15,7 @@ export async function updateClusterActionHandler(clusterDetails)
   }
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($clusterId:String,$clusterDetails:clusterObject, $moduleName:String!, $actionName:String!){
+    mutation  ($clusterId:String!,$clusterDetails:clusterObject, $moduleName:String!, $actionName:String!){
         upsertCluster(
           clusterId:$clusterId,
           cluster:$clusterDetails,

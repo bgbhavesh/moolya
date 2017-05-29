@@ -35,7 +35,6 @@ export default class MlCreateRegistration extends React.Component{
       userName : '',
       selectedAccountsType:" "
     }
-    //this.addEventHandler.bind(this);
     this.createRegistration.bind(this);
     return this;
   }
@@ -77,7 +76,6 @@ export default class MlCreateRegistration extends React.Component{
       FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error(response.result);
-    //  FlowRouter.go("/admin/transactions/registrationRequested");
     }
    }
 
@@ -85,8 +83,6 @@ export default class MlCreateRegistration extends React.Component{
   optionsBySelectTypeOfAccounts(value){
     this.setState({selectedAccountsType:value})
   }
-
-
 
   optionsBySelectCountry(value){
     this.setState({country:value})
@@ -133,25 +129,11 @@ export default class MlCreateRegistration extends React.Component{
     }
   }
 
-/*  async handleError(response) {
-    alert(response)
-  };*/
+
   enteredUserName(){
      this.setState({"userName" : this.refs.email.value});
   }
 
-
-/*  async handleSuccess(response) {
-
-    //FlowRouter.go("/admin/settings/departmentsList");
-    if (response){
-      if(response.success)
-        FlowRouter.go("/admin/transactions/registrationRequested");
-      else
-        toastr.error(response.result);
-      FlowRouter.go("/admin/transactions/registrationRequested");
-    }
-  };*/
   render(){
     let MlActionConfig = [
       {
@@ -175,11 +157,6 @@ export default class MlCreateRegistration extends React.Component{
       }
     }`
 
-   /* let stateQuery=gql` query($countryId:String){
-      data:fetchStatesPerCountry(countryId:$countryId){label:name,value:_id}
-    }
-    `;
-*/
     let citiesquery = gql`query($searchQuery:String){
       data:searchCities(searchQuery:$searchQuery){label:name,value:_id}
     }
@@ -200,7 +177,7 @@ export default class MlCreateRegistration extends React.Component{
     }`;
 
     let subChapterQuery= gql`query($id:String){  
-      data:fetchContextSubChapters(id:id) {
+      data:fetchContextSubChapters(id:$id) {
         value:_id
         label:subChapterName
       }  
@@ -211,21 +188,13 @@ export default class MlCreateRegistration extends React.Component{
       data:fetchCommunityDefinition{label:name,value:code}
     }
     `;
-/*
-    let stateOption={options: { variables: {countryId:this.state.country}}};
-    let cityOption={options: { variables: {stateId:this.state.state}}};*/
+
     let chapterOption={options: { variables: {id:this.state.cluster}}};
     let subChapterOption={options: { variables: {id:this.state.chapter}}}
-    let countryOption = {options: { variables: {}}};
-
-    // let subscriptionOptions = [
-    //   {value: 'Starter', label: 'Starter'},
-    //   {value: 'Premier', label: 'Premier'}
-    // ];
 
     let accountsquery=gql `query{
     data: FetchAccount {label:accountName,value: _id}
-}`;
+    }`;
 
     let referedOption=[
       { value: '0', label: 'friends/collegues reference' },
@@ -284,21 +253,15 @@ export default class MlCreateRegistration extends React.Component{
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true}/>
-
                 </div>
 
-                {/*<div className="form-group">*/}
-                  {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
-                  {/*<br/><br/><br/><br/><br/>*/}
-                {/*</div>*/}
               <div className="panel panel-default">
                   <div className="panel-heading">Operation Area</div>
                   <div className="panel-body">
                     <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)}/>
                     <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)}/>
                     <Moolyaselect multiSelect={false} placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)}/>
-
-
+                    <br/><br/><br/><br/><br/>
                   </div>
                 </div>
               </form>
@@ -313,10 +276,7 @@ export default class MlCreateRegistration extends React.Component{
                 smoothScrolling={true}
                 default={true}
               >
-
-
               <form>
-
                 <div className="form-group">
                   <input type="text" placeholder="User name" ref="userName"  value={this.state.userName} className="form-control float-label" id="" disabled="disabled"/>
                 </div>
@@ -348,21 +308,7 @@ export default class MlCreateRegistration extends React.Component{
                   <br className="brclear"/>
                   <br className="brclear"/>
                   <br className="brclear"/>
-
-
-
                 </div>
-                {/*<div className="panel panel-default">
-                  <div className="panel-heading">Process Status</div>
-                  <div className="panel-body button-with-icon">
-                    <button type="button" className="btn btn-labeled btn-success" >
-                      <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
-                    <button type="button" className="btn btn-labeled btn-success" >
-                      <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
-                    <button type="button" className="btn btn-labeled btn-success" >
-                      <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>
-                  </div>
-                </div>*/}
               </form>
               </ScrollArea>
             </div>
@@ -371,9 +317,7 @@ export default class MlCreateRegistration extends React.Component{
         </div>
     )
   }
-
 }
 
 
-/*export default MoolyaCreateRegistation = formHandler()(MlCreateRegistration);*/
 

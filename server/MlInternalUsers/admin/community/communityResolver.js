@@ -502,7 +502,11 @@ MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, conte
     communities.push(community);
   })
   communities = _.uniqBy(communities, 'code')
-
+  //added all for all levels irrespective of cluster,chapter,subchapter selection.
+    let community = {};
+    community["name"] = "All";
+    community["code"] = "all";
+    communities.push(community);
 
   return communities;
 }
@@ -510,3 +514,4 @@ MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, conte
 updateDB = (collectionName, query, payload, options, context) =>{
     return mlDBController.update(collectionName, query, payload, options, context)
 }
+

@@ -27,7 +27,8 @@ export default class MlTable extends React.Component {
       mode: 'checkbox',
       bgColor: this.props.bgColor?this.props.bgColor:'#feeebf',
       onSelect: this.props.handleRowSelect,
-      clickToExpand: this.props.isExpandableRow?true:false
+      clickToExpand: this.props.isExpandableRow?true:false,
+      onSelectAll: this.props.handleRowSelectAll
     };
     var WinHeight = $(window).height();
     var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));

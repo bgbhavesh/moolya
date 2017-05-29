@@ -196,6 +196,10 @@ export default class MlStartupManagement extends React.Component{
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let that = this;
     const showLoader = that.state.loading;
     let managementArr = that.state.startupManagementList || [];
@@ -279,7 +283,7 @@ export default class MlStartupManagement extends React.Component{
                           <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                     inputProps={{placeholder: "Joining Date to this Company"}}
                                     closeOnSelect={true} value={this.state.data.joiningDate}
-                                    onChange={this.onDateChange.bind(this, "joiningDate")}/>
+                                    onChange={this.onDateChange.bind(this, "joiningDate")}  isValidDate={ valid }/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isJoiningDatePrivate" onClick={this.onClick.bind(this, "isJoiningDatePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isJoiningDatePrivate}/>
                         </div>
 
@@ -288,7 +292,7 @@ export default class MlStartupManagement extends React.Component{
                           <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                     inputProps={{placeholder: "First Job Joining Date"}}
                                     closeOnSelect={true} value={this.state.data.firstJobJoiningDate}
-                                    onChange={this.onDateChange.bind(this, "firstJobJoiningDate")}/>
+                                    onChange={this.onDateChange.bind(this, "firstJobJoiningDate")}  isValidDate={ valid }/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isFJJDPrivate" onClick={this.onClick.bind(this, "isFJJDPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFJJDPrivate}/>
                         </div>
                       </form>

@@ -172,31 +172,28 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        serverQuery={'status':{'$in':['Pending','WIP']}};
+        serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};
         break;
       case 'approved':
-        serverQuery={'status':"Approved"};
+        serverQuery={'userId':context.userId,'status':"Approved"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
-    var result=[];
     var data= MlRequests.find(resultantQuery,fieldsProj).fetch()||[];
     var totalRecords=MlRequests.find(resultantQuery,fieldsProj).count();
-
-    data = result;
     return {totalRecords:totalRecords,data:data};
   },
   MlTemplatesAssignmentRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
     var contextFieldMap={'clusterId':'templateclusterId','chapterId':'templatechapterId','subChapterId':'templatesubChapterId','communityId':'communityId','communityCode':'templatecommunityCode'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
     //this is specific to template assignment
+    //community is is not captured in template assignment
     _.omit(resultantQuery, ['communityId']);
     //add all for each option
     _.each(resultantQuery,function(r){if(_.isArray(r)){r.push('all');}});
 
-    console.log(resultantQuery);
     //construct context query with $in operator for each fields
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
 
@@ -247,6 +244,8 @@ let CoreModules = {
         if(doc.allocation){
             object.assignedUser = doc.allocation.assignee
             object.userName = doc.allocation.assigneeId
+        }else{
+            object.assignedUser = "Un Assigned"
         }
         result.push(object);
       });

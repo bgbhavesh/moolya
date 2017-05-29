@@ -79,7 +79,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .admin_main_wrap .filter{background: #ef4647;width: 28px;height: 30px;position: fixed;right: 0px;text-align: center;line-height: 24px;color: #fff;text-shadow: 0px 1px 1px #000;font-size: 20px;z-index: 4;}
 .admin_main_wrap .filter.alfa_filter{position: absolute; float: left; cursor: pointer; margin-right: 56px;}
 .alfa_pagination{right: -60px;position: fixed;z-index: 9999;transition: .5s linear;top: 37%;}
-.alfa_pagination.alfa_pagination_open{right: 0px;}
+.alfa_pagination.alfa_pagination_open{right: 0px;height: 30px;}
 .admin_main_wrap .filter.alfa_filter .fa{font-size: 16px;font-weight: normal;}
 .admin_main_wrap .alfa_filter_litters{z-index: 8; background: transparent;width: 56px;float: right;}
 .admin_main_wrap .alfa_filter_litters ul{  }
@@ -495,7 +495,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .custome_pagination .pageMaxPip, .pageMinPip {font-size: 12px; color: #777; position: absolute; bottom: -30px; width: 20px; }
 .custome_pagination .pageMaxPip {right: -10px; }
 .custome_pagination .pageMinPip {left: -10px; }
-.custome_pagination .pagination {width: 350px; text-align: center; background: #ef4647; padding: 17px 0px 8px 0px; position: fixed; right: -324px; z-index: 9999; bottom: 0px; border-radius:0px; transition: .5s linear; cursor: pointer; }
+.custome_pagination .pagination {width: 350px; text-align: center; background: #ef4647; padding: 17px 0px 8px 0px; position: fixed; right: -324px; z-index: 999; bottom: 0px; border-radius:0px; transition: .5s linear; cursor: pointer; }
 .custome_pagination .pagination.pagination_open{right: 0px;}
 .custome_pagination .pagination::before {position: absolute; left: -30px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 50px 30px 50px 0px; border-color: transparent #ef4647 transparent transparent; top: 0px; }
 .custome_pagination .pageSlider {display: inline-block; }
@@ -1366,3 +1366,5 @@ button.close {
 
 .m_red{color:#ef4647;}
 .m_yel{color:#ffc20e;}
+
+.menu_count{background: #EF4647; position: absolute; color: #FFF; z-index: 9; border-radius: 50%;width: 22px; height: 22px; line-height: 22px; font-size: 9px; right: -15px; top: -8px; text-align: center;}

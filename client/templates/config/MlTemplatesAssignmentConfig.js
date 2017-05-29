@@ -33,7 +33,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter},
+    {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter,dataSort:true},
     {dataField: "templateProcessName", title: "Process",dataSort:true},
     {dataField: "templateSubProcessName", title: "Sub Process",dataSort:true},
     {dataField: "templateclusterName", title: "Cluster",dataSort:true},

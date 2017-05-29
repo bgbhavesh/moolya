@@ -194,7 +194,7 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "startups", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
     "templateidentity" : "view", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTFUNVIW","templateName":"Portfolio-Template-Funder-View"}],
     createdDate: new Date(), createdBy: "systemadmin"
   });

@@ -206,7 +206,7 @@ export default class MlStartupLookingFor extends React.Component{
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-        <div className="admin_padding_wrap portfolio-main-wrap">
+        <div className="portfolio-main-wrap">
           <h2>Looking For</h2>
           <div className="requested_input main_wrap_scroll">
 
@@ -242,11 +242,17 @@ export default class MlStartupLookingFor extends React.Component{
               </div>
             </ScrollArea>
             <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-              {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+               <PopoverTitle>Add New Looking For</PopoverTitle>
               <PopoverContent>
                 <div  className="ml_create_client">
+
+
+
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
+
+
+
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                       labelKey={'label'} queryType={"graphql"} query={query}
@@ -254,25 +260,56 @@ export default class MlStartupLookingFor extends React.Component{
                                       queryOptions={lookingOption}
                                       onSelect={this.onOptionSelected.bind(this)}
                                       selectedValue={this.state.selectedVal}/>
-                      </div>
+
                       <div className="form-group">
                         <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
+                        <FontAwesome name='unlock' className="input_icon"/>
                       </div>
-                      <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
-                          <span>Upload Logo</span>
-                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                    <div className="form-group">
+                        <div className="input_types">
+                          <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
-                      </div>
-                      <div className="form-group">
-                        <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
-                      </div>
-                      <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
-                      </div>
+                        <div className="ml_btn" style={{'textAlign': 'center'}}>
+                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                        </div>
                     </div>
                   </div></div>
+
+
+
+
+
+
+                  {/*<div className="medium-popover"><div className="row">*/}
+                    {/*<div className="col-md-12">*/}
+                      {/*<div className="form-group">*/}
+                        {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}*/}
+                                      {/*labelKey={'label'} queryType={"graphql"} query={query}*/}
+                                      {/*isDynamic={true}*/}
+                                      {/*queryOptions={lookingOption}*/}
+                                      {/*onSelect={this.onOptionSelected.bind(this)}*/}
+                                      {/*selectedValue={this.state.selectedVal}/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<div className="fileUpload mlUpload_btn">*/}
+                          {/*<span>Upload Logo</span>*/}
+                          {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
+                        {/*</div>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>*/}
+                      {/*</div>*/}
+                      {/*<div className="ml_btn" style={{'textAlign': 'center'}}>*/}
+                        {/*<a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>*/}
+                      {/*</div>*/}
+                    {/*</div>*/}
+                  {/*</div></div>*/}
+                </div>
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>

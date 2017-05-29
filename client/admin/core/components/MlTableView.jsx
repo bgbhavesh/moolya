@@ -94,10 +94,34 @@ export default class MlTableView extends Component {
   };
 
   handleRowSelect(row, isSelected, e) {
+    //if its multiselect
+    if(this.props.multiSelect){
+      var selectedRows = this.state.selectedRow || [];
+      if (isSelected) {
+        selectedRows.push(row);
+        this.setState({"selectedRow": selectedRows});
+      }else{
+        selectedRows=_.without(selectedRows,row);
+        this.setState({"selectedRow":selectedRows});
+      }
+
+    }else {
+        if (isSelected) {
+          this.setState({"selectedRow": row});
+        } else {
+          this.setState({"selectedRow": null});
+        }
+    }
+  }
+
+   handleRowSelectAll(isSelected, rows) {
     if (isSelected) {
-      this.setState({"selectedRow": row});
+      this.setState({"selectedRow": rows});
     } else {
-      this.setState({"selectedRow": null});
+      /*_.each(rows,function(row){
+        selectedRows=_.without(selectedRows,row);
+      })*/
+      this.setState({"selectedRow":null});
     }
   }
 
@@ -118,6 +142,7 @@ export default class MlTableView extends Component {
     let loading = this.props.loading;
     let config = this.props;
     config["handleRowSelect"] = this.handleRowSelect.bind(this);
+    config["handleRowSelectAll"]=this.handleRowSelectAll.bind(this);
 
     let that = this;
     let actionsConf = _.clone(config.actionConfiguration);
@@ -140,7 +165,9 @@ export default class MlTableView extends Component {
         <MlTable {...config } totalDataSize={totalDataSize} data={data} pageNumber={this.state.pageNumber}
                  sizePerPage={this.state.sizePerPage} onPageChange={this.onPageChange.bind(this)}
                  onSizePerPageList={this.onSizePerPageList.bind(this)} onSearchChange={this.onSearchChange.bind(this)}
-                 handleRowSelect={that.handleRowSelect.bind(this)} onSortChange={this.onSortChange.bind(this)}></MlTable>
+                 handleRowSelect={that.handleRowSelect.bind(this)}
+                 handleRowSelectAll={that.handleRowSelectAll.bind(this)}
+                 onSortChange={this.onSortChange.bind(this)}></MlTable>
         {config.showActionComponent === true && <MlActionComponent ActionOptions={actionsProxyList}/>}
       </div>
     )}</div>)

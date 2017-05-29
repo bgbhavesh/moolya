@@ -16,7 +16,10 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
   constructor(props, context) {
       super(props);
       this.state = {
-          portfolioIdeatorInfo: {},
+          portfolioIdeatorInfo: {
+            problemImage:[],
+            solutionImage:[]
+          },
           annotations:[],
         content:{}
       }
@@ -107,6 +110,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
   async fetchPortfolioInfo(){
       const response = await findIdeatorProblemsAndSolutionsActionHandler(this.props.portfolioDetailsId);
+      response.problemImage ? response.problemImage : response.problemImage =[];
+      response.solutionImage ? response.solutionImage : response.solutionImage =[];
       this.setState({portfolioIdeatorInfo : response});
   }
 
@@ -136,6 +141,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
                     <div className="panel-body">
                       {this.state.portfolioIdeatorInfo.problemStatement}
+                      {this.state.portfolioIdeatorInfo.problemImage.map(function (imgLink, i) {
+                        return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
+                      })}
                     </div>
                   </div>
                 </div>
@@ -148,6 +156,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
                     <div className="panel-body">
                       {this.state.portfolioIdeatorInfo.solutionStatement}
+                      {this.state.portfolioIdeatorInfo.solutionImage.map(function (imgLink, i) {
+                        return <img className="upload-image img upload" src={imgLink.fileUrl} key={i} />
+                      })}
                     </div>
                   </div></div>
               </div>

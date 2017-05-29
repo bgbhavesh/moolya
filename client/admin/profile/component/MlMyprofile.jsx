@@ -183,7 +183,7 @@ async showImage(temp){
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
         genderSelect: "Male", //response.profile.genderType
-        dateOfBirth: response.profile.dateOfBirth
+        dateOfBirth: moment(response.profile.dateOfBirth).toDate().getTime()
       });
     }else{
       let response = await findBackendUserActionHandler(userType);
@@ -194,7 +194,7 @@ async showImage(temp){
         userName: response.profile.InternalUprofile.moolyaProfile.displayName,
         uploadedProfilePic:response.profile.profileImage,
         genderSelect:response.profile.genderType,
-        dateOfBirth: response.profile.dateOfBirth
+        dateOfBirth: moment(response.profile.dateOfBirth).toDate().getTime()
       });
     }
     this.genderSelect();
@@ -257,6 +257,8 @@ async showImage(temp){
         showPasswordFields:true
       })
     }
+    const resp = this.onFileUpload();
+    return resp;
   }
 
 
@@ -265,9 +267,12 @@ async showImage(temp){
     console.log(response);
   }
   async updateProfile(){
-    if(this.state.passwordState ==='Passwords match!') {
+    let existingPwdField = this.refs.existingPassword.value;
+    let password = this.refs.password.value;
+    let confirmPassword = this.refs.confirmPassword.value;
+    if(existingPwdField && password && confirmPassword ) {
       this.resetPassword();
-    }    else
+    }else
       {
         const resp = this.onFileUpload();
         return resp;

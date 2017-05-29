@@ -129,6 +129,9 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type=args.context.transactionTypeName
       result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'templateAssignment':
+      result=CoreModulesRepo.MlTemplatesAssignmentRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -143,6 +146,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "cluster":resolveType= 'Cluster';break;
       case "chapter":resolveType= 'Chapter';break;
       case "subChapter":resolveType= 'SubChapter';break;
+      case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "community":resolveType= 'Community';break;
       case "MASTER_SETTINGS":resolveType= 'MasterSettings';break;
       case "AUDIT_LOG":resolveType= 'AuditLogs';break;

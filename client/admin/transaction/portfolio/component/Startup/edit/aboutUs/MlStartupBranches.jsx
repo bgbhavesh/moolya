@@ -137,7 +137,7 @@ export default class MlStartupBranches extends React.Component{
     startupBranches = arr;
     this.setState({startupBranches:startupBranches})
     this.props.getStartupBranches(startupBranches);
-    this.imagesDisplay();
+
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -154,6 +154,7 @@ export default class MlStartupBranches extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }

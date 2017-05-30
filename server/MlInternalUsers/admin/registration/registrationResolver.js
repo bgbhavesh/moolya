@@ -30,7 +30,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   validationCheck=MlRegistrationPreCondition.validateMobile(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
+  let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
+  args.registration.accountType=accountTypeName.accountName;
+
   let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
 
   args.registration.clusterName=subChapterDetails.clusterName;
@@ -196,6 +199,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.communityName!=details.communityName)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
        }
+
+        let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registrationDetails.accountType}, context) || {};
+        // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
+        args.registrationDetails.accountType=accountTypeName.accountName;
        //if subChapter is selected by admin
         if(details.subChapterId){
            subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: details.subChapterId}, context) || {};

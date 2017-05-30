@@ -346,6 +346,8 @@ export default class Individual extends React.Component{
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder="Select Citizenship" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
+                    <br className="clearfix"/>                      <br className="clearfix"/>
+
                   </div>
                   <div className="panel panel-default">
                     <div className="panel-heading">Investment Per Year</div>
@@ -400,6 +402,10 @@ export default class Individual extends React.Component{
                 </div>
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="Investing From" options={investingFrom} value={this.state.investingFrom} onChange={this.optionsBySelectInvestingFrom.bind(this)}  className="float-label"/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+
+
                 </div>
               </form>
             </div>

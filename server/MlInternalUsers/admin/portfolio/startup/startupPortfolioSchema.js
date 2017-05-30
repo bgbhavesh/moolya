@@ -78,7 +78,6 @@ let startupPortfolioSchema = `
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int,
-        companyName : String
     }
     
     type branchesOutput{

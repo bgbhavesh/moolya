@@ -11,6 +11,7 @@ export async function findSubChapterActionHandler(subChapterId) {
         clusterName
         chapterName
         subChapterName
+        subChapterUrl
         isDefaultSubChapter
         subChapterDisplayName
         stateName

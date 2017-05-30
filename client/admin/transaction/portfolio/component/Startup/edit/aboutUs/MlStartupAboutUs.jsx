@@ -1,11 +1,12 @@
-import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar'
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
+
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
 export default class MlStartupAboutUs extends React.Component{
   constructor(props, context){
@@ -16,7 +17,7 @@ export default class MlStartupAboutUs extends React.Component{
     }
 
     this.handleBlur.bind(this);
-
+    this.fetchPortfolioDetails.bind(this);
     return this;
 
   }
@@ -30,6 +31,8 @@ export default class MlStartupAboutUs extends React.Component{
     dataVisibilityHandler();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    this.fetchPortfolioDetails()
+    this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
@@ -55,6 +58,7 @@ export default class MlStartupAboutUs extends React.Component{
       }
     }
     this.props.getStartupAboutUs(data)
+    this.fetchPortfolioDetails()
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -73,13 +77,9 @@ export default class MlStartupAboutUs extends React.Component{
       }
     }
   }
-  async fetchOnlyImages(){
-    const response = this.props.aboutUsDetails;
-    if (response) {
-      let dataDetails =this.state.data
-      dataDetails['logo'] = response.logo
-      this.setState({loading: false, data: dataDetails});
-    }
+
+  async fetchOnlyImages() {
+    this.fetchPortfolioDetails()
   }
   onLockChange(field, e){
     let details = this.state.data||{};
@@ -94,6 +94,18 @@ export default class MlStartupAboutUs extends React.Component{
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
+  }
+
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    if (response) {
+      let dataDetails = this.state.data
+      dataDetails['logo'] = response.aboutUs.logo
+      this.setState({loading: false, data: dataDetails});
+    }
+
   }
 
 
@@ -115,9 +127,7 @@ export default class MlStartupAboutUs extends React.Component{
               About Us
             </h2>
             <div className="panel panel-default panel-form">
-
               <div className="panel-body">
-
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." className="form-control"  name="description" id="description" defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
                   <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
@@ -125,22 +135,6 @@ export default class MlStartupAboutUs extends React.Component{
 
               </div>
             </div>
-           {/* <div className="panel panel-default">
-              <div className="panel-heading">Add Images</div>
-              <div className="panel-body nopadding">
-                <div className="upload-file-wrap">
-                  <input type="file" name="aboutUsLogo" id="aboutUsFileinput" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onLogoFileUpload.bind(this)} multiple />
-                  <label for="fileinput">
-                    <figure>
-                      <i className="fa fa-upload" aria-hidden="true"></i>
-                    </figure>
-                  </label>
-                </div>
-                <div className="upload-image"><img id="output"/></div>
-                <div className="upload-image"></div>
-                <div className="upload-image"></div>
-              </div>
-            </div>*/}
             <div className="panel panel-default">
               <div className="panel-heading">Add Images</div>
               <div className="panel-body nopadding">
@@ -159,10 +153,6 @@ export default class MlStartupAboutUs extends React.Component{
           </div> </div>
         </ScrollArea>
       </div>
-
-
-
-
     )
   }
 }

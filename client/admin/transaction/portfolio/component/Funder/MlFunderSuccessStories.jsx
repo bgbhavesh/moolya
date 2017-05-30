@@ -189,6 +189,10 @@ export default class MlFunderSuccessStories extends React.Component {
   }
 
   render() {
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let that = this;
     const showLoader = that.state.loading;
     let funderSuccessList = that.state.funderSuccessList || [];
@@ -241,9 +245,9 @@ export default class MlFunderSuccessStories extends React.Component {
                         <div className="col-md-12">
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                      inputProps={{placeholder: "Select Date"}} ref="date"
+                                      inputProps={{placeholder: "Select Date"}} ref="date" closeOnSelect={true}
                                       defaultValue={this.state.data.date ? this.state.data.date : ''}
-                                      onBlur={this.dateChange.bind(this)}/>
+                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/>
                             <FontAwesome name='unlock' className="input_icon"
                                          onClick={this.onLockChange.bind(this, "isDatePrivate")}/>
                             <input type="checkbox" className="lock_input"

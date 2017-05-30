@@ -2,6 +2,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import mlAssignHierarchy from "../../../admin/../admin/genericTransactions/impl/MlHierarchyAssignment";
 
+
 MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context, info) => {
   let response;
   let levelCode = "";
@@ -147,12 +148,7 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    hierarchy= mlDBController.findOne('MlHierarchyAssignments', {
-      $and: [
-        {parentDepartment:args.departmentId},
-        {parentSubDepartment:args.subDepartmentId},
-        {clusterId:args.clusterId}
-      ]},context)
+    hierarchy= mlAssignHierarchy.findHierarchy(args.clusterId, args.departmentId, args.subDepartmentId, args.roleId)
   }
   if(hierarchy){
     //get all users associated with the hierarchy

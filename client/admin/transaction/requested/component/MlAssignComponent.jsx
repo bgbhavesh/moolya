@@ -116,18 +116,38 @@ export default class MlAssignComponent extends Component {
 
   render() {
     let that=this;
-    let clusterQuery=gql` query{
+   /* let clusterQuery=gql` query{
       data:fetchActiveClusters{label:countryName,value:_id}
     }
     `;
-    let chapterQuery=gql`query($id:String){  
+    let chapterQuery=gql`query($id:String){
     data:fetchChapters(id:$id) {
       value:_id
       label:chapterName
+      }
+    }`;
+    let subChapterquery=gql`query($id:String){
+      data:fetchSubChaptersForRegistration(id:$id) {
+        value:_id
+        label:subChapterName
+      }
+    }`;*/
+    let clusterQuery = gql`query{
+     data:fetchContextClusters {
+        value:_id
+        label:countryName
+      }
+    }
+    `;
+    let chapterQuery = gql`query($id:String){  
+      data:fetchContextChapters(id:$id) {
+        value:_id
+        label:chapterName
       }  
     }`;
-    let subChapterquery=gql`query($id:String){  
-      data:fetchSubChaptersForRegistration(id:$id) {
+
+    let subChapterQuery= gql`query($id:String){  
+      data:fetchContextSubChapters(id:$id) {
         value:_id
         label:subChapterName
       }  
@@ -168,6 +188,8 @@ export default class MlAssignComponent extends Component {
       }  
     }`;
 
+    /*let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
+    let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}*/
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
    /* let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}*/
@@ -203,7 +225,7 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCluster} queryType={"graphql"} query={clusterQuery} onSelect={that.optionsBySelectCluster.bind(this)} isDynamic={true}/>
           </div>
           <div className="form-group">
-            <Moolyaselect multiSelect={false} placeholder="Select Subchapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterquery} reExecuteQuery={true} queryOptions={subChapterOption} isDynamic={true} onSelect={this.optionsBySelectSubChapter.bind(this)} />
+            <Moolyaselect multiSelect={false} placeholder="Select Subchapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption} isDynamic={true} onSelect={this.optionsBySelectSubChapter.bind(this)} />
           </div>
           <div className="form-group">
             <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedDepartment} queryType={"graphql"} query={departmentQuery} reExecuteQuery={true} queryOptions={departmentOption} isDynamic={true} onSelect={this.optionsBySelectDepartment.bind(this)} />
@@ -227,31 +249,35 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={usersQuery} reExecuteQuery={true} queryOptions={usersOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
           </div>
         </div>
-
-        <div className="assign-popup">
+        <div className="assign-popup col-md-12">
           <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.assignUser.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml ml-save"></span>
           </a>
           <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>
             <span className="ml ml-delete"></span>
           </a>
-        </div>
-
-       {/* {this.props.canAssign?*/}
-        <div className="assign-popup">
           <a data-toggle="tooltip" title="Self assign" data-placement="top" onClick={this.selfAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-assign-user"></span>
           </a>
-        </div>
-          {/*:<div></div>}*/}
-
-        {/*{this.props.canUnAssign?*/}
-        <div className="assign-popup">
           <a data-toggle="tooltip" title=" Unassign" data-placement="top" onClick={this.unAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-unassign-user"></span>
           </a>
         </div>
-          {/*:<div></div>}*/}
+       {/* <div className="assign-popup">
+
+        </div>
+
+       /!* {this.props.canAssign?*!/
+        <div className="assign-popup">
+
+        </div>
+          /!*:<div></div>}*!/
+
+        /!*{this.props.canUnAssign?*!/
+        <div className="assign-popup">
+
+        </div>
+          /!*:<div></div>}*!/*/}
 
 
       </div>

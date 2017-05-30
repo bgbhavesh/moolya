@@ -151,15 +151,28 @@ let CoreModules = {
   },
 
   MlHierarchySubChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
-    let query={};
+    let nonMoolyaQuery={};
+    let moolyaQuery={};
+    var processedData = []
     //User selection filter.
     let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(clusterId){
-      query={"clusterId":clusterId};
+      nonMoolyaQuery={"clusterId":clusterId,isDefaultSubChapter:false};
+      moolyaQuery={"clusterId":clusterId,isDefaultSubChapter:true}
     }
-    const data = mlDBController.find('MlSubChapters', query, context, fieldsProj).fetch();
-    const totalRecords = mlDBController.find('MlSubChapters', query, context, fieldsProj).count();
-    return {totalRecords:totalRecords,data:data};
+    var nonMoolya = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).fetch();
+    var moolya =  mlDBController.findOne('MlSubChapters', moolyaQuery, context, fieldsProj);
+    if(moolya && moolya.isDefaultSubChapter === true){
+      processedData.push(moolya)
+      if(nonMoolya){
+        nonMoolya.map(function (doc,id) {
+          processedData.push(doc)
+        })
+      }
+    }
+    data = processedData
+    var totalRecords = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).count();
+    return {totalRecords:totalRecords+1,data:data};
 
   },
   MlInternalRequestRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){

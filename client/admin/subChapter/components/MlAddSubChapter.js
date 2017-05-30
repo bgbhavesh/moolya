@@ -15,6 +15,7 @@ import {addSubChapterActionHandler} from "../actions/addSubChapter";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
 import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
 import gql from "graphql-tag";
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
@@ -121,6 +122,7 @@ class MlAddSubChapter extends React.Component {
     dataGet.subChapterName = this.refs.subChapterName.value
     dataGet.subChapterEmail = this.refs.subChapterEmail.value
     dataGet.subChapterUrl = this.refs.subChapterUrl.value
+    dataGet.subChapterImageLink= this.state.data.subChapterImageLink || ''
     dataGet.associatedSubChapters = this.state.relatedSubChapter || []
     dataGet.showOnMap = this.refs.showOnMap.checked
     dataGet.isActive = this.refs.isActive.checked
@@ -154,9 +156,6 @@ class MlAddSubChapter extends React.Component {
     return resp;
   }
 
-  componentDidMount() {
-    console.log(this.state.data)
-  }
 
   componentDidUpdate() {
     var WinHeight = $(window).height();
@@ -190,6 +189,30 @@ class MlAddSubChapter extends React.Component {
       externalUser: details.externalUser ? details.externalUser : this.state.moolyaSubChapterAccess.externalUser
     }
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
+  }
+
+  async onImageFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    if(file) {
+      let data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId:''}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
+    }
+  }
+
+  async onFileUploadCallBack(resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if (result.success) {
+        console.log(result)
+        let dataDetails = this.state.data
+        let cloneBackUp = _.cloneDeep(dataDetails);
+        cloneBackUp['subChapterImageLink'] = result.result
+        this.setState({data: cloneBackUp});
+      }
+    }
   }
 
   selectAssociateChapter(val) {
@@ -294,7 +317,7 @@ class MlAddSubChapter extends React.Component {
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Add Pic</span>
-                        <input type="file" className="upload"/>
+                        <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                       </div>
                       <div className="previewImg ProfileImg">
                         <img

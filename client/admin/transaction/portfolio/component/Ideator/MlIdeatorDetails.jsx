@@ -178,17 +178,17 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} className="form-control float-label"/>
+                      <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} disabled="true" className="form-control float-label"/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate"/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} disabled="true" className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isMobileNumberPrivate" onClick={this.onClick.bind(this, "isMobileNumberPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isMobileNumberPrivate}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} disabled="true" className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon un_lock" id="isEmailIdPrivate" onClick={this.onClick.bind(this, "isEmailIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmailIdPrivate}/>
                     </div>
 

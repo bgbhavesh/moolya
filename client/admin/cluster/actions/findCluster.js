@@ -7,6 +7,7 @@ export async function findClusterTypeActionHandler(clusterId) {
     query: gql`
         query  ($clusterId: String!, $moduleName:String!, $actionName:String!){
         fetchCluster(clusterId:$clusterId, moduleName:$moduleName, actionName:$actionName){
+        _id
         countryName
         about
         email

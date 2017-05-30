@@ -51,6 +51,7 @@ const mlCommunityListConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:true,
   sort:true,
+  search:false,
   viewComponent:<MlCommunityList />,
   graphQlQuery:gql`
               query{

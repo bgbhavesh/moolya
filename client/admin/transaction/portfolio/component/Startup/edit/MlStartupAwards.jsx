@@ -30,6 +30,7 @@ export default class MlStartupAwards extends React.Component{
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
 
@@ -42,6 +43,7 @@ export default class MlStartupAwards extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay()
     //initalizeFloatLabel();
   }
   componentWillMount(){
@@ -174,6 +176,7 @@ export default class MlStartupAwards extends React.Component{
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
     this.props.getAwardsDetails(startupAwards);
+    this.imagesDisplay();
   }
 
   onLogoFileUpload(e){
@@ -214,6 +217,23 @@ export default class MlStartupAwards extends React.Component{
   }
 
 
+  async imagesDisplay(){
+    const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response?response:[]
+      let dataDetails =this.state.startupAwards
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupAwardsList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupAwards:cloneBackUp,startupAwardsList:cloneBackUpList});
+    }
+  }
+
+
   render(){
     var yesterday = Datetime.moment().subtract(0,'day');
     var valid = function( current ){
@@ -228,6 +248,12 @@ export default class MlStartupAwards extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let startupAwardsList = that.state.startupAwardsList || [];
+    let displayUploadButton = null;
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -287,12 +313,12 @@ export default class MlStartupAwards extends React.Component{
                         <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
                       </div>
-                      <div className="form-group">
+                      {displayUploadButton?<div className="form-group">
                         <div className="fileUpload mlUpload_btn">
                           <span>Upload Logo</span>
                           <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                         </div>
-                      </div>
+                      </div>:""}
                       <div className="clearfix"></div>
                       <div className="form-group">
                         <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>

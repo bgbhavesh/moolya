@@ -7,6 +7,7 @@ import {updateSubChapterActionHandler} from "../actions/updateSubChapter";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import _ from "lodash";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../utils/formElemUtil";
+import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
 import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
@@ -116,7 +117,7 @@ class MlSubChapterDetails extends React.Component {
     if (!this.state.data.isDefaultSubChapter) {
       subChapterDetailsExtend = {
         subChapterUrl: this.refs.subChapterUrl.value,
-        associatedSubChapters: this.state.data.associatedSubChapters,
+        associatedSubChapters: this.state.data.associatedSubChapters || [],
         isBespokeWorkFlow: this.refs.isBespokeWorkFlow.checked,
         isBespokeRegistration: this.refs.isBespokeRegistration.checked,
         internalSubChapterAccess: this.state.internalSubChapterAccess,
@@ -176,6 +177,31 @@ class MlSubChapterDetails extends React.Component {
     } else {
       var z=_.extend(updatedData,{associatedSubChapters:''});
       this.setState({data:z});
+    }
+  }
+
+  async onImageFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    if(file) {
+      let data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId:this.state.data.id}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
+    }
+  }
+
+  async onFileUploadCallBack(resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if (result.success) {
+        let subChapterId = this.props.params;
+        const response = await findSubChapterActionHandler(subChapterId);
+        let dataDetails = this.state.data
+        let cloneBackUp = _.cloneDeep(dataDetails);
+        cloneBackUp['subChapterImageLink'] = response['subChapterImageLink']
+        this.setState({data: cloneBackUp});
+      }
     }
   }
 
@@ -279,8 +305,8 @@ class MlSubChapterDetails extends React.Component {
                     <form>
                       <div className="form-group">
                         <div className="fileUpload mlUpload_btn">
-                          <span>Profile Pic</span>
-                          <input type="file" className="upload" ref="subChapterImageLink"/>
+                          <span>Upload Pic</span>
+                          <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                         </div>
                         <div className="previewImg ProfileImg">
                           <img src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'} />
@@ -338,7 +364,7 @@ class MlSubChapterDetails extends React.Component {
                       <div className="form-group">
                         <div className="fileUpload mlUpload_btn">
                           <span>Profile Pic</span>
-                          <input type="file" className="upload"/>
+                          <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                         </div>
                         <div className="previewImg ProfileImg">
                           <img

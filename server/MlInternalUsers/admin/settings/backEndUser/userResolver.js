@@ -5,9 +5,8 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
-import _ from 'lodash'
-import _underscore from 'underscore'
-
+import _ from "lodash";
+import _underscore from "underscore";
 
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
@@ -1349,4 +1348,12 @@ MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) 
     return response;
   }
 
+}
+
+
+MlResolver.MlQueryResolver['fetchMoolyaInternalUsers'] = (obj, args, context, info) => {
+  var getUsers = mlDBController.find('users', {
+      'profile.isActive': true, 'profile.isExternaluser': false, 'profile.isMoolya': true
+    }, context).fetch() || [];
+  return getUsers
 }

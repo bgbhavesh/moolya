@@ -341,8 +341,11 @@ export default class IdeatorIndividualComponent extends React.Component{
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder="Select Citizenship" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
+                    <br className="clearfix"/>                      <br className="clearfix"/>
+                    <br className="clearfix"/>                      <br className="clearfix"/>
+                    <br className="clearfix"/>                      <br className="clearfix"/>
+
                   </div>
-                  <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
 
                 </div>
 
@@ -380,7 +383,13 @@ export default class IdeatorIndividualComponent extends React.Component{
                 </div>
                 <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)} isValidDate={ valid } />
+
                   <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerEmploymentDate.bind(that)}/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+
                 </div>
               </form>
             </div>

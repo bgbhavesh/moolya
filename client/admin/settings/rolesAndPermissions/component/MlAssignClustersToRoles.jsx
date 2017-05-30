@@ -4,6 +4,7 @@ import {render} from 'react-dom';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
+import Select from 'react-select';
 export default class MlAssignClustersToRoles extends React.Component {
   constructor(props){
       super(props);
@@ -261,7 +262,11 @@ export default class MlAssignClustersToRoles extends React.Component {
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
+                      { assignCluster.community && assignCluster.subChapter ?
+                        <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
+                          :
+                            <Select multi={false} placeholder="Select Department" className="float-label" valueKey={'value'} labelKey={'label'}/>
+                      }
                     </div>
                   </div>
                   <div className="form-group">

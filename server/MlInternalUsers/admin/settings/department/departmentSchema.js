@@ -63,6 +63,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
 let supportedApi = [
     {api:'createDepartment', actionName:'CREATE', moduleName:"DEPARTMENT"},
     {api:'updateDepartment', actionName:'UPDATE', moduleName:"DEPARTMENT"},
+    {api:'fetchDepartments', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'findDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchActiveDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},

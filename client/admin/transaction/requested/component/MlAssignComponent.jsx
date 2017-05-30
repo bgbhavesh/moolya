@@ -125,7 +125,7 @@ export default class MlAssignComponent extends Component {
       data:fetchMoolyaInternalUsers{label:username,value:_id}
     }
     `;
-    /*let clusterQuery=gql` query{
+   /* let clusterQuery=gql` query{
       data:fetchActiveClusters{label:countryName,value:_id}
     }
     `;

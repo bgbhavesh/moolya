@@ -47,7 +47,7 @@ let countriesSchema = `
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], countriesSchema]);
 let supportedApi = [
-    {api:'fetchCountries', actionName:'READ', moduleName:"COUNTRIES"},
+    {api:'fetchCountries', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
     {api:'fetchCountry', actionName:'READ', moduleName:"COUNTRIES"},
     {api:'fetchCountriesSearch', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
     {api:'fetchCountriesAPI', actionName:'READ', moduleName:"COUNTRIES"},

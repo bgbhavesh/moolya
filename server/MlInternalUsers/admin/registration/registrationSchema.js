@@ -1,5 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef'
 
 let registrationSchema = `        
     
@@ -428,3 +429,28 @@ let registrationSchema = `
     
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);
+let supportedApi = [
+    {api:'findRegistration', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'findRegistrationInfo', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'findRegistrationInfoForUser', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'registerAs', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'createRegistrationAPI', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'createRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'createGeneralInfoInRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistrationInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistrationUploadedDocumentUrl', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistrationGeneralInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'ApprovedStatusOfDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'RejectedStatusOfDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'RemoveFileFromDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'ApprovedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'RejectedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

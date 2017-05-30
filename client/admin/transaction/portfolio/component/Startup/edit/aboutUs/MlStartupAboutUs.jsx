@@ -17,7 +17,7 @@ export default class MlStartupAboutUs extends React.Component{
     }
 
     this.handleBlur.bind(this);
-    this.fetchPortfolioDetails.bind(this);
+    this.fetchOnlyImages.bind(this);
     return this;
 
   }
@@ -31,7 +31,7 @@ export default class MlStartupAboutUs extends React.Component{
     dataVisibilityHandler();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-    this.fetchPortfolioDetails()
+    this.fetchOnlyImages()
     this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
@@ -58,7 +58,7 @@ export default class MlStartupAboutUs extends React.Component{
       }
     }
     this.props.getStartupAboutUs(data)
-    this.fetchPortfolioDetails()
+    this.fetchOnlyImages()
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -79,7 +79,15 @@ export default class MlStartupAboutUs extends React.Component{
   }
 
   async fetchOnlyImages() {
-    this.fetchPortfolioDetails()
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    if (response) {
+      let dataDetails = this.state.data
+      dataDetails['logo'] = response.aboutUs.logo
+      this.setState({loading: false, data: dataDetails});
+    }
+
   }
   onLockChange(field, e){
     let details = this.state.data||{};
@@ -96,6 +104,7 @@ export default class MlStartupAboutUs extends React.Component{
     })
   }
 
+/*
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -107,6 +116,7 @@ export default class MlStartupAboutUs extends React.Component{
     }
 
   }
+*/
 
 
   render(){

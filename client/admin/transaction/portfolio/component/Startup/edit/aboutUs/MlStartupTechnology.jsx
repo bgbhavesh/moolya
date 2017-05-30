@@ -27,6 +27,7 @@ export default class MlStartupTechnology extends React.Component{
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -37,6 +38,7 @@ export default class MlStartupTechnology extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.technologies)
@@ -149,6 +151,7 @@ export default class MlStartupTechnology extends React.Component{
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
     this.props.getStartupTechnology(startupTechnologies);
+    this.imagesDisplay();
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -186,6 +189,22 @@ export default class MlStartupTechnology extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response&&response.technologies?response.technologies:[]
+      let dataDetails =this.state.startupTechnologies
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupTechnologiesList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupTechnologies:cloneBackUp,startupTechnologiesList:cloneBackUpList});
+    }
+  }
+
   render(){
     let query=gql`query{
       data:fetchTechnologies {
@@ -197,6 +216,12 @@ export default class MlStartupTechnology extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let technologiesArray = that.state.startupTechnologiesList || [];
+    let displayUploadButton = null
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
     return (
       <div>
         <h2>Technology</h2>
@@ -255,12 +280,12 @@ export default class MlStartupTechnology extends React.Component{
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
 
-                    <div className="form-group">
+                    {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Upload Logo</span>
                         <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                       </div>
-                    </div>
+                    </div>:""}
                     <div className="clearfix"></div>
 
                     <div className="form-group">

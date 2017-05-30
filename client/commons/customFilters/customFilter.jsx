@@ -31,6 +31,15 @@ export default class MlCustomFilter extends Component {
     $('.filter_btn').click(function(){
       $('.filter_table').toggleClass('filter_hide');
     });
+    setTimeout(function(){
+      $('[data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
+      $('[data-toggle="tooltip').on('click', function () {
+        $(this).tooltip('hide');
+      });
+    },1000);
   }
   componentDidUpdate(){
     initalizeFloatLabel();
@@ -329,7 +338,7 @@ export default class MlCustomFilter extends Component {
 
 
         </div>
-        <div className="filter_btn"><img src="/images/filter_icon.png"/></div>
+        <div className="filter_btn"  data-toggle="tooltip" title="Filter"><img src="/images/filter_icon.png"/></div>
       </div>
     )
   }

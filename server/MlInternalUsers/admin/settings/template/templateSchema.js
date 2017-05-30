@@ -25,7 +25,7 @@ let supportedApi = [
     {api:'CreateAccount', actionName:'CREATE', moduleName:"MASTERSETTINGS"},
     {api:'UpdateAccount', actionName:'UPDATE', moduleName:"MASTERSETTINGS"},
     {api:'FindAccount', actionName:'READ', moduleName:"MASTERSETTINGS"},
-    {api:'FetchAccount', actionName:'READ', moduleName:"MASTERSETTINGS"}
+    {api:'FetchAccount', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

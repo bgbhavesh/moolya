@@ -245,8 +245,11 @@ class MlAuthorization
                 }
             }
             break;
+          case 'REGISTRATION':{
+              return true
+          }
+          break;
           case 'FILTERS':
-          case 'REGISTRATION':
           case 'REQUESTTYPE':{
               return true;
           }

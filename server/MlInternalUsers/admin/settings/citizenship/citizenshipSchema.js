@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlSchemaDef'
+
 let Citizenship = `        
     type Citizenship{
       citizenshipTypeName :String
@@ -20,3 +22,9 @@ let Citizenship = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], Citizenship]);
 
+let supportedApi = [
+  {api:'CreateCitizenship', actionName:'CREATE', moduleName:"GLOBALSETTINGS"},
+  {api:'UpdateCitizenship', actionName:'CREATE', moduleName:"GLOBALSETTINGS"},
+  {api:'FindCitizenship', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
+  {api:'FetchCitizenship', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
+]

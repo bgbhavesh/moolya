@@ -23,7 +23,7 @@ let Industry = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Industry]);
 let supportedApi = [
   {api:'FindIndustry', actionName:'READ', moduleName:"INDUSTRY"},
-  {api:'fetchIndustries', actionName:'READ', moduleName:"INDUSTRY"},
+  {api:'fetchIndustries', actionName:'READ', moduleName:"INDUSTRY", isWhiteList:true},
   {api:'CreateIndustry', actionName:'CREATE', moduleName:"INDUSTRY"},
   {api:'UpdateIndustry', actionName:'UPDATE', moduleName:"INDUSTRY"}
 ]

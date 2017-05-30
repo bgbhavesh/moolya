@@ -168,6 +168,7 @@ let supportedApi = [
     {api:'updateChapter', actionName:'UPDATE', moduleName:"CHAPTER"},
     {api:'updateSubChapter', actionName:'UPDATE', moduleName:"SUBCHAPTER"},
     {api:'fetchChapter', actionName:'READ', moduleName:"CHAPTER"},
+    {api:'fetchChaptersWithoutAll', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
     {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER"},
     {api:'fetchSubChapter', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER"},

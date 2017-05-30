@@ -104,7 +104,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],TemplateAssignment])
 
 let supportedApi = [
   {api:'findTemplateSteps', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
-  {api:'fetchAssignedTemplate', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'fetchAssignedTemplate', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
   {api:'fetchSubProcess', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
   {api:'findAssignedTemplates', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
   {api:'findTemplateStepsSelect', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},

@@ -254,8 +254,45 @@ class MlAuthorization
                 }
             }
             break;
+          case 'REGISTRATION':{
+              if(actionName == 'CREATE' || isContextSpecSearch)
+                return true;
+
+              if(req.variables.registrationId){
+                    var registration = MlRegistration.findOne(req.variables.registrationId)
+                    if(!registration){
+                        return false;
+                    }
+
+                    if(roleDetails['clusterId'] == registration.registrationInfo.clusterId){
+
+                          // cluster admin context
+                          if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
+                              return true
+                          }
+
+                          // chapter admin context
+                          else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+                            return true
+                          }
+
+                          // sub chapter admin context
+                          else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == 'all'){
+                            return true
+                          }
+
+                          // community admin context
+                          else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == registration.registrationInfo.communityId){
+                            return true
+                          }
+                    }
+
+
+
+              }
+          }
+          break;
           case 'FILTERS':
-          case 'REGISTRATION':
           case 'REQUESTTYPE':{
               return true;
           }

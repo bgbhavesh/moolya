@@ -39,7 +39,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],UserTypesSchema]);
 //FetchUserType1:[UserTypes]
 let supportedApi = [
   {api:'FindUserType', actionName:'READ', moduleName:"USERTYPE"},
-  {api:'FetchUserType', actionName:'READ', moduleName:"USERTYPE"},
+  {api:'FetchUserType', actionName:'READ', moduleName:"USERTYPE", isWhiteList:true},
   {api:'FetchUserTypeForMultiSelect', actionName:'READ', moduleName:"USERTYPE"},
   {api:'FetchUserTypeSelect', actionName:'READ', moduleName:"USERTYPE"},
   {api:'createUserType', actionName:'CREATE', moduleName:"USERTYPE"},

@@ -81,11 +81,7 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"DATEANDTIME"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"NUMERICALFORMAT"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"SOCIALLINKS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"GENDER"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"EMAILTYPE"}))._id, actions:permissions}
+                    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
                   ]
     let role = {
       roleName:"clusteradmin",

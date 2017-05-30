@@ -45,7 +45,7 @@ class MlClusterDetails extends React.Component {
 
   async  updateCluster() {
     let clusterDetails = {
-      _id: this.refs.id.value,
+      _id: this.props.params,
       countryName: this.refs.countryName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,

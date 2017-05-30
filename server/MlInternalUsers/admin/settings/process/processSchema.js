@@ -185,6 +185,6 @@ let supportedApi = [
     {api:'updateProcess', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
     {api:'upsertProcessDocument', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
     {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING"},
-    {api:'findProcessDocumentForRegistration', actionName:'READ', moduleName:"PROCESSMAPPING"},
+    {api:'findProcessDocumentForRegistration', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
 ]
-// MlResolver.MlModuleResolver.push(supportedApi)
+MlResolver.MlModuleResolver.push(supportedApi)

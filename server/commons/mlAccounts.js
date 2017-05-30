@@ -338,6 +338,25 @@ Meteor.methods({
   }
 })
 
+Accounts.validateLoginAttempt(function (details) {
+  if(details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
+    let departmentId = details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department;
+    if(departmentId !='all') {
+      mlDBController = new MlDBController();
+      department = mlDBController.findOne('MlDepartments',{_id:departmentId}, this);
+      if(!department.isActive){
+        throw new Meteor.Error('department-deactivated', 'You do not have any active department');
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  } else {
+    return true;
+  }
+})
 
 Accounts.onLogin(function (details) {
 if(details.type =="password") {

@@ -205,7 +205,7 @@ export default class MlStartupBranches extends React.Component{
                   </a>
                 </div>
                 {branchesArray.map(function (details, idx) {
-                  return(<div className="col-lg-2 col-md-3 col-sm-3" id={idx}>
+                  return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>

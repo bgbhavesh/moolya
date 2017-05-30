@@ -1,10 +1,13 @@
-import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
-import  Select from 'react-select';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import {
+  assignUserForTransactionAction,
+  selfAssignUserForTransactionAction,
+  unAssignUserForTransactionAction
+} from "../actions/assignUserforTransactionAction";
 
 export default class MlAssignComponent extends Component {
 
@@ -43,6 +46,10 @@ export default class MlAssignComponent extends Component {
   optionsBySelectSubChapter(value){
 
     this.setState({selectedSubChapter:value})
+  }
+
+  optionsBySelectAllUser(value) {
+    this.setState({selectedUser: value})
   }
   optionsBySelectDepartment(value){
 
@@ -116,6 +123,11 @@ export default class MlAssignComponent extends Component {
 
   render() {
     let that=this;
+
+    let moolyaUserQuery = gql` query{
+      data:fetchMoolyaInternalUsers{label:username,value:_id}
+    }
+    `;
     let clusterQuery=gql` query{
       data:fetchActiveClusters{label:countryName,value:_id}
     }
@@ -196,7 +208,11 @@ export default class MlAssignComponent extends Component {
     /*  <div className="ml_assignrequest" style={{'display':'none'}}>*/
       <div className="panel panel-default-bottom col-md-12">
         <div className="mrgn-btm">
-          <input type="text" placeholder="Search User" className="search-form-control" id="" />
+          {/*<input type="text" placeholder="Search User" className="search-form-control" />*/}
+          <Moolyaselect multiSelect={false} placeholder="Select User" className="search-form-control"
+                        valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser}
+                        queryType={"graphql"} query={moolyaUserQuery} onSelect={that.optionsBySelectAllUser.bind(this)}
+                        isDynamic={true}/>
         </div>
         <div className="col-md-6 nopadding-left">
           <div className="form-group">

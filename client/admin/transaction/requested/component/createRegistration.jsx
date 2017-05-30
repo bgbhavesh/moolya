@@ -57,7 +57,7 @@ export default class MlCreateRegistration extends React.Component{
         registrationType:  this.state.registrationType,
         userName        :  this.refs.userName.value,
         password        :  this.refs.password.value,
-        accountType     :  this.state.subscription,
+        accountType     :  this.state.selectedAccountsType,
         institutionAssociation    :   this.state.institutionAssociation,
         companyname     :  this.refs.companyName.value,
         companyUrl      :  this.refs.companyUrl.value,

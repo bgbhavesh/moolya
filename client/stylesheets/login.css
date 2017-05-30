@@ -10,13 +10,13 @@
 .login_block_in:before{border-color: transparent #273545 transparent transparent;border-width: 110px 50px 110px 0px;}*/
 
 .login_block_in{    height: 208px;width: 350px;background: #273545;z-index: 2;position: absolute;top: 3px;left: 50%;
-transform: translateX(-50%);}
+  transform: translateX(-50%);}
 .login_block_in:after{position:absolute;right:-50px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 104px 0 104px 50px;border-color: transparent transparent transparent #273545;top: 0px;}
 .login_block_in:before{position:absolute;left:-50px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 104px 50px 104px 0px;border-color: transparent #273545 transparent transparent;top: 0px;}
 
 
 .login_top{    height: 80px;width: 100px;background: #FFC20E;z-index: 1;position: absolute;top: 213px;left: 50%;
-transform: translateX(-50%);color: #fff;text-shadow: none;font-size: 20px;}
+  transform: translateX(-50%);color: #fff;text-shadow: none;font-size: 20px;}
 .login_top:after{    position: absolute;right: -30px;content: " ";width: 0px;height: 0px;border-style: solid;border-width: 40px 0 40px 30px;border-color: transparent transparent transparent #FFC20E;top: 0px;}
 .login_top:before{    position: absolute;left: -30px;content: " ";width: 0px;height: 0px;border-style: solid;border-width: 40px 30px 40px 0px;border-color: transparent #FFC20E transparent transparent;top: 0px;}
 
@@ -37,8 +37,20 @@ transform: translateX(-50%);color: #fff;text-shadow: none;font-size: 20px;}
 .login_block_in p{color: #B9C5CC;font-size: 12px;text-align: left;text-shadow: none; }
 .login_block_in a{    color: #B9C5CC; padding:0px 5px;        }
 .login_block_in a:hover{color: #fff;text-decoration: none;}
+
 .login_block_in input:-webkit-autofill{
   -webkit-box-shadow: 0 0 0px 1000px #273545 inset !important;
   -webkit-text-fill-color: #fff !important;
   background-color: rgba(0,0,0,1) !important;
+}
+.video_bg{display: none;}
+.login_bg video{display: block;}
+
+@media only screen and ( max-width: 768px ){
+  .login_bg video{display: none;}
+  .video_bg{background-image: url("../images/video_bg.png");background-size: cover;background-position: center center;display: block;position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-repeat: no-repeat;}
+}
+@media only screen and ( max-width: 1024px ){
+  .login_bg video{display: none;}
+  .video_bg{background-image: url("../images/video_bg2.png");background-size: cover;background-position: center center;display: block;position: fixed;top: 0px;left: 0px;width: 100%;height: 100%;background-repeat: no-repeat;}
 }

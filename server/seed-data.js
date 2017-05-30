@@ -108,7 +108,8 @@ if(!chapterAdmin){
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer}
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
   ]
   let role = {
     roleName:"chapteradmin",
@@ -127,11 +128,13 @@ if(!subchapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer}
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer}
   ]
   let role = {
     roleName:"subchapteradmin",
@@ -148,10 +151,15 @@ var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
 if(!communityAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:communityPer},
-    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:communityPer}
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:communityPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
   ]
   let role = {
     roleName:"communityadmin",

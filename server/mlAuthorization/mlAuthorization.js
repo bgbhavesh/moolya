@@ -158,7 +158,8 @@ class MlAuthorization
         return ret;
     }
 
-    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch){
+    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)
+    {
         switch (moduleName){
 
             case 'CLUSTER':{
@@ -180,12 +181,20 @@ class MlAuthorization
 
             case 'SUBCHAPTER':
             {
-                if(isContextSpecSearch && (roleDetails['chapterId'] == req.variables.context['chapterId'] && roleDetails['clusterId'] == req.variables['clusterId'])){
+                if(isContextSpecSearch && ((req.variables.context && roleDetails['chapterId'] == req.variables.context['chapterId'] && roleDetails['clusterId'] == req.variables.context['clusterId']) || (roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['clusterId'] == req.variables['clusterId']))){
                     return true
                 }
 
-                if(roleDetails['subChapterId'] == 'all')
-                    return true;
+                if(req.variables.context && roleDetails['clusterId'] == req.variables.context['clusterId']){
+                    if(roleDetails['subChapterId'] == 'all')
+                      return true;
+                }
+                if(req.variables.id){
+                    var subChapter = mlDBController.findOne('MlSubChapters', {"_id":req.variables.id}, context)
+                    if(subChapter && roleDetails['clusterId'] == subChapter.clusterId && roleDetails['chapterId'] == subChapter.chapterId){
+                           return true;
+                    }
+                }
             }
             break;
 

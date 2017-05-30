@@ -176,7 +176,6 @@ export default class MlStartupAwards extends React.Component{
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
     this.props.getAwardsDetails(startupAwards);
-    this.imagesDisplay();
   }
 
   onLogoFileUpload(e){
@@ -195,6 +194,7 @@ export default class MlStartupAwards extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay()
       }
     }
   }

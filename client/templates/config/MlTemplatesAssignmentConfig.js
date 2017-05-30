@@ -65,7 +65,11 @@ const mltemplatesassignmetConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/templates/assignTemplate")
+        if(data&&data.id) {
+          toastr.error("Please uncheck the record")
+        }else {
+          FlowRouter.go("/admin/templates/assignTemplate")
+        }
       }
     },
   ],

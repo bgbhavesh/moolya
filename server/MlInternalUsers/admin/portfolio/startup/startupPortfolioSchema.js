@@ -359,7 +359,7 @@ let startupPortfolioSchema = `
     }
     
     input lookingFor{
-        type:String,
+        lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
         description:String,

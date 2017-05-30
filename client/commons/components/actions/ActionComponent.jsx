@@ -15,6 +15,19 @@ export default class MlActionComponent extends Component {
       $('.bottom_actions_block').toggleClass('show_block');
       $(this).toggleClass('show_act');
     });*/
+    /*$('[data-toggle="tooltip"]').tooltip({
+      container:'body',
+      trigger:"hover"
+    });*/
+    setTimeout(function(){
+      $('[data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
+      $('[data-toggle="tooltip').on('click', function () {
+        $(this).tooltip('hide');
+      });
+    },1000);
   }
 
   onActionSwitch(e){
@@ -127,7 +140,7 @@ export default class MlActionComponent extends Component {
         }
         return (
           <div className={`${activeClass} `} key={option.actionName}  >
-            <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `} >
+            <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `} data-toggle="tooltip" title={option.actionName} data-placement="top" >
               {/*<img src={action['imagefield']} />*/}
               <span className={action['iconClass']} id={option.iconID}></span>
             </div></div>

@@ -211,6 +211,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               });
               break;
             }
+            case "SUBCHAPTER":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                if(data.subChapterId){
+                  MlResolver.MlMutationResolver['updateSubChapter'](null, {
+                    subChapterId: data.subChapterId,
+                    moduleName: data.moduleName,
+                    actionName: data.actionName,
+                    subChapterDetails:{subChapterImageLink: resp}
+                  }, context, null);
+                }
+              });
+              break;
+            }
           }
 
           if(imageUploaderPromise) {

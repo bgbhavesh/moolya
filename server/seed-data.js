@@ -77,6 +77,7 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"PORTFOLIODETAILS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
@@ -103,9 +104,14 @@ if(!chapterAdmin){
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIODETAILS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"chapteradmin",
@@ -128,9 +134,14 @@ if(!subchapterAdmin){
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIODETAILS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer}
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"subchapteradmin",
@@ -156,6 +167,11 @@ if(!communityAdmin){
     {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:communityPer},
     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIODETAILS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"communityadmin",

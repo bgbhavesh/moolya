@@ -296,6 +296,43 @@ class MlAuthorization
           case 'REQUESTTYPE':{
               return true;
           }
+          case 'PORTFOLIODETAILS':{
+            if(actionName == 'CREATE' || isContextSpecSearch)
+              return true;
+
+            if(req.variables.portfoliodetailsId){
+              var portfolio = MlPortfolioDetails.findOne(req.variables.portfoliodetailsId)
+              if(!portfolio){
+                return false;
+              }
+
+              if(roleDetails['clusterId'] == portfolio.clusterId){
+
+                // cluster admin context
+                if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
+                  return true
+                }
+
+                // chapter admin context
+                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+                  return true
+                }
+
+                // sub chapter admin context
+                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == 'all'){
+                  return true
+                }
+
+                // community admin context
+                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == portfolio.communityId){
+                  return true
+                }
+              }
+
+
+
+            }
+          }
         }
 
         return false

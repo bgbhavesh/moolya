@@ -151,7 +151,7 @@ export default class MlStartupAssets extends React.Component{
     startupAssets = arr;
     this.setState({startupAssets:startupAssets})
     this.props.getStartupAssets(startupAssets);
-    this.imagesDisplay();
+
   }
 
   onLogoFileUpload(e){
@@ -169,6 +169,7 @@ export default class MlStartupAssets extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }

@@ -77,13 +77,13 @@ let CoreModules = {
     return {totalRecords:mytotalRecords,data:myAggregateCheck};
   },
   MlSubChapterRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
-     var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
+      var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
       //let query=contextQuery;
       let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
       let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
       if(chapterId){
         // resultantQuery = mergeQueries(resultantQuery, {"chapterId":chapterId})
-        resultantQuery={"chapterId":chapterId};
+        resultantQuery=mergeQueries({"chapterId":chapterId}, userFilterQuery);
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
             resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }

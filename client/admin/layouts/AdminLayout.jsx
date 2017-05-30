@@ -9,6 +9,10 @@ export default class  AdminLayout extends Component {
   constructor(props,context){
     super(props,context);
   }
+
+  componentDidMount(){
+
+  }
   render(){
     return (
       //To Provide the Apollo Context

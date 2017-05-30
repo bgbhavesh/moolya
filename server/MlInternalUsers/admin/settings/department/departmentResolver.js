@@ -166,6 +166,9 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartment'] = (obj, args, context, 
 
 MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentRoles'] = (obj, args, context, info) => {
   // let resp = MlDepartments.find({isMoolya: args.isMoolya, isActive: true}).fetch();
+  if(!args.clusterId){
+    return [];
+  }
   let resp = mlDBController.find('MlDepartments', {
     $or: [{
       isMoolya: args.isMoolya,

@@ -22,10 +22,10 @@ let AccountType = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],AccountType]);
 let supportedApi = [
-    {api:'CreateAccount', actionName:'CREATE', moduleName:"ACCOUNTTYPE"},
-    {api:'UpdateAccount', actionName:'UPDATE', moduleName:"ACCOUNTTYPE"},
-    {api:'FindAccount', actionName:'READ', moduleName:"ACCOUNTTYPE"},
-    {api:'FetchAccount', actionName:'READ', moduleName:"ACCOUNTTYPE"}
+    {api:'CreateAccount', actionName:'CREATE', moduleName:"MASTERSETTINGS"},
+    {api:'UpdateAccount', actionName:'UPDATE', moduleName:"MASTERSETTINGS"},
+    {api:'FindAccount', actionName:'READ', moduleName:"MASTERSETTINGS"},
+    {api:'FetchAccount', actionName:'READ', moduleName:"MASTERSETTINGS"}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

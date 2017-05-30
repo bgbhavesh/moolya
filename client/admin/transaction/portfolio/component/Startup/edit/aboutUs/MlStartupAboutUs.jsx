@@ -4,6 +4,7 @@ import ScrollArea from "react-scrollbar";
 import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
+
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -16,7 +17,7 @@ export default class MlStartupAboutUs extends React.Component{
     }
 
     this.handleBlur.bind(this);
-
+    this.fetchPortfolioDetails.bind(this);
     return this;
 
   }
@@ -30,6 +31,8 @@ export default class MlStartupAboutUs extends React.Component{
     dataVisibilityHandler();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    this.fetchPortfolioDetails()
+    this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
@@ -55,6 +58,7 @@ export default class MlStartupAboutUs extends React.Component{
       }
     }
     this.props.getStartupAboutUs(data)
+    this.fetchPortfolioDetails()
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -75,12 +79,7 @@ export default class MlStartupAboutUs extends React.Component{
   }
 
   async fetchOnlyImages() {
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
-    if (response) {
-      let dataDetails = this.state.data
-      dataDetails['logo'] = response.aboutUs.logo
-      this.setState({loading: false, data: dataDetails});
-    }
+    this.fetchPortfolioDetails()
   }
   onLockChange(field, e){
     let details = this.state.data||{};
@@ -95,6 +94,18 @@ export default class MlStartupAboutUs extends React.Component{
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
+  }
+
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    if (response) {
+      let dataDetails = this.state.data
+      dataDetails['logo'] = response.aboutUs.logo
+      this.setState({loading: false, data: dataDetails});
+    }
+
   }
 
 

@@ -103,38 +103,28 @@ class MlSubChapterDetails extends React.Component {
   }
 
   async updateSubChapter() {
-    // let loggedInUser = getAdminUserContext()
-    console.log(this.state.data.associatedSubChapters)
-    let subChapterDetails={};
-    //loggedInUser.hierarchyLevel != 1
-    if(this.state.data.isDefaultSubChapter){
-      subChapterDetails = {
-        subChapterId: this.refs.id.value,
-        subChapterDisplayName: this.refs.subChapterDisplayName.value,
-        aboutSubChapter: this.refs.aboutSubChapter.value,
-        subChapterEmail: this.refs.subChapterEmail.value,
-        isEmailNotified: this.state.data.isEmailNotified,
-        showOnMap: this.refs.showOnMap.checked,
-        isActive: this.refs.isActive.checked
-        // subChapterImageLink: this.refs.subChapterImageLink.value,
-        // chapterId:this.state.data.chapterId,
-      }
-    }else{
-      subChapterDetails = {
-        subChapterId: this.refs.id.value,
-        subChapterDisplayName: this.refs.subChapterDisplayName.value,
-        aboutSubChapter: this.refs.aboutSubChapter.value,
-        showOnMap: this.refs.showOnMap.checked,
-        isActive: this.refs.isActive.checked,
+    let subChapterDetailsExtend = {}
+    let basicObj = {
+      subChapterId: this.refs.id.value,
+      subChapterDisplayName: this.refs.subChapterDisplayName.value,
+      aboutSubChapter: this.refs.aboutSubChapter.value,
+      subChapterEmail: this.refs.subChapterEmail.value,
+      isEmailNotified: this.state.data.isEmailNotified,
+      showOnMap: this.refs.showOnMap.checked,
+      isActive: this.refs.isActive.checked
+    }
+    if (!this.state.data.isDefaultSubChapter) {
+      subChapterDetailsExtend = {
+        subChapterUrl: this.refs.subChapterUrl.value,
         associatedSubChapters: this.state.data.associatedSubChapters,
         isBespokeWorkFlow: this.refs.isBespokeWorkFlow.checked,
         isBespokeRegistration: this.refs.isBespokeRegistration.checked,
         internalSubChapterAccess: this.state.internalSubChapterAccess,
         moolyaSubChapterAccess: this.state.moolyaSubChapterAccess
-        // chapterId:this.state.data.chapterId,
       }
     }
-    const response = await updateSubChapterActionHandler(subChapterDetails)
+    let detailsObj = _.extend(basicObj, subChapterDetailsExtend);
+    const response = await updateSubChapterActionHandler(detailsObj)
     return response;
   }
 
@@ -208,9 +198,7 @@ class MlSubChapterDetails extends React.Component {
       }
     ]
     let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
-     // let chapterData=this.state.data;
     const showLoader = this.state.loading;
-    // let loggedInUser = getAdminUserContext()
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -238,13 +226,39 @@ class MlSubChapterDetails extends React.Component {
                     <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
                            className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                   </div>
-                  {(this.state.data.isDefaultSubChapter) ? <div></div> : <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
-                                  className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                                  selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
-                                  query={subChapterQuery} isDynamic={true}
-                                  onSelect={this.selectAssociateChapter.bind(this)}/>
-                  </div>}
+                  {(this.state.data.isDefaultSubChapter) ? <div></div> : <div>
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
+                                    className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                    selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
+                                    query={subChapterQuery} isDynamic={true}
+                                    onSelect={this.selectAssociateChapter.bind(this)}/>
+                    </div>
+                    <br className="brclear"/>
+                    <div className="form-group">
+                      <input type="text" ref="state" placeholder="State" className="form-control float-label"
+                             defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
+                             defaultValue={this.state.data && this.state.data.subChapterEmail}
+                             className="form-control float-label"/>
+                      <div className="email_notify">
+                        <div className="input_types">
+                          <input ref="isEmailNotified" type="checkbox" name="checkbox"
+                                 checked={this.state.data.isEmailNotified}
+                                 onChange={this.onStatusChangeNotify.bind(this)}/>
+                          <label htmlFor="checkbox1"><span> </span>Notify</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="subChapterUrl" placeholder="Sub-Chapter URL"
+                             defaultValue={this.state.data && this.state.data.subChapterUrl}
+                             className="form-control float-label"/>
+                    </div>
+                  </div>
+                  }
                   <div className="form-group">
                   <textarea placeholder="About" ref="aboutSubChapter" defaultValue={this.state.data && this.state.data.aboutSubChapter}
                     className="form-control float-label">
@@ -253,7 +267,6 @@ class MlSubChapterDetails extends React.Component {
                 </form>
               </div>
             </div>
-            {/*loggedInUser.hierarchyLevel!=1 */}
             {(this.state.data.isDefaultSubChapter)?
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg left_wrap">

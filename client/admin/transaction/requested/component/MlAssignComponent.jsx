@@ -44,6 +44,10 @@ export default class MlAssignComponent extends Component {
 
     this.setState({selectedSubChapter:value})
   }
+
+  optionsBySelectAllUser(value) {
+    this.setState({selectedUser: value})
+  }
   optionsBySelectDepartment(value){
 
     this.setState({selectedDepartment:value})
@@ -116,7 +120,12 @@ export default class MlAssignComponent extends Component {
 
   render() {
     let that=this;
-   /* let clusterQuery=gql` query{
+
+    let moolyaUserQuery = gql` query{
+      data:fetchMoolyaInternalUsers{label:username,value:_id}
+    }
+    `;
+    /*let clusterQuery=gql` query{
       data:fetchActiveClusters{label:countryName,value:_id}
     }
     `;
@@ -152,6 +161,7 @@ export default class MlAssignComponent extends Component {
         label:subChapterName
       }  
     }`;
+
     let fetchcommunities = gql` query{
       data:fetchCommunityDefinition{label:name,value:code}
     }
@@ -188,8 +198,6 @@ export default class MlAssignComponent extends Component {
       }  
     }`;
 
-    /*let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
-    let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}*/
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
    /* let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}*/
@@ -218,7 +226,11 @@ export default class MlAssignComponent extends Component {
     /*  <div className="ml_assignrequest" style={{'display':'none'}}>*/
       <div className="panel panel-default-bottom col-md-12">
         <div className="mrgn-btm">
-          <input type="text" placeholder="Search User" className="search-form-control" id="" />
+          {/*<input type="text" placeholder="Search User" className="search-form-control" />*/}
+          <Moolyaselect multiSelect={false} placeholder="Select User" className="search-form-control"
+                        valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser}
+                        queryType={"graphql"} query={moolyaUserQuery} onSelect={that.optionsBySelectAllUser.bind(this)}
+                        isDynamic={true}/>
         </div>
         <div className="col-md-6 nopadding-left">
           <div className="form-group">
@@ -249,35 +261,31 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={usersQuery} reExecuteQuery={true} queryOptions={usersOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
           </div>
         </div>
-        <div className="assign-popup col-md-12">
+
+        <div className="assign-popup">
           <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.assignUser.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml ml-save"></span>
           </a>
           <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>
             <span className="ml ml-delete"></span>
           </a>
+        </div>
+
+       {/* {this.props.canAssign?*/}
+        <div className="assign-popup">
           <a data-toggle="tooltip" title="Self assign" data-placement="top" onClick={this.selfAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-assign-user"></span>
           </a>
+        </div>
+          {/*:<div></div>}*/}
+
+        {/*{this.props.canUnAssign?*/}
+        <div className="assign-popup">
           <a data-toggle="tooltip" title=" Unassign" data-placement="top" onClick={this.unAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-unassign-user"></span>
           </a>
         </div>
-       {/* <div className="assign-popup">
-
-        </div>
-
-       /!* {this.props.canAssign?*!/
-        <div className="assign-popup">
-
-        </div>
-          /!*:<div></div>}*!/
-
-        /!*{this.props.canUnAssign?*!/
-        <div className="assign-popup">
-
-        </div>
-          /!*:<div></div>}*!/*/}
+          {/*:<div></div>}*/}
 
 
       </div>

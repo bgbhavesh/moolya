@@ -30,6 +30,7 @@ export default class MlStartupLookingFor extends React.Component{
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
+    //this.imagesDisplay.bind(this);
     return this;
   }
 
@@ -41,6 +42,7 @@ export default class MlStartupLookingFor extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    //this.imagesDisplay()
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -109,10 +111,11 @@ export default class MlStartupLookingFor extends React.Component{
     })
   }
 
-  onOptionSelected(selectedId){
+  onOptionSelected(selectedId,callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["typeId"]);
-    details=_.extend(details,{["typeId"]:selectedId});
+    details=_.omit(details,["lookingForName"]);
+    details=_.extend(details,{["typeId"]:selectedId,["lookingForName"]: selObject.label});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
@@ -152,8 +155,10 @@ export default class MlStartupLookingFor extends React.Component{
     this.setState({startupLookingFor:startupLookingFor})
     // let indexArray = this.state.indexArray;
     this.props.getLookingForDetails(startupLookingFor);    //indexArray
+
   }
 
+/*
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -191,6 +196,24 @@ export default class MlStartupLookingFor extends React.Component{
 
     }
   }
+
+  async imagesDisplay(){
+    const response = await fetchStartupPortfolioLookingFor(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response?response:[]
+      let dataDetails =this.state.startupLookingFor
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupLookingForList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupLookingFor:cloneBackUp,startupLookingForList:cloneBackUpList});
+    }
+  }
+*/
+
 
   render(){
     let query=gql`query($communityCode:String){

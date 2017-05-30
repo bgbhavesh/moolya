@@ -454,6 +454,7 @@ let BackEndUser = `
         FindUserOnToken(token: String):response
         fetchInternalUserProfiles(userId: String):[UserProfiles]
         fetchUserRoleDetails(clusterId:String):UserRoles
+        fetchMoolyaInternalUsers : [BackendUsers]
     }
 `
 

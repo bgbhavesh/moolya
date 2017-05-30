@@ -22,7 +22,7 @@ export default class MlClusterSubChaptersList extends Component
         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
           <div className="list_block">
             <div className="cluster_status"></div>
-            <a href={clusterRoutes.createSubChapterDetails(data[0].clusterId, data[0].chapterId)}>
+            <a href={clusterRoutes.createSubChapterDetails(FlowRouter.current().params.clusterId, FlowRouter.current().params.chapterId)}>
               <div className={"hex_outer"}><span className="ml ml-plus"></span></div>
             </a>
             <h3>Add Sub Chapter</h3>
@@ -52,7 +52,8 @@ export default class MlClusterSubChaptersList extends Component
             <div className="list_block">
               <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
               <a href={clusterRoutes.subChapterDetails(prop.clusterId, prop.chapterId, prop._id, prop.subChapterName)}>
-                <div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div>
+                  <div className={"hex_outer"}>{prop.subChapterImageLink ? <img src={prop.subChapterImageLink}/> : <span
+                    className="ml ml-moolya-symbol"></span>}</div>
               </a>
               <h3>{prop.subChapterDisplayName}</h3>
             </div>
@@ -68,3 +69,4 @@ export default class MlClusterSubChaptersList extends Component
 
   }
 }
+/*<div className={"hex_outer"}><span className="ml ml-moolya-symbol"></span></div>*/

@@ -99,14 +99,14 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["rating"] = portfolio.rating;
     startAboutUsArray["assets"] = portfolio.assets;
 
-    if(startAboutUsArray && startAboutUsArray.clients){
-      startAboutUsArray.clients.map(function(client,index) {
-        let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
-        if(startAboutUsArray.clients[index]){
-          startAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
-        }
-      })
-    }
+    // if(startAboutUsArray && startAboutUsArray.clients){
+    //   startAboutUsArray.clients.map(function(client,index) {
+    //     let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
+    //     if(startAboutUsArray.clients[index]){
+    //       startAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
+    //     }
+    //   })
+    // }
     if(startAboutUsArray && startAboutUsArray.assets){
       startAboutUsArray.assets.map(function(asset,index) {
         if(startAboutUsArray.assets[index]){

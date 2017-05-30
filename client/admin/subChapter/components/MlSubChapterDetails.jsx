@@ -7,6 +7,7 @@ import {updateSubChapterActionHandler} from "../actions/updateSubChapter";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import _ from "lodash";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../utils/formElemUtil";
+import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
 import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
@@ -103,38 +104,28 @@ class MlSubChapterDetails extends React.Component {
   }
 
   async updateSubChapter() {
-    // let loggedInUser = getAdminUserContext()
-    console.log(this.state.data.associatedSubChapters)
-    let subChapterDetails={};
-    //loggedInUser.hierarchyLevel != 1
-    if(this.state.data.isDefaultSubChapter){
-      subChapterDetails = {
-        subChapterId: this.refs.id.value,
-        subChapterDisplayName: this.refs.subChapterDisplayName.value,
-        aboutSubChapter: this.refs.aboutSubChapter.value,
-        subChapterEmail: this.refs.subChapterEmail.value,
-        isEmailNotified: this.state.data.isEmailNotified,
-        showOnMap: this.refs.showOnMap.checked,
-        isActive: this.refs.isActive.checked
-        // subChapterImageLink: this.refs.subChapterImageLink.value,
-        // chapterId:this.state.data.chapterId,
-      }
-    }else{
-      subChapterDetails = {
-        subChapterId: this.refs.id.value,
-        subChapterDisplayName: this.refs.subChapterDisplayName.value,
-        aboutSubChapter: this.refs.aboutSubChapter.value,
-        showOnMap: this.refs.showOnMap.checked,
-        isActive: this.refs.isActive.checked,
-        associatedSubChapters: this.state.data.associatedSubChapters,
+    let subChapterDetailsExtend = {}
+    let basicObj = {
+      subChapterId: this.refs.id.value,
+      subChapterDisplayName: this.refs.subChapterDisplayName.value,
+      aboutSubChapter: this.refs.aboutSubChapter.value,
+      subChapterEmail: this.refs.subChapterEmail.value,
+      isEmailNotified: this.state.data.isEmailNotified,
+      showOnMap: this.refs.showOnMap.checked,
+      isActive: this.refs.isActive.checked
+    }
+    if (!this.state.data.isDefaultSubChapter) {
+      subChapterDetailsExtend = {
+        subChapterUrl: this.refs.subChapterUrl.value,
+        associatedSubChapters: this.state.data.associatedSubChapters || [],
         isBespokeWorkFlow: this.refs.isBespokeWorkFlow.checked,
         isBespokeRegistration: this.refs.isBespokeRegistration.checked,
         internalSubChapterAccess: this.state.internalSubChapterAccess,
         moolyaSubChapterAccess: this.state.moolyaSubChapterAccess
-        // chapterId:this.state.data.chapterId,
       }
     }
-    const response = await updateSubChapterActionHandler(subChapterDetails)
+    let detailsObj = _.extend(basicObj, subChapterDetailsExtend);
+    const response = await updateSubChapterActionHandler(detailsObj)
     return response;
   }
 
@@ -189,6 +180,31 @@ class MlSubChapterDetails extends React.Component {
     }
   }
 
+  async onImageFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    if(file) {
+      let data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId:this.state.data.id}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
+    }
+  }
+
+  async onFileUploadCallBack(resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if (result.success) {
+        let subChapterId = this.props.params;
+        const response = await findSubChapterActionHandler(subChapterId);
+        let dataDetails = this.state.data
+        let cloneBackUp = _.cloneDeep(dataDetails);
+        cloneBackUp['subChapterImageLink'] = response['subChapterImageLink']
+        this.setState({data: cloneBackUp});
+      }
+    }
+  }
+
   render() {
     let MlActionConfig = [
       {
@@ -208,9 +224,7 @@ class MlSubChapterDetails extends React.Component {
       }
     ]
     let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
-     // let chapterData=this.state.data;
     const showLoader = this.state.loading;
-    // let loggedInUser = getAdminUserContext()
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -238,13 +252,39 @@ class MlSubChapterDetails extends React.Component {
                     <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
                            className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                   </div>
-                  {(this.state.data.isDefaultSubChapter) ? <div></div> : <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
-                                  className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                                  selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
-                                  query={subChapterQuery} isDynamic={true}
-                                  onSelect={this.selectAssociateChapter.bind(this)}/>
-                  </div>}
+                  {(this.state.data.isDefaultSubChapter) ? <div></div> : <div>
+                    <div className="form-group">
+                      <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
+                                    className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                    selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
+                                    query={subChapterQuery} isDynamic={true}
+                                    onSelect={this.selectAssociateChapter.bind(this)}/>
+                    </div>
+                    <br className="brclear"/>
+                    <div className="form-group">
+                      <input type="text" ref="state" placeholder="State" className="form-control float-label"
+                             defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
+                             defaultValue={this.state.data && this.state.data.subChapterEmail}
+                             className="form-control float-label"/>
+                      <div className="email_notify">
+                        <div className="input_types">
+                          <input ref="isEmailNotified" type="checkbox" name="checkbox"
+                                 checked={this.state.data.isEmailNotified}
+                                 onChange={this.onStatusChangeNotify.bind(this)}/>
+                          <label htmlFor="checkbox1"><span> </span>Notify</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="subChapterUrl" placeholder="Sub-Chapter URL"
+                             defaultValue={this.state.data && this.state.data.subChapterUrl}
+                             className="form-control float-label"/>
+                    </div>
+                  </div>
+                  }
                   <div className="form-group">
                   <textarea placeholder="About" ref="aboutSubChapter" defaultValue={this.state.data && this.state.data.aboutSubChapter}
                     className="form-control float-label">
@@ -253,7 +293,6 @@ class MlSubChapterDetails extends React.Component {
                 </form>
               </div>
             </div>
-            {/*loggedInUser.hierarchyLevel!=1 */}
             {(this.state.data.isDefaultSubChapter)?
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg left_wrap">
@@ -266,8 +305,8 @@ class MlSubChapterDetails extends React.Component {
                     <form>
                       <div className="form-group">
                         <div className="fileUpload mlUpload_btn">
-                          <span>Profile Pic</span>
-                          <input type="file" className="upload" ref="subChapterImageLink"/>
+                          <span>Upload Pic</span>
+                          <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                         </div>
                         <div className="previewImg ProfileImg">
                           <img src={this.state.data && this.state.data.subChapterImageLink ? this.state.data.subChapterImageLink : '/images/def_profile.png'} />
@@ -325,7 +364,7 @@ class MlSubChapterDetails extends React.Component {
                       <div className="form-group">
                         <div className="fileUpload mlUpload_btn">
                           <span>Profile Pic</span>
-                          <input type="file" className="upload"/>
+                          <input type="file" className="upload" onChange={this.onImageFileUpload.bind(this)}/>
                         </div>
                         <div className="previewImg ProfileImg">
                           <img

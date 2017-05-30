@@ -66,6 +66,7 @@ let chapterSchema = `
         isDefaultSubChapter:Boolean
         clusterName: String
         chapterId:String
+        subChapterUrl : String
         subChapterImageLink:String
         chapterName :String
         stateName : String

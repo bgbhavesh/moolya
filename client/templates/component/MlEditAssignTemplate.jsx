@@ -63,6 +63,7 @@ class MlEditAssignTemplate extends React.Component{
     });
   }
   componentWillMount() {
+    console.log(this.props)
     const resp=this.findTemplate();
     return resp;
   }
@@ -224,6 +225,11 @@ class MlEditAssignTemplate extends React.Component{
     const templates=await this.findTemplates(this.state.subProcess,stepName);
     this.setState({templateInfo:templates||[]})
   }
+  showTemplateImage(row){
+
+    console.log(row);
+    window.open(row.templateImage)
+  }
 
   render(){
     let that=this;
@@ -351,12 +357,13 @@ class MlEditAssignTemplate extends React.Component{
                             </ul>
 
                             <div className="tab-content clearfix">
+
                               {that.state.templateInfo.map(function(options,key) {
                                 return(
                                   <div className="tab-pane active" id={'template'+key} key={key}>
                                     <div className="list-group nomargin-bottom">
                                       <a className="list-group-item" key={key} id={"template"}>{options.templateName}
-                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
+                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye' onClick={that.showTemplateImage.bind(that,options)}/>
                                       </a>
                                     </div>
                                   </div>

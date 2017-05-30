@@ -1,6 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
-import MlResolver from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 
 let Citizenship = `        
     type Citizenship{
@@ -28,3 +28,4 @@ let supportedApi = [
   {api:'FindCitizenship', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
   {api:'FetchCitizenship', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
 ]
+MlResolver.MlModuleResolver.push(supportedApi)

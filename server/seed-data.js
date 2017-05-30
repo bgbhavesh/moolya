@@ -85,7 +85,8 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"NUMERICALFORMAT"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"SOCIALLINKS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"GENDER"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"EMAILTYPE"}))._id, actions:permissions}
+                    {moduleId:(_.find(mlModules, {code:"EMAILTYPE"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
                   ]
     let role = {
       roleName:"clusteradmin",

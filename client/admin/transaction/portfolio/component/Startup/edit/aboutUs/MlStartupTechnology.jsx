@@ -151,7 +151,7 @@ export default class MlStartupTechnology extends React.Component{
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
     this.props.getStartupTechnology(startupTechnologies);
-    this.imagesDisplay();
+
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -168,6 +168,7 @@ export default class MlStartupTechnology extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }

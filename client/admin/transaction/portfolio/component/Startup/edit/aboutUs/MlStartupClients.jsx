@@ -143,7 +143,7 @@ export default class MlStartupClients extends React.Component{
     startupClients = arr;
     this.setState({startupClients:startupClients})
     this.props.getStartupClients(startupClients);
-    this.imagesDisplay();
+
   }
 
   onLogoFileUpload(e){
@@ -162,6 +162,7 @@ export default class MlStartupClients extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }

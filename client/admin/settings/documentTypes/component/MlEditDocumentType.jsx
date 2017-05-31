@@ -127,13 +127,13 @@ class MlEditDocumentType extends React.Component{
                   <div className="form-group">
                     <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.docTypeDisplayName} readOnly="true" className="form-control float-label"  disabled="disabled"/>
                   </div>
-                  {/*<div className="form-group switch_wrap inline_switch">*/}
-                    {/*<label>Status</label>*/}
-                    {/*<label className="switch">*/}
-                      {/*<input type="checkbox" ref="documentTypeStatus" checked={this.state.data&&this.state.data.isActive} />*/}
-                      {/*<div className="slider"></div>*/}
-                    {/*</label>*/}
-                  {/*</div>*/}
+                  <div className="form-group switch_wrap inline_switch">
+                    <label>Status</label>
+                    <label className="switch">
+                      <input type="checkbox" ref="documentTypeStatus" defaultChecked={this.state.data&&this.state.data.isActive} />
+                      <div className="slider"></div>
+                    </label>
+                  </div>
 
                 </form>
 

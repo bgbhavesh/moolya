@@ -7,6 +7,7 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
   let list = [];
   let resp = mlDBController.find('MlDepartments', {
     $and: [
+      {isMoolya:true},
       {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]}}
     ]
   }, context).fetch()
@@ -79,6 +80,7 @@ MlResolver.MlMutationResolver['updateFinalApprovalRoles'] = (obj, args, context,
 
 MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info) => { // reporting role
   let roles = [];
+  var isChapterRole = false;
   let levelCode = args.levelCode
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
@@ -90,47 +92,94 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
       })
     }
     else {
+
+      //validate chapter or subchapter role
+        _.each(valueGet, function (item, say) {
+          _.each(item.assignRoles, function (value, key) {
+            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+              if (item._id==args.currentRoleId && value.isActive) {
+                isChapterRole = true;
+              }
+            }
+          })
+        })
+
+
       if (levelCode == 'cluster') {
         _.each(valueGet, function (item, say) {
-          let ary = []
           _.each(item.assignRoles, function (value, key) {
-            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all")) {
-              if (value.isActive) {
+            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+              if (item._id!=args.currentRoleId && value.isActive) {
                 filteredRole.push(item)
               }
             }
           })
-          item.assignRoles = ary
         })
-      } else if (levelCode == 'chapter') {
+      } else if (levelCode == 'chapter' && isChapterRole === true) {
         _.each(valueGet, function (item, say) {
-          let ary = []
           _.each(item.assignRoles, function (value, key) {
-            if (((value.cluster == args.clusterId ) && (value.chapter != "all")) || (value.cluster == 'all' && value.chapter == "all")) {
-              if (value.isActive) {
+            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+              if (item._id!=args.currentRoleId &&value.isActive) {
                 filteredRole.push(item)
               }
-            }else if((value.cluster == "all" && value.chapter == "all" && value.subChapter == "all")||(value.cluster == args.clusterId  && value.chapter == "all" && value.subChapter == "all" )){
-              if (value.isActive) {
+            }
+            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+              if (item._id!=args.currentRoleId && value.isActive) {
                 filteredRole.push(item)
               }
             }
           })
-          item.assignRoles = ary
         })
-      }  else if (levelCode == 'community') {
+      }else if (levelCode == 'chapter' && isChapterRole === false) {
         _.each(valueGet, function (item, say) {
-          let ary = []
           _.each(item.assignRoles, function (value, key) {
-            if ((value.cluster == args.clusterId && value.chapter != "all" && value.subChapter != "all" && value.community != "all")) { // need to add  more conditions
-              if (value.isActive) {
+            if( value.subChapter != 'all' && value.community == "all"){
+              if (item._id!=args.currentRoleId &&value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+              isChapterRole = true;
+              if (item._id!=args.currentRoleId &&value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+              if (item._id!=args.currentRoleId && value.isActive) {
                 filteredRole.push(item)
               }
             }
           })
-          item.assignRoles = ary
+
+        })
+      } else if (levelCode == 'community') {
+        _.each(valueGet, function (item, say) {
+          _.each(item.assignRoles, function (value, key) {
+            if ( value.community != "all") {
+              if (item._id!=args.currentRoleId &&value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+              if (item._id!=args.currentRoleId && value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+              if (item._id!=args.currentRoleId &&value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+            if(value.subChapter != 'all' && value.community == "all"){
+              if (item._id!=args.currentRoleId &&value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+          })
+
         })
       }
+
     }
 
   }
@@ -172,7 +221,13 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"isActive": true}]}, context).fetch()
+    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles": {
+      $elemMatch: {
+        cluster : {"$in": ["all",args.clusterId]},
+        department: args.departmentId,
+        subDepartment: args.subDepartmentId,
+      }
+    }}, {"isActive": true}]}, context).fetch()
     _.each(valueGet, function (item, say) {
       let ary = []
       _.each(item.assignRoles, function (value, key) {

@@ -26,16 +26,19 @@ class  MlAdminProfileApp extends Component {
     $('.ml_profile h1').click(function(){
       $(this).parent('.ml_profile').toggleClass('profile_open');
     });
-
-    $('[data-toggle="tooltip"]').tooltip({
-      container:'mooly_admin',
-      trigger: 'hover'
-    });
+    setTimeout(function(){
+      $('.ml_profile [data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
+      $('.ml_profile [data-toggle="tooltip').on('click', function () {
+        $(this).tooltip('hide');
+      });
+    },1000);
   }
 
   componentWillReceiveProps(){
-    console.log(this.props.user);
-    this.getValue();
+   this.getValue();
   }
 
   logoutUser(){
@@ -79,14 +82,14 @@ class  MlAdminProfileApp extends Component {
           <img className="logo" src="/images/logo.png" />
         </a>
         <div className="ml_profile" role="navigation">
-          <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center -5px`}}
+          <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center center`}}
           ></h1>
           <ol>
-            <li><a href="/admin/myprofile/personalInfo"><img className="profile-img" src="/images/1.png" /></a></li>
-            <li><a href="/admin/logas"><img className="profile-img" src="/images/2.png" /></a></li>
-            <li><a href="#"><img className="profile-img" src="/images/3.png" /></a></li>
-            <li><a href="/admin/switchprofile"><img className="profile-img" src="/images/4.png" /></a></li>
-            <li><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
+            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/admin/myprofile/personalInfo"><img className="profile-img" src="/images/1.png" /></a></li>
+            <li data-toggle="tooltip" title="Log As" data-placement="right"><a href="/admin/logas"><img className="profile-img" src="/images/2.png" /></a></li>
+            <li data-toggle="tooltip" title="" data-placement="right"><a href="#"><img className="profile-img" src="/images/3.png" /></a></li>
+            <li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchprofile"><img className="profile-img" src="/images/4.png" /></a></li>
+            <li data-toggle="tooltip" title="Logout" data-placement="left"><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
           </ol>
         </div>
         <div className="profile-name">Welcome {this.state.firstName} </div>

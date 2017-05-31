@@ -20,7 +20,7 @@ const mlHierarchyTableConfig=new MlViewer.View({
     {dataField: "role", title: "Role",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
-  showActionComponent:true,
+  showActionComponent:false,
   actionConfiguration:[
     {
       actionName: 'edit',

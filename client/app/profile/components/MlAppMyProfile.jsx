@@ -9,6 +9,12 @@ export default class MlAppMyProfile extends Component {
     super(props)
     this.state = {loading: true, data: {}};
   }
+  componentDidMount() {
+    $(function () {
+      $('.float-label').jvFloat();
+    });
+    // this.initializeSwiper();
+  }
   componentWillMount(){
     let userDetails = Meteor.user();
     let firstName = userDetails.profile.firstName

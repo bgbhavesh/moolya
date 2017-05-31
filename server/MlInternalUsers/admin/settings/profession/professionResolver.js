@@ -10,6 +10,27 @@ MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) =
     return response;
   }
 
+  let query ={
+    "$or":[
+      {
+        professionName: {
+          "$regex" : new RegExp('^' + args.professionName + '$', 'i')
+        }
+      },
+      {
+        professionDisplayName: {
+          "$regex" :new RegExp("^" + args.professionDisplayName + '$','i')}
+      }
+    ]
+  };
+
+  let isFind = mlDBController.find('MlProfessions', query, context).fetch();
+  if(isFind.length){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    return response;
+  }
+
   if (mlDBController.findOne('MlIndustries', {_id:args.industryId}, context)){
     // args.industryName=MlIndustries.findOne({_id:args.industryId}).industryName;
     args.industryName = mlDBController.findOne('MlIndustries', {_id:args.industryId}, context).industryName;
@@ -39,6 +60,30 @@ MlResolver.MlMutationResolver['UpdateProfession'] = (obj, args, context, info) =
   }
   if (args._id) {
     var id= args._id;
+    let query ={
+      "_id":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          professionName: {
+            "$regex" : new RegExp('^' + args.professionName + '$', 'i')
+          }
+        },
+        {
+          professionDisplayName: {
+            "$regex" :new RegExp("^" + args.professionDisplayName + '$','i')}
+        }
+      ]
+    };
+
+    let isFind = mlDBController.find('MlProfessions', query, context).fetch();
+    if(isFind.length) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      return response;
+    }
+
     args=_.omit(args,'_id');
     // let result= MlProfessions.update(id, {$set: args});
     let result= mlDBController.update('MlProfessions',id , args, {$set:true}, context);

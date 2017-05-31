@@ -22,6 +22,10 @@ let requestsSchema = `
         chapter                   : String
         subChapter                : String
         community                 : String
+        clusterName               : String
+        chapterName               : String
+        subChapterName            : String
+        communityName             : String
         }
         
         
@@ -64,7 +68,11 @@ let requestsSchema = `
         cluster                   : String
         chapter                   : String
         subChapter                : String
+        clusterName               : String
+        chapterName               : String
+        subChapterName            : String
         community                 : String
+        communityName             : String
       }
     type Mutation{
       createRequestss(requests:requestsInput):response
@@ -73,7 +81,7 @@ let requestsSchema = `
       }
 
     type Query{
-      fetchRequestss(userId: String ): [requests]
+      fetchRequestss(userId: String, status: [String] ): [requests]
       fetchRequestsForApproval(transactionType:String):[requests]
 
     }`;

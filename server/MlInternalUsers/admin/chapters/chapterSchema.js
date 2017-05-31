@@ -46,7 +46,7 @@ let chapterSchema = `
     }
     
     input associatedChapters{ 
-        chapterId:String
+        subChapterId:String
     }
     
     type internalSubChapterAccess{
@@ -68,7 +68,7 @@ let chapterSchema = `
         isDefaultSubChapter:Boolean
         clusterName: String
         chapterId:String
-        associatedSubChapters:[String]
+        subChapterUrl : String
         subChapterImageLink:String
         chapterName :String
         stateName : String
@@ -87,6 +87,7 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean
         internalSubChapterAccess:internalSubChapterAccess
         moolyaSubChapterAccess:moolyaSubChapterAccess
+        associatedSubChapters : [String]
     }
     
     input internalSubChapterAccessObject{
@@ -115,7 +116,7 @@ let chapterSchema = `
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
-        associatedSubChapters:[String] ,
+        associatedSubChapters:[String],   
         subChapterUrl:String,
         isUrlNotified:Boolean,
         subChapterEmail:String,

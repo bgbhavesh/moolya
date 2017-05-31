@@ -1,8 +1,8 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
-import React from 'react';
-import gql from 'graphql-tag'
-import MlCustomFilter from '../../../../commons/customFilters/customFilter';
-import moment from 'moment';
+import {MlViewer, MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import React from "react";
+import gql from "graphql-tag";
+import MlCustomFilter from "../../../../commons/customFilters/customFilter";
+import moment from "moment";
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
   return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
@@ -19,6 +19,17 @@ const mlUserTypeTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  fieldsMap: {
+    'registrationDate': 'registrationInfo.registrationDate',
+    'firstName': 'registrationInfo.firstName',
+    'contactNumber': 'registrationInfo.contactNumber',
+    'communityName': 'registrationInfo.communityName',
+    'clusterName': 'registrationInfo.clusterName',
+    'chapterName': 'registrationInfo.chapterName',
+    'accountType': 'registrationInfo.accountType',
+    'assignedUser': 'registrationInfo.assignedUser',
+    'subChapterName': 'registrationInfo.subChapterName'
+  },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
@@ -41,8 +52,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
 
-        if(data && data.id){
+        if(data && data.id && (Meteor.userId()==data.userName || Meteor.user().profile.email=="platformadmin@moolya.com")){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+        }else if(data && data.id && Meteor.userId()!=data.userName){
+          toastr.error("User does not have access to edit record");
         } else{
           toastr.error("Please Select a record");
         }
@@ -59,46 +72,9 @@ const mlUserTypeTableConfig=new MlViewer.View({
           toastr.error("Please Select a record");
         }
       }
-    }/*,
-    {
-      showAction: true,
-      actionName: 'add',
-      iconID:'createRegistrationRequest',
-      handler: null
-    }*/
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
-  graphQlQuery:/*gql`
-             query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"registrationInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on RegistrationInfo{
-   registrationInfo.firstName:firstName
-                              lastName
-                              id:_id
-                              contactNumber
-                              communityName
-                      			  clusterName
-                      				chapterName
-                              subChapterName
-                              accountType
-                      				source
-                              assignedUser
-              								registrationStatus
-                      				registrationDate
-                              transactionId
-                              canAssign
-                              canUnAssign
-                          }
-                      }
-                  }
-              }
-              `*/
+  graphQlQuery:
   gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
                     data:ContextSpecSearch(module:"registrationInfo",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
@@ -118,9 +94,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               assignedUser
               								registrationStatus
                       				registrationDate
-                              transactionId
-                              canAssign
-                              canUnAssign
+                              transactionId                              
+                              userName
                           }
                       }
               }

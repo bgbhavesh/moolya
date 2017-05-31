@@ -35,11 +35,11 @@ export default class MlAssignBackednUserRoles extends React.Component {
         chapterId: this.props.chapterId ? this.props.chapterId : "",
         subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
         communityId: this.props.communityId ? this.props.communityId : "",
-        hierarchyLevel: "",
+        hierarchyLevel: -1,
         hierarchyCode: ""
       }],
       selectedRole: "",
-      hierarchyLevel: ''
+      hierarchyLevel: -1
     }
     this.findUserDepartments.bind(this);
     return this;
@@ -104,7 +104,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
         chapterId: this.props.chapterId ? this.props.chapterId : "",
         subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
         communityId: this.props.communityId ? this.props.communityId : "",
-        hierarchyLevel: "",
+        hierarchyLevel: -1,
         hierarchyCode: "",
         departmentId: '',
         departmentName: '',
@@ -116,7 +116,12 @@ export default class MlAssignBackednUserRoles extends React.Component {
       let specificDepartment = allData[did];
       let rolesArray = specificDepartment.roles;
       rolesArray.push(emptyRoleBox);
-      this.setState({rolesData: allData});
+      this.setState({rolesData: allData}, function () {
+        setTimeout(function () {
+          this.context.scrollArea.refresh();
+          this.context.scrollArea.scrollBottom();
+        }.bind(this));
+      });
     }
   }
 
@@ -176,7 +181,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
       chapterId: this.props.chapterId ? this.props.chapterId : "",
       subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
       communityId: this.props.communityId ? this.props.communityId : "",
-      hierarchyLevel: "",
+      hierarchyLevel: -1,
       hierarchyCode: "",
       departmentId: '',
       departmentName: '',
@@ -373,3 +378,7 @@ export default class MlAssignBackednUserRoles extends React.Component {
     )
   }
 }
+
+MlAssignBackednUserRoles.contextTypes = {
+  scrollArea: React.PropTypes.object
+};

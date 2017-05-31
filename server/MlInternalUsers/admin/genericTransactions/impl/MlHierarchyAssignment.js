@@ -2,56 +2,37 @@
 /**
  * Created by muralidhar on 23/05/17.
  */
-import MlResolver from "../../../../commons/mlResolverDef";
-import MlRespPayload from "../../../../commons/mlPayload";
+import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
 
 class MlHierarchyAssignment{
 
   findHierarchy(clusterId,departmentId,subDepartmentId,roleId){
+    let roleDetails = mlDBController.findOne('MlRoles', {_id:roleId})
     let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
       parentDepartment: departmentId,
       parentSubDepartment: subDepartmentId,
-      clusterId:clusterId
+      clusterId:roleDetails.isSystemDefined?"All":clusterId
     }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
     return hierarchy;
   }
 
-  canSelfAssignTransaction(transactionId,collection,userId) { //need to pass collection
+  canSelfAssignTransaction(transactionId,collection,userId) {
+
     var isValidAssignment = false;
-    let userID=userId,isPlatformAdmin=false,clusterId='',chapterId=[]
     let transaction = mlDBController.findOne(collection, {transactionId: transactionId});
-    //get user details iterate through profiles match with role and get clusterId
-    let user = mlDBController.findOne('users', {_id: userID}, context)
-    let userProfiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
-    userProfiles.map(function (doc,index) {
-      if(doc.isDefault) {
-        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-        for (let i = 0; i < userRoles.length; i++) {
-          let role = userRoles[i];
-          if(role.clusterId=="all"){
-            isPlatformAdmin = true
-          }else if(role.clusterId!="all" && role.chapterId=="all" && role.subChapterId=="all" && role.communityId=="all"){
-            clusterId = userRoles[i].clusterId;
-          }else if(role.clusterId!="all" && role.chapterId!="all" && role.subChapterId=="all" && role.communityId=="all"){
-            chapterId.push(userRoles[i].chapterId)
-          }
-        }
-      }
-    });
-    if(isPlatformAdmin){
+    let userProfile=new MlAdminUserContext().userProfileDetails(userId)||{};
+    let hirarichyLevel=userProfile.hierarchyLevel;
+    let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:'';
+
+    if(hirarichyLevel==4){
+      return false;
       //platform admin cannot assign to himself
     }
-    else if(clusterId!='' || chapterId.length>=1){
+    else if(clusterId!=''){
       //check valid oprational area
-      let chId = transaction.registrationInfo.chapterId ;
-      if(transaction.registrationInfo.clusterId == clusterId ){
-       //need to handle chapter
-        /*chapterId.map(function (chapter,key) {
-          if(chId == chapter){*/
-            isValidAssignment = true;
-            this.processAssignmentTransactions(transaction,userID);
-        /*  }
-        })*/
+      if(transaction.registrationInfo.clusterId == clusterId){
+        isValidAssignment = true;
+        this.processAssignmentTransactions(transaction,userId);
       }
     }
     if(isValidAssignment === true && transaction.canAssign){
@@ -62,6 +43,13 @@ class MlHierarchyAssignment{
       return false;
     }
   }
+
+
+
+  canSelfAssignTransactionAssignedTransaction(transactionId,collection,userId,assignedUserId) {
+    return this.assignTransaction(transactionId, collection, userId, assignedUserId)
+  }
+
 
   canUnAssignTransaction(transactionId,collection,userId){
      //check his team hierarchy below
@@ -77,8 +65,10 @@ class MlHierarchyAssignment{
   }
 
   assignTransaction(transactionId,collection,userId,assignedUserId){
-
     let userRole = this.getUserRoles(userId);
+    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin"){
+      return true;
+    }
     let assignedRole = this.getUserRoles(assignedUserId);
     let userhierarchy = this.findHierarchy(userRole.clusterId,userRole.departmentId,userRole.subDepartmentId,userRole.roleId);
     let assignedRolehierarchy = this.findHierarchy(assignedRole.clusterId,assignedRole.departmentId,assignedRole.subDepartmentId,assignedRole.roleId);

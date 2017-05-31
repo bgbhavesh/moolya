@@ -16,7 +16,21 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "portfolioId", title: "Requested Id",dataSort:true},
+   /* {dataField: "firstName", title: "Date & Time",dataSort:true},
+    {dataField: "lastName", title: "Requested Id",dataSort:true},
+    {dataField: "firstName", title: "Transaction Type",dataSort:true},
+    {dataField: "firstName", title: "Name",dataSort:true},
+    {dataField: "lastName", title: "Contact No",dataSort:true},
+    {dataField: "lastName", title: "Community",dataSort:true},
+    {dataField: "firstName", title: "Cluster",dataSort:true},
+    {dataField: "lastName", title: "Chapter",dataSort:true},
+    {dataField: "lastName", title: "SubChapter",dataSort:true},
+    {dataField: "firstName", title: "Subscription Type",dataSort:true},
+    {dataField: "lastName", title: "Source",dataSort:true},
+    {dataField: "lastName", title: "Created By",dataSort:true},
+    {dataField: "lastName", title: "Status",dataSort:true},
+    {dataField: "lastName", title: "Assign",dataSort:true},*/
+    {dataField: "portfolioId", title: "Portfolio Id",dataSort:true},
     {dataField: "createdAt", title: "Date & Time",dataSort:true},
     {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
@@ -30,8 +44,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "status", title: "Status",dataSort:true},
     {dataField: "assignedTo", title: "Assign",dataSort:true},
-
-],
+  ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
   actionConfiguration:[

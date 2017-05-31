@@ -12,60 +12,69 @@ class MlAdminUserContext
 
   userProfileDetails(userId)
   {
-      check(userId, String)
-      let hierarchyLevel =null;
-      let hierarchyCode=null;
-      let defaultCluster=null;
-      var isMoolya = null
-      let defaultChapters = [];
-      let defaultSubChapters = [];
-      let defaultCommunities = [];
-      var user = Meteor.users.findOne({_id:userId});
-      if(user && user.profile && user.profile.isInternaluser == true)
-      {
-          let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-          isMoolya = user.profile.isMoolya
-          let user_roles;
-          let default_User_Profiles=_.find(user_profiles, {'isDefault': true });
-          if(default_User_Profiles){
-              for(var i = 0; i < user_profiles.length; i++){
-                  if(user_profiles[i].isDefault == true){
-                      user_roles = user_profiles[i].userRoles;
-                      defaultCluster=user_profiles[i].clusterId;
-                      break;
-                  }
-              }
-          }else{ //else pick the first profile
-              user_roles=user_profiles&&user_profiles[0]&&user_profiles[0].userRoles?user_profiles[0].userRoles:[];
-              defaultCluster=user_profiles&&user_profiles[0]?user_profiles[0]["clusterId"]:null;
+   check(userId, String)
+    let hierarchyLevel =null;
+    let hierarchyCode=null;
+    let defaultCluster=null;
+    var isMoolya = null
+    let defaultChapters = [];
+    let defaultSubChapters = [];
+    let defaultCommunities = [];
+    let defaultCommunityHierarchyLevel;
+    var user = Meteor.users.findOne({_id:userId});
+    if(user && user.profile && user.profile.isInternaluser == true)
+    {
+      let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+      isMoolya = user.profile.isMoolya
+      let user_roles;
+      // Selecting Default Profile
+      let default_User_Profiles=_.find(user_profiles, {'isDefault': true });
+      //if default Profile is available then,
+      if(default_User_Profiles){
+         for(var i = 0; i < user_profiles.length; i++){
+             if(user_profiles[i].isDefault == true){
+                  user_roles = user_profiles[i].userRoles;
+                  defaultCluster=user_profiles[i].clusterId;
+                  break;
+             }
           }
-          if(user_roles && user_roles.length > 0){
-              user_roles.map(function (userRole) {
-                  if(userRole.isActive) {
-                      if (!hierarchyLevel) {
-                        hierarchyLevel = userRole.hierarchyLevel;
-                        hierarchyCode = userRole.hierarchyCode;
-                      } else if (hierarchyLevel && hierarchyLevel < userRole.hierarchyLevel) {
-                        hierarchyLevel = userRole.hierarchyLevel;
-                        hierarchyCode = userRole.hierarchyCode;
-                      }
-                      if (defaultChapters.indexOf(userRole.chapterId < 0))
-                        defaultChapters.push(userRole.chapterId)
-                      if (defaultSubChapters.indexOf(userRole.subChapterId < 0))
-                        defaultSubChapters.push(userRole.subChapterId)
-                      if (defaultCommunities.indexOf(userRole.communityId < 0))
-                        defaultCommunities.push(userRole.communityId)
-                  }
-              })
-          }
+      }else{ //else pick the first profile
+        user_roles=user_profiles&&user_profiles[0]&&user_profiles[0].userRoles?user_profiles[0].userRoles:[];
+        defaultCluster=user_profiles&&user_profiles[0]?user_profiles[0]["clusterId"]:null;
       }
-      return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,
-              defaultProfileHierarchyCode:"CLUSTER",
-              defaultProfileHierarchyRefId:defaultCluster,
-              defaultChapters:defaultChapters,
-              defaultSubChapters:defaultSubChapters,
-              defaultCommunities:defaultCommunities,
-              isMoolya:isMoolya};
+
+      if(user_roles && user_roles.length > 0)
+      {
+          user_roles.map(function (userRole) {
+              if(!hierarchyLevel){
+                  hierarchyLevel=userRole.hierarchyLevel;
+                  hierarchyCode=userRole.hierarchyCode;
+              }else if(hierarchyLevel&&hierarchyLevel<userRole.hierarchyLevel){
+                  hierarchyLevel=userRole.hierarchyLevel;
+                  hierarchyCode=userRole.hierarchyCode;
+              }
+              if(userRole.communityHierarchyLevel){
+                  defaultCommunityHierarchyLevel = userRole.communityHierarchyLevel
+              }
+              if(defaultChapters.indexOf(userRole.chapterId < 0))
+                defaultChapters.push(userRole.chapterId)
+              if(defaultSubChapters.indexOf(userRole.subChapterId< 0))
+                defaultSubChapters.push(userRole.subChapterId)
+              if(defaultCommunities.indexOf(userRole.communityId< 0))
+                defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
+                // defaultCommunities.push(userRole.communityId)
+          })
+
+      }
+    }
+        return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,
+                defaultProfileHierarchyCode:"CLUSTER",
+                defaultProfileHierarchyRefId:defaultCluster,
+                defaultChapters:defaultChapters,
+                defaultSubChapters:defaultSubChapters,
+                defaultCommunities:defaultCommunities,
+                defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
+                isMoolya:isMoolya};
   }
 
   getDefaultMenu(userId) {

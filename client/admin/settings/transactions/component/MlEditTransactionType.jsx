@@ -63,7 +63,7 @@ class MlEditTransactionType extends React.Component{
       transactionName: this.refs.transactionName.value,
       transactionDisplayName: this.refs.transactionDisplayName.value,
       transactionDescription: this.refs.transactionDescription.value,
-      isActive: this.refs.isActive.checked
+      // isActive: this.refs.isActive.checked
     }
     const response = await updateTransactionTypeActionHandler(TransactionType)
     return response;

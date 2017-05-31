@@ -26,11 +26,12 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
   {
     OnLockSwitch();
     dataVisibilityHandler();
-    initalizeFloatLabel();
+
   }
 
   componentDidUpdate()
   {
+    initalizeFloatLabel();
     OnLockSwitch();
     dataVisibilityHandler();
     var WinHeight = $(window).height();

@@ -48,8 +48,14 @@ export default class MlAssignDocument extends React.Component {
   }
 
   assignDocumentsState(id){
+    const that = this;
     this.setState({
       assignDocuments: this.state.assignDocuments.concat([{type: '',category:'',isActive:false}])
+    }, function () {
+      setTimeout(function () {
+        this.context.scrollArea.refresh();
+        this.context.scrollArea.scrollBottom();
+      }.bind(this));
     });
   }
 
@@ -146,3 +152,6 @@ export default class MlAssignDocument extends React.Component {
   }
 };
 
+MlAssignDocument.contextTypes = {
+  scrollArea: React.PropTypes.object
+};

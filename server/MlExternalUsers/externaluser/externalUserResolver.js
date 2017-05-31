@@ -105,7 +105,7 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
     var userProfiles = user.profile.isExternaluser?user.profile.externalUserProfiles:[];
 
     //todo: add isApproved Attribute to the profile
-    userProfiles=_.filter(userProfiles, {'isProfileActive': true })||[];
+    userProfiles=_.filter(userProfiles, {'isActive': true })||[];
     return userProfiles;
   }else {
     let code = 409;
@@ -114,14 +114,32 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
   }
 
 }
-
 MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, info) => {
   let userId=context.userId;
   var response=null;
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
     result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
-      {"profile.externalUserProfiles.$.isProfileActive": true}, {$set: true}, context);
+      {"profile.externalUserProfiles.$.isActive": false}, {$set: true}, context);
+    response = new MlRespPayload().successPayload({}, 200);
+  }else {
+    let code = 409;
+    response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
+
+  return response;
+
+}
+
+
+MlResolver.MlMutationResolver['blockUserProfile'] = (obj, args, context, info) => {
+  let userId=context.userId;
+  var response=null;
+  const user = Meteor.users.findOne({_id:userId}) || {}
+  if(user&&args&&args.profileId){
+    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+      {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
   }else {
     let code = 409;
@@ -140,7 +158,7 @@ MlResolver.MlMutationResolver['setDefaultProfile'] = (obj, args, context, info) 
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
 
-    result= mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'isDefault': true}}},
+    result= mlDBController.update('users', {_id:userId,'profile.externalUserProfiles':{$elemMatch: {'isDefault': true}}},
       {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
     result= mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},

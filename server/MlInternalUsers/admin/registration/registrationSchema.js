@@ -236,9 +236,7 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        transactionId   :   String,
-        canAssign       :   Boolean,
-        canUnAssign     :   Boolean
+        transactionId   :   String
     }
     
     type branchLocation{
@@ -425,6 +423,9 @@ let registrationSchema = `
         findRegistration(registrationId:String):Registration
         findRegistrationInfo(registrationId:String):RegistrationResponse
         findRegistrationInfoForUser:RegistrationResponse
+        fetchContextClusters: [Cluster]
+        fetchContextChapters(id:String): [Chapter]
+        fetchContextSubChapters(id:String): [SubChapter]
     }
     
 `

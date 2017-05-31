@@ -15,6 +15,7 @@ const mlChapterCommunitiesConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:true,
   sort:true,
+  search:false,
   viewComponent:<MlChapterCommunitiesList />,
   queryOptions:true,
   buildQueryOptions:(config)=>{

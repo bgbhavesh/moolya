@@ -156,6 +156,18 @@ class MlDBController{
     let response = collection.findOne(query);
     return response;
   }
+
+  aggregate(collectionName, pipeline, context) {
+    let collection;
+    if(collectionName == "users") {
+      collection = Meteor.users
+    }
+    else{
+      collection = MlCollections[collectionName]
+    }
+    let response = collection.aggregate(pipeline);
+    return response;
+  }
 }
 
 

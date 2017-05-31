@@ -25,7 +25,9 @@ export default class MlFilterListRepo{
     let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
     let chapterIds = userProfile && userProfile.defaultChapters?userProfile.defaultChapters:[];
     let subChapterIds = userProfile && userProfile.defaultSubChapters?userProfile.defaultSubChapters:[];
-    let communityIds = userProfile && userProfile.defaultCommunities?userProfile.defaultCommunities:[];
+    // let communityIds = userProfile && userProfile.defaultCommunities?userProfile.defaultCommunities:[];
+    let communityCode = userProfile && userProfile.defaultCommunities?userProfile.defaultCommunities:[];
+    communityCode = _.pluck(communityCode, 'communityCode')
     userProfiles.map(function (doc,index) {
 
       let userRoles = doc && doc.userRoles ? doc.userRoles : [];
@@ -57,83 +59,12 @@ export default class MlFilterListRepo{
     }
     let  options=[]
     switch (requestParams.moduleName) {
-/*      case "Reg_Clusters":
-
-          clusterIds = [clusterIds]
-
-        if(listData.length < 1){
-          let allclusterIds = _.contains(clusterIds,"all");
-          if(allclusterIds){
-            result = MlClusters.find({isActive : true}).fetch();
-          }else{
-            result= MlClusters.find({ _id: { $in: clusterIds },isActive : true}).fetch();
-          }
-
-        }else{
-
-          result= MlClusters.find({ _id: { $in: listData },isActive : true}).fetch();
-        }
-
-        let resultResponse=_.each(result,function (option,id) {
-          options.push({"label":option.displayName,"value":option._id})
-        })
-
-        break;
-      case "Reg_Chapters":
-        if(listData.length < 1){
-          let allchapterIds = _.contains(chapterIds,"all");
-          if(allchapterIds){
-            result = MlChapters.find({isActive : true}).fetch();
-          }else{
-            result= MlChapters.find({ _id: { $in: chapterIds },isActive : true}).fetch();
-          }
-
-        }else{
-          let arrayOfValues = _.pluck(requestParams.filteredListId, 'value') || [];
-          result= MlChapters.find({ clusterId: {$in : arrayOfValues},isActive : true}).fetch();
-        }
-
-
-
-        let chapterResponse=_.each(result,function (option,id) {
-          options.push({"label":option.displayName,"value":option._id})
-        })
-
-        break;
-
-      case "Reg_SubChapters":
-
-        if(listData.length < 1){
-          if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 2){
-            let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
-            result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
-          }else{
-            let allsubChapterIds = _.contains(subChapterIds, "all");
-            if (allsubChapterIds) {
-              result = MlSubChapters.find({isActive: true}).fetch();
-            } else {
-              result = MlSubChapters.find({_id: {$in: subChapterIds}, isActive: true}).fetch();
-            }
-          }
-
-        }else{
-          let arrayOfSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
-          result= MlSubChapters.find({clusterId: {$in : arrayOfSubChapter}, chapterId: {$in : arrayOfSubChapter},isActive : true}).fetch();
-
-        }
-
-
-
-        let subchapterResponse=_.each(result,function (option,id) {
-          options.push({"label":option.subChapterDisplayName,"value":option._id})
-        })
-
-        break;*/
 
       case "Gen_Community":
 
         if(listData.length < 1){
-          let allCommuntities = _.contains(communityIds,"all");
+          // let allCommuntities = _.contains(communityIds,"all");
+          let allCommuntities = _.contains(communityCode,"all") || [];
           if(allCommuntities){
             result = MlCommunityDefinition.find({isActive : true}).fetch();
           }else{
@@ -202,7 +133,7 @@ export default class MlFilterListRepo{
       case "Gen_Chapters":
 
         if(listData.length < 1){
-          if(userProfile.hierarchyLevel == 4){
+          if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3){
             let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
           }else{
@@ -253,7 +184,7 @@ export default class MlFilterListRepo{
 
 
         let genSubChapterResponse=_.each(result,function (option,id) {
-          options.push({"label":option.subChapterDisplayName,"value":option._id})
+          options.push({"label":option.subChapterName,"value":option._id})
         })
 
         break;

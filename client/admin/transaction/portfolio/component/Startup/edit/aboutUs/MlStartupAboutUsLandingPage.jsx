@@ -6,6 +6,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formE
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+var Rating = require('react-rating');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 
@@ -40,8 +41,13 @@ export default class MlStartupAboutUs extends React.Component{
     console.log(this.state.startupAboutUs.aboutUs);
     return (
       <div>
-      {this.state.aboutStartup===false?(<div className="admin_padding_wrap portfolio-main-wrap">
-        <h2>Portfolio</h2>
+      {this.state.aboutStartup===false?(<div className=" portfolio-main-wrap">
+        <ScrollArea
+          speed={0.8}
+          className="main_wrap_scroll"
+          smoothScrolling={true}
+          default={true}
+        >        <h2>Portfolio</h2>
         <div className="col-md-6 col-sm-6 nopadding">
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">About Us <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
@@ -54,7 +60,15 @@ export default class MlStartupAboutUs extends React.Component{
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
             <div className="panel-body">
-              Rating
+              <div className="star_ratings">
+                <Rating
+                  empty="fa fa-star-o empty"
+                  full="fa fa-star fill"
+                  fractions={2}
+                  initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? this.state.startupAboutUs.rating.rating : 0}
+                  readonly={true}
+                />
+              </div>
             </div>
           </div>
           <div className="clearfix"></div>
@@ -84,7 +98,7 @@ export default class MlStartupAboutUs extends React.Component{
           </div></div>
 
         </div>
-
+        </ScrollArea>
       </div>):(<div>{<MlStartupTab getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs}></MlStartupTab> }</div>)}
       </div>
 

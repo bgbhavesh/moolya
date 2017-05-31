@@ -39,13 +39,18 @@ import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings
 import MlMyProfile from '../../admin/profile/component/MlMyprofile'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 
+import  MlAdminSwitchProfile from '../../admin/profile/component/MlAdminSwitchProfile'
 import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio'
 import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
 import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
 import MlTransactionApprovals from '../../admin/transaction/requests/components/MlTransactionApprovals'
 import MlInteractionsLogList from '../../admin/transaction/interactions/component/MlinteractionsLogList'
 import MlConversationsLogList from '../../admin/transaction/conversations/component/MlConversationsLogList'
+import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
+
+import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
+import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
 
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
@@ -100,7 +105,12 @@ adminSection.route('/myprofile/Settings', {
     mount(AdminLayout,{headerContent:<MlAdminProfileHeader />,adminContent:< MyProfileSettings/>})
   }
 });
-
+adminSection.route('/switchprofile', {
+  name: 'myprofile',
+  action(){
+    mount(AdminLayout,{adminContent:<MlAdminSwitchProfile/>})
+  }
+});
 
 adminSection.route('/dashboard/subChapters/:chapterId', {
   name: 'dashboard_subChapters',
@@ -152,19 +162,19 @@ adminSection.route('/community/:communityId/assignusers', {
 adminSection.route('/documents/clusterList', {
   name: 'documents_ClusterList',
   action(){
-    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'documents','showBreadCrum':true,'module':'cluster'}} />, adminContent:<MlProcessDocumentList/>})
   }
 });
 adminSection.route('/documents/chapterList', {
   name: 'documents_ChapterList',
   action(){
-    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'documents','showBreadCrum':true,'module':'chapter'}} />, adminContent:<MlProcessDocumentList/>})
   }
 });
 adminSection.route('/documents/communityList', {
   name: 'documents_CommunityList',
   action(){
-    mount(AdminLayout,{adminContent:<MlProcessDocumentList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'documents','showBreadCrum':true,'module':'community'}} />, adminContent:<MlProcessDocumentList/>})
   }
 });
 adminSection.route('/documents/:pid/:kycid/:docid', {
@@ -178,21 +188,23 @@ adminSection.route('/documents/:pid/:kycid/:docid', {
 adminSection.route('/transactions/requestedList', {
   name: 'transaction_RequestList',
   action(){
-    mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlInternalRequestsList/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionRequested/>})
   }
 });
 
 adminSection.route('/transactions/approvedList', {
   name: 'transaction_ApprovedList',
   action(){
-    mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'approvels'}} />, adminContent:<MlApprovedInternalRequestsList/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
   }
 });
 
 adminSection.route('/transactions/registrationApprovedList', {
   name: 'transaction_registration_approved',
   action(){
-    mount(AdminLayout,{adminContent:<MlRegistrtionApprovedList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'approved'}} />,  adminContent:<MlRegistrtionApprovedList/>})
   }
 });
 
@@ -207,7 +219,7 @@ adminSection.route('/transactions/registrationRequested/edit', {
 adminSection.route('/transactions/registrationRequested', {
   name: 'transaction_registration_requested',
   action(params){
-    mount(AdminLayout,{adminContent:<MlRequestedList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'requested'}} />, adminContent:<MlRequestedList/>})
   }
 });
 
@@ -215,24 +227,23 @@ adminSection.route('/transactions/registrationRequested', {
 adminSection.route('/transactions/systemsLog', {
   name: 'systems_Log',
   action(params){
-    mount(AdminLayout,{adminContent:<MlSystemsLogList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'system'}} />, adminContent:<MlSystemsLogList/>})
   }
 });
 
 adminSection.route('/transactions/interactionsLog', {
   name: 'Interactions_Log',
   action(params){
-    mount(AdminLayout,{adminContent:<MlInteractionsLogList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'interactions'}} />, adminContent:<MlInteractionsLogList/>})
   }
 });
 
 adminSection.route('/transactions/conversationsLog', {
   name: 'Conversations_Log',
   action(params){
-    mount(AdminLayout,{adminContent:<MlConversationsLogList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'conversations'}} />, adminContent:<MlConversationsLogList/>})
   }
 });
-
 
 adminSection.route('/transactions/portfolioRequested/edit', {
     name: 'transaction_portfolio_requested_edit',
@@ -278,26 +289,26 @@ adminSection.route('/transactions/editRequests/:id', {
 adminSection.route('/transactions/createRegistration', {
   name: 'transaction_registration_create',
   action(params){
-    mount(AdminLayout,{adminContent:<MlCreateRegistration/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'create'}} />, adminContent:<MlCreateRegistration/>})
   }
 });
 // ************* Portfolio Routes **************
 adminSection.route('/transactions/portfolio/requestedPortfolioList', {
   name: 'portfolio_requested',
   action(params){
-    mount(AdminLayout,{adminContent:<MlRequestedPortfolioList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'requested'}} />, adminContent:<MlRequestedPortfolioList/>})
   }
 });
 adminSection.route('/transactions/portfolio/approvedPortfolioList', {
   name: 'portfolio_approved',
   action(params){
-    mount(AdminLayout,{adminContent:<MlApprovedPortfolioList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'approved'}} />, adminContent:<MlApprovedPortfolioList/>})
   }
 });
 adminSection.route('/transactions/portfolio/createPortfolio', {
   name: 'portfolio_create',
   action(params){
-    mount(AdminLayout,{adminContent:<MlCreatePortfolio/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'create'}} />, adminContent:<MlCreatePortfolio/>})
   }
 });
 

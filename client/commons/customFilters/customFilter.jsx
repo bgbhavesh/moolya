@@ -31,6 +31,15 @@ export default class MlCustomFilter extends Component {
     $('.filter_btn').click(function(){
       $('.filter_table').toggleClass('filter_hide');
     });
+    setTimeout(function(){
+      $('[data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
+      $('[data-toggle="tooltip').on('click', function () {
+        $(this).tooltip('hide');
+      });
+    },1000);
   }
   componentDidUpdate(){
     initalizeFloatLabel();
@@ -42,26 +51,41 @@ export default class MlCustomFilter extends Component {
   }
   onFromDateSelection(fieldName,subType,event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedFromDate: value});
       this.setFilterData(fieldName,value,"Date",subType)
     }
   }
   onToDateSelection(fieldName,subType,event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedToDate: value});
       this.setFilterData(fieldName,value,"Date",subType)
     }
   }
-  optionsSelected(index,selectedFieldName, selectedValue, callback,selObject){
+  optionsSelected(index,selectedFieldName,displayName, selectedValue, callback,selObject){
+    if(displayName == "Cluster"){
+      let selectedValues = this.state.selectedDropdownValues
+      let that = this;
+      var result = _.map(selectedValues, function (currentObject) {
+        let selectedOption = null;
+        if(currentObject["selectedOption"] != "selectedOption_registrationInfo.communityDefName"){
+          selectedOption = currentObject["selectedOption"];
+        }
 
+        that.setState({[selectedOption] : ""})
+
+
+      });
+    }
     let selectedOption = "selectedOption_"+selectedFieldName;
+
     let selectedValues = this.state.selectedDropdownValues;
     selectedValues.push({selectedOption})
     this.setState({selectedDropdownValues : selectedValues})
     this.setState({[selectedOption] : selectedValue})
     this.setFilterData(selectedFieldName,selectedValue,"List",null)
+
 
 
   }
@@ -87,7 +111,7 @@ export default class MlCustomFilter extends Component {
         });
 
         if(selectedType == "Date"){
-          let dateSelect = {"fieldName" : selectedFieldName,"value" :  JSON.stringify(this.state.dateQuery),"fieldType" : selectedType,"operator" : selectedSubType}
+          let dateSelect = {"fieldName" : selectedFieldName,"value" :  JSON.stringify(this.state.dateQuery),"fieldType" : selectedType,"operator" :'$and' }
           queries.push(dateSelect)
         }else{
           queries.push(selector);
@@ -247,7 +271,7 @@ export default class MlCustomFilter extends Component {
                 return(<span key={id}>
                   {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="fromDateInput" dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
                   {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="toDateInput" dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
-                  {options.isActive&&listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} ref="listSelect" placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName)} isDynamic={true} id={'list'+id}/></div>:""}
+                  {options.isActive&&listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} ref="listSelect" placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName,options.displayName)} isDynamic={true} id={'list'+id}/></div>:""}
                   {options.isActive&&stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)} disabled={options.isRestrictedFilter}/></div>:""}
                   {/*{booleanSelect?<div className="col-lg-3">
                     <div className="input_types label_name">
@@ -314,7 +338,7 @@ export default class MlCustomFilter extends Component {
 
 
         </div>
-        <div className="filter_btn"><img src="/images/filter_icon.png"/></div>
+        <div className="filter_btn"  data-toggle="tooltip" title="Filter"><img src="/images/filter_icon.png"/></div>
       </div>
     )
   }

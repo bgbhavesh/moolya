@@ -19,7 +19,7 @@ if(!department) {
     displayName: "Operations",
     departmentDesc: "Operations Department",
     isActive: true,
-    isMoolya: false,
+    isMoolya: true,
     depatmentAvailable: departmentAvailiable,
     isSystemDefined: true
   };
@@ -229,7 +229,7 @@ if(!userObj){
 
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(role){
-  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:dep._id, departmentName:dep.departmentName, subDepartmentId:subDep._id, subDepartmentName:subDep.subDepartmentName}]
+  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", communityCode : "all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:dep._id, departmentName:dep.departmentName, subDepartmentId:subDep._id, subDepartmentName:subDep.subDepartmentName}]
   var userProfiles = [{
     clusterId:"all",
     userRoles:userRoles,
@@ -502,7 +502,7 @@ validateinternalUserLoginAttempt=(user)=>{
               subChapterActive = true
             }
 
-            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityId}, {isActive:true}]})
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityCode}, {isActive:true}]})
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }

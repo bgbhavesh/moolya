@@ -1368,3 +1368,12 @@ button.close {
 .m_yel{color:#ffc20e;}
 
 .menu_count{background: #EF4647; position: absolute; color: #FFF; z-index: 9; border-radius: 50%;width: 22px; height: 22px; line-height: 22px; font-size: 9px; right: -15px; top: -8px; text-align: center;}
+
+.popover-custom-class {
+  position: fixed !important;
+  bottom: 65px;
+}
+
+.popover-custom-class div{
+  bottom: 0;
+}

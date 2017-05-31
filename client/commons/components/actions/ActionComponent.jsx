@@ -38,7 +38,7 @@ export default class MlActionComponent extends Component {
   }
 
   onMultiEdit(){
-    toastr.error("Multiple records cannot be edited");
+    toastr.error("Multiple records cannot be edited, Please select a record");
   }
 
 

@@ -80,7 +80,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "AUDIT_LOG":
       let auditParams=args.context;
       result=CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context);
-    case "hierarchySubChapters":
+    case "hierarchy":
       result=CoreModulesRepo.MlHierarchySubChapterRepo(args.context,contextQuery,findOptions, context);
       break;
     case "registrationInfo":
@@ -135,7 +135,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "community":resolveType= 'Community';break;
       case "MASTERSETTINGS":resolveType= 'MasterSettings';break;
       case "AUDIT_LOG":resolveType= 'AuditLogs';break;
-      case "hierarchySubChapters":resolveType= 'SubChapter';break;
+      case "hierarchy":resolveType= 'SubChapter';break;
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
       case "portfolioRequests":resolveType= 'Portfoliodetails';break;

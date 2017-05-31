@@ -37,8 +37,14 @@ export default class MlActionComponent extends Component {
 
   }
 
+  onMultiEdit(){
+    toastr.error("Multiple records cannot be edited");
+  }
+
 
   render(){
+    const count = this.props.count;
+    const that = this;
     let config=[
       {
         imagefield:'/images/edit_icon.png',
@@ -140,7 +146,7 @@ export default class MlActionComponent extends Component {
         }
         return (
           <div className={`${activeClass} `} key={option.actionName}  >
-            <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `} data-toggle="tooltip" title={option.actionName} data-placement="top" >
+            <div onClick={( (count > 1 && option.actionName =='edit') ? that.onMultiEdit.bind(that) : (option.handler&&option.handler.bind(this,option)))} key={option.actionName}   className={`${activesubclass} `} data-toggle="tooltip" title={option.actionName} data-placement="top" >
               {/*<img src={action['imagefield']} />*/}
               <span className={action['iconClass']} id={option.iconID}></span>
             </div></div>

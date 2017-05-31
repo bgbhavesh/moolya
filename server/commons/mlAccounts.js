@@ -339,7 +339,7 @@ Meteor.methods({
 })
 
 Accounts.validateLoginAttempt(function (details) {
-  if(details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
+  if(details.user&&details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
     let departmentId = details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department;
     if(departmentId !='all') {
       mlDBController = new MlDBController();

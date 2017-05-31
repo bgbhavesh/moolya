@@ -46,23 +46,25 @@ class MlAdminUserContext
 
       if(user_roles && user_roles.length > 0)
       {
-          user_roles.map(function (userRole) {
-              if(!hierarchyLevel){
-                  hierarchyLevel=userRole.hierarchyLevel;
-                  hierarchyCode=userRole.hierarchyCode;
-              }else if(hierarchyLevel&&hierarchyLevel<userRole.hierarchyLevel){
-                  hierarchyLevel=userRole.hierarchyLevel;
-                  hierarchyCode=userRole.hierarchyCode;
-              }
-              if(userRole.communityHierarchyLevel){
+          user_roles.map(function (userRole)
+          {
+              if(userRole.isActive) {
+                if (!hierarchyLevel) {
+                  hierarchyLevel = userRole.hierarchyLevel;
+                  hierarchyCode = userRole.hierarchyCode;
+                } else if (hierarchyLevel && hierarchyLevel < userRole.hierarchyLevel) {
+                  hierarchyLevel = userRole.hierarchyLevel;
+                  hierarchyCode = userRole.hierarchyCode;
+                }
+                if (userRole.communityHierarchyLevel) {
                   defaultCommunityHierarchyLevel = userRole.communityHierarchyLevel
-              }
-              if(defaultChapters.indexOf(userRole.chapterId < 0))
-                defaultChapters.push(userRole.chapterId)
-              if(defaultSubChapters.indexOf(userRole.subChapterId< 0))
-                defaultSubChapters.push(userRole.subChapterId)
-              if(defaultCommunities.indexOf(userRole.communityId< 0))
-                defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
+                }
+                if (defaultChapters.indexOf(userRole.chapterId < 0))
+                  defaultChapters.push(userRole.chapterId)
+                if (defaultSubChapters.indexOf(userRole.subChapterId < 0))
+                  defaultSubChapters.push(userRole.subChapterId)
+                if (defaultCommunities.indexOf(userRole.communityId < 0))
+                  defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
                 // defaultCommunities.push(userRole.communityId)
               roleName = userRole.roleName
           })

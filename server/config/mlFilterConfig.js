@@ -179,4 +179,111 @@ if(Meteor.isServer){
     }});
   }
 
+  //for internalRequests
+  let internalRequestFilterExists = MlFilters.findOne({"moduleName":"internalRequests"});
+  if(!internalRequestFilterExists){
+    MlFilters.upsert({"moduleName" : "internalRequests"},{$set:{
+      "filterName" : "Internal Request Filter",
+      "filterDescription" : "Internal Request Filter",
+      "isActive" : true,
+      "moduleName" : "internalRequests",
+      "filterFields" : [
+        {
+          "fieldName" : "cluster",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "chapter",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "subChapter",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "community",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "transactionCreatedDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
+
+  //for approvedRequests
+  let approvedRequestFilterExists = MlFilters.findOne({"moduleName":"internalApprovedRequests"});
+  if(!approvedRequestFilterExists){
+    MlFilters.upsert({"moduleName" : "internalApprovedRequests"},{$set:{
+      "filterName" : "Internal Approved Request Filter",
+      "filterDescription" : "Internal Approved Request Filter",
+      "isActive" : true,
+      "moduleName" : "internalApprovedRequests",
+      "filterFields" : [
+        {
+          "fieldName" : "cluster",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "chapter",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "subChapter",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "community",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "transactionCreatedDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
 }

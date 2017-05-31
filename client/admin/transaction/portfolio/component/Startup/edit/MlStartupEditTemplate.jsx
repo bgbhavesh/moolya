@@ -94,7 +94,12 @@ export default class MlStartupEditTemplate extends React.Component{
     if(data && !data.awardsRecognition){
       data['awardsRecognition']=[];
     }
-    data['awardsRecognition'] = details;
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['awardsRecognition'] = arr;
     this.setState({startupPortfolio : data})
     this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }

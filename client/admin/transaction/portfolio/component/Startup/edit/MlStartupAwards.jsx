@@ -170,8 +170,8 @@ export default class MlStartupAwards extends React.Component{
           }
         }
         newItem = _.omit(item, "__typename");
-        let updateItem = _.omit(newItem, 'logo');
-        arr.push(updateItem)
+        //let updateItem = _.omit(newItem, 'logo');
+        arr.push(newItem)
     })
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
@@ -194,7 +194,7 @@ export default class MlStartupAwards extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
-        this.imagesDisplay()
+        this.imagesDisplay();
       }
     }
   }
@@ -210,6 +210,7 @@ export default class MlStartupAwards extends React.Component{
         let curUpload=response[thisState]
         specificData['logo']= curUpload['logo']
         this.setState({loading: false, startupAwards:cloneBackUp });
+
       }else {
         this.setState({loading: false})
       }

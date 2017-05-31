@@ -50,16 +50,17 @@ export default class CreateRequestComponent extends Component {
     }
     const response = await createRequestsActionHandler(requests);
     if(response.success){
+      this.props.refreshList();
       this.setState({show:false,requestType:null})
-      this.toggle();
-      this.findRequestDetails();
+      // this.toggle();
+      // this.findRequestDetails();
       toastr.success("Request is created successfully");
       FlowRouter.go("/admin/transactions/requestedList");
 
     }else{
       this.setState({show:false,requestType:null})
       toastr.error(response.result);
-      this.toggle();
+      // this.toggle();
       this.setState({requestType:null})
       FlowRouter.go("/admin/transactions/requestedList");
     }
@@ -151,7 +152,7 @@ export default class CreateRequestComponent extends Component {
     let communityOption={options: { variables: {clusterId:this.state.cluster, chapterId:this.state.chapter, subChapterId:this.state.subChapter}}};
 
     return (
-      <div>
+      <div className="popover-custom-class">
         {this.state.show==true?
           <div className="panel panel-default-bottom col-md-12">
             <div className="mrgn-btm">

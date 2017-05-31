@@ -321,20 +321,27 @@ export default class step1 extends React.Component{
     label:country
   }
 }`
-    let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}
+
+    let clusterQuery=gql`query{
+     data:fetchContextClusters {
+        value:_id
+        label:countryName
+      }
+    }
     `;
-    let chapterQuery = gql`query($id:String){  
-  data:fetchChaptersWithoutAll(id:$id) {
-    value:_id
-    label:chapterName
-  }  
-}`;
-    let subChapterQuery= gql`query($id:String,$displayAllOption:Boolean){  
-      data:fetchSubChaptersSelect(id:$id,displayAllOption:$displayAllOption) {
+    let chapterQuery =gql`query($id:String){  
+      data:fetchContextChapters(id:$id) {
+        value:_id
+        label:chapterName
+      }  
+    }`;
+    let subChapterQuery= gql`query($id:String){  
+      data:fetchContextSubChapters(id:$id) {
         value:_id
         label:subChapterName
       }  
     }`;
+
     /*    let citiesquery = gql`query{
      data:fetchCities {label:name,value:_id
      }
@@ -372,7 +379,7 @@ export default class step1 extends React.Component{
     let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
     let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-    let subChapterOption={options: { variables: {id:this.state.chapter,displayAllOption:false}}}
+    let subChapterOption={options: { variables: {id:this.state.chapter}}}
     /*let registrationOptions = [
      { value: '0', label: 'simplybrowsing' },
      { value: '1', label: 'ideator' },

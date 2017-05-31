@@ -110,6 +110,7 @@ class MlEditAssignTemplate extends React.Component{
         subProcess        : response.templatesubProcess,
         processName       : response.processName,
         subProcessName    : response.subProcessName,
+        templateGroupName : response.templateGroupName,
         communities       : response.templatecommunityCode,
         userTypes         : response.templateuserType,
         identity          : response.templateidentity,
@@ -133,6 +134,7 @@ class MlEditAssignTemplate extends React.Component{
       templatesubProcess        : this.state.subProcess,
       templateProcessName       : this.state.processName,
       templateSubProcessName    : this.state.subProcessName,
+      templateGroupName         : this.refs.templateGroupName.value,
       templateclusterId         : this.state.clusters,
       templateclusterName       : this.state.clusterName,
       templatechapterId         : this.state.chapters,
@@ -311,6 +313,10 @@ class MlEditAssignTemplate extends React.Component{
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Sub Process"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subProcess} queryType={"graphql"} query={subProcessQuery} queryOptions={subprocessOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubProcess.bind(this)} />
+                        </div>
+                        <div className="form-group">
+                          <input ref="templateGroupName" value={this.state.templateGroupName&&this.state.templateGroupName} readOnly="true"
+                                 placeholder="Group Name" className="form-control float-label"></input>
                         </div>
                         <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />

@@ -12,6 +12,7 @@ export async function findStepTemplatesAssignmentActionHandler(templateId) {
           templatesubProcess
           templateProcessName
           templateSubProcessName
+          templateGroupName
           createdBy
           createdDate
           templateclusterId

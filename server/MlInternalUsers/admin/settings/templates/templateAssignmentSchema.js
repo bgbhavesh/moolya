@@ -33,6 +33,7 @@ let TemplateAssignment = `
             templatesubProcess        : String
             templateProcessName       : String
             templateSubProcessName    : String
+            templateGroupName         : String
             assignedTemplates         : [template]    
             createdBy                 : String      
             createdDate               : Date  
@@ -68,6 +69,7 @@ let TemplateAssignment = `
             templatesubProcess        : String
             templateProcessName       : String
             templateSubProcessName    : String
+            templateGroupName         : String
             assignedTemplates         : [stepInput]    
             createdBy                 : String      
             createdDate               : Date  

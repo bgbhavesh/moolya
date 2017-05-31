@@ -30,6 +30,7 @@ class MlAssignTemplate extends React.Component{
       processName : '',
       subProcess  : '',
       subProcessName : '',
+      templateGroupName:'',
       userTypes   : '',
       identity    : '',
       clusters    : '',
@@ -88,6 +89,7 @@ class MlAssignTemplate extends React.Component{
       templatesubProcess        : this.state.subProcess,
       templateProcessName       : this.state.processName,
       templateSubProcessName    : this.state.subProcessName,
+      templateGroupName         : this.refs.templateGroupName.value,
       templateclusterId         : this.state.clusters,
       templateclusterName       : this.state.clusterName,
       templatechapterId         : this.state.chapters,
@@ -283,6 +285,12 @@ class MlAssignTemplate extends React.Component{
                         <div className="form-group">
                            <Moolyaselect multiSelect={false}  placeholder={"Sub Process"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subProcess} queryType={"graphql"} query={subProcessQuery} queryOptions={subprocessOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubProcess.bind(this)} />
                         </div>
+
+                        <div className="form-group">
+                          <input ref="templateGroupName"
+                                 placeholder="Group Name" className="form-control float-label"></input>
+                        </div>
+
                         <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
                         </div>

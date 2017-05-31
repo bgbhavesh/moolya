@@ -546,7 +546,7 @@ export default class step1 extends React.Component{
                 </ScrollArea>
               </div>
               <div className="col-md-6 nopadding-right">
-                <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+                 <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
 
                 <div className="form_bg">
                   <form>
@@ -579,19 +579,21 @@ export default class step1 extends React.Component{
                     <div className="form-group mandatory">
                       <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
                       <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required" />
+                     <br className="clearfix"/>                      <br className="clearfix"/>
+
                     </div>
 
-                    {/* <div className="panel panel-default">
+                     <div className="panel panel-default">
                      <div className="panel-heading">Process Status</div>
                      <div className="panel-body button-with-icon">
                      <button type="button" className="btn btn-labeled btn-success"  onClick={this.sendSmsVerification.bind(this)} >
-                     <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
+                     <span className="btn-label"><FontAwesome name='key'/></span>Re Send OTP</button>
                      <button type="button" className="btn btn-labeled btn-success" onClick={this.sendEmailVerification.bind(this)}>
-                     <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
-                     /!*<button type="button" className="btn btn-labeled btn-success" >
-                     <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*!/
+                     <span className="btn-label"><span className="ml ml-email"></span></span>Re Send Email</button>
+                    {/* <button type="button" className="btn btn-labeled btn-success" >
+                     <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*/}
                      </div>
-                     </div>*/}
+                     </div>
 
                   </form>
                 </div>

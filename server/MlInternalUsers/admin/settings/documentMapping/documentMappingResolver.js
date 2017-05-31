@@ -9,7 +9,25 @@ MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => 
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
-
+  let query ={
+    "$or":[
+      {
+        documentName: {
+          "$regex" : new RegExp('^' + args.document.documentName + '$', 'i')
+        }
+      },
+      {
+        documentDisplayName: {
+          "$regex" :new RegExp("^" + args.document.documentDisplayName + '$','i')}
+      }
+    ]
+  };
+  let isFind = MlDocumentMapping.find(query).fetch();
+  if(isFind.length){
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+    return response;
+  }
   let id = MlDocumentMapping.insert({...args.document});
   if (id) {
     let code = 200;
@@ -27,6 +45,31 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
   }
 
   if (args.documentId) {
+    let id = args.documentId;
+    let query = {
+      "documentId":{
+        "$ne": id
+      },
+      "$or":[
+        {
+          documentName: {
+            "$regex" : new RegExp('^' + args.document.documentName + '$', 'i')
+          }
+        },
+        {
+          documentDisplayName: {
+            "$regex" :new RegExp("^" + args.document.documentDisplayName + '$','i')}
+        }
+      ]
+    };
+    let isFind = MlDocumentMapping.find(query).fetch();
+    if(isFind.length) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
+      return response;
+    }
+
+
     args=_.omit(args,'_id');
     let result= MlDocumentMapping.update({documentId:args.documentId}, {$set: args.document});
     let code = 200;
@@ -129,22 +172,38 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
     if(clusterId.length==1&&clusterId[0]=="all"&&chapterId[0]=="all"&&subChapterId[0]=="all"){
        data = MlDocumentMapping.find({ documentType : { $in: [id] },isActive:true}).fetch();
     }else {
-       data = MlDocumentMapping.find({
-        documentType: {$in: [id]},
-        clusters: {$in: clusterId},
-         chapters: {$in: chapterId},
-         subChapters:{$in: subChapterId},
-        isActive: true
-      }).fetch();
-       if(data.length<1){
-         data = MlDocumentMapping.find({
-           documentType: {$in: [id]},
-           clusters: {$in: ["all"]},
-           chapters: {$in: ["all"]},
-           subChapters:{$in: ["all"]},
-           isActive: true
-         }).fetch();
-       }
+      let count=1
+      if(clusterId.length>=1){
+        for(var i=0;i<clusterId.length;i++){
+          let docResult=MlDocumentMapping.find({
+            clusters: {$in: [clusterId[i]]
+            },
+            isActive: true
+          }).fetch();
+          if(docResult.length>=1){
+                count++
+          }
+        }
+      }
+      if(clusterId.length==(count-1)){
+        data = MlDocumentMapping.find({
+          documentType: {$in: [id]},
+          clusters: {$in: clusterId},
+          chapters: {$in: chapterId},
+          subChapters:{$in: subChapterId},
+          isActive: true
+        }).fetch();
+        if(data.length<1){
+          data = MlDocumentMapping.find({
+            documentType: {$in: [id]},
+            clusters: {$in: ["all"]},
+            chapters: {$in: ["all"]},
+            subChapters:{$in: ["all"]},
+            isActive: true
+          }).fetch();
+        }
+      }
+
     }
     let kycId=[]
     data.map(function (doc,index) {

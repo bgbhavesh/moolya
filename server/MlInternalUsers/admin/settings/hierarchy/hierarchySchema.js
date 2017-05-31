@@ -37,8 +37,8 @@ let HierarchySchema = `
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
-        fetchRolesForDepartment(departmentId:String,clusterId:String):[Roles]
-        fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String): [Roles]
+        fetchRolesForDepartment(departmentId:String,subDepartmentId:String,clusterId:String):[Roles]
+        fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String,currentRoleId:String): [Roles]
         fetchRolesForFinalApprovalHierarchy(departmentId:String): [Roles]
     }
     type Mutation{

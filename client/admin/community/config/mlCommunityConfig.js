@@ -51,6 +51,7 @@ const mlCommunityListConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:true,
   sort:true,
+  search:false,
   viewComponent:<MlCommunityList />,
   graphQlQuery:gql`
               query{
@@ -77,6 +78,8 @@ const mlCommunityChaptersConfig=new MlViewer.View({
   viewType:MlViewerTypes.LIST,
   extraFields:[],
   throttleRefresh:true,
+  fields:["displayName"],
+  searchFields:["displayName"],
   pagination:true,
   sort:true,
   viewComponent:<MlCommunityChapterList />,
@@ -91,8 +94,8 @@ const mlCommunityChaptersConfig=new MlViewer.View({
       return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   graphQlQuery:gql`
-      query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-      data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+      query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec, $fieldsData:[GenericFilter]){
+      data:ContextSpecSearch(module:"chapter",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec, fieldsData:$fieldsData){
             totalRecords
             data{
              ...on Chapter{

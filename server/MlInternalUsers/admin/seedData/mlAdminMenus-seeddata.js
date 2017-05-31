@@ -684,16 +684,16 @@ if(Meteor.isServer){
                 "subMenuMappingId":"portfolio_approved"
               },
 
-              {
-                "link" : "/admin/transactions/portfolio/createPortfolio",
-                "name" : "Create",
-                "uniqueId" : "portfolio_create",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio",
-                //"subMenuMappingId":"transaction_registration_create"
-              },
+              // {
+              //   "link" : "/admin/transactions/portfolio/createPortfolio",
+              //   "name" : "Create",
+              //   "uniqueId" : "portfolio_create",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio",
+              //   //"subMenuMappingId":"transaction_registration_create"
+              // },
               {
                 "link" : "/admin/transactions/portfolio/history",
                 "name" : "History",
@@ -1148,6 +1148,45 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/actionsAndStatusesList",
+            "name" : "Action & Status",
+            "uniqueId" : "settings_Action_And_Status",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link" : "/admin/settings/actionsAndStatusesList",
+                "name" : "Action & Status",
+                "uniqueId": "settings_Action_And_Status_List",
+                "subMenuMappingId":"settings_Action_And_Status",
+                "subMenusId":"settings",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+              },
+              {
+              "link": "/admin/settings/actionsAndStatusesEdit",
+              "name": "Edit Action & Status",
+              "uniqueId": "settings_Action_And_Status_Edit",
+              "subMenuMappingId":"settings_Action_And_Status",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": "",
+              subMenu: [{
+                "link": "/admin/settings/actionsAndStatusesEdit",
+                "name": "Generic",
+                "uniqueId": "settings_Action_And_Status_Edit_Generic",
+                "subMenuMappingId":"settings_Action_And_Status_Edit",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+            }]
           },
           {
             "link" : "/admin/settings/userTypeList",

@@ -80,6 +80,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "AUDIT_LOG":
       let auditParams=args.context;
       result=CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
     case "hierarchy":
       result=CoreModulesRepo.MlHierarchySubChapterRepo(args.context,contextQuery,findOptions, context);
       break;
@@ -92,6 +93,16 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams=args.context||{};
       requestParams.type='approved';
       result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "internalRequests":
+      requestParams=args.context||{};
+      requestParams.type='requested';
+      result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "internalApprovedRequests":
+      requestParams=args.context||{};
+      requestParams.type='approved';
+      result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case "portfolioRequests":
       requestParams=args.context||{};
@@ -118,6 +129,9 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type=args.context.transactionTypeName
       result=CoreModulesRepo.MlTransactionLogRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'templateAssignment':
+      result=CoreModulesRepo.MlTemplatesAssignmentRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -132,6 +146,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "cluster":resolveType= 'Cluster';break;
       case "chapter":resolveType= 'Chapter';break;
       case "subChapter":resolveType= 'SubChapter';break;
+      case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "community":resolveType= 'Community';break;
       case "MASTERSETTINGS":resolveType= 'MasterSettings';break;
       case "AUDIT_LOG":resolveType= 'AuditLogs';break;
@@ -143,6 +158,8 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "TransactionsLog":resolveType='TransactionsLog';break;
       case "InteractionsLog":resolveType='TransactionsLog';break;
       case "ConversationsLog":resolveType='TransactionsLog';break;
+      case "internalRequests":resolveType='requests';break;
+      case "internalApprovedRequests":resolveType='requests';break;
 
     }
 

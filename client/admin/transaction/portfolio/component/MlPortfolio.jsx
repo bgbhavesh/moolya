@@ -200,36 +200,39 @@ class MlPortfolio extends React.Component {
 
   render() {
     let that = this;
-    let MlActionConfig = [
-      {
+    let MlActionConfig = []
+    if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests"){
+      MlActionConfig.push({
         showAction: true,
         actionName: 'edit',
         handler: null
-      },
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
-      },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList")
-        }
-      },
-      {
-        showAction: true,
-        actionName: 'assign',
-        handler: null
-      },
-      {
+      });
+    }
+    MlActionConfig.push({
+      actionName: 'save',
+      showAction: true,
+      handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
+    });
+    MlActionConfig.push({
+      showAction: true,
+      actionName: 'cancel',
+      handler: async(event) => {
+        FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList")
+      }
+    });
+    MlActionConfig.push({
+      showAction: true,
+      actionName: 'assign',
+      handler: null
+    });
+    if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests") {
+      MlActionConfig.push({
         showAction: true,
         actionName: 'comment',
         handler: null,
         iconID: 'Popover1'
-      },
-    ]
+      });
+    }
     let EditComponent = "";
     let ViewComponent = "";
     if (this.props.viewMode) {

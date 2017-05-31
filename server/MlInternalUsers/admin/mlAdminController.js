@@ -153,19 +153,21 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
               var isAuth = false;
               if(!ret.isWhiteList){
-                  isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
+                isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
               }
 
               if(ret.isWhiteList || isAuth) {
                 response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {
                   communityId: data.communityId,
+                  clusterId: data.clusterId,
+                  chapterId: data.chapterId,
+                  subChapterId: data.subChapterId,
                   community: data.community,
                   clusters: data.clusters,
                   chapters: data.chapters,
                   subchapters: data.subchapters
                 }, context, null);
               }
-              else response = {unAuthorized:true,message:"Not Authorized"}
             }
             break;
             case "PROFILE":{
@@ -536,6 +538,58 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   }
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
+}
+
+function authChecker(req, context)
+{
+    let query = parse(req.body.query);
+    let schemaDef;
+    let queryTypeName;
+    let mutationTypeName;
+    let moduleName;
+    let actionName;
+    let operation;
+    let typeName = '';
+    for(var i = 0; i < query.definitions.length; i++){
+        const d = query.definitions[i];
+        console.log(d.kind)
+        switch (d.kind){
+            case 'OperationDefinition':
+                if (schemaDef) {
+                    throw new Error('Must provide only one schema definition.');
+                }
+                schemaDef = d;
+            break;
+        }
+    }
+    operation = schemaDef.operation;
+    schemaDef.selectionSet.selections.forEach(operationType => {
+        typeName = operationType.name.value
+    })
+    let modules = MlResolver.MlModuleResolver;
+    _.each(modules, function (module) {
+          let isValid = _.indexOf(module.apis, typeName)
+          if(isValid >= 0){
+              moduleName = module.moduleName;
+          }
+    })
+
+    if(operation == 'query'){
+        actionName = ['READ']
+    }
+    else if(operation == 'mutation'){
+        actionName = ['CREATE', 'UPDATE']
+    }
+
+    if(moduleName) {
+        for(var i = 0; i < actionName.length; i++){
+            let isValidAuth = mlAuthorization.validteAuthorization(context.userId, moduleName, actionName[i], req.body);
+            return isValidAuth;
+        }
+    }
+
+
+    return false;
 }
 
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

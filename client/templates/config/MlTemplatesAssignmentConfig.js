@@ -33,13 +33,15 @@ const mltemplatesassignmetConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter},
+    {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter,dataSort:true},
     {dataField: "templateProcessName", title: "Process",dataSort:true},
     {dataField: "templateSubProcessName", title: "Sub Process",dataSort:true},
     {dataField: "templateclusterName", title: "Cluster",dataSort:true},
     {dataField: "templatechapterName", title: "Chapter",dataSort:true},
     {dataField: "templatesubChapterName", title: "Sub Chapter",dataSort:true},
     {dataField: "templatecommunityName", title: "Community",dataSort:true},
+    {dataField: "templateuserType", title: "User Type",dataSort:true},
+    {dataField: "templateidentity", title: "Identity",dataSort:true},
     {dataField: "createdBy", title: "Created By", dataSort:true},
     {dataField: "modifiedBy", title: "Modified By", dataSort:true},
     {dataField: "modifiedDate", title: "Modified Date", customComponent: modifiedDateFormatter},
@@ -63,12 +65,16 @@ const mltemplatesassignmetConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        FlowRouter.go("/admin/templates/assignTemplate")
+        if(data&&data.id) {
+          toastr.error("Please uncheck the record")
+        }else {
+          FlowRouter.go("/admin/templates/assignTemplate")
+        }
       }
     },
   ],
   sizePerPage:5,
-  graphQlQuery:gql`
+  graphQlQuery:/*gql`
  query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
               data:SearchQuery(module:"templateAssignment",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
@@ -79,18 +85,42 @@ const mltemplatesassignmetConfig=new MlViewer.View({
                               createdBy
                               createdDate
                               id:_id
-                              templateclusterName     
-                              templatechapterName    
-                              templatesubChapterName  
-                              templatecommunityName  
+                              templateclusterName
+                              templatechapterName
+                              templatesubChapterName
+                              templatecommunityName
+                              templateuserType
+                              templateidentity
                               modifiedBy
                               modifiedDate
                           }
                       }
               }
               }
-            
-              `
+
+              `*/
+    gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"templateAssignment",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    totalRecords
+                    data{
+                      ...on TemplateAssignment{
+                              templateProcessName
+                              templateSubProcessName
+                              createdBy
+                              createdDate
+                              id:_id
+                              templateclusterName
+                              templatechapterName
+                              templatesubChapterName
+                              templatecommunityName
+                              templateuserType
+                              templateidentity
+                              modifiedBy
+                              modifiedDate
+                          }
+                      }
+              }
+              }`
 });
 
 export {mltemplatesassignmetConfig};

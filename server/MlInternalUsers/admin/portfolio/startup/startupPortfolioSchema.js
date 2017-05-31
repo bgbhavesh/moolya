@@ -78,7 +78,6 @@ let startupPortfolioSchema = `
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int,
-        companyName : String
     }
     
     type branchesOutput{
@@ -360,7 +359,7 @@ let startupPortfolioSchema = `
     }
     
     input lookingFor{
-        type:String,
+        lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
         description:String,

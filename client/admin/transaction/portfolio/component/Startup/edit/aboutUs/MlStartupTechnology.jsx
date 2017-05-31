@@ -27,6 +27,7 @@ export default class MlStartupTechnology extends React.Component{
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -37,6 +38,7 @@ export default class MlStartupTechnology extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.technologies)
@@ -99,18 +101,21 @@ export default class MlStartupTechnology extends React.Component{
   onOptionSelected(selectedId, callback, selObject) {
     if (selectedId) {
       let details = this.state.data;
+      // this.setState({aboutShow:selObject.about})
       details = _.omit(details, ["technologyId"]);
-      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label});
+      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, description: selObject.about});
       this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedId, "technologyName": selObject.label})
+        this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "description": selObject.about})
         this.sendDataToParent()
       })
     } else {
       let details = this.state.data;
+      // this.setState({aboutShow:''})
       details = _.omit(details, ["technologyId"]);
       details = _.omit(details, ["technologyName"]);
+      details = _.omit(details, ["description"]);
       this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', "technologyName": ''})
+        this.setState({"selectedVal": '', "technologyName": '', description:''})
         this.sendDataToParent()
       })
     }
@@ -146,6 +151,7 @@ export default class MlStartupTechnology extends React.Component{
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
     this.props.getStartupTechnology(startupTechnologies);
+
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -162,6 +168,7 @@ export default class MlStartupTechnology extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }
@@ -183,9 +190,26 @@ export default class MlStartupTechnology extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response&&response.technologies?response.technologies:[]
+      let dataDetails =this.state.startupTechnologies
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupTechnologiesList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupTechnologies:cloneBackUp,startupTechnologiesList:cloneBackUpList});
+    }
+  }
+
   render(){
     let query=gql`query{
       data:fetchTechnologies {
+        about : about
         label:displayName
         value:_id
       }
@@ -193,6 +217,12 @@ export default class MlStartupTechnology extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let technologiesArray = that.state.startupTechnologiesList || [];
+    let displayUploadButton = null
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
     return (
       <div>
         <h2>Technology</h2>
@@ -246,17 +276,17 @@ export default class MlStartupTechnology extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description} disabled="true"  onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
 
-                    <div className="form-group">
+                    {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Upload Logo</span>
                         <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                       </div>
-                    </div>
+                    </div>:""}
                     <div className="clearfix"></div>
 
                     <div className="form-group">

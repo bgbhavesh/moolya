@@ -25,6 +25,13 @@ let departmentSchema = `
          isMoolya       : Boolean
          depatmentAvailable:[DepatmentAvailableSchema]
     }
+    
+    type DepartmentBasedOnClusterChapterAndSubChapter {
+        departmentId :  String
+        departmentName : String
+        subDepartmentId : String
+        subDepartmentName : String
+    }
    
     input DepatmentAvailable{
         cluster     : [String]
@@ -56,6 +63,8 @@ let departmentSchema = `
         fetchNonMoolyaBasedDepartment(isMoolya:Boolean,subChapter:String):[Department]
         fetchDepartmentsForRegistration(cluster:String,chapter:String,subChapter:String):[Department]    
         fetchMoolyaBasedDepartmentRoles(isMoolya:Boolean,clusterId:String):[Department]
+        fetchClusterChapterSubChapterBasedDepartmentRoles(isMoolya: Boolean, cluster: String, chapter: String, subChapter: String): [DepartmentBasedOnClusterChapterAndSubChapter]
+        fetchHierarchyMoolyaDepartment(isMoolya:Boolean,clusterId:String):[Department]
     }
 `
 

@@ -30,13 +30,73 @@ export default class VerticalBreadCrum extends Component {
       }
     }
   }
-   getHierarchyDetails(){
-    let breadCrum=this.props&&this.props.breadcrum?this.props.breadcrum:null;
-    let breadCrumList=[];
-    if(breadCrum&&breadCrum.type==='hierarchy'){
-        let params = FlowRouter.current().params;
-        getBreadCrumListBasedOnhierarchy(breadCrum.module,params,this.setBreadCrumHierarchyCallback.bind(this));
-    }
+   getHierarchyDetails() {
+     let breadCrum = this.props && this.props.breadcrum ? this.props.breadcrum : null;
+     let breadCrumList = [];
+     if (breadCrum && breadCrum.type === 'hierarchy') {
+       let params = FlowRouter.current().params;
+       getBreadCrumListBasedOnhierarchy(breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
+     } else if (breadCrum && breadCrum.type === 'setting') {
+       let text = breadCrum.module;
+       let result = text.replace(/([A-Z])/g, " $1");
+       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+       let breadCrumObject = [
+         {linkName: 'Setting', linkId: "setting"},
+         {linkName: finalResult, linkId: "module"}
+       ];
+       if (breadCrum.subModule) {
+         let text = breadCrum.subModule;
+         let result = text.replace(/([A-Z])/g, " $1");
+         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+         breadCrumObject.push({
+           linkName: finalResult,
+           linkId: "subModule"
+         });
+       }
+       this.setBreadCrumHierarchyCallback(
+         breadCrumObject
+       );
+     } else if (breadCrum && breadCrum.type === 'transaction') {
+       let text = breadCrum.module;
+       let result = text.replace(/([A-Z])/g, " $1");
+       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+       let breadCrumObject = [
+         {linkName: 'Transaction', linkId: "transactions"},
+         {linkName: finalResult, linkId: "module"}
+       ];
+       if (breadCrum.subModule) {
+         let text = breadCrum.subModule;
+         let result = text.replace(/([A-Z])/g, " $1");
+         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+         breadCrumObject.push({
+           linkName: finalResult,
+           linkId: "subModule"
+         });
+       }
+       this.setBreadCrumHierarchyCallback(
+         breadCrumObject
+       );
+     } else if (breadCrum && breadCrum.type === 'documents') {
+       let text = breadCrum.module;
+       let result = text.replace(/([A-Z])/g, " $1");
+       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+       let breadCrumObject = [
+         {linkName: 'Transaction', linkId: "transactions"},
+         {linkName: finalResult, linkId: "module"}
+       ];
+       if (breadCrum.subModule) {
+         let text = breadCrum.subModule;
+         let result = text.replace(/([A-Z])/g, " $1");
+         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+         breadCrumObject.push({
+           linkName: finalResult,
+           linkId: "subModule"
+         });
+       }
+       this.setBreadCrumHierarchyCallback(
+         breadCrumObject
+       );
+     }
     return breadCrumList;
   }
    render(){

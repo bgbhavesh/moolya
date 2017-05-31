@@ -15,6 +15,7 @@ const mlClusterCommunityListConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:true,
   sort:true,
+  search:false,
   queryOptions:true,
   buildQueryOptions:(config)=>{
     return {clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}

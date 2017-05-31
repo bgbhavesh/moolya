@@ -30,7 +30,7 @@ class MlGenericTransactions{
       let result =  {message:"Not available in hierarchy"}
       let response = new MlRespPayload().errorPayload(result, code);
       console.log(response);
-      res.send(response);
+      return response;
     }
   }
 
@@ -43,7 +43,7 @@ class MlGenericTransactions{
       let result =  {message:"Not available in hierarchy"}
       let response = new MlRespPayload().errorPayload(result, code);
       console.log(response);
-      res.send(response);
+      return response;
     }
   }
 
@@ -56,7 +56,7 @@ class MlGenericTransactions{
       let result = {message:"Transaction Error"}
       let response = new MlRespPayload().errorPayload(result, code);
       console.log(response);
-      res.send(response);
+      return response;
     }
   }
 

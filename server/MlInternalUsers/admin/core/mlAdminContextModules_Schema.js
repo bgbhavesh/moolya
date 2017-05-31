@@ -3,7 +3,9 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
 let contextSpecificSearch = `
-union ContextSpecSearchResult = GenericType| Cluster | Chapter | SubChapter  | Community | MasterSettings | AuditLogs | RegistrationInfo
+union ContextSpecSearchResult = GenericType| Cluster | Chapter | SubChapter  | Community | MasterSettings | AuditLogs | RegistrationInfo | Portfoliodetails | TransactionsLog | requests | TemplateAssignment 
+
+
 type ContextSpecSearchResp {
   totalRecords:Int,
   data:[ContextSpecSearchResult]
@@ -15,7 +17,8 @@ input ContextParams{
    subChapterId:String,
    communityId:String,
    settingsType:String,
-   moduleName: String
+   moduleName: String,
+   transactionTypeName: String
 }
 
 input SearchSpec{

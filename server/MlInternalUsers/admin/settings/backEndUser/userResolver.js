@@ -5,9 +5,8 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
-import _ from 'lodash'
-import _underscore from 'underscore'
-
+import _ from "lodash";
+import _underscore from "underscore";
 
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
@@ -80,7 +79,7 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
                   let action =_.find(userRoles, {"roleId": role.roleId, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId, "departmentId":role.departmentId, "subDepartmentId":role.subDepartmentId});
                   if(!action){
                       userRoles.push(role)
-                  }else {
+                  }else if(userRoles[key]) {
                       userRoles[key].validTo = role.validTo;
                       userRoles[key].validFrom = role.validFrom;
                       userRoles[key].isActive = role.isActive;
@@ -1349,4 +1348,12 @@ MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) 
     return response;
   }
 
+}
+
+
+MlResolver.MlQueryResolver['fetchMoolyaInternalUsers'] = (obj, args, context, info) => {
+  var getUsers = mlDBController.find('users', {
+      'profile.isActive': true, 'profile.isExternaluser': false, 'profile.isMoolya': true
+    }, context).fetch() || [];
+  return getUsers
 }

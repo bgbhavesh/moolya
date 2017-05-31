@@ -323,13 +323,11 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
     return response;
   }
 
-    // let subChapter = MlSubChapters.findOne({_id: args.subChapterId});
     let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
     if(subChapter){
         for(key in args.subChapterDetails){
           subChapter[key] = args.subChapterDetails[key]
         }
-        // let resp = MlSubChapters.update({_id:args.subChapterId}, {$set:subChapter})
         let resp = mlDBController.update('MlSubChapters', args.subChapterId, subChapter, {$set:true}, context)
         if(resp){
           if(subChapter && subChapter.isEmailNotified){

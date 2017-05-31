@@ -13,6 +13,7 @@ export default class MlTableView extends Component {
       selectedRow: null,
       searchValue:"",
       filterValue:[],
+      selectedCount:0
     }
 
     this.onPageChange.bind(this);
@@ -107,9 +108,15 @@ export default class MlTableView extends Component {
 
     }else {
         if (isSelected) {
-          this.setState({"selectedRow": row});
+          this.setState({
+            "selectedRow": row,
+            "selectedCount":this.state.selectedCount+1
+          });
         } else {
-          this.setState({"selectedRow": null});
+          this.setState({
+            "selectedRow": null,
+            "selectedCount":this.state.selectedCount-1
+          });
         }
     }
   }
@@ -168,7 +175,7 @@ export default class MlTableView extends Component {
                  handleRowSelect={that.handleRowSelect.bind(this)}
                  handleRowSelectAll={that.handleRowSelectAll.bind(this)}
                  onSortChange={this.onSortChange.bind(this)}></MlTable>
-        {config.showActionComponent === true && <MlActionComponent ActionOptions={actionsProxyList}/>}
+        {config.showActionComponent === true && <MlActionComponent count={this.state.selectedCount} ActionOptions={actionsProxyList}/>}
       </div>
     )}</div>)
   }

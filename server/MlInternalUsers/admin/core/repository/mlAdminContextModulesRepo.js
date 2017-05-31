@@ -77,13 +77,13 @@ let CoreModules = {
     return {totalRecords:mytotalRecords,data:myAggregateCheck};
   },
   MlSubChapterRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{
-     var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
+      var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
       //let query=contextQuery;
       let chapterId=requestParams&&requestParams.chapterId?requestParams.chapterId:null;
       let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
       if(chapterId){
         // resultantQuery = mergeQueries(resultantQuery, {"chapterId":chapterId})
-        resultantQuery={"chapterId":chapterId};
+        resultantQuery=mergeQueries({"chapterId":chapterId}, userFilterQuery);
           if(!_.isEmpty(contextQuery) && _.indexOf(contextQuery._id, "all") < 0){
             resultantQuery = mergeQueries(resultantQuery,{ _id: {$in : contextQuery._id}});
           }
@@ -151,15 +151,28 @@ let CoreModules = {
   },
 
   MlHierarchySubChapterRepo:(requestParams,contextQuery,fieldsProj, context)=>{
-    let query={};
+    let nonMoolyaQuery={};
+    let moolyaQuery={};
+    var processedData = []
     //User selection filter.
     let clusterId=requestParams&&requestParams.clusterId?requestParams.clusterId:null;
     if(clusterId){
-      query={"clusterId":clusterId};
+      nonMoolyaQuery={"clusterId":clusterId,isDefaultSubChapter:false};
+      moolyaQuery={"clusterId":clusterId,isDefaultSubChapter:true}
     }
-    const data = mlDBController.find('MlSubChapters', query, context, fieldsProj).fetch();
-    const totalRecords = mlDBController.find('MlSubChapters', query, context, fieldsProj).count();
-    return {totalRecords:totalRecords,data:data};
+    var nonMoolya = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).fetch();
+    var moolya =  mlDBController.findOne('MlSubChapters', moolyaQuery, context, fieldsProj);
+    if(moolya && moolya.isDefaultSubChapter === true){
+      processedData.push(moolya)
+      if(nonMoolya){
+        nonMoolya.map(function (doc,id) {
+          processedData.push(doc)
+        })
+      }
+    }
+    data = processedData
+    var totalRecords = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).count();
+    return {totalRecords:totalRecords+1,data:data};
 
   },
   MlInternalRequestRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
@@ -172,7 +185,7 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};
+        serverQuery={'status':{'$in':['Pending','WIP']}};
         break;
       case 'approved':
         serverQuery={'userId':context.userId,'status':"Approved"};
@@ -263,7 +276,7 @@ let CoreModules = {
        // serverQuery={'status':{'$in':['Pending','Rejected']}};
         break;
       case 'approved':
-       // serverQuery={'status':"Approved"};
+       serverQuery={'status':"Approved"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator

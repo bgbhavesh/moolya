@@ -54,9 +54,10 @@ MlLoginContent = React.createClass({
       <div>
         <div>
           <div className="login_bg" style={{textAlign: "center"}}>
-           {/* <video poster="" id="bgvid" autoPlay muted loop playsInline>
+            <video poster="" id="bgvid" autoPlay muted loop playsInline>
               <source src="/images/bg_video.mp4"/>
-            </video>*/}
+            </video>
+            <div className="video_bg"></div>
             <img className="logo" src="/images/moolya_logo.png"/>
             <div className="login_top">
               <div className="login_top_in"><span>Login</span></div>

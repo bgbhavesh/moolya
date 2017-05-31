@@ -117,7 +117,11 @@ class MlEditRole extends React.Component {
   }
 
   onUserTypeSelect(val) {
-    this.setState({selectedUserType: val.value})
+    if(val)
+      this.setState({selectedUserType:val.value})
+    else{
+      this.setState({selectedUserType:''})
+    }
   }
 
   onBackendUserSelect(val) {

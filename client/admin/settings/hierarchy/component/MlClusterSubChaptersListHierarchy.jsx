@@ -16,18 +16,7 @@ export default class MlClusterSubChaptersListHierarchy extends Component
     let listMoolya = null, temp=0;
     if(subChapterData.length>0){
       let data=[]
-      for(let i=0;i<subChapterData.length;i++){
-
-        if(subChapterData[i].isDefaultSubChapter===true) {
-          temp = temp + 1;
-          if (temp == 1) {
-            data.push(subChapterData[i])
-          }
-        }else{
-          data.push(subChapterData[i])
-        }
-      }
-
+      data = subChapterData;
       listMoolya=  data.map( function(prop,idx) {
         let icon, status;
         if (prop.isActive && prop.showOnMap) {
@@ -51,8 +40,6 @@ export default class MlClusterSubChaptersListHierarchy extends Component
                 <div className={"hex_outer"}><span
                   className={prop.isDefaultSubChapter ? "ml ml-moolya-symbol" : "/images/def_profile.png"}></span></div>
               </a>
-              {/*<h3>Moolya</h3>*/}
-
               <h3>{prop.isDefaultSubChapter ? "Moolya" : prop.subChapterName}</h3>
             </div>
           </div>

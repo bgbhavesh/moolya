@@ -401,7 +401,9 @@ export default class Company extends React.Component{
               </div>
                <div className="form-group">
                 <Select name="form-field-name" placeholder="Investing From" options={investingFrom} value={this.state.investingFrom} onChange={this.optionsBySelectInvestingFrom.bind(this)}  className="float-label"/>
-              </div>
+                 <br className="clearfix"/>                      <br className="clearfix"/>
+
+               </div>
 
             </form>
           </div>

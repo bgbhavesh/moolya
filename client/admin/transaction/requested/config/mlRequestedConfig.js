@@ -3,10 +3,13 @@ import React from "react";
 import gql from "graphql-tag";
 import MlCustomFilter from "../../../../commons/customFilters/customFilter";
 import moment from "moment";
+import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
+
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
   return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
 }
+
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"registrationInfoTable",
   module:"registrationInfo",//Module name for filter.
@@ -51,10 +54,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: (data)=>{
-
-        if(data && data.id && (Meteor.userId()==data.userName || Meteor.user().profile.email=="platformadmin@moolya.com")){
+        //if(data && data.id && (Meteor.userId()==data.userName || Meteor.user().profile.email=="platformadmin@moolya.com")){
+        if(data && data.id && hierarchyValidations.validateEditAction(data.userName)){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
-        }else if(data && data.id && Meteor.userId()!=data.userName){
+        }else if(data && data.id){
           toastr.error("User does not have access to edit record");
         } else{
           toastr.error("Please Select a record");
@@ -87,6 +90,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               contactNumber
                               communityName
                       			  clusterName
+                      			  clusterId
                       				chapterName
                               subChapterName
                               accountType

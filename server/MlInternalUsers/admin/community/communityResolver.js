@@ -431,19 +431,31 @@ MlResolver.MlMutationResolver['updateCommunityDef'] = (obj, args, context, info)
         _.each(clusters, function (item) {
               _.each(item.difference, function (clusterid) {
                   resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {clusterId:clusterid}, {"hierarchyCode":"CLUSTER"}]}, {isActive:item.isActive}, {$set:true}, context);
+                  if(!resp){
+                    updateDB("MlCommunityAccess", {communityDefCode:args.communityId, clusterId:clusterid, "hierarchyCode":"CLUSTER"}, {isActive:item.isActive}, {$set:true, upsert:true}, context);
+                  }
               })
         })
 
         _.each(chapters, function (item) {
             _.each(item.difference, function (chapterid) {
                 resp = updateDB("MlCommunityAccess", {"$and":[{communityDefCode:args.communityId}, {chapterId:chapterid}, {"hierarchyCode":"CHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context);
+                if(!resp){
+                  updateDB("MlCommunityAccess", {communityDefCode:args.communityId, chapterId:chapterid, "hierarchyCode":"CHAPTER" }, {isActive:item.isActive}, {$set:true, upsert:true}, context);
+                }
             })
         })
 
         _.each(subchapters, function (item) {
             _.each(item.difference, function (subchapterid) {
                 resp = updateDB('MlCommunityAccess', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subchapterid}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context)
+                  if(!resp){
+                    updateDB('MlCommunityAccess', {communityDefCode:args.communityId, subChapterId:subchapterid, "hierarchyCode":"SUBCHAPTER"}, {isActive:item.isActive}, {$set:true, upsert:true}, context)
+                  }
                 resp = updateDB('MlCommunity', {"$and":[{communityDefCode:args.communityId}, {subChapterId:subchapterid}, {"hierarchyCode":"SUBCHAPTER"}]}, {isActive:item.isActive}, {$set:true}, context)
+                  if(!resp){
+                    updateDB('MlCommunity', {communityDefCode:args.communityId, subChapterId:subchapterid, "hierarchyCode":"SUBCHAPTER"}, {isActive:item.isActive}, {$set:true, upsert:true}, context)
+                  }
             })
         })
 

@@ -5,6 +5,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 
 export default class MlAssignComponent extends Component {
 
@@ -44,6 +45,10 @@ export default class MlAssignComponent extends Component {
 
     this.setState({selectedSubChapter:value})
   }
+
+  optionsBySelectAllUser(value) {
+    this.setState({selectedUser: value})
+  }
   optionsBySelectDepartment(value){
 
     this.setState({selectedDepartment:value})
@@ -75,17 +80,24 @@ export default class MlAssignComponent extends Component {
       "role": this.state.selectedRole,
       "user": this.state.selectedUser
     }
-    let transactionType=this.props.transactionType
-    const response = await assignUserForTransactionAction("Registration",params,this.props.transactionId,"Registration","assignTransaction");
-    if(response.success){
-      this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
-      toastr.success("Transaction assigned to user successfully");
-      FlowRouter.go("/admin/transactions/registrationRequested");
+    if(hierarchyValidations.validateAssignAction(this.props.clusterId,this.state.selectedCluster)){
+      let transactionType=this.props.transactionType
+      const response = await assignUserForTransactionAction("Registration",params,this.props.transactionId,"Registration","assignTransaction");
+      if(response.success){
+        this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
+        toastr.success("Transaction assigned to user successfully");
+        FlowRouter.go("/admin/transactions/registrationRequested");
+      }else{
+        toastr.error("Wrong Hierarchy");
+        this.setState({show:false})
+        FlowRouter.go("/admin/transactions/registrationRequested");
+      }
     }else{
-      toastr.error("Wrong Hierarchy");
+      toastr.error("Wrong assignment");
       this.setState({show:false})
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
+
   }
 
   async selfAssignTransaction(){
@@ -116,22 +128,48 @@ export default class MlAssignComponent extends Component {
 
   render() {
     let that=this;
-    let clusterQuery=gql` query{
+
+    let moolyaUserQuery = gql` query{
+      data:fetchMoolyaInternalUsers{label:username,value:_id}
+    }
+    `;
+   /* let clusterQuery=gql` query{
       data:fetchActiveClusters{label:countryName,value:_id}
     }
     `;
-    let chapterQuery=gql`query($id:String){  
+    let chapterQuery=gql`query($id:String){
     data:fetchChapters(id:$id) {
       value:_id
       label:chapterName
+      }
+    }`;
+    let subChapterquery=gql`query($id:String){
+      data:fetchSubChaptersForRegistration(id:$id) {
+        value:_id
+        label:subChapterName
+      }
+    }`;*/
+    let clusterQuery = gql`query{
+     data:fetchContextClusters {
+        value:_id
+        label:countryName
+      }
+    }
+    `;
+    let chapterQuery = gql`query($id:String){  
+      data:fetchContextChapters(id:$id) {
+        value:_id
+        label:chapterName
       }  
     }`;
-    let subChapterquery=gql`query($id:String){  
-      data:fetchSubChaptersForRegistration(id:$id) {
+
+    let subChapterQuery= gql`query($id:String){  
+      data:fetchContextSubChapters(id:$id) {
         value:_id
         label:subChapterName
       }  
     }`;
+
     let fetchcommunities = gql` query{
       data:fetchCommunityDefinition{label:name,value:code}
     }
@@ -196,14 +234,18 @@ export default class MlAssignComponent extends Component {
     /*  <div className="ml_assignrequest" style={{'display':'none'}}>*/
       <div className="panel panel-default-bottom col-md-12">
         <div className="mrgn-btm">
-          <input type="text" placeholder="Search User" className="search-form-control" id="" />
+          {/*<input type="text" placeholder="Search User" className="search-form-control" />*/}
+          <Moolyaselect multiSelect={false} placeholder="Select User" className="search-form-control"
+                        valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser}
+                        queryType={"graphql"} query={moolyaUserQuery} onSelect={that.optionsBySelectAllUser.bind(this)}
+                        isDynamic={true}/>
         </div>
         <div className="col-md-6 nopadding-left">
           <div className="form-group">
             <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCluster} queryType={"graphql"} query={clusterQuery} onSelect={that.optionsBySelectCluster.bind(this)} isDynamic={true}/>
           </div>
           <div className="form-group">
-            <Moolyaselect multiSelect={false} placeholder="Select Subchapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterquery} reExecuteQuery={true} queryOptions={subChapterOption} isDynamic={true} onSelect={this.optionsBySelectSubChapter.bind(this)} />
+            <Moolyaselect multiSelect={false} placeholder="Select Subchapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption} isDynamic={true} onSelect={this.optionsBySelectSubChapter.bind(this)} />
           </div>
           <div className="form-group">
             <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedDepartment} queryType={"graphql"} query={departmentQuery} reExecuteQuery={true} queryOptions={departmentOption} isDynamic={true} onSelect={this.optionsBySelectDepartment.bind(this)} />

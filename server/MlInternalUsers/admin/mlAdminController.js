@@ -211,6 +211,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               });
               break;
             }
+            case "SUBCHAPTER":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                if(data.subChapterId){
+                  MlResolver.MlMutationResolver['updateSubChapter'](null, {
+                    subChapterId: data.subChapterId,
+                    moduleName: data.moduleName,
+                    actionName: data.actionName,
+                    subChapterDetails:{subChapterImageLink: resp}
+                  }, context, null);
+                }
+              });
+              break;
+            }
           }
 
           if(imageUploaderPromise) {
@@ -256,7 +270,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let data = req.body.data;
         let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
-          if(data.email&&data.countryId&&data.registrationType){
+          if(data.email&&data.countryId){
             let response;
             if(data) {
               response = MlResolver.MlMutationResolver['createRegistrationAPI'](null, {registration: data}, context, null);

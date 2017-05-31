@@ -33,8 +33,12 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
   args.registration.accountType=accountTypeName.accountName;
-
-  let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
+ let subChapterDetails
+  if(args.registration.subChapterId){
+    subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: args.registration.subChapterId}, context) || {};
+  }else{  //default moolya subChapter will be taken
+    subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
+  }
 
   args.registration.clusterName=subChapterDetails.clusterName;
   args.registration.chapterName=subChapterDetails.chapterName;

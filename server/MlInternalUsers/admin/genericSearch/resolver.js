@@ -752,7 +752,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
 
     var module=context.module||"";
-    console.log(module);
     var resolveType='';
     switch(module) {
       case "cluster":resolveType= 'Cluster';break;

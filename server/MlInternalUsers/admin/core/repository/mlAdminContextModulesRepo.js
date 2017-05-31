@@ -210,7 +210,7 @@ let CoreModules = {
   },
   MlRegistrationRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
     var type=requestParams&&requestParams.type?requestParams.type:"";
-    var contextFieldMap={'clusterId':'registrationInfo.clusterId','chapterId':'registrationInfo.chapterId','subChapterId':'registrationInfo.subChapterId','communityId':'registrationInfo.communityId','communityCode':'registrationInfo.communityDefCode'};
+    var contextFieldMap={'clusterId':'registrationInfo.clusterId','chapterId':'registrationInfo.chapterId','subChapterId':'registrationInfo.subChapterId','communityId':'registrationInfo.communityId','communityCode':'registrationInfo.registrationType'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
         //construct context query with $in operator for each fields
         resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');

@@ -3,6 +3,7 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
+var defaultModules = ["CHAPTER", "SUBCHAPTER", "COMMUNITY"];
 
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
@@ -34,6 +35,28 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   // role.createdBy = Meteor.users.findOne({_id:context.userId}).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
   // let id = MlRoles.insert({...role});
+
+  // Adding Default Modules
+
+  _.each(defaultModules, function (mod) {
+    var module = mlDBController.findOne("MlModules", {code:mod}, context);
+    var readAction = mlDBController.findOne("MlActions", {code: "READ"}, context);
+    var isModAvailable = _.findIndex(role.modules, {moduleId:module._id})
+
+    if((isModAvailable <= 0) && module && readAction){
+      var moduleObj = {
+        moduleId: module._id,
+        moduleName: module.name,
+        validFrom: null,
+        validTo: null,
+        isActive: true,
+        actions: [{actionId: readAction._id}]
+      }
+      role.modules.push(moduleObj)
+    }
+  })
+
+
   let id = mlDBController.insert('MlRoles', role, context)
   if (id) {
     let code = 200;

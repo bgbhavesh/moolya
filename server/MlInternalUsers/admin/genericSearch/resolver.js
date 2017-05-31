@@ -156,18 +156,52 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlCountries.find(query,findOptions).count();
   }
   if(args.module=="states"){
-    let countries = MlCountries.find({"isActive": true}).fetch();
-    let allIds=_.pluck(countries,'_id');
-      let ary = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
-
-      _.each(ary,function (item,key) {
-        _.each(countries, function (s,v) {
-          if (item.countryId == s._id)
-            item.countryName = s.country;
-        })
-      })
-      data=ary;
-      totalRecords = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).count();
+    let pipeline = [
+      {"$match":{"isActive": true}},
+      {"$lookup":{from:'mlStates',localField:'countryCode',foreignField:'countryCode',as:'states'}},
+      {"$unwind":'$states'},
+      {"$project":{ _id:"$states._id",
+        "countryName":"$country","name":"$states.name","countryId":"$_id","countryCode":1,"isActive":"$states.isActive" }},
+    ];
+    if(query && Object.keys(query).length){
+      pipeline.push({"$match":query});
+    }
+    pipeline.push(
+      { $group : {
+        _id: null,
+        count : { $sum : 1 },
+        data: {$push: '$$ROOT'}
+      }}
+    );
+    pipeline.push(
+      { '$unwind': '$data' }
+    )
+    pipeline.push({
+      "$project":{ count:1,_id:"$data._id", "countryName":"$data.countryName","name":"$data.name","countryId":"$data.countryId","countryCode":"$data.countryCode","isActive":"$data.isActive" }
+    });
+    if(findOptions.sort){
+      pipeline.push({"$sort": findOptions.sort});
+    }
+    if(findOptions.skip){
+      pipeline.push({"$skip": parseInt(findOptions.skip)});
+    }
+    if(findOptions.limit){
+      pipeline.push({"$limit": parseInt(findOptions.limit)});
+    }
+    data = MlCountries.aggregate(pipeline);
+    totalRecords = (data.length ? data[0].count : 0);
+    // let countries = MlCountries.find({"isActive": true}).fetch();
+    // let allIds=_.pluck(countries,'_id');
+    //   let ary = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
+    //
+    //   _.each(ary,function (item,key) {
+    //     _.each(countries, function (s,v) {
+    //       if (item.countryId == s._id)
+    //         item.countryName = s.country;
+    //     })
+    //   })
+    //   data=ary;
+    //   totalRecords = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).count();
   }
 
   if(args.module=="cities"){

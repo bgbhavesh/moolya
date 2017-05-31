@@ -152,6 +152,7 @@ const mlCommunitySubChaptersConfig=new MlViewer.View({
                                    showOnMap
                                    isActive
                                    subChapterDisplayName
+                                   isDefaultSubChapter
                           }
                       }
               }

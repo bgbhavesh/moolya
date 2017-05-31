@@ -71,6 +71,7 @@ const mlSubChapterListConfig=new MlViewer.View({
                                    showOnMap
                                    isActive
                                    subChapterDisplayName
+                                   isDefaultSubChapter
                           }
                       }
               }

@@ -23,12 +23,10 @@ class MlHierarchyAssignment{
     let userProfile=new MlAdminUserContext().userProfileDetails(userId)||{};
     let hirarichyLevel=userProfile.hierarchyLevel;
     let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:'';
-
-    if(hirarichyLevel==4){
-      return false;
-      //platform admin cannot assign to himself
-    }
-    else if(clusterId!=''){
+    console.log(userProfile);
+    if(this.validateProfileAccess(userProfile)){
+      return true;
+    } else if(clusterId!=''){
       //check valid oprational area
       if(transaction.registrationInfo.clusterId == clusterId){
         isValidAssignment = true;
@@ -44,6 +42,15 @@ class MlHierarchyAssignment{
     }
   }
 
+  validateProfileAccess(userProfile){
+    let hierarchyLevel = userProfile.hierarchyLevel
+    let roleName = userProfile.roleName;
+    if((hierarchyLevel==4 && roleName=="platformadmin") || (hierarchyLevel==3 && roleName=="clusteradmin")||(hierarchyLevel==2 && roleName=="chapteradmin")||(hierarchyLevel==1 && roleName=="subchapteradmin")||(hierarchyLevel==0 && roleName=="communityadmin")){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
 
   canSelfAssignTransactionAssignedTransaction(transactionId,collection,userId,assignedUserId) {
@@ -145,6 +152,7 @@ class MlHierarchyAssignment{
 
     return transaction;
   }
+
 
 }
 

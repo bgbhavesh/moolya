@@ -206,6 +206,10 @@ export default class MlStartupTechnology extends React.Component{
     }
   }
 
+  emptyClick(e) {
+    if (this.state.popoverOpen)
+      this.setState({popoverOpen: false})
+  }
   render(){
     let query=gql`query{
       data:fetchTechnologies {
@@ -223,8 +227,9 @@ export default class MlStartupTechnology extends React.Component{
     }else{
       displayUploadButton = false
     }
+    //
     return (
-      <div>
+      <div onClick={this.emptyClick.bind(this)}>
         <h2>Technology</h2>
         {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">

@@ -186,7 +186,7 @@ export default class MlHierarchyDetails extends React.Component {
   render() {
 
     let MlActionConfig = [
-      {
+      /*{
         actionName: 'edit',
         showAction: true,
         handler: null
@@ -205,7 +205,7 @@ export default class MlHierarchyDetails extends React.Component {
         actionName: 'assign',
         showAction: true,
         handler: null
-      },
+      },*/
       {
         actionName: 'save',
         showAction: true,

@@ -33,13 +33,24 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
   args.registration.accountType=accountTypeName.accountName;
-
-  let subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
+ let subChapterDetails
+  if(args.registration.subChapterId){
+    subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: args.registration.subChapterId}, context) || {};
+  }else{  //default moolya subChapter will be taken
+    subChapterDetails = mlDBController.findOne('MlSubChapters', {chapterId: args.registration.chapterId}, context) || {};
+  }
 
   args.registration.clusterName=subChapterDetails.clusterName;
   args.registration.chapterName=subChapterDetails.chapterName;
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
+
+  var communityDetails = mlDBController.findOne('MlCommunity', {subChapterId: (subChapterDetails._id||null),communityDefCode:args.registration.registrationType}, context) || {};
+  var communityDef= mlDBController.findOne('MlCommunityDefinition', {code: (args.registration.registrationType||null)}, context) || {};
+   args.registration.communityId = communityDetails._id;
+   args.registration.communityName=communityDetails.communityName||communityDef.name;
+   args.registration.communityDefName = communityDetails.communityDefName;
+   args.registration.communityDefCode = communityDetails.communityDefCode;
 
  // args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   args.registration.registrationDate=date
@@ -224,11 +235,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
             communityDefCode: details.registrationType
           }, context) || {};
 
+        var communityDef= mlDBController.findOne('MlCommunityDefinition', {code: (details.registrationType||null)}, context) || {};
+
         validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,details);
         if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
         details.communityId = communityDetails._id;
-        details.communityName=communityDetails.communityName;
+        details.communityName=communityDetails.communityName ||communityDef.name;
         details.communityDefName = communityDetails.communityDefName;
         details.communityDefCode = communityDetails.communityDefCode;
 

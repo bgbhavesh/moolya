@@ -85,7 +85,7 @@ MlResolver.MlQueryResolver['fetchCommunities'] = (obj, args, context, info) =>
         let community = {};
         // let iscommunityActive = userProfile.defaultCommunities.indexOf('all') || userProfile.defaultCommunities.indexOf(communityAccess.communityDefCode);
         let iscommunityActive = _.indexOf(userProfile.defaultCommunities, 'all')
-        if(iscommunityActive)
+        if(iscommunityActive < 0)
             iscommunityActive = _.indexOf(userProfile.defaultCommunities, communityAccess.communityDefCode)
 
         if(!platformCommunity.isActive || iscommunityActive < 0)

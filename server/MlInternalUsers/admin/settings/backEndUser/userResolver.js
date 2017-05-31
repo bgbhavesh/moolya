@@ -79,7 +79,7 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
                   let action =_.find(userRoles, {"roleId": role.roleId, "chapterId":role.chapterId, "subChapterId":role.subChapterId, "communityId":role.communityId, "departmentId":role.departmentId, "subDepartmentId":role.subDepartmentId});
                   if(!action){
                       userRoles.push(role)
-                  }else {
+                  }else if(userRoles[key]) {
                       userRoles[key].validTo = role.validTo;
                       userRoles[key].validFrom = role.validFrom;
                       userRoles[key].isActive = role.isActive;

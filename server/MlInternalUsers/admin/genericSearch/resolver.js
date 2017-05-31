@@ -755,7 +755,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   }
 
-  if(args.module == "Portfoliodetails"){
+  if(args.module == "portfoliodetails"){
       data = MlPortfolioDetails.find(query,findOptions).fetch();
       // totalRecords = data.length;
       totalRecords = MlPortfolioDetails.find(query,findOptions).count();

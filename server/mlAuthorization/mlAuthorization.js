@@ -67,6 +67,10 @@ class MlAuthorization
                       if(moduleName == 'REGISTRATIONINFO' || moduleName == 'REGISTRATIONAPPROVEDINFO'){
                           moduleName = 'REGISTRATION';
                       }
+
+                      if(moduleName == 'PORTFOLIOREQUESTS' || moduleName == 'PORTFOLIOAPPROVED'){
+                          moduleName = 'PORTFOLIO';
+                      }
                       isContextSpecSearch = true;
                       break;
                   }
@@ -296,7 +300,7 @@ class MlAuthorization
           case 'REQUESTTYPE':{
               return true;
           }
-          case 'PORTFOLIODETAILS':{
+          case 'PORTFOLIO':{
             if(actionName == 'CREATE' || isContextSpecSearch)
               return true;
 

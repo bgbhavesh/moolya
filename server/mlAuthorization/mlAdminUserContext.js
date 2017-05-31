@@ -41,19 +41,21 @@ class MlAdminUserContext
           }
           if(user_roles && user_roles.length > 0){
               user_roles.map(function (userRole) {
-                  if(!hierarchyLevel){
-                      hierarchyLevel=userRole.hierarchyLevel;
-                      hierarchyCode=userRole.hierarchyCode;
-                  }else if(hierarchyLevel&&hierarchyLevel<userRole.hierarchyLevel){
-                      hierarchyLevel=userRole.hierarchyLevel;
-                      hierarchyCode=userRole.hierarchyCode;
+                  if(userRole.isActive) {
+                      if (!hierarchyLevel) {
+                        hierarchyLevel = userRole.hierarchyLevel;
+                        hierarchyCode = userRole.hierarchyCode;
+                      } else if (hierarchyLevel && hierarchyLevel < userRole.hierarchyLevel) {
+                        hierarchyLevel = userRole.hierarchyLevel;
+                        hierarchyCode = userRole.hierarchyCode;
+                      }
+                      if (defaultChapters.indexOf(userRole.chapterId < 0))
+                        defaultChapters.push(userRole.chapterId)
+                      if (defaultSubChapters.indexOf(userRole.subChapterId < 0))
+                        defaultSubChapters.push(userRole.subChapterId)
+                      if (defaultCommunities.indexOf(userRole.communityId < 0))
+                        defaultCommunities.push(userRole.communityId)
                   }
-                  if(defaultChapters.indexOf(userRole.chapterId < 0))
-                    defaultChapters.push(userRole.chapterId)
-                  if(defaultSubChapters.indexOf(userRole.subChapterId< 0))
-                    defaultSubChapters.push(userRole.subChapterId)
-                  if(defaultCommunities.indexOf(userRole.communityId< 0))
-                    defaultCommunities.push(userRole.communityId)
               })
           }
       }

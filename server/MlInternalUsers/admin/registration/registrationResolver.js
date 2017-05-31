@@ -45,6 +45,13 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   args.registration.subChapterName=subChapterDetails.subChapterName;
   args.registration.subChapterId=subChapterDetails._id;
 
+  var communityDetails = mlDBController.findOne('MlCommunity', {subChapterId: (subChapterDetails._id||null),communityDefCode:args.registration.registrationType}, context) || {};
+  var communityDef= mlDBController.findOne('MlCommunityDefinition', {code: (args.registration.registrationType||null)}, context) || {};
+   args.registration.communityId = communityDetails._id;
+   args.registration.communityName=communityDetails.communityName||communityDef.name;
+   args.registration.communityDefName = communityDetails.communityDefName;
+   args.registration.communityDefCode = communityDetails.communityDefCode;
+
  // args.registration.registrationDate=moment(date).format('DD/MM/YYYY HH:mm:ss')
   args.registration.registrationDate=date
   let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
@@ -228,11 +235,13 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
             communityDefCode: details.registrationType
           }, context) || {};
 
+        var communityDef= mlDBController.findOne('MlCommunityDefinition', {code: (details.registrationType||null)}, context) || {};
+
         validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,details);
         if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
         details.communityId = communityDetails._id;
-        details.communityName=communityDetails.communityName;
+        details.communityName=communityDetails.communityName ||communityDef.name;
         details.communityDefName = communityDetails.communityDefName;
         details.communityDefCode = communityDetails.communityDefCode;
 

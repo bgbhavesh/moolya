@@ -133,7 +133,7 @@ export default class MlFilterListRepo{
       case "Gen_Chapters":
 
         if(listData.length < 1){
-          if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3){
+          if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 0){
             let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
           }else{

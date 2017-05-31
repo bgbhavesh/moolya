@@ -60,6 +60,19 @@ class MlGenericTransactions{
     }
   }
 
+  validateTransaction(transactionType,transactionId){
+    let resp = MlResolver.MlMutationResolver['validateTransaction'] ("",{'collection':this.collectionConfig().get(transactionType),'transactionId':transactionId,'status':status},context, "");
+    if(!resp.success){
+      return resp;
+    }else{
+      let code = 401;
+      let result = {message:"Transaction Error"}
+      let response = new MlRespPayload().errorPayload(result, code);
+      console.log(response);
+      return response;
+    }
+  }
+
   collectionConfig(){
     let collection = new Map([["Registration", "MlRegistration"], ["Portfolio", "MlPortfolioDetails"],["InternalRequests","MlRequests"]]);
     return collection

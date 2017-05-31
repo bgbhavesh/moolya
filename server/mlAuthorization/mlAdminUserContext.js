@@ -21,6 +21,7 @@ class MlAdminUserContext
     let defaultSubChapters = [];
     let defaultCommunities = [];
     let defaultCommunityHierarchyLevel;
+    let roleName = null;
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -63,6 +64,7 @@ class MlAdminUserContext
               if(defaultCommunities.indexOf(userRole.communityId< 0))
                 defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
                 // defaultCommunities.push(userRole.communityId)
+              roleName = userRole.roleName
           })
 
       }
@@ -74,7 +76,9 @@ class MlAdminUserContext
                 defaultSubChapters:defaultSubChapters,
                 defaultCommunities:defaultCommunities,
                 defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
-                isMoolya:isMoolya};
+                isMoolya:isMoolya,
+                roleName:roleName
+        };
   }
 
   getDefaultMenu(userId) {

@@ -76,7 +76,8 @@ export default class MlAssignHierarchy extends React.Component {
     let clusterId = this.props.clusterId
     if(departmentInfo!=undefined){
       let departmentId=departmentInfo.departmentId
-      const response = await findDeptRolesActionHandler(departmentId,clusterId);
+      let subDepartmentId = departmentInfo.subDepartmentId;
+      const response = await findDeptRolesActionHandler(departmentId,subDepartmentId,clusterId);
       if(response){
         let roleDetails=[]
         for(let i=0;i<response.length;i++){
@@ -183,13 +184,17 @@ export default class MlAssignHierarchy extends React.Component {
   }
   async findRoles(type) {
     //get deptId
+
     let parentDepartment = this.props.departmentInfo;
     let departmnetId = parentDepartment.departmentId;
     let subDepartmentId = parentDepartment.subDepartmentId
     const response = await findAssignedRolesActionHandler(departmnetId,subDepartmentId,type);
     if(response){
+      console.log(response._id)
       let teamAssignment=response.teamStructureAssignment
       this.setState({loading:false,assignedRoles:{id : response._id,teamStructureAssignment:teamAssignment}})
+    }else{
+      this.setState({loading:false,assignedRoles:{id : '',teamStructureAssignment:{}}})
     }
     return response;
   }
@@ -233,8 +238,8 @@ export default class MlAssignHierarchy extends React.Component {
         label:subDepartmentName
       }
     }`
-    let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String){
-      data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode) {
+    let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String,$currentRoleId:String){
+      data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode,currentRoleId:$currentRoleId) {
         value:_id
         label:roleName
       }
@@ -275,7 +280,7 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel-body">
             {that.state.unAssignedRoles.teamStructureAssignment.map(function (roles,id) {
               let parentDepartment = that.props.departmentInfo;
-              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId}}};
 
               return(
                 <div className="row" key={roles.roleId}>
@@ -367,7 +372,7 @@ export default class MlAssignHierarchy extends React.Component {
                   })
 
                   }
-                </div>):(<div>No Assignments</div>)}
+                </div>):(<div className="panel-body">No Assignments</div>)}
             </div>
           </div>
           <div className="panel panel-default">
@@ -420,7 +425,7 @@ export default class MlAssignHierarchy extends React.Component {
                   })
 
                   }
-                </div>:<div>No Assignments</div>}
+                </div>:<div className="panel-body">No Assignments</div>}
             </div>
           </div>
           <div className="panel panel-default">
@@ -471,7 +476,7 @@ export default class MlAssignHierarchy extends React.Component {
                     )
                   })
                   }
-                </div>):(<div>No Assignments</div>)}
+                </div>):(<div className="panel-body">No Assignments</div>)}
             </div>
           </div>
         </div>

@@ -207,6 +207,11 @@ export default class MlStartupAssets extends React.Component{
     }
   }
 
+  emptyClick(e) {
+    if (this.state.popoverOpen)
+      this.setState({popoverOpen: false})
+  }
+
   render(){
     let assetsQuery=gql`query{
       data:fetchAssets {
@@ -224,7 +229,7 @@ export default class MlStartupAssets extends React.Component{
       displayUploadButton = false
     }
     return(
-      <div>
+      <div onClick={this.emptyClick.bind(this)}>
         <h2>Assets</h2>
         {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">

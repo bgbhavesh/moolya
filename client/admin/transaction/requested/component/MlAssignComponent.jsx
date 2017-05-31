@@ -5,6 +5,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 
 export default class MlAssignComponent extends Component {
 
@@ -79,17 +80,24 @@ export default class MlAssignComponent extends Component {
       "role": this.state.selectedRole,
       "user": this.state.selectedUser
     }
-    let transactionType=this.props.transactionType
-    const response = await assignUserForTransactionAction("Registration",params,this.props.transactionId,"Registration","assignTransaction");
-    if(response.success){
-      this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
-      toastr.success("Transaction assigned to user successfully");
-      FlowRouter.go("/admin/transactions/registrationRequested");
+    if(hierarchyValidations.validateAssignAction(this.props.clusterId,this.state.selectedCluster)){
+      let transactionType=this.props.transactionType
+      const response = await assignUserForTransactionAction("Registration",params,this.props.transactionId,"Registration","assignTransaction");
+      if(response.success){
+        this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
+        toastr.success("Transaction assigned to user successfully");
+        FlowRouter.go("/admin/transactions/registrationRequested");
+      }else{
+        toastr.error("Wrong Hierarchy");
+        this.setState({show:false})
+        FlowRouter.go("/admin/transactions/registrationRequested");
+      }
     }else{
-      toastr.error("Wrong Hierarchy");
+      toastr.error("Wrong assignment");
       this.setState({show:false})
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
+
   }
 
   async selfAssignTransaction(){

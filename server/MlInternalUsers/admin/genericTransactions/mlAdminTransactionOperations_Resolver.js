@@ -22,8 +22,8 @@ MlResolver.MlMutationResolver['updateGenericTransaction'] = (obj, args, context,
       case 'updateTransactionStatus':
         return instance.updateTransactionStatus(transactionType,transactionId,args.parmas.status);
         break;
-      case 'workflowTransaction':
-        return instance.workflowTransaction();
+      case 'validateTransaction':
+        return instance.validateTransaction(transactionType,transactionId);
         break;
     }
   }

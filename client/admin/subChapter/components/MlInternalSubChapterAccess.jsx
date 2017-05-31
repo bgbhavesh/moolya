@@ -126,7 +126,7 @@ export default class MlInternalSubChapterAccess extends React.Component {
               <div className="row">
                 <div className="col-md-4">
                   <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='eye'/></label>
+                    <label className=""><FontAwesome name='search'/></label>
                     <label className="switch">
                       <input type="checkbox" ref="canSearchB" checked={that.state.backendUser.canSearch}
                              onChange={this.onStatusChangeCanSearchB.bind(this)}/>
@@ -146,7 +146,7 @@ export default class MlInternalSubChapterAccess extends React.Component {
                 </div>
                 <div className="col-md-4">
                   <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='eye'/></label>
+                    <label className=""><FontAwesome name='refresh'/></label>
                     <label className="switch">
                       <input type="checkbox" ref="canDiscoverB" checked={that.state.backendUser.canDiscover}
                              onChange={this.onStatusChangeCanDiscoverB.bind(this)}/>

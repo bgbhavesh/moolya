@@ -7,7 +7,7 @@ import _ from "lodash";
 export function getAdminUserContext()
 {
     let user = Meteor.user();
-    let hierarchyLevel = null, hierarchyCode = null, defaultCluster = null, isMoolya = null, communityCode=null;
+    let hierarchyLevel = null, hierarchyCode = null, defaultCluster = null, isMoolya = null, communityCode=null, roleName=null;
     if(user && user.profile && user.profile.isInternaluser == true)
     {
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
@@ -38,10 +38,12 @@ export function getAdminUserContext()
             hierarchyCode=userRole.hierarchyCode;
             communityCode=userRole.communityCode
           }
+          roleName = userRole.roleName
         })
       }
       isMoolya = user.profile.isMoolya;
     }
 
-  return {hierarchyCode:hierarchyCode, hierarchyLevel:hierarchyLevel, clusterId:defaultCluster, isMoolya: isMoolya, communityCode:communityCode}
+  return {hierarchyCode:hierarchyCode, hierarchyLevel:hierarchyLevel, clusterId:defaultCluster, isMoolya: isMoolya, communityCode:communityCode, roleName:roleName}
 }
+

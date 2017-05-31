@@ -200,6 +200,11 @@ export default class MlStartupClients extends React.Component{
     }
   }
 
+  emptyClick(e) {
+    if (this.state.popoverOpen)
+      this.setState({popoverOpen: false})
+  }
+
   render(){
     // let query=gql`query{
     //   data:fetchStageOfCompany {
@@ -217,7 +222,7 @@ export default class MlStartupClients extends React.Component{
       displayUploadButton = false
     }
     return(
-      <div>
+      <div onClick={this.emptyClick.bind(this)}>
         <h2>Clients</h2>
         {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">

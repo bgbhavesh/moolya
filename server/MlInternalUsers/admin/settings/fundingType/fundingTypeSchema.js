@@ -3,7 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
-
+import MlResolver from '../../../../commons/mlResolverDef'
 
 let FundingTypesSchema = `
     type FundingType
@@ -38,4 +38,12 @@ let FundingTypesSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FundingTypesSchema]);
 
+let supportedApi = [
+  {api:'fetchFundingType', actionName:'READ', moduleName:"FUNDINGTYPE"},
+  {api:'fetchFundingTypes', actionName:'READ', moduleName:"FUNDINGTYPE"},
+
+  {api:'createFundingType', actionName:'CREATE', moduleName:"FUNDINGTYPE"},
+  {api:'updateFundingType', actionName:'UPDATE', moduleName:"FUNDINGTYPE"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)
 

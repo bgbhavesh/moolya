@@ -33,10 +33,10 @@ let DocumentFormatsSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentFormatsSchema]);
 let supportedApi = [
-    {api:'createDocumentFormat', actionName:'CREATE', moduleName:"DOCUMENTMAPPING"},
-    {api:'updateDocumentFormat', actionName:'UPDATE', moduleName:"DOCUMENTMAPPING"},
-    {api:'findDocumentFormat', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
-    {api:'fetchDocumentsFormat', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
+    {api:'createDocumentFormat', actionName:'CREATE', moduleName:"DOCUMENTFORMAT"},
+    {api:'updateDocumentFormat', actionName:'UPDATE', moduleName:"DOCUMENTFORMAT"},
+    {api:'findDocumentFormat', actionName:'READ', moduleName:"DOCUMENTFORMAT"},
+    {api:'fetchDocumentsFormat', actionName:'READ', moduleName:"DOCUMENTFORMAT"},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

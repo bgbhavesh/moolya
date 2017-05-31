@@ -110,7 +110,7 @@ let Role = `
   
   type Mutation {
      createRole(role:roleObject, moduleName:String, actionName:String):response
-     updateRole(d:String, role:roleObject, moduleName:String, actionName:String):response
+     updateRole(roleId:String, role:roleObject, moduleName:String, actionName:String):response
   }
 `
 

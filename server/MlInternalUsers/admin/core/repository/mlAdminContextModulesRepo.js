@@ -185,7 +185,7 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};
+        serverQuery={'status':{'$in':['Pending','WIP']}};
         break;
       case 'approved':
         serverQuery={'userId':context.userId,'status':"Approved"};

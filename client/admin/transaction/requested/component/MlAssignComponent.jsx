@@ -1,13 +1,10 @@
-import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
-import {graphql} from "react-apollo";
-import gql from "graphql-tag";
-import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
-import {
-  assignUserForTransactionAction,
-  selfAssignUserForTransactionAction,
-  unAssignUserForTransactionAction
-} from "../actions/assignUserforTransactionAction";
+import React, {Component, PropTypes} from 'react';
+import {render} from 'react-dom';
+import  Select from 'react-select';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
 
 export default class MlAssignComponent extends Component {
 
@@ -128,22 +125,43 @@ export default class MlAssignComponent extends Component {
       data:fetchMoolyaInternalUsers{label:username,value:_id}
     }
     `;
-    let clusterQuery=gql` query{
+   /* let clusterQuery=gql` query{
       data:fetchActiveClusters{label:countryName,value:_id}
     }
     `;
-    let chapterQuery=gql`query($id:String){  
+    let chapterQuery=gql`query($id:String){
     data:fetchChapters(id:$id) {
       value:_id
       label:chapterName
+      }
+    }`;
+    let subChapterquery=gql`query($id:String){
+      data:fetchSubChaptersForRegistration(id:$id) {
+        value:_id
+        label:subChapterName
+      }
+    }`;*/
+    let clusterQuery = gql`query{
+     data:fetchContextClusters {
+        value:_id
+        label:countryName
+      }
+    }
+    `;
+    let chapterQuery = gql`query($id:String){  
+      data:fetchContextChapters(id:$id) {
+        value:_id
+        label:chapterName
       }  
     }`;
-    let subChapterquery=gql`query($id:String){  
-      data:fetchSubChaptersForRegistration(id:$id) {
+
+    let subChapterQuery= gql`query($id:String){  
+      data:fetchContextSubChapters(id:$id) {
         value:_id
         label:subChapterName
       }  
     }`;
+
     let fetchcommunities = gql` query{
       data:fetchCommunityDefinition{label:name,value:code}
     }
@@ -219,7 +237,7 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCluster} queryType={"graphql"} query={clusterQuery} onSelect={that.optionsBySelectCluster.bind(this)} isDynamic={true}/>
           </div>
           <div className="form-group">
-            <Moolyaselect multiSelect={false} placeholder="Select Subchapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterquery} reExecuteQuery={true} queryOptions={subChapterOption} isDynamic={true} onSelect={this.optionsBySelectSubChapter.bind(this)} />
+            <Moolyaselect multiSelect={false} placeholder="Select Subchapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption} isDynamic={true} onSelect={this.optionsBySelectSubChapter.bind(this)} />
           </div>
           <div className="form-group">
             <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedDepartment} queryType={"graphql"} query={departmentQuery} reExecuteQuery={true} queryOptions={departmentOption} isDynamic={true} onSelect={this.optionsBySelectDepartment.bind(this)} />

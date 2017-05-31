@@ -11,7 +11,11 @@ export default class CreateRequestComponent extends Component {
     super(props);
     this.state={
       show:true,
-      requestType:null
+      requestType:null,
+      cluster:null,
+      chapter:null,
+      subChapter:null,
+      community:null
     };
     return this;
   }
@@ -91,14 +95,14 @@ export default class CreateRequestComponent extends Component {
         value:_id
       }
     }`;
-    let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
+   /* let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
 
     let chapterquery=gql`query($id:String){
     data:fetchChapters(id:$id) {
         value:_id,
         label:chapterName
       }
-    }`;
+    }`;*/
 
     let subDepartmentquery=gql`query($id:String){
       data:fetchSubDepartments(id:$id) {
@@ -107,11 +111,31 @@ export default class CreateRequestComponent extends Component {
       }
     }`;
 
-    let subChapterquery=gql`query($chapterId:String,$clusterId:String){
+    /*let subChapterquery=gql`query($chapterId:String,$clusterId:String){
         data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
           value:_id
           label:subChapterName
         }
+    }`;*/
+    let clusterQuery = gql`query{
+     data:fetchContextClusters {
+        value:_id
+        label:countryName
+      }
+    }
+    `;
+    let chapterQuery = gql`query($id:String){  
+      data:fetchContextChapters(id:$id) {
+        value:_id
+        label:chapterName
+      }  
+    }`;
+
+    let subChapterQuery= gql`query($id:String){  
+      data:fetchContextSubChapters(id:$id) {
+        value:_id
+        label:subChapterName
+      }  
     }`;
 
     let communityQuery=gql`query($clusterId:String, $chapterId:String, $subChapterId:String){
@@ -120,9 +144,10 @@ export default class CreateRequestComponent extends Component {
           label:name
       }
     }`;
-
     let chapterOption={options: { variables: {id:this.state.cluster}}};
-    let subchapterOption={options: { variables: {chapterId:this.state.chapter,clusterId:this.state.cluster}}};
+    let subChapterOption={options: { variables: {id:this.state.chapter}}}
+   /* let chapterOption={options: { variables: {id:this.state.cluster}}};
+    let subchapterOption={options: { variables: {chapterId:this.state.chapter,clusterId:this.state.cluster}}};*/
     let communityOption={options: { variables: {clusterId:this.state.cluster, chapterId:this.state.chapter, subChapterId:this.state.subChapter}}};
 
     return (
@@ -139,17 +164,17 @@ export default class CreateRequestComponent extends Component {
               <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(this)} />
+              <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true} id={'country'} onSelect={this.optionsBySelectCluster.bind(this)} />
             </div>
 
             <div className="form-group">
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(this)} />
+                <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery}  isDynamic={true} id={'chapter'} reExecuteQuery={true} queryOptions={chapterOption} onSelect={this.optionsBySelectChapter.bind(this)} />
               </div>
             </div>
             <div className="form-group">
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={this.optionsBySelectSubChapter.bind(this)} />
+                <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery}  isDynamic={true} id={'subChapter'} reExecuteQuery={true} queryOptions={subChapterOption} onSelect={this.optionsBySelectSubChapter.bind(this)} />
               </div>
             </div>
             <div className="form-group">

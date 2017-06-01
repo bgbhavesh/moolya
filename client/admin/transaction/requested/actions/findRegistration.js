@@ -5,8 +5,8 @@ export async function findRegistrationActionHandler(registrationId) {
   let regId = registrationId
   const result = await client.query({
     query: gql`
-   query($id: String){  
-        findRegistrationInfo(registrationId:$id){          
+   query($registrationId: String){  
+        findRegistrationInfo(registrationId:$registrationId){          
           _id
           transactionId
           registrationInfo {
@@ -167,7 +167,7 @@ export async function findRegistrationActionHandler(registrationId) {
       }
     `,
     variables: {
-      id: regId
+      registrationId: regId
     },
     forceFetch: true
   })

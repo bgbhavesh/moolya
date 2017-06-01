@@ -57,7 +57,7 @@ const mlTransactionTypeTableConfig=new MlViewer.View({
   sizePerPage:5,
   graphQlQuery:gql`
                 query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"transaction",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+              data:SearchQuery(module:"TRANSACTIONTYPES",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on Transaction{

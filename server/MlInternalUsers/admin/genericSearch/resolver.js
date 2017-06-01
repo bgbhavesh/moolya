@@ -147,7 +147,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
     totalRecords=MlSubDepartments.find({},findOptions).count();
   }
-  if(args.module=="request"){
+  if(args.module=="REQUESTTYPE"){
     data= MlRequestType.find(query,findOptions).fetch();
     totalRecords=MlRequestType.find(query,findOptions).count();
   }
@@ -290,12 +290,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTransactionTypes.find(query,findOptions).fetch();
     totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
-  if(args.module=="accountType"){
+  if(args.module=="ACCOUNTTYPE"){
     data= MlAccountTypes.find(query,findOptions).fetch();
     totalRecords=MlAccountTypes.find(query,findOptions).count();
   }
 
-  if(args.module == 'BackendUsers'){
+  if(args.module == 'Users'){
     var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
     var queryChange;
     if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
@@ -387,7 +387,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlIndustries.find(query,findOptions).fetch();
     totalRecords=MlIndustries.find(query, findOptions).count();
   }
-  if(args.module=="award"){
+  if(args.module=="awards"){
     data= MlAwards.find(query,findOptions).fetch();
     totalRecords=MlAwards.find(query, findOptions).count();
   }
@@ -407,7 +407,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlStageOfCompany.find(query,findOptions).fetch();
     totalRecords=MlStageOfCompany.find(query,findOptions).count();
   }
-  if(args.module=="process"){
+  if(args.module=="processmapping"){
     data= MlProcessMapping.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
@@ -476,7 +476,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     totalRecords=MlProcessMapping.find(query,findOptions).count();
   }
-  if(args.module=="processdocument"){
+  if(args.module=="documents"){
     data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
@@ -764,8 +764,8 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "cities":resolveType= 'Cities';break;
       case "userType":resolveType= 'UserTypes';break;
       case "roleType":resolveType= 'RoleTypes';break;
-      case "process":resolveType='ProcessType';break;
-      case "processdocument":resolveType='ProcessType';break;
+      case "processmapping":resolveType='ProcessType';break;
+      case "documents":resolveType='ProcessType';break;
       case "request":resolveType='Requests';break;
       case "tax":resolveType='Tax';break;
       case "taxation":resolveType='taxation';break;
@@ -778,12 +778,12 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "kycCategory":resolveType= 'KycCategories';break;
       case "documentMapping":resolveType= 'DocumentMapping';break;
       case "transaction":resolveType= 'Transaction';break;
-      case "accountType":resolveType= 'Account';break;
+      case "ACCOUNTTYPE":resolveType= 'Account';break;
       case "templates":resolveType= 'TemplateDetails';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "industry":resolveType= 'Industry';break;
       case "roles":resolveType= 'Roles';break;
-      case "award":resolveType= 'Award';break;
+      case "awards":resolveType= 'Award';break;
       case "specification":resolveType= 'Specification';break;
       case "profession":resolveType= 'Profession';break;
       case "entity":resolveType= 'Entity';break;
@@ -807,7 +807,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "SubDomain":resolveType= 'SubDomain';break;
       case "dateAndTime":resolveType= 'DateAndTime';break;
       case "language":resolveType= 'Language';break;
-      case "BackendUsers":resolveType= 'BackendUsers';break;
+      case "Users":resolveType= 'BackendUsers';break;
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
       case "community":resolveType= 'Community';break;

@@ -9,7 +9,7 @@ export async function updateRoleActionHandler(roleDetails) {
     mutation: gql`
    mutation  ($id:String!, $role: roleObject!, $moduleName:String, $actionName:String){
        updateRole(
-        id: $id,
+        roleId: $id,
         role: $role,
         moduleName:$moduleName,
         actionName:$actionName

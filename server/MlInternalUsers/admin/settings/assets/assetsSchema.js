@@ -3,6 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
 
 
 let AssetsSchema = `
@@ -38,4 +39,12 @@ let AssetsSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], AssetsSchema]);
 
+let supportedApi = [
+  {api:'createAssets', actionName:'CREATE', moduleName:"ASSETS"},
+  {api:'updateSelectedAsset', actionName:'UPDATE', moduleName:"ASSETS"},
+
+  {api:'fetchAssets', actionName:'READ', moduleName:"ASSETS"},
+  {api:'findAsset', actionName:'READ', moduleName:"ASSETS"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)
 

@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let Role = `
 
   type AssignRoles{
@@ -108,9 +110,20 @@ let Role = `
   
   type Mutation {
      createRole(role:roleObject, moduleName:String, actionName:String):response
-     updateRole(id:String, role:roleObject, moduleName:String, actionName:String):response
+     updateRole(roleId:String, role:roleObject, moduleName:String, actionName:String):response
   }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Role]);
+let supportedApi = [
+    {api:'fetchRole', actionName:'READ', moduleName:"ROLES"},
+    {api:'fetchRolesByDepSubDep', actionName:'READ', moduleName:"ROLES"},
+    {api:'findRole', actionName:'READ', moduleName:"ROLES"},
+    {api:'fetchActiveRoles', actionName:'READ', moduleName:"ROLES"},
+    {api:'fetchAllAssignedRoles', actionName:'READ', moduleName:"ROLES"},
+    {api:'fetchRolesForRegistration', actionName:'READ', moduleName:"ROLES"},
+    {api:'createRole', actionName:'CREATE', moduleName:"ROLES"},
+    {api:'updateRole', actionName:'UPDATE', moduleName:"ROLES"}
+]
 
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 
 const mlTechnologiesTableConfig=new MlViewer.View({
   name:"AssetsTable",
-  module:"Assets",//Module name for filter.
+  module:"Technologies",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["TechnologyName","TechnologyDisplayName","icon","about","isActive"],

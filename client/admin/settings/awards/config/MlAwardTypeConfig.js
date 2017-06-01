@@ -3,7 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 const mlAwardTypeTableConfig=new MlViewer.View({
   name:"awardTypeTable",
-  module:"award",//Module name for filter.
+  module:"awards",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["awardName","awardDisplayName","about","isActive"],
@@ -54,7 +54,7 @@ const mlAwardTypeTableConfig=new MlViewer.View({
   sizePerPage:5,
   graphQlQuery:gql`
                 query SearchQuery( $offset: Int, $limit: Int,$fieldsData:[GenericFilter], $sortData:[SortFilter]) {
-              data:SearchQuery(module:"award",offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
+              data:SearchQuery(module:"awards",offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
                     totalRecords
                     data{
                      ...on Award{

@@ -1,6 +1,8 @@
 
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let Taxation = `
     type taxation{
         _id                   : String                  
@@ -64,3 +66,10 @@ let Taxation = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Taxation]);
 
+let supportedApi = [
+  {api:'createTaxation', actionName:'CREATE', moduleName:"TAXATION"},
+  {api:'updateTaxation', actionName:'UPDATE', moduleName:"TAXATION"},
+
+  {api:'fetchTaxation', actionName:'READ', moduleName:"TAXATION"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -97,6 +97,8 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   let userRegisterInfo=userInfo.registrationInfo;
   let registrationInfo=args.registration
   let clusterInfo=MlClusters.findOne({_id:registrationInfo.clusterId})
+  let communityDef= mlDBController.findOne('MlCommunityDefinition', {code: (args.registration.registrationType||null)}, context) || {};
+    registrationInfo.communityName=communityDef.name;
     registrationInfo.clusterName=clusterInfo.clusterName,
     registrationInfo.clusterId=clusterInfo._id
     registrationInfo.countryId=userRegisterInfo.countryId
@@ -118,7 +120,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   //create transaction
   let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
   args.registration.transactionId = resp.result;
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Pending",emails:emails, transactionId: resp.result}, context)
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Yet To Start",emails:emails, transactionId: resp.result}, context)
   if(id){
 
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);

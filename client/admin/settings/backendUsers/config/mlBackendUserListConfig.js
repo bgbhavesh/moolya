@@ -26,7 +26,7 @@ export const mlBackendUserListConfig=new MlViewer.View({
   ],
   graphQlQuery:gql`
               query SearchQuery( $offset: Int, $limit: Int,$fieldsData:[GenericFilter], $sortData:[SortFilter]) {
-              data:SearchQuery(module:"BackendUsers",offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
+              data:SearchQuery(module:"Users",offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
                     totalRecords
                     data{
                      ...on BackendUsers{

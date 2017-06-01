@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let TemplateAssignment = `        
     type SubProcess{
             _id             : String
@@ -101,3 +103,14 @@ let TemplateAssignment = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],TemplateAssignment]);
+
+let supportedApi = [
+  {api:'findTemplateSteps', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'fetchAssignedTemplate', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
+  {api:'fetchSubProcess', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'findAssignedTemplates', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'findTemplateStepsSelect', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'createTemplateAssignment', actionName:'CREATE', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'updateTemplateAssignment', actionName:'UPDATE', moduleName:"TEMPLATEASSIGNMENT"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

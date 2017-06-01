@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let States = `       
     type States 
     {     
@@ -36,3 +38,11 @@ let States = `
     }
 `
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],States]);
+let supportedApi = [
+  {api:'fetchState', actionName:'READ', moduleName:"STATES"},
+  {api:'FetchActiveStates', actionName:'READ', moduleName:"STATES"},
+  {api:'fetchStatesPerCountry', actionName:'READ', moduleName:"STATES"},
+  {api:'FetchActiveStatesForCluster', actionName:'READ', moduleName:"STATES"},
+  {api:'updateState', actionName:'UPDATE', moduleName:"STATES"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

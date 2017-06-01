@@ -452,6 +452,9 @@ let supportedApi = [
     {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION"}
+    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

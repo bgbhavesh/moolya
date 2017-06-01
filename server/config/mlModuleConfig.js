@@ -61,7 +61,10 @@ let modules = [
     'fundingType',
     'portfolio',
     'transactionLog',
-    'modulelist'];
+    'modulelist',
+    "internalRequests",
+    "internalApprovedRequests"
+  ];
 
 // Meteor.startup(function () {
 

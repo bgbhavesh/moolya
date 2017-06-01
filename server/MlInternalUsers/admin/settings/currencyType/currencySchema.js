@@ -1,5 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef'
 
 let currencySchema = ` 
 
@@ -20,4 +21,8 @@ type currency{
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], currencySchema]);
 
 
+let supportedApi = [
 
+  {api:'fetchCurrency', actionName:'READ', moduleName:"GLOBALSETTINGS"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

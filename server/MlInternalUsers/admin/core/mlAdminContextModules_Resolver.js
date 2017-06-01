@@ -72,7 +72,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "community":
       result=CoreModulesRepo.MlCommunityRepo(args.context,userFilterQuery,contextQuery,findOptions, context);
       break;
-    case "MASTER_SETTINGS":
+    case "MASTERSETTINGS":
       requestParams=args.context;
       requestParams.userId=context.userId;
       result=CoreModulesRepo.MlMasterSettingsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
@@ -81,7 +81,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       let auditParams=args.context;
       result=CoreModulesRepo.MlAuditLogRepo(auditParams,userFilterQuery,contextQuery,findOptions, context);
       break;
-    case "hierarchySubChapters":
+    case "hierarchy":
       result=CoreModulesRepo.MlHierarchySubChapterRepo(args.context,contextQuery,findOptions, context);
       break;
     case "registrationInfo":
@@ -104,12 +104,12 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type='approved';
       result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
-    case "PortfolioRequests":
+    case "portfolioRequests":
       requestParams=args.context||{};
       requestParams.type='requested';
       result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
-    case "PortfolioApproved":
+    case "portfolioApproved":
       requestParams=args.context||{};
       requestParams.type='approved';
       result=CoreModulesRepo.MlPortfolioRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
@@ -148,13 +148,13 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "subChapter":resolveType= 'SubChapter';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "community":resolveType= 'Community';break;
-      case "MASTER_SETTINGS":resolveType= 'MasterSettings';break;
+      case "MASTERSETTINGS":resolveType= 'MasterSettings';break;
       case "AUDIT_LOG":resolveType= 'AuditLogs';break;
-      case "hierarchySubChapters":resolveType= 'SubChapter';break;
+      case "hierarchy":resolveType= 'SubChapter';break;
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
-      case "PortfolioRequests":resolveType= 'Portfoliodetails';break;
-      case "PortfolioApproved":resolveType= 'Portfoliodetails';break;
+      case "portfolioRequests":resolveType= 'Portfoliodetails';break;
+      case "portfolioApproved":resolveType= 'Portfoliodetails';break;
       case "TransactionsLog":resolveType='TransactionsLog';break;
       case "InteractionsLog":resolveType='TransactionsLog';break;
       case "ConversationsLog":resolveType='TransactionsLog';break;

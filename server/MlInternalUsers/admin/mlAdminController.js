@@ -5,6 +5,9 @@
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import { parse, buildASTSchema } from 'graphql';
+import { build } from 'graphql-utilities';
+import { traverse } from 'graphql-parser'
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import { check } from 'meteor/check';
@@ -19,6 +22,8 @@ import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
 let cors = require('cors');
+const Fiber = Npm.require('fibers')
+var _language = require('graphql/language');
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -75,8 +80,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   const graphQLServer = express();
   config.configServer(graphQLServer)
   graphQLServer.use(cors());
-  // graphQLServer.use(authChecker)
-  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
+  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
   {
     try {
       const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
@@ -85,7 +89,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         ...defaultGraphQLOptions,
         ...customOptionsObject,
       };
-      context = getContext({req});
+
+      context = getContext({req, res});
+      var isAut = mlAuthorization.authChecker({req, context})
+      if(!isAut){
+          res.json({unAuthorized:true,message:"Not Authorized"})
+          return;
+      }
 
       return {
         schema  : executableSchema,
@@ -121,11 +131,41 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         }
         switch (moduleName){
             case "USERS":{
-              response = MlResolver.MlMutationResolver['assignUsers'](null, {userId:data.userId, user:data.user, moduleName:data.moduleName, actionName:data.actionName}, context, null);
+              var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
+              var isAuth = false;
+              if(!ret.isWhiteList){
+                isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
+              }
+              if(ret.isWhiteList || isAuth) {
+                response = MlResolver.MlMutationResolver['assignUsers'](null, {
+                  userId: data.userId,
+                  user: data.user,
+                  moduleName: data.moduleName,
+                  actionName: data.actionName
+                }, context, null);
+              }
+              else response = {unAuthorized:true,message:"Not Authorized"}
             }
             break;
             case "COMMUNITY":{
-              response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {communityId:data.communityId, clusterId:data.clusterId, chapterId:data.chapterId, subChapterId:data.subChapterId, community:data.community, clusters:data.clusters, chapters:data.chapters, subchapters:data.subchapters}, context, null);
+              var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
+              var isAuth = false;
+              if(!ret.isWhiteList){
+                isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
+              }
+
+              if(ret.isWhiteList || isAuth) {
+                response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {
+                  communityId: data.communityId,
+                  clusterId: data.clusterId,
+                  chapterId: data.chapterId,
+                  subChapterId: data.subChapterId,
+                  community: data.community,
+                  clusters: data.clusters,
+                  chapters: data.chapters,
+                  subchapters: data.subchapters
+                }, context, null);
+              }
             }
             break;
             case "PROFILE":{

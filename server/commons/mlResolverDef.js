@@ -10,7 +10,9 @@ const MlQueryResolver = {};
 const MlMutationResolver = {};
 const MlUnionResolver={};
 const MlScalarResolver={};
-const MlResolver = {MlQueryResolver, MlMutationResolver,MlUnionResolver,MlScalarResolver};
+const MlModuleResolver = [];
+const MlResolver = {MlQueryResolver, MlMutationResolver,MlUnionResolver, MlScalarResolver, MlModuleResolver};
+
 
 
 const MoolyaDateScalar = `scalar Date`;

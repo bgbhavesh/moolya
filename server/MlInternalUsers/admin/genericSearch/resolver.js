@@ -811,6 +811,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
       case "community":resolveType= 'Community';break;
+      case "REQUESTTYPE":resolveType= 'Requests';break;
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
 
     }

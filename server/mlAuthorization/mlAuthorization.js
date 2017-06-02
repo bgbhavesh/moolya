@@ -301,6 +301,10 @@ class MlAuthorization
                           }
 
                       }
+                      // For Dashboard Community Priming
+                      if(req.variables['clusterId'] == null && req.variables['userType']){
+                          return true
+                      }
                   }
 
             }

@@ -277,7 +277,7 @@ export default class MlStartupLookingFor extends React.Component{
 
 
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                        <Moolyaselect multiSelect={false} placeholder="Select LookingFor" className="form-control float-label" valueKey={'value'}
                                       labelKey={'label'} queryType={"graphql"} query={query}
                                       isDynamic={true}
                                       queryOptions={lookingOption}

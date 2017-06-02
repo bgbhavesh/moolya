@@ -28,7 +28,17 @@ export default class DocumentViewer extends React.Component{
         trigger:"hover"
       });*/
     });
+    $(".information").unbind("click").click(function(){
+      if($(this).hasClass('ml-information')){
+        $(this).removeClass('ml-information').addClass('ml-delete');
+      }else{
+        $(this).removeClass('ml-delete').addClass('ml-information');
+      }
+      $(this).parents('.panel').find(".show-information").toggle(200);
+    });
+
   }
+
   onFileUpload(documentId,docTypeId,status){
     if(status!='Approved'){
       let file=document.getElementById(docTypeId+documentId).files[0];
@@ -86,7 +96,7 @@ export default class DocumentViewer extends React.Component{
            </div>
            </div>
            <div className="pull-right block_action">
-           <span className="single_icon ml ml-information"></span>
+           <span className="single_icon ml ml-information information"></span>
            </div>
            </div>
            <div className="panel-body uploaded_files_swiper">
@@ -102,6 +112,7 @@ export default class DocumentViewer extends React.Component{
 
            </ul>
              <div><center>{doc.status}</center></div>
+             <p className="show-information" style={{'display':'none'}}>Document Format : {doc.allowableFormat[0]}<br />Document Size : {doc.allowableMaxSize}</p>
            </div>
            </div>
 

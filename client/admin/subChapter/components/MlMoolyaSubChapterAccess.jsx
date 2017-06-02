@@ -45,7 +45,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
   }
   onStatusChangeCanSearchB(e) {
     let status = this.refs.canSearchB.checked
-    backendUser={
+    var backendUser={
       canSearch:status,
       canView:this.state.backendUser.canView?this.state.backendUser.canView:false,
       canDiscover:this.state.backendUser.canDiscover?this.state.backendUser.canDiscover:false
@@ -56,7 +56,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
 
   onStatusChangeCanViewB(e) {
     let status = this.refs.canViewB.checked
-    backendUser={
+    var backendUser={
       canSearch:this.state.backendUser.canSearch?this.state.backendUser.canSearch:false,
       canView: status,
       canDiscover:this.state.backendUser.canDiscover?this.state.backendUser.canDiscover:false
@@ -67,7 +67,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
 
   onStatusChangeCanDiscoverB(e) {
     let status = this.refs.canDiscoverB.checked
-    backendUser={
+    var backendUser={
       canSearch:this.state.backendUser.canSearch?this.state.backendUser.canSearch:false,
       canView:this.state.backendUser.canView?this.state.backendUser.canView:false,
       canDiscover:status
@@ -77,7 +77,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
   }
   onStatusChangeCanSearchE(e) {
     let status = this.refs.canSearchE.checked
-    externalUser={
+    var externalUser={
       canSearch:status,
       canView: this.state.externalUser.canView?this.state.externalUser.canView:false,
       canDiscover:this.state.externalUser.canDiscover?this.state.externalUser.canDiscover:false
@@ -88,7 +88,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
 
   onStatusChangeCanViewE(e) {
     let status = this.refs.canViewE.checked
-    externalUser={
+    var externalUser={
       canSearch:this.state.externalUser.canSearch?this.state.externalUser.canSearch:false,
       canView: status,
       canDiscover:this.state.externalUser.canDiscover?this.state.externalUser.canSearch:false
@@ -99,7 +99,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
 
   onStatusChangeCanDiscoverE(e) {
     let status = this.refs.canDiscoverE.checked
-    externalUser={
+    var externalUser={
       canSearch:this.state.externalUser.canSearch?this.state.externalUser.canSearch:false,
       canView: this.state.externalUser.canView?this.state.externalUser.canView:false,
       canDiscover:status
@@ -163,7 +163,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
               <div className="row">
                 <div className="col-md-4">
                   <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='eye'/></label>
+                    <label className=""><FontAwesome name='search'/></label>
                     <label className="switch">
                       <input type="checkbox" ref="canSearchE" checked={that.state.externalUser.canSearch}
                              onChange={this.onStatusChangeCanSearchE.bind(this)}/>
@@ -183,7 +183,7 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
                 </div>
                 <div className="col-md-4">
                   <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='eye'/></label>
+                    <label className=""><FontAwesome name='refresh'/></label>
                     <label className="switch">
                       <input type="checkbox" ref="canDiscoverE" checked={that.state.externalUser.canDiscover}
                              onChange={this.onStatusChangeCanDiscoverE.bind(this)}/>

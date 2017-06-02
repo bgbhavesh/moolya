@@ -137,7 +137,7 @@ class MlAuthorization
         if(user && user.profile && user.profile.isInternaluser == true)
         {
             let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
-            let hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
+            var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
 
             if(hierarchy.isParent===true){
               return true;
@@ -161,7 +161,7 @@ class MlAuthorization
                 for(var i = 0; i < user_roles.length; i++){
                     ret = this.validateRole(user_roles[i].roleId, module, action)
                     if(ret){
-                      return this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch)
+                      return this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch, hierarchy)
                     }
                 }
             }
@@ -192,7 +192,7 @@ class MlAuthorization
         return ret;
     }
 
-    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)
+    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch, hierarchy)
     {
         switch (moduleName){
 
@@ -301,17 +301,32 @@ class MlAuthorization
                           }
 
                       }
+                      // For Dashboard Community Priming
+                      if(req.variables['clusterId'] == null && req.variables['userType']){
+                          return true
+                      }
                   }
 
             }
             break;
-            case 'TAXATION':
-            case 'GLOBALSETTINGS':
+            case 'GLOBALSETTINGS':{
+              if(actionName == 'CREATE' && hierarchy.level>=3){
+                return true;
+              }
+              else if(actionName == 'UPDATE' && hierarchy.level>=3){
+                return true;
+              }
+              else if(actionName == 'READ'){
+                return true;
+              }
+            }
+            break;
             case 'MASTERSETTINGS':{
-                if(actionName == 'CREATE'){
+                if(actionName == 'CREATE' && hierarchy.level>=3){
                   return true;
                 }
-                else if(actionName == 'UPDATE'){
+                else if(actionName == 'UPDATE' && hierarchy.level>=3){
+                  return true
                 }
                 else if(actionName == 'READ'){
                     return true;
@@ -350,12 +365,69 @@ class MlAuthorization
                         }
                     }
               }
+
+              if(actionName == 'READ')
+                return true;
+          }
+          break;
+          case 'ROLES':{
+            if(roleDetails['clusterId'] == req.variables['clusterId'])
+            {
+              // cluster admin context
+              if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+                return true;
+              }
+              // chapter admin context
+              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+                return true
+              }
+
+              // sub chapter admin context
+              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
+                return true
+              }
+
+              // community admin context
+              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
+                return true
+              }
+
+            }
+          }
+          break;
+          case 'INTERNALREQUESTS':{
+            return true
+          }
+          break;
+          case 'INTERNALAPPROVEDREQUESTS':{
+            return true
+          }
+          break;
+          case 'DOCUMENTS':{
+            if(actionName == 'READ' || isContextSpecSearch){
+              return true;
+            }
+          }
+          break;
+          case 'TEMPLATEASSIGNMENT':{
+            if(actionName == 'READ' || isContextSpecSearch){
+              return true;
+            }
           }
           break;
           case 'FILTERS':
           case 'REQUESTTYPE':{
               return true;
           }
+          break;
+          case 'TAXATION':{
+            if(hierarchy.level>=3){
+              return true
+            }else if(actionName == 'READ' || isContextSpecSearch){
+              return true;
+            }
+          }
+          break;
           case 'PORTFOLIO':{
             if(actionName == 'CREATE' || isContextSpecSearch)
               return true;
@@ -391,6 +463,7 @@ class MlAuthorization
 
             }
           }
+          break;
         }
 
         return false

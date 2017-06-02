@@ -117,7 +117,7 @@ let Role = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Role]);
 let supportedApi = [
     {api:'fetchRole', actionName:'READ', moduleName:"ROLES"},
-    {api:'fetchRolesByDepSubDep', actionName:'READ', moduleName:"ROLES"},
+    {api:'fetchRolesByDepSubDep', actionName:'READ', moduleName:"ROLES", isWhiteList:true},
     {api:'findRole', actionName:'READ', moduleName:"ROLES"},
     {api:'fetchActiveRoles', actionName:'READ', moduleName:"ROLES"},
     {api:'fetchAllAssignedRoles', actionName:'READ', moduleName:"ROLES"},

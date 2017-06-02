@@ -305,6 +305,12 @@ class MlAuthorization
                       if(req.variables['clusterId'] == null && req.variables['userType']){
                           return true
                       }
+                      if(req.variables['subChapterId']){
+                        var subChapter = mlDBController.findOne('MlSubChapters', {"_id":req.variables.subChapterId}, context)
+                        if(subChapter && roleDetails['clusterId'] == subChapter.clusterId) {
+                          return true
+                        }
+                      }
                   }
 
             }

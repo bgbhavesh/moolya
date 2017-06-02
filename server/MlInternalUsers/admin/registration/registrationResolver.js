@@ -4,6 +4,7 @@ import MlRegistrationPreCondition from './registrationPreConditions';
 import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
+import geocoder from 'geocoder'
 
 import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
@@ -137,11 +138,9 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
 
   var response=null;
-
- // let clusterInfo=MlClusters.findOne({_id:args.registration.clusterId})
- // var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.clusterId":args.registration.clusterId},{"registrationInfo.registrationType":args.registration.registrationType}]})
-  var validate = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
-  if(validate){
+  var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
+  var userExist = mlDBController.findOne('users', {"profile.email":args.registration.email}, context) || {};
+  if(registrationExist || userExist){
     let code = 400;
     let result = {message: "Registration Exist"}
     let errResp = new MlRespPayload().errorPayload(result, code);
@@ -730,14 +729,47 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         //   { _id : args.registrationId },
         //   { $push: { 'addressInfo': args.registration.addressInfo[0] } }
         // )
-        id = mlDBController.update('MlRegistration', args.registrationId, { 'addressInfo': args.registration.addressInfo[0] }, {$push:true}, context)
-      }else{
-        // id = MlRegistration.update(
-        //   { _id : args.registrationId },
-        //   { $set: { 'addressInfo': args.registration.addressInfo } }
-        // )
+        let city = args.registration.addressInfo[0].addressCity
+        geocoder.geocode(city, Meteor.bindEnvironment(function ( err, data ) {
+          if(err){
+            return "Invalid City Name";
+          }
+          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
+          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
 
+          try{
+            // let id = MlClusters.insert(cluster);
+           let  id = mlDBController.update('MlRegistration', args.registrationId, { 'addressInfo': args.registration.addressInfo[0] }, {$push:true}, context)
+            if(id){
+              let code = 200;
+              let result = {addressId: id}
+              let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+              return response
+            }
+          }catch(e){
+            throw new Error("Error while updating address "+e);
+          }
+
+        }),{key:Meteor.settings.private.googleApiKey});
+      }else{
         id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
+        /*let data =  args.registration.addressInfo;
+
+       _.map(data, function (current) {
+          let city = current.addressCity
+          geocoder.geocode(city, Meteor.bindEnvironment(function ( err, data ) {
+            if(err){
+              return "Invalid City Name";
+            }
+            current.latitude = data.results[0].geometry.location.lat;
+            current.longitude = data.results[0].geometry.location.lng;
+            id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': data}, {$set: true}, context)
+
+          }),{key:Meteor.settings.private.googleApiKey});
+        });*/
+       // id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': data}, {$set: true}, context)
+
+       // id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
       }
     }else if(args.type == "SOCIALLINKS") {
       let dbData = _.pluck(registrationDetails.socialLinksInfo, 'socialLinkType') || [];

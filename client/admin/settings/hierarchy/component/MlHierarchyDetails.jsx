@@ -145,6 +145,8 @@ export default class MlHierarchyDetails extends React.Component {
       if (response && response.result)
         toastr.success(response.result);
       return response;
+    }else{
+      toastr.error("Final Approval role is mandatory");
     }
   }
 

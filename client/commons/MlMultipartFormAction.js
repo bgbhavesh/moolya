@@ -38,6 +38,9 @@ export async function multipartFormHandler(data, file,endPoint) {
 
     console.log(result)
     const id = result;
+    if(result.unAuthorized){
+        FlowRouter.go('/unauthorize')
+    }
     return id
 }
 

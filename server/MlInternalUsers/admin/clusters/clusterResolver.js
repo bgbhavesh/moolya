@@ -98,16 +98,8 @@ MlResolver.MlMutationResolver['upsertCluster'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchCluster'] = (obj, args, context, info) => {
-  // TODO : Authorization
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, {clusterId:args._id});
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
-  if (args._id) {
-    var id= args._id;
-    // let response= MlClusters.findOne({"_id":id});
+  if (args.clusterId) {
+    var id= args.clusterId;
     let response = mlDBController.findOne('MlClusters', {"_id":id}, context)
     return response;
   }

@@ -3,6 +3,7 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
+var defaultModules = ["CHAPTER", "SUBCHAPTER", "COMMUNITY"];
 
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
@@ -34,6 +35,28 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   // role.createdBy = Meteor.users.findOne({_id:context.userId}).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
   // let id = MlRoles.insert({...role});
+
+  // Adding Default Modules
+
+  _.each(defaultModules, function (mod) {
+    var module = mlDBController.findOne("MlModules", {code:mod}, context);
+    var readAction = mlDBController.findOne("MlActions", {code: "READ"}, context);
+    var isModAvailable = _.findIndex(role.modules, {moduleId:module._id})
+
+    if((isModAvailable <= 0) && module && readAction){
+      var moduleObj = {
+        moduleId: module._id,
+        moduleName: module.name,
+        validFrom: null,
+        validTo: null,
+        isActive: true,
+        actions: [{actionId: readAction._id}]
+      }
+      role.modules.push(moduleObj)
+    }
+  })
+
+
   let id = mlDBController.insert('MlRoles', role, context)
   if (id) {
     let code = 200;
@@ -54,12 +77,12 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
+  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  // if (!isValidAuth) {
+  //   let code = 401;
+  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+  //   return response;
+  // }
 
   if (!args.role.roleName) {
     let code = 409;
@@ -67,16 +90,16 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
     return response;
   }
 
-  if (args.id) {
+  if (args.roleId) {
     // let role = MlRoles.findOne({_id: args.id});
-    let role = mlDBController.findOne('MlRoles', {_id: args.id}, context)
+    let role = mlDBController.findOne('MlRoles', {_id: args.roleId}, context)
     if (role) {
       if (role.isSystemDefined) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("Cannot edit system defined Role", code);
         return response;
       } else {
-        var id = args.id;
+        var id = args.roleId;
         // let result= MlRoles.update(id, {$set: args.role});
         let result = mlDBController.update('MlRoles', id, args.role, {$set: true}, context);
         let code = 200;

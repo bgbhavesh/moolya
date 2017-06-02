@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let HierarchyAssignmentSchema = `
 
     type HierarchyAssignment{
@@ -70,3 +72,14 @@ let HierarchyAssignmentSchema = `
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchyAssignmentSchema]);
+
+let supportedApi = [
+  {api:'fetchAssignedRolesHierarchy', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchFinalApprovalRole', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchHierarchyRoles', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchHierarchyUsers', actionName:'READ', moduleName:"HIERARCHY"},
+
+  {api:'updateHierarchyAssignment', actionName:'UPDATE', moduleName:"HIERARCHY"},
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let Template = `        
     type TemplateDetails{
             _id                         : String,
@@ -33,3 +35,10 @@ let Template = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Template]);
+let supportedApi = [
+  {api:'findStepAssignedTemplates', actionName:'READ', moduleName:"TEMPLATE"},
+  {api:'findTemplates', actionName:'READ', moduleName:"TEMPLATE"},
+  {api:'findTemplatesSelect', actionName:'READ', moduleName:"TEMPLATE"},
+  {api:'updateStepAssignedTemplate', actionName:'UPDATE', moduleName:"TEMPLATE"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

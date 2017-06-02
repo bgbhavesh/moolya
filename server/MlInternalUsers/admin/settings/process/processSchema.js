@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let Process = `
 
     type ProcessType{
@@ -178,5 +180,11 @@ let Process = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Process]);
-
-
+let supportedApi = [
+    {api:'createProcess', actionName:'CREATE', moduleName:"PROCESSMAPPING"},
+    {api:'updateProcess', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
+    {api:'upsertProcessDocument', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
+    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING"},
+    {api:'findProcessDocumentForRegistration', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 const mlApprovedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
-  module:"portfolioInfo",//Module name for filter.
+  module:"portfolioDetails",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["firstName","lastName"],
@@ -87,7 +87,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
               }
               `*/
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"PortfolioApproved",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    data:ContextSpecSearch(module:"portfolioApproved",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
                       ...on Portfoliodetails{

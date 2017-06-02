@@ -31,6 +31,8 @@ let registrationSchema = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude        :  Int
+        longitude       :  Int
      }
      
      type SocialLinkInfoSchema{
@@ -94,6 +96,8 @@ let registrationSchema = `
       addressState      :  String
       addressCountry : String
       addressPinCode : String
+      latitude        :  Int
+      longitude       :  Int
     }
     
     input SocialLinkInfo{

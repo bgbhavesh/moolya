@@ -73,7 +73,7 @@ MlLoginContent = React.createClass({
                          onBlur={this.validationCheck}/>
 
                   <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
-                  <button className="ml_submit_btn" type="button" onClick={this.loginSubmit}>Sign in</button>
+                  <button className="ml_submit_btn" ref="signIn" type="button" onClick={this.loginSubmit}>Sign in</button>
                   <br className="brclear"/>
                   <p><a href="#">Forgot Password</a> | <a href="#">Register</a></p>
                 </form>

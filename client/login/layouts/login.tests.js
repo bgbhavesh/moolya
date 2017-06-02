@@ -6,11 +6,15 @@ import {
   scryRenderedDOMComponentsWithClass,
   Simulate
 } from 'react-addons-test-utils';
-
-// Need to import to get the value of the MlLoginContent from the file.
+// Need to import to get MlLoginContent from the file.
 import {spy, stub} from 'sinon';
 import {} from './login.jsx';
-import { expect } from 'chai';
+//using a different expect (not from chai)
+import expect from 'expect';
+import expectJSX from 'expect-jsx';
+//for shallow rendering
+const ReactShallowRenderer = require('react-test-renderer/shallow');
+expect.extend(expectJSX);
 
 describe('Client Side Test: Login Module', () => {
 
@@ -21,8 +25,8 @@ describe('Client Side Test: Login Module', () => {
     const inputField = scryRenderedDOMComponentsWithClass(component, 'input');
     const button = scryRenderedDOMComponentsWithClass(component, 'button');
 
-    expect(inputField).to.be.ok;
-    expect(button).to.be.ok;
+    expect(inputField).toExist();
+    expect(button).toExist();
   });
   /*
     For performing the second test case, add ref="signIn" to the sign in button in login.jsx
@@ -38,7 +42,27 @@ describe('Client Side Test: Login Module', () => {
     Simulate.change(password);
     Simulate.click(button);
     console.log(component.refs.username.value);
-    expect(mlValidations.formValidations.calledOnce).to.be.true;
+    expect(mlValidations.formValidations.calledOnce).toEqual(true);
   });
+
+  it('should display the moolya logo', function(){
+    formSubmits = () => { };
+    const renderer = new ReactShallowRenderer();
+    renderer.render(<MlLoginContent formSubmit={formSubmits}/>);
+    output = renderer.getRenderOutput();
+    expect(output.type).toEqual('div');
+    expect(output).toIncludeJSX(<img className="logo" src="/images/moolya_logo.png"/>);
+    expect(output).toIncludeJSX(<div className="login_top_in"><span>Login</span></div>);
+
+
+  });
+   it('should display forgot password and register options',function () {
+     expect(output).toIncludeJSX(<p><a href="#">Forgot Password</a> | <a href="#">Register</a></p>);
+   })
+   it('should display a checkbox for remember me', function () {
+     expect(output).toIncludeJSX(<div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>);
+     // expect(output).toIncludeJSX(<input type="checkbox"/><span>Remember me</span>);
+   })
+
 
 });

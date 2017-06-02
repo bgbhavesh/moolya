@@ -8,7 +8,7 @@ import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 const mlCommunityDashboardListConfig=new MlViewer.View({
   name:"communityDashBoardList",
-  module:"community",
+  module:"users",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
   throttleRefresh:true,
@@ -51,7 +51,7 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
 
 const mlCommunityDashboardMapConfig=new MlViewer.View({
   name:"communityDashBoardMap",
-  module:"community",
+  module:"users",
   viewType:MlViewerTypes.MAP,
   extraFields:[],
   throttleRefresh:true,

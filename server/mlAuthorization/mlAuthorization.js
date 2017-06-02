@@ -25,7 +25,7 @@ class MlAuthorization
           let isContextSpecSearch = false
           for(var i = 0; i < query.definitions.length; i++){
             const d = query.definitions[i];
-            console.log(d.kind)
+            // console.log(d.kind)
             switch (d.kind){
               case 'OperationDefinition':
                 if (schemaDef) {

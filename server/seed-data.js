@@ -80,7 +80,10 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
                   ]
@@ -110,7 +113,10 @@ if(!chapterAdmin){
     {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
@@ -141,7 +147,10 @@ if(!subchapterAdmin){
     {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
@@ -172,7 +181,10 @@ if(!communityAdmin){
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]

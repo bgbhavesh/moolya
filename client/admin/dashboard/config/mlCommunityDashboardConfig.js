@@ -80,7 +80,7 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
               data{
                   ...on BackendUsers{
                       _id,
-                      text:profile{email}
+                      text:username
                       isActive:profile{isActive}                      
                       lat:latitude
                       lng:longitude

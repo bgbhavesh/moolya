@@ -422,6 +422,8 @@ let registrationSchema = `
          resendSmsVerification(mobileNumber:String):response
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
+         forgotPassword(email:String):response
+         resetPassword(token:String, password:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
@@ -451,14 +453,15 @@ let supportedApi = [
     {api:'RemoveFileFromDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'ApprovedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'RejectedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION"},
     {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION"},
     {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

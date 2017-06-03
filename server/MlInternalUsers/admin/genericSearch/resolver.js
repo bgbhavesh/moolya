@@ -286,7 +286,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     totalRecords=MlDocumentMapping.find(query,findOptions).count();
   }
-  if(args.module=="transaction"){
+  if(args.module=="transactionTypes"){
     data= MlTransactionTypes.find(query,findOptions).fetch();
     totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
@@ -777,7 +777,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "documentFormat":resolveType= 'DocumentFormats';break;
       case "kycCategory":resolveType= 'KycCategories';break;
       case "documentMapping":resolveType= 'DocumentMapping';break;
-      case "transaction":resolveType= 'Transaction';break;
+      case "transactionTypes":resolveType= 'Transaction';break;
       case "ACCOUNTTYPE":resolveType= 'Account';break;
       case "templates":resolveType= 'TemplateDetails';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
@@ -813,6 +813,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "community":resolveType= 'Community';break;
       case "REQUESTTYPE":resolveType= 'Requests';break;
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
+      case 'TransactionsLog':resolveType='TransactionsLog';break
 
     }
 

@@ -338,7 +338,21 @@ if(Meteor.isServer){
                     "dynamicLinkHandler" : "",
                     "subMenusId":"chapter_chapters",
                     "subMenuMappingId":"chapter_assignusers"
+                  },
+
+                  {
+                    "link" : "/admin/chapters/history",
+                    "name" : "History",
+                    "uniqueId" : "chapter_history",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"chapter_chapters",
+                    "subMenuMappingId": "chapter_history"
                   }
+
                 ]
             //   }
             // ]
@@ -365,6 +379,18 @@ if(Meteor.isServer){
             "dynamicLinkHandler" : "",
             "subMenusId":"community",
             "subMenuMappingId":"community_Community_Details"
+          },
+          {
+            "link" : "/admin/community/history",
+            "name" : "History",
+            "uniqueId" : "community_Histroy_Details",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "subMenuMappingId":"community_Histroy_Details"
           },
           // {
           //   "link" : "/admin/community/assignusers",
@@ -447,7 +473,27 @@ if(Meteor.isServer){
                 "image": ""
               }
             ]
-          }
+          },
+          {
+            "link" : "/admin/documents/history",
+            "name" : "History",
+            "uniqueId" : "documents_History",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/history",
+                "name": "List Clusters",
+                "uniqueId": "documents_HistoryList",
+                "subMenuMappingId":"documents_History",
+                "subMenusId":"documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
       ]
 
       },
@@ -493,7 +539,39 @@ if(Meteor.isServer){
                 ]
               },
             ]
-          }
+          },
+         /* {
+            "link" : "/admin/templates/history",
+            "name" : "History",
+            "uniqueId" : "templates_History",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"templates",
+            "subMenuMappingId":""
+          },*/
+          {
+            "link" : "/admin/templates/history",
+            "name" : "History",
+            "uniqueId" : "templates_History",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/templates/history",
+                "name": "Templates History",
+                "uniqueId": "templates_HistoryList",
+                "subMenuMappingId":"templates_History",
+                "subMenusId":"templates",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
       {
@@ -623,6 +701,16 @@ if(Meteor.isServer){
                 "link" : "/admin/transactions/createRegistration",
                 "name" : "Create",
                 "uniqueId" : "transaction_registration_create",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                //"subMenuMappingId":"transaction_registration_create"
+              },
+              {
+                "link" : "/admin/transactions/registrationHistory",
+                "name" : "History",
+                "uniqueId" : "transaction_registration_history",
                 "isLink" : true,
                 "isMenu" : true,
                 "image" : "",
@@ -759,6 +847,16 @@ if(Meteor.isServer){
             "link": "/admin/transactions/conversationsLog ",
             "name": "Conversations",
             "uniqueId": "Conversations_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/history",
+            "name": "History",
+            "uniqueId": "History_Log",
             "isLink": true,
             "isMenu": true,
             "image": "",
@@ -2019,6 +2117,26 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/history",
+            "name" : "History",
+            "uniqueId" : "settings_history",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link": "/admin/settings/history",
+                "name": "History List",
+                "uniqueId": "settings_historyList",
+                "subMenuMappingId":"settings_history",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+            ]
           }
         ]
       }

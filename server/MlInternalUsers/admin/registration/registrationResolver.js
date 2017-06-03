@@ -730,9 +730,12 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         //   { $push: { 'addressInfo': args.registration.addressInfo[0] } }
         // )
         let city = args.registration.addressInfo[0].addressCity
-        geocoder.geocode(city, Meteor.bindEnvironment(function ( err, data ) {
+        let area = args.registration.addressInfo[0].addressArea
+        let locality = args.registration.addressInfo[0].addressLocality
+        let pin =args.registration.addressInfo[0].addressPinCode
+        geocoder.geocode(locality+","+area+","+city, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
-            return "Invalid City Name";
+            throw new Error("Invalid Locality selection "+e);
           }
           args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
           args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
@@ -752,24 +755,31 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
         }),{key:Meteor.settings.private.googleApiKey});
       }else{
-        id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
-        /*let data =  args.registration.addressInfo;
+        let city = args.registration.addressInfo[0].addressCity
+        let area = args.registration.addressInfo[0].addressArea
+        let locality = args.registration.addressInfo[0].addressLocality
+        let pin =args.registration.addressInfo[0].addressPinCode
+        geocoder.geocode(locality+","+area+","+city, Meteor.bindEnvironment(function ( err, data ) {
+          if(err){
+            throw new Error("Invalid Locality selection "+e);
+          }
+          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
+          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
 
-       _.map(data, function (current) {
-          let city = current.addressCity
-          geocoder.geocode(city, Meteor.bindEnvironment(function ( err, data ) {
-            if(err){
-              return "Invalid City Name";
+          try{
+            // let id = MlClusters.insert(cluster);
+            let id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
+            if(id){
+              let code = 200;
+              let result = {addressId: id}
+              let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+              return response
             }
-            current.latitude = data.results[0].geometry.location.lat;
-            current.longitude = data.results[0].geometry.location.lng;
-            id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': data}, {$set: true}, context)
+          }catch(e){
+            throw new Error("Error while updating address "+e);
+          }
+        }),{key:Meteor.settings.private.googleApiKey});
 
-          }),{key:Meteor.settings.private.googleApiKey});
-        });*/
-       // id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': data}, {$set: true}, context)
-
-       // id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
       }
     }else if(args.type == "SOCIALLINKS") {
       let dbData = _.pluck(registrationDetails.socialLinksInfo, 'socialLinkType') || [];
@@ -1101,4 +1111,33 @@ MlResolver.MlQueryResolver['fetchContextSubChapters'] = (obj, args, context, inf
   let code = 200;
   let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
   return result
+}
+
+MlResolver.MlMutationResolver['forgotPassword'] = (obj, args, context, info) =>{
+  console.log(args);
+  if (args.email) {
+    const result= MlAccounts.sendForgotPasswordEamil(args.email, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Email is mandatory",403);
+  }
+}
+
+MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) =>{
+  if (args.password && args.token) {
+    const result= MlAccounts.resetPasswordWithToken(args.token, args.password, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
+  }
 }

@@ -49,6 +49,20 @@ FlowRouter.route('/login', {
   }
 });
 
+FlowRouter.route('/reset/:token', {
+  name:'login',
+  action:()=>{
+    mount(MlLoginLayout, {content:<MlResetPasswordContent />})
+  }
+});
+
+FlowRouter.route('/forgot-password', {
+  name:'login',
+  action:()=>{
+    mount(MlLoginLayout, {content:<MlForgotPasswordContent />})
+  }
+});
+
 FlowRouter.route('/unauthorize', {
   name:'unauthorize',
   action:()=>{

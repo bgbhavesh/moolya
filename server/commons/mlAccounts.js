@@ -328,9 +328,21 @@ export default MlAccounts=class MlAccounts {
     if(!user){
       return {email:email, error: true,reason:"Invalid Email, User not register with this email", code:404};
     }
+    context.userId = user._id;
+    context.browser = 'Forgot Password';
+    context.url="https://mymoolya.com";
     let token = Random.secret();
     let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
     if(res){
+      var emailOptions={};
+      //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
+      emailOptions.from=fromEmail;
+      emailOptions.to=email;
+      emailOptions.subject="Forgot Password !";
+      emailOptions.html=Meteor.absoluteUrl('reset')+'/'+token;
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml(emailOptions);
+      }, 2 * 1000);
       return {error: false,reason:"Reset link send successfully", code:200};
     }
   }
@@ -340,6 +352,9 @@ export default MlAccounts=class MlAccounts {
      if(!user){
       return {token:token, error: true,reason:"Reset link Expired/Used", code:404};
     }
+    context.userId = user._id;
+    context.browser = 'Reset Password API';
+    context.url="https://mymoolya.com";
     let salted = passwordUtil.hashPassword(password);
     let res = mlDBController.update('users', user._id, { 'services.password.bcrypt': salted, 'services.password.reset': {} }, {$set:true}, context);
     if(res){

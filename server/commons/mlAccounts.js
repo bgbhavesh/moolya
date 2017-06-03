@@ -5,6 +5,7 @@
 import mlSms from './mlSms';
 import MlDBController from './mlDBController';
 import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
+import passwordUtil from "./passwordUtil";
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -322,6 +323,29 @@ export default MlAccounts=class MlAccounts {
     }
   }
 
+  static sendForgotPasswordEamil(email, context) {
+    user = mlDBController.findOne('users', {"$or":[{username:email},{'emails.address':email}]});
+    if(!user){
+      return {email:email, error: true,reason:"Invalid Email, User not register with this email", code:404};
+    }
+    let token = Random.secret();
+    let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
+    if(res){
+      return {error: false,reason:"Reset link send successfully", code:200};
+    }
+  }
+
+  static resetPasswordWithToken(token, password, context) {
+    user = mlDBController.findOne('users', {"services.password.reset.token":token});
+     if(!user){
+      return {token:token, error: true,reason:"Reset link Expired/Used", code:404};
+    }
+    let salted = passwordUtil.hashPassword(password);
+    let res = mlDBController.update('users', user._id, { 'services.password.bcrypt': salted, 'services.password.reset': {} }, {$set:true}, context);
+    if(res){
+      return {error: false,reason:"Password reset successfully", code:200};
+    }
+  }
 }
 
 Meteor.methods({

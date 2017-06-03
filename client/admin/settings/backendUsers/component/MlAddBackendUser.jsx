@@ -343,10 +343,14 @@ class MlAddBackendUser extends React.Component {
 
                     <div className="form-group switch_wrap inline_switch">
                       <label>Global Assignment Availability</label>
-                      <label className="switch">
+                      {(this.state.selectedBackendUserType == 'non-moolya') ? <label className="switch">
+                        <input type="checkbox" ref="globalAssignment" disabled="disabled"/>
+                        <div className="slider"></div>
+                      </label> : <label className="switch">
                         <input type="checkbox" ref="globalAssignment"/>
                         <div className="slider"></div>
-                      </label>
+                      </label>}
+
                     </div>
                     <br className="brclear"/>
                     <div className="form-group switch_wrap inline_switch">

@@ -11,6 +11,7 @@ import moment from "moment";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {customFilterSearchQuery} from "./customFilterSearchQueryActionHandler"
 import _ from 'lodash';
+import _underscore from 'underscore'
 export default class MlCustomFilter extends Component {
   constructor(props){
     super(props);
@@ -64,27 +65,16 @@ export default class MlCustomFilter extends Component {
     }
   }
   optionsSelected(index,selectedFieldName,displayName, selectedValue, callback,selObject){
-    if(displayName == "Cluster"){
-      let selectedValues = this.state.selectedDropdownValues
-      let that = this;
-      var result = _.map(selectedValues, function (currentObject) {
-        let selectedOption = null;
-        if(currentObject["selectedOption"] != "selectedOption_registrationInfo.communityDefName"){
-          selectedOption = currentObject["selectedOption"];
-        }
-
-        that.setState({[selectedOption] : ""})
 
 
-      });
-    }
+
     let selectedOption = "selectedOption_"+selectedFieldName;
 
     let selectedValues = this.state.selectedDropdownValues;
     selectedValues.push({selectedOption})
     this.setState({selectedDropdownValues : selectedValues})
     this.setState({[selectedOption] : selectedValue})
-    this.setFilterData(selectedFieldName,selectedValue,"List",null)
+    this.setFilterData(selectedFieldName,selectedValue,displayName,"List",null)
 
 
 
@@ -98,7 +88,7 @@ export default class MlCustomFilter extends Component {
     this.setFilterData(fieldName,value,"Boolean",null)
   }
 
-  setFilterData(selectedFieldName,selectedValue,selectedType,selectedSubType){
+  setFilterData(selectedFieldName,selectedValue,displayName,selectedType,selectedSubType){
     let queries = this.state.filterQueries;
 
 
@@ -115,6 +105,30 @@ export default class MlCustomFilter extends Component {
           queries.push(dateSelect)
         }else{
           queries.push(selector);
+          if(selectedType == "List"){
+            if(displayName == "Cluster"){
+
+              queries = queries || []
+              let that = this
+              _.map(queries, function (obj,index) {
+                if(obj&&obj.fieldName == ('registrationInfo.chapterId' || 'registrationInfo.subChapterId' || 'chapterId' || 'subChapterId')){
+                  queries = _underscore.without(queries, _underscore.findWhere(queries, {
+                    fieldName: obj.fieldName
+                  }));
+
+                 /* let select =  "selectedOption_"+obj.fieldName;
+                  this.setState({[select] : ""})*/
+                  //for making chapter,subchapter values empty on change of cluster
+                  let selectedOption =  "selectedOption_"+obj.fieldName;
+                  that.setState({[selectedOption] : ""})
+                }else{
+                  queries = queries
+                }
+
+              })
+
+            }
+          }
         }
 
 

@@ -16,6 +16,7 @@ import MlChapterCommunityDetails from '../../admin/chapter/components/MlChapterC
 import MlViews from '../../admin/core/components/MlViews';
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlAssignBackendUsers from '../../admin/cluster/components/MlAssignBackendUsers'
+import MlChapterTabHistoryList from '../../admin/chapter/chapterAuditLog/components/MlChapterTabHistoryList'
 
 adminSection.route('/chapters/', {
   name: 'chapter_chapters',
@@ -69,5 +70,13 @@ adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/communities/:c
   name: 'chapter_communities_assignusers',
   action(params){
     mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlAssignBackendUsers params={params}/>})
+  }
+});
+
+
+adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/history', {
+  name: 'chapter_history',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlChapterTabHistoryList params={params}/>})
   }
 });

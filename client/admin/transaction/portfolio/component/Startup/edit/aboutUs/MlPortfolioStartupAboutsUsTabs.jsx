@@ -55,7 +55,8 @@ export default class MlStartupTab extends React.Component{
     let data = this.state.portfolioStartupAboutUs;
     data=details;
     this.setState({portfolioStartupAboutUs : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"aboutUs");
+    let updateItem = _.omit(details, 'logo');
+    this.props.getPortfolioStartupAboutUsDetails(updateItem,"aboutUs");
   }
   getStartupAssets(details){
     // let data = this.state.portfolioStartupAssets;

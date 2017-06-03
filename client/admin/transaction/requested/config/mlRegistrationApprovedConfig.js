@@ -1,8 +1,8 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
-import React from 'react';
-import gql from 'graphql-tag'
-import moment from 'moment'
-import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import {MlViewer, MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import React from "react";
+import gql from "graphql-tag";
+import moment from "moment";
+import MlCustomFilter from "../../../../commons/customFilters/customFilter";
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
   return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
@@ -19,6 +19,17 @@ const mlUserTypeTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  fieldsMap: {
+    'registrationDate': 'registrationInfo.registrationDate',
+    'firstName': 'registrationInfo.firstName',
+    'contactNumber': 'registrationInfo.contactNumber',
+    'communityName': 'registrationInfo.communityName',
+    'clusterName': 'registrationInfo.clusterName',
+    'chapterName': 'registrationInfo.chapterName',
+    'subChapterName': 'registrationInfo.subChapterName',
+    'accountType': 'registrationInfo.accountType',
+    'assignedUser': 'registrationInfo.assignedUser'
+  },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
@@ -59,39 +70,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
         }
       }
     }
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
   ],
-  graphQlQuery:/*gql`
-             query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-              data:SearchQuery(module:"registrationApprovedInfo", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                    totalRecords
-                    data{
-                     ...on RegistrationInfo{
-
-                              firstName
-                              lastName
-                              id:_id
-                              contactNumber
-                              communityName
-                      			  clusterName
-                      				chapterName
-                              subChapterName
-                              accountType
-                      				source
-                              assignedUser
-              								registrationStatus
-                      				registrationDate
-
-
-                          }
-                      }
-              }
-              }
-              `*/
+  graphQlQuery:
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
                     data:ContextSpecSearch(module:"registrationApprovedInfo",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords

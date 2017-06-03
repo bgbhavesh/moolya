@@ -97,24 +97,32 @@ class MlAddProcessMapping extends React.Component{
     if (ret) {
       toastr.error(ret);
     } else {
-      let processDetails = {
-        processId: this.refs.processId.value,
-        process: this.state.process,
-        communities: this.state.communities,
-        userTypes: this.state.userTypes,
-        identity: this.state.identity,
-        industries: this.state.industries,
-        professions: this.state.professions,
-        clusters: this.state.clusters,
-        states: this.state.states,
-        chapters: this.state.chapters,
-        subChapters: this.state.subChapters,
-        isActive: this.refs.status.checked,
-        documents: this.state.assignDocument
+      let type=this.state.assignDocument[0].type;
+      let category=this.state.assignDocument[0].category;
+      if(!type) {
+        toastr.error("Document type is required");
+      }else if(!category){
+        toastr.error("Kyc category is required");
+      }else{
+        let processDetails = {
+          processId: this.refs.processId.value,
+          process: this.state.process,
+          communities: this.state.communities,
+          userTypes: this.state.userTypes,
+          identity: this.state.identity,
+          industries: this.state.industries,
+          professions: this.state.professions,
+          clusters: this.state.clusters,
+          states: this.state.states,
+          chapters: this.state.chapters,
+          subChapters: this.state.subChapters,
+          isActive: this.refs.status.checked,
+          documents: this.state.assignDocument
+        }
+        const response = await addProcessActionHandler(processDetails)
+        toastr.success("Created Successfully")
+        return response;
       }
-      const response = await addProcessActionHandler(processDetails)
-      toastr.success("Created Successfully")
-      return response;
     }
   }
   getAssignedDocuments(departments){
@@ -309,7 +317,13 @@ class MlAddProcessMapping extends React.Component{
           <div className="col-md-6 nopadding-right"  >
             <div className="form_bg" >
               <div className="left_wrap">
-<form>
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                <form>
 
   <Moolyaselect ref="industries" multiSelect={true} mandatory={true} placeholder={"Industries"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.industries} queryType={"graphql"} query={industriesquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectIndustries.bind(this)}  data-required={true} data-errMsg="Industry is required" />
 
@@ -330,16 +344,8 @@ class MlAddProcessMapping extends React.Component{
   <Moolyaselect ref="chapter" multiSelect={true}mandatory={true}   placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}  data-required={true} data-errMsg="Chapter is required"/>
 
   <Moolyaselect  ref="subChapter"multiSelect={true} mandatory={true}   placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required" />
-</form>
-  <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                  default={true}
-                >
-                  <form style={{marginTop:'5px'}}>
-                      <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>
-                  </form>
+  <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>
+                </form>
                 </ScrollArea>
               </div>
             </div>

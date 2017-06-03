@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
 import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
-import {initalizeFloatLabel} from '../../utils/formElemUtil';
+import {initalizeFloatLabel, passwordVisibilityHandler} from '../../utils/formElemUtil';
 //import {addProfilePicAction} from "../actions/addProfilePicAction"
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
@@ -13,6 +13,8 @@ import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/
 import Datetime from "react-datetime";
 import moment from "moment";
 import MlLoader from '../../../commons/components/loader/loader'
+import {resetPasswordActionHandler} from "../../settings/backendUsers/actions/resetPasswordAction";
+
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 
 
@@ -34,9 +36,14 @@ export default class MlMyProfile extends React.Component{
       genderStateMale: " ",
       genderStateFemale: " ",
       genderStateOthers: " ",
-      dateOfBirth:" ",
+      dateOfBirth:null,
       genderSelect:" ",
       responsePic:" ",
+      password:'',
+      confirmPassword:'',
+      showPasswordFields:true,
+      passwordState: " "
+
       // Details:{
       //   firstName: " ",
       //   middleName:" ",
@@ -54,6 +61,7 @@ export default class MlMyProfile extends React.Component{
     this.updateProfile.bind(this);
     this.genderSelect = this.genderSelect.bind(this);
     this.onfoundationDateSelection.bind(this);
+    this.checkExistingPassword.bind(this);
    // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
    // this.firstNameUpdation.bind(this);
@@ -61,10 +69,25 @@ export default class MlMyProfile extends React.Component{
   }
   onFoundationDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, foundationDate: value});
     }
   }
+  async checkExistingPassword(){
+    const that =  this;
+    let pwd = this.refs.existingPassword.value;
+    var digest = Package.sha.SHA256(pwd);
+    Meteor.call('checkPassword', digest, function(err, result) {
+      if (result) {
+        that.setState({passwordState:'Passwords match!'})
+      }else{
+        that.setState({passwordState:'Passwords do not match!'})
+      }
+    });
+  }
+
+
+
 
   componentDidMount()
   {
@@ -160,7 +183,7 @@ async showImage(temp){
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
         genderSelect: "Male", //response.profile.genderType
-        // dateOfBirth: response.profile.dateOfBirth
+        dateOfBirth:moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     }else{
       let response = await findBackendUserActionHandler(userType);
@@ -171,7 +194,7 @@ async showImage(temp){
         userName: response.profile.InternalUprofile.moolyaProfile.displayName,
         uploadedProfilePic:response.profile.profileImage,
         genderSelect:response.profile.genderType,
-        dateOfBirth: response.profile.dateOfBirth
+        dateOfBirth:moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     }
     this.genderSelect();
@@ -183,6 +206,7 @@ async showImage(temp){
   }
   componentDidUpdate(){
     initalizeFloatLabel();
+    passwordVisibilityHandler();
   }
 
 
@@ -201,7 +225,7 @@ async showImage(temp){
 
   onfoundationDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, dateOfBirth: value});
     }
   }
@@ -210,13 +234,59 @@ async showImage(temp){
     this.resetBackendUers();
   }
 
+  async resetPassword() {
+    if(this.state.showPasswordFields){
+      let userDetails={
+        userId:Meteor.userId(),
+        password:this.refs.confirmPassword.value
+      }
+      this.onCheckPassword();
+      if(this.state.pwdErrorMsg)
+        toastr.error("Confirm Password does not match with Password");
+
+      else{
+        const response = await resetPasswordActionHandler(userDetails);
+        // this.refs.id.value='';
+        this.refs.confirmPassword.value = '';
+        this.refs.password.value = '';
+        this.setState({"pwdErrorMsg":'Password reset complete'})
+        toastr.success(response.result);
+      }
+    } else {
+      this.setState({
+        showPasswordFields:true
+      })
+    }
+    const resp = this.onFileUpload();
+    return resp;
+  }
+
+
   handleError(response) {
     console.log('error handle');
     console.log(response);
   }
   async updateProfile(){
-    const resp=this.onFileUpload();
-    return resp;
+    let existingPwdField = this.refs.existingPassword.value;
+    let password = this.refs.password.value;
+    let confirmPassword = this.refs.confirmPassword.value;
+    if(existingPwdField && password && confirmPassword ) {
+      this.resetPassword();
+    }else
+      {
+        const resp = this.onFileUpload();
+        return resp;
+      }
+  }
+
+  onCheckPassword(){
+    let password=this.refs.password.value;
+    let confirmPassword=this.refs.confirmPassword.value;
+    if(confirmPassword!=password){
+      this.setState({"pwdErrorMsg":'Confirm Password does not match with Password'})
+    }else{
+      this.setState({"pwdErrorMsg":''})
+    }
   }
 
   async onFileUpload(){
@@ -302,14 +372,23 @@ async showImage(temp){
                     <div className="form-group">
                       <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
                     </div>
-                    <div className="form-group">
-                      <input type="password" placeholder="Password" className="form-control float-label" id=""/>
-                      <FontAwesome name='eye' className="password_icon"/>
-                    </div>
-                    <div className="form-group">
-                      <input type="password" placeholder="Confirm Password" className="form-control float-label" id=""/>
-                      <FontAwesome name='eye' className="password_icon"/>
-                    </div>
+                    {this.state.showPasswordFields ?
+                      <div className="form-group">
+                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
+                        <input type="Password" ref="existingPassword"  placeholder="Existing Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password"/>
+                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                      </div> : <div></div>}
+                    {this.state.showPasswordFields ?
+                      <div className="form-group">
+                        <input type="Password" ref="password" defaultValue={this.state.password} placeholder="New Password" className="form-control float-label" id="password"/>
+                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                      </div> : <div></div>}
+                    {this.state.showPasswordFields ?
+                      <div className="form-group">
+                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                        <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
+                        <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
+                      </div> : <div></div>}
                     {/*<div className="form-group">*/}
                       {/*<input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label"  disabled="true" />*/}
                       {/*<FontAwesome name='calendar' className="password_icon" />*/}
@@ -317,7 +396,7 @@ async showImage(temp){
                     {/*</div>*/}
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onfoundationDateSelection.bind(this)} />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={moment(this.state.dateOfBirth).format('DD-MM-YYYY')} onChange={this.onfoundationDateSelection.bind(this)} />
                       <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

@@ -169,9 +169,16 @@ export default class Individual extends React.Component{
     }
   }
   ondateOfBirthSelection(event) {
+    var ageDifMs = Date.now() - event._d.getTime();
+    var ageDate = new Date(ageDifMs);
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
       this.setState({loading: false, dateOfBirth: value});
+    }
+    if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+    }
+    else{
+      toastr.error("age limit exceeded")
     }
   }
   onemploymentDateSelection(event) {
@@ -190,6 +197,10 @@ export default class Individual extends React.Component{
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let MlActionConfig
     let userType=this.props.userType;
     if(userType=='external'){
@@ -327,7 +338,7 @@ export default class Individual extends React.Component{
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group" id="date-of-birth">
-                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}/>
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}  isValidDate={ valid } />
                     <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerDateOfBirth.bind(that)}/>
                   </div>
                   <div className="form-group">
@@ -335,6 +346,8 @@ export default class Individual extends React.Component{
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder="Select Citizenship" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
+                    <br className="clearfix"/>                      <br className="clearfix"/>
+
                   </div>
                   <div className="panel panel-default">
                     <div className="panel-heading">Investment Per Year</div>
@@ -389,6 +402,10 @@ export default class Individual extends React.Component{
                 </div>
                 <div className="form-group">
                   <Select name="form-field-name" placeholder="Investing From" options={investingFrom} value={this.state.investingFrom} onChange={this.optionsBySelectInvestingFrom.bind(this)}  className="float-label"/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+                  <br className="clearfix"/>                      <br className="clearfix"/>
+
+
                 </div>
               </form>
             </div>

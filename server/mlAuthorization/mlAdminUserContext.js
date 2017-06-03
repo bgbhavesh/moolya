@@ -20,6 +20,8 @@ class MlAdminUserContext
     let defaultChapters = [];
     let defaultSubChapters = [];
     let defaultCommunities = [];
+    let defaultCommunityHierarchyLevel;
+    let roleName = null;
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -44,20 +46,28 @@ class MlAdminUserContext
 
       if(user_roles && user_roles.length > 0)
       {
-          user_roles.map(function (userRole) {
-              if(!hierarchyLevel){
-                  hierarchyLevel=userRole.hierarchyLevel;
-                  hierarchyCode=userRole.hierarchyCode;
-              }else if(hierarchyLevel&&hierarchyLevel<userRole.hierarchyLevel){
-                  hierarchyLevel=userRole.hierarchyLevel;
-                  hierarchyCode=userRole.hierarchyCode;
+          user_roles.map(function (userRole)
+          {
+              if(userRole.isActive) {
+                if (!hierarchyLevel) {
+                  hierarchyLevel = userRole.hierarchyLevel;
+                  hierarchyCode = userRole.hierarchyCode;
+                } else if (hierarchyLevel && hierarchyLevel < userRole.hierarchyLevel) {
+                  hierarchyLevel = userRole.hierarchyLevel;
+                  hierarchyCode = userRole.hierarchyCode;
+                }
+                if (userRole.communityHierarchyLevel) {
+                  defaultCommunityHierarchyLevel = userRole.communityHierarchyLevel
+                }
+                if (defaultChapters.indexOf(userRole.chapterId < 0))
+                  defaultChapters.push(userRole.chapterId)
+                if (defaultSubChapters.indexOf(userRole.subChapterId < 0))
+                  defaultSubChapters.push(userRole.subChapterId)
+                if (defaultCommunities.indexOf(userRole.communityId < 0))
+                  defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
+                // defaultCommunities.push(userRole.communityId)
+              roleName = userRole.roleName
               }
-              if(defaultChapters.indexOf(userRole.chapterId < 0))
-                defaultChapters.push(userRole.chapterId)
-              if(defaultSubChapters.indexOf(userRole.subChapterId< 0))
-                defaultSubChapters.push(userRole.subChapterId)
-              if(defaultCommunities.indexOf(userRole.communityId< 0))
-                defaultCommunities.push(userRole.communityId)
           })
 
       }
@@ -68,7 +78,10 @@ class MlAdminUserContext
                 defaultChapters:defaultChapters,
                 defaultSubChapters:defaultSubChapters,
                 defaultCommunities:defaultCommunities,
-                isMoolya:isMoolya};
+                defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
+                isMoolya:isMoolya,
+                roleName:roleName
+        };
   }
 
   getDefaultMenu(userId) {

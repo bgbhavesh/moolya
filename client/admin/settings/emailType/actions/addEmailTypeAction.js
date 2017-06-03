@@ -28,7 +28,7 @@ export async function addEmailTypeActionHandler(Details)
     mutation: gql`
     mutation  ($masterData:MasterSettingsRequest){
         createMasterSetting(
-          moduleName:"MASTER_SETTINGS",
+          moduleName:"MASTERSETTINGS",
           actionName:"CREATE",
           type:EMAILTYPE,
           masterData:$masterData

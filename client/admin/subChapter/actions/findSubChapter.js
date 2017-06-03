@@ -11,6 +11,7 @@ export async function findSubChapterActionHandler(subChapterId) {
         clusterName
         chapterName
         subChapterName
+        subChapterUrl
         isDefaultSubChapter
         subChapterDisplayName
         stateName
@@ -21,6 +22,7 @@ export async function findSubChapterActionHandler(subChapterId) {
         isEmailNotified
         showOnMap
         isActive
+        associatedSubChapters
         isBespokeRegistration
         isBespokeWorkFlow
         internalSubChapterAccess {

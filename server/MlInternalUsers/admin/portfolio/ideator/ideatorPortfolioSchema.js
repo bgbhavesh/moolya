@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef'
+
 
 let ideatorPortfolioSchema = `
 
@@ -257,7 +259,7 @@ let ideatorPortfolioSchema = `
       firstName:String,
       lastName:String,
       profileImage : String
-      createdAt:String
+      createdAt:Date
     }
     
      type annotationInfo{
@@ -269,7 +271,7 @@ let ideatorPortfolioSchema = `
       userName : String,
       isResolved:Boolean,
       isReopened:Boolean,
-      createdAt:String
+      createdAt:Date
     }
     
     type Idea{
@@ -321,3 +323,32 @@ let ideatorPortfolioSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSchema]);
+
+let supportedApi = [
+  {api:'fetchIdeatorPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioProblemsAndSolutions', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioAudience', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioLibrary', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioStrategyAndPlanning', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioIntellectualPlanning', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioRequests', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchAnnotations', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchComments', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchAnnotations', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchComments', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
+
+  {api:'createIdeatorPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createAnnotation', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createComment', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createIdea', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

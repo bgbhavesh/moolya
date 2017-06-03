@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let BackEndUser = `
 
     type BackendUsers{
@@ -10,7 +12,9 @@ let BackEndUser = `
         password: String,
         username: String,
         profile:userProfile,
-        roleNames:[String]
+        roleNames:[String],
+        latitude:Float,
+        longitude:Float
     }
     
     type userProfile{
@@ -24,7 +28,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
     }
     
@@ -48,6 +52,7 @@ let BackEndUser = `
         isDefault: Boolean,
         clusterId: String,
         clusterName:String,
+        clusterFlag:String,
         userRoles:[UserRoles],
     }
     
@@ -61,6 +66,8 @@ let BackEndUser = `
         validTo: String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
+        communityHierarchyLevel:Int,
         isActive:Boolean,
         hierarchyLevel:String,
         hierarchyCode:String,
@@ -70,7 +77,8 @@ let BackEndUser = `
         subDepartmentName : String,
         chapterName:String,
         subChapterName:String,
-        communityName:String
+        communityName:String,
+        clusterName : String
     }
     
     type MoolyaProfile{
@@ -110,8 +118,10 @@ let BackEndUser = `
         chapterId:String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
         isActive:Boolean,
         hierarchyLevel:Int,
+        communityHierarchyLevel:Int,
         hierarchyCode:String,
         roleName:String,
         departmentId: String,
@@ -143,7 +153,7 @@ let BackEndUser = `
         profileImage:String,
          numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
         
     }
@@ -190,7 +200,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String,
         profileImage: String
     }
@@ -208,7 +218,7 @@ let BackEndUser = `
       lastName: String,
       userName: String,
       genderType: String,
-      dateOfBirth: String
+      dateOfBirth: Date
     }
     
     input settingsAttributesObject{
@@ -283,6 +293,8 @@ let BackEndUser = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude:Float,
+        longitude:Float
      }
      
        type SocialLinkInfoSchema{
@@ -408,6 +420,8 @@ let BackEndUser = `
         kycDocuments       : [KycDocumentInfo]
     }
     
+    
+    
    
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
@@ -420,6 +434,8 @@ let BackEndUser = `
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
+        setAdminDefaultProfile(clusterId:String!):response
+        deActivateAdminUserProfile(clusterId:String!):response
     }
     
     type Query{
@@ -437,12 +453,39 @@ let BackEndUser = `
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
         fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
-        FindUserOnToken(token: String):response
+        findUserOnToken(token: String):response
+        fetchInternalUserProfiles(userId: String):[UserProfiles]
+        fetchUserRoleDetails(clusterId:String):UserRoles
+        fetchMoolyaInternalUsers : [BackendUsers]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
-// userObject changed
-// fetchChapterBasedRoles(userId:String, clusterId:String): UserProfiles
-// fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
+let supportedApi = [
+    {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
+    {api:'fetchUsersByClusterDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchAssignedUsers', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUsersBysubChapterDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchsubChapterUserDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchAssignedAndUnAssignedUsers', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
+    {api:'fetchMapCenterCordsForUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
+    {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS"},
+    {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},
 
+    {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
+    {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'resetPassword', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'addUserProfile', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'assignUsers', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'deActivateUser', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'updateDataEntry', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'updateSettings', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'updateAddressBookInfo', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+];
+MlResolver.MlModuleResolver.push(supportedApi)

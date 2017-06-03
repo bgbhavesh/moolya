@@ -24,12 +24,12 @@ export default class MlStartupClients extends React.Component{
       popoverOpen:false,
       selectedIndex:-1,
       startupClientsList:this.props.clientsDetails || [],
-      /*indexArray:[],*/
       selectedVal:null,
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -40,6 +40,7 @@ export default class MlStartupClients extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
@@ -142,6 +143,7 @@ export default class MlStartupClients extends React.Component{
     startupClients = arr;
     this.setState({startupClients:startupClients})
     this.props.getStartupClients(startupClients);
+
   }
 
   onLogoFileUpload(e){
@@ -160,6 +162,7 @@ export default class MlStartupClients extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }
@@ -181,6 +184,27 @@ export default class MlStartupClients extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response&&response.clients?response.clients:[]
+      let dataDetails =this.state.startupClients
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupClientsList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupClients:cloneBackUp,startupClientsList:cloneBackUpList});
+    }
+  }
+
+  emptyClick(e) {
+    if (this.state.popoverOpen)
+      this.setState({popoverOpen: false})
+  }
+
   render(){
     // let query=gql`query{
     //   data:fetchStageOfCompany {
@@ -191,8 +215,14 @@ export default class MlStartupClients extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let clientsArray = that.state.startupClientsList || [];
+    let displayUploadButton = null;
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
     return(
-      <div>
+      <div onClick={this.emptyClick.bind(this)}>
         <h2>Clients</h2>
         {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
@@ -248,12 +278,12 @@ export default class MlStartupClients extends React.Component{
                       <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
-                    <div className="form-group">
+                    {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Upload Logo</span>
                         <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                       </div>
-                    </div>
+                    </div>:""}
                     <div className="clearfix"></div>
                     <div className="form-group">
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>

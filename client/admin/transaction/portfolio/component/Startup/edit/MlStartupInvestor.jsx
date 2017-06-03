@@ -29,6 +29,7 @@ export default class MlStartupInvestor extends React.Component{
     }
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
 
@@ -40,6 +41,7 @@ export default class MlStartupInvestor extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay()
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -151,6 +153,7 @@ export default class MlStartupInvestor extends React.Component{
     startupInvestor = arr;
     this.setState({startupInvestor: startupInvestor})
     this.props.getInvestorDetails(startupInvestor);
+
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -167,6 +170,7 @@ export default class MlStartupInvestor extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay()
       }
     }
   }
@@ -188,6 +192,22 @@ export default class MlStartupInvestor extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await findStartupInvestorDetailsActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response?response:[]
+      let dataDetails =this.state.startupInvestor
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupInvestorList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupInvestor:cloneBackUp,startupInvestorList:cloneBackUpList});
+    }
+  }
+
   render(){
     let query=gql`query{
       data:fetchFundingTypes {
@@ -198,6 +218,12 @@ export default class MlStartupInvestor extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let investorsArray = that.state.startupInvestorList || [];
+    let displayUploadButton = null;
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
@@ -262,12 +288,12 @@ export default class MlStartupInvestor extends React.Component{
                         <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
                       </div>
-                      <div className="form-group">
+                      {displayUploadButton?<div className="form-group">
                         <div className="fileUpload mlUpload_btn">
                           <span>Upload Logo</span>
                           <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                         </div>
-                      </div>
+                      </div>:""}
                       <div className="clearfix"></div>
                       <div className="form-group">
                         <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>

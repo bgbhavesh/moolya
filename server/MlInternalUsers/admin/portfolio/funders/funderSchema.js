@@ -3,6 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef'
 
 let FunderPortfolioSchema = `
 
@@ -309,3 +310,16 @@ let FunderPortfolioSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FunderPortfolioSchema]);
+
+let supportedApi = [
+  {api:'fetchFunderAbout', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchfunderPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderPrincipal', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderTeam', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderAreaOfInterest', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderSuccessStories', actionName:'READ', moduleName:"PORTFOLIO"},
+
+  {api:'createFunderPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'updateFunderPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

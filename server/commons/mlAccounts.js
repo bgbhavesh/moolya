@@ -4,6 +4,7 @@
  */
 import mlSms from './mlSms';
 import MlDBController from './mlDBController';
+import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -322,4 +323,69 @@ export default MlAccounts=class MlAccounts {
   }
 
 }
+
+Meteor.methods({
+  checkPassword: function(digest) {
+    check(digest, String);
+    if (this.userId) {
+      var user = Meteor.user();
+      var password = {digest: digest, algorithm: 'sha-256'};
+      var result = Accounts._checkPassword(user, password);
+      return result.error == null;
+    } else {
+      return false;
+    }
+  }
+})
+
+Accounts.validateLoginAttempt(function (details) {
+  if(details&&details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
+    let departmentId = details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department;
+    if(departmentId !='all') {
+      mlDBController = new MlDBController();
+      department = mlDBController.findOne('MlDepartments',{_id:departmentId}, this);
+      if(!department.isActive){
+        throw new Meteor.Error('department-deactivated', 'You do not have any active department');
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  } else {
+    return true;
+  }
+})
+
+Accounts.onLogin(function (details) {
+if(details.type =="password") {
+  var userId = (details.user || {})._id;
+  let context = {
+    ip: details.connection.clientAddress,
+    browser: details.connection.httpHeaders['user-agent'],
+    url: details.connection.httpHeaders.host
+  };
+  let transactionDetails = `User logged in to application at ${new Date()} `;
+  new MlTransactionsHandler().recordTransaction({
+    'activity': 'login',
+    'transactionType': 'system',
+    'userId': userId,
+    'transactionDetails': transactionDetails,
+    'context': context,
+    'transactionTypeId': " "
+  });
+}else{
+
+}
+});
+
+Accounts.onLogout(function (details) {
+  var userId=(details.user || {})._id;
+  let context={ip: details.connection.clientAddress,browser:details.connection.httpHeaders['user-agent'],url:details.connection.httpHeaders.host};
+  let transactionDetails=`User logged out of application at ${new Date()} `;
+  if(details&&details.user){
+    new MlTransactionsHandler().recordTransaction({'activity':'logout','transactionType':'system','userId':userId,'transactionDetails':transactionDetails,'context':context});
+  }
+});
 

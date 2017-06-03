@@ -1,8 +1,8 @@
-import React from 'react';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import {OnToggleSwitch} from '../../../admin/utils/formElemUtil';
-//var mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
+import React from "react";
+import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
+import {OnToggleSwitch} from "../../../admin/utils/formElemUtil";
 import $ from "jquery";
+//var mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
 export default class MlTable extends React.Component {
   constructor(props) {
     super(props);
@@ -25,8 +25,10 @@ export default class MlTable extends React.Component {
   render() {
     const selectRow = {
       mode: 'checkbox',
-      bgColor: '#feeebf',
-      onSelect: this.props.handleRowSelect
+      bgColor: this.props.bgColor?this.props.bgColor:'#feeebf',
+      onSelect: this.props.handleRowSelect,
+      clickToExpand: this.props.isExpandableRow?true:false,
+      onSelectAll: this.props.handleRowSelectAll
     };
     var WinHeight = $(window).height();
     var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
@@ -68,7 +70,13 @@ export default class MlTable extends React.Component {
       clearSearch: false};
 
     const columnItems = this.props.columns.map((cl) =>{
-      let columnOptions={key:cl.dataField,dataField:cl.dataField,hidden:(cl.isHidden?cl.isHidden:false),isKey:(cl.isKey?cl.isKey:false),dataSort:(cl.dataSort?cl.dataSort:false)};
+      let columnOptions = {
+        key: cl.dataField,
+        dataField: cl.dataField,
+        hidden: (cl.isHidden ? cl.isHidden : false),
+        isKey: (cl.isKey ? cl.isKey : false),
+        dataSort: (cl.dataSort ? cl.dataSort : false)
+      };
       if(cl.customComponent){
         let CustomComponent = cl.customComponent;
         let customColumnComponent=(cell,row)=> {

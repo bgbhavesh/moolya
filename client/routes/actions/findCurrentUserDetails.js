@@ -6,7 +6,7 @@ export async function findUserActionHandler(token) {
   const result = await client.query({
     query: gql`
     query  ($token: String){
-        FindUserOnToken(token:$token){
+        findUserOnToken(token:$token){
             success,
             code,
             result
@@ -18,6 +18,6 @@ export async function findUserActionHandler(token) {
     },
     forceFetch:true
   })
-  const id = result.data.FindUserOnToken;
+  const id = result.data.findUserOnToken;
   return id
 }

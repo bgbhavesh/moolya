@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef'
+
 
 let startupPortfolioSchema = `
 
@@ -78,7 +80,6 @@ let startupPortfolioSchema = `
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int,
-        companyName : String
     }
     
     type branchesOutput{
@@ -360,7 +361,7 @@ let startupPortfolioSchema = `
     }
     
     input lookingFor{
-        type:String,
+        lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
         description:String,
@@ -476,3 +477,19 @@ let startupPortfolioSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], startupPortfolioSchema]);
+
+let supportedApi = [
+  {api:'fetchStartupPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioMemberships', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioCompliances', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioLicenses', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
+
+  {api:'createStartupPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'updateStartupPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

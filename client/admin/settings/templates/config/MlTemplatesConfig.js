@@ -1,7 +1,11 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-
+import moment from 'moment';
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.createdDate?data.data.createdDate:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+}
 const mltemplatesConfig=new MlViewer.View({
   name:"templatesTable",
   module:"templates",//Module name for filter.
@@ -15,7 +19,7 @@ const mltemplatesConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "subProcessId",title:"subProcessId",isHidden:true},
-    {dataField: "createdDate", title: "created Date",dataSort:true},
+    {dataField: "createdDate", title: "created Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "processName", title: "Process",dataSort:true},
     {dataField: "subProcessName", title: "Sub Process",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true}

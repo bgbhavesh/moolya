@@ -130,7 +130,7 @@ class MlEditDocumentType extends React.Component{
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>
                     <label className="switch">
-                      <input type="checkbox" ref="documentTypeStatus" checked={this.state.data&&this.state.data.isActive} />
+                      <input type="checkbox" ref="documentTypeStatus" defaultChecked={this.state.data&&this.state.data.isActive} />
                       <div className="slider"></div>
                     </label>
                   </div>

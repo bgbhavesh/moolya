@@ -2,7 +2,6 @@
  * Created by venkatasrinag on 19/12/16.
  */
 
-import MlTransactionsHandler from '../server/commons/mlTransactionsLog'
 
 let _ = require('lodash'),
   adminPassword = "MoolyaAdmin@123",
@@ -20,7 +19,7 @@ if(!department) {
     displayName: "Operations",
     departmentDesc: "Operations Department",
     isActive: true,
-    isMoolya: false,
+    isMoolya: true,
     depatmentAvailable: departmentAvailiable,
     isSystemDefined: true
   };
@@ -74,7 +73,16 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
+                    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
                   ]
     let role = {
       roleName:"clusteradmin",
@@ -95,7 +103,16 @@ if(!chapterAdmin){
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"chapteradmin",
@@ -114,9 +131,19 @@ if(!subchapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"subchapteradmin",
@@ -133,8 +160,21 @@ var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
 if(!communityAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:communityPer},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:communityPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"communityadmin",
@@ -157,6 +197,7 @@ var options = {
     isInternaluser : true,
     isExternaluser : false,
     email: 'platformadmin@moolya.com',
+    isMoolya:true,
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
@@ -188,7 +229,7 @@ if(!userObj){
 
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(role){
-  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:dep._id, departmentName:dep.departmentName, subDepartmentId:subDep._id, subDepartmentName:subDep.subDepartmentName}]
+  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", communityCode : "all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:dep._id, departmentName:dep.departmentName, subDepartmentId:subDep._id, subDepartmentName:subDep.subDepartmentName}]
   var userProfiles = [{
     clusterId:"all",
     userRoles:userRoles,
@@ -395,12 +436,7 @@ Accounts.validateLoginAttempt(function (user)
 
 
     return true;
-})
-
-Accounts.onLogin(function (transactionsParams) {
-  mlTransactionsHandler = new MlTransactionsHandler();
-  mlTransactionsHandler.insertTransactions(transactionsParams);
-})
+});
 
 validateExternalUserLoginAttempt=(user)=>{
   let userExternal = user.user.profile.isExternaluser;
@@ -466,7 +502,7 @@ validateinternalUserLoginAttempt=(user)=>{
               subChapterActive = true
             }
 
-            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityId}, {isActive:true}]})
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityCode}, {isActive:true}]})
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }

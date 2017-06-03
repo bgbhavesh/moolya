@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let ProcessTypesSchema = `
     type ProcessTypes
     {
@@ -15,3 +17,7 @@ let ProcessTypesSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],ProcessTypesSchema]);
+let supportedApi = [
+    {api:'FetchProcessType', actionName:'READ', moduleName:"PROCESSTYPES"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

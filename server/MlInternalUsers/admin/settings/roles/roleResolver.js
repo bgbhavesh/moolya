@@ -1,8 +1,9 @@
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
+var defaultModules = ["CHAPTER", "SUBCHAPTER", "COMMUNITY"];
 
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
@@ -34,6 +35,28 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   // role.createdBy = Meteor.users.findOne({_id:context.userId}).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
   // let id = MlRoles.insert({...role});
+
+  // Adding Default Modules
+
+  _.each(defaultModules, function (mod) {
+    var module = mlDBController.findOne("MlModules", {code:mod}, context);
+    var readAction = mlDBController.findOne("MlActions", {code: "READ"}, context);
+    var isModAvailable = _.findIndex(role.modules, {moduleId:module._id})
+
+    if((isModAvailable <= 0) && module && readAction){
+      var moduleObj = {
+        moduleId: module._id,
+        moduleName: module.name,
+        validFrom: null,
+        validTo: null,
+        isActive: true,
+        actions: [{actionId: readAction._id}]
+      }
+      role.modules.push(moduleObj)
+    }
+  })
+
+
   let id = mlDBController.insert('MlRoles', role, context)
   if (id) {
     let code = 200;
@@ -54,12 +77,12 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
+  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
+  // if (!isValidAuth) {
+  //   let code = 401;
+  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
+  //   return response;
+  // }
 
   if (!args.role.roleName) {
     let code = 409;
@@ -67,16 +90,16 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
     return response;
   }
 
-  if (args.id) {
+  if (args.roleId) {
     // let role = MlRoles.findOne({_id: args.id});
-    let role = mlDBController.findOne('MlRoles', {_id: args.id}, context)
+    let role = mlDBController.findOne('MlRoles', {_id: args.roleId}, context)
     if (role) {
       if (role.isSystemDefined) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("Cannot edit system defined Role", code);
         return response;
       } else {
-        var id = args.id;
+        var id = args.roleId;
         // let result= MlRoles.update(id, {$set: args.role});
         let result = mlDBController.update('MlRoles', id, args.role, {$set: true}, context);
         let code = 200;
@@ -111,7 +134,8 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   clusterId = args.clusterId && ((args.clusterId == userProfile.defaultProfileHierarchyRefId) || userhierarchy.isParent) ? args.clusterId : "";
   chapterId = args.chapterId && ((userProfile.defaultChapters.indexOf("all") >= 0 || userProfile.defaultChapters.indexOf(args.chapterId) > -1) || userhierarchy.isParent) ? args.chapterId : "";
   subChapterId = args.subChapterId && ((userProfile.defaultSubChapters.indexOf("all") >= 0 || userProfile.defaultSubChapters.indexOf(args.subChapterId) > -1) || userhierarchy.isParent) ? args.subChapterId : ""
-  communityId = args.communityId && ((userProfile.defaultCommunities.indexOf("all") >= 0 || userProfile.defaultCommunities.indexOf(args.communityId) > -1) || userhierarchy.isParent) ? args.communityId : ""
+  // communityId = args.communityId && ((userProfile.defaultCommunities.indexOf("all") >= 0 || userProfile.defaultCommunities.indexOf(args.communityId) > -1) || userhierarchy.isParent) ? args.communityId : ""
+  communityId = args.communityId && ((_.findIndex(userProfile.defaultCommunities, {communityCode:'all'}) >= 0 || _.findIndex(userProfile.defaultCommunities, {communityCode:args.communityId}) > -1) || userhierarchy.isParent) ? args.communityId : ""
 
   if (clusterId != "" && chapterId != "" && subChapterId != "" && communityId != "") {
     levelCode = "COMMUNITY"
@@ -133,28 +157,61 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
   }
 
   // let department = MlDepartments.findOne({"_id":args.departmentId})
-  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive) {
-    // let valueGet  = MlRoles.find({"$and":[{"assignRoles.department":{"$in":[args.departmentId]}}, {"assignRoles.cluster":{"$in":["all", args.clusterId]}}, {"isActive":true}]}).fetch()
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
-    _.each(valueGet, function (item, say) {
-      let ary = []
-      _.each(item.assignRoles, function (value, key) {
-        if (value.cluster == args.clusterId || value.cluster == 'all') {
-          if (value.isActive) {
-            ary.push(value);
-          }
-        }
-      })
-      item.assignRoles = ary
-    })
-    _.each(valueGet, function (item, key) {
-      if (item) {
-        if (item.assignRoles.length < 1) {
-          valueGet.splice(key, 1)
-        }
-      }
-    })
+  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive:true}, context)
+  if (department) {
+
+
+    let query = {};
+    query.isActive = true;
+    if(args.clusterId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].cluster = {$in: ['all', args.clusterId]};
+    }
+    if(args.chapterId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].chapter = {$in: ['all', args.chapterId] };
+    }
+    if(args.subChapterId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].subChapter = {$in: ['all', args.subChapterId] };
+    }
+    if(args.communityId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].community = {$in: ['all', args.communityId] };
+    }
+    if(args.departmentId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
+      query.assignRoles['$elemMatch'].department = {$in: ['all', args.departmentId] };
+    }
+    if(args.subDepartmentId){
+      query.assignRoles && query.assignRoles['$elemMatch'] ? '' : query.assignRoles = {}; query.assignRoles['$elemMatch']={} ;
+      query.assignRoles['$elemMatch'].subDepartment = {$in: ['all', args.subDepartmentId] };
+    }
+    if(query.assignRoles && query.assignRoles['$elemMatch']){
+      query.assignRoles['$elemMatch'].isActive = true;
+    }
+    let finalQuery = {$or: [query, {isSystemDefined: true, isActive: true}]}
+
+    let valueGet = mlDBController.find('MlRoles', finalQuery, context).fetch()
+    // let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
+    // _.each(valueGet, function (item, say) {
+    //   let ary = []
+    //   _.each(item.assignRoles, function (value, key) {
+    //     if (value.cluster == args.clusterId || value.cluster == 'all') {
+    //       if (value.isActive) {
+    //         ary.push(value);
+    //       }
+    //     }
+    //   })
+    //   item.assignRoles = ary
+    // })
+    // _.each(valueGet, function (item, key) {
+    //   if (item) {
+    //     if (item.assignRoles.length < 1) {
+    //       valueGet.splice(key, 1)
+    //     }
+    //   }
+    // })
     roles = valueGet;
   }
 

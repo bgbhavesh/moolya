@@ -109,6 +109,7 @@ export default class MlListView extends Component {
 
   render(){
     let data=this.props.data&&this.props.data.data?this.props.data.data:[];
+    let search = typeof this.props.search == 'undefined' ? true : false ;
     let pConfig=_.extend(this.props,{sizePerPage:this.state.sizePerPage,pageNumber:this.state.pageNumber});
     let ListComponent =React.cloneElement(this.props.viewComponent,{data:data,config:pConfig});
     let totalRecords=this.props.data&&this.props.data.totalRecords;
@@ -124,7 +125,9 @@ export default class MlListView extends Component {
       actionsProxyList.push(act);
     });
     }
-    return(<div className="admin_padding_wrap"><input type="text" className="form-control" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/>{loading?(<div className="loader_wrap"></div>):(
+    return(<div className="admin_padding_wrap">
+      { search ? <input type="text" className="form-control" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/> : '' }
+      {loading?(<div className="loader_wrap"></div>):(
       <div className="list_scroll">
         <ScrollArea
           speed={0.8}

@@ -1,9 +1,9 @@
-  import MlResolver from '../../../commons/mlResolverDef'
-import getQuery from "../genericSearch/queryConstructor";
-import mlTransactionsListRepo from '../../admin/transactions/mlTransactionsListRepo'
-  import _ from 'underscore'
+  import MlResolver from "../../../commons/mlResolverDef";
+  import getQuery from "../genericSearch/queryConstructor";
+  import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
+  import _ from "underscore";
 
-let mergeQueries=function(userFilter,serverFilter){
+  let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
   if (_.isEmpty(query)) {
     query = serverFilter||{};
@@ -53,67 +53,68 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlSubChapters.find({},findOptions).count();
   }
 
-  if(args.module=="department"){
-    data= MlDepartments.find(query,findOptions).fetch() || [];
-    data.map(function (doc,index) {
+  if (args.module == "department") {
+    var userProfileDep = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (userProfileDep.defaultSubChapters.indexOf("all") < 0) {
+      userProfileDep.defaultSubChapters.push('all')
+      var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      queryChange = mergeQueries(query, serverQuery);
+    }else {
+      queryChange = query
+    }
+    data = MlDepartments.find(queryChange, findOptions).fetch() || [];
+    data.map(function (doc, index) {
       let clusterIds = [];
-      let clusterIdsArray = [];
       let chapterIdsArray = [];
       let subchapterIdsArray = [];
-      let departments=doc&&doc.depatmentAvailable?doc.depatmentAvailable:[];
-      departments.map(function (department) {
-         let currentDepClusterIds = department&&department.cluster&&department.cluster?department.cluster:[];
-         clusterIds = clusterIds.concat(currentDepClusterIds);
 
-        let chapterId =  department&&department.chapter&&department.chapter?department.chapter:"";
-        if(chapterId != "all"){
+      var departments = doc && doc.depatmentAvailable ? doc.depatmentAvailable : [];
+      departments.map(function (department) {
+        let currentDepClusterIds = department && department.cluster && department.cluster ? department.cluster : [];
+        clusterIds = clusterIds.concat(currentDepClusterIds);
+
+        let chapterId = department && department.chapter && department.chapter ? department.chapter : "";
+        if (chapterId != "all") {
           chapterIdsArray.push(chapterId);
         }
-        let subchapterId =  department&&department.subChapter&&department.subChapter?department.subChapter:"";
-        if(subchapterId != "all"){
+        let subchapterId = department && department.subChapter && department.subChapter ? department.subChapter : "";
+        if (subchapterId != "all") {
           subchapterIdsArray.push(subchapterId);
         }
       });
-      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
-      const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
-      const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
+      const clusterData = MlClusters.find({_id: {$in: clusterIds}}).fetch() || [];
+      const chapterData = MlChapters.find({_id: {$in: chapterIdsArray}}).fetch() || [];
+      const subchapterData = MlSubChapters.find({_id: {$in: subchapterIdsArray}}).fetch() || [];
 
-      let clusterNames = [];  //@array of strings
-    /*  clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
-*/
-      clusterNames = _.pluck(clusterData, 'clusterName') || [];
-      let chapterNamesArray = [];
-     /* chapterData.map(function (doc) {
-        chapterNamesArray.push(doc.chapterName)
-      });*/
-      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
-
-      let subchapterNamesArray = [];
-  /*    subchapterData.map(function (doc) {
-        subchapterNamesArray.push(doc.subChapterName)
-      });*/
-      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
+      var clusterNames = _.pluck(clusterData, 'clusterName') || [];
+      var chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+      var subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].clustersList = clusterNames || [];
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];
-
-
-
     });
-    totalRecords=MlDepartments.find({},findOptions).count();
+
+    totalRecords = MlDepartments.find({}, findOptions).count();
   }
 
   if(args.module=="subDepartment"){
-    data= MlSubDepartments.find(query,findOptions).fetch();
+    var userProfileSub = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (userProfileSub.defaultSubChapters.indexOf("all") < 0) {
+      userProfileSub.defaultSubChapters.push('all')
+      var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      queryChange = mergeQueries(query, serverQuery);
+    }else {
+      queryChange = query
+    }
+    data = MlSubDepartments.find(queryChange, findOptions).fetch();
 
     data.map(function (doc,index) {
       let clusterIds = [];
       let chapterIdsArray = [];
       let subchapterIdsArray = [];
-
       let departments=doc&&doc.subDepatmentAvailable?doc.subDepatmentAvailable:[];
       const departmentDetails =  MlDepartments.findOne({_id : doc.departmentId}).departmentName || "";
       departments.map(function (department) {
@@ -133,22 +134,9 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
-      let clusterNames = [];  //@array of strings
-      clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
-
-      let chapterNamesArray = [];
-      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
-/*      chapterData.map(function (doc) {
-        chapterNamesArray.push(doc.chapterName)
-      });*/
-
-      let subchapterNamesArray = [];
-    /*  subchapterData.map(function (doc) {
-        subchapterNamesArray.push(doc.subChapterName)
-      });*/
-      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
+      var clusterNames = _.pluck(clusterData, 'clusterNames') || [];
+      var chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+      var subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].departmentAliasName = departmentDetails || "";
       data[index].clustersList = clusterNames || [];
@@ -159,7 +147,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
     totalRecords=MlSubDepartments.find({},findOptions).count();
   }
-  if(args.module=="request"){
+  if(args.module=="REQUESTTYPE"){
     data= MlRequestType.find(query,findOptions).fetch();
     totalRecords=MlRequestType.find(query,findOptions).count();
   }
@@ -168,18 +156,52 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlCountries.find(query,findOptions).count();
   }
   if(args.module=="states"){
-    let countries = MlCountries.find({"isActive": true}).fetch();
-    let allIds=_.pluck(countries,'_id');
-      let ary = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
-
-      _.each(ary,function (item,key) {
-        _.each(countries, function (s,v) {
-          if (item.countryId == s._id)
-            item.countryName = s.country;
-        })
-      })
-      data=ary;
-      totalRecords = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).count();
+    let pipeline = [
+      {"$match":{"isActive": true}},
+      {"$lookup":{from:'mlStates',localField:'countryCode',foreignField:'countryCode',as:'states'}},
+      {"$unwind":'$states'},
+      {"$project":{ _id:"$states._id",
+        "countryName":"$country","name":"$states.name","countryId":"$_id","countryCode":1,"isActive":"$states.isActive" }},
+    ];
+    if(query && Object.keys(query).length){
+      pipeline.push({"$match":query});
+    }
+    pipeline.push(
+      { $group : {
+        _id: null,
+        count : { $sum : 1 },
+        data: {$push: '$$ROOT'}
+      }}
+    );
+    pipeline.push(
+      { '$unwind': '$data' }
+    )
+    pipeline.push({
+      "$project":{ count:1,_id:"$data._id", "countryName":"$data.countryName","name":"$data.name","countryId":"$data.countryId","countryCode":"$data.countryCode","isActive":"$data.isActive" }
+    });
+    if(findOptions.sort){
+      pipeline.push({"$sort": findOptions.sort});
+    }
+    if(findOptions.skip){
+      pipeline.push({"$skip": parseInt(findOptions.skip)});
+    }
+    if(findOptions.limit){
+      pipeline.push({"$limit": parseInt(findOptions.limit)});
+    }
+    data = MlCountries.aggregate(pipeline);
+    totalRecords = (data.length ? data[0].count : 0);
+    // let countries = MlCountries.find({"isActive": true}).fetch();
+    // let allIds=_.pluck(countries,'_id');
+    //   let ary = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).fetch();
+    //
+    //   _.each(ary,function (item,key) {
+    //     _.each(countries, function (s,v) {
+    //       if (item.countryId == s._id)
+    //         item.countryName = s.country;
+    //     })
+    //   })
+    //   data=ary;
+    //   totalRecords = MlStates.find({$and:[{"countryId":{$in:allIds}},query]},findOptions).count();
   }
 
   if(args.module=="cities"){
@@ -268,47 +290,45 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlTransactionTypes.find(query,findOptions).fetch();
     totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
-  if(args.module=="accountType"){
+  if(args.module=="ACCOUNTTYPE"){
     data= MlAccountTypes.find(query,findOptions).fetch();
     totalRecords=MlAccountTypes.find(query,findOptions).count();
   }
 
-  if(args.module == 'BackendUsers'){
-      data = Meteor.users.find({"profile.isInternaluser":true}).fetch();
+  if(args.module == 'Users'){
+    var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+      queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    } else {
+      queryChange = {'profile.isExternaluser': false}   //platform_admin
+    }
+    let queryList = mergeQueries(query, queryChange);
+    data = Meteor.users.find(queryList, findOptions).fetch();
 
     data.map(function (doc,index) {
-      let roleIds=[]
-      let hirarichyLevel=[]
+      var hirarichyLevel=[]
+      var roleNames = []
       let userProfiles=doc&&doc.profile.InternalUprofile.moolyaProfile.userProfiles?doc.profile.InternalUprofile.moolyaProfile.userProfiles:[];
       userProfiles.map(function (doc,index) {
         if(doc.isDefault) {
           let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-          userRoles.map(function (doc, index) {
-            hirarichyLevel.push(doc.hierarchyLevel)
-
-          });
+          hirarichyLevel = _.pluck(userRoles, 'hierarchyLevel') || [];
           hirarichyLevel.sort(function (a, b) {
             return b - a
           });
           for (let i = 0; i < userRoles.length; i++) {
             if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
-              roleIds.push(userRoles[i].roleId);
+              roleNames.push(userRoles[i].roleName);
               break
             }
           }
         }
       });
-
-
-      let roleNames=[]
-      const rolesData =  MlRoles.find({ _id: { $in: roleIds} } ).fetch() || [];
-      rolesData.map(function (doc) {
-        roleNames.push(doc.roleName)
-      });
       data[index].roleNames = roleNames || [];
     });
 
-    totalRecords=Meteor.users.find({},findOptions).count();
+    totalRecords=Meteor.users.find(queryList,findOptions).count();
   }
   if(args.module == 'roles'){
     data= MlRoles.find(query,findOptions).fetch();
@@ -335,30 +355,24 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
       let departmentNames = [];  //@array of strings
-      departmentData.map(function (doc) {
+/*      departmentData.map(function (doc) {
         departmentNames.push(doc.departmentName)
-      });
+      });*/
+      departmentNames = _.pluck(departmentData, 'departmentName') || [];
 
       let subdepartmentsNames = [];  //@array of strings
-      subdepartmentData.map(function (doc) {
-        subdepartmentsNames.push(doc.subDepartmentName)
-      });
+      subdepartmentsNames = _.pluck(subdepartmentData, 'subDepartmentName') || [];
 
 
       let clusterNames = [];  //@array of strings
-      clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
+      clusterNames = _.pluck(clusterData, 'clusterName') || [];
 
       let chapterNamesArray = [];
-      chapterData.map(function (doc) {
-        chapterNamesArray.push(doc.chapterName)
-      });
+      chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
+
 
       let subchapterNamesArray = [];
-      subchapterData.map(function (doc) {
-        subchapterNamesArray.push(doc.subChapterName)
-      });
+      subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
       data[index].departmentsList = departmentNames || [];
       data[index].subdepartmentsList = subdepartmentsNames || [];
@@ -373,7 +387,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlIndustries.find(query,findOptions).fetch();
     totalRecords=MlIndustries.find(query, findOptions).count();
   }
-  if(args.module=="award"){
+  if(args.module=="awards"){
     data= MlAwards.find(query,findOptions).fetch();
     totalRecords=MlAwards.find(query, findOptions).count();
   }
@@ -393,7 +407,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlStageOfCompany.find(query,findOptions).fetch();
     totalRecords=MlStageOfCompany.find(query,findOptions).count();
   }
-  if(args.module=="process"){
+  if(args.module=="processmapping"){
     data= MlProcessMapping.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
@@ -462,7 +476,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     totalRecords=MlProcessMapping.find(query,findOptions).count();
   }
-  if(args.module=="processdocument"){
+  if(args.module=="documents"){
     data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
@@ -637,129 +651,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlGlobalSettings.find(query,findOptions).fetch();
     totalRecords=MlGlobalSettings.find(query,findOptions).count();
   }
-  if(args.module=="registrationInfo"){
-    let userID=context.userId,isPlatformAdmin=false,hirarichyLevel=[],clusterId='',chapterId=[]
-    //get user details iterate through profiles match with role and get clusterId
-    let user = mlDBController.findOne('users', {_id: userID}, context)
-    let userProfiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
-    userProfiles.map(function (doc,index) {
-      if(doc.isDefault) {
-        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-        for (let i = 0; i < userRoles.length; i++) {
-          let role = userRoles[i];
-          if(role.clusterId=="all"){
-            isPlatformAdmin = true
-          }else if(role.clusterId!="all" && role.chapterId=="all" && role.subChapterId=="all" && role.communityId=="all"){
-            clusterId = userRoles[i].clusterId;
-          }else if(role.clusterId!="all" && role.chapterId!="all" && role.subChapterId=="all" && role.communityId=="all"){
-            chapterId.push(userRoles[i].chapterId)
-          }
-        }
-      }
-    });
-    if(isPlatformAdmin){
-      let result=[];
-      let serverQueryList ={$or: [{status:"Rejected"}, {status: "Pending"}]}
-      let queryCountList = mergeQueries(query,serverQueryList);
-      data= MlRegistration.find(queryCountList,findOptions).fetch()||[];
-      data.map(function (doc,index) {
-          let object ;
-          object = doc.registrationInfo;
-          object._id = doc._id;
-          object.registrationStatus =doc.status;
-          object.canAssign = false;
-          object.canUnAssign = false;
-          result.push(object);
-      });
-      data = result;
-      let serverQuery ={$or: [{status:"Rejected"}, {status: "Pending"}]}
-      let queryCount = mergeQueries(query,serverQuery);
-      totalRecords=MlRegistration.find(queryCount,findOptions).count();
-    }
-    else if(clusterId!='' || chapterId.length>=1){
-      let result=[];
-      let serverQueryList = {$and: [{$or: [{"registrationInfo.clusterId":clusterId},{"registrationInfo.chapterId":{$in: [chapterId]}}]},{$or:[{status:"Rejected"},{status: "Pending"}]}]}
-      let queryCountList = mergeQueries(query,serverQueryList);
-      data= MlRegistration.find(queryCountList,findOptions).fetch();
-        data.map(function (doc,index) {
-            let object ;
-            object = doc.registrationInfo;
-            object._id = doc._id;
-            object.registrationStatus =doc.status;
-            result.push(object);
-
-        });
-      let serverQuery ={$and: [{$or: [{"registrationInfo.clusterId":clusterId},{"registrationInfo.chapterId":{$in: [chapterId]}}]},{$or:[{status:"Rejected"},{status: "Pending"}]}]}
-      let queryCount = mergeQueries(query,serverQuery);
-      data = mlTransactionsListRepo.processAssignmentTransactions(result,context.userId);
-      //data = result;
-      totalRecords=MlRegistration.find(queryCount,findOptions).count();
-    }
-  }
-  if(args.module=="registrationApprovedInfo"){
-    let userID=context.userId,hirarichyLevel=[],clusterIds=[]
-    //get user details iterate through profiles match with role and get clusterId
-    let user = mlDBController.findOne('users', {_id: userID}, context)
-    let userProfiles=user.profile.InternalUprofile.moolyaProfile.userProfiles
-    userProfiles.map(function (doc,index) {
-      if(doc.isDefault) {
-        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-        userRoles.map(function (doc, index) {
-          hirarichyLevel.push(doc.hierarchyLevel)
-
-        });
-        hirarichyLevel.sort(function (a, b) {
-          return b - a
-        });
-        for (let i = 0; i < userRoles.length; i++) {
-          if (userRoles[i].hierarchyLevel == hirarichyLevel[0]) {
-            clusterIds.push(userRoles[i].clusterId);
-            break
-          }
-        }
-      }
-    });
-    if(clusterIds.length>=1){
-      let serverQueryList ={status:"Approved"}
-      let queryCountList = mergeQueries(query,serverQueryList);
-      data= MlRegistration.find(queryCountList,findOptions).fetch();
-      let result=[];
-      if(clusterIds[0]=="all"){
-        data.map(function (doc,index) {
-          if(doc.status=='Approved'){
-            let object ;
-            object = doc.registrationInfo;
-            object._id = doc._id;
-            object.registrationStatus =doc.status;
-            result.push(object);
-          }
-        });
-      }else{
-        data.map(function (doc,index) {
-          if(doc.status=='Approved'&&doc.registrationInfo.clusterId==clusterIds[0]){
-            let object ;
-            object = doc.registrationInfo;
-            object._id = doc._id;
-            object.registrationStatus =doc.status;
-            result.push(object);
-          }
-        });
-      }
-
-      let serverQuery = {status:'Approved'}
-      let queryCount = mergeQueries(query,serverQuery);
-      data = result;
-      totalRecords = MlRegistration.find(queryCount,findOptions).count();
-    }
-
-  }
-
   if(args.module == "Portfoliodetails"){
       data = MlPortfolioDetails.find(query,findOptions).fetch();
       // totalRecords = data.length;
       totalRecords = MlPortfolioDetails.find(query,findOptions).count();
   }
-
   if(args.module=="templates"){
     data= MlTemplates.find(query,findOptions).fetch();
     totalRecords=MlTemplates.find(query,findOptions).count();
@@ -796,8 +692,57 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       obj.industryId = industryName;
       modArray.push(obj)
     })
-    data= modArray
+    data= modArray;
     totalRecords=MlSubDomain.find(query,findOptions).count();
+  }
+  if(args.module == "actionAndStatus") {
+    var pipeline = [
+      {
+        '$match':{}
+      }];
+
+    if(findOptions.skip && findOptions.skip != undefined){
+      pipeline.push({
+        '$skip':parseInt(findOptions.skip)
+      });
+    }
+    if(findOptions.limit != undefined){
+      pipeline.push({
+        '$limit': parseInt(findOptions.limit)
+      });
+    }
+    if(findOptions.sort != undefined){
+      pipeline.push({
+        '$sort':findOptions.sort
+      });
+    }
+    pipeline.push({
+      '$lookup':{
+        from: 'users',
+        localField: 'createdBy',
+        foreignField: '_id',
+        as: 'createdBy'
+      }
+    });
+    pipeline.push({
+      '$lookup': {
+        from: 'users',
+        localField: 'updatedBy',
+        foreignField: '_id',
+        as: 'updatedBy'
+      }
+    });
+    data = mlDBController.aggregate('MlActionAndStatus', pipeline, context);
+    data = data.map(function (doc) {
+      if(doc.createdBy && doc.createdBy[0]){
+        doc.createdBy = doc.createdBy[0].profile.InternalUprofile.moolyaProfile.displayName;
+      }
+      if(doc.updatedBy && doc.updatedBy[0]){
+        doc.updatedBy = doc.updatedBy[0].profile.InternalUprofile.moolyaProfile.displayName;
+      }
+      return doc;
+    });
+    totalRecords = mlDBController.find('MlActionAndStatus', query, context, findOptions).count();
   }
 
   return {'totalRecords':totalRecords,'data':data};
@@ -819,8 +764,8 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "cities":resolveType= 'Cities';break;
       case "userType":resolveType= 'UserTypes';break;
       case "roleType":resolveType= 'RoleTypes';break;
-      case "process":resolveType='ProcessType';break;
-      case "processdocument":resolveType='ProcessType';break;
+      case "processmapping":resolveType='ProcessType';break;
+      case "documents":resolveType='ProcessType';break;
       case "request":resolveType='Requests';break;
       case "tax":resolveType='Tax';break;
       case "taxation":resolveType='taxation';break;
@@ -833,12 +778,12 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "kycCategory":resolveType= 'KycCategories';break;
       case "documentMapping":resolveType= 'DocumentMapping';break;
       case "transaction":resolveType= 'Transaction';break;
-      case "accountType":resolveType= 'Account';break;
+      case "ACCOUNTTYPE":resolveType= 'Account';break;
       case "templates":resolveType= 'TemplateDetails';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
       case "industry":resolveType= 'Industry';break;
       case "roles":resolveType= 'Roles';break;
-      case "award":resolveType= 'Award';break;
+      case "awards":resolveType= 'Award';break;
       case "specification":resolveType= 'Specification';break;
       case "profession":resolveType= 'Profession';break;
       case "entity":resolveType= 'Entity';break;
@@ -862,10 +807,11 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "SubDomain":resolveType= 'SubDomain';break;
       case "dateAndTime":resolveType= 'DateAndTime';break;
       case "language":resolveType= 'Language';break;
-      case "BackendUsers":resolveType= 'BackendUsers';break;
+      case "Users":resolveType= 'BackendUsers';break;
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
       case "community":resolveType= 'Community';break;
+      case 'actionAndStatus':resolveType='ActionAndStatusType';break
 
     }
 

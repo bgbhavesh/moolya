@@ -208,13 +208,13 @@ var options = {
 
     isInternaluser : true,
     isExternaluser : false,
-    email: 'platformadmin@moolya.com',
+    email: 'platformadmin@mymoolya.com',
     isMoolya:true,
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"platformadmin@moolya.com",
+        email:"platformadmin@mymoolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -225,12 +225,12 @@ var options = {
     },
     isSystemDefined: true
   },
-  username: 'platformadmin@moolya.com',
+  username: 'platformadmin@mymoolya.com',
   password: adminPassword
 
 };
 
-var userObj = Meteor.users.findOne({username: "platformadmin@moolya.com"});
+var userObj = Meteor.users.findOne({username: "platformadmin@mymoolya.com"});
 if(!userObj){
   console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
   platformAdminId = Accounts.createUser(options);
@@ -256,12 +256,12 @@ var systemAdminProfile = {
   profile:{
     isInternaluser : true,
     isExternaluser : false,
-    email: 'systemadmin@moolya.com',
+    email: 'systemadmin@mymoolya.com',
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"systemadmin@moolya.com",
+        email:"systemadmin@mymoolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -272,11 +272,11 @@ var systemAdminProfile = {
     },
     isSystemDefined: true
   },
-  username: 'systemadmin@moolya.com',
+  username: 'systemadmin@mymoolya.com',
   password: adminPassword
 };
 
-var systemAdminUser = Meteor.users.findOne({username: "systemadmin@moolya.com"});
+var systemAdminUser = Meteor.users.findOne({username: "systemadmin@mymoolya.com"});
 if(!systemAdminUser){
   console.log("No Admin found, hence inserting a default Moolya System Admin: ",systemAdminProfile);
   Accounts.createUser(systemAdminProfile);

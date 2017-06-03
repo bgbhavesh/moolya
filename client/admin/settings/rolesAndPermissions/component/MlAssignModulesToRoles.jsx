@@ -196,9 +196,6 @@ export default class MlAssignModulesToRoles extends React.Component {
   }
 
   onmoduleNameChange(index, event) {
-    alert("Testtttttttttttttttttt");
-    console.log("**************************************************");
-    console.log(this.state.assignModulesToRoles);
     let assignModulesToRoles = this.state.assignModulesToRoles
     assignModulesToRoles[index]['moduleName'] = event.target.value
     this.setState({assignModulesToRoles: assignModulesToRoles})

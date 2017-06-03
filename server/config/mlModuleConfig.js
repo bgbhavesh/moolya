@@ -60,7 +60,7 @@ let modules = [
     'awards',
     'fundingType',
     'portfolio',
-    'transactionLog',
+    'transactionsLog',
     'modulelist',
     "internalRequests",
     "internalApprovedRequests",

@@ -1,5 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef'
 
 let transactionsSchema = `        
      type byInfo{
@@ -184,3 +185,20 @@ let transactionsSchema = `
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);
+
+let supportedApi = [
+  {api:'fetchTransactionsByUser', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
+  {api:'fetchTransactions', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
+  {api:'fetchTransactionsLog', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
+
+  {api:'createTransactionLog', actionName:'CREATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'createTransaction', actionName:'CREATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'createRegistrationTransaction', actionName:'CREATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'updateTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'assignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'updateTransactionStatus', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'updateRegistrationTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'selfAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'unAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -813,6 +813,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "community":resolveType= 'Community';break;
       case "REQUESTTYPE":resolveType= 'Requests';break;
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
+      case 'TransactionsLog':resolveType='TransactionsLog';break
 
     }
 

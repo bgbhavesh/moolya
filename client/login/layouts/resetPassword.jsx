@@ -15,13 +15,25 @@ MlResetPasswordContent = React.createClass({
 
     if(password == conformPassword){
       let token = FlowRouter.getParam('token');
-      let response = await resetPasswordActionHandler(token, password);
-      if(response.success){
-        toastr.success(response.result);
-        FlowRouter.go('/login');
-      } else {
-        toastr.error(response.result);
-      }
+      // let response = await resetPasswordActionHandler(token, password);
+      let data={token:token,password:password};
+      var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: Meteor.absoluteUrl('resetPassword'),
+        data :JSON.stringify(data),
+        headers: header,
+        contentType: "application/json; charset=utf-8",
+        success:function(response){
+          if(response.success){
+            toastr.success(response.result);
+            FlowRouter.go('/login');
+          } else {
+            toastr.error(response.result);
+          }
+        }
+      });
     } else {
       toastr.error('Password not match');
     }

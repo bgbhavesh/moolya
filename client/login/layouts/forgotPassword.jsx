@@ -13,12 +13,24 @@ MlForgotPasswordContent = React.createClass({
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let email = this.refs.email.value
     if(re.test(email)){
-      let response = await forgotPasswordActionHandler(email);
-      if(response.success){
-        toastr.success(response.result)
-      } else {
-        toastr.error(response.result);
-      }
+      let data={email:email};
+      var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: Meteor.absoluteUrl('forgotPassword'),
+        data :JSON.stringify(data),
+        headers: header,
+        contentType: "application/json; charset=utf-8",
+        success:function(response){
+          if(response.success){
+            toastr.success(response.result)
+          } else {
+            toastr.error(response.result);
+          }
+        }
+      });
+      // let response = await forgotPasswordActionHandler(email);
     } else {
       toastr.error('A valid email is required');
     }

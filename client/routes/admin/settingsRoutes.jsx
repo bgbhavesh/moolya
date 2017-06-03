@@ -186,6 +186,7 @@ import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 // @End
 
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
+import MlSettingsTabHistoryList from '../../admin/settings/settingsAuditLog/components/MlSettingsTabHistoryList'
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -1114,6 +1115,13 @@ adminSection.route('/settings/editActionsAndStatuses/:id/:Did', {
   name: 'settings_Generic_ActionsAndStatuses_Edit',
   action(){
     mount(AdminLayout,{adminContent:<MlEditGenericActionsAndStatuses />})
+  }
+});
+
+adminSection.route('/settings/history', {
+  name: 'settings_historyList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'history'}} />,adminContent:< MlSettingsTabHistoryList/>})
   }
 });
 

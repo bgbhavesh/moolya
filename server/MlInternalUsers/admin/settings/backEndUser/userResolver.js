@@ -7,7 +7,7 @@ import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import _ from "lodash";
 import _underscore from "underscore";
-
+import geocoder from 'geocoder'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -1110,10 +1110,33 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   } else{
 
       if(userType == "All"){
-        users = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isActive":true}]}, context).fetch();
+        let internal = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        let external = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        _.each(internal, function (user){
+          if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+            user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+            user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+          }
+          users.push(user);
+        })
+        _.each(external, function (user){
+          if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+            user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+            user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+          }
+          users.push(user);
+        })
+
       }
       else if(userType == "BackendUsers"){
-        users = mlDBController.find('users', {"$and":[{"profile.isInternaluser":true},{"profile.isActive":true},{"profile.isSystemDefined":{$exists:false}}]}, context).fetch();
+        var internalUsers = mlDBController.find('users', {"$and":[{"profile.isInternaluser":true},{"profile.isActive":true},{"profile.isSystemDefined":{$exists:false}}]}, context).fetch();
+        _.each(internalUsers, function (user){
+            if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+              user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+              user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+            }
+            users.push(user);
+        })
       }
       else if(userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
           let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
@@ -1249,8 +1272,36 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
     } else if (args.type == "ADDRESSTYPE") {
         let addressTypes = []
         addressTypes = user.profile.addressInfo?user.profile.addressInfo:[];
-        addressTypes.push(args.addressBook.addressInfo[0]);
-      id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
+
+        // Fetching Lat Lng from Address
+        let city = args.addressBook.addressInfo[0].addressCity
+        let area = args.addressBook.addressInfo[0].addressArea
+        let locality = args.addressBook.addressInfo[0].addressLocality
+        let pin =args.addressBook.addressInfo[0].addressPinCode
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+          if(err){
+            throw new Error("Invalid Locality selection "+e);
+          }
+          args.addressBook.addressInfo[0].latitude = data.results[0].geometry.location.lat;
+          args.addressBook.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+
+          try{
+            // let id = MlClusters.insert(cluster);
+            addressTypes.push(args.addressBook.addressInfo[0]);
+            let id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
+
+            if(id){
+              let code = 200;
+              let result = {addressId: id}
+              let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+              return response
+            }
+          }catch(e){
+            throw new Error("Error while updating address "+e);
+          }
+
+        }),{key:Meteor.settings.private.googleApiKey});
+
     } else if (args.type == "EMAILTYPE") {
         let emailTypes = []
         emailTypes = user.profile.emailInfo?user.profile.emailInfo:[];

@@ -733,7 +733,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         let area = args.registration.addressInfo[0].addressArea
         let locality = args.registration.addressInfo[0].addressLocality
         let pin =args.registration.addressInfo[0].addressPinCode
-        geocoder.geocode(locality+","+area+","+city, Meteor.bindEnvironment(function ( err, data ) {
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }
@@ -759,7 +759,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         let area = args.registration.addressInfo[0].addressArea
         let locality = args.registration.addressInfo[0].addressLocality
         let pin =args.registration.addressInfo[0].addressPinCode
-        geocoder.geocode(locality+","+area+","+city, Meteor.bindEnvironment(function ( err, data ) {
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }

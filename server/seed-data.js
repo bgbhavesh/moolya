@@ -69,7 +69,7 @@ if(!clusterAdmin){
     let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
     let clusterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
     let modules = [
-                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:clusterPer},
+                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
@@ -103,7 +103,7 @@ if(!chapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
@@ -138,7 +138,7 @@ if(!subchapterAdmin){
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},

@@ -1,5 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
 
 let communitySchema = `
     type Community{
@@ -57,3 +58,14 @@ let communitySchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], communitySchema]);
+let supportedApi = [
+    {api:'createCommunityAccess', actionName:'CREATE', moduleName:"COMMUNITY"},
+    {api:'createCommunity', actionName:'CREATE', moduleName:"COMMUNITY"},
+    {api:'updateCommunityDef', actionName:'UPDATE', moduleName:"COMMUNITY"},
+    {api:'FetchMapData', actionName:'READ', moduleName:"COMMUNITY"},
+    {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY"},
+    {api:'fetchCommunitiesSelect', actionName:'READ', moduleName:"COMMUNITY"},
+    {api:'fetchCommunityDef', actionName:'READ', moduleName:"COMMUNITY"},
+    {api:'fetchCommunitiesForRolesSelect', actionName:'READ', moduleName:"COMMUNITY"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

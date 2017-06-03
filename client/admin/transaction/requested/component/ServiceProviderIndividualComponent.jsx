@@ -110,7 +110,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   }
 
   optionsBySelectGender(val){
-    this.setState({gender:val})
+    this.setState({gender:val.value})
   }
   optionsBySelectTitle(val){
     this.setState({title:val})
@@ -237,6 +237,11 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       {value: 'Yes', label: 'Yes'},
       {value: 'No', label: 'No'}
     ];
+    let genderValues = [
+      {value: 'male', label: 'Male'},
+      {value: 'female', label: 'Female'},
+      {value: 'others', label: 'Others'}
+    ];
 
     let genderquery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -338,8 +343,11 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                     <FontAwesome name="calendar" className="password_icon"  onClick={that.openDatePickerDateOfBirth.bind(that)} />
                     {/*<br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>*/}
                   </div>
+                  {/*<div className="form-group">*/}
+                    {/*<Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>*/}
+                  {/*</div>*/}
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>
+                    <Select name="form-field-name"  placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" />
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder="Select Citizenship" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>

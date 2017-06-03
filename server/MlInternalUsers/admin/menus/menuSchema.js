@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
+
 let Menu = `
     type Menu{
       image: String
@@ -30,3 +32,5 @@ let Menu = `
 `
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],Menu]);
+let supportedApi = [{api:'FetchMenu', actionName:'READ', isWhiteList: true, moduleName:"MENU"}, {api:'fetchExternalUserMenu', actionName:'READ', isWhiteList: true, moduleName:"MENU"}, {api:'fetchExternalUserProfileMenu', isWhiteList: true, actionName:'READ', moduleName:"MENU"}];
+MlResolver.MlModuleResolver.push(supportedApi)

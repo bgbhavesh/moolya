@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let citiesSchema = `       
     type Cities
     {     
@@ -41,3 +43,13 @@ let citiesSchema = `
 `
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], citiesSchema]);
+let supportedApi = [
+  {api:'fetchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
+  {api:'fetchCity', actionName:'READ', moduleName:"CITIES"},
+  {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES"},
+  {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES"},
+  {api:'searchCities', actionName:'READ', moduleName:"CITIES"},
+  {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)
+

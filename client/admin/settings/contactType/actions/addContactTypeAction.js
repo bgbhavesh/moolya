@@ -27,7 +27,7 @@ export async function addContactTypeActionHandler(Details)
     mutation: gql`
     mutation  ($masterData:MasterSettingsRequest){
         createMasterSetting(
-          moduleName:"MASTER_SETTINGS",
+          moduleName:"MASTERSETTINGS",
           actionName:"CREATE",
           type:CONTACTTYPE,
           masterData:$masterData

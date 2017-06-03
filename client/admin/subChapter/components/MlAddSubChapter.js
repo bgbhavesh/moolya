@@ -131,24 +131,29 @@ class MlAddSubChapter extends React.Component {
     dataGet.isBespokeRegistration = this.refs.isBespokeRegistration.checked
     dataGet.internalSubChapterAccess = this.state.internalSubChapterAccess
     dataGet.moolyaSubChapterAccess = this.state.moolyaSubChapterAccess
-    let data = dataGet;
-    for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined || data[propName] === '') {
-        delete data[propName];
-      }
-    }
 
-    if (_.isEmpty(data.associatedSubChapters) && data.associatedSubChapters.length<1){
-      data = _.omit(data, 'associatedSubChapters')
+    if (dataGet.subChapterName) {
+      let data = dataGet;
+      for (var propName in data) {
+        if (data[propName] === null || data[propName] === undefined || data[propName] === '') {
+          delete data[propName];
+        }
+      }
+
+      if (_.isEmpty(data.associatedSubChapters) && data.associatedSubChapters.length < 1) {
+        data = _.omit(data, 'associatedSubChapters')
+      }
+      if (_.isEmpty(data.internalSubChapterAccess)) {
+        data = _.omit(data, 'internalSubChapterAccess')
+      }
+      if (_.isEmpty(data.moolyaSubChapterAccess)) {
+        data = _.omit(data, 'moolyaSubChapterAccess')
+      }
+      const response = await addSubChapterActionHandler(data)
+      return response;
+    } else {
+      toastr.error('Sub-Chapter Name is required')
     }
-    if(_.isEmpty(data.internalSubChapterAccess)){
-      data = _.omit(data, 'internalSubChapterAccess')
-    }
-    if(_.isEmpty(data.moolyaSubChapterAccess)){
-      data = _.omit(data, 'moolyaSubChapterAccess')
-    }
-    const response = await addSubChapterActionHandler(data)
-    return response;
   }
 
   componentWillMount() {

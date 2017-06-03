@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let CommunityDefinition = `        
     type CommunityDefinition{
       name :String
@@ -22,3 +24,9 @@ let CommunityDefinition = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],CommunityDefinition]);
+let supportedApi = [
+    {api:'fetchCommunityDefinition', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'fetchCommunityDefinitionForSelect', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'fetchCommunityDefinitionAPI', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

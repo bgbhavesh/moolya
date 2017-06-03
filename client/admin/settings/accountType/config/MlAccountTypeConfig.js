@@ -3,7 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 const mlTemplateTypeTableConfig=new MlViewer.View({
   name:"templateTypeTable",
-  module:"accountType",//Module name for filter.
+  module:"MASTERSETTINGS",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["accountName","accountDisplayName","isActive"],
@@ -55,7 +55,7 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
   sizePerPage:5,
   graphQlQuery:gql`
                 query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-                data:SearchQuery(module:"accountType",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+                data:SearchQuery(module:"MASTERSETTINGS",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on Account{

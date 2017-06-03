@@ -1,7 +1,7 @@
-import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
+import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-const mlHistoryTableConfig=new MlViewer.View({
+const mlSettingsTabHistoryTableConfig=new MlViewer.View({
   name:"auditLogTable",
   module:"audit",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
@@ -23,7 +23,7 @@ const mlHistoryTableConfig=new MlViewer.View({
   tableHeaderClass:'react_table_head',
   showActionComponent:false,
   actionConfiguration:[
-   {
+    {
       showAction: true,
       actionName: 'logout',
       handler: (data)=>{console.log(data);}
@@ -31,7 +31,7 @@ const mlHistoryTableConfig=new MlViewer.View({
   ],
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{moduleName:"CLUSTER,CHAPTER,SUBCHAPTER,COMMUNITY,USERS"}}
+    return {context:{moduleName:"CITIES,INDUSTRY,AWARDS,COUNTRIES,DEPARTMENT,DOCUMENTMAPPING,GLOBALSETTINGS,MASTERSETTINGS,HIERARCHY,Modules,PROCESSMAPPING,ROLES,ROLETYPE,SERVICES,STATES,Status,SUBDEPARTMENT,TAXATION,ACCOUNTTYPES,BUSINESSTYPE,CITIZENSHIP,DOCUMENTCATEGORIES,DOCUMENTFORMAT,DOCUMENTTYPE,ENTITY,LOOKINGFOR,FUNDINGTYPE,PROFESSION,SPECIFICATION,STAGEOFCOMPANY,IDENTITYTYPES,PROCESSTYPES,SUBPROCESS,HIERARCHY,FILTERS,TEMPLATE"}}
     // return {context:{moduleName:"CLUSTER, SUBCHAPTER",clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   sizePerPage:5,
@@ -57,4 +57,4 @@ const mlHistoryTableConfig=new MlViewer.View({
               `
 });
 
-export {mlHistoryTableConfig};
+export {mlSettingsTabHistoryTableConfig};

@@ -73,6 +73,7 @@ class  MlAdminProfileApp extends Component {
 
 
   render() {
+    var loggedInUser = getAdminUserContext();
     return (
       <div className="header_top">
         <a onClick={this.handleClick} style={{cursor: 'pointer'}}>
@@ -87,8 +88,8 @@ class  MlAdminProfileApp extends Component {
           <ol>
             <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/admin/myprofile/personalInfo"><img className="profile-img" src="/images/1.png" /></a></li>
             <li data-toggle="tooltip" title="Log As" data-placement="right"><a href="/admin/logas"><img className="profile-img" src="/images/2.png" /></a></li>
-            <li data-toggle="tooltip" title="" data-placement="right"><a href="#"><img className="profile-img" src="/images/3.png" /></a></li>
-            <li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchprofile"><img className="profile-img" src="/images/4.png" /></a></li>
+            {loggedInUser&&loggedInUser.hierarchyLevel<4?<li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchprofile"><img className="profile-img" src="/images/3.png" /></a></li>:""}
+            <li data-toggle="tooltip" title="Themes" data-placement="right"><a href="#"><img className="profile-img" src="/images/4.png" /></a></li>
             <li data-toggle="tooltip" title="Logout" data-placement="left"><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
           </ol>
         </div>

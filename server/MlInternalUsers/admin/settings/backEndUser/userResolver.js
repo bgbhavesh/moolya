@@ -683,6 +683,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 communityDefCode:(communityCode||"all"),
               });
               if (profile) {
+                if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
                 users.push(user);
               }
             }
@@ -696,6 +700,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           if(profile){
             let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all"), communityCode:(communityCode||"all")});
             if(roles){
+              if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+              }
               users.push(user);
             }
           }
@@ -720,6 +728,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                       subChapterId: subChapterId
                     });
                     if (profile) {
+                      if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                        user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                        user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                      }
                       users.push(user);
                     }
                   }
@@ -733,6 +745,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   if(profile){
                     let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all")});
                     if(roles){
+                      if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                        user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                        user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                      }
                       users.push(user);
                     }
                   }
@@ -743,6 +759,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 _.each(browserUsers, function (user) {
                   let userProfiles = user.profile.externalUserProfiles;
                   if (!userProfiles || userProfiles.length<1) {
+                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                      user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                      user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                    }
                       users.push(user);
                   }
                 })
@@ -756,6 +776,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   if(profile){
                     let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
                     if(roles){
+                      if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                        user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                        user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                      }
                       users.push(user);
                     }
                   }
@@ -771,10 +795,18 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                     if (profile.communityId && profile.communityId != "all") {
                       let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                       if (community && community.communityName == userType) {
+                        if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                          user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                          user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                        }
                         users.push(user);
                       }
                     } else if(profile.communityId && profile.communityId == "all") {
                       if (profile) {
+                        if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                          user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                          user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                        }
                         users.push(user);
                       }
                     }
@@ -789,6 +821,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               _.each(browserUsers, function (user) {
                 let userProfiles = user.profile.externalUserProfiles;
                 if (!userProfiles || userProfiles.length<1) {
+                  if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                    user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                    user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                  }
                   users.push(user);
                 }
               })
@@ -810,6 +846,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               if(userProfiles){
                 let profile = _.find(userProfiles, {clusterId:clusterId,chapterId:chapterId});
                 if(profile){
+                  if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                    user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                    user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                  }
                   users.push(user);
                 }
               }
@@ -823,6 +863,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               if(profile){
                 let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
                 if(roles){
+                  if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                    user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                    user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                  }
                   users.push(user);
                 }
               }
@@ -833,6 +877,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             _.each(browserUsers, function (user) {
               let userProfiles = user.profile.externalUserProfiles;
               if (!userProfiles || userProfiles.length<1) {
+                if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
                 users.push(user);
               }
             })
@@ -847,6 +895,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               if(profile){
                 let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
                 if(roles){
+                  if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                    user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                    user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                  }
                   users.push(user);
                 }
               }
@@ -862,10 +914,18 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 if (profile.communityId && profile.communityId != "all") {
                   let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                   if (community && community.communityName == userType) {
+                    if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                      user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                      user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                    }
                     users.push(user);
                   }
                 } else if(profile.communityId && profile.communityId == "all") {
                   if (profile) {
+                    if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                      user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                      user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                    }
                     users.push(user);
                   }
                 }
@@ -880,6 +940,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
             if (!userProfiles || userProfiles.length<1) {
+              if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+              }
               users.push(user);
             }
           })
@@ -900,6 +964,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 communityDefCode:(communityCode||"all"),
               });
               if (profile) {
+                if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
                 users.push(user);
               }
             }
@@ -913,6 +981,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           if(profile){
             let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
             if(roles){
+              if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+              }
               users.push(user);
             }
           }
@@ -932,6 +1004,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               if(userProfiles){
                 let profile = _.find(userProfiles, {clusterId:clusterId});
                 if(profile){
+                  if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                    user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                    user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                  }
                   users.push(user);
                 }
               }
@@ -943,6 +1019,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
               if(profile){
+                if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
                   users.push(user);
               }
           })
@@ -952,6 +1032,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             _.each(browserUsers, function (user) {
               let userProfiles = user.profile.externalUserProfiles;
               if (!userProfiles || userProfiles.length<1) {
+                if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
                 users.push(user);
               }
             })
@@ -964,6 +1048,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
               if(profile){
+                if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
                   users.push(user);
               }
           })
@@ -978,10 +1066,18 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 if (profile.communityId && profile.communityId != "all") {
                   let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                   if (community && community.communityName == userType) {
+                    if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                      user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                      user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                    }
                     users.push(user);
                   }
                 } else if(profile.communityId && profile.communityId == "all") {
                   if (profile) {
+                    if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                      user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                      user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                    }
                     users.push(user);
                   }
                 }
@@ -996,6 +1092,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
             if (!userProfiles || userProfiles.length<1) {
+              if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+              }
               users.push(user);
             }
           })
@@ -1022,10 +1122,18 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                               if (profile.communityId && profile.communityId != "all") {
                                   let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                                   if (community && community.communityName == userType) {
+                                    if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                                      user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                                      user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                                    }
                                       users.push(user);
                                   }
                               } else if(profile.communityId && profile.communityId == "all") {
                                   if (profile) {
+                                    if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                                      user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                                      user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                                    }
                                       users.push(user);
                                   }
                               }
@@ -1040,6 +1148,10 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
             if (!userProfiles || userProfiles.length<1) {
+              if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+              }
               users.push(user);
             }
           })

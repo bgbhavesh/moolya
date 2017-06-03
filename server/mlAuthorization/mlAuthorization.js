@@ -372,7 +372,7 @@ class MlAuthorization
                     }
               }
 
-              if(actionName == 'READ')
+              if(actionName == 'READ' || actionName == 'UPDATE')
                 return true;
           }
           break;

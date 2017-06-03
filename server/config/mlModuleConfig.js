@@ -63,7 +63,9 @@ let modules = [
     'transactionLog',
     'modulelist',
     "internalRequests",
-    "internalApprovedRequests"
+    "internalApprovedRequests",
+    "actionAndStatus",
+    "accountType"
   ];
 
 // Meteor.startup(function () {

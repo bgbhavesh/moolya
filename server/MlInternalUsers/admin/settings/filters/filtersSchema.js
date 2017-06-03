@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let Filters = `    
         
     type fieldListSpecificsOutput{
@@ -88,3 +90,14 @@ let Filters = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Filters]);
+
+let supportedApi = [
+  {api:'findFilters', actionName:'READ', moduleName:"FILTERS"},
+  {api:'fetchModuleFilters', actionName:'READ', moduleName:"FILTERS"},
+  {api:'fetchSelectedFilterListDropDown', actionName:'READ', moduleName:"FILTERS"},
+  {api:'fetchSelectedFilterData', actionName:'READ', moduleName:"FILTERS"},
+  {api:'fetchFilterListDropDown', actionName:'READ', moduleName:"FILTERS"},
+  {api:'createRequestss', actionName:'CREATE', moduleName:"FILTERS"},
+  {api:'updateFilter', actionName:'UPDATE', moduleName:"FILTERS"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

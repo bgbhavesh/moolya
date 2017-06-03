@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let ProfessionSchema = `
     type Profession
     {
@@ -25,3 +27,12 @@ let ProfessionSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],ProfessionSchema]);
+let supportedApi = [
+  {api:'FindProfession', actionName:'READ', moduleName:"PROFESSION"},
+  {api:'fetchProfessions', actionName:'READ', moduleName:"PROFESSION"},
+  {api:'FetchProfessionIndustry', actionName:'READ', moduleName:"PROFESSION"},
+  {api:'fetchIndustryBasedProfession', actionName:'READ', moduleName:"PROFESSION", isWhiteList:true},
+  {api:'CreateProfession', actionName:'CREATE', moduleName:"PROFESSION"},
+  {api:'UpdateProfession', actionName:'UPDATE', moduleName:"PROFESSION"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -115,7 +115,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .list_block .hex_outer{display: inline-block;background: #B9C5CC;border: 0px;position: relative;height: 136px;z-index: 1;width: 99px;margin-top: 8px;}
 .list_block .hex_outer:after{position:absolute;right:-30px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 67px 0px 67px 30px;border-color: transparent transparent transparent #B9C5CC;top: 1px;}
 .list_block .hex_outer:before{position: absolute;left: -30px;content: " ";width: 0px;height: 0px;border-style: solid;border-width: 67px 30px 67px 0px;border-color: transparent #B9C5CC transparent transparent;top: 1px;}
-.list_block h3{color: #fff;background: #273545;position: absolute;width: 100%;line-height: 40px;bottom: 0px;text-shadow: 0px 1px 1px #000;font-size: 16px;font-weight: normal;border-radius: 0px 0px 4px 4px;margin-bottom: 0px;padding: 0px 10px;}
+.list_block h3{color: #fff;background: #273545;position: absolute;width: 100%;line-height: 40px;bottom: 0px;text-shadow: 0px 1px 1px #000;font-size: 16px;font-weight: normal;border-radius: 0px 0px 4px 4px;margin-bottom: 0px;padding: 0px 10px;white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 
 .community_icons{height: 45px;position: absolute; /*position:relative;*/ float:right; top: 0px;right: 10px;background-color:rgba(255,255,255,0.9);border-radius: 0px 0px 6px 6px;padding: 0px 5px 0px 5px;border: 1px solid #ccc;z-index: 3;}
 .community_icons a .ml{font-size: 19px; color: #273545; border-radius: 100%; padding: 5px; margin-right: 5px; text-shadow: none;text-shadow: none;line-height: 40px;border:solid 2px transparent;background-color: #B9C5CC; }
@@ -1378,3 +1378,6 @@ button.close {
 .popover-custom-class div{
   bottom: 0;
 }
+
+.show-information{position: absolute; background: rgba(51, 51, 51, 0.76); width: 100%; top: 0; left: 0; height: 100%; z-index: 9; color: #fff; padding: 10px;border-radius: 0 0 4px 4px;text-align: center; line-height:50px}
+.uploaded_files .panel-body{position: relative;}

@@ -41,7 +41,7 @@ class MlClusterDetails extends React.Component {
 
   async  updateCluster() {
     let clusterDetails = {
-      _id: this.refs.id.value,
+      _id: this.props.params,
       countryName: this.refs.countryName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
@@ -169,7 +169,7 @@ class MlClusterDetails extends React.Component {
                       <div className="email_notify">
                         <div className="input_types">
                           <input ref="isEmailNotified" type="checkbox" name="checkbox"
-                                 checked={this.state.data.isEmailNotified}
+                                 checked={this.state.data && this.state.data.isEmailNotified}
                                  onChange={this.onStatusChangeNotify.bind(this)}/>
                           <label htmlFor="checkbox1"><span> </span>Notify</label>
                         </div>

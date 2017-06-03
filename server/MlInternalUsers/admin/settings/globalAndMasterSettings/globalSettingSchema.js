@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let GlobalSettingsSchema = `
    enum GLOBAL_SETTINGS_TYPE {
             DATEANDTIME,NUMERICAL,REGIONAL
@@ -95,3 +97,10 @@ let GlobalSettingsSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],GlobalSettingsSchema]);
+
+let supportedApi = [
+    {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS"},
+    {api:'updateGlobalSetting', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

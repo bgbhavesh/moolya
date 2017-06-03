@@ -18,7 +18,7 @@ const mlClusterSubChaptersListConfig=new MlViewer.View({
   viewComponent:<MlClusterSubChaptersListHierarchy />,
   graphQlQuery:gql`
               query ContextSpecSearch($context:ContextParams,$offset: Int, $limit: Int,$searchSpec:SearchSpec){
-              data:ContextSpecSearch(module:"hierarchySubChapters",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
+              data:ContextSpecSearch(module:"hierarchy",context:$context,offset:$offset,limit:$limit,searchSpec:$searchSpec){
                     totalRecords
                     data{
                      ...on SubChapter{

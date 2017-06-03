@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let countriesSchema = `
 
     type Countries{
@@ -44,4 +46,13 @@ let countriesSchema = `
 `
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], countriesSchema]);
+let supportedApi = [
+    {api:'fetchCountries', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
+    {api:'fetchCountry', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
+    {api:'fetchCountriesSearch', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
+    {api:'fetchCountriesAPI', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
+    {api:'fetchCountryCode', actionName:'READ', moduleName:"COUNTRIES", isWhiteList:true},
+    {api:'updateCountry', actionName:'UPDATE', moduleName:"COUNTRIES"},
+]
 // String
+MlResolver.MlModuleResolver.push(supportedApi)

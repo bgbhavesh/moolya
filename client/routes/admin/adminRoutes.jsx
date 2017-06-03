@@ -52,6 +52,12 @@ import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
 import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
 
+import MlCommunityTabHistoryList from '../../admin/community/communityAuditLog/components/MlCommunityTabHistoryList'
+import MlDocumentsTabHistoryList from '../../admin/processDocument/documentsAuditLog/components/MlDocumentsTabHistoryList'
+import MlTemplatesTabHistoryList from '../../templates/templatesAuditLog/components/MlTemplatesTabHistoryList'
+import MlTransactionTabHistoryList from '../../admin/transaction/transactionAuditLog/components/MlTransactionTabHistoryList'
+import MlRegistrationTabHistoryList from '../../admin/transaction/requested/registrationAuditLog/components/MlRegistrationTabHistoryList'
+import MlPotfolioTabHistoryList from '../../admin/transaction/portfolio/portfolioAuditLog/components/MlPotfolioTabHistoryList'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -149,7 +155,13 @@ adminSection.route('/community', {
 adminSection.route('/community/:communityId/communityDetails', {
   name: 'community_Community_Details',
   action(params){
-    mount(AdminLayout,{adminContent:< MlEditCommunityFormComponent params={params.communityId}/>})
+   mount(AdminLayout,{adminContent:< MlEditCommunityFormComponent params={params.communityId}/>})
+  }
+});
+adminSection.route('/community/:communityId/history', {
+  name: 'community_Histroy_Details',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlCommunityTabHistoryList params={params.communityId}/>})
   }
 });
 adminSection.route('/community/:communityId/assignusers', {
@@ -175,6 +187,12 @@ adminSection.route('/documents/communityList', {
   name: 'documents_CommunityList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'documents','showBreadCrum':true,'module':'community'}} />, adminContent:<MlProcessDocumentList/>})
+  }
+});
+adminSection.route('/documents/history', {
+  name: 'documents_HistoryList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'documents','showBreadCrum':true,'module':'community'}} />, adminContent:<MlDocumentsTabHistoryList/>})
   }
 });
 adminSection.route('/documents/:pid/:kycid/:docid', {
@@ -245,6 +263,14 @@ adminSection.route('/transactions/conversationsLog', {
   }
 });
 
+adminSection.route('/transactions/history', {
+  name: 'History_Log',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'conversations'}} />, adminContent:<MlTransactionTabHistoryList/>})
+  }
+});
+
+
 adminSection.route('/transactions/portfolioRequested/edit', {
     name: 'transaction_portfolio_requested_edit',
     action(params){
@@ -292,6 +318,13 @@ adminSection.route('/transactions/createRegistration', {
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'create'}} />, adminContent:<MlCreateRegistration/>})
   }
 });
+
+adminSection.route('/transactions/registrationHistory', {
+  name: 'transaction_registration_history',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'history'}} />, adminContent:<MlRegistrationTabHistoryList/>})
+  }
+});
 // ************* Portfolio Routes **************
 adminSection.route('/transactions/portfolio/requestedPortfolioList', {
   name: 'portfolio_requested',
@@ -309,6 +342,12 @@ adminSection.route('/transactions/portfolio/createPortfolio', {
   name: 'portfolio_create',
   action(params){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'create'}} />, adminContent:<MlCreatePortfolio/>})
+  }
+});
+adminSection.route('/transactions/portfolio/history', {
+  name: 'portfolio_history',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'history'}} />, adminContent:<MlPotfolioTabHistoryList/>})
   }
 });
 
@@ -330,6 +369,13 @@ adminSection.route('/templates/templateList', {
   name: 'templates_List',
   action(){
     mount(AdminLayout,{adminContent:<MlAssignedTemplatesList/>})
+  }
+});
+
+adminSection.route('/templates/history', {
+  name: 'templates_History',
+  action(){
+    mount(AdminLayout,{adminContent:<MlTemplatesTabHistoryList/>})
   }
 });
 

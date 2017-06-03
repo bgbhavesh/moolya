@@ -123,12 +123,18 @@ export default class MlTableView extends Component {
 
    handleRowSelectAll(isSelected, rows) {
     if (isSelected) {
-      this.setState({"selectedRow": rows});
+      this.setState({
+        "selectedRow": rows,
+        "selectedCount": rows.length
+      });
     } else {
       /*_.each(rows,function(row){
         selectedRows=_.without(selectedRows,row);
       })*/
-      this.setState({"selectedRow":null});
+      this.setState({
+        "selectedRow":null,
+        "selectedCount":0
+      });
     }
   }
 

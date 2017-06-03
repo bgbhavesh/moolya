@@ -1112,3 +1112,32 @@ MlResolver.MlQueryResolver['fetchContextSubChapters'] = (obj, args, context, inf
   let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
   return result
 }
+
+MlResolver.MlMutationResolver['forgotPassword'] = (obj, args, context, info) =>{
+  console.log(args);
+  if (args.email) {
+    const result= MlAccounts.sendForgotPasswordEamil(args.email, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Email is mandatory",403);
+  }
+}
+
+MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) =>{
+  if (args.password && args.token) {
+    const result= MlAccounts.resetPasswordWithToken(args.token, args.password, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
+  }
+}

@@ -462,11 +462,11 @@ let BackEndUser = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
 let supportedApi = [
-    {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchUsersByClusterDepSubDep', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchAssignedUsers', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUsersBysubChapterDepSubDep', actionName:'READ', moduleName:"USERS"},
     {api:'fetchsubChapterUserDepSubDep', actionName:'READ', moduleName:"USERS"},
@@ -474,8 +474,11 @@ let supportedApi = [
     {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchMapCenterCordsForUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
-    {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserRoleDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},
@@ -487,5 +490,7 @@ let supportedApi = [
     {api:'updateSettings', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'updateAddressBookInfo', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'deActivateAdminUserProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'setAdminDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

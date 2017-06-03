@@ -146,7 +146,7 @@ let chapterSchema = `
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String,displayAllOption:Boolean):[SubChapter]
         fetchActiveSubChapters:[SubChapter]
-        fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String):[SubChapter] 
+        fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String, subChapterId : String):[SubChapter] 
         fetchActiveClusterChapters(clusters:[String],displayAllOption:Boolean):[Chapter]
         fetchActiveStatesChapters(states:[String],clusters:[String]):[Chapter]
         fetchActiveChaptersSubChapters(chapters:[String],clusters:[String],displayAllOption:Boolean):[SubChapter],

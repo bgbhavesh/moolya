@@ -223,7 +223,8 @@ class MlSubChapterDetails extends React.Component {
         }
       }
     ]
-    let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
+    var subChapterQuery = gql`query($subChapterId:String){data:fetchSubChaptersSelectNonMoolya(subChapterId:$subChapterId) { value:_id, label:subChapterName}}`;
+    var subChapterOption = {options: {variables: {subChapterId: this.props.params}}};
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -257,7 +258,7 @@ class MlSubChapterDetails extends React.Component {
                       <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
                                     className="form-control float-label" valueKey={'value'} labelKey={'label'}
                                     selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
-                                    query={subChapterQuery} isDynamic={true}
+                                    query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}
                                     onSelect={this.selectAssociateChapter.bind(this)}/>
                     </div>
                     <br className="brclear"/>

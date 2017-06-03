@@ -197,7 +197,7 @@ MlResolver.MlQueryResolver['fetchSubChaptersSelectNonMoolya'] = (obj, args, cont
         chapterId: args.chapterId,
         isDefaultSubChapter: false,
         isActive: true
-      } : {isDefaultSubChapter: false, isActive: true}
+      } : {'$and':[{isDefaultSubChapter: false, isActive: true}, {'_id':{$ne: args.subChapterId}}]}
       result = mlDBController.find('MlSubChapters', query, context).fetch() || [];
       if (result.length > 0 && args.chapterId) {
         result.push({"subChapterName": "All", "_id": "all"});

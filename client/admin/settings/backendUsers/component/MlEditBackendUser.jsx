@@ -13,13 +13,9 @@ import {updateBackendUserActionHandler} from "../actions/updateBackendUserAction
 import {resetPasswordActionHandler} from "../actions/resetPasswordAction";
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
+import moment from "moment";
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
-import Datetime from "react-datetime";
-import moment from "moment";
-import {MlMyProfile} from '../../../profile/component/MlMyprofile'
-import {updateDataEntry} from '../../../profile/actions/addProfilePicAction'
-
 
 
 class MlEditBackendUser extends React.Component{
@@ -548,10 +544,16 @@ class MlEditBackendUser extends React.Component{
 
                   <div className="form-group switch_wrap inline_switch">
                     <label>Global Assignment Availability</label>
-                    <label className="switch">
-                      <input type="checkbox" ref="globalAssignment" checked={that.state.globalStatus}  onChange={that.onGlobalStatusChanged.bind(that)} />
+                    {(that.state.selectedBackendUserType == 'non-moolya') ? <label className="switch">
+                      <input type="checkbox" ref="globalAssignment" checked={that.state.globalStatus}
+                             disabled="disabled"/>
                       <div className="slider"></div>
-                    </label>
+                    </label> : <label className="switch">
+                      <input type="checkbox" ref="globalAssignment" checked={that.state.globalStatus}
+                             onChange={that.onGlobalStatusChanged.bind(that)}/>
+                      <div className="slider"></div>
+                    </label>}
+
                   </div>
                   <br className="brclear"/>
                   <div className="form-group switch_wrap inline_switch">

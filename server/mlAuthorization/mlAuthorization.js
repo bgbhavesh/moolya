@@ -302,7 +302,7 @@ class MlAuthorization
 
                       }
                       // For Dashboard Community Priming
-                      if(req.variables['clusterId'] == null && req.variables['userType']){
+                      if(req.variables['clusterId'] == null || req.variables['userType']){
                           return true
                       }
                       if(req.variables['subChapterId']){
@@ -311,6 +311,10 @@ class MlAuthorization
                           return true
                         }
                       }
+                  }else if(actionName == 'UPDATE' && hierarchy.level==1){
+                    return true;
+                  }else if(actionName == 'CREATE' && hierarchy.level==1){
+                    return true;
                   }
 
             }
@@ -372,7 +376,7 @@ class MlAuthorization
                     }
               }
 
-              if(actionName == 'READ' || actionName == 'UPDATE')
+              if(actionName == 'READ')
                 return true;
           }
           break;

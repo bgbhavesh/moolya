@@ -465,7 +465,7 @@ let supportedApi = [
     {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchUsersByClusterDepSubDep', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchAssignedUsers', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUsersBysubChapterDepSubDep', actionName:'READ', moduleName:"USERS"},

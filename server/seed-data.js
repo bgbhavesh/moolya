@@ -69,7 +69,7 @@ if(!clusterAdmin){
     let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
     let clusterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
     let modules = [
-                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:clusterPer},
                     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
@@ -103,7 +103,7 @@ if(!chapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
@@ -138,7 +138,7 @@ if(!subchapterAdmin){
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
@@ -208,13 +208,13 @@ var options = {
 
     isInternaluser : true,
     isExternaluser : false,
-    email: 'platformadmin@mymoolya.com',
+    email: 'platformadmin@moolya.com',
     isMoolya:true,
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"platformadmin@mymoolya.com",
+        email:"platformadmin@moolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -225,12 +225,12 @@ var options = {
     },
     isSystemDefined: true
   },
-  username: 'platformadmin@mymoolya.com',
+  username: 'platformadmin@moolya.com',
   password: adminPassword
 
 };
 
-var userObj = Meteor.users.findOne({username: "platformadmin@mymoolya.com"});
+var userObj = Meteor.users.findOne({username: "platformadmin@moolya.com"});
 if(!userObj){
   console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
   platformAdminId = Accounts.createUser(options);
@@ -256,12 +256,12 @@ var systemAdminProfile = {
   profile:{
     isInternaluser : true,
     isExternaluser : false,
-    email: 'systemadmin@mymoolya.com',
+    email: 'systemadmin@moolya.com',
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"systemadmin@mymoolya.com",
+        email:"systemadmin@moolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -272,11 +272,11 @@ var systemAdminProfile = {
     },
     isSystemDefined: true
   },
-  username: 'systemadmin@mymoolya.com',
+  username: 'systemadmin@moolya.com',
   password: adminPassword
 };
 
-var systemAdminUser = Meteor.users.findOne({username: "systemadmin@mymoolya.com"});
+var systemAdminUser = Meteor.users.findOne({username: "systemadmin@moolya.com"});
 if(!systemAdminUser){
   console.log("No Admin found, hence inserting a default Moolya System Admin: ",systemAdminProfile);
   Accounts.createUser(systemAdminProfile);

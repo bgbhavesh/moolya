@@ -422,6 +422,8 @@ let registrationSchema = `
          resendSmsVerification(mobileNumber:String):response
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
+         forgotPassword(email:String):response
+         resetPassword(token:String, password:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
@@ -460,5 +462,6 @@ let supportedApi = [
     {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION"},
     {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION"},
     {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

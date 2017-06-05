@@ -25,7 +25,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
   }
   componentDidMount() {
     initalizeFloatLabel();
-    console.log(this.props.data)
+    // console.log(this.props.data)
   }
   componentWillReceiveProps(newProps){
    /* let type=newProps.type;

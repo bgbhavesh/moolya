@@ -44,7 +44,8 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data && data.id) {
-          FlowRouter.go("/admin/settings/documentFormatList");
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/documentFormatList");
         }else{
           FlowRouter.go("/admin/settings/addDocumentFormat")
 

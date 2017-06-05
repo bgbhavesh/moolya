@@ -1,5 +1,6 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
+import mlHierarchyAssignment from '../../../admin/genericTransactions/impl/MlHierarchyAssignment'
 
 MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) => {
   if(!args.requests.requestTypeId){
@@ -48,13 +49,25 @@ MlResolver.MlQueryResolver['fetchRequestss'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, info) => {
-
-  let id = mlDBController.update('MlRequests', {requestId:args.requestsId},{status: args.status},  {$set: true},context)
-  if(id){
-    let code = 200;
-    let result = {requestsId : id}
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  let requestId = args.requestsId;
+  let transaction = mlDBController.findOne("MlRequests", {requestId: requestId});
+  let decision = false;
+  if(args.status == "WIP" || args.status == "Approved"){
+    decision = mlHierarchyAssignment.canWorkOnInternalRequest(requestId,"MlRequests",context.userId)
+  }
+  if( decision === false ){
+    let code = 401;
+    let result = {message : "User not available in hierarchy"}
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }else{
+    let id = mlDBController.update('MlRequests', {requestId:requestId},{status: args.status},  {$set: true},context)
+    if(id){
+      let code = 200;
+      let result = {requestsId : id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 }
 

@@ -423,7 +423,7 @@ let registrationSchema = `
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
          forgotPassword(email:String):response
-         resetPassword(token:String, password:String):response
+         resetPasswords(token:String, password:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

@@ -9,7 +9,7 @@ export async function resetPasswordActionHandler(token, password) {
   const result = await client.mutate({
     mutation: gql`
     mutation ($token: String!, $password: String!) {
-      resetPassword(token:$token, password:$password){
+      resetPasswords(token:$token, password:$password){
         success,
         code,
         result
@@ -24,6 +24,6 @@ export async function resetPasswordActionHandler(token, password) {
     }
   })
   console.log(result);
-  const id = result.data.resetPassword;
+  const id = result.data.resetPasswords;
   return id
 }

@@ -12,6 +12,8 @@ import {addBackendUserActionHandler} from "../actions/addBackendUserAction";
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import Datetime from "react-datetime";
+import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
+
 import moment from "moment";
 
 let FontAwesome = require('react-fontawesome');
@@ -190,6 +192,23 @@ class MlAddBackendUser extends React.Component {
   optionsBySelectSubChapter(val){
     this.setState({selectedSubChapter:val})
   }
+  passwordValidation() {
+    let password = this.refs.password.value;
+    if (!password) {
+      this.setState({"pwdValidationMsg": ''})
+    } else {
+      let validate = passwordSAS_validate(password)
+      if (validate.isValid) {
+        this.setState({"pwdValidationMsg": ''})
+        // this.setState({passwordValidation: true})
+      }
+      else if (typeof (validate) == 'object') {
+        this.setState({"pwdValidationMsg": validate.errorMsg})
+      }
+
+    }
+  }
+
   onCheckPassword(){
     let password=this.refs.password.value;
     let confirmPassword=this.refs.confirmPassword.value;
@@ -287,7 +306,8 @@ class MlAddBackendUser extends React.Component {
                       />
                     </div>
                     <div className="form-group">
-                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
+                      <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password"  onBlur={this.passwordValidation.bind(this)} className="form-control float-label" id="password"/>
                       <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                     </div>
                     <div className="form-group">

@@ -40,7 +40,8 @@ const mlLookingForTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/lookingForList")
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/lookingForList")
         }else {
           FlowRouter.go("/admin/settings/addLookingFor")
         }

@@ -66,7 +66,9 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data && data.documentId){FlowRouter.go("/admin/settings/documentMappingList")}
+        if(data && data.documentId)
+          toastr.error("Please uncheck the record")
+        // {FlowRouter.go("/admin/settings/documentMappingList")}
         else {
           FlowRouter.go("/admin/settings/addDocumentMapping")
         }

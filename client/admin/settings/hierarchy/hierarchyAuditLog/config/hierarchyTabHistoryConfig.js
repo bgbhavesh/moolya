@@ -1,7 +1,7 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import {MlViewer,MlViewerTypes} from "../../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-const mlDocumentsTabHistoryTableConfig=new MlViewer.View({
+const mlHierarchyTabHistoryTableConfig=new MlViewer.View({
   name:"auditLogTable",
   module:"audit",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
@@ -31,7 +31,7 @@ const mlDocumentsTabHistoryTableConfig=new MlViewer.View({
   ],
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{moduleName:"DOCUMENTS"}}
+    return {context:{moduleName:"HIERARCHY"}}
     // return {context:{moduleName:"CLUSTER, SUBCHAPTER",clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   sizePerPage:5,
@@ -57,4 +57,4 @@ const mlDocumentsTabHistoryTableConfig=new MlViewer.View({
               `
 });
 
-export {mlDocumentsTabHistoryTableConfig};
+export {mlHierarchyTabHistoryTableConfig};

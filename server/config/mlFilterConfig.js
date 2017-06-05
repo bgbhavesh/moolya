@@ -31,7 +31,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Clusters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["registrationInfo.chapterId","registrationInfo.subChapterId"]
         },
         {
           "fieldName" : "registrationInfo.chapterId",
@@ -39,7 +40,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Chapters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["registrationInfo.subChapterId"]
         },
         {
           "fieldName" : "registrationInfo.subChapterId",
@@ -87,7 +89,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Clusters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
         },
         {
           "fieldName" : "chapterId",
@@ -95,7 +98,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Chapters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["subChapterId"]
         },
         {
           "fieldName" : "subChapterId",
@@ -140,7 +144,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Clusters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
         },
         {
           "fieldName" : "chapterId",
@@ -148,7 +153,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Chapters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["subChapterId"]
         },
         {
           "fieldName" : "subChapterId",
@@ -194,7 +200,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Clusters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["chapter","subChapter"]
         },
         {
           "fieldName" : "chapter",
@@ -202,7 +209,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Chapters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["subChapter"]
         },
         {
           "fieldName" : "subChapter",
@@ -248,7 +256,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Clusters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["chapter","subChapter"]
         },
         {
           "fieldName" : "chapter",
@@ -256,7 +265,8 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Chapters",
-          "isActive":true
+          "isActive":true,
+          "clearFields" : ["subChapter"]
         },
         {
           "fieldName" : "subChapter",

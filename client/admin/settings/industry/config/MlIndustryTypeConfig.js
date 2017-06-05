@@ -39,7 +39,8 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=> {
         if (data && data.id) {
-          FlowRouter.go("/admin/settings/industryList")
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/industryList")
         }
         else {
           FlowRouter.go("/admin/settings/addIndustry")

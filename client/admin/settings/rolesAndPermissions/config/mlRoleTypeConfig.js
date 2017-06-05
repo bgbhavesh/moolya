@@ -116,7 +116,9 @@ const mlRoleTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data&&data.id){FlowRouter.go("/admin/settings/rolesList")}
+        if(data&&data.id)
+        // {FlowRouter.go("/admin/settings/rolesList")}
+          toastr.error("Please uncheck the record")
         else {
           FlowRouter.go("/admin/settings/createRole")
         }

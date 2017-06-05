@@ -36,7 +36,9 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-          if(data&&data.id){FlowRouter.go("/admin/settings/userTypeList")}
+          if(data&&data.id)
+            toastr.error("Please uncheck the record")
+          // {FlowRouter.go("/admin/settings/userTypeList")}
           else {
             FlowRouter.go("/admin/settings/addUserType")
           }

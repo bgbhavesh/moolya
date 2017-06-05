@@ -37,6 +37,7 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
               data{
                   ...on BackendUsers{
                       _id,
+                      name
                       profile{
                           isInternaluser,
                           isExternaluser,
@@ -80,7 +81,7 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
               data{
                   ...on BackendUsers{
                       _id,
-                      text:profile{email}
+                      text:name
                       isActive:profile{isActive}                      
                       lat:latitude
                       lng:longitude

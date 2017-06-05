@@ -182,6 +182,7 @@ import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHiera
 import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
 import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 /*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/
+import {MlHierarchyTabHistoryList} from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
 
 // @End
 
@@ -265,6 +266,12 @@ adminSection.route('/settings/hierarchy/clusterhierarchy', {
   name: 'hierarchy',
   action(){
     mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'cluster'}}/>,adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
+  }
+});
+adminSection.route('/settings/hierarchy/history', {
+  name: 'hierarchy',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'history'}}/>,adminContent:<MlHierarchyTabHistoryList />})
   }
 });
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/chapters', {

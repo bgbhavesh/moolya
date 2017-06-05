@@ -22,6 +22,7 @@ let Filters = `
       fieldType : String
       fieldResolverName:String
       isCustom:Boolean
+      clearFields:[String]
       fieldList : [fieldListSpecificsOutput]
     }
     
@@ -50,7 +51,8 @@ let Filters = `
       fieldType : String
       fieldResolverName : String
       fieldList : [fieldListSpecifics]
-      isCustom:Boolean
+      isCustom:Boolean,
+      clearFields : [String]
     }
     
     type FiltersDropData{

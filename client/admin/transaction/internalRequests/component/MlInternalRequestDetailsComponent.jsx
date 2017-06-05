@@ -25,7 +25,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
   }
   componentDidMount() {
     initalizeFloatLabel();
-    console.log(this.props.data)
+    // console.log(this.props.data)
   }
   componentWillReceiveProps(newProps){
    /* let type=newProps.type;
@@ -87,7 +87,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
     let status=val.value
     let requestId=this.props.data.requestId
     let response = await updateStusForTransactionActionHandler(requestId,status);
-    if(response){
+    if(response.success){
       toastr.success("transaction status changed successfully")
       if(status=="Approved"){
         FlowRouter.go("/admin/transactions/approvedList");
@@ -96,7 +96,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
         FlowRouter.go("/admin/transactions/requestedList");
       }
     }else{
-      toastr.error(response.error)
+      toastr.error("User not available in hierarchy")
     }
   }
 
@@ -141,7 +141,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
                   <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.state.status}  onChange={this.onStatusSelect.bind(this)} />
+                  <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.props.data.status}  onChange={this.onStatusSelect.bind(this)} />
                 </div>
                 <br className="clearfix" />
               </div>

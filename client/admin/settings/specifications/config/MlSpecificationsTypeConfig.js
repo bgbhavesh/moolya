@@ -39,7 +39,8 @@ const mlSpecificationTypeTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if (data && data.id) {
-          FlowRouter.go("/admin/settings/specificationList")
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/specificationList")
         }
         else {
           FlowRouter.go("/admin/settings/addSpecification")

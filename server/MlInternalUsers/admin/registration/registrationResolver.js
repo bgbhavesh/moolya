@@ -140,7 +140,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var response=null;
   var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   var userExist = mlDBController.findOne('users', {"profile.email":args.registration.email}, context) || {};
-  if(registrationExist || userExist){
+  if(registrationExist || userExist._id){
     let code = 400;
     let result = {message: "Registration Exist"}
     let errResp = new MlRespPayload().errorPayload(result, code);
@@ -733,7 +733,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         let area = args.registration.addressInfo[0].addressArea
         let locality = args.registration.addressInfo[0].addressLocality
         let pin =args.registration.addressInfo[0].addressPinCode
-        geocoder.geocode(locality+","+area+","+city, Meteor.bindEnvironment(function ( err, data ) {
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }
@@ -759,7 +759,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         let area = args.registration.addressInfo[0].addressArea
         let locality = args.registration.addressInfo[0].addressLocality
         let pin =args.registration.addressInfo[0].addressPinCode
-        geocoder.geocode(locality+","+area+","+city, Meteor.bindEnvironment(function ( err, data ) {
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }
@@ -1128,7 +1128,7 @@ MlResolver.MlMutationResolver['forgotPassword'] = (obj, args, context, info) =>{
   }
 }
 
-MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) =>{
+MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
   if (args.password && args.token) {
     const result= MlAccounts.resetPasswordWithToken(args.token, args.password, context);
     if(result&&result.error){

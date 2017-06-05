@@ -86,7 +86,9 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data&&data.id){FlowRouter.go("/admin/settings/subDepartmentsList")}
+        if(data&&data.id)
+        // {FlowRouter.go("/admin/settings/subDepartmentsList")}
+          toastr.error("Please uncheck the record")
         else{
           FlowRouter.go("/admin/settings/addSubDepartment")
         }

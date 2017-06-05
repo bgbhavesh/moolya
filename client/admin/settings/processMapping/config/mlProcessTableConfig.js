@@ -98,7 +98,8 @@ const mlProcessTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/processList")
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/processList")
         }else {
           FlowRouter.go("/admin/settings/addProcess")
         }

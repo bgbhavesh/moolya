@@ -235,7 +235,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <div className="list_block notrans funding_list">
                                         <FontAwesome name='lock'/>
                                         <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                        <img src="/images/def_profile.png"/>
+                                        <img src={selectedPrincipal.logo ? selectedPrincipal.logo.fileUrl : "/images/def_profile.png"}/>
                                         <div><p>{selectedPrincipal.firstName + " " + selectedPrincipal.lastName}</p><p
                                           className="small">{selectedPrincipal.designation}</p></div>
                                         <div className="ml_icon_btn">
@@ -399,7 +399,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                       <div className="list_block notrans funding_list">
                                         <FontAwesome name='lock'/>
                                         <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                        <img src="/images/def_profile.png"/>
+                                        <img src={selectedTeam.logo ? selectedTeam.logo.fileUrl : "/images/def_profile.png"}/>
                                         <div><p>{selectedTeam.firstName + " " + selectedTeam.lastName}</p><p
                                           className="small">{selectedTeam.designation}</p></div>
                                         <div className="ml_icon_btn">

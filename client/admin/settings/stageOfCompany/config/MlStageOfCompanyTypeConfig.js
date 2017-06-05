@@ -39,7 +39,8 @@ const mlStageOfCompanyTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/stageOfCompanyList");
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/stageOfCompanyList");
         } else {
           FlowRouter.go("/admin/settings/addStageOfCompany")
         }

@@ -38,7 +38,8 @@ const mlTemplateTypeTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data&&data.id){
-        FlowRouter.go("/admin/settings/accountTypeList")
+          toastr.error("Please uncheck the record")
+        // FlowRouter.go("/admin/settings/accountTypeList")
       }else{
         FlowRouter.go("/admin/settings/addAccountType")
 

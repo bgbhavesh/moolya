@@ -73,7 +73,7 @@ class MlHierarchyAssignment{
 
   assignTransaction(transactionId,collection,userId,assignedUserId){
     let userRole = this.getUserRoles(userId);
-    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin"){
+    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin" || userRole.roleName == "chapteradmin" || userRole.roleName == "subchapteradmin" || userRole.roleName == "communityadmin"){
       return true;
     }
     let assignedRole = this.getUserRoles(assignedUserId);
@@ -151,6 +151,54 @@ class MlHierarchyAssignment{
       }
 
     return transaction;
+  }
+
+
+  canWorkOnInternalRequest(transactionId,collection,userId) {
+    let transaction = mlDBController.findOne(collection, {requestId: transactionId});
+    //cannot approve his own request
+    /*if(transaction.userId == userId){
+      return false;
+    }*/
+    let userRole = this.getUserRoles(userId);
+    let requestRole = this.getUserRoles(transaction.userId);
+    let userhierarchy = this.findHierarchy(userRole.clusterId,userRole.departmentId,userRole.subDepartmentId,userRole.roleId);
+    let assignedRolehierarchy = this.findHierarchy(requestRole.clusterId,requestRole.departmentId,requestRole.subDepartmentId,requestRole.roleId);
+    if(this.checkisPlatformAdmin(userRole)){
+      return true;
+    }
+    if(this.checkSystemSystemDeifinedRole(userRole) && this.checkSystemSystemDeifinedRole(requestRole)){
+      if(userhierarchy._id == assignedRolehierarchy._id){
+        let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,requestRole.roleId);
+        return decision;
+      }else{
+        return false;
+      }
+    }else if(this.checkSystemSystemDeifinedRole(userRole)){
+      return true;
+    }
+    if(userhierarchy._id == assignedRolehierarchy._id){
+      let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,requestRole.roleId);
+      return decision;
+    }else{
+      return false;
+    }
+  }
+
+  checkSystemSystemDeifinedRole(userRole){
+    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin" || userRole.roleName == "chapteradmin" || userRole.roleName == "subchapteradmin" || userRole.roleName == "communityadmin"){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  checkisPlatformAdmin(userRole){
+    if(userRole.roleName ==  "platformadmin"){
+      return true;
+    }else{
+      return false;
+    }
   }
 
 

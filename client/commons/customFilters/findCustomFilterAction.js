@@ -17,6 +17,7 @@ export async function findModuleCustomFilterActionHandler(moduleName){
               isDynamic
               fieldType
               fieldResolverName
+              clearFields
               fieldList{
                 departmentId
                 subDepartmentId

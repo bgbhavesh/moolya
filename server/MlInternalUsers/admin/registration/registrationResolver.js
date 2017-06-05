@@ -1128,7 +1128,7 @@ MlResolver.MlMutationResolver['forgotPassword'] = (obj, args, context, info) =>{
   }
 }
 
-MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) =>{
+MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
   if (args.password && args.token) {
     const result= MlAccounts.resetPasswordWithToken(args.token, args.password, context);
     if(result&&result.error){

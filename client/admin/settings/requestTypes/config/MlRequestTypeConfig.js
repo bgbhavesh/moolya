@@ -38,7 +38,9 @@ const mlRequestTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data&&data.id){FlowRouter.go("/admin/settings/requestTypeList")}
+        if(data&&data.id)
+          toastr.error("Please uncheck the record")
+        // {FlowRouter.go("/admin/settings/requestTypeList")}
         else {
           FlowRouter.go("/admin/settings/addRequestType")
         }

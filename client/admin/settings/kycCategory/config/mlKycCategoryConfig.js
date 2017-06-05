@@ -36,7 +36,9 @@ const mlKycCategoryTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data&&data.id){FlowRouter.go("/admin/settings/kycCategoryList")}
+        if(data&&data.id)
+          toastr.error("Please uncheck the record")
+        // {FlowRouter.go("/admin/settings/kycCategoryList")}
         else {
           FlowRouter.go("/admin/settings/addKycCategory")
 

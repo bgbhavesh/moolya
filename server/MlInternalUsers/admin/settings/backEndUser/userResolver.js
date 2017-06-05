@@ -327,7 +327,7 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
         let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId, isActive: true}, context)
         if (subChapter) {
           var isMoolya = subChapter.isDefaultSubChapter
-          let departments = mlDBController.find('MlDepartments', {$and: [{isMoolya: isMoolya}, {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}, context).fetch();
+          let departments = mlDBController.find('MlDepartments', {'$or':[{isSystemDefined: true, isActive : true}, {$and: [{isMoolya: isMoolya}, {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}]}, context).fetch();
           if (departments && departments.length > 0) {
             departments.map(function (department) {
 
@@ -691,6 +691,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                   user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                 }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             }
@@ -708,6 +709,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                 user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
               }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           }
@@ -736,6 +738,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                         user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                         user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                       }
+                      user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                     }
                   }
@@ -753,6 +756,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                         user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                         user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
                       }
+                      user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                     }
                   }
@@ -767,6 +771,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                       user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                       user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                     }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                   }
                 })
@@ -784,6 +789,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                         user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                         user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
                       }
+                      user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                     }
                   }
@@ -803,6 +809,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                           user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                           user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                         }
+                        user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                         users.push(user);
                       }
                     } else if(profile.communityId && profile.communityId == "all") {
@@ -811,6 +818,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                           user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                           user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                         }
+                        user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                         users.push(user);
                       }
                     }
@@ -829,6 +837,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                     user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                     user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                   }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               })
@@ -854,6 +863,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                     user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                     user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                   }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
@@ -871,6 +881,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                     user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                     user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
                   }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
@@ -885,6 +896,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                   user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                 }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             })
@@ -903,6 +915,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                     user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                     user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
                   }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
@@ -922,6 +935,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                       user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                       user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                     }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 } else if(profile.communityId && profile.communityId == "all") {
@@ -930,6 +944,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                       user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                       user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                     }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 }
@@ -948,6 +963,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                 user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
               }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           })
@@ -972,6 +988,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                   user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                 }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             }
@@ -989,6 +1006,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                 user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
               }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           }
@@ -1012,6 +1030,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                     user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                     user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                   }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
@@ -1027,6 +1046,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                   user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
                 }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
               }
           })
@@ -1040,6 +1060,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                   user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                 }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             })
@@ -1056,6 +1077,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
                   user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
                 }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
               }
           })
@@ -1074,6 +1096,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                       user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                       user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                     }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 } else if(profile.communityId && profile.communityId == "all") {
@@ -1082,6 +1105,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                       user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                       user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                     }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 }
@@ -1100,6 +1124,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                 user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
               }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           })
@@ -1117,6 +1142,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
             user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
           }
+          user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
           users.push(user);
         })
         _.each(external, function (user){
@@ -1124,6 +1150,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
             user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
           }
+          user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
           users.push(user);
         })
 
@@ -1135,6 +1162,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
               user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
             }
+          user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
             users.push(user);
         })
       }
@@ -1153,6 +1181,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                                       user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                                       user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                                     }
+                                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                                       users.push(user);
                                   }
                               } else if(profile.communityId && profile.communityId == "all") {
@@ -1161,6 +1190,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                                       user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                                       user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
                                     }
+                                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                                       users.push(user);
                                   }
                               }
@@ -1179,6 +1209,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
                 user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
               }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           })

@@ -1,6 +1,7 @@
 import _ from "lodash";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import MlAdminContextQueryConstructor from "./mlAdminContextQueryConstructor";
+
 let mergeQueries=function(userFilter,serverFilter)
 {
   let query=userFilter||{};
@@ -180,15 +181,22 @@ let CoreModules = {
     var contextFieldMap={'clusterId':'cluster','chapterId':'chapter','subChapterId':'subChapter','communityId':'communityId','communityCode':'community'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
     //construct context query with $in operator for each fields
+    let userProfile=new MlAdminUserContext().userProfileDetails(context.userId);
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
     var serverQuery ={};
     switch(type){
       //custom restriction for registration
       case 'requested':
+        if(userProfile.roleName === "platformadmin")
         serverQuery={'status':{'$in':['Pending','WIP']}};
+        else
+          serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};
         break;
       case 'approved':
-        serverQuery={'status':"Approved"};
+        if(userProfile.roleName === "platformadmin")
+          serverQuery={'status':"Approved"};
+        else
+        serverQuery={'userId':context.userId,'status':"Approved"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator

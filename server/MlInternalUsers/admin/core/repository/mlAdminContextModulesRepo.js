@@ -188,7 +188,7 @@ let CoreModules = {
         serverQuery={'status':{'$in':['Pending','WIP']}};
         break;
       case 'approved':
-        serverQuery={'userId':context.userId,'status':"Approved"};
+        serverQuery={'status':"Approved"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator

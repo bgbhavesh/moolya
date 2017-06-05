@@ -142,9 +142,10 @@ export default class MlHierarchyDetails extends React.Component {
       console.log(hierarchyInfo);
       const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
       //this.state.isExpanded=true
-      if (response && response.result)
+      if (response && response.result){
         toastr.success(response.result);
-      return response;
+        return response;
+      }
     }else{
       toastr.error("Final Approval role is mandatory");
     }

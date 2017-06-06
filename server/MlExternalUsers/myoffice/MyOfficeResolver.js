@@ -20,7 +20,8 @@ MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => 
         if(args.myOffice){
             let myOffice = args.myOffice;
             myOffice['userId'] = context.userId;
-            ret = MlMyOffice.insert({...myOffice});
+            myOffice['createdDate'] = new Date();
+            ret = mlDBController.insert('MlMyOffice', myOffice, context)
             if(!ret){
                 let code = 400;
                 let response = new MlRespPayload().successPayload("Failed To Create Office", code);

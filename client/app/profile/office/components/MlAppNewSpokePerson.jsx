@@ -40,7 +40,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       principalUserCount: this.refs.principalUserCount.value,
       teamUserCount: this.refs.teamUserCount.value,
       branchType: this.refs.branchType.value,
-      location: this.refs.location.value,
+      officeLocation: this.refs.officeLocation.value,
       streetLocality: this.refs.streetLocality.value,
       landmark: this.refs.landmark.value,
       area: this.refs.area.value,
@@ -197,7 +197,7 @@ export default class MlAppNewSpokePerson extends React.Component {
 
                   <div className="form-group">
                     <input type="text" placeholder="Office Location" className="form-control float-label"
-                           ref="location"/>
+                           ref="officeLocation"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Street No/Locality" className="form-control float-label"

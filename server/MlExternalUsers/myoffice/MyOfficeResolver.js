@@ -2,11 +2,19 @@
  * Created by venkatsrinag on 11/5/17.
  */
 
-import MlResolver from '../../commons/mlResolverDef'
-import MlRespPayload from '../../commons/mlPayload'
+import MlResolver from "../../commons/mlResolverDef";
+import MlRespPayload from "../../commons/mlPayload";
 
 MlResolver.MlQueryResolver['fetchMyOffice'] = (obj, args, context, info) => {
-    let myOffice = [];
+  let myOffice = [];
+  if (context.userId) {
+    myOffice = mlDBController.find('MlMyOffice', {userId: context.userId}).fetch()
+    return myOffice
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    return response;
+  }
 }
 
 MlResolver.MlQueryResolver['fetchMyOfficeMembers'] = (obj, args, context, info) => {
@@ -15,29 +23,29 @@ MlResolver.MlQueryResolver['fetchMyOfficeMembers'] = (obj, args, context, info) 
 
 MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => {
   var ret = "";
-    try {
-        if(args.myOffice){
-            let myOffice = args.myOffice;
-            myOffice['userId'] = context.userId;
-            myOffice['isActive'] = false;
-            myOffice['createdDate'] = new Date();
-            ret = mlDBController.insert('MlMyOffice', myOffice, context)
-            if(!ret){
-                let code = 400;
-                let response = new MlRespPayload().successPayload("Failed To Create Office", code);
-                return response;
-            }
-        }
-    }
-    catch (e){
+  try {
+    if (args.myOffice) {
+      let myOffice = args.myOffice;
+      myOffice['userId'] = context.userId;
+      myOffice['isActive'] = false;
+      myOffice['createdDate'] = new Date();
+      ret = mlDBController.insert('MlMyOffice', myOffice, context)
+      if (!ret) {
         let code = 400;
-        let response = new MlRespPayload().successPayload(e.message, code);
+        let response = new MlRespPayload().errorPayload("Failed To Create Office", code);
         return response;
+      }
     }
-
-    let code = 200;
-    let response = new MlRespPayload().successPayload(ret, code);
+  }
+  catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().successPayload(e.message, code);
     return response;
+  }
+
+  let code = 200;
+  let response = new MlRespPayload().successPayload(ret, code);
+  return response;
 }
 
 MlResolver.MlMutationResolver['updateMyOffice'] = (obj, args, context, info) => {

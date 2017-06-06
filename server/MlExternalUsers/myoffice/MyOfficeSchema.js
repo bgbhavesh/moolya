@@ -37,6 +37,7 @@ let myOfficeSchema = `
     }
     
     type MyOffice{
+        _id: String
         userId:String,
         userName : String,
         totalCount:Int,

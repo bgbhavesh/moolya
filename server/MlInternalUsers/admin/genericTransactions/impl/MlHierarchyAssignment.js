@@ -86,14 +86,16 @@ class MlHierarchyAssignment{
       }else{
         return false;
       }
-    }else if(this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)){
+    }else if(!this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)){
       if(userhierarchy._id == assignedRolehierarchy._id){
         let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,assignedRole.roleId);
         return decision;
       }else{
         return false;
       }
-    }else if(!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)){
+    }else if(this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)){
+      return true;
+    }else if(!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)){
       return false;
     }
   }
@@ -193,13 +195,15 @@ class MlHierarchyAssignment{
       }else{
         return false;
       }
-    }else if(this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)){
+    }else if(!this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)){
       if(userhierarchy._id == assignedRolehierarchy._id){
         let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,requestRole.roleId);
         return decision;
       }else{
         return false;
       }
+    }else if(this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)){
+        return true;
     }else if(!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)){
         return false;
     }

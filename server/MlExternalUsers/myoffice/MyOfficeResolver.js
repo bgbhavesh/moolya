@@ -39,6 +39,31 @@ MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => 
                 let code = 400;
                 let response = new MlRespPayload().successPayload("Failed To Create Office", code);
                 return response;
+            } else {
+              let officeTrans = {
+                officeId: ret,
+                userId: userId,
+                clusterId: profile.clusterId,
+                clusterName: profile.clusterName,
+                chapterId: profile.chapterId,
+                chapterName: profile.chapterName,
+                subChapterId: profile.subChapterId,
+                subChapterName: profile.subChapterName,
+                communityId: profile.communityId,
+                communityName: profile.communityName,
+                dateTime : new Date(),
+                transactionId: 'TransId',
+                status: 'Pending'
+              };
+              let officeTransResponse = mlDBController.insert('MlOfficeTransaction', officeTrans, context);
+              if(!officeTransResponse){
+                let code = 400;
+                let response = new MlRespPayload().successPayload("Failed To Create Office", code);
+                return response;
+              }
+              let code = 200;
+              let response = new MlRespPayload().successPayload("Created Office", code);
+              return response;
             }
         }
     }

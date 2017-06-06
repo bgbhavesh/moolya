@@ -83,11 +83,11 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
     }
   }
   async  onStatusSelect(val){
+    this.setState({"status":val.value})
     let status=val.value
     let requestId=this.props.data.requestId
     let response = await updateStusForTransactionActionHandler(requestId,status);
     if(response.success){
-      this.setState({"status":val.value})
       toastr.success("transaction status changed successfully")
       if(status=="Approved"){
         FlowRouter.go("/admin/transactions/approvedList");

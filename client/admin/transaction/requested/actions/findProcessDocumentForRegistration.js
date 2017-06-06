@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findProcessDocumentForRegistrationActionHandler(clusterIdInfo,chapterInfo,subchapterInfo,communityTypeInfo,userTypeInfo,identityTypeInfo,professionInfo,industryInfo) {
+export async function findProcessDocumentForRegistrationActionHandler(clusterIdInfo,chapterInfo,subchapterInfo,communityTypeInfo,userTypeInfo,identityTypeInfo,professionInfo,industryInfo,emailInfo) {
   let clusterId = clusterIdInfo
   let userType =userTypeInfo
   let communityType=communityTypeInfo
@@ -10,10 +10,11 @@ export async function findProcessDocumentForRegistrationActionHandler(clusterIdI
   let identityType=identityTypeInfo
   let profession=professionInfo
   let industry=industryInfo
+  let email=emailInfo
   const result = await client.query({
     query: gql`
-       query($clusterId: String,$chapterId:String,$subChapterId:String, $userType: String, $communityType: String,$identityType: String,$profession:String,$industry:String ){
-            findProcessDocumentForRegistration(clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId,userType:$userType, communityType:$communityType,identityType:$identityType,profession:$profession,industry:$industry) {
+       query($clusterId: String,$chapterId:String,$subChapterId:String, $userType: String, $communityType: String,$identityType: String,$profession:String,$industry:String, $email:String ){
+            findProcessDocumentForRegistration(clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId,userType:$userType, communityType:$communityType,identityType:$identityType,profession:$profession,industry:$industry,email:$email) {
               _id
               processDocuments {
                 kycCategoryId
@@ -29,6 +30,13 @@ export async function findProcessDocumentForRegistrationActionHandler(clusterIdI
                 allowableMaxSize
                 allowableFormat
                 docMappingDef
+                status
+                 docFiles{
+                   fileId,
+                   fileUrl,
+                   fileName,
+                   fileSize
+                }
               }
             }
         }
@@ -41,7 +49,8 @@ export async function findProcessDocumentForRegistrationActionHandler(clusterIdI
       communityType,
       identityType,
       profession,
-      industry
+      industry,
+      email
     },
     forceFetch: true
   })

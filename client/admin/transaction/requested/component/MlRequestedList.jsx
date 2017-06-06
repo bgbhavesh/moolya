@@ -11,6 +11,9 @@ export default class MlRequestedList extends Component {
      this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null,clusterId:null};
      this.assignActionHandler.bind(this);
   }
+  showPopUp(value) {
+    this.setState({'show': value})
+  }
   componentDidMount() {
 
     /*$("#Reg_Request").popover({
@@ -33,7 +36,7 @@ export default class MlRequestedList extends Component {
     }
   }
   assignAddActionHandler(){
-    this.setState({showCreateComponent:true});
+    this.setState({show:true});
   }
   render() {
    let actions= mlUserTypeTableConfig.actionConfiguration;
@@ -44,16 +47,13 @@ export default class MlRequestedList extends Component {
       addAction.handler=this.assignAddActionHandler.bind(this);
     }
     let showAssignComponent=this.state.show;
-   let showCreateComponent=this.state.showCreateComponent;
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Requested List</h2>
-      {/*    <button id="createRegistrationRequest"></button>*/}
           <MlTableViewContainer {...mlUserTypeTableConfig} forceFetch={false}/>
-          {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} clusterId={this.state.clusterId} />}
-          {showCreateComponent&&<CreateRequestComponent openPopUp={true}/>}
-        </div>
+          {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} clusterId={this.state.clusterId} showPopUp={this.showPopUp.bind(this)}/>}
+         </div>
       </div>
     )
   }

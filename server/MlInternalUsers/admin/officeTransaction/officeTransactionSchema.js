@@ -48,8 +48,23 @@ let officeTransaction = `
       location : String
     }
     
+    type officeTransactionType {
+      _id            : String
+      dataAndTime    : Date
+      userId         : String
+      name           : String
+      transactionId  : String
+      clusterName    : String
+      chapterName    : String
+      subChapterName : String
+      communityName  : String
+      payment        : String
+      status         : String
+      action         : String
+    }
+    
     type Query {
-      
+      findOfficeTransaction(officeTransactionId:String):response
     }
     type Mutation {
       createOfficeTransaction(officeTransaction:officeTransaction):response
@@ -59,6 +74,7 @@ let officeTransaction = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeTransaction]);
 let supportedApi = [
-  {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"}
+  {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
+  {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -76,6 +76,9 @@ class MlAuthorization
                       if(moduleName == 'PORTFOLIOREQUESTS' || moduleName == 'PORTFOLIOAPPROVED'){
                           moduleName = 'PORTFOLIO';
                       }
+                      if(moduleName == 'OFFICETRANSACTION'){
+                        moduleName = 'OFFICE';
+                      }
 
                       if(moduleName == 'AUDIT_LOG')
                           return true

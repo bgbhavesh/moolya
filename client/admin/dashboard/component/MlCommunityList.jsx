@@ -88,13 +88,13 @@ export default class MlCommunityList extends Component {
           <div className={`cluster_status ${prop.profile.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.profile.isActive?"check":"times"}/></div>
           {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}
           <a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
-          <h3>{prop.profile.email}</h3>
+          <h3>{prop.name}</h3>
         </div>
       </div>
   );
     return (
       <div>
-          <div className="community_icons">
+          <div className="community_icons fixed_icon">
             <a data-toggle="tooltip" title="All" data-placement="bottom" className="All active_community" data-filter="all">
               <span className="ml ml-select-all" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
             </a>

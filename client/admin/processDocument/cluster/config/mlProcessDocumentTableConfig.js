@@ -3,6 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import ActiveProcessFormatter from "../components/ActiveProcessDocFormatter"
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
+import MlCustomFilter from "../../../../commons/customFilters/customFilter";
 function stateFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.stateNames?data.data.stateNames:[];
@@ -74,6 +75,8 @@ const mlProcessTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  filter:true,
+  filterComponent: <MlCustomFilter module="documents" moduleName="documents" />,
   buildQueryOptions:(config)=>
   {
     if(!config.params){

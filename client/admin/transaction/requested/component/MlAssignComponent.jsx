@@ -66,10 +66,11 @@ export default class MlAssignComponent extends Component {
     this.setState({selectedUser:value})
   }
   cancel(){
+    this.props.showPopUp(false)
     this.setState({show:false})
-   // FlowRouter.go("/");/*/transactions/registrationRequested");*/
   }
   async assignUser(){
+    this.props.showPopUp(false)
     let params={
       "cluster": this.state.selectedCluster,
       "chapter": this.state.selectedChapter,
@@ -101,6 +102,7 @@ export default class MlAssignComponent extends Component {
   }
 
   async selfAssignTransaction(){
+    this.props.showPopUp(false)
     let transactionType=this.props.transactionType
     const response = await selfAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","selfAssignTransaction");
     if(response.success){
@@ -114,6 +116,7 @@ export default class MlAssignComponent extends Component {
   }
 
   async unAssignTransaction(){
+    this.props.showPopUp(false)
     let transactionType=this.props.transactionType
     const response = await unAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","unAssignTransaction");
     if(response.success){

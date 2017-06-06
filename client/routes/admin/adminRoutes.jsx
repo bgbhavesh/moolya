@@ -58,6 +58,7 @@ import MlTemplatesTabHistoryList from '../../templates/templatesAuditLog/compone
 import MlTransactionTabHistoryList from '../../admin/transaction/transactionAuditLog/components/MlTransactionTabHistoryList'
 import MlRegistrationTabHistoryList from '../../admin/transaction/requested/registrationAuditLog/components/MlRegistrationTabHistoryList'
 import MlPotfolioTabHistoryList from '../../admin/transaction/portfolio/portfolioAuditLog/components/MlPotfolioTabHistoryList'
+import EditTaxation from '../../admin/transaction/office/component/MlOfficeList'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -362,6 +363,13 @@ adminSection.route('/transactions/portfolio/viewPortfolio/:id/:communityType', {
   name: 'transaction_portfolio_viewPortfolio',
   action(params){
     mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
+  }
+});
+
+adminSection.route('/transactions/office', {
+  name: 'transaction_office',
+  action(){
+    mount(AdminLayout,{adminContent:<EditTaxation />})
   }
 });
 

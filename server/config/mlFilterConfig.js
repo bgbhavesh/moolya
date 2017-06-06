@@ -296,4 +296,116 @@ if(Meteor.isServer){
       ]
     }});
   }
+
+  //for process documents
+  let processDocumentsFilterExists = MlFilters.findOne({"moduleName":"documents"});
+  if(!processDocumentsFilterExists){
+    MlFilters.upsert({"moduleName" : "documents"},{$set:{
+      "filterName" : "Documents",
+      "filterDescription" : "Documents Filter",
+      "isActive" : true,
+      "moduleName" : "documents",
+      "filterFields" : [
+        {
+          "fieldName" : "clusters",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapters","subChapters"]
+        },
+        {
+          "fieldName" : "chapters",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "subChapters",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "communities",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "date",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
+
+  //for template assignment
+  let templateAssignmentFilterExists = MlFilters.findOne({"moduleName":"templateAssignment"});
+  if(!templateAssignmentFilterExists){
+    MlFilters.upsert({"moduleName" : "templateAssignment"},{$set:{
+      "filterName" : "Templates",
+      "filterDescription" : "Templates Filter",
+      "isActive" : true,
+      "moduleName" : "templateAssignment",
+      "filterFields" : [
+        {
+          "fieldName" : "templateclusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["templatechapterId","templatesubChapterId"]
+        },
+        {
+          "fieldName" : "templatechapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "templatesubChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "templatecommunityCode",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
 }

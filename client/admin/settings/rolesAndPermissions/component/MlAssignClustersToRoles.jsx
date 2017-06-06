@@ -242,28 +242,28 @@ export default class MlAssignClustersToRoles extends React.Component {
                 <div className="panel-body">
 
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
+                    <Moolyaselect multiSelect={false}  mandatory={true} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.cluster} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'country'+id} onSelect={that.optionsBySelectCluster.bind(that,id)} />
                   </div>
 
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'+id} reExecuteQuery={true} queryOptions={chapterOption} onSelect={that.optionsBySelectChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false}  mandatory={true} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.chapter} queryType={"graphql"} query={chapterquery}  isDynamic={true} id={'chapter'+id} reExecuteQuery={true} queryOptions={chapterOption} onSelect={that.optionsBySelectChapter.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} mandatory={true} placeholder="Select SubChapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subChapter} queryType={"graphql"} query={subChapterquery}  isDynamic={true} id={'subChapter'+id} reExecuteQuery={true} queryOptions={subchapterOption} onSelect={that.optionsBySelectSubChapter.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'+id} reExecuteQuery={true} queryOptions={communityOption} onSelect={that.optionsBySelectCommunity.bind(that,id)} />
+                      <Moolyaselect multiSelect={false} mandatory={true} placeholder="Select Community" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.community} queryType={"graphql"} query={communityQuery}  isDynamic={true} id={'community'+id} reExecuteQuery={true} queryOptions={communityOption} onSelect={that.optionsBySelectCommunity.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="form-group">
                       { assignCluster.community && assignCluster.subChapter ?
-                        <Moolyaselect multiSelect={false} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
+                        <Moolyaselect multiSelect={false} mandatory={true} placeholder="Select Department" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.department} queryType={"graphql"} query={departmentQuery} queryOptions={departmentqueryOptions}  isDynamic={true} id={'department'+id} onSelect={that.optionsBySelectDepartment.bind(that,id)} />
                           :
                             <Select multi={false} placeholder="Select Department" className="float-label" valueKey={'value'} labelKey={'label'}/>
                       }
@@ -271,7 +271,7 @@ export default class MlAssignClustersToRoles extends React.Component {
                   </div>
                   <div className="form-group">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Select SubDepartment" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subDepartment} queryType={"graphql"} query={subDepartmentquery}  isDynamic={true} id={'subDepartment'+id} reExecuteQuery={true} queryOptions={subDeparatmentOption}  onSelect={that.optionsBySelectSubDepartment.bind(that,id)} />
+                      <Moolyaselect multiSelect={false}  mandatory={true} placeholder="Select SubDepartment" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={assignCluster.subDepartment} queryType={"graphql"} query={subDepartmentquery}  isDynamic={true} id={'subDepartment'+id} reExecuteQuery={true} queryOptions={subDeparatmentOption}  onSelect={that.optionsBySelectSubDepartment.bind(that,id)} />
                     </div>
                   </div>
                   <div className="form-group switch_wrap inline_switch">

@@ -477,7 +477,26 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlProcessMapping.find(query,findOptions).count();
   }
   if(args.module=="documents"){
-    data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
+
+    let finalQuery={};
+    if(_.isEmpty(query)){
+      finalQuery= {isActive:true}
+    }else {
+      let filterQuery;
+      filterQuery = query['$and']?query['$and']:[]
+      var seen = false;
+      for(var j = 0; j != filterQuery.length; ++j) {
+        if(filterQuery[j].isActive){
+          seen = true;
+        }
+      }
+
+      if (!seen) {
+        filterQuery.push({isActive:true})
+      }
+      finalQuery.$and = filterQuery
+    }
+    data = MlProcessMapping.find(finalQuery, findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
       let communityIds=[];

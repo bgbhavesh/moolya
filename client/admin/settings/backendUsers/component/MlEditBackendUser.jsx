@@ -323,6 +323,9 @@ class MlEditBackendUser extends React.Component{
       moolyaProfile: moolyaProfile
     }
     let profile={
+      firstName: this.refs.firstName.value,
+      middleName: this.refs.middleName.value,
+      lastName: this.refs.lastName.value,
       isInternaluser: true,
       isExternaluser: false,
       email: this.refs.email.value,

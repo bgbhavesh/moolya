@@ -430,6 +430,10 @@ class MlAuthorization
               return true;
           }
           break;
+          case 'HIERARCHY':{
+            return true;
+          }
+            break;
           case 'TAXATION':{
             if(hierarchy.level>=3){
               return true

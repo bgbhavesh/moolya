@@ -140,7 +140,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   var response=null;
   var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   var userExist = mlDBController.findOne('users', {"profile.email":args.registration.email}, context) || {};
-  if(registrationExist || userExist){
+  if(registrationExist || userExist._id){
     let code = 400;
     let result = {message: "Registration Exist"}
     let errResp = new MlRespPayload().errorPayload(result, code);

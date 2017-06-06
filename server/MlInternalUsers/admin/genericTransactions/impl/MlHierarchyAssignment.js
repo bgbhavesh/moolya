@@ -73,16 +73,29 @@ class MlHierarchyAssignment{
 
   assignTransaction(transactionId,collection,userId,assignedUserId){
     let userRole = this.getUserRoles(userId);
-    if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin" || userRole.roleName == "chapteradmin" || userRole.roleName == "subchapteradmin" || userRole.roleName == "communityadmin"){
+    let assignedRole = this.getUserRoles(assignedUserId);
+    if(this.checkisPlatformAdmin(userRole)){
       return true;
     }
-    let assignedRole = this.getUserRoles(assignedUserId);
     let userhierarchy = this.findHierarchy(userRole.clusterId,userRole.departmentId,userRole.subDepartmentId,userRole.roleId);
     let assignedRolehierarchy = this.findHierarchy(assignedRole.clusterId,assignedRole.departmentId,assignedRole.subDepartmentId,assignedRole.roleId);
-    if(userhierarchy._id == assignedRolehierarchy._id){
-      let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,assignedRole.roleId);
-      return decision;
-    }else{
+    if(this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)){
+      if(userhierarchy._id == assignedRolehierarchy._id){
+        let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,assignedRole.roleId);
+        return decision;
+      }else{
+        return false;
+      }
+    }else if(!this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)){
+      if(userhierarchy._id == assignedRolehierarchy._id){
+        let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,assignedRole.roleId);
+        return decision;
+      }else{
+        return false;
+      }
+    }else if(this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)){
+      return true;
+    }else if(!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)){
       return false;
     }
   }
@@ -100,39 +113,47 @@ class MlHierarchyAssignment{
     return role;
   }
 
-  hierarchyDecision(hierarchy,userRole,assignedRole){
+  hierarchyDecision(hierarchy,userRole,assignedRole) {
 
     let userRoleMapping = null;
     let assignedRoleMapping = null;
+    if (userRole == assignedRole) {
+      return true;
+    }
     let teamStructureAssignment = hierarchy.teamStructureAssignment;
-    teamStructureAssignment.map(function (role, key){
-      if(role.roleId==userRole){
+    teamStructureAssignment.map(function (role, key) {
+      if (role.roleId == userRole) {
         userRoleMapping = role;
-        if (role.assignedLevel=='cluster' && role.reportingRole=='') {
+        if (role.assignedLevel == 'cluster' && role.reportingRole == '') {
           return true;
         }
-      }else if(role.roleId == assignedRole){
+      } else if (role.roleId == assignedRole) {
         assignedRoleMapping = role;
       }
     })
 
-    if(userRoleMapping.reportingRole == assignedRoleMapping.roleId){
-        return false;
+    if (userRoleMapping.reportingRole == assignedRoleMapping.roleId) {
+      return false;
     }
 
-    if(assignedRoleMapping.reportingRole == userRoleMapping.roleId){
-        return true;
+    if (assignedRoleMapping.reportingRole == userRoleMapping.roleId) {
+      return true;
     }
     let tempReportingRole = assignedRoleMapping.reportingRole;
-    teamStructureAssignment.map(function (role, key){
-      if(tempReportingRole==role.roleId){
-        if(role.roleId==userRoleMapping.roleId){
-          return true;
+    let decision = false;
+    for (i = 0; i < teamStructureAssignment.length; i++) {
+      for (i = 0; i < teamStructureAssignment.length; i++) {
+        let role =teamStructureAssignment[i];
+        if (tempReportingRole == role.roleId) {
+          if (role.roleId == userRoleMapping.roleId) {
+            decision = true;
+          }
+          tempReportingRole = role.reportingRole
+          break;
         }
-        tempReportingRole = role.reportingRole
       }
-    })
-    return false;
+    }
+    return decision;
 
   }
 
@@ -157,9 +178,9 @@ class MlHierarchyAssignment{
   canWorkOnInternalRequest(transactionId,collection,userId) {
     let transaction = mlDBController.findOne(collection, {requestId: transactionId});
     //cannot approve his own request
-    /*if(transaction.userId == userId){
+    if(transaction.userId == userId){
       return false;
-    }*/
+    }
     let userRole = this.getUserRoles(userId);
     let requestRole = this.getUserRoles(transaction.userId);
     let userhierarchy = this.findHierarchy(userRole.clusterId,userRole.departmentId,userRole.subDepartmentId,userRole.roleId);
@@ -167,25 +188,28 @@ class MlHierarchyAssignment{
     if(this.checkisPlatformAdmin(userRole)){
       return true;
     }
-    if(this.checkSystemSystemDeifinedRole(userRole) && this.checkSystemSystemDeifinedRole(requestRole)){
+    if(this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)){
       if(userhierarchy._id == assignedRolehierarchy._id){
         let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,requestRole.roleId);
         return decision;
       }else{
         return false;
       }
-    }else if(this.checkSystemSystemDeifinedRole(userRole)){
-      return true;
-    }
-    if(userhierarchy._id == assignedRolehierarchy._id){
-      let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,requestRole.roleId);
-      return decision;
-    }else{
-      return false;
+    }else if(!this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)){
+      if(userhierarchy._id == assignedRolehierarchy._id){
+        let decision = this.hierarchyDecision(userhierarchy,userRole.roleId,requestRole.roleId);
+        return decision;
+      }else{
+        return false;
+      }
+    }else if(this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)){
+        return true;
+    }else if(!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)){
+        return false;
     }
   }
 
-  checkSystemSystemDeifinedRole(userRole){
+  checkSystemSystemDefinedRole(userRole){
     if(userRole.roleName ==  "platformadmin" || userRole.roleName == "clusteradmin" || userRole.roleName == "chapteradmin" || userRole.roleName == "subchapteradmin" || userRole.roleName == "communityadmin"){
       return true;
     }else{

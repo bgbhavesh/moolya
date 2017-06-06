@@ -77,9 +77,9 @@ let supportedApi = [
     {api:'fetchActiveDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchNonMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
-    {api:'fetchDepartmentsForRegistration', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchDepartmentsForRegistration', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchMoolyaBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchClusterChapterSubChapterBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},
-    {api:'fetchHierarchyMoolyaDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchHierarchyMoolyaDepartment', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

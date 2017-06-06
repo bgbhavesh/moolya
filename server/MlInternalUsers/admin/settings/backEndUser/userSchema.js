@@ -14,7 +14,8 @@ let BackEndUser = `
         profile:userProfile,
         roleNames:[String],
         latitude:Float,
-        longitude:Float
+        longitude:Float,
+        name: String,
     }
     
     type userProfile{
@@ -29,7 +30,10 @@ let BackEndUser = `
         numericalFormat: String,
         currencyTypes: String,
         dateOfBirth: Date,
-        genderType: String
+        genderType: String,
+        firstName: String,
+        middleName: String,
+        lastName: String,
     }
     
      type internalUserprofile{
@@ -202,7 +206,10 @@ let BackEndUser = `
         currencyTypes: String,
         dateOfBirth: Date,
         genderType: String,
-        profileImage: String
+        profileImage: String,
+        firstName: String,
+        middleName: String,
+        lastName: String,
     }
     
     input userObject{

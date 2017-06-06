@@ -5,7 +5,7 @@ import {mergeStrings} from "gql-merge";
 import MlSchemaDef from "../../commons/mlSchemaDef";
 import MlResolver from "../../commons/mlResolverDef";
 
-let myOfficeSchema = `
+let myOfficeSchema = ` 
     type OfficeMembers{
        userId:String,
        firstName:String,

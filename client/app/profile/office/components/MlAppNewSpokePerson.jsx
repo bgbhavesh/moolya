@@ -6,7 +6,7 @@ import React from "react";
 import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
-import  {createOfficeActionHandler} from '../actions/createOfficeAction';
+import {createOfficeActionHandler} from "../actions/createOfficeAction";
 var options = [
   {value: 'Type of Funding', label: 'Type of Funding'},
   {value: '2', label: '2'}
@@ -40,7 +40,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       principalUserCount: this.refs.principalUserCount.value,
       teamUserCount: this.refs.teamUserCount.value,
       branchType: this.refs.branchType.value,
-      location: this.refs.location.value,
+      officeLocation: this.refs.officeLocation.value,
       streetLocality: this.refs.streetLocality.value,
       landmark: this.refs.landmark.value,
       area: this.refs.area.value,
@@ -49,7 +49,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       country: this.refs.country.value,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
-      availableCommunities : community
+      availableCommunities: community
     }
     let data = myOffice;
     for (var propName in data) {
@@ -58,7 +58,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       }
     }
     console.log(data)
-    if(data.availableCommunities.length<1){
+    if (data.availableCommunities.length < 1) {
       data = _.omit(data, 'availableCommunities')
     }
 
@@ -68,9 +68,9 @@ export default class MlAppNewSpokePerson extends React.Component {
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      FlowRouter.go('/app/officeMembersDetails/'+response.result)
+      FlowRouter.go('/app/officeMembersDetails/' + response.result)
       toastr.success('Office Successfully Created');
-    }else {
+    } else {
       toastr.error(response.result);
     }
     return response;
@@ -197,7 +197,7 @@ export default class MlAppNewSpokePerson extends React.Component {
 
                   <div className="form-group">
                     <input type="text" placeholder="Office Location" className="form-control float-label"
-                           ref="location"/>
+                           ref="officeLocation"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Street No/Locality" className="form-control float-label"

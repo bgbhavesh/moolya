@@ -41,6 +41,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
                   isLinkedinUrlPrivate
                   facebookUrl
                   isFacebookUrlPrivate
+                  profilePic
                   investmentBudget {
                     from
                     isFromPrivate

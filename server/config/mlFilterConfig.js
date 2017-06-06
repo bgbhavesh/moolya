@@ -352,4 +352,60 @@ if(Meteor.isServer){
       ]
     }});
   }
+
+  //for template assignment
+  let templateAssignmentFilterExists = MlFilters.findOne({"moduleName":"templateAssignment"});
+  if(!templateAssignmentFilterExists){
+    MlFilters.upsert({"moduleName" : "templateAssignment"},{$set:{
+      "filterName" : "Templates",
+      "filterDescription" : "Templates Filter",
+      "isActive" : true,
+      "moduleName" : "templateAssignment",
+      "filterFields" : [
+        {
+          "fieldName" : "templateclusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["templatechapterId","templatesubChapterId"]
+        },
+        {
+          "fieldName" : "templatechapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "templatesubChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "templatecommunityCode",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
 }

@@ -2,15 +2,16 @@
  * Created by vishwadeep on 12/5/17.
  */
 
-import React from "react";
+import React, { Component } from 'react';
 import {render} from "react-dom";
 import {findUserOfficeActionHandler} from "../actions/findUserOffice";
 import MlLoader from "../../../../commons/components/loader/loader";
 
-export default class MlAppMyOffice extends React.Component {
+export default class MlAppMyOffice extends Component {
   constructor(props) {
     super(props);
     this.state = {loading: true, data: []};
+    this.findUserOffice.bind(this);
     return this;
   }
 

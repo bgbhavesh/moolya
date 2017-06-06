@@ -8,7 +8,7 @@ export async function findUserOfficeActionHandler() {
   const result = await appClient.query({
     query: gql`
           query{
-              fetchMyOffice{
+              fetchOffice{
                 userId
                 officeId : _id
                 totalCount
@@ -20,6 +20,6 @@ export async function findUserOfficeActionHandler() {
       `,
       forceFetch: true
   })
-  const id = result.data.fetchMyOffice;
+  const id = result.data.fetchOffice;
   return id
 }

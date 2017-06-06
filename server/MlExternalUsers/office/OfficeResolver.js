@@ -6,10 +6,10 @@ import MlResolver from '../../commons/mlResolverDef';
 import MlRespPayload from '../../commons/mlPayload';
 import MlUserContext from '../../MlExternalUsers/mlUserContext';
 
-MlResolver.MlQueryResolver['fetchMyOffice'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let myOffice = [];
   if (context.userId) {
-    myOffice = mlDBController.find('MlMyOffice', {userId: context.userId}).fetch()
+    myOffice = mlDBController.find('MlOffice', {userId: context.userId}).fetch()
     return myOffice
   } else {
     let code = 400;
@@ -18,11 +18,11 @@ MlResolver.MlQueryResolver['fetchMyOffice'] = (obj, args, context, info) => {
   }
 }
 
-MlResolver.MlQueryResolver['fetchMyOfficeMembers'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) => {
   let officeMembers = [];
 }
 
-MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
   var ret = "";
     try {
         if(args.myOffice){
@@ -42,7 +42,7 @@ MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => 
               myOffice["communityId"] = profile.communityId;
               myOffice["communityName"] =profile.communityName;
             }
-            ret = mlDBController.insert('MlMyOffice', myOffice, context)
+            ret = mlDBController.insert('MlOffice', myOffice, context)
             if(!ret){
                 let code = 400;
                 let response = new MlRespPayload().successPayload("Failed To Create Office", code);
@@ -86,5 +86,5 @@ MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => 
   return response;
 }
 
-MlResolver.MlMutationResolver['updateMyOffice'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateOffice'] = (obj, args, context, info) => {
 }

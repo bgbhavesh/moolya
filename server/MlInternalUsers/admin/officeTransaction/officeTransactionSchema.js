@@ -2,8 +2,8 @@
  * Created by vishwadeep on 6/6/17.
  */
 import {mergeStrings} from "gql-merge";
-import MlSchemaDef from "../../commons/mlSchemaDef";
-import MlResolver from "../../commons/mlResolverDef";
+import MlSchemaDef from "../../../commons/mlSchemaDef";
+import MlResolver from "../../../commons/mlResolverDef";
 
 let officeTransaction = ` 
   

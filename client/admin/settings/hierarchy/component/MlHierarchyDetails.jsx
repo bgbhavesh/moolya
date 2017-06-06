@@ -22,7 +22,8 @@ export default class MlHierarchyDetails extends React.Component {
       unassignedRoles:[],
       assignedRoles:[],
       finalApproval:null,
-      isExpanded:false
+      isExpanded:false,
+      hierarchyId:''
     }
     return this;
   }
@@ -43,6 +44,9 @@ export default class MlHierarchyDetails extends React.Component {
   }
   getFinalApprovalDetails(details){
     this.setState({'finalApproval':details})
+  }
+  getHierarchyId(id){
+    this.setState({'hierarchyId':id})
   }
   componentDidMount() {
     $('.switch input').change(function() {
@@ -132,7 +136,7 @@ export default class MlHierarchyDetails extends React.Component {
         isChecked           : this.state.finalApproval.isChecked
       };
       hierarchyInfo={
-        id                  : this.state.unassignedRoles.id?this.state.unassignedRoles.id:this.state.assignedRoles.id,
+        id                  : this.state.hierarchyId,//unassignedRoles.id?this.state.unassignedRoles.id:this.state.assignedRoles.id,
         parentDepartment    : this.state.finalApproval.parentDepartment,
         parentSubDepartment : this.state.finalApproval.parentSubDepartment,
         clusterId           : this.props.clusterId,
@@ -150,6 +154,8 @@ export default class MlHierarchyDetails extends React.Component {
       toastr.error("Final Approval role is mandatory");
     }
   }
+
+
 
   isExpandableRow() {
     return true;
@@ -173,7 +179,7 @@ export default class MlHierarchyDetails extends React.Component {
     return (
       <div>
       {selctedRowDetails?
-      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} getFinalApprovalRole={this.getFinalApprovalRole.bind(this)} getFinalApprovalDetails={this.getFinalApprovalDetails.bind(this)}/>:
+      <MlAssignHierarchy departmentInfo={row} clusterId={this.props.clusterId} getUnAssignRoleDetails={this.getUnAssignRoleDetails.bind(this)} getAssignRoleDetails={this.getAssignRoleDetails.bind(this)} getFinalApprovalRole={this.getFinalApprovalRole.bind(this)} getFinalApprovalDetails={this.getFinalApprovalDetails.bind(this)} getHierarchyId={this.getHierarchyId.bind(this)}/>:
         <div></div>
       }
       </div>
@@ -184,6 +190,7 @@ export default class MlHierarchyDetails extends React.Component {
     const assigned = this.updateunassignedRoles();
     const upAssigned = this.updateassignRoles();
     //FlowRouter.go("/admin/settings/hierarchy/clusterhierarchy/"+this.props.clusterId+"/hierarchyDetails");
+    FlowRouter.reload();
     return hierarchyAssignment;
   }
   SwitchBtn(cell,row){

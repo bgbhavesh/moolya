@@ -182,6 +182,7 @@ let transactionsSchema = `
       fetchTransactionsByUser(userId:String):[Transactions]
       fetchTransactions(transactionType:String,status:[String]):[Transactions]
       fetchTransactionsLog(userId:String,transactionTypeName:String):[TransactionsLog]
+      validateTransaction(transactionId:String,collection:String,assignedUserId:String):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);
@@ -200,5 +201,6 @@ let supportedApi = [
   {api:'updateRegistrationTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
   {api:'selfAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
   {api:'unAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
+  {api:'validateTransaction', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

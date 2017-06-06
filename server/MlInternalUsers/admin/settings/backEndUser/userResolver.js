@@ -46,9 +46,9 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
       let response = new MlRespPayload().errorPayload("Username is required", code);
       return response;
     }
-  let extEmailExists = mlDBController.find('users', {'profile.email':args.user.profile.email, 'profile.isExternaluser':true }, context).count();
-      // if(Meteor.users.find({username:args.user.username}).count() > 0) {
-    if(mlDBController.find('users', {username:args.user.username}, context).count() > 0 || extEmailExists ){
+  let backEndUserExist = mlDBController.findOne('users', {'profile.email':args.user.profile.email}, context)
+  let registrationExist =   mlDBController.findOne('MlRegistration', {'registrationInfo.email':args.user.profile.email}, context)
+    if((backEndUserExist && backEndUserExist._id) || (registrationExist && registrationExist._id)){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
         return response;

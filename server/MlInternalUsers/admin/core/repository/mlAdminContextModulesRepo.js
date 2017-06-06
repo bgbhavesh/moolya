@@ -187,16 +187,16 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        if(userProfile.roleName === "platformadmin")
+        //if(userProfile.roleName === "platformadmin")
         serverQuery={'status':{'$in':['Pending','WIP']}};
-        else
-          serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};
+        /*else
+          serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};*/
         break;
       case 'approved':
-        if(userProfile.roleName === "platformadmin")
+        //if(userProfile.roleName === "platformadmin")
           serverQuery={'status':"Approved"};
-        else
-        serverQuery={'userId':context.userId,'status':"Approved"};
+        /*else
+        serverQuery={'userId':context.userId,'status':"Approved"};*/
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
@@ -264,7 +264,7 @@ let CoreModules = {
         object.registrationStatus =doc.status;
         if(doc.allocation){
             object.assignedUser = doc.allocation.assignee
-            object.userName = doc.allocation.assigneeId
+            object.assignedUserId = doc.allocation.assigneeId
         }else{
             object.assignedUser = "Un Assigned"
         }

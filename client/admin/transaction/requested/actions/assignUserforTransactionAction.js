@@ -70,3 +70,24 @@ export async function selfAssignUserForTransactionAction(module,transactionId,tr
   const id = result.data.updateGenericTransaction;
   return id
 }
+
+export async function validateTransaction(transactionId,collection,assignedUserId) {
+  const result = await client.mutate({
+    mutation: gql`
+     query($transactionId:String,$collection:String,$assignedUserId:String){
+    validateTransaction(transactionId:$transactionId,collection:$collection,assignedUserId:$assignedUserId){
+      success
+      code
+      result
+    }
+  }
+    `,
+    variables: {
+      transactionId:transactionId,
+      collection:collection,
+      assignedUserId:assignedUserId
+    }
+  })
+  const id = result.data.validateTransaction;
+  return id
+}

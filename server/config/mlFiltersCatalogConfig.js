@@ -217,6 +217,49 @@ if(Meteor.isServer){
   }
 
 
+  let processDocumentsFilterExists = MlFiltersCatalog.findOne({"moduleName":"documents"});
+  if(!processDocumentsFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "documents",
+      "moduleName":"documents"
+    },{$set:{
+      fields:[
+        {
+          name:"clusters",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"chapters",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"subChapters",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+        {
+          name:"communities",
+          type:'List',
+          resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"date",
+          type:'Date',
+          resolverName : " ",
+          isDynamic:true
+        }
+      ]
+    }});
+  }
+
+
+
 
 
   MlFiltersCatalog.upsert({

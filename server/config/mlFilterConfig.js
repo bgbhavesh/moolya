@@ -296,4 +296,60 @@ if(Meteor.isServer){
       ]
     }});
   }
+
+  //for process documents
+  let processDocumentsFilterExists = MlFilters.findOne({"moduleName":"documents"});
+  if(!processDocumentsFilterExists){
+    MlFilters.upsert({"moduleName" : "documents"},{$set:{
+      "filterName" : "Documents",
+      "filterDescription" : "Documents Filter",
+      "isActive" : true,
+      "moduleName" : "documents",
+      "filterFields" : [
+        {
+          "fieldName" : "clusters",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapters","subChapters"]
+        },
+        {
+          "fieldName" : "chapters",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "subChapters",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "communities",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "date",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
 }

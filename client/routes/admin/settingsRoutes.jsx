@@ -182,7 +182,7 @@ import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHiera
 import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
 import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 /*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/
-import {MlHierarchyTabHistoryList} from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
+import MlHierarchyTabHistoryList from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
 
 // @End
 

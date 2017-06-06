@@ -188,38 +188,94 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
 
   //checking for the email exist or not
-   let user=MlRegistration.findOne({"$and":[{"registrationInfo.email":email},{"status":"Approved"}]});
-  if(user){
-    //if user exist get the KYC of user
-    let kycDoc=user.kycDocuments;
+   let user=MlRegistration.find({"$and":[{"registrationInfo.email":email},{"status":"Approved"}]}).fetch();
+  if(user&&user.length>0){
+   let  ApprovedKyc=[];
+    let kycDoc=null;
+    //if user exist get the KYC of  approved Users
+   /* _.map(user,function(userDetails){
+      if(userDetails.kycDocuments){
+        let kyc=userDetails.kycDocuments
+        for(let i=0;i<kyc.length;i++){
+          ApprovedKyc.push(kyc[i])
+        }
+      }
+    })*/
+         for(let j=0;j<user.length;j++){
+           if(user[j].kycDocuments){
+             let kyc=user[j].kycDocuments
+             for(let i=0;i<kyc.length;i++){
+               ApprovedKyc.push(kyc[i])
+             }
+           }
+         }
+    kycDoc=_.uniqBy(ApprovedKyc, function (kyc) {
+      return kyc.documentId&&kyc.docTypeId;
+    });
+
 
     if(kycDoc){
       //get the kyc for multiple profile createria
       kycProcessDoc=getTheKyc(email)
       if(kycProcessDoc){
         let props=['documentId','docTypeId'];
-        let Documents=[]
+        let Documents=[],MatchingDocuments=[]
         let latestKyc=kycProcessDoc.processDocuments;
         if(latestKyc.length>0){
+          //matching the documents in both latestkyc and alredy approved kyc
                 for(var i=0;i<kycDoc.length;i++){
                   for(var j=0;j<latestKyc.length;j++){
                     if((kycDoc[i].documentId==latestKyc[j].documentId)&&(kycDoc[i].docTypeId==latestKyc[j].docTypeId)){
                       console.log(kycDoc[i])
-                      Documents.push(kycDoc[i])
-                    }else{
-                      Documents.push(latestKyc[j])
+                      MatchingDocuments.push(kycDoc[i])
                     }
                   }
                 }
-                if(Documents&&Documents.length>0){
-                 let kycProcess={
-                    'processDocuments':Documents
+                //if matching documents available
+                if(MatchingDocuments&&MatchingDocuments.length>0){
+                  //search for unmatched documents in latestkyc
+                  for (var i = 0, len = MatchingDocuments.length; i < len; i++) {
+                    for (var j = 0, len2 = latestKyc.length; j < len2; j++) {
+                      if ((MatchingDocuments[i].documentId === latestKyc[j].documentId)&&(MatchingDocuments[i].docTypeId === latestKyc[j].docTypeId)){
+                        latestKyc.splice(j, 1);
+                        len2=latestKyc.length;
+                      }
+                    }
                   }
-                  if(kycProcess){
-                    return kycProcess
+                  console.log(latestKyc)
+                  //if unmatched docs found pushed to matching doc and return the documents
+                  if(latestKyc&&latestKyc.length){
+                      for(let i=0;i<latestKyc.length;i++){
+                        MatchingDocuments.push(latestKyc[i])
+                      }
+                        let kycProcess={
+                          'processDocuments':MatchingDocuments
+                        }
+                        if(kycProcess){
+                          return kycProcess
 
+                        }
+
+                  }else{
+                    //if no docs found in latest kyc  return matching docs
+                        let kycProcess={
+                          'processDocuments':MatchingDocuments
+                        }
+                        if(kycProcess){
+                          return kycProcess
+
+                        }
                   }
+                }
+                else{
+                  //if no matching documents return the latest kyc
+                      let kycProcess={
+                        'processDocuments':latestKyc
+                      }
+                      if(kycProcess){
+                        return kycProcess
 
+                      }
                 }
               }else{
                   return kycProcessDoc

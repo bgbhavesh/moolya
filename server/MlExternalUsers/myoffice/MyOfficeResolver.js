@@ -2,8 +2,9 @@
  * Created by venkatsrinag on 11/5/17.
  */
 
-import MlResolver from '../../commons/mlResolverDef'
-import MlRespPayload from '../../commons/mlPayload'
+import MlResolver from '../../commons/mlResolverDef';
+import MlRespPayload from '../../commons/mlPayload';
+import MlUserContext from '../../MlExternalUsers/mlUserContext';
 
 MlResolver.MlQueryResolver['fetchMyOffice'] = (obj, args, context, info) => {
     let myOffice = [];
@@ -17,10 +18,22 @@ MlResolver.MlMutationResolver['createMyOffice'] = (obj, args, context, info) => 
   var ret = "";
     try {
         if(args.myOffice){
+            let userId = context.userId;
             let myOffice = args.myOffice;
+            let profile = new MlUserContext(userId).userProfileDetails(userId)
             myOffice['userId'] = context.userId;
             myOffice['isActive'] = false;
             myOffice['createdDate'] = new Date();
+            if(profile){
+              myOffice["clusterId"] = profile.clusterId;
+              myOffice["clusterName"] = profile.clusterName;
+              myOffice["chapterId"] = profile.chapterId;
+              myOffice["chapterName"] = profile.chapterName;
+              myOffice["subChapterId"] = profile.subChapterId;
+              myOffice["subChapterName"] = profile.subChapterName;
+              myOffice["communityId"] = profile.communityId;
+              myOffice["communityName"] =profile.communityName;
+            }
             ret = mlDBController.insert('MlMyOffice', myOffice, context)
             if(!ret){
                 let code = 400;

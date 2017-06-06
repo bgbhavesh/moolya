@@ -200,23 +200,39 @@ export default class Step5 extends React.Component {
       let identityType=this.props.registrationData && this.props.registrationData.registrationInfo.identityType ? this.props.registrationData.registrationInfo.identityType : '';
       let profession=this.props.registrationData && this.props.registrationData.registrationInfo.profession ? this.props.registrationData.registrationInfo.profession : '';
       let industry=this.props.registrationData && this.props.registrationData.registrationInfo.industry ? this.props.registrationData.registrationInfo.industry : '';
-      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry);
+      let email=this.props.registrationData && this.props.registrationData.registrationInfo.email ? this.props.registrationData.registrationInfo.email : '';
+      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry,email);
       if (response) {
         let processDoc=response
         if (processDoc.processDocuments) {
           let processDocuments = processDoc.processDocuments
           var ActiveResults = _underscore.where(processDocuments, {isActive: true});
-          var result = _.map(ActiveResults, function (currentObject) {
-            return _.pick(currentObject, "docTypeName", "docTypeId", "kycCategoryId", "kycCategoryName", "documentId", "documentDisplayName", "documentName", "isMandatory", "isActive","allowableFormat","allowableMaxSize");
+          var result = _.map(ActiveResults, function (currentObject){
+
+            if(currentObject.status&&currentObject.docFiles) {
+              return _.pick(currentObject, "docTypeName", "docTypeId", "kycCategoryId", "kycCategoryName", "documentId", "documentDisplayName", "documentName", "isMandatory", "isActive", "allowableFormat", "allowableMaxSize","status","docFiles");
+            }else {
+              return _.pick(currentObject, "docTypeName", "docTypeId", "kycCategoryId", "kycCategoryName", "documentId", "documentDisplayName", "documentName", "isMandatory", "isActive", "allowableFormat", "allowableMaxSize");
+            }
           });
           var KYCDocResp = result.map(function (el) {
             var o = Object.assign({}, el);
-            o.status = "Awaiting upload";
-            o.docFiles = []
-            return o;
+            if(!el.status && !el.docFiles) {
+              o.status = "Awaiting upload";
+              o.docFiles = []
+              return o;
+            }
+            return el;
           })
+          let kycDoc=_.map(KYCDocResp, function (Docs) {
+            if (Docs.docFiles.length > 0) {
+              Docs.docFiles=_.map(Docs.docFiles,function(row){return _.omit(row, ['__typename'])});
+            }
+            return Docs
+          });
+
           let  registrationId=this.props.registrationData._id
-          const regResponse = await  addRegistrationStep3Details(KYCDocResp,"KYCDOCUMENT",registrationId);
+          const regResponse = await  addRegistrationStep3Details(kycDoc,"KYCDOCUMENT",registrationId);
           if(regResponse){
           this.props.getRegistrationKYCDetails();
 

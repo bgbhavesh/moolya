@@ -2,7 +2,7 @@
  * Created by vishwadeep on 12/5/17.
  */
 
-import React, { Component } from 'react';
+import React, {Component} from "react";
 import {render} from "react-dom";
 import {findUserOfficeActionHandler} from "../actions/findUserOffice";
 import MlLoader from "../../../../commons/components/loader/loader";
@@ -47,11 +47,16 @@ export default class MlAppMyOffice extends Component {
     FlowRouter.go("/app/addOffice")
   }
 
+  selectOffice(officeId,evt) {
+    FlowRouter.go('/app/payOfficeSubscription/' + officeId)
+  }
+
   render() {
+    let that = this
     let userOffice = this.state.data && this.state.data.length > 0 ? this.state.data : []
     const userOfficeList = userOffice.map(function (office, id) {
       return (
-        <div className="swiper-slide office_accounts my-office-main" key={id}>
+        <div className="swiper-slide office_accounts my-office-main" key={id} onClick={that.selectOffice.bind(that, office.officeId)}>
           <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
           <h2>Total: {office.totalCount}</h2>
           <h3>Principal:{office.principalUserCount}&nbsp;&nbsp;Team:{office.teamUserCount}</h3>

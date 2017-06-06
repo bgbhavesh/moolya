@@ -1,9 +1,9 @@
 /**
  * Created by pankaj on 6/6/17.
  */
-import React from "react";
+import React, { Component } from 'react';
 
-export default class MlAppPayOfficeSubcription extends React.Component {
+export default class MlAppPayOfficeSubscription extends Component {
 
   componentDidMount() {
     var swiper = new Swiper('.profile_container', {
@@ -21,6 +21,9 @@ export default class MlAppPayOfficeSubcription extends React.Component {
         slideShadows : true
       }
     });
+  }
+  payClick(){
+    toastr.success('Payment Link will be Generated');
   }
 
   render() {
@@ -50,7 +53,7 @@ export default class MlAppPayOfficeSubcription extends React.Component {
                   </ul>
 
                   <br />
-                  <a href="#" className="ideabtn">Pay</a>
+                  <a className="ideabtn" onClick={this.payClick.bind(this)}>Pay</a>
                 </div>
               </div>
             </div>

@@ -63,7 +63,8 @@ export default class MlAppNewSpokePerson extends React.Component {
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      // FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      FlowRouter.go('/app/myOffice/')
       toastr.success('Office Successfully Created');
     } else {
       toastr.error(response.result);

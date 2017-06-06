@@ -60,7 +60,7 @@ MlResolver.MlMutationResolver['updateFunderPortfolio'] = (obj, args, context, in
 
                 // let ret = MlFunderPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: funderPortfolio})
               let ret = mlDBController.update('MlFunderPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, funderPortfolio, {$set: true}, context)
-              if (ret) {
+                if (ret) {
                     let code = 200;
                     let response = new MlRespPayload().successPayload("Updated Successfully", code);
                     return response;

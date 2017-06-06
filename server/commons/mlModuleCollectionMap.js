@@ -63,8 +63,13 @@ MlModuleCollectionMap['MlFunderPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlStartupPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 
-
 //hierarchy
 MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';
 
+//office
+MlModuleCollectionMap['MlOffice'] = 'OFFICE';
+MlModuleCollectionMap['MlOfficeMembers'] = 'OFFICE';
+MlModuleCollectionMap['MlOfficeTransaction'] = 'OFFICE';
+
 module.exports=  MlModuleCollectionMap;
+

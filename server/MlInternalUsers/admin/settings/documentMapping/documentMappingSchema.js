@@ -11,6 +11,8 @@ let DocumentMapping = `
         clusters :[String]
         kycCategory  : [String]
         isActive : Boolean
+        chapters: [String]
+        subChapters: [String]
      }
      
      type allowableFormatOutput{

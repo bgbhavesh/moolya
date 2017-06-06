@@ -142,7 +142,7 @@ let FunderPortfolioSchema = `
         facebookUrl:String
         isFacebookUrlPrivate:Boolean
         investmentBudget:Investmentbudget,
-        logo:imagesTypeSchema
+        profilePic: String
     }
     
     type FunderPortfolio{
@@ -282,6 +282,7 @@ let FunderPortfolioSchema = `
         facebookUrl:String
         isFacebookUrlPrivate:Boolean
         investmentBudget:investmentbudget
+        profilePic: String
     }
     
     input funderPortfolio{

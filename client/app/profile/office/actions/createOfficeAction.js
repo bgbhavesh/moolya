@@ -9,7 +9,7 @@ export async function createOfficeActionHandler(myOffice) {
   const result = await appClient.mutate({
     mutation: gql`
           mutation($myOffice:myOffice){
-              createMyOffice(myOffice:$myOffice){
+              createOffice(myOffice:$myOffice){
                   success,
                   code,
                   result
@@ -20,7 +20,7 @@ export async function createOfficeActionHandler(myOffice) {
       myOffice
     }
   })
-  const id = result.data.createMyOffice;
+  const id = result.data.createOffice;
   return id
 }
 

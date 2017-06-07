@@ -6,8 +6,8 @@ export async function findBackendUserActionHandler(userTypeId) {
   const result = await client.query({
     query: gql`
     
-          query($id: String){
-            fetchUser(userId:$id){
+          query{
+            fetchUser{
               _id,
               profile{
                 isInternaluser,
@@ -77,9 +77,6 @@ export async function findBackendUserActionHandler(userTypeId) {
             }
           }
     `,
-    variables: {
-      id:did
-    },
     forceFetch:true
   })
   const id = result.data.fetchUser;

@@ -55,7 +55,6 @@ export default class sMlTransactionRequested extends Component {
         code: "1",
         description:"requested"
       },
-      userId:Meteor.userId(),
       requestId: " ",
       status:"Pending",
       transactionCreatedDate: new Date()
@@ -105,7 +104,7 @@ export default class sMlTransactionRequested extends Component {
   }
 
     async findRequestDetails(){
-      let requestDetails = await findRequestssActionHandler(Meteor.userId());
+      let requestDetails = await findRequestssActionHandler();
       let requestInfo = []
       for (let i = 0; i < requestDetails.length; i++) {
         let json = {

@@ -3,12 +3,11 @@ import {client} from '../../core/apolloConnection';
 
 
 export async function findUserActionHandler() {
-  let did=Meteor.userId()
   const result = await client.query({
     query: gql`
     
           query($id: String){
-            fetchInternalUserProfiles(userId:$id){
+            fetchInternalUserProfiles{
                     isDefault,
                     clusterId,
                     clusterName,
@@ -37,9 +36,6 @@ export async function findUserActionHandler() {
             }
           }
     `,
-    variables: {
-      id:did
-    },
     forceFetch:true
   })
 

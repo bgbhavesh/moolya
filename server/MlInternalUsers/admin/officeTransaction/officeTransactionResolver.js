@@ -101,11 +101,3 @@ MlResolver.MlMutationResolver['officeTransactionPayment'] = (obj, args, context,
   let response = new MlRespPayload().successPayload('office transaction updated' + ret, code);
   return response;
 }
-
-MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
-  var result = {}
-  if (args.officeId) {
-    result = mlDBController.findOne('MlOfficeTransaction', {officeId: args.officeId}, context)
-    return result
-  }
-}

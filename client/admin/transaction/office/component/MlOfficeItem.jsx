@@ -51,6 +51,7 @@ export default class MlOfficeItem extends React.Component {
     if(response){
       let result = JSON.parse(response.result)[0];
       if(result){
+        result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
           transInfo: result.trans,
           userInfo: result.user,

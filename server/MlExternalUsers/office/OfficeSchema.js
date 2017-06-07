@@ -131,6 +131,7 @@ let myOfficeSchema = `
     type Query{
         fetchOffice:[MyOffice]
         fetchOfficeMembers:[OfficeMembers]
+        findOfficeDetail(officeId:String):response
     }
     
     type Mutation{       
@@ -150,7 +151,8 @@ let supportedApi = [
   {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE"}
+  {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

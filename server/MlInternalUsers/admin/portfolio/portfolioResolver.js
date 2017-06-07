@@ -202,11 +202,16 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.portfoliodetailsId) {
-    let updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Approved"}, {$set: true}, context)
-
+    let updatedResponse;
+    let regRecord = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context) || {};
+    if(regRecord.status != "Approved"){
+      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Approved"}, {$set: true}, context)
+    }else{
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Portfolio already approved", code);
+      return response;
+    }
     if(updatedResponse===1) {
-      let regRecord = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context) || {};
-
       let portfolioDetails = {
         "transactionType": "processSetup",
         "communityType": regRecord.communityName,
@@ -219,16 +224,9 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         chapterName: regRecord.chapterName,
         subChapterName: regRecord.subChapterName,
         communityName: regRecord.communityName,
-        "createdAt": new Date(),
-        "source": "self",
-        "createdBy": "admin",
+        "dateTime": new Date(),
         "status": "Yet To Start",
-        "isPublic": false,
-        "isGoLive": false,
-        "isActive": false,
-        "portfolioUserName": regRecord.userName,
         "userId": regRecord.userId,
-        "userType": regRecord.userType,
         mobileNumber: regRecord.contactNumber,
       }
       orderNumberGenService.assignPortfolioId(portfolioDetails)

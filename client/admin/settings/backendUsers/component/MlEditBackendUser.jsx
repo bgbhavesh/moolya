@@ -32,7 +32,7 @@ class MlEditBackendUser extends React.Component{
       password:'',
       confirmPassword:'',
       selectedBackendUserType:'',
-      selectedBackendUser:'',
+      selectedBackendUser:'Internal User',
       clusterId:'',
       chapterId:'',
       communityId:'',
@@ -521,7 +521,7 @@ class MlEditBackendUser extends React.Component{
                   )}
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
                     <div className="form-group">
-                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)}
+                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)} disabled={true}
                     />
                       </div>
                {/* {that.state.showPasswordFields ?

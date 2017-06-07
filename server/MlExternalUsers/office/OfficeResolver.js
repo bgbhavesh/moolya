@@ -92,3 +92,15 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateOffice'] = (obj, args, context, info) => {
 }
+
+MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info) => {
+  if(!args.id){
+    let code = 400;
+    let response = new MlRespPayload().successPayload('Office id is required', code);
+    return response;
+  }
+  let result = mlDBController.update('MlOffice', args.id, {isActive:true}, {$set:true},  context);
+  let code = 200;
+  let response = new MlRespPayload().successPayload('Office activated', code);
+  return response;
+}

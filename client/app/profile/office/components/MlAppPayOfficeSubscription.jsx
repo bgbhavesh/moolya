@@ -23,7 +23,24 @@ export default class MlAppPayOfficeSubscription extends Component {
     });
   }
   payClick(){
-    toastr.success('Payment Link will be Generated');
+    var data = {officeId:this.props.config}
+    var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: Meteor.absoluteUrl('moolyaPaymentStatus'),
+      data :JSON.stringify(data),
+      headers: header,
+      contentType: "application/json; charset=utf-8",
+      success:function(response){
+        if(response.success){
+          toastr.success(response.result);
+          FlowRouter.go("/app/myOffice")
+        } else {
+          toastr.error(response.result);
+        }
+      }
+    });
   }
 
   render() {

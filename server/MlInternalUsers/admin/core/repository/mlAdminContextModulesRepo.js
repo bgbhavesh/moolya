@@ -345,6 +345,43 @@ let CoreModules = {
     var data= MlProcessTransactions.find(resultantQuery,fieldsProj).fetch()||[];
     var totalRecords=MlProcessTransactions.find(resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
+  },
+  MlOfficeTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+    //To display the latest record based on date
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'dateTime': -1}
+    }
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    let pipleline = [
+      {'$lookup':{ from:'users',localField:'userId', 'foreignField':'_id', as:'user' }},
+      {'$unwind':'$user'},
+      {'$project':{ 'userName':'$user.profile.displayName', 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 }}
+    ];
+    if(Object.keys(resultantQuery).length){
+      pipleline.push({'$match':resultantQuery});
+    }
+    if(fieldsProj.sort){
+      pipleline.push({'$sort':fieldsProj.sort});
+    }
+    if(fieldsProj.skip){
+      pipleline.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if(fieldsProj.limit){
+      pipleline.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    var data= mlDBController.aggregate('MlOfficeTransaction',pipleline);
+    var totalRecords=mlDBController.find('MlOfficeTransaction',resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
   }
 
 }

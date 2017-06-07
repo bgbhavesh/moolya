@@ -1,13 +1,12 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findRequestssActionHandler(requestTypeDetails) {
-  let userId = requestTypeDetails
+export async function findRequestssActionHandler() {
   let status=["WIP","Pending"]
   const result = await client.query({
     query: gql`
  query ($userId: String, $status: [String]) {
-  fetchRequestss(userId: $userId , status : $status) {
+  fetchRequestss(status : $status) {
     _id
     userId
     status
@@ -25,7 +24,6 @@ export async function findRequestssActionHandler(requestTypeDetails) {
 
     `,
     variables: {
-      userId,
   status
     },
     forceFetch: true

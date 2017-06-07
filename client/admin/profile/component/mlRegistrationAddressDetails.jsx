@@ -190,11 +190,7 @@ export default class AddressDetails extends React.Component{
   }
 
   async findRegistration(){
-
-    let registrationId=Meteor.userId();
-
-    const response = await getContactDetails(registrationId);
-
+    const response = await getContactDetails();
     this.setState({loading:false,addressDetails:response.addressInfo});
      //this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
     //return response;

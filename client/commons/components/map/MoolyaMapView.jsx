@@ -85,7 +85,7 @@ export default class MoolyaMapView extends Component {
     return (
       <span>
         {MapComponent?MapComponent:
-          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage}/>
         }
       </span>
 

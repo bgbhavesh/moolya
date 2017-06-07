@@ -54,7 +54,7 @@ MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info
 MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context, info) => {
   let response ;
   let hierarchy = args.hierarchy;
-  if (hierarchy.id!=''&&hierarchy.id!=null) {
+  if (hierarchy.id) {
     let hierarchyAssignment = mlDBController.findOne("MlHierarchyAssignments", {"_id": hierarchy.id}, context)
     let assignedRoles = hierarchyAssignment.teamStructureAssignment;
     let id = hierarchy.id

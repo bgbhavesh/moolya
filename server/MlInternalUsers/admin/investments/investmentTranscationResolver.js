@@ -2,6 +2,7 @@
  * Created by venkatsrinag on 6/6/17.
  */
 import MlResolver from '../../../commons/mlResolverDef'
+import MlRespPayload from "../../../commons/mlPayload";
 
 MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, info) =>{
 }

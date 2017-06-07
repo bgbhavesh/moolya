@@ -9,8 +9,9 @@ export async function findOfficeAction(officeId) {
     query: gql`
           query($officeId:String){
               findOfficeDetail(officeId:$officeId){
-                userId
-                status
+                success
+                code
+                result
               }  
           }
       `,

@@ -22,22 +22,23 @@ let officeTransaction = `
     
     input paymentDetail {
       datetime : Date
-      transactionId :Date
-      totalAmountPaid: String
+      transactionId :String
+      totalAmountPaid: Int
       paymentMode: String
       promotionCode : String
       codeAmount : String
       promoCodeStatus : String
       voucherCode : String
-      paymentStatus : Boolean
+      paymentStatus : String
+      isPaid :Boolean
     }
     
     input orderSubscriptionDetail { 
       orderId : String
       SubscriptionName : String 
       SubscriptionCode : String
-      cost : String
-      isTaxInclusive : String
+      cost : Int
+      isTaxInclusive : Boolean
       about : String
     }
     
@@ -61,11 +62,22 @@ let officeTransaction = `
       payment        : String
       status         : String
       action         : String
+      userName       : String
+      orderSubscriptionDetails : OrderSubscriptionDetail
+    }
+    
+     type OrderSubscriptionDetail { 
+      orderId : String
+      SubscriptionName : String 
+      SubscriptionCode : String
+      cost : Int
+      isTaxInclusive : Boolean
+      about : String
     }
     
     type Query {
       findOfficeTransaction(officeTransactionId:String):response
-      findOfficeDetail(officeId:String):officeTransactionType
+      
     }
     type Mutation {
       createOfficeTransaction(officeTransaction:officeTransaction):response
@@ -80,7 +92,6 @@ let supportedApi = [
   {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

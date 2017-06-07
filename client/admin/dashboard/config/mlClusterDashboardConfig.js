@@ -46,6 +46,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:false,
   fetchCenter:true,
+  showImage:true,//added for cluster image in map
   fetchCenterHandler:async function(reqParams){
     let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams&&reqParams.params&&reqParams.params.clusterId?reqParams.params.clusterId:null};
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
@@ -91,7 +92,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
                      ...on Cluster{
                              _id
                              desc:about
-                             text:displayName
+                             text:countryFlag                             
                              lat:latitude
                              lng:longitude
                              isActive:isActive
@@ -99,6 +100,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
                                code
                                description
                              }
+                             flag:countryFlag
                           }
                       }
               }

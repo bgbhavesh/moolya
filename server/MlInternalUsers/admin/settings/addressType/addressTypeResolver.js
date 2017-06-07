@@ -39,9 +39,18 @@ MlResolver.MlMutationResolver['createAddressType'] = (obj, args, context, info) 
     return response
   }
 }
-// MlResolver.MlQueryResolver['findAddressTypes'] = (obj, args, context, info) => {
-//   let result=MlDocumentTypes.find({isActive:true}).fetch()||[];
-//   return result;
+// MlResolver.MlQueryResolver['fetchAddressTypes'] = (obj, args, context, info) => {
+//
+//   let result=MlMasterSettings.find({type:"ADDRESSTYPE"}).fetch()||[];
+//   let temp1 = [];
+//   result.map(function(address){
+//     if(address.addressTypeInfo){
+//        var temp =  address.addressTypeInfo.addressName;
+//        temp1.push(temp);
+//       return temp1;
+//
+//     }
+//   })
 // }
 
 

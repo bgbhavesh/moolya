@@ -96,6 +96,13 @@ appSection.route('/myOffice', {
   }
 });
 
+appSection.route('/myInvestments', {
+  name: 'myInvestments',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMyOffice />, isProfileMenu: true})
+  }
+});
+
 appSection.route('/addOffice', {
   name: 'addOffice',
   action(){

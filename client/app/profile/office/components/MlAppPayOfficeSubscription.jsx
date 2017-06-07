@@ -49,7 +49,12 @@ export default class MlAppPayOfficeSubscription extends Component {
   }
 
   payClick() {
-    var data = {officeId: this.props.config}
+    let officeAmount = this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : "00"
+    var data = {
+      officeId: this.props.config,
+      amount: officeAmount,
+      transactionId: this.state.transaction && this.state.transaction.transactionId
+    }
     var header = {apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
     $.ajax({
       type: 'POST',

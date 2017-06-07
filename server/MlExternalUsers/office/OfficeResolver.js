@@ -128,7 +128,8 @@ MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
       '$project': {
         office: 1, officeTransaction: {
           status: '$officeTransaction.status', transactionId: '$officeTransaction.transactionId',
-          orderSubscriptionDetails: '$officeTransaction.orderSubscriptionDetails'
+          orderSubscriptionDetails: '$officeTransaction.orderSubscriptionDetails',
+          paymentDetails: '$officeTransaction.paymentDetails'
         }
       }
     }

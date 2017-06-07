@@ -303,13 +303,13 @@ let CoreModules = {
     }
     switch(type){
       case 'interactions':
-        serverQuery={'transactionTypeName': "interactions"};
+        serverQuery={'transactionTypeName': "interaction"};
         break;
       case 'system':
         serverQuery={'transactionTypeName': "system"};
         break;
       case 'conversations':
-        serverQuery={'transactionTypeName': "conversations"};
+        serverQuery={'transactionTypeName': "conversation"};
         break;
     }
     var resultantQuery=MlAdminContextQueryConstructor.constructQuery(contextQuery,'$in');

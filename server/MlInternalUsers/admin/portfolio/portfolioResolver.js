@@ -232,7 +232,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
       orderNumberGenService.assignPortfolioId(portfolioDetails)
 
       try {
-        MlResolver.MlMutationResolver['createProcessTranscation'](obj, {
+        MlResolver.MlMutationResolver['createProcessTransaction'](obj, {
           'portfoliodetails': portfolioDetails,
         }, context, info); //portfolio request
       } catch (e) {

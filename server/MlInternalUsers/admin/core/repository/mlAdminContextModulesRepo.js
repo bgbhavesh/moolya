@@ -342,8 +342,8 @@ let CoreModules = {
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
     var result=[];
-    var data= MlProcessTranscation.find(resultantQuery,fieldsProj).fetch()||[];
-    var totalRecords=MlProcessTranscation.find(resultantQuery,fieldsProj).count();
+    var data= MlProcessTransactions.find(resultantQuery,fieldsProj).fetch()||[];
+    var totalRecords=MlProcessTransactions.find(resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
   },
   MlOfficeTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){

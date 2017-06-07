@@ -14,7 +14,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:true,
-  filterComponent: <MlCustomFilter module="internalRequests" moduleName="internalRequests" />,
+  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" />,
   columns:[
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true},
@@ -42,28 +42,22 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
       }
     }
   ],
-  queryOptions:true,
-  buildQueryOptions:(config)=>{
-    return {context:{transactionTypeName:"internalRequests"}}
-  },
   graphQlQuery:
   gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"internalRequests",offset:$offset, context:$context, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    data:ContextSpecSearch(module:"processSetup",offset:$offset, context:$context, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
-                      ...on requests{
+                      ...on ProcessTransactions{
                           _id
                           userId
                           status
-                          requestId
-                          requestTypeName
-                          transactionCreatedDate
-                          requestTypeId
-                          requestDescription
+                          transactionType
                           clusterName
                           chapterName
                           subChapterName
                           communityName
+                          dateTime
+                          mobileNumber
                       }
                     }
               }

@@ -8,7 +8,13 @@ import {findBackendUserActionHandler} from '../../internalRequests/actions/findU
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 import  {updateStusForTransactionActionHandler} from '../../internalRequests/actions/updateStatusRequestsAction'
 
-
+var options = [
+  { value: 'role', label: 'Role' },
+  { value: 'role', label: 'Role' }
+];
+function logChange(val) {
+  console.log("Selected: " + val);
+}
 export default class MlProcessSetupDetailsComponent extends React.Component {
   constructor(props){
     super(props);
@@ -309,55 +315,59 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
           <div className="tab-pane" id={`paymentDetails${this.props.data.requestId}`}>
             <div className="row">
               <div className="col-md-6">
-                <h3>Generate Payment Link</h3>
-                <div className="form-group">
-                  <input type="text" placeholder="Subscription Name" className="form-control float-label" id="" readOnly="true"/>
-                </div>
-                <div className="form-group ">
-                  <input type="text" placeholder="Cost" value={this.state.departmentName} className="form-control float-label" id=""/>
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="About" value={this.state.subDepartmentName} className="form-control float-label" id=""/>
+                <div className="panel panel-default">
+                  <div className="panel-heading">Generate payment link</div>
+                  <div className="panel-body">
+                    <div className="form-group">
+                      <input type="text" placeholder="Subscription Name" className="form-control float-label" id="" />
+                    </div>
+                    <br className="brclear"/>
+                    <div className="form-group ">
+                      <input type="text" placeholder="Cost" className="form-control float-label"/>
+                      <div className="email_notify">
+                        <div className="input_types">
+                          <input id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <textarea placeholder="About" className="form-control float-label" id=""></textarea>
+                    </div>
+                    <a href="#" className="fileUpload mlUpload_btn">Genrate Link</a> <a href="#" className="fileUpload mlUpload_btn">Activate office</a>
+                  </div>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Date & Time" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Transaction Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Id" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Transaction ID" defaultValue="moo1234" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total Amount Paid" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Total amount paid" defaultValue="Rs 25,000" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Payment Mode" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Payment mode" defaultValue="Debit Card" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Card Number" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Card number" defaultValue="1234 2545 2565 4585" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Card Holder Name" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Card Holder name" defaultValue="Kiran Kumar" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Promotion Code" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Promotion Code" defaultValue="Null" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Code Amount" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Code Amount" defaultValue="Null" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Status" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Status" defaultValue="Null" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Voucher Code" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Voucher Code" defaultValue="Null" className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Voucher Amount" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Status" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
-                </div>
-                <br className="clearfix" />
               </div>
             </div>
           </div>

@@ -84,6 +84,8 @@ let portfolioSchema = `
     type Mutation{
           createPortfolioRequest(portfoliodetails:portfoliodetails):response
           updatePortfolio(portfoliodetailsId:String, portfolio:portfolio):response
+          approvePortfolio(portfoliodetailsId:String):response
+          rejectPortfolio(portfoliodetailsId:String):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);
@@ -94,5 +96,7 @@ let supportedApi = [
 
   {api:'createPortfolioRequest', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updatePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'approvePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

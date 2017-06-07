@@ -73,3 +73,45 @@ export async function createAnnotationActionHandler(details) {
   console.log(id);
   return id
 }
+
+export async function approvePortfolio(portfolioId) {
+  const result = await client.mutate({
+    mutation: gql`
+     mutation($portfoliodetailsId:String){
+      approvePortfolio(portfoliodetailsId:$portfoliodetailsId) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      portfoliodetailsId:portfolioId
+    }
+  })
+
+  const id = result.data.approvePortfolio;
+
+  return id
+}
+
+export async function rejectPortfolio(portfolioId) {
+  const result = await client.mutate({
+    mutation: gql`
+     mutation($portfoliodetailsId:String){
+      rejectPortfolio(portfoliodetailsId:$portfoliodetailsId) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      portfoliodetailsId:portfolioId
+    }
+  })
+
+  const id = result.data.rejectPortfolio;
+
+  return id
+}

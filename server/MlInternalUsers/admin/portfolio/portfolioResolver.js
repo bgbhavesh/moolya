@@ -198,3 +198,66 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 
     return response;
 }
+
+MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.portfoliodetailsId) {
+    let updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Approved"}, {$set: true}, context)
+
+    if(updatedResponse===1) {
+      let regRecord = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context) || {};
+
+      let portfolioDetails = {
+        "transactionType": "processSetup",
+        "communityType": regRecord.communityName,
+        "communityCode": regRecord.communityCode,
+        "clusterId": regRecord.clusterId,
+        "chapterId": regRecord.chapterId,
+        "subChapterId": regRecord.subChapterId,
+        "communityId": regRecord.communityId,
+        clusterName: regRecord.clusterName,
+        chapterName: regRecord.chapterName,
+        subChapterName: regRecord.subChapterName,
+        communityName: regRecord.communityName,
+        "createdAt": new Date(),
+        "source": "self",
+        "createdBy": "admin",
+        "status": "Yet To Start",
+        "isPublic": false,
+        "isGoLive": false,
+        "isActive": false,
+        "portfolioUserName": regRecord.userName,
+        "userId": regRecord.userId,
+        "userType": regRecord.userType,
+        mobileNumber: regRecord.contactNumber,
+      }
+      orderNumberGenService.assignPortfolioId(portfolioDetails)
+
+      try {
+        MlResolver.MlMutationResolver['createProcessTranscation'](obj, {
+          'portfoliodetails': portfolioDetails,
+        }, context, info); //portfolio request
+      } catch (e) {
+        console.log(e);
+        //send error response;
+      }
+    }
+      if(updatedResponse===1){
+        let code = 200;
+        let result = {portfoliodetailsId : updatedResponse}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }else{
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Please validate the user", code);
+        return response;
+      }
+  }
+}
+
+MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Rejected"}, {$set: true}, context)
+    return updatedResponse;
+  }
+}

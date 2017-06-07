@@ -227,18 +227,7 @@ class MlPortfolio extends React.Component {
 
   render() {
     let that = this;
-    let MlActionConfig = [
-      {
-        showAction: true,
-        actionName: 'approveUser',
-        handler:  this.approveUser.bind(this)
-      },
-      {
-        showAction: true,
-        actionName: 'rejectUser',
-        handler: this.rejectUser.bind(this)
-      }
-    ]
+    let MlActionConfig = []
     if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests"){
       MlActionConfig.push({
         showAction: true,
@@ -264,12 +253,23 @@ class MlPortfolio extends React.Component {
       handler: null
     });
     if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests") {
-      MlActionConfig.push({
-        showAction: true,
-        actionName: 'comment',
-        handler: null,
-        iconID: 'Popover1'
-      });
+      MlActionConfig.push(
+        {
+          showAction: true,
+          actionName: 'comment',
+          handler: null,
+          iconID: 'Popover1'
+        },
+        {
+          showAction: true,
+          actionName: 'approveUser',
+          handler:  this.approveUser.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'rejectUser',
+          handler: this.rejectUser.bind(this)
+        });
     }
     let EditComponent = "";
     let ViewComponent = "";

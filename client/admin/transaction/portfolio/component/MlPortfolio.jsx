@@ -92,10 +92,9 @@ class MlPortfolio extends React.Component {
     let portfolioId = this.props.config
     const response = await approvePortfolio(portfolioId);
     if (response.success) {
-      // this.props.getRegistrationKYCDetails();
       toastr.success("Portfolio Approved Successfully")
+      FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
     }else{
-      // this.props.getRegistrationKYCDetails();
       toastr.error(response.result)
     }
   }

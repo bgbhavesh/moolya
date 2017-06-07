@@ -8,7 +8,7 @@ import { render } from 'react-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
-import {findOfficeTransactionHandler} from '../actions/findOfficeTransaction'
+import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 

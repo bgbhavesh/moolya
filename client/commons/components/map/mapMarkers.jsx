@@ -117,6 +117,8 @@ export default class MapMarkers extends Component {
     if(this.props.status && (this.props.status.code == 111)){
       status = "active"
     }
+    console.log(this.props.flag);
+    console.log(this.props.text);
     return (
       <div>{this.props.status?
         <div style={{'width': '200px'}} className={`cluster_map ${status}`} id={this.props.markerId}
@@ -124,7 +126,7 @@ export default class MapMarkers extends Component {
                           onClick={this.markerClickHandler.bind(this, this.props)}>
           <div className="hex_btn hex_btn_in">
             <span>
-              <b>{this.props.text}</b></span>
+              {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>
             <div className="indec"></div>
           </div>
           {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
@@ -133,10 +135,10 @@ export default class MapMarkers extends Component {
         :
         <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
                           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-                          onClick={this.markerClickHandler.bind(this, this.props)}>
+                          onClick={this.markerClickHandler.bind(this, this.props.flag)}>
         <div className="hex_btn hex_btn_in">
           <span>
-            <b>{this.props.text}</b></span>
+           {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>
           <div className="indec"></div>
         </div>
         {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}

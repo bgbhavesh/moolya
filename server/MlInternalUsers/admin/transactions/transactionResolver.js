@@ -236,7 +236,7 @@ MlResolver.MlQueryResolver['validateTransaction'] = (obj, args, context, info) =
   let hierarchyDesicion = false;
   if(!args.assignedUserId){
      let systemRoles =  mlHierarchyAssignment.checkSystemSystemDefinedRole(mlHierarchyAssignment.getUserRoles(context.userId));
-     if(systemRoles){
+     if(systemRoles===true){
        let code = 200;
        let result = {status : systemRoles}
        let response = new MlRespPayload().successPayload(result, code);

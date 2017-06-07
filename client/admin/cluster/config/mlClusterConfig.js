@@ -13,7 +13,7 @@ const mlClusterListConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:true,
   sort:true,
-  showActionComponent:true,
+  showActionComponent:false,
   actionConfiguration:[
     // {
     //   actionName: 'edit',

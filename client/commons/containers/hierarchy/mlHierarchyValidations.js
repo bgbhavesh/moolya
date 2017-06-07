@@ -11,11 +11,12 @@ class MlHierarchyValidations{
   constructor(){
     if(! MlHierarchyValidations.instance){
       MlHierarchyValidations.instance = this;
-      this.validateEditAction.bind(this);
+     // this.validateEditAction.bind(this);
       this.validateAssignAction.bind(this);
     }
     return MlHierarchyValidations.instance;
   }
+/*
 
   validateEditAction(assignedUserId){
     let userProfile = getAdminUserContext()
@@ -29,6 +30,7 @@ class MlHierarchyValidations{
       return false;
     }
   }
+*/
 
   validateAssignAction(recordClusterId,selectedClusterId){
    if(recordClusterId == selectedClusterId){

@@ -6,12 +6,7 @@ import React from "react";
 import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
-import  {createOfficeActionHandler} from '../actions/createOfficeAction';
-var options = [
-  {value: 'Type of Funding', label: 'Type of Funding'},
-  {value: '2', label: '2'}
-];
-
+import {createOfficeActionHandler} from "../actions/createOfficeAction";
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
@@ -21,7 +16,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     return this;
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     var mySwiper = new Swiper('.blocks_in_form', {
       speed: 400,
       spaceBetween: 20,
@@ -49,7 +44,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       country: this.refs.country.value,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
-      availableCommunities : community
+      availableCommunities: community
     }
     let data = myOffice;
     for (var propName in data) {
@@ -58,7 +53,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       }
     }
     console.log(data)
-    if(data.availableCommunities.length<1){
+    if (data.availableCommunities.length < 1) {
       data = _.omit(data, 'availableCommunities')
     }
 
@@ -68,9 +63,10 @@ export default class MlAppNewSpokePerson extends React.Component {
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      FlowRouter.go('/app/officeMembersDetails/'+response.result)
+      // FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      FlowRouter.go('/app/myOffice/')
       toastr.success('Office Successfully Created');
-    }else {
+    } else {
       toastr.error(response.result);
     }
     return response;

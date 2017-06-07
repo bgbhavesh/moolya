@@ -182,7 +182,7 @@ import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHiera
 import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
 import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 /*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/
-import {MlHierarchyTabHistoryList} from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
+import MlHierarchyTabHistoryList from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
 
 // @End
 
@@ -277,7 +277,7 @@ adminSection.route('/settings/hierarchy/history', {
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/chapters', {
   name: 'hierarchy_chapters',
   action(params){
-    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'history'}}/>,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
   }
 });
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/hierarchyDetails', {

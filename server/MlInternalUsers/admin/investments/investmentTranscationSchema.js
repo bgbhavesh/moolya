@@ -42,6 +42,21 @@ let investments = `
         action:String,
         progress:Int
         paymentDetails:paymentDetails
+        
+        transactionType:String,
+        userId:String,
+        mobileNumber:String,
+        communityType:String,
+        communityCode:String,
+        clusterId:String,
+        chapterId:String,
+        subChapterId:String,
+        dateTime:Date,
+        status:String,
+        clusterName     : String,
+        chapterName     : String,
+        subChapterName  : String,
+        communityName   : String
     }
     
     type PaymentDetails{
@@ -107,7 +122,7 @@ let investments = `
     
     
     type Mutation{
-        createProcessTranscation:response
+        createProcessTranscation(processTranscations:processTranscations):response
         createProcessSetup(processTranscationId:String, processSteps:[processSteps]):response
         updateProcessTranscation(processTranscationId:String, processTranscations:processTranscations):response
     }

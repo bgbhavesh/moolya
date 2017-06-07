@@ -43,7 +43,6 @@ export default class CreateRequestComponent extends Component {
         code: "1",
         description:"requested"
       },
-      userId:Meteor.userId(),
       requestId: " ",
       status:"Pending",
       transactionCreatedDate: new Date()

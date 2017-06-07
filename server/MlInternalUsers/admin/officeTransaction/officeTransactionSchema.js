@@ -69,6 +69,7 @@ let officeTransaction = `
     }
     type Mutation {
       createOfficeTransaction(officeTransaction:officeTransaction):response
+      updateOfficeTransactionOrderSubscriptionDetail(id: String, orderSubscriptionDetail:orderSubscriptionDetail):response
       officeTransactionPayment(officeId:String):response
     }
 `;
@@ -78,6 +79,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeTransaction])
 let supportedApi = [
   {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"}
 ]

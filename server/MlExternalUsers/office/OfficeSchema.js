@@ -25,8 +25,8 @@ let myOfficeSchema = `
        isFreeze:Boolean,
        isRetire:Boolean,
        isFreeUser:Boolean,
-       isFreeUser:Boolean,
-       isFreeUser:Boolean
+       isPaidUser:Boolean,
+       isAdminUser:Boolean
     }
 
     type AvailableCommunities{
@@ -88,7 +88,12 @@ let myOfficeSchema = `
        isInternalUserInteraction:Boolean,
        isExternalUserInteraction:Boolean,
        isFreeze:Boolean,
-       isRetire:Boolean
+       isRetire:Boolean,
+       communityType:String,
+       isPrincipal:Boolean,
+       isFreeUser:Boolean,
+       isPaidUser:Boolean,
+       isAdminUser:Boolean
     }
 
     input availableCommunities{
@@ -134,7 +139,7 @@ let myOfficeSchema = `
   
     type Query{
         fetchOffice:[MyOffice]
-        fetchOfficeMembers:[OfficeMembers]
+        fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
         findOfficeDetail(officeId:String):response
     }
     
@@ -157,6 +162,7 @@ let supportedApi = [
   {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE"},
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

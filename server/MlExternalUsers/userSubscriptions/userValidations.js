@@ -13,6 +13,7 @@ class MlUserValidations{
             return {success:false, msg:'Invalid Office'}
         }
         // let offices = MlUserSubscriptions.find({resId:officeId}).fetch();
+        return {success:true}
     }
 
     // This Method Validates office members count

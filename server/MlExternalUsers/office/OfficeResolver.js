@@ -104,3 +104,35 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
   let response = new MlRespPayload().successPayload('Office activated', code);
   return response;
 }
+
+MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
+  if (!args.officeId) {
+    let code = 400;
+    let response = new MlRespPayload().successPayload("Office Id is required", code);
+    return response;
+  }
+  let pipeline = [{'$match': {_id: args.officeId}},
+    {'$project': {office: '$$ROOT'}},
+    {
+      '$lookup': {
+        from: 'mlOfficeTransaction',
+        localField: 'office._id',
+        foreignField: 'officeId',
+        as: 'officeTransaction'
+      }
+    },
+    {'$unwind': '$officeTransaction'},
+    {
+      '$project': {
+        office: 1, officeTransaction: {
+          status: '$officeTransaction.status', transactionId: '$officeTransaction.transactionId',
+          orderSubscriptionDetails: '$officeTransaction.orderSubscriptionDetails'
+        }
+      }
+    }
+  ];
+  let result = mlDBController.aggregate('MlOffice', pipeline);
+  let code = 200;
+  let response = new MlRespPayload().successPayload(result, code);
+  return response;
+}

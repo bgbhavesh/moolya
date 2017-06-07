@@ -61,11 +61,21 @@ let officeTransaction = `
       payment        : String
       status         : String
       action         : String
+      orderSubscriptionDetails : OrderSubscriptionDetail
+    }
+    
+     type OrderSubscriptionDetail { 
+      orderId : String
+      SubscriptionName : String 
+      SubscriptionCode : String
+      cost : String
+      isTaxInclusive : String
+      about : String
     }
     
     type Query {
       findOfficeTransaction(officeTransactionId:String):response
-      findOfficeDetail(officeId:String):officeTransactionType
+      
     }
     type Mutation {
       createOfficeTransaction(officeTransaction:officeTransaction):response
@@ -80,7 +90,6 @@ let supportedApi = [
   {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -314,7 +314,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         var updateCount = 0;
         var userId = null;
 
-        if (existingUser) {
+      if (existingUser) {
               //check if the registration profile(community based) exists for user and can be updated
                userId=existingUser._id;
                result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfiles':{$elemMatch: {'registrationId': id}}},

@@ -115,3 +115,23 @@ export async function rejectPortfolio(portfolioId) {
 
   return id
 }
+
+export async function requestProtfolioForGoLive(resId) {
+  let portfoliodetailsId  = resId
+  const result = await client.mutate({
+    mutation: gql`
+            mutation  ($portfoliodetailsId: String, ){
+                requestForGoLive(portfoliodetailsId:$portfoliodetailsId){
+                    success,
+                    code,
+                    result
+                }  
+            }
+        `,
+    variables: {
+      portfoliodetailsId
+    }
+  })
+  const response = result;
+  return portfoliodetailsId
+}

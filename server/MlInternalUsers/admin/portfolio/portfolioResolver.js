@@ -261,3 +261,26 @@ MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) =>
     return updatedResponse;
   }
 }
+
+MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) => {
+  let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
+  if(details && details.userId == context.userId){
+    try {
+      let status = "Go Live";
+      let ret = mlDBController.update('MlPortfolioDetails', {"_id": args.portfoliodetailsId}, {status:status}, {$set: true}, context)
+      if (ret) {
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        return response;
+      }
+    }catch (e){
+      let code = 409
+      let response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
+    }
+  }
+
+  let code = 400
+  let response = new MlRespPayload().errorPayload("Not Found", code);
+  return response;
+}

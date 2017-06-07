@@ -56,8 +56,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: async(data)=>{
         //if(data && data.id && (Meteor.userId()==data.userName || Meteor.user().profile.email=="platformadmin@moolya.com")){
-         let response =  await validateTransaction(data.registrationId,"MlRegistration",data.assignedUserId);
-        if(data && data.id && response.success === true){
+        //  let response =  await validateTransaction(data.registrationId,"MlRegistration",data.assignedUserId);
+        if(data && data.id){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
         }else if(data && data.id){
           toastr.error("User does not have access to edit record");

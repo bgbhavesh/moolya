@@ -322,7 +322,9 @@ let CoreModules = {
     return {totalRecords:totalRecords,data:data};
 
   },
+
   MlProcessTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+
     var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId','communityCode':'communityCode'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
 

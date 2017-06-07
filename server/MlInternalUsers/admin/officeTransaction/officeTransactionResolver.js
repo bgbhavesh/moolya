@@ -32,6 +32,30 @@ MlResolver.MlMutationResolver['createOfficeTransaction'] = (obj, args, context, 
   return response;
 }
 
+MlResolver.MlMutationResolver['updateOfficeTransactionOrderSubscriptionDetail'] = (obj, args, context, info) => {
+  if(!args.id){
+    let code = 400;
+    let response = new MlRespPayload().successPayload("Office transaction id is required", code);
+    return response;
+  }
+  if(!args.orderSubscriptionDetail){
+    let code = 400;
+    let response = new MlRespPayload().successPayload("Office subscription detail id is required", code);
+    return response;
+  }
+  let result = mlDBController.update('MlOfficeTransaction', args.id, { orderSubscriptionDetails: args.orderSubscriptionDetail }, {$set:true}, context)
+  if(result){
+    let code = 200;
+    let response = new MlRespPayload().successPayload('Payment link generated successfully', code);
+    return response;
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response;
+  }
+
+}
+
 MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info) => {
   if(!args.officeTransactionId){
     let code = 400;
@@ -44,7 +68,7 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     {'$lookup':{ from: 'users', localField: 'trans.userId', foreignField: '_id', as: 'user'}},
     {'$unwind':'$user'},
     {'$project':{ trans:1, user: { name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber' } }},
-    {'$lookup':{ from: 'mlMyOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
+    {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
     {'$unwind':'$office'}
   ];
   let result = mlDBController.aggregate('MlOfficeTransaction', pipeline);

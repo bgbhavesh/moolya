@@ -32,6 +32,7 @@ import MlAppMyOffice from '../../../client/app/profile/office/components/MlAppMy
 import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
 import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
 import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
+import MlAppPayOfficeSubscription from '../../app/profile/office/components/MlAppPayOfficeSubscription';
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
@@ -108,6 +109,14 @@ appSection.route('/officeMembersDetails/:officeId', {
     mount(AppLayout, {appContent: <MlAppOfficeMembersDetails config={params.officeId}/>, isProfileMenu: true})
   }
 });
+
+appSection.route('/payOfficeSubscription/:officeId', {
+  name: 'payOfficeSubscription',
+  action(params){
+    mount(AppLayout, {appContent: <MlAppPayOfficeSubscription config={params.officeId}/>, isProfileMenu: true})
+  }
+});
+
 
 appSection.route('/myConnections', {
   name: 'myConnections',

@@ -7,11 +7,6 @@ import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
-var options = [
-  {value: 'Type of Funding', label: 'Type of Funding'},
-  {value: '2', label: '2'}
-];
-
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
@@ -21,7 +16,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     return this;
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     var mySwiper = new Swiper('.blocks_in_form', {
       speed: 400,
       spaceBetween: 20,
@@ -68,7 +63,8 @@ export default class MlAppNewSpokePerson extends React.Component {
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      // FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      FlowRouter.go('/app/myOffice/')
       toastr.success('Office Successfully Created');
     } else {
       toastr.error(response.result);

@@ -9,7 +9,7 @@ export function searchFunction(args) {
     if(s.operator == "$and"){
       if(s.fieldType == "List"){
         if(s.value){
-          json[s.fieldName]=s.value
+          json[s.fieldName]={$in: [s.value]}
         }
 
       }else if(s.fieldType == "Date"){

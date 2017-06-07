@@ -37,6 +37,7 @@ let myOfficeSchema = `
     }
     
     type MyOffice{
+        _id: String
         userId:String,
         userName : String,
         totalCount:Int,
@@ -128,26 +129,26 @@ let myOfficeSchema = `
      }
   
     type Query{
-        fetchMyOffice:[MyOffice]
-        fetchMyOfficeMembers:[OfficeMembers]
+        fetchOffice:[MyOffice]
+        fetchOfficeMembers:[OfficeMembers]
     }
     
     type Mutation{       
-        createMyOffice(myOffice:myOffice):response
+        createOffice(myOffice:myOffice):response
         createOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
         updateOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
-        updateMyOffice(myOffice:myOffice, myOfficeId:String):response
+        updateOffice(myOffice:myOffice, myOfficeId:String):response
     }
 `
 
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
 let supportedApi = [
-  {api: 'createMyOffice', actionName: 'CREATE', moduleName: "OFFICE"},
+  {api: 'createOffice', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'createOfficeMembers', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'fetchMyOffice', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'updateMyOffice', actionName: 'UPDATE', moduleName: "OFFICE"}
+  {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

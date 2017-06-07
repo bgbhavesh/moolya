@@ -178,7 +178,8 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        status          : String   
+        status          : String  ,
+        
     }
     
     type RegistrationResponse{
@@ -241,6 +242,7 @@ let registrationSchema = `
         assignedUser    :   String,
         profileImage    :   String,
         transactionId   :   String
+        assignedUserId    :   String,
     }
     
     type branchLocation{

@@ -18,7 +18,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
       subDepartmentName:'',
       profileImage:'',
       firstName: " ",
-      status:null,
+      status:props.data.status,
       dispalyStatus:false
     }
     return this;
@@ -141,7 +141,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
                   <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.props.data.status}  onChange={this.onStatusSelect.bind(this)} />
+                  <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={this.state.status}  onChange={this.onStatusSelect.bind(this)} />
                 </div>
                 <br className="clearfix" />
               </div>

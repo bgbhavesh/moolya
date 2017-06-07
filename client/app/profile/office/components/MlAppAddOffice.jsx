@@ -94,7 +94,7 @@ export default class MlAppAddOffice extends React.Component {
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-4 col-sm-4">
-                    <a href="#" id="create_client" data-placement="top" data-class="large_popover">
+                    <a id="create_client" data-placement="top" data-class="large_popover">
                       <div className="list_block notrans">
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3>Bespoke Members</h3>

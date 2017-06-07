@@ -199,25 +199,86 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     return response;
 }
 
-MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) => {
-    let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
-    if(details && details.userId == context.userId){
-          try {
-              let status = "Go Live";
-              let ret = mlDBController.update('MlPortfolioDetails', {"_id": args.portfoliodetailsId}, {status:status}, {$set: true}, context)
-              if (ret) {
-                let code = 200;
-                let response = new MlRespPayload().successPayload("Updated Successfully", code);
-                return response;
-              }
-          }catch (e){
-              let code = 409
-              let response = new MlRespPayload().errorPayload(e.message, code);
-              return response;
-          }
+MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  if (args.portfoliodetailsId) {
+    let updatedResponse;
+    let regRecord = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context) || {};
+    if(regRecord.status != "Approved"){
+      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Approved"}, {$set: true}, context)
+    }else{
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Portfolio already approved", code);
+      return response;
     }
+    if(updatedResponse===1) {
+      let portfolioDetails = {
+        "transactionType": "processSetup",
+        "communityType": regRecord.communityName,
+        "communityCode": regRecord.communityCode,
+        "clusterId": regRecord.clusterId,
+        "chapterId": regRecord.chapterId,
+        "subChapterId": regRecord.subChapterId,
+        "communityId": regRecord.communityId,
+        clusterName: regRecord.clusterName,
+        chapterName: regRecord.chapterName,
+        subChapterName: regRecord.subChapterName,
+        communityName: regRecord.communityName,
+        "dateTime": new Date(),
+        "status": "Yet To Start",
+        "userId": regRecord.userId,
+        mobileNumber: regRecord.contactNumber,
+      }
+      orderNumberGenService.assignPortfolioId(portfolioDetails)
 
-    let code = 400
-    let response = new MlRespPayload().errorPayload("Not Found", code);
-    return response;
+      try {
+        MlResolver.MlMutationResolver['createProcessTranscation'](obj, {
+          'portfoliodetails': portfolioDetails,
+        }, context, info); //portfolio request
+      } catch (e) {
+        console.log(e);
+        //send error response;
+      }
+    }
+      if(updatedResponse===1){
+        let code = 200;
+        let result = {portfoliodetailsId : updatedResponse}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }else{
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Please validate the user", code);
+        return response;
+      }
+  }
+}
+
+MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Rejected"}, {$set: true}, context)
+    return updatedResponse;
+  }
+}
+
+MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) => {
+  let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
+  if(details && details.userId == context.userId){
+    try {
+      let status = "Go Live";
+      let ret = mlDBController.update('MlPortfolioDetails', {"_id": args.portfoliodetailsId}, {status:status}, {$set: true}, context)
+      if (ret) {
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        return response;
+      }
+    }catch (e){
+      let code = 409
+      let response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
+    }
+  }
+
+  let code = 400
+  let response = new MlRespPayload().errorPayload("Not Found", code);
+  return response;
 }

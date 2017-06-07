@@ -5,7 +5,9 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {findUserOfficeActionHandler} from "../actions/findUserOffice";
+import {findOfficeAction} from "../actions/findOfficeAction";
 import MlLoader from "../../../../commons/components/loader/loader";
+// import {findOfficeTransactionHandler} from '../../../../../client/admin/transaction/office/actions/findOfficeTranscation'
 
 export default class MlAppMyOffice extends Component {
   constructor(props) {
@@ -47,8 +49,12 @@ export default class MlAppMyOffice extends Component {
     FlowRouter.go("/app/addOffice")
   }
 
-  selectOffice(officeId,evt) {
-    FlowRouter.go('/app/payOfficeSubscription/' + officeId)
+  async selectOffice(officeId, evt) {
+    let response = await findOfficeAction(officeId);
+    if (response && response.status == 'paid') {
+        toastr.success('Office amount Paid wait for admin approval');
+    } else
+      FlowRouter.go('/app/payOfficeSubscription/' + officeId)
   }
 
   render() {

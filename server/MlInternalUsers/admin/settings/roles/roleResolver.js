@@ -3,7 +3,7 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
-var defaultModules = ["CHAPTER", "SUBCHAPTER", "COMMUNITY"];
+var defaultModules = ["CHAPTER", "SUBCHAPTER", "COMMUNITY", "INTERNALREQUESTS"];
 
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});

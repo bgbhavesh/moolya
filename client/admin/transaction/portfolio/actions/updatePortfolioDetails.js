@@ -74,10 +74,52 @@ export async function createAnnotationActionHandler(details) {
   return id
 }
 
+export async function approvePortfolio(portfolioId) {
+  const result = await client.mutate({
+    mutation: gql`
+     mutation($portfoliodetailsId:String){
+      approvePortfolio(portfoliodetailsId:$portfoliodetailsId) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      portfoliodetailsId:portfolioId
+    }
+  })
+
+  const id = result.data.approvePortfolio;
+
+  return id
+}
+
+export async function rejectPortfolio(portfolioId) {
+  const result = await client.mutate({
+    mutation: gql`
+     mutation($portfoliodetailsId:String){
+      rejectPortfolio(portfoliodetailsId:$portfoliodetailsId) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      portfoliodetailsId:portfolioId
+    }
+  })
+
+  const id = result.data.rejectPortfolio;
+
+  return id
+}
+
 export async function requestProtfolioForGoLive(resId) {
-    let portfoliodetailsId  = resId
-    const result = await client.mutate({
-      mutation: gql`
+  let portfoliodetailsId  = resId
+  const result = await client.mutate({
+    mutation: gql`
             mutation  ($portfoliodetailsId: String, ){
                 requestForGoLive(portfoliodetailsId:$portfoliodetailsId){
                     success,
@@ -86,10 +128,10 @@ export async function requestProtfolioForGoLive(resId) {
                 }  
             }
         `,
-      variables: {
-        portfoliodetailsId
-      }
-    })
-    const response = result;
-    return portfoliodetailsId
+    variables: {
+      portfoliodetailsId
+    }
+  })
+  const response = result;
+  return portfoliodetailsId
 }

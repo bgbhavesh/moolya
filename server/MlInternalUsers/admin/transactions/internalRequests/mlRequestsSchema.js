@@ -26,6 +26,7 @@ let requestsSchema = `
         chapterName               : String
         subChapterName            : String
         communityName             : String
+        createdBy                 : String
         }
         
         
@@ -73,6 +74,7 @@ let requestsSchema = `
         subChapterName            : String
         community                 : String
         communityName             : String
+        createdBy                 : String
       }
     type Mutation{
       createRequestss(requests:requestsInput):response

@@ -24,6 +24,11 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
     args.requests.communityName = communityDetails.name;
 
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      args.requests.createdBy = Meteor.users.findOne({_id: context.userId}).username
+    }
+
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;

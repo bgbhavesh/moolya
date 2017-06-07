@@ -58,6 +58,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
+  }
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
 

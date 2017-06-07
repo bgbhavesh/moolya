@@ -189,6 +189,20 @@ export default class MlFilterListRepo{
 
         break;
 
+      case "Gen_Users":
+
+        result= Meteor.users.find().fetch();
+
+        let genUsersResponse=_.each(result,function (option,id) {
+          if(option.profile.isInternaluser){
+            options.push({"label":option.profile.InternalUprofile.moolyaProfile.displayName,"value":option.profile.InternalUprofile.moolyaProfile.displayName})
+          }
+
+        })
+        options.push({"label": "Un Assigned","value" : "Un Assigned"})
+
+        break;
+
     }
 
 

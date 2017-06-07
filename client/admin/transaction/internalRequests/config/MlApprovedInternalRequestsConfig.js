@@ -26,7 +26,8 @@ const mlApprovedInternalRequestsTableConfig=new MlViewer.View({
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "status", title: "status",dataSort:true,selectRow:true}
+    {dataField: "status", title: "status",dataSort:true,selectRow:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
@@ -55,6 +56,7 @@ const mlApprovedInternalRequestsTableConfig=new MlViewer.View({
                           chapterName
                           subChapterName
                           communityName
+                          createdBy
                       }
                     }
               }

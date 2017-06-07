@@ -764,11 +764,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords = mlDBController.find('MlActionAndStatus', query, context, findOptions).count();
   }
 
-  if(args.module == "officeTransaction") {
-    data= mlDBController.find('MlOfficeTransaction',query,findOptions).fetch();
-    totalRecords=mlDBController.find('MlOfficeTransaction',query,findOptions).count();
-  }
-
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -838,8 +833,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "REQUESTTYPE":resolveType= 'Requests';break;
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
       case 'TransactionsLog':resolveType='TransactionsLog';break
-      case 'officeTransaction':resolveType='officeTransactionType';break
-
     }
 
     if(resolveType){

@@ -28,7 +28,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],RequestTypeSchema]);
 let supportedApi = [
   {api:'CreateRequestType', actionName:'CREATE', moduleName:"REQUESTTYPE"},
   {api:'UpdateRequestType', actionName:'UPDATE', moduleName:"REQUESTTYPE"},
-  {api:'FindRequestType', actionName:'READ', moduleName:"REQUESTTYPE"},
-  {api:'FetchRequestType', actionName:'READ', moduleName:"REQUESTTYPE"}
+  {api:'FindRequestType', actionName:'READ', moduleName:"REQUESTTYPE", isWhiteList:true},
+  {api:'FetchRequestType', actionName:'READ', moduleName:"REQUESTTYPE", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

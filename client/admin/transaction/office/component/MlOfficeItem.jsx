@@ -9,6 +9,8 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
+import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
+import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -17,13 +19,30 @@ export default class MlOfficeItem extends React.Component {
       transId:props.data.id,
       transInfo:{},
       userInfo:{},
-      officeInfo:{}
+      officeInfo:{
+        availableCommunities:[]
+      },
+      cost: 0,
+      tax:false,
+      about:'',
+      isGenerateLinkDisable: false
     }
     this.getTranscation(this.state.transId);
     return this;
   }
   componentDidMount() {
     initalizeFloatLabel();
+    $(function() {
+      $('.float-label').jvFloat();
+    });
+
+    $('.switch input').change(function() {
+      if ($(this).is(':checked')) {
+        $(this).parent('.switch').addClass('on');
+      }else{
+        $(this).parent('.switch').removeClass('on');
+      }
+    });
     // console.log(this.props.data)
   }
 
@@ -31,12 +50,77 @@ export default class MlOfficeItem extends React.Component {
     let response = await findOfficeTransactionHandler(id);
     if(response){
       let result = JSON.parse(response.result)[0];
-      console.log(result);
+      if(result){
+        result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
+        this.setState({
+          transInfo: result.trans,
+          userInfo: result.user,
+          officeInfo: result.office,
+          tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
+          cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',
+          about: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.about ? result.trans.orderSubscriptionDetails.about : '',
+          isGenerateLinkDisable: result.trans.orderSubscriptionDetails ? true : false
+        });
+      }
+    }
+  }
+
+  updateCost(e){
+    this.setState({"cost":e.currentTarget.value});
+  }
+
+  updateTax(e){
+    this.setState({"tax":e.currentTarget.checked});
+  }
+
+  updateAbout(e){
+    this.setState({"about":e.currentTarget.value});
+  }
+
+  async generateLink(){
+    if(this.state.isGenerateLinkDisable){
+      toastr.error('Payment Link is already generated');
+      return false;
+    }
+    this.setState({
+      isGenerateLinkDisable:true
+    })
+    if(!this.state.cost){
+      toastr.error('Cost is required');
+      return false;
+    }
+    if(this.state.cost < 1){
+      toastr.error('Enter tha valid cost');
+      return false;
+    }
+    let generateLinkInfo = {
+      SubscriptionName: this.state.officeInfo && this.state.officeInfo.subscriptionName ? this.state.officeInfo.subscriptionName : '' ,
+      cost: this.state.cost,
+      isTaxInclusive: this.state.tax,
+      about: this.state.about
+    }
+    let id = this.state.transId;
+    let response = await updateSubcriptionDetail(id ,generateLinkInfo);
+    if(response.success){
+      toastr.success(response.result);
+    } else {
+      toastr.error(response.result);
       this.setState({
-        transInfo: result.trans,
-        userInfo: result.user,
-        officeInfo: result.office
-      });
+        isGenerateLinkDisable:false
+      })
+    }
+  }
+
+  async acitvateOffice(){
+    if(this.state.officeInfo.isActive){
+      toastr.error('Office already activated');
+      return false;
+    }
+    let response = await updateOfficeStatus(this.state.officeInfo._id);
+    if(response.success){
+      toastr.success(response.result);
+    } else {
+      toastr.error(response.result);
     }
   }
 
@@ -122,49 +206,33 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Total number of Team" value={this.state.officeInfo.teamUserCount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group switch_wrap switch_names">
-                  <span className="state_label acLabel">All Communities</span><label className="switch nocolor-switch">
-                  <input type="checkbox" />
+                  <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
+                  <input type="checkbox" checked={this.state.officeInfo.availableCommunities.length > 2 ? true : false} />
                   <div className="slider"></div>
                 </label>
-                  <span className="state_label">Specific</span>
+                  <span className="state_label">All Communities</span>
                 </div>
                 <div className="clearfix" />
 
                 <div className="swiper-container blocks_in_form">
                   <div className="clearfix" />
                   <div className="swiper-wrapper">
-                    <div className="swiper-slide"><div className="team-block marb0">
-                      <span className="ml ml-moolya-symbol"></span>
-                      <h3>
-                        Office Barer
-                      </h3>
-                    </div><div className="form-group mart20">
-                      <input type="text" placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
-                    </div></div>
-                    <div className="swiper-slide"><div className="team-block marb0">
-                      <span className="ml ml-moolya-symbol"></span>
-                      <h3>
-                        Service Provider
-                      </h3>
-                    </div><div className="form-group mart20">
-                      <input type="text" placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
-                    </div></div>
-                    <div className="swiper-slide"><div className="team-block marb0">
-                      <span className="ml ml-moolya-symbol"></span>
-                      <h3>
-                        Office Barer
-                      </h3>
-                    </div><div className="form-group mart20">
-                      <input type="text" placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
-                    </div></div>
-                    <div className="swiper-slide"><div className="team-block marb0">
-                      <span className="ml ml-moolya-symbol"></span>
-                      <h3>
-                        Service Provider
-                      </h3>
-                    </div><div className="form-group mart20">
-                      <input type="text" placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
-                    </div></div>
+                    {this.state.officeInfo.availableCommunities.map(function (item, i) {
+                      return(
+                        <div className="swiper-slide" key={i}>
+                          <div className="team-block marb0">
+                            <span className="ml ml-moolya-symbol"></span>
+                            <h3>
+                              {item.communityName}
+                            </h3>
+                          </div>
+                          <div className="form-group mart20">
+                            <input type="text" value={item.userCount} placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
+                          </div>
+                        </div>
+                      )
+                    })}
+
                   </div>
                 </div>
                 <div className="panel panel-default">
@@ -205,21 +273,22 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Generate payment link</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" placeholder="Subscription Name" className="form-control float-label" id="" />
+                      <input type="text" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label" id="" />
                     </div>
                     <br className="brclear"/>
                     <div className="form-group ">
-                      <input type="text" placeholder="Cost" className="form-control float-label"/>
+                      <input type="number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" className="form-control float-label"/>
                       <div className="email_notify">
                         <div className="input_types">
-                          <input id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
+                          <input id="checkbox1" onChange={(e)=>this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
                         </div>
                       </div>
                     </div>
                     <div className="form-group">
-                      <textarea placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" id=""></textarea>
                     </div>
-                    <a href="#" className="fileUpload mlUpload_btn">Genrate Link</a> <a href="#" className="fileUpload mlUpload_btn">Activate office</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Genrate Link</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
                   </div>
                 </div>
               </div>

@@ -87,7 +87,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'approveUser',
       handler: (data) => {
         if (data && data.id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id);
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
         } else {
           toastr.error("Please select a record");
         }
@@ -98,7 +98,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'rejectUser',
       handler: (data) => {
         if (data && data.id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id);
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
         } else {
           toastr.error("Please select a record");
         }

@@ -12,17 +12,21 @@ let myOfficeSchema = `
        lastName:String,
        mobileNumber:Int,
        emailId:String,
-       userType:String,
        description:String,
        name:String,
        joiningDate:Date,
+       communityType:String,
        role:String,
        isActive:Boolean,
+       isPrincipal:Boolean,
        isIndependent:Boolean,
        isInternalUserInteraction:Boolean,
        isExternalUserInteraction:Boolean,
        isFreeze:Boolean,
-       isRetire:Boolean
+       isRetire:Boolean,
+       isFreeUser:Boolean,
+       isFreeUser:Boolean,
+       isFreeUser:Boolean
     }
 
     type AvailableCommunities{
@@ -136,7 +140,7 @@ let myOfficeSchema = `
     
     type Mutation{       
         createOffice(myOffice:myOffice):response
-        createOfficeMembers(myOfficeId:String, officeMembers:[officeMembers]):response
+        createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
         updateOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
         updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String):response

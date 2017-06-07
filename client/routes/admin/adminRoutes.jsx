@@ -48,6 +48,7 @@ import MlInteractionsLogList from '../../admin/transaction/interactions/componen
 import MlConversationsLogList from '../../admin/transaction/conversations/component/MlConversationsLogList'
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
+import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/component/MlProcessSetupRequestsList'
 
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
 import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
@@ -413,5 +414,14 @@ adminSection.route('/portfolio/tabcomponent', {
 adminSection.route('/portfolio/about', {
   action(params){
       mount(AdminLayout,{adminContent:<MlIdeatorPortfolioAbout />})
+  }
+});
+
+
+// Process Setup Routes
+adminSection.route('/transactions/processSetupList', {
+  name: 'transaction_ProcessSetupList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
   }
 });

@@ -485,7 +485,7 @@ let supportedApi = [
     {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUserRoleDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
   // {api:'passwordVerification', actionName:'READ', moduleName:"USERS"},
 

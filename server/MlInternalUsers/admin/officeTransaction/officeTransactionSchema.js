@@ -61,13 +61,27 @@ let officeTransaction = `
       payment        : String
       status         : String
       action         : String
+      userName       : String
+      orderSubscriptionDetails : OrderSubscriptionDetail
+    }
+    
+     type OrderSubscriptionDetail { 
+      orderId : String
+      SubscriptionName : String 
+      SubscriptionCode : String
+      cost : String
+      isTaxInclusive : String
+      about : String
     }
     
     type Query {
       findOfficeTransaction(officeTransactionId:String):response
+      
     }
     type Mutation {
       createOfficeTransaction(officeTransaction:officeTransaction):response
+      updateOfficeTransactionOrderSubscriptionDetail(id: String, orderSubscriptionDetail:orderSubscriptionDetail):response
+      officeTransactionPayment(officeId:String):response
     }
 `;
 
@@ -75,6 +89,8 @@ let officeTransaction = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeTransaction]);
 let supportedApi = [
   {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"}
+  {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

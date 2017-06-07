@@ -437,12 +437,12 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .cluster_map.workinprogress .indec{background: #273545;}
 .cluster_map.tobeassign .indec{background: #b9c5cc;}
 .cluster_map {position: absolute;width: auto !important;}
-.cluster_map .hex_btn{display: inline-block; background: #fff; border: 0px; line-height: 7px; position: relative; text-decoration: none; font-size: 16px; height: 20px; padding: 0px 10px 0 3px;}
-.cluster_map .hex_btn span{margin-right: 4px;font-size: 12px;line-height: 13px;white-space: nowrap;}
-.cluster_map .hex_btn .indec{border-radius: 100%; width: 8px; height: 8px; right: 0px; position: absolute; top: 5px; z-index: 999;}
-.cluster_map .hex_btn span img{width: 16px; background: #fff; border-radius: 100%; padding: 2px;}
-.cluster_map .hex_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 10px 0 10px 10px;border-color: transparent transparent transparent #fff;top: 0px;}
-.cluster_map .hex_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 10px 10px 10px 0px;border-color: transparent #fff transparent transparent;top: 0px;}
+.cluster_map .hex_btn{display: inline-block; background: #fff; border: 0px; line-height: 7px; position: relative; text-decoration: none; font-size: 16px; height: 26px; padding: 0px 10px 0 3px;}
+.cluster_map .hex_btn span{margin-right: 4px;font-size: 12px;line-height: 20px;white-space: nowrap;}
+.cluster_map .hex_btn .indec{border-radius: 100%; width: 8px; height: 8px; right: 0px; position: absolute; top: 9px; z-index: 999;}
+.cluster_map .hex_btn span img{width: 33px;/* background: #fff; border-radius: 100%; padding: 2px;*/height: 20px;margin-top: -2px;}
+.cluster_map .hex_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 13px 0 13px 10px;border-color: transparent transparent transparent #fff;top: 0px;}
+.cluster_map .hex_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 13px 10px 13px 0px;border-color: transparent #fff transparent transparent;top: 0px;}
 .cluster_map .hex_btn.hex_btn_in{background: #ffe144; z-index: 2; padding-top: 3px; text-align: center; color: #333; text-shadow: none;}
 .cluster_map .hex_btn.hex_btn_in:after{border-color: transparent transparent transparent #ffe144;}
 .cluster_map .hex_btn.hex_btn_in:before{border-color: transparent #ffe144 transparent transparent;}

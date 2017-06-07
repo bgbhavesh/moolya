@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import formHandler from "../../../../commons/containers/MlFormHandler";
-import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler} from "../actions/updatePortfolioDetails";
+import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, approvePortfolio, rejectPortfolio} from "../actions/updatePortfolioDetails";
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import {findComments} from "../../../../commons/annotaterComments/findComments";
@@ -87,6 +87,32 @@ class MlPortfolio extends React.Component {
       this.setState({ideaId: " "})
     }
 
+  }
+  async updateApproveUser(){
+    let portfolioId = this.props.config
+    const response = await approvePortfolio(portfolioId);
+    if (response.success) {
+      toastr.success("Portfolio Approved Successfully")
+      FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
+    }else{
+      toastr.error(response.result)
+    }
+  }
+  approveUser(){
+    const resp = this.updateApproveUser();
+    return resp;
+  }
+  async updateRejectUser(){
+    let portfolioId = this.props.config
+    const response = await rejectPortfolio(portfolioId);
+    if (response) {
+      this.props.getRegistrationKYCDetails();
+      toastr.success("Portfolio Rejected Successfully")
+    }
+  }
+  rejectUser(){
+    const resp = this.updateRejectUser();
+    return resp;
   }
 
   async fetchIdeaId() {
@@ -226,12 +252,23 @@ class MlPortfolio extends React.Component {
       handler: null
     });
     if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests") {
-      MlActionConfig.push({
-        showAction: true,
-        actionName: 'comment',
-        handler: null,
-        iconID: 'Popover1'
-      });
+      MlActionConfig.push(
+        {
+          showAction: true,
+          actionName: 'comment',
+          handler: null,
+          iconID: 'Popover1'
+        },
+        {
+          showAction: true,
+          actionName: 'approveUser',
+          handler:  this.approveUser.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'rejectUser',
+          handler: this.rejectUser.bind(this)
+        });
     }
     let EditComponent = "";
     let ViewComponent = "";

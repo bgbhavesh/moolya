@@ -27,6 +27,6 @@ type Mutation {
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],transactOperations]);
 let supportedApi = [
-  {api:'updateGenericTransaction', actionName:'UPDATE', moduleName:"REGISTRATION"},
+  {api:'updateGenericTransaction', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

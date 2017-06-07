@@ -7,7 +7,7 @@ import MlSchemaDef from '../../commons/mlSchemaDef'
 let externalUser = `
     input externalUser{
         username: String,
-        profile:profile
+        profile:  profile
     }
 
     input profile{

@@ -345,6 +345,26 @@ let CoreModules = {
     var data= MlProcessTranscation.find(resultantQuery,fieldsProj).fetch()||[];
     var totalRecords=MlProcessTranscation.find(resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
+  },
+  MlOfficeTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+    //To display the latest record based on date
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'dateTime': -1}
+    }
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    var data= mlDBController.find('MlOfficeTransaction',resultantQuery,fieldsProj).fetch();
+    var totalRecords=mlDBController.find('MlOfficeTransaction',resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
   }
 
 }

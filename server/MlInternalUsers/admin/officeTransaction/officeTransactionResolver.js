@@ -8,9 +8,11 @@ import MlRespPayload from "../../../commons/mlPayload";
 MlResolver.MlMutationResolver['createOfficeTransaction'] = (obj, args, context, info) => {
   var ret = "";
   try {
-    if (args.myOffice) {
+    if (args.officeTransaction) {
       let officeTransaction = args.officeTransaction;
       officeTransaction['userId'] = context.userId;
+      officeTransaction['dateTime']= new Date()
+      orderNumberGenService.assignOfficeTransaction(args.officeTransaction)
       ret = mlDBController.insert('MlOfficeTransaction', officeTransaction, context)
       if (!ret) {
         let code = 400;

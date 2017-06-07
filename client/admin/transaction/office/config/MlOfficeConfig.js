@@ -16,8 +16,8 @@ const mlOfficeTableConfig=new MlViewer.View({
   module:"office",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:[],
-  searchFields:[],
+  fields:['userId','subProcessName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  searchFields:['userId','subProcessName','transactionId','clusterName','chapterName','subChapterName','communityName'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -40,7 +40,24 @@ const mlOfficeTableConfig=new MlViewer.View({
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
   actionConfiguration:[],
-  graphQlQuery:gql`
+  graphQlQuery:gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"officeTransaction", context:$context, offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    totalRecords
+                    data{
+                      ... on officeTransactionType {
+                      id: _id
+                      userId
+                      clusterName
+                      chapterName
+                      chapterName
+                      subChapterName
+                      communityName
+                      transactionId
+                      status
+                    }
+                    }
+              }
+              }`/*gql`
                 query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
                 data: SearchQuery(module: "officeTransaction", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
                   totalRecords
@@ -59,7 +76,7 @@ const mlOfficeTableConfig=new MlViewer.View({
                   }
                 }
               }
-              `
+              `*/
 });
 
 export {mlOfficeTableConfig};

@@ -58,7 +58,7 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
                     let code = 200;
                     let response = new MlRespPayload().successPayload("Updated Successfully", code);
                     return response;
-                }
+              }
             }
         }
         catch (e){

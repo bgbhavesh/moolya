@@ -72,6 +72,10 @@ export default class AppActionButtons extends React.Component {
       {
         actionName: 'save',
         iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'golive',
+        iconClass: 'ml ml-save'
       }
     ]
     let ActionOptions= this.props.ActionOptions|| []

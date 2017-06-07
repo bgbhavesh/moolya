@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import classNames from "classnames"
 import { render } from 'react-dom';
 import formHandler from '../../../commons/containers/MlFormHandler';
-import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
+import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, requestProtfolioForGoLive} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import {findComments} from '../../../commons/annotaterComments/findComments'
@@ -175,6 +175,12 @@ class MlAppPortfolio extends React.Component{
     console.log('edit testing')
   }
 
+  async requestForGoLive(){
+      console.log("golive")
+      let portfolioId = this.props.config;
+      requestProtfolioForGoLive(portfolioId);
+  }
+
   async handleSuccess(response) {
     FlowRouter.go("/app/portfolio");
   };
@@ -203,6 +209,11 @@ class MlAppPortfolio extends React.Component{
         showAction: true,
         actionName: 'edit',
         handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'golive',
+        handler: async(event) => this.props.handler(this.requestForGoLive.bind(this))
       }]
 
     let EditComponent = ""; let ViewComponent = "";

@@ -362,7 +362,24 @@ let CoreModules = {
     //resultant query with $and operator
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
-    var data= mlDBController.find('MlOfficeTransaction',resultantQuery,fieldsProj).fetch();
+    let pipleline = [
+      {'$lookup':{ from:'users',localField:'userId', 'foreignField':'_id', as:'user' }},
+      {'$unwind':'$user'},
+      {'$project':{ 'userName':'$user.profile.displayName', 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 }}
+    ];
+    if(Object.keys(resultantQuery).length){
+      pipleline.push({'$match':resultantQuery});
+    }
+    if(fieldsProj.sort){
+      pipleline.push({'$sort':fieldsProj.sort});
+    }
+    if(fieldsProj.skip){
+      pipleline.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if(fieldsProj.limit){
+      pipleline.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    var data= mlDBController.aggregate('MlOfficeTransaction',pipleline);
     var totalRecords=mlDBController.find('MlOfficeTransaction',resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
   }

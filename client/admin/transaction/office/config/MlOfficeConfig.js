@@ -16,8 +16,8 @@ const mlOfficeTableConfig=new MlViewer.View({
   module:"office",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:['userId','subProcessName','transactionId','clusterName','chapterName','subChapterName','communityName'],
-  searchFields:['userId','subProcessName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  fields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  searchFields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -27,7 +27,7 @@ const mlOfficeTableConfig=new MlViewer.View({
     {dataField: "createdAt", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "userId", title: "UserId",dataSort:true},
-    {dataField: "subProcessName", title: "Name",dataSort:true},
+    {dataField: "userName", title: "Name",dataSort:true},
     {dataField: "transactionId", title: "Trans Id"},
     {dataField:"clusterName", title:"Cluster"},
     {dataField:"chapterName", title:"Chapter"},
@@ -54,6 +54,7 @@ const mlOfficeTableConfig=new MlViewer.View({
                       communityName
                       transactionId
                       status
+                      userName
                     }
                     }
               }

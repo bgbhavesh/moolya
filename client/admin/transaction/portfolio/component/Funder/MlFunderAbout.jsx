@@ -14,6 +14,8 @@ export default class MlFunderAbout extends React.Component {
     super(props);
     this.state={
       loading: true,
+      profilePic: " ",
+      defaultProfilePic: "/images/def_profile.png",
       data:{}
     }
     this.onClick.bind(this);
@@ -101,6 +103,22 @@ export default class MlFunderAbout extends React.Component {
     })
   }
 
+  async deleteProfilePic() {
+    let that = this;
+    this.setState({profilePic: ' /images/def_profile.png'})
+    const response = await fetchfunderPortfolioAbout(that.props.portfolioDetailsId);
+    if (response) {
+      let dataDetails = response
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      if (cloneBackUp) {
+        cloneBackUp.profilePic = that.state.defaultProfilePic;
+        this.setState({data: cloneBackUp}, function () {
+          that.sendDataToParent()
+        });
+      }
+    }
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -108,7 +126,7 @@ export default class MlFunderAbout extends React.Component {
     if(empty){
       const response = await fetchfunderPortfolioAbout(portfoliodetailsId);
       if (response) {
-        this.setState({loading: false, data: response});
+        this.setState({loading: false, data: response, profilePic:response.profilePic});
       }
     }else{
       this.setState({loading: false, data: that.context.funderPortfolio.funderAbout});
@@ -116,7 +134,7 @@ export default class MlFunderAbout extends React.Component {
 
   }
 
-  sendDataToParent(){
+    sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
       if (data[propName] === null || data[propName] === undefined) {
@@ -134,28 +152,34 @@ export default class MlFunderAbout extends React.Component {
     if(e.target.files[0].length ==  0)
       return;
     let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
-    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{funderAbout:[{logo:{fileUrl:'', fileName : fileName}}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{funderAbout:{profilePic:" "}}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
   }
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(resp){
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
+        this.setState({profilePic:result.result})
         this.setState({loading:true})
         this.fetchOnlyImages();
       }
     }
   }
   async fetchOnlyImages(){
-    const response = await fetchfunderPortfolioAbout(this.props.portfolioDetailsId);
+    let that = this;
+    const response = await fetchfunderPortfolioAbout(that.props.portfolioDetailsId);
     if (response) {
-      let dataDetails =response
+      let dataDetails = response
       let cloneBackUp = _.cloneDeep(dataDetails);
       if(cloneBackUp){
         let curUpload=dataDetails
-        cloneBackUp['logo']= curUpload['logo']
+        console.log(curUpload)
+        cloneBackUp.profilePic = that.state.profilePic;
+        this.setState({data:cloneBackUp}, function () {
+          that.sendDataToParent()
+        }) ;
         this.setState({loading: false, funderAbout:cloneBackUp})
       }else {
         this.setState({loading: false})
@@ -257,15 +281,19 @@ export default class MlFunderAbout extends React.Component {
                 >
                   <div className="form_bg">
                     <form>
-
+                      <div className="previewImg ProfileImg">
+                        <img src={this.state.profilePic?this.state.profilePic:this.state.defaultProfilePic}/>
+                        {this.state.profilePic?<span className="triangle-topright"><FontAwesome name='minus-square' onClick={this.deleteProfilePic.bind(this)}/></span>: " "}
+                      </div>
                       <div className="form-group">
-                        {/*<div className="fileUpload mlUpload_btn">*/}
-                          {/*<span>Profile Pic</span>*/}
-                          {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
-                        {/*</div>*/}
-                        <div className="previewImg ProfileImg">
-                          <img src="/images/def_profile.png"/>
+                        <div className="clearfix"></div>
+                        <div className="fileUpload mlUpload_btn">
+                          <span>Profile Pic</span>
+                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                         </div>
+                        {/*<div className="previewImg ProfileImg">*/}
+                          {/*<img src="/images/def_profile.png"/>*/}
+                        {/*</div>*/}
                       </div>
                       <div className="clearfix"></div>
                       <div className="panel panel-default mart20">

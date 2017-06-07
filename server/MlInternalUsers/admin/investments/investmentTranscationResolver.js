@@ -3,7 +3,7 @@
  */
 import MlResolver from '../../../commons/mlResolverDef'
 
-MlResolver.MlQueryResolver['fetchProcessTranscations'] = (obj, args, context, info) =>{
+MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, info) =>{
 }
 
 MlResolver.MlQueryResolver['fetchProcessStages'] = (obj, args, context, info) =>{
@@ -12,17 +12,17 @@ MlResolver.MlQueryResolver['fetchProcessStages'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['fetchProcessActions'] = (obj, args, context, info) =>{
 }
 
-MlResolver.MlQueryResolver['fetchProcessTranscationCustomerDetails'] = (obj, args, context, info) =>{
+MlResolver.MlQueryResolver['fetchProcessTransactionCustomerDetails'] = (obj, args, context, info) =>{
 }
 
 MlResolver.MlQueryResolver['fetchProcessSetup'] = (obj, args, context, info) =>{
 }
 
-MlResolver.MlMutationResolver['createProcessTranscation'] = (obj, args, context, info) =>{
+MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context, info) =>{
     if(args.portfoliodetails){
       let ret;
       try{
-        ret = mlDBController.insert('MlProcessTranscations', args.portfoliodetails, context)
+        ret = mlDBController.insert('MlProcessTransactions', args.portfoliodetails, context)
       }catch(e){
         let code = 409;
         let response = new MlRespPayload().errorPayload(e.message, code);
@@ -38,5 +38,5 @@ MlResolver.MlMutationResolver['createProcessTranscation'] = (obj, args, context,
 MlResolver.MlMutationResolver['createProcessSetup'] = (obj, args, context, info) =>{
 }
 
-MlResolver.MlMutationResolver['updateProcessTranscation'] = (obj, args, context, info) =>{
+MlResolver.MlMutationResolver['updateProcessTransaction'] = (obj, args, context, info) =>{
 }

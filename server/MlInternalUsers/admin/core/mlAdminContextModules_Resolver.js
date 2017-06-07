@@ -163,7 +163,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "ConversationsLog":resolveType='TransactionsLog';break;
       case "internalRequests":resolveType='requests';break;
       case "internalApprovedRequests":resolveType='requests';break;
-      case "processSetup":resolveType='ProcessTranscations';break;
+      case "processSetup":resolveType='ProcessTransactions';break;
     }
 
     if(resolveType){

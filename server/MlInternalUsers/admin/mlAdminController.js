@@ -93,6 +93,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       };
 
       context = getContext({req, res});
+
+      if(!context||!context.userId){
+        res.json({unAuthorized:true,message:"Invalid Token"})
+        return;
+      }
+
       var isAut = mlAuthorization.authChecker({req, context})
       if(!isAut){
           res.json({unAuthorized:true,message:"Not Authorized"})
@@ -567,7 +573,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           let response;
-          response = MlResolver.MlMutationResolver['resetPassword'](null, data, context, null);
+          response = MlResolver.MlMutationResolver['resetPasswords'](null, data, context, null);
           res.send(response);
         }else{
           let code = 401;

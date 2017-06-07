@@ -32,6 +32,7 @@ const defaultServerConfig = {
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
   graphiqlPath: '/graphiql',
+  paymentReturnUrlPath:'/moolyaPaymentStatus',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -89,6 +90,14 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
             ...config.graphiqlOptions,
             endpointURL: config.path,
         }));
+    }
+
+    // return url for payment gateway, Need to send transcation type on payment
+    if(config.paymentReturnUrlPath){
+        graphQLServer.options(config.paymentReturnUrlPath, cors());
+        graphQLServer.post(config.paymentReturnUrlPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res){
+
+        }))
     }
     WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }

@@ -228,3 +228,46 @@ MlResolver.MlMutationResolver['createTransactionLog'] = (obj, args, context, inf
     return response
   }
 }
+
+
+MlResolver.MlQueryResolver['validateTransaction'] = (obj, args, context, info) => {
+  var collection = args.collection
+  let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
+  let hierarchyDesicion = false;
+  if(args.assignedUserId == ''){
+   let platformAdmin =  mlHierarchyAssignment.checkisPlatformAdmin(mlHierarchyAssignment.getUserRoles(context.userId));
+   if(platformAdmin){
+     let code = 200;
+     let result = {status : platformAdmin}
+     let response = new MlRespPayload().successPayload(result, code);
+     return response
+   }else{
+     let systemRoles =  mlHierarchyAssignment.checkSystemSystemDefinedRole(mlHierarchyAssignment.getUserRoles(context.userId));
+     if(systemRoles){
+       let code = 200;
+       let result = {status : systemRoles}
+       let response = new MlRespPayload().successPayload(result, code);
+       return response
+     }else{
+       let code = 400;
+       let result = {message:"Not available in hierarchy"}
+       let response = new MlRespPayload().errorPayload(result, code);
+       return response
+     }
+   }
+  }else{
+    hierarchyDesicion = mlHierarchyAssignment.validateTransaction(args.transactionId,collection,context.userId,args.assignedUserId)
+    if(hierarchyDesicion === true){
+      let code = 200;
+      let result = {status : hierarchyDesicion}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }else{
+      let code = 400;
+      let result = {message:"Not available in hierarchy"}
+      let response = new MlRespPayload().errorPayload(result, code);
+      return response
+    }
+  }
+
+}

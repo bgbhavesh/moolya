@@ -69,6 +69,7 @@ export default class MlAssignHierarchy extends React.Component {
       this.props.getFinalApprovalDetails(response.finalApproval);
       let unassignedRoles = this.state.unAssignedRoles
       this.setState({unAssignedRoles:{id:response._id,teamStructureAssignment:unassignedRoles.teamStructureAssignment}})
+      this.props.getHierarchyId(response._id);
       this.setState({loading:false,finalApproval:response.finalApproval})
     }
     return response

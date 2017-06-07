@@ -7,7 +7,11 @@ class MlUserValidations{
     }
 
     // This Method Validates office expiry date
-    officeValidations(officeId, officeOwnerId){
+    validateOfficeExpiryDate(officeId, userId){
+        var myOffice = mlDBController.findOne('MlOffice', {_id: args.myOfficeId});
+        if(!myOffice || (myOffice && myOffice.userId != context.userId)){
+            return {success:false, msg:'Invalid Office'}
+        }
     }
 
     // This Method Validates office members count
@@ -18,3 +22,6 @@ class MlUserValidations{
     processValidations(processId){
     }
 }
+
+
+module.exports = MlUserValidations;

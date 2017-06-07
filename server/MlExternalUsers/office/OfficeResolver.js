@@ -5,6 +5,8 @@
 import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
 import MlUserContext from "../../MlExternalUsers/mlUserContext";
+import MlUserValidations from "../../MlExternalUsers/userSubscriptions/userValidations";
+
 import _ from "lodash";
 
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
@@ -135,4 +137,34 @@ MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
   let code = 200;
   let response = new MlRespPayload().successPayload(result, code);
   return response;
+}
+
+
+MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info) => {
+    if(!args.myOfficeId){
+        let code = 400;
+        let response = new MlRespPayload().successPayload("Invalid Office", code);
+        return response;
+    }
+    var ret = new MlUserValidations().validateOfficeExpiryDate(args.myOfficeId);
+    if(!ret.success){
+        let code = 400;
+        let response = new MlRespPayload().successPayload(ret.msg, code);
+        return response;
+    }
+
+    let officeMembers = args.officeMembers;
+    if(officeMembers.length == 0){
+        let code = 400;
+        let response = new MlRespPayload().successPayload("Please add atleast one office memeber", code);
+        return response;
+    }
+
+
+
+
+
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response;
 }

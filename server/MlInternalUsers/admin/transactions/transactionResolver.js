@@ -234,14 +234,7 @@ MlResolver.MlQueryResolver['validateTransaction'] = (obj, args, context, info) =
   var collection = args.collection
   let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
   let hierarchyDesicion = false;
-  if(args.assignedUserId == ''){
-   let platformAdmin =  mlHierarchyAssignment.checkisPlatformAdmin(mlHierarchyAssignment.getUserRoles(context.userId));
-   if(platformAdmin){
-     let code = 200;
-     let result = {status : platformAdmin}
-     let response = new MlRespPayload().successPayload(result, code);
-     return response
-   }else{
+  if(!args.assignedUserId){
      let systemRoles =  mlHierarchyAssignment.checkSystemSystemDefinedRole(mlHierarchyAssignment.getUserRoles(context.userId));
      if(systemRoles){
        let code = 200;
@@ -254,7 +247,6 @@ MlResolver.MlQueryResolver['validateTransaction'] = (obj, args, context, info) =
        let response = new MlRespPayload().errorPayload(result, code);
        return response
      }
-   }
   }else{
     hierarchyDesicion = mlHierarchyAssignment.validateTransaction(args.transactionId,collection,context.userId,args.assignedUserId)
     if(hierarchyDesicion === true){

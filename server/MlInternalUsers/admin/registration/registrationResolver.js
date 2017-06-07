@@ -117,14 +117,14 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
   orderNumberGenService.assignRegistrationId(args.registration)
-  var emails=[{address:args.registration.email,verified:false}];
+  var emails=[{address:args.registration.email,verified:true}];
   //create transaction
   let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
   args.registration.transactionId = resp.result;
   let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Yet To Start",emails:emails, transactionId: resp.result}, context)
   if(id){
 
-    MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
+  /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
 
     //send email and otp;

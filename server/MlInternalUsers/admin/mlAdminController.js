@@ -93,6 +93,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       };
 
       context = getContext({req, res});
+
+      if(!context||!context.userId){
+        res.json({unAuthorized:true,message:"Invalid Token"})
+        return;
+      }
+
       var isAut = mlAuthorization.authChecker({req, context})
       if(!isAut){
           res.json({unAuthorized:true,message:"Not Authorized"})

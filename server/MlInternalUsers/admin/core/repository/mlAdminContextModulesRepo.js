@@ -321,6 +321,30 @@ let CoreModules = {
     const totalRecords = mlDBController.find('MlTransactionsLog', resultantQuery, context,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
+  },
+  MlProcessTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId','communityCode':'communityCode'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+
+    //community is is not captured in process transaction
+    _.omit(resultantQuery, ['communityId']);
+
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+    //To display the latest record based on date
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'dateTime': -1}
+    }
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    var result=[];
+    var data= MlProcessTranscation.find(resultantQuery,fieldsProj).fetch()||[];
+    var totalRecords=MlProcessTranscation.find(resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
   }
 
 }

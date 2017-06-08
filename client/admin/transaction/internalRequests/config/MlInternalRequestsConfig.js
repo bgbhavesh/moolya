@@ -3,6 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlInternalRequestDetailsComponent from '../../internalRequests/component/MlInternalRequestDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import CreateRequest from '../component/CreateRequestComponent'
 
 const mlInternalRequestsTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
@@ -34,10 +35,19 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
   showActionComponent:true,
   actionConfiguration:[
     {
-      actionName: 'add',
       showAction: true,
-      handler: (data)=>{
-
+      showAction: true,
+      actionName: 'add',
+      hasPopOver:true,
+      popOverTitle:'Create Request',
+      placement:'top',
+      target:'createInternalRequest',
+      popOverComponent:<CreateRequest />,
+      actionComponent:function(props){
+        return  <div className={props.activeClass} id={props.actionName}>
+          <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" >
+            <span className={props.iconClass} id={props.target}></span>
+          </div></div>;
       }
     }
   ],

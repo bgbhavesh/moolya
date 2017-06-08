@@ -17,6 +17,13 @@ MlResolver.MlQueryResolver['fetchProcessTransactionCustomerDetails'] = (obj, arg
 }
 
 MlResolver.MlQueryResolver['fetchProcessSetup'] = (obj, args, context, info) =>{
+  if(args.processTransactionId){
+    let processSetup = mlDBController.findOne('MlProcessSetup', {processTransactionId:args.processTransactionId}, context)
+    if(processSetup){
+        return processSetup
+    }
+  }
+  return {};
 }
 
 MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context, info) =>{

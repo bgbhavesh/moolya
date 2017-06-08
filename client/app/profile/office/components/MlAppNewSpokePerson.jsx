@@ -155,22 +155,22 @@ export default class MlAppNewSpokePerson extends React.Component {
               <div className="form_bg">
                 <form>
                   <div className="panel panel-default">
-                    <div className="panel-heading"> Subscription: Bespoke Office</div>
+                    <div className="panel-heading">  Subscription: Bespoke Office</div>
 
                     <div className="panel-body">
 
                       <div className="form-group">
                         <input type="number" placeholder="Total Number of Users" ref="totalCount"
-                               className="form-control float-label"/>
+                               className="form-control float-label" min="0"/>
                       </div>
 
                       <div className="form-group">
                         <input type="number" placeholder="Principal Users" className="form-control float-label"
-                               ref="principalUserCount"/>
+                               ref="principalUserCount" min="0"/>
                       </div>
                       <div className="form-group">
                         <input type="number" placeholder="Team Members" className="form-control float-label"
-                               ref="teamUserCount"/>
+                               ref="teamUserCount" min="0"/>
                       </div>
                       <div className="form-group switch_wrap switch_names">
 
@@ -202,7 +202,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                                 <div className="form-group mart20">
                                   <input type="number" placeholder="Enter Total Numbers"
                                          onBlur={that.handleBlur.bind(that, idx)}
-                                         className="form-control float-label" ref='count'/>
+                                         className="form-control float-label" ref='count' min="0"/>
                                 </div>
                               </div>
                             )

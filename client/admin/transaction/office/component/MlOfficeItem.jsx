@@ -27,7 +27,7 @@ export default class MlOfficeItem extends React.Component {
       about:'',
       isGenerateLinkDisable: false
     }
-    this.getTranscation(this.state.transId);
+    this.getTransaction(this.state.transId);
     return this;
   }
   componentDidMount() {
@@ -46,11 +46,12 @@ export default class MlOfficeItem extends React.Component {
     // console.log(this.props.data)
   }
 
-  async getTranscation(id){
+  async getTransaction(id){
     let response = await findOfficeTransactionHandler(id);
     if(response){
       let result = JSON.parse(response.result)[0];
       if(result){
+        result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
           transInfo: result.trans,
           userInfo: result.user,

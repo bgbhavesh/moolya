@@ -120,7 +120,7 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     //   return response;
     // }
   let salted = passwordUtil.hashPassword(args.password);
-    let resp = mlDBController.update('users', args.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
+    let resp = mlDBController.update('users', context.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
     if (resp) {
       let code = 200;
       let response = new MlRespPayload().successPayload("Password Reset complete", code);
@@ -176,7 +176,7 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let user = mlDBController.findOne('users', {_id: context.userId}, context)
     let roleIds=[]
     let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
     userProfiles.map(function (doc,index) {
@@ -1259,7 +1259,7 @@ MlResolver.MlQueryResolver['fetchUserForReistration'] = (obj, args, context, inf
 
 MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) => {
   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let resp;
   if(user){
     // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
@@ -1276,11 +1276,11 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
 
 MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => {
   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let resp;
   if(user){
-    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
-    resp = mlDBController.update('users', args.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
+    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActiv`e":args.isActive}});
+    resp = mlDBController.update('users', context.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
   }
   if(resp){
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
@@ -1349,11 +1349,14 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
   }
 }
 
+
+
 MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
-      let rest = null;
-      let user = mlDBController.findOne('users', {_id: args.userId}, context);
-      return user.profile;
+  let rest = null;
+  let user = mlDBController.findOne('users', {_id: context.userId}, context);
+  return user.profile;
 }
+
 
 MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
   const hashedToken = Accounts._hashLoginToken(args.token)

@@ -39,10 +39,7 @@ export default class EmailDetails extends React.Component{
   }
 
   async findRegistration(){
-    let registrationId= Meteor.userId();
-
-    const response = await getContactDetails(registrationId);
-
+    const response = await getContactDetails();
     this.setState({loading:false,emailDetails:response.emailInfo});
     //this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
     //return response;

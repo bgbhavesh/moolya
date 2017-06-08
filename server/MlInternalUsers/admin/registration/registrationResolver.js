@@ -154,6 +154,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     args.registration.userName = args.registration.email;
     var emails=[{address:args.registration.userName,verified:false}];
     orderNumberGenService.assignRegistrationId(args.registration);
+    args.registration.registrationDate=new Date();
     response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,registrationDetails:{identityType:args.registration.identityType}}, context)
     if(response){
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:response}, context, info);
@@ -313,7 +314,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         var updateCount = 0;
         var userId = null;
 
-        if (existingUser) {
+      if (existingUser) {
               //check if the registration profile(community based) exists for user and can be updated
                userId=existingUser._id;
                result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfiles':{$elemMatch: {'registrationId': id}}},
@@ -321,6 +322,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
               //if registration profile item doesn't exist,then update the profile
               if (result != 1) {
+                let profileId = orderNumberGenService .createUserProfileId();
+                 userProfile.profileId=profileId
                 updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfiles': userProfile}, {$push: true}, context);
               } else {
                 updateCount = 1;
@@ -328,6 +331,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               //Email & MobileNumber verification updates to user
               mlRegistrationRepo.updateUserVerificationDetails(id,'all',context);
         } else {
+
+
                userId = mlDBController.insert('users', userObject, context)
               if(userId){
                  //Email & MobileNumber verification updates to user

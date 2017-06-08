@@ -2,7 +2,7 @@
  * Created by venkatsrinag on 7/6/17.
  */
 
-class MlUserValidations{
+class MlOfficeValidations{
     constructor(){
     }
 
@@ -51,4 +51,4 @@ class MlUserValidations{
 }
 
 
-module.exports = MlUserValidations;
+module.exports = MlOfficeValidations;

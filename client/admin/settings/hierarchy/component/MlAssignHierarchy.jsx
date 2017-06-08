@@ -255,9 +255,9 @@ export default class MlAssignHierarchy extends React.Component {
             data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
           }
           `;
-    let subDepartmentOptions = {options: { variables: {id:this.state.finalApproval.department}}};
-    let subDepartmentquery=gql`query($id:String){
-      data:fetchSubDepartments(id:$id) {
+    let subDepartmentOptions = {options: { variables: {id:this.state.finalApproval.department,subDepartmentId:departmentInfo.subDepartmentId}}};
+    let subDepartmentquery=gql`query($id:String,$subDepartmentId:String){
+      data:fetchSubDepartmentsHierarchy(id:$id,subDepartmentId:$subDepartmentId) {
         value:_id
         label:subDepartmentName
       }
@@ -268,10 +268,10 @@ export default class MlAssignHierarchy extends React.Component {
         label:roleName
       }
     }`
-    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department}}};
-    let finalApprovalQuery=gql`query($departmentId:String){
-      data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId) {
-        value:_id
+    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department,subDepartmentId:this.state.finalApproval.subDepartment,clusterId:this.props.clusterId}}};
+    let finalApprovalQuery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String){
+      data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId) {
+        value:roleId
         label:roleName
       }
     }`

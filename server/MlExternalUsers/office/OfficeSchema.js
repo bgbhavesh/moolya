@@ -7,6 +7,7 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let myOfficeSchema = ` 
     type OfficeMembers{
+       _id: String,
        userId:String,
        firstName:String,
        lastName:String,

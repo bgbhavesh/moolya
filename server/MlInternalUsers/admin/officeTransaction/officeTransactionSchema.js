@@ -22,22 +22,23 @@ let officeTransaction = `
     
     input paymentDetail {
       datetime : Date
-      transactionId :Date
-      totalAmountPaid: String
+      transactionId :String
+      totalAmountPaid: Int
       paymentMode: String
       promotionCode : String
       codeAmount : String
       promoCodeStatus : String
       voucherCode : String
-      paymentStatus : Boolean
+      paymentStatus : String
+      isPaid :Boolean
     }
     
     input orderSubscriptionDetail { 
       orderId : String
       SubscriptionName : String 
       SubscriptionCode : String
-      cost : String
-      isTaxInclusive : String
+      cost : Int
+      isTaxInclusive : Boolean
       about : String
     }
     
@@ -69,8 +70,8 @@ let officeTransaction = `
       orderId : String
       SubscriptionName : String 
       SubscriptionCode : String
-      cost : String
-      isTaxInclusive : String
+      cost : Int
+      isTaxInclusive : Boolean
       about : String
     }
     

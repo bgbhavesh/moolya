@@ -5,7 +5,7 @@
 import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
 import MlUserContext from "../../MlExternalUsers/mlUserContext";
-import MlUserValidations from "../../MlExternalUsers/userSubscriptions/userValidations";
+import MlOfficeValidations from "../userSubscriptions/officeValidations";
 
 import _ from "lodash";
 
@@ -22,7 +22,12 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) => {
-  let officeMembers = [];
+  let query = {
+    officeId:args.officeId,
+    isPrincipal: args.isPrincipal
+  }
+  let response = mlDBController.find('MlOfficeMembers', query).fetch();
+  return response;
 }
 
 MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
@@ -128,7 +133,8 @@ MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
       '$project': {
         office: 1, officeTransaction: {
           status: '$officeTransaction.status', transactionId: '$officeTransaction.transactionId',
-          orderSubscriptionDetails: '$officeTransaction.orderSubscriptionDetails'
+          orderSubscriptionDetails: '$officeTransaction.orderSubscriptionDetails',
+          paymentDetails: '$officeTransaction.paymentDetails'
         }
       }
     }
@@ -146,25 +152,47 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         let response = new MlRespPayload().successPayload("Invalid Office", code);
         return response;
     }
-    var ret = new MlUserValidations().validateOfficeExpiryDate(args.myOfficeId);
+    var ret = new MlOfficeValidations().validateOfficeExpiryDate(args.myOfficeId);
     if(!ret.success){
         let code = 400;
         let response = new MlRespPayload().successPayload(ret.msg, code);
         return response;
     }
 
-    let officeMembers = args.officeMembers;
-    if(officeMembers.length == 0){
+    if(_.isEmpty(args.officeMember)){
         let code = 400;
         let response = new MlRespPayload().successPayload("Please add atleast one office memeber", code);
         return response;
     }
 
+    var ret = new MlOfficeValidations().officeMemeberValidations(args.myOfficeId, args.officeMember);
+    if(!ret.success){
+        let code = 400;
+        let response = new MlRespPayload().successPayload(ret.msg, code);
+        return response;
+    }
 
+    try{
 
+        var officeMember = args.officeMember;
+        officeMember.officeId = args.myOfficeId;
+        let ret = MlOfficeMembers.insert({...officeMember});
 
+        let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})
+        if(isUserExist){
+            // Send an invite to the Existing User
+        }
+        else{
+            // Soft Registration has to be done to new user
+        }
+
+    }catch (e){
+      let code = 400;
+      let response = new MlRespPayload().successPayload(e.message, code);
+      return response;
+    }
 
     let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
+    let response = new MlRespPayload().successPayload("Member Added Successfully", code);
     return response;
 }

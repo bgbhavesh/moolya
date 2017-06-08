@@ -51,14 +51,17 @@ export default class MlAppMyOffice extends Component {
 
   async selectOffice(officeId, evt) {
     let response = await findOfficeAction(officeId);
-    if(response && response.success){
+    if (response && response.success) {
       let data = JSON.parse(response.result)
-      console.log(data[0].officeTransaction.status)
-      if (data[0].officeTransaction && data[0].officeTransaction.status == 'paid') {
+      console.log(data[0])
+      if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
+        if (data[0].office.isActive)
+          FlowRouter.go('/app/editOffice/' + officeId)
+        else
           toastr.success('Office amount Paid wait for admin approval');   //redirect to member details
-      } else if(data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost){
+      } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
         FlowRouter.go('/app/payOfficeSubscription/' + officeId)
-      }else
+      } else
         toastr.error('Waiting for admin approval');
     }
   }

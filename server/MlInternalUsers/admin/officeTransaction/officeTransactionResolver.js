@@ -4,6 +4,7 @@
 
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
+import moment from 'moment'
 
 MlResolver.MlMutationResolver['createOfficeTransaction'] = (obj, args, context, info) => {
   var ret = "";
@@ -81,20 +82,45 @@ MlResolver.MlMutationResolver['officeTransactionPayment'] = (obj, args, context,
   var ret;
   try {
     let userId = context.userId;
+    let curDate = new Date()
     if (args.officeId) {
+      var obj = {
+        status: 'payment done',
+        'deviceDetails.ipAddress': context.ip,
+        'deviceDetails.deviceName': context.browser,
+        paymentDetails: {
+          datetime: curDate,
+          transactionId: args.transactionId,
+          totalAmountPaid: args.amount,
+          paymentMode: 'online',
+          paymentStatus: 'done',
+          isPaid: true
+        }
+      }
       ret = mlDBController.update('MlOfficeTransaction', {
         officeId: args.officeId,
         userId: userId
-      }, {status: 'paid', 'deviceDetails.ipAddress':context.ip, 'deviceDetails.deviceName':context.browser}, {$set: true}, context)
+      }, obj, {$set: true}, context)
       if (!ret) {
         let code = 400;
         let response = new MlRespPayload().errorPayload('office not updated', code);
         return response;
       }
+      let updatedOffice = mlDBController.findOne('MlOfficeTransaction', { officeId: args.officeId, userId: userId}, context) || {}
+      let subscriptionObj = {
+        userId :userId,
+        resId: updatedOffice._id,
+        resType : 'office',
+        transactionId : args.transactionId,
+        subscriptionDate : curDate,
+        subscriptionEndDate : moment(curDate).add(365, 'day')._d
+      }
+
+      mlDBController.insert('MlUserSubscriptions', subscriptionObj, context)
     }
   } catch (e) {
     let code = 400;
-    let response = new MlRespPayload().errorPayload(e.reason, code);
+    let response = new MlRespPayload().errorPayload(e.message, code);
     return response;
   }
   let code = 200;

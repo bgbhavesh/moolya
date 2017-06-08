@@ -167,6 +167,7 @@ let BackEndUser = `
     }
     
     input externalProfile{
+        profileId         : String,
         registrationId    : String,
         countryName       : String,
         countryId         : String,
@@ -447,7 +448,7 @@ let BackEndUser = `
     
     type Query{
         fetchUserDetails(userId:String): userDetails
-        fetchUser: BackendUsers
+        fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String, chapterId:String, subChapterId:String, communityId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchUserRoles(userId:String):[contextRoles]
@@ -455,7 +456,7 @@ let BackEndUser = `
         fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
         fetchAssignedAndUnAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
-        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String): SearchResp
+        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String,offset: Int,limit:Int,fieldsData:[GenericFilter]): SearchResp
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords

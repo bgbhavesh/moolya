@@ -823,6 +823,26 @@ if(Meteor.isServer){
             ]
           },
           {
+            "link" : "/admin/transactions/office",
+            "name" : "Office",
+            "uniqueId" : "transaction_office_list",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu" : [
+              {
+                "link" : "/admin/transactions/office",
+                "name" : "Office",
+                "uniqueId" : "transaction_office",
+                "subMenuMappingId" : "transaction_office_list",
+                "subMenusId" : "transaction",
+                "isLink" : true,
+                "isMenu" : false,
+                "image" : ""
+              }
+            ]
+          },
+          {
             "link" : "/admin/transactions/processSetupList",
             "name" : "ProcessSetUp",
             "uniqueId" : "transaction_ProcessSetup",

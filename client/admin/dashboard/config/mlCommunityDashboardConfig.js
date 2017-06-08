@@ -11,6 +11,8 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
   module:"users",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
+  fields:["username",'profile.firstName'],
+  searchFields:["username", 'profile.firstName'],
   throttleRefresh:true,
   pagination:true,
   sort:true,
@@ -31,8 +33,8 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
   },
   viewComponent:<MlCommunityList params={this.params}/>,
   graphQlQuery:gql`
-      query($clusterId:String, $chapterId:String, $subChapterId:String, $userType:String){
-          data:fetchUsersForDashboard(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, userType:$userType){
+      query($clusterId:String, $chapterId:String, $subChapterId:String, $userType:String, $offset: Int, $limit: Int, $fieldsData:[GenericFilter]){
+          data:fetchUsersForDashboard(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, userType:$userType, offset: $offset, limit: $limit, fieldsData:$fieldsData){
               totalRecords
               data{
                   ...on BackendUsers{

@@ -61,6 +61,9 @@ orderNumberGenService = (function(){
     assignOfficeTransaction: function (officeTransaction) {
       officeTransaction.transactionId = "ML-OF-" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
     },
+    assignProcessSetupTransaction: function (officeTransaction) {
+      officeTransaction.transactionId = "ML-PS-" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+    },
 
     createUserProfileId: function (userProfile) {
       userProfile.profileId = "ML-PRO-" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);

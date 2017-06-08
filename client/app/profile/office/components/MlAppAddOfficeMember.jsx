@@ -29,10 +29,9 @@ export default class MlAppAddOfficeMember extends React.Component{
   }
 
   async getMembers(){
-    let isPrinciple = this.props.availableCommunities ? true : false;
+    let isPrinciple = this.props.availableCommunities ? false : true;
     let officeId = FlowRouter.getParam('officeId');
     let result = await fetchOfficeMembers(officeId, isPrinciple);
-    console.log(result);
     this.setState({
       members:result
     });
@@ -75,11 +74,13 @@ export default class MlAppAddOfficeMember extends React.Component{
       isAdminUser: false,
       name: this.refs.name.value,
       emailId: this.refs.email.value,
-      mobileNumber: this.refs.phoneNumber.value,
       isPrincipal: (this.state.selected == 'principle' ? true : false),
       communityType: (this.state.selected == 'principle' ? '' : this.state.selected)
     };
     data[this.state.userType] = true;
+    if(this.refs.phoneNumber.value) {
+      data['mobileNumber'] = this.refs.phoneNumber.value;
+    }
     let id = FlowRouter.getParam('officeId');
     let response = await createOfficeMembers(id, data);
     if(response.success){
@@ -92,6 +93,7 @@ export default class MlAppAddOfficeMember extends React.Component{
       toastr.success(response.result);
     }
   }
+
   render(){
     const that = this;
     console.log(this.state.selected);
@@ -117,7 +119,7 @@ export default class MlAppAddOfficeMember extends React.Component{
                 {that.state.members.map(function (data, i) {
                   return (
                     <div className="col-lg-2 col-md-4 col-sm-4" key={i}>
-                      <a href="#" >
+                      <a href={'/app/officeMember/'+FlowRouter.getParam('officeId')+'/'+data._id} >
                         <div className="list_block notrans">
                           <div className="cluster_status active_cl"></div>
                           <div className="hex_outer"><span className="ml ml-funder"></span></div>

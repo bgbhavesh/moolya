@@ -5,6 +5,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import getQuery from "../../genericSearch/queryConstructor";
 import _ from "lodash";
 import _underscore from "underscore";
 import geocoder from 'geocoder'
@@ -639,6 +640,22 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info) => {
 
+    var totalRecords=0;
+    var findOptions = {};
+
+    if(args.offset && args.offset >0){   // `offset` may be `null`
+      findOptions.skip=args.offset;
+    };
+
+    if (args.limit&&args.limit > 0) { // `limit` may be `null`
+      findOptions.limit = args.limit;
+    }
+
+    let userFilterQuery={}; //'filter' applied by user
+    if (args.fieldsData){
+      userFilterQuery = getQuery.searchFunction(args);
+    }
+
   var userType = args.userType; // Backend, Funder, Ideator, Startup, etc.
 
   var loggedInUser = new MlAdminUserContext().userProfileDetails(context.userId);
@@ -698,7 +715,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
         }
       //   // FOR Internal Users
-        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
         _.each(internalUsers, function (user){
           let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
           let profile = _.find(userProfiles, {clusterId:clusterId});
@@ -723,7 +740,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       if(cluster.isActive && chapter.isActive && subChapter.isActive){
           if(userType == "All"){
               // FOR External Users
-              let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+              let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
               if(externalUsers && externalUsers.length>0) {
                 _.each(externalUsers, function (user) {
                   let userProfiles = user.profile.externalUserProfiles;
@@ -745,7 +762,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 })
               }
               // FOR Internal Users
-              let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+              let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
               _.each(internalUsers, function (user){
                   let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
                   let profile = _.find(userProfiles, {clusterId:clusterId});
@@ -762,7 +779,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   }
               })
               // For Browsers
-              let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+              let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
               if(browserUsers && browserUsers.length>0) {
                 _.each(browserUsers, function (user) {
                   let userProfiles = user.profile.externalUserProfiles;
@@ -796,7 +813,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               })
           }
           else if (userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
               _.each(allUsers, function (user){
                 let userProfiles = user.profile.externalUserProfiles;
                 let profile = _.filter(userProfiles, {clusterId:clusterId,chapterId:chapterId,subChapterId:subChapterId});
@@ -828,7 +845,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               })
           }
           else{
-            let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+            let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
             if(browserUsers && browserUsers.length>0) {
               _.each(browserUsers, function (user) {
                 let userProfiles = user.profile.externalUserProfiles;
@@ -852,7 +869,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
     if(cluster.isActive && chapter.isActive){
       if(userType == "All"){
           // FOR External Users
-          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(externalUsers && externalUsers.length>0){
             _.each(externalUsers, function (user){
               let userProfiles = user.profile.externalUserProfiles;
@@ -870,7 +887,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             })
           }
           // FOR Internal Users
-          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(internalUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
@@ -887,7 +904,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               }
           })
           // For Browsers
-          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(browserUsers && browserUsers.length>0) {
             _.each(browserUsers, function (user) {
               let userProfiles = user.profile.externalUserProfiles;
@@ -904,7 +921,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
       else if(userType == "BackendUsers"){
         //   // UserType needed to be introduced
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
@@ -922,7 +939,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else if (userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
             let userProfiles = user.profile.externalUserProfiles;
             let profile = _.filter(userProfiles, {clusterId:clusterId,chapterId:chapterId});
@@ -954,7 +971,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(browserUsers && browserUsers.length>0) {
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
@@ -974,7 +991,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   }else if(clusterId != "" && communityCode != ""){
     let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
     if(cluster.isActive ){
-        let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+        let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(externalUsers && externalUsers.length>0) {
           _.each(externalUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
@@ -995,7 +1012,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
         }
       //   // FOR Internal Users
-        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
         _.each(internalUsers, function (user){
           let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
           let profile = _.find(userProfiles, {clusterId:clusterId});
@@ -1019,7 +1036,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
     if(cluster.isActive ){
       if(userType == "All"){
           // FOR External Users
-          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(externalUsers && externalUsers.length>0){
             _.each(externalUsers, function (user){
               let userProfiles = user.profile.externalUserProfiles;
@@ -1037,7 +1054,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             })
           }
           // FOR Internal Users
-          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(internalUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
@@ -1051,7 +1068,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               }
           })
           // For Browsers
-          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(browserUsers && browserUsers.length>0) {
             _.each(browserUsers, function (user) {
               let userProfiles = user.profile.externalUserProfiles;
@@ -1068,7 +1085,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
       else if(userType == "BackendUsers"){
         //   // UserType needed to be introduced
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
@@ -1083,7 +1100,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else if (userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
             let userProfiles = user.profile.externalUserProfiles;
             let profile = _.filter(userProfiles, {clusterId:clusterId});
@@ -1115,7 +1132,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(browserUsers && browserUsers.length>0) {
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
@@ -1135,8 +1152,8 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   } else{
 
       if(userType == "All"){
-        let internal = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
-        let external = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        let internal = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
+        let external = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
         _.each(internal, function (user){
           if(user.profile.addressInfo && user.profile.addressInfo.length>0){
             user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
@@ -1156,7 +1173,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
 
       }
       else if(userType == "BackendUsers"){
-        var internalUsers = mlDBController.find('users', {"$and":[{"profile.isInternaluser":true},{"profile.isActive":true},{"profile.isSystemDefined":{$exists:false}}]}, context).fetch();
+        var internalUsers = mlDBController.find('users', {"$and":[{"profile.isInternaluser":true},{"profile.isActive":true},{"profile.isSystemDefined":{$exists:false}}]}, context, findOptions).fetch();
         _.each(internalUsers, function (user){
             if(user.profile.addressInfo && user.profile.addressInfo.length>0){
               user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
@@ -1167,7 +1184,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         })
       }
       else if(userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
 
                   let userProfiles = user.profile.externalUserProfiles;
@@ -1200,7 +1217,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(browserUsers && browserUsers.length>0) {
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;

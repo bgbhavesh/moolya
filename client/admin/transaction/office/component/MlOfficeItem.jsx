@@ -11,6 +11,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
+import moment from 'moment'
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -160,7 +161,7 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Transaction Id" value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time" value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : '' } className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Name" value={this.state.userInfo.name} className="form-control float-label" id=""/>

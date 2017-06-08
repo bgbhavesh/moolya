@@ -21,9 +21,10 @@ import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
+let helmet = require('helmet');
 let cors = require('cors');
 const Fiber = Npm.require('fibers')
-var _language = require('graphql/language');
+let _language = require('graphql/language');
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -80,7 +81,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
+
   config.configServer(graphQLServer)
+
+  graphQLServer.use(helmet());
+  graphQLServer.use(helmet.noCache());
+  graphQLServer.use(helmet.frameguard());
+
   graphQLServer.use(cors());
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
   {

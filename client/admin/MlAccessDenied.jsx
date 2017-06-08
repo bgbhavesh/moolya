@@ -14,7 +14,7 @@ export default class MlAccessDenied extends React.Component{
             <FontAwesome name='ban'/>
             <h3>Access Denied</h3>
             <p>Return to the <a href="#">previous page</a> or
-              go back to your <a href="#">dashboard</a>.</p>
+              go back to your <a href={"https://"+window.location.host}>dashboard</a>.</p>
           </div>
 
         </div>

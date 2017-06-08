@@ -132,6 +132,12 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case 'templateAssignment':
       result=CoreModulesRepo.MlTemplatesAssignmentRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'processSetup':
+      result=CoreModulesRepo.MlProcessTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'officeTransaction':
+      result=CoreModulesRepo.MlOfficeTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -160,7 +166,8 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "ConversationsLog":resolveType='TransactionsLog';break;
       case "internalRequests":resolveType='requests';break;
       case "internalApprovedRequests":resolveType='requests';break;
-
+      case "processSetup":resolveType='ProcessTransactions';break;
+      case "officeTransaction":resolveType='officeTransactionType';break;
     }
 
     if(resolveType){

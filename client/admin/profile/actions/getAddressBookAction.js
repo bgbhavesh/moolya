@@ -1,11 +1,11 @@
 import gql from 'graphql-tag';
 import {client} from '../../core/apolloConnection';
 
-export async function getContactDetails(userId) {
+export async function getContactDetails() {
   const result = await client.query({
     query: gql`
-    query ($userId: String, $moduleName: String, $actionName: String) {
-  fetchAddressBookInfo(userId: $userId, moduleName: $moduleName, actionName: $actionName) {
+    query ($moduleName: String, $actionName: String) {
+  fetchAddressBookInfo(moduleName: $moduleName, actionName: $actionName) {
     addressInfo {
       addressType
       addressTypeName
@@ -34,7 +34,6 @@ export async function getContactDetails(userId) {
   }
 }`,
     variables: {
-      userId:userId,
       moduleName:"PROFILE",
       actionName:"GET"
     },

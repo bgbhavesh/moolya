@@ -133,7 +133,7 @@ appSection.route('/editOffice/:officeId', {
   }
 });
 
-appSection.route('/officeMember/:memberId', {
+appSection.route('/officeMember/:officeId/:memberId', {
   name: 'officeMember',
   action(){
     mount(AppLayout, {appContent: <MlAppMember />, isProfileMenu: true})

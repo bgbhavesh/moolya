@@ -354,6 +354,11 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
             }
             if(isCreatePortfolioRequest) {
                 let regRecord = mlDBController.findOne('MlRegistration', {_id: profile.registrationId, status: "Approved"}, context) //|| {"registrationInfo": {}};
+                let createdName
+                if(Meteor.users.findOne({_id : context.userId}))
+                {
+                  createdName = Meteor.users.findOne({_id: context.userId}).username
+                }
                 if(regRecord){
                   let portfolioDetails={
                     "transactionType" : "portfolio",
@@ -363,7 +368,7 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
                     "chapterId" : regRecord.registrationInfo.chapterId,
                     "subChapterId" :regRecord.registrationInfo.subChapterId,
                     "source" : "self",
-                    "createdBy" : "admin",
+                    "createdBy" : createdName,
                     "status" : "Yet To Start",
                     "isPublic": false,
                     "isGoLive" : false,

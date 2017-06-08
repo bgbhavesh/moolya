@@ -58,7 +58,31 @@ if(Meteor.isServer){
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
           "isActive":true
-        }
+        },
+        {
+          "fieldName" : "registrationInfo.createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "registrationInfo.email",
+          "displayName" : "Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "allocation.assignee",
+          "displayName" : "Assigned To",
+          "isDynamic" : true,
+          "fieldType" : "String",
+          "fieldResolverName" : "null",
+          "isActive":true
+        },
 
       ]
     }});
@@ -117,14 +141,30 @@ if(Meteor.isServer){
           "fieldResolverName" : "Gen_Community",
           "isActive":true
         },
-        {
+       /* {
           "fieldName" : "isActive",
           "displayName" : "isActive??",
           "isDynamic" : true,
           "fieldType" : "Boolean",
           "fieldResolverName" : "Gen_isActive",
           "isActive":true
-        }
+        },*/
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "portfolioUserName",
+          "displayName" : "Contact Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
       ]
     }});
   }
@@ -236,6 +276,14 @@ if(Meteor.isServer){
           "fieldResolverName" : null,
           "isActive":true
         },
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
 
       ]
     }});
@@ -291,6 +339,14 @@ if(Meteor.isServer){
           "fieldType" : "Date",
           "fieldResolverName" : null,
           "isActive":true
+        },
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
         },
 
       ]
@@ -403,6 +459,14 @@ if(Meteor.isServer){
           "fieldType" : "Date",
           "fieldResolverName" : null,
           "isActive":true
+        },
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
         },
 
       ]

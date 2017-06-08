@@ -51,5 +51,4 @@ class MlOfficeValidations{
 }
 
 
-// module.exports = MlUserValidations;
-module.exports = MlOfficeValidations
+module.exports = MlOfficeValidations;

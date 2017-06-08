@@ -46,7 +46,17 @@ if(Meteor.isServer){
           type:'List',
           resolverName : "Gen_SubscriptionType",
           isDynamic:true
-        }
+        },
+        {
+          name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"portfolioUserName",
+          type:'String',
+          resolverName : " "
+        },
       ]
     }});
   }
@@ -92,7 +102,23 @@ if(Meteor.isServer){
           type:'List',
           resolverName : "Gen_Community",
           isDynamic:true
+        },
+        {
+          name:"registrationInfo.createdBy",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"registrationInfo.email",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"allocation.assignee",
+          type:'String',
+          resolverName : "",
         }
+
 
       ]
     }})
@@ -170,7 +196,13 @@ if(Meteor.isServer){
           type:'Date',
           resolverName : " ",
           isDynamic:true
-        }
+        },
+        {
+          name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
+
       ]
     }});
   }
@@ -211,7 +243,12 @@ if(Meteor.isServer){
           type:'Date',
           resolverName : " ",
           isDynamic:true
-        }
+        },
+        {
+          name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
       ]
     }});
   }
@@ -261,8 +298,8 @@ if(Meteor.isServer){
   let templateAssignmentFilterExists = MlFiltersCatalog.findOne({"moduleName":"templateAssignment"});
   if(!templateAssignmentFilterExists){
     MlFiltersCatalog.upsert({
-      "_id" : "documents",
-      "moduleName":"documents"
+      "_id" : "templateAssignment",
+      "moduleName":"templateAssignment"
     },{$set:{
       fields:[
         {
@@ -294,7 +331,12 @@ if(Meteor.isServer){
           type:'Date',
           resolverName : " ",
           isDynamic:true
-        }
+        },
+        {
+          name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
       ]
     }});
   }

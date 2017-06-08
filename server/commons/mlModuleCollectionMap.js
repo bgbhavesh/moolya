@@ -73,6 +73,7 @@ MlModuleCollectionMap['MlProcessTransactions'] = 'PROCESSSETUP';
 MlModuleCollectionMap['MlOffice'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeMembers'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeTransaction'] = 'OFFICE';
+MlModuleCollectionMap['MlOfficeInvite'] = 'OFFICE';
 MlModuleCollectionMap['MlUserSubscriptions'] = 'SUBSCRIPTIONS';
 
 module.exports=  MlModuleCollectionMap;

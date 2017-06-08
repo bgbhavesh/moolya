@@ -24,7 +24,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], StageOfCompany]);
 
 let supportedApi = [
   {api:'FindStageOfCompany', actionName:'READ', moduleName:"STAGEOFCOMPANY"},
-  {api:'fetchStageOfCompany', actionName:'READ', moduleName:"STAGEOFCOMPANY"},
+  {api:'fetchStageOfCompany', actionName:'READ', moduleName:"STAGEOFCOMPANY", isWhiteList:true},
 
   {api:'CreateStageOfCompany', actionName:'CREATE', moduleName:"STAGEOFCOMPANY"},
   {api:'UpdateStageOfCompany', actionName:'UPDATE', moduleName:"STAGEOFCOMPANY"}

@@ -16,11 +16,10 @@ export default class MlCommunityList extends Component {
               <span className={prop.communityImageLink}></span>
             </div>
           </a>
-          <h3>{prop.name}</h3>
+          <h3>{prop.displayName}</h3>
         </div>
       </div>
   );
-
     return (
         <div className="row communities_list">
           <h2>Communities</h2>

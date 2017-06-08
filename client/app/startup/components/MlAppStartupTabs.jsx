@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import AppActionButtons from '../../commons/components/appActionButtons'
-import TopIconsList from '../../commons/components/topIconsList'
+import InteractionsCounter from '../../commons/components/InteractionsCounter'
 import MlStartupViewAboutUs from '../../../admin/transaction/portfolio/component/StartupView/MlStartupViewAboutUs';
 import MlStartupViewManagement from '../../../admin/transaction/portfolio/component/StartupView/MlStartupViewManagement';
 import MlStartupViewInvestor from '../../../admin/transaction/portfolio/component/StartupView/MlStartupViewInvestor';
@@ -132,7 +132,7 @@ export default class MlAppStartupTabs extends React.Component{
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <div className="col-md-12">
-            <TopIconsList/>
+            <InteractionsCounter/>
             <MlTabComponent tabs={tabs}/>
           </div>
           <AppActionButtons/>

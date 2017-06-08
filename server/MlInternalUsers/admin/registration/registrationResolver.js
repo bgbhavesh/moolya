@@ -322,6 +322,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
               //if registration profile item doesn't exist,then update the profile
               if (result != 1) {
+                let profileId = orderNumberGenService .createUserProfileId();
+                 userProfile.profileId=profileId
                 updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfiles': userProfile}, {$push: true}, context);
               } else {
                 updateCount = 1;
@@ -329,6 +331,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               //Email & MobileNumber verification updates to user
               mlRegistrationRepo.updateUserVerificationDetails(id,'all',context);
         } else {
+
+
                userId = mlDBController.insert('users', userObject, context)
               if(userId){
                  //Email & MobileNumber verification updates to user

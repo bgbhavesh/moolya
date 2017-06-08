@@ -24,6 +24,11 @@ if (!officeNumber) {
   MlSerialNumbers.insert({_id: "officeTransaction", seq: 0});
 }
 
+var profileNumber = MlSerialNumbers.findOne({_id: "profileNumber"});
+if (!profileNumber) {
+  MlSerialNumbers.insert({_id: "profileNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -55,6 +60,10 @@ orderNumberGenService = (function(){
     },
     assignOfficeTransaction: function (officeTransaction) {
       officeTransaction.transactionId = "ML-OF-" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+    },
+
+    createUserProfileId: function () {
+      officeTransaction.transactionId = "ML-PRO-" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

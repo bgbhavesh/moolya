@@ -176,7 +176,7 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
     // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: context.userId}, context)
+  let user = mlDBController.findOne('users', {_id: args.userId}, context)
     let roleIds=[]
     let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
     userProfiles.map(function (doc,index) {
@@ -1373,7 +1373,22 @@ MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
     return response
   }
 }
-
+// MlResolver.MlQueryResolver['passwordVerification'] = (obj, args, context, info) => {
+//   if (context.userId) {
+//       // let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+//     var user = mlDBController.findOne('users', {_id: context.userId}, context);
+//     console.log(user);
+//     let pwd = {digest: args.Details, algorithm: 'sha-256'};
+//     var result = Accounts._checkPassword(user, pwd);
+//     if(result.error) {
+//       return false;
+//     }else{
+//       return true
+//     }
+//   }else{
+//     return false;
+//   }
+// }
 
 
 MlResolver.MlMutationResolver['uploadUserImage'] = (obj, args, context, info) => {

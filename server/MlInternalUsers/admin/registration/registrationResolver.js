@@ -5,6 +5,7 @@ import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
 import geocoder from 'geocoder'
+import _ from 'lodash'
 
 import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
@@ -317,13 +318,20 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       if (existingUser) {
               //check if the registration profile(community based) exists for user and can be updated
                userId=existingUser._id;
+                let externalUserProfiles=existingUser.profile.externalUserProfiles
+                let userExProfile=_.find(externalUserProfiles,function (profile) {
+                            return profile.registrationId==id
+                          })
+                if(userExProfile){
+                     userProfile.profileId=userExProfile.profileId
+                }
                result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfiles':{$elemMatch: {'registrationId': id}}},
                                                        {"profile.externalUserProfiles.$": userProfile}, {$set: true}, context)
 
               //if registration profile item doesn't exist,then update the profile
               if (result != 1) {
-                let profileId = orderNumberGenService .createUserProfileId();
-                 userProfile.profileId=profileId
+                 orderNumberGenService .createUserProfileId(userProfile);
+                 //userProfile.profileId=profileId
                 updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfiles': userProfile}, {$push: true}, context);
               } else {
                 updateCount = 1;

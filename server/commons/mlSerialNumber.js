@@ -62,8 +62,8 @@ orderNumberGenService = (function(){
       officeTransaction.transactionId = "ML-OF-" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
     },
 
-    createUserProfileId: function () {
-      officeTransaction.transactionId = "ML-PRO-" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
+    createUserProfileId: function (userProfile) {
+      userProfile.profileId = "ML-PRO-" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

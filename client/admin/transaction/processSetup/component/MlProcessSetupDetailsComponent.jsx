@@ -5,18 +5,12 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {findBackendUserActionHandler} from '../../internalRequests/actions/findUserAction'
+import {updateProcessSetupActionHandler} from '../actions/updateProcessSetupAction'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MoolyaSelect from "../../../../commons/components/select/MoolyaSelect";
 
-var options = [
-  { value: 'role', label: 'Role' },
-  { value: 'role', label: 'Role' }
-];
-function logChange(val) {
-  console.log("Selected: " + val);
-}
 export default class MlProcessSetupDetailsComponent extends React.Component {
   constructor(props){
     super(props);
@@ -73,22 +67,25 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     this.sendDataToParent();
   }
   onStageStatusChange(sIdx, e){
-    let value = event.target.checked
+    let value = e.target.checked
     let stages = this.state.stages;
     stages[sIdx]['isActive'] = value;
     this.setState({stages: stages});
     this.sendDataToParent();
   }
   onActionStatusChange(sIdx, aIdx, e){
-    let value = event.target.checked
+    let value = e.target.checked
     let stages = this.state.stages
     stages[sIdx].stageActions[aIdx]['isActive'] = value;
     this.setState({stages:stages})
     this.sendDataToParent();
   }
 
-  sendDataToParent(){
-    // update
+  async sendDataToParent(){
+    let stages = this.state.stages;
+    let data = this.state.data;
+    let response = await updateProcessSetupActionHandler(data, stages);
+    return response;
   }
 
   async findBackendUser() {

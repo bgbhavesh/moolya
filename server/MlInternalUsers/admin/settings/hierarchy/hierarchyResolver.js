@@ -216,6 +216,32 @@ MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, 
   return roles;
 }
 
+MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => {
+  let response;
+  let levelCode = "";
+  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
+  if (department && department.isActive) {
+      response = mlDBController.findOne('MlHierarchyAssignments', {
+        parentDepartment: args.departmentId,
+        parentSubDepartment: args.subDepartmentId,
+        clusterId:department.isSystemDefined?"All":args.clusterId
+      }, context)
+
+  if(response){
+    let teamStructureAssignment = response.teamStructureAssignment;
+    let filteredSteps = [];
+     teamStructureAssignment.map(function (step, key){
+     if(step.isAssigned===true){
+     filteredSteps.push(step)
+     }
+     })
+     //response.teamStructureAssignment = filteredSteps;
+    return filteredSteps;
+   }
+  }
+  return response;
+}
+
 MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, info) => {
   let roles = [];
   let levelCode = "";

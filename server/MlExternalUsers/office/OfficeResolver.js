@@ -5,7 +5,7 @@
 import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
 import MlUserContext from "../../MlExternalUsers/mlUserContext";
-import MlUserValidations from "../../MlExternalUsers/userSubscriptions/userValidations";
+import MlOfficeValidations from "../userSubscriptions/officeValidations";
 
 import _ from "lodash";
 
@@ -152,7 +152,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         let response = new MlRespPayload().successPayload("Invalid Office", code);
         return response;
     }
-    var ret = new MlUserValidations().validateOfficeExpiryDate(args.myOfficeId);
+    var ret = new MlOfficeValidations().validateOfficeExpiryDate(args.myOfficeId);
     if(!ret.success){
         let code = 400;
         let response = new MlRespPayload().successPayload(ret.msg, code);
@@ -165,7 +165,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         return response;
     }
 
-    var ret = new MlUserValidations().officeMemeberValidations(args.myOfficeId, args.officeMember);
+    var ret = new MlOfficeValidations().officeMemeberValidations(args.myOfficeId, args.officeMember);
     if(!ret.success){
         let code = 400;
         let response = new MlRespPayload().successPayload(ret.msg, code);

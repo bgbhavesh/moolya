@@ -5,6 +5,7 @@ import MlCustomFilter from "../../../../commons/customFilters/customFilter";
 import moment from "moment";
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
+import MlAddDepartment from "../../../../admin/settings/departments/component/MlAddDepartment"
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
@@ -69,13 +70,16 @@ const mlUserTypeTableConfig=new MlViewer.View({
     {
       showAction: true,
       actionName: 'assign',
-      handler: (data) => {
-        console.log(data);
-        if (data && data.id) {
-          const internalConfig = data;
-        } else {
-          toastr.error("Please Select a record");
-        }
+      hasPopOver:true,
+      popOverTitle:'Assign',
+      placement:'top',
+      target:'registrationAssign',
+      popOverComponent:<MlAddDepartment />,
+      actionComponent:function(props){
+          return  <div className={props.activeClass} id={props.actionName}>
+            <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" >
+              <span className={props.iconClass} id={props.target}></span>
+            </div></div>;
       }
     }
   ],

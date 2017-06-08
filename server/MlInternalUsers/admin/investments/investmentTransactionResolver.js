@@ -30,7 +30,7 @@ MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context,
     if(args.portfoliodetails){
       let ret;
       try{
-        orderNumberGenService.assignOfficeTransaction(args.portfoliodetails)
+        orderNumberGenService.assignProcessSetupTransaction(args.portfoliodetails)
         ret = mlDBController.insert('MlProcessTransactions', args.portfoliodetails, context)
       }catch(e){
         let code = 409;
@@ -77,15 +77,15 @@ MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info)
 MlResolver.MlMutationResolver['updateProcessTransaction'] = (obj, args, context, info) =>{
   var ret='';
   try{
-    if(!args.paymentDetails){
+    if(!args.processTransactions){
       let code = 400;
       let response = new MlRespPayload().successPayload("Invalid Request", code);
       return response;
     }
-    let ret = mlDBController.update('MlProcessTransactions', args.processTransactionId, { paymentDetails: args.paymentDetails }, {$set:true}, context)
+    ret = mlDBController.update('MlProcessTransactions', {_id:args.processTransactionId}, args.processTransactions, {$set:true}, context)
     if(!ret) {
       let code = 200;
-      let response = new MlRespPayload().errorPayload('Error in generating link', code);
+      let response = new MlRespPayload().errorPayload('Error', code);
       return response;
     }
   }catch(e){

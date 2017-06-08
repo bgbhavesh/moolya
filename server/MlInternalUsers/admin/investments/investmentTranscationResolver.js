@@ -36,7 +36,34 @@ MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context,
     }
 }
 
-MlResolver.MlMutationResolver['createProcessSetup'] = (obj, args, context, info) =>{
+MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info) =>{
+  if(args.processTransactionId){
+    let ret;
+    let processSetup = mlDBController.findOne('MlProcessSetup', {processTransactionId:args.processTransactionId}, context)
+
+    if(processSetup){
+        try{
+          ret = mlDBController.update('MlProcessSetup', {processTransactionId:args.processTransactionId}, args.processSetup, {$set:true}, context)
+        }catch(e){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload(e.message, code);
+          return response;
+        }
+    }else{
+        try{
+          ret = mlDBController.insert('MlProcessSetup', args.processSetup, context)
+        }catch(e){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload(e.message, code);
+          return response;
+        }
+    }
+
+    let code = 200;
+    let response = new MlRespPayload().successPayload(ret, code);
+    return response;
+
+  }
 }
 
 MlResolver.MlMutationResolver['updateProcessTransaction'] = (obj, args, context, info) =>{

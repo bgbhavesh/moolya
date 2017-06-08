@@ -3,6 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
 
 let investments = `
 
@@ -23,6 +24,7 @@ let investments = `
         voucherAmount:String,
         voucherStatus:String,
         paymentStatus:String
+        isPaid : Boolean
     }
     
     input stageActions{
@@ -36,6 +38,15 @@ let investments = `
         stageActions:[stageActions]
         isActive:Boolean
     }
+    
+    input processSetup{
+        userId:String,
+        username:String,
+        processTransactionId:String,
+        processSteps:[processSteps],
+        isActive:Boolean
+    }
+    
     input deviceDetails{
       deviceName:String,
       deviceId:String,
@@ -83,6 +94,7 @@ let investments = `
         voucherAmount:String,
         voucherStatus:String,
         paymentStatus:String
+        isPaid : Boolean
     }
     
     type CustomerDetails{
@@ -117,6 +129,15 @@ let investments = `
         stageActions:[StageActions]
         isActive:Boolean
     }
+    
+    type ProcessSetup{
+        userId:String,
+        username:String,
+        processTransactionId:String,
+        processSteps:[ProcessSteps],
+        isActive:Boolean
+    }
+    
     type DeviceDetails{
       deviceName:String,
       deviceId:String,
@@ -152,7 +173,7 @@ let investments = `
     
     type Mutation{
         createProcessTransaction(processTransactions:processTransactions):response
-        createProcessSetup(processTransactionId:String, processSteps:[processSteps]):response
+        updateProcessSetup(processTransactionId:String, processSetup:processSetup):response
         updateProcessTransaction(processTransactionId:String, processTransactions:processTransactions):response
     }
     
@@ -161,9 +182,16 @@ let investments = `
         fetchProcessStages:[Stages]
         fetchProcessActions:[Actions]
         fetchProcessTransactionCustomerDetails(processTransactionId:String):CustomerDetails
-        fetchProcessSetup(processTransactionId:String):[ProcessSteps]
+        fetchProcessSetup(processTransactionId:String):ProcessSetup
     }
 `
 
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],investments]);
+
+let supportedApi = [
+  {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
+  {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"},
+  {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

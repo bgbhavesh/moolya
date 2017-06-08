@@ -36,13 +36,20 @@ let investments = `
         stageActions:[stageActions]
         isActive:Boolean
     }
+    input deviceDetails{
+      deviceName:String,
+      deviceId:String,
+      ipAddress:String,
+      location:String,
+    }
     
-    input processTranscations{
+    input processTransactions{
         status:String,
         action:String,
-        progress:Int
-        paymentDetails:paymentDetails
-        
+        progress:Int,
+        paymentDetails:paymentDetails,
+        deviceDetails:deviceDetails,
+        transactionId:String,
         transactionType:String,
         userId:String,
         mobileNumber:String,
@@ -80,7 +87,7 @@ let investments = `
     
     type CustomerDetails{
         userId:String,
-        transcationId:String,
+        transactionId:String,
         datetime:Date,
         name:String,
         emailId:String,
@@ -110,29 +117,51 @@ let investments = `
         stageActions:[StageActions]
         isActive:Boolean
     }
+    type DeviceDetails{
+      deviceName:String,
+      deviceId:String,
+      ipAddress:String,
+      location:String,
+    }
     
-    type ProcessTranscations{
+    type ProcessTransactions{
         _id:String,
         status:String,
         action:String,
         progress:Int,
         paymentDetails:PaymentDetails
+        deviceDetails:DeviceDetails
+        transactionType:String,
+        transactionId:String,
+        userId:String,
+        mobileNumber:String,
+        communityType:String,
+        communityCode:String,
+        clusterId:String,
+        chapterId:String,
+        subChapterId:String,
+        dateTime:Date,
+        status:String,
+        clusterName     : String,
+        chapterName     : String,
+        subChapterName  : String,
+        communityName   : String
     }
     
     
     
     type Mutation{
-        createProcessTranscation(processTranscations:processTranscations):response
-        createProcessSetup(processTranscationId:String, processSteps:[processSteps]):response
-        updateProcessTranscation(processTranscationId:String, processTranscations:processTranscations):response
+        createProcessTransaction(processTransactions:processTransactions):response
+        createProcessSetup(processTransactionId:String, processSteps:[processSteps]):response
+        updateProcessTransaction(processTransactionId:String, processTransactions:processTransactions):response
     }
     
     type Query{
-        fetchProcessTranscations:[ProcessTranscations]
+        fetchProcessTransactions:[ProcessTransactions]
         fetchProcessStages:[Stages]
         fetchProcessActions:[Actions]
-        fetchProcessTranscationCustomerDetails(processTranscationId:String):CustomerDetails
-        fetchProcessSetup(processTranscationId:String):[ProcessSteps]
+        fetchProcessTransactionCustomerDetails(processTransactionId:String):CustomerDetails
+        fetchProcessSetup(processTransactionId:String):[ProcessSteps]
     }
 `
 

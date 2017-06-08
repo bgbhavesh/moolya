@@ -167,6 +167,7 @@ let BackEndUser = `
     }
     
     input externalProfile{
+        profileId         : String,
         registrationId    : String,
         countryName       : String,
         countryId         : String,

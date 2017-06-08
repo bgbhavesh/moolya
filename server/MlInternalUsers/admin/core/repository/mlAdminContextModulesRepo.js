@@ -322,7 +322,9 @@ let CoreModules = {
     return {totalRecords:totalRecords,data:data};
 
   },
+
   MlProcessTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+
     var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId','communityCode':'communityCode'};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
 
@@ -342,8 +344,8 @@ let CoreModules = {
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
 
     var result=[];
-    var data= MlProcessTranscation.find(resultantQuery,fieldsProj).fetch()||[];
-    var totalRecords=MlProcessTranscation.find(resultantQuery,fieldsProj).count();
+    var data= MlProcessTransactions.find(resultantQuery,fieldsProj).fetch()||[];
+    var totalRecords=MlProcessTransactions.find(resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
   },
   MlOfficeTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){

@@ -12,7 +12,7 @@ import MlIdeatorLookingFor from '../../../admin/transaction/portfolio/component/
 import MlIdeatorIntellectualPlanningAndTrademark from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 import MlIdeatorIdeas from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIdeas'
 import AppActionButtons from '../../commons/components/appActionButtons'
-import TopIconsList from '../../commons/components/topIconsList'
+import InteractionsCounter from '../../commons/components/InteractionsCounter'
 import {updatePortfolioActionHandler} from '../../../admin/transaction/portfolio/actions/updatePortfolioDetails';
 
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'
@@ -122,7 +122,7 @@ getChildContext(){
     let tabs = this.state.tabs;
     return (
       <div className="col-md-12">
-        <TopIconsList/>
+        <InteractionsCounter/>
         <MlTabComponent tabs={tabs}/>
       </div>
     )

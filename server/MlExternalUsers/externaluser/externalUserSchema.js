@@ -115,7 +115,7 @@ let externalUser = `
         communityDefCode:String,
         communityDefName:String,
         communityType:String,
-               
+        communityImage:String,        
         isDefault:Boolean,
         isActive:Boolean,
         accountType:String,

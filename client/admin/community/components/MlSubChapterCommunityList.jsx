@@ -20,7 +20,7 @@ export default class MlSubChapterCommunityList extends Component {
             <a> <div className={"hex_outer"}><span className={prop.communityImageLink}></span></div></a>
           }
 
-          <h3>{prop.name}</h3>
+          <h3>{prop.displayName}</h3>
         </div>
       </div>
     );

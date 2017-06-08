@@ -7,11 +7,6 @@ import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
-var options = [
-  {value: 'Type of Funding', label: 'Type of Funding'},
-  {value: '2', label: '2'}
-];
-
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
@@ -21,7 +16,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     return this;
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     var mySwiper = new Swiper('.blocks_in_form', {
       speed: 400,
       spaceBetween: 20,
@@ -61,14 +56,40 @@ export default class MlAppNewSpokePerson extends React.Component {
     if (data.availableCommunities.length < 1) {
       data = _.omit(data, 'availableCommunities')
     }
+    let isValid = this.validateUserData(data)
+    if (isValid && isValid.success){
+      const resp = this.createMyOfficeAction(data)
+      // toastr.success(isValid.result);
+    }else
+      toastr.error(isValid.result);
+  }
 
-    const resp = this.createMyOfficeAction(data)
+  validateUserData(usersData) {
+    if (usersData && usersData.principalUserCount && usersData.teamUserCount && usersData.totalCount) {
+      let PUC = usersData.principalUserCount?Number(usersData.principalUserCount):0
+      let TUC = usersData.teamUserCount?Number(usersData.teamUserCount):0
+      let TC = usersData.totalCount?Number(usersData.totalCount):0
+      if ((PUC + TUC) > TC)
+        return {success: false, result: 'Total count can not be greator than Principle and user'}
+      else if (!_.isEmpty(usersData.availableCommunities)) {
+        let communities = usersData.availableCommunities
+        let arrayCount = _.map(communities, 'userCount')
+        let addArray = _.sum(arrayCount)
+        if (Number(addArray) > TUC)
+          return {success: false, result: 'Communities Users count can not be greater than Team user count'}
+        else
+          return {success: true, result: 'Validation done'}
+      } else
+        return {success: true, result: 'Validation done'}
+    } else
+      return {success: false, result: 'Please enter users Data'}
   }
 
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      // FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      FlowRouter.go('/app/myOffice/')
       toastr.success('Office Successfully Created');
     } else {
       toastr.error(response.result);
@@ -102,14 +123,24 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   handleBlur(id, e) {
-    if (e.target.value) {
+    if (e.target) {
       let data = this.state.availableCommunities;
+      let dataBackUp = _.cloneDeep(data);
+      let specificData = dataBackUp[id];
       let block = this.state.showCommunityBlock;
-      let user = {}
-      user.communityName = block[id].displayName
-      user.communityId = block[id].code
-      user.userCount = e.target.value
-      data.push(user)
+      if(_.isEmpty(specificData)){
+        specificData = {}
+        specificData.communityName = block[id].displayName
+        specificData.communityId = block[id].code
+        specificData.userCount = Number(e.target.value)
+        data.push(specificData)
+      }else {
+        specificData.communityName = block[id].displayName
+        specificData.communityId = block[id].code
+        specificData.userCount = Number(e.target.value)
+      }
+      data.splice(id, 1);
+      data.splice(id, 0, specificData);
       this.setState({availableCommunities: data})
     }
   }

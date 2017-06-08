@@ -66,10 +66,13 @@ MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 //hierarchy
 MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';
 
+//Process Setup
+MlModuleCollectionMap['MlProcessSetup'] = 'PROCESSSETUP';
 //office
-MlModuleCollectionMap['MlMyOffice'] = 'OFFICE';
-MlModuleCollectionMap['MlMyOfficeMembers'] = 'OFFICE';
+MlModuleCollectionMap['MlOffice'] = 'OFFICE';
+MlModuleCollectionMap['MlOfficeMembers'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeTransaction'] = 'OFFICE';
+MlModuleCollectionMap['MlUserSubscriptions'] = 'SUBSCRIPTIONS';
 
 module.exports=  MlModuleCollectionMap;
 

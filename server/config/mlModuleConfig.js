@@ -65,7 +65,10 @@ let modules = [
     "internalRequests",
     "internalApprovedRequests",
     "actionAndStatus",
-    "accountType"
+    "accountType",
+    'office',
+    "processSetup",
+    'subscriptions'
   ];
 
 // Meteor.startup(function () {

@@ -114,10 +114,7 @@ export default class ContactDetails extends React.Component{
 
   }
   async findRegistration(){
-    let userId =Meteor.userId();
-
-    const response = await getContactDetails(userId);
-
+    const response = await getContactDetails();
     this.setState({loading:false,contactNumberArray:response.contactInfo});
     //this.setState({'isMoolyaChecked':this.state.data&&this.state.data.isMoolya})
     //return response;
@@ -140,8 +137,7 @@ export default class ContactDetails extends React.Component{
     });
 
     let detailsType = "CONTACTTYPE";
-    let registerid = Meteor.userId();
-    const response = await updateContactDetails(listArray,detailsType,registerid);
+    const response = await updateContactDetails(listArray,detailsType);
     if(response){
       this.setState({loading:false,contactNumberArray:response.contactInfo});
       this.findRegistration();

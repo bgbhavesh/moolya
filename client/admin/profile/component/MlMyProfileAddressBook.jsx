@@ -40,14 +40,12 @@ export default class Step3 extends React.Component{
 
 
   async getRegistrationContactDetails(details){
-    const userId = Meteor.userId();
-    const response=await getContactDetails(userId);
+    const response=await getContactDetails();
     this.setState({'registrationDetails':response})
   }
 
   async getContents(){
-      const userId = Meteor.userId();
-      let response = await getContactDetails (userId);
+      let response = await getContactDetails ();
       this.setState({loading:false,registrationDetails:response});
       //return response;
   }

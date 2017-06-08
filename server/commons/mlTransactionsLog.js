@@ -109,12 +109,13 @@ class MlTransactionsHandler {
         transactionTypeId:transactionsParams.transactionTypeId||null,
         transactionTypeName:transactionsParams.transactionType||null,
         activity: transactionsParams.activity,
+        activityDocId: transactionsParams.activityDocId||null,
         moduleName:transactionsParams.moduleName,
         userAgent: userAgent,
         createdAt: new Date(),
         transactionDetails: transactionsParams.transactionDetails
       }
-    orderNumberGenService.assignTransationRequest(transactionRecord),
+    //orderNumberGenService.assignTransationRequest(transactionRecord),
       transactionRecord=_.extend(transactionRecord,contextData);
 
     const resp = MlTransactionsLog.insert(transactionRecord);

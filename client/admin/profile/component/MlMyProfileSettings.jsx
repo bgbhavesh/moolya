@@ -102,7 +102,6 @@ export default class MyProfileSettings extends React.Component{
     let Details = {
       currencySymbol : this.state.currencySymbol,
       measurementSystem :this.state.measurementSystem,
-      userId : Meteor.userId()
     }
     const dataresponse = await updateSettings(Details);
     console.log(dataresponse);

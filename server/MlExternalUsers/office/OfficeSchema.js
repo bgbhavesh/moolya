@@ -12,17 +12,21 @@ let myOfficeSchema = `
        lastName:String,
        mobileNumber:Int,
        emailId:String,
-       userType:String,
        description:String,
        name:String,
        joiningDate:Date,
+       communityType:String,
        role:String,
        isActive:Boolean,
+       isPrincipal:Boolean,
        isIndependent:Boolean,
        isInternalUserInteraction:Boolean,
        isExternalUserInteraction:Boolean,
        isFreeze:Boolean,
-       isRetire:Boolean
+       isRetire:Boolean,
+       isFreeUser:Boolean,
+       isPaidUser:Boolean,
+       isAdminUser:Boolean
     }
 
     type AvailableCommunities{
@@ -37,6 +41,7 @@ let myOfficeSchema = `
     }
     
     type MyOffice{
+        _id: String
         userId:String,
         userName : String,
         totalCount:Int,
@@ -83,7 +88,12 @@ let myOfficeSchema = `
        isInternalUserInteraction:Boolean,
        isExternalUserInteraction:Boolean,
        isFreeze:Boolean,
-       isRetire:Boolean
+       isRetire:Boolean,
+       communityType:String,
+       isPrincipal:Boolean,
+       isFreeUser:Boolean,
+       isPaidUser:Boolean,
+       isAdminUser:Boolean
     }
 
     input availableCommunities{
@@ -128,26 +138,32 @@ let myOfficeSchema = `
      }
   
     type Query{
-        fetchMyOffice:[MyOffice]
-        fetchMyOfficeMembers:[OfficeMembers]
+        fetchOffice:[MyOffice]
+        fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
+        findOfficeDetail(officeId:String):response
     }
     
     type Mutation{       
-        createMyOffice(myOffice:myOffice):response
-        createOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
+        createOffice(myOffice:myOffice):response
+        createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
         updateOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
-        updateMyOffice(myOffice:myOffice, myOfficeId:String):response
+        updateOffice(myOffice:myOffice, myOfficeId:String):response
+        updateOfficeStatus(id:String):response
     }
 `
 
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
 let supportedApi = [
-  {api: 'createMyOffice', actionName: 'CREATE', moduleName: "OFFICE"},
+  {api: 'createOffice', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'createOfficeMembers', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'fetchMyOffice', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'updateMyOffice', actionName: 'UPDATE', moduleName: "OFFICE"}
+  {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE"},
+
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

@@ -21,9 +21,10 @@ import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
+let helmet = require('helmet');
 let cors = require('cors');
 const Fiber = Npm.require('fibers')
-var _language = require('graphql/language');
+let _language = require('graphql/language');
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -80,7 +81,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
+
   config.configServer(graphQLServer)
+
+  graphQLServer.use(helmet());
+  graphQLServer.use(helmet.noCache());
+  graphQLServer.use(helmet.frameguard());
+
   graphQLServer.use(cors());
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
   {
@@ -93,6 +100,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       };
 
       context = getContext({req, res});
+
+      if(!context||!context.userId){
+        res.json({unAuthorized:true,message:"Invalid Token"})
+        return;
+      }
+
       var isAut = mlAuthorization.authChecker({req, context})
       if(!isAut){
           res.json({unAuthorized:true,message:"Not Authorized"})
@@ -567,7 +580,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
           let response;
-          response = MlResolver.MlMutationResolver['resetPassword'](null, data, context, null);
+          response = MlResolver.MlMutationResolver['resetPasswords'](null, data, context, null);
           res.send(response);
         }else{
           let code = 401;

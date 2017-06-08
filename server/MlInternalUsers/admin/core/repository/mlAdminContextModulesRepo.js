@@ -187,16 +187,16 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        if(userProfile.roleName === "platformadmin")
+        //if(userProfile.roleName === "platformadmin")
         serverQuery={'status':{'$in':['Pending','WIP']}};
-        else
-          serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};
+        /*else
+          serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};*/
         break;
       case 'approved':
-        if(userProfile.roleName === "platformadmin")
+        //if(userProfile.roleName === "platformadmin")
           serverQuery={'status':"Approved"};
-        else
-        serverQuery={'userId':context.userId,'status':"Approved"};
+        /*else
+        serverQuery={'userId':context.userId,'status':"Approved"};*/
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
@@ -264,7 +264,7 @@ let CoreModules = {
         object.registrationStatus =doc.status;
         if(doc.allocation){
             object.assignedUser = doc.allocation.assignee
-            object.userName = doc.allocation.assigneeId
+            object.assignedUserId = doc.allocation.assigneeId
         }/*else{
             object.assignedUser = "Un Assigned"
         }*/
@@ -303,13 +303,13 @@ let CoreModules = {
     }
     switch(type){
       case 'interactions':
-        serverQuery={'transactionTypeName': "interactions"};
+        serverQuery={'transactionTypeName': "interaction"};
         break;
       case 'system':
         serverQuery={'transactionTypeName': "system"};
         break;
       case 'conversations':
-        serverQuery={'transactionTypeName': "conversations"};
+        serverQuery={'transactionTypeName': "conversation"};
         break;
     }
     var resultantQuery=MlAdminContextQueryConstructor.constructQuery(contextQuery,'$in');
@@ -321,6 +321,69 @@ let CoreModules = {
     const totalRecords = mlDBController.find('MlTransactionsLog', resultantQuery, context,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
 
+  },
+
+  MlProcessTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+
+    var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId','communityCode':'communityCode'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+
+    //community is is not captured in process transaction
+    _.omit(resultantQuery, ['communityId']);
+
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+    //To display the latest record based on date
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'dateTime': -1}
+    }
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    var result=[];
+    var data= MlProcessTransactions.find(resultantQuery,fieldsProj).fetch()||[];
+    var totalRecords=MlProcessTransactions.find(resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
+  },
+  MlOfficeTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+    //To display the latest record based on date
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'dateTime': -1}
+    }
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    let pipleline = [
+      {'$lookup':{ from:'users',localField:'userId', 'foreignField':'_id', as:'user' }},
+      {'$unwind':'$user'},
+      {'$project':{ 'userName':'$user.profile.displayName', 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 }}
+    ];
+    if(Object.keys(resultantQuery).length){
+      pipleline.push({'$match':resultantQuery});
+    }
+    if(fieldsProj.sort){
+      pipleline.push({'$sort':fieldsProj.sort});
+    }
+    if(fieldsProj.skip){
+      pipleline.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if(fieldsProj.limit){
+      pipleline.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    var data= mlDBController.aggregate('MlOfficeTransaction',pipleline);
+    var totalRecords=mlDBController.find('MlOfficeTransaction',resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
   }
 
 }

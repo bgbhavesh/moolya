@@ -46,9 +46,9 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
       let response = new MlRespPayload().errorPayload("Username is required", code);
       return response;
     }
-  let extEmailExists = mlDBController.find('users', {'profile.email':args.user.profile.email, 'profile.isExternaluser':true }, context).count();
-      // if(Meteor.users.find({username:args.user.username}).count() > 0) {
-    if(mlDBController.find('users', {username:args.user.username}, context).count() > 0 || extEmailExists ){
+  let backEndUserExist = mlDBController.findOne('users', {'profile.email':args.user.profile.email}, context)
+  let registrationExist =   mlDBController.findOne('MlRegistration', {'registrationInfo.email':args.user.profile.email}, context)
+    if((backEndUserExist && backEndUserExist._id) || (registrationExist && registrationExist._id)){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
         return response;
@@ -120,7 +120,7 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     //   return response;
     // }
   let salted = passwordUtil.hashPassword(args.password);
-    let resp = mlDBController.update('users', args.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
+    let resp = mlDBController.update('users', context.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
     if (resp) {
       let code = 200;
       let response = new MlRespPayload().successPayload("Password Reset complete", code);
@@ -1259,7 +1259,7 @@ MlResolver.MlQueryResolver['fetchUserForReistration'] = (obj, args, context, inf
 
 MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) => {
   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let resp;
   if(user){
     // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
@@ -1276,11 +1276,11 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
 
 MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => {
   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let resp;
   if(user){
-    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
-    resp = mlDBController.update('users', args.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
+    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActiv`e":args.isActive}});
+    resp = mlDBController.update('users', context.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
   }
   if(resp){
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
@@ -1349,11 +1349,14 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
   }
 }
 
+
+
 MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
-      let rest = null;
-      let user = mlDBController.findOne('users', {_id: args.userId}, context);
-      return user.profile;
+  let rest = null;
+  let user = mlDBController.findOne('users', {_id: context.userId}, context);
+  return user.profile;
 }
+
 
 MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
   const hashedToken = Accounts._hashLoginToken(args.token)
@@ -1370,7 +1373,22 @@ MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
     return response
   }
 }
-
+// MlResolver.MlQueryResolver['passwordVerification'] = (obj, args, context, info) => {
+//   if (context.userId) {
+//       // let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+//     var user = mlDBController.findOne('users', {_id: context.userId}, context);
+//     console.log(user);
+//     let pwd = {digest: args.Details, algorithm: 'sha-256'};
+//     var result = Accounts._checkPassword(user, pwd);
+//     if(result.error) {
+//       return false;
+//     }else{
+//       return true
+//     }
+//   }else{
+//     return false;
+//   }
+// }
 
 
 MlResolver.MlMutationResolver['uploadUserImage'] = (obj, args, context, info) => {

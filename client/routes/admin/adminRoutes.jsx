@@ -48,6 +48,7 @@ import MlInteractionsLogList from '../../admin/transaction/interactions/componen
 import MlConversationsLogList from '../../admin/transaction/conversations/component/MlConversationsLogList'
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
+import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/component/MlProcessSetupRequestsList'
 
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
 import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
@@ -58,6 +59,7 @@ import MlTemplatesTabHistoryList from '../../templates/templatesAuditLog/compone
 import MlTransactionTabHistoryList from '../../admin/transaction/transactionAuditLog/components/MlTransactionTabHistoryList'
 import MlRegistrationTabHistoryList from '../../admin/transaction/requested/registrationAuditLog/components/MlRegistrationTabHistoryList'
 import MlPotfolioTabHistoryList from '../../admin/transaction/portfolio/portfolioAuditLog/components/MlPotfolioTabHistoryList'
+import EditTaxation from '../../admin/transaction/office/component/MlOfficeList'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -354,14 +356,23 @@ adminSection.route('/transactions/portfolio/history', {
 adminSection.route('/transactions/portfolio/editRequests/:id/:communityType', {
   name: 'transaction_portfolio_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
+    /*mount(AdminLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})*/
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'edit'}} />, adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
   }
 });
 
 adminSection.route('/transactions/portfolio/viewPortfolio/:id/:communityType', {
   name: 'transaction_portfolio_viewPortfolio',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
+    /*mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})*/
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'view'}} />, adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
+  }
+});
+
+adminSection.route('/transactions/office', {
+  name: 'transaction_office',
+  action(){
+    mount(AdminLayout,{adminContent:<EditTaxation />})
   }
 });
 
@@ -405,5 +416,14 @@ adminSection.route('/portfolio/tabcomponent', {
 adminSection.route('/portfolio/about', {
   action(params){
       mount(AdminLayout,{adminContent:<MlIdeatorPortfolioAbout />})
+  }
+});
+
+
+// Process Setup Routes
+adminSection.route('/transactions/processSetupList', {
+  name: 'transaction_ProcessSetupList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
   }
 });

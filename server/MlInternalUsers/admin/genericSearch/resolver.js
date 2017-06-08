@@ -833,7 +833,6 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "REQUESTTYPE":resolveType= 'Requests';break;
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
       case 'TransactionsLog':resolveType='TransactionsLog';break
-
     }
 
     if(resolveType){

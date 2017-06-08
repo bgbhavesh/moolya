@@ -167,6 +167,7 @@ let BackEndUser = `
     }
     
     input externalProfile{
+        profileId         : String,
         registrationId    : String,
         countryName       : String,
         countryId         : String,
@@ -433,11 +434,11 @@ let BackEndUser = `
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
-        resetPassword (userId:String!, password: String!, moduleName:String, actionName:String):response
+        resetPassword (password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
-        updateDataEntry(userId: String, moduleName: String, actionName: String, attributes:attributesObject):response
+        updateDataEntry(moduleName: String, actionName: String, attributes:attributesObject):response
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
@@ -459,11 +460,12 @@ let BackEndUser = `
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
-        fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
+        fetchAddressBookInfo(moduleName: String, actionName: String):addressBookSchema
         findUserOnToken(token: String):response
-        fetchInternalUserProfiles(userId: String):[UserProfiles]
+        fetchInternalUserProfiles:[UserProfiles]
         fetchUserRoleDetails(clusterId:String):UserRoles
         fetchMoolyaInternalUsers : [BackendUsers]
+        passwordVerification(Details:String):response
     }
 `
 
@@ -484,8 +486,9 @@ let supportedApi = [
     {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUserRoleDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+  // {api:'passwordVerification', actionName:'READ', moduleName:"USERS"},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},

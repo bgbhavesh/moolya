@@ -32,6 +32,7 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;
+    args.requests.userId = context.userId;
     orderNumberGenService.assignRequests(args.requests)
     let id = mlDBController.insert('MlRequests', args.requests, context)
     if (id) {

@@ -61,9 +61,13 @@ class MlAddSubDepartment extends React.Component{
     if (val) {
       this.findDepartment(val);
       this.setState({department: val})
-    } else {
-      this.setState({department: '', data: '',subdepartmentAvailability:[]})
     }
+    else {
+      this.setState({department: ''})
+    }
+  // else {
+  //     this.setState({department: '', data: '',subdepartmentAvailability:[]})
+  //   }
   }
 
   async findDepartment(val) {

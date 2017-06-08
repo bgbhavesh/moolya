@@ -241,7 +241,8 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        transactionId   :   String,
+        transactionId   :   String
+        assignedUserId    :   String,
         createdBy       :   String
     }
     
@@ -461,9 +462,9 @@ let supportedApi = [
     {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
-    {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

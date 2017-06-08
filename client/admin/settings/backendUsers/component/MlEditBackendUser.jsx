@@ -32,7 +32,7 @@ class MlEditBackendUser extends React.Component{
       password:'',
       confirmPassword:'',
       selectedBackendUserType:'',
-      selectedBackendUser:'',
+      selectedBackendUser:'Internal User',
       clusterId:'',
       chapterId:'',
       communityId:'',
@@ -353,7 +353,7 @@ class MlEditBackendUser extends React.Component{
   }
 
   async resetPassword() {
-    if(this.state.showPasswordFields){
+    /*if(this.state.showPasswordFields){
       let userDetails={
         userId:this.refs.id.value,
         password:this.refs.confirmPassword.value
@@ -361,19 +361,40 @@ class MlEditBackendUser extends React.Component{
       this.onCheckPassword();
       if(this.state.pwdErrorMsg)
         toastr.error("Confirm Password does not match with Password");
-      else{
+      else{*/
         const response = await resetPasswordActionHandler(userDetails);
-        this.refs.id.value='';
+       /* this.refs.id.value='';
         this.refs.confirmPassword.value = '';
-        this.refs.password.value = '';
+        this.refs.password.value = '';*/
         this.setState({"pwdErrorMsg":'Password reset complete'})
-        toastr.success(response.result);
+     /*   toastr.success(response.result);
       }
     } else {
       this.setState({
         showPasswordFields:true
       })
-    }
+    }*/
+  }
+
+  async resetPassword(){
+      let email = this.refs.email.value
+      let data={email:email};
+      var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: Meteor.absoluteUrl('forgotPassword'),
+        data :JSON.stringify(data),
+        headers: header,
+        contentType: "application/json; charset=utf-8",
+        success:function(response){
+          if(response.success){
+            toastr.success(response.result)
+          } else {
+            toastr.error(response.result);
+          }
+        }
+      });
   }
 
   // ondateOfBirthSelection(event) {
@@ -500,10 +521,10 @@ class MlEditBackendUser extends React.Component{
                   )}
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
                     <div className="form-group">
-                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)}
+                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)} disabled={true}
                     />
                       </div>
-                {that.state.showPasswordFields ?
+               {/* {that.state.showPasswordFields ?
                   <div className="form-group">
                     <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{that.state.pwdValidationMsg}</text>
                     <input type="Password" ref="password" defaultValue={that.state.password} placeholder="Create Password"  onBlur={that.passwordValidation.bind(that)}  className="form-control float-label" id="password"/>
@@ -514,7 +535,7 @@ class MlEditBackendUser extends React.Component{
                     <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{that.state.pwdErrorMsg}</text>
                     <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
                     <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
-                  </div> : <div></div>}
+                  </div> : <div></div>}*/}
 
                   <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 

@@ -1,71 +1,125 @@
 /**
- * Created by viswadeep on 12/5/17.
+ * Created by vishwadeep on 12/5/17.
  */
 
-import React from "react";
+import React, {Component} from "react";
 import {render} from "react-dom";
-// import MapView from '../../components/mapView';
-export default class MlAppMyOffice extends React.Component {
-  componentDidMount() {
-    $('.view_switch').click(function () {
-      if ($(this).hasClass('map_view')) {
-        $(this).removeClass('map_view').addClass('list_view');
-        $('.map_view_block').hide();
-        $('.list_view_block').show();
-        $('.admin_padding_wrap').removeClass('no_padding');
-      } else {
-        $(this).removeClass('list_view').addClass('map_view');
-        $('.map_view_block').show();
-        $('.list_view_block').hide();
-        $('.admin_padding_wrap').addClass('no_padding');
+import {findUserOfficeActionHandler} from "../actions/findUserOffice";
+import {findOfficeAction} from "../actions/findOfficeAction";
+import MlLoader from "../../../../commons/components/loader/loader";
+// import {findOfficeTransactionHandler} from '../../../../../client/admin/transaction/office/actions/findOfficeTranscation'
+
+export default class MlAppMyOffice extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {loading: true, data: []};
+    this.findUserOffice.bind(this);
+    return this;
+  }
+
+  componentDidUpdate() {
+    var swiper = new Swiper('.profile_container', {
+      pagination: '.swiper-pagination',
+      effect: 'coverflow',
+      grabCursor: true,
+      centeredSlides: true,
+      initialSlide: 1,
+      slidesPerView: 'auto',
+      coverflow: {
+        rotate: 50,
+        stretch: 0,
+        depth: 100,
+        modifier: 1,
+        slideShadows: true
       }
     });
   }
 
-  addNewOffice(){
+  componentWillMount() {
+    const resp = this.findUserOffice();
+    return resp;
+  }
+
+  async findUserOffice() {
+    const response = await findUserOfficeActionHandler();
+    this.setState({loading: false, data: response});
+  }
+
+  addNewOffice() {
     FlowRouter.go("/app/addOffice")
   }
 
+  async selectOffice(officeId, evt) {
+    let response = await findOfficeAction(officeId);
+    if (response && response.success) {
+      let data = JSON.parse(response.result)
+      console.log(data[0])
+      if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
+        if (data[0].office.isActive)
+          FlowRouter.go('/app/editOffice/' + officeId)
+        else
+          toastr.success('Office amount Paid wait for admin approval');   //redirect to member details
+      } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
+        FlowRouter.go('/app/payOfficeSubscription/' + officeId)
+      } else
+        toastr.error('Waiting for admin approval');
+    }
+  }
+
   render() {
-    //style={{display: 'none'}}
-    {/*<div className="map_view_block">*/
-    }
-    {/*<MapView/>*/
-    }
-    {/*</div>*/
-    }
+    let that = this
+    let userOffice = this.state.data && this.state.data.length > 0 ? this.state.data : []
+    const userOfficeList = userOffice.map(function (office, id) {
+      return (
+        <div className="swiper-slide office_accounts my-office-main" key={id} onClick={that.selectOffice.bind(that, office.officeId)}>
+          <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
+          <h2>Total: {office.totalCount}</h2>
+          <h3>Principal:{office.principalUserCount}&nbsp;&nbsp;Team:{office.teamUserCount}</h3>
+        </div>
+      )
+    });
+
+    const showLoader = this.state.loading;
     return (
       <div className="app_main_wrap">
-
-        {/*<div className="view_switch map_view"/>*/}
-
-        <div className="app_padding_wrap no_padding">
-          <div className="list_view_block">
-            <div className="col-md-8 col-md-offset-4">
-              <div className="profile_container my-office-main">
-                <div className="profile_accounts">
-                  <span className="ml flaticon-ml-building"></span>
-                  <br />
-                  <h2>Add Office</h2>
-                  <h3></h3>
+        {showLoader === true ? ( <MlLoader/>) : (
+          <div className="app_padding_wrap no_padding">
+            <div className="list_view_block">
+              {(userOffice.length < 1) ? <div className="col-md-12 text-center">
+                <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas2">
+                  <div className="col-md-6">
+                  </div>
+                  <div className="col-md-6">
+                    <a onClick={this.addNewOffice.bind(this)} className="ideabtn">Add new office</a>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </div> : <div>
+                <div className="col-md-12 text-center">
+                  <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6">
+                    <div className="swiper-container profile_container">
+                      <div className="swiper-wrapper">
 
+                        {userOfficeList}
 
-            <div className="col-md-12 text-center well mart100">
-              <div className="col-md-4">
-                <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New Office</a>
-              </div>
-              <div className="col-md-4">
-                <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
-              </div>
-              <div className="col-md-4">
-                <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
-              </div>
+                      </div>
+                      <div className="swiper-pagination"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-12 text-center well mart100">
+                  <div className="col-md-4">
+                    <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New Office</a>
+                  </div>
+                  <div className="col-md-4">
+                    <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
+                  </div>
+                  <div className="col-md-4">
+                    <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
+                  </div>
+                </div>
+              </div>}
             </div>
-          </div>
-        </div>
+          </div>)}
       </div>
     )
   }

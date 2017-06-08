@@ -80,8 +80,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
   module:"roles",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["roleName","displayName","roleType","userType","about"],
-  searchFields:["roleTypeName","roleTypeDisplayName","isActive"],
+  fields:["roleName","displayName","roleType","userType",'createdBy'],
+  searchFields:["roleName","displayName","roleType", "userType",'createdBy'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.

@@ -129,27 +129,28 @@ export default class MlOfficeItem extends React.Component {
       {value: 'WIP', label: 'WIP' , clearableValue: true},
       {value: 'Approved', label: 'Approved',clearableValue: true}
     ];
+    let transId = this.state.transId;
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">
           <li className="active">
-            <a href="#1a" data-toggle="tab">Customer Details</a>
+            <a href={"#1a"+transId} data-toggle="tab">Customer Details</a>
           </li>
           <li>
-            <a href="#2a" data-toggle="tab">Order Details</a>
+            <a href={"#2a"+transId} data-toggle="tab">Order Details</a>
           </li>
           <li>
-            <a href="#3a" data-toggle="tab">Payment Details</a>
+            <a href={"#3a"+transId} data-toggle="tab">Payment Details</a>
           </li>
           <li>
-            <a href="#4a" data-toggle="tab">Device Details</a>
+            <a href={"#4a"+transId} data-toggle="tab">Device Details</a>
           </li>
           <li>
-            <a href="#5a" data-toggle="tab">History</a>
+            <a href={"#5a"+transId} data-toggle="tab">History</a>
           </li>
         </ul>
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id="1a">
+          <div className="tab-pane active" id={"1a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -187,7 +188,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id="2a">
+          <div className="tab-pane" id={"2a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -294,7 +295,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane active" id="3a">
+          <div className="tab-pane" id={"3a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -332,7 +333,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane active" id="4a">
+          <div className="tab-pane" id={"4a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -352,7 +353,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane active" id="5a">
+          <div className="tab-pane" id={"5a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 One

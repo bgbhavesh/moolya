@@ -32,6 +32,7 @@ export default class MlAppAddOfficeMember extends React.Component{
     let isPrinciple = this.props.availableCommunities ? true : false;
     let officeId = FlowRouter.getParam('officeId');
     let result = await fetchOfficeMembers(officeId, isPrinciple);
+    console.log(result);
     this.setState({
       members:result
     });

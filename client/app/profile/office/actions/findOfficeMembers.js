@@ -10,7 +10,8 @@ export async function fetchOfficeMembers(officeId,isPrincipal) {
           query($officeId:String, $isPrincipal:Boolean){
               fetchOfficeMembers(officeId:$officeId, isPrincipal: $isPrincipal){
                 name
-              }  
+                _id
+              }
           }
       `,
     variables: {

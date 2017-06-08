@@ -28,6 +28,7 @@ export async function fetchExternalUserProfilesActionHandler() {
         communityDefCode
         communityDefName
         communityType
+        communityImage
               
         isDefault
         isActive

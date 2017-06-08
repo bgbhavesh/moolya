@@ -106,6 +106,12 @@ MlResolver.MlQueryResolver['fetchUserProfiles'] = (obj, args, context, info) => 
 
     //todo: add isApproved Attribute to the profile
     userProfiles=_.filter(userProfiles, {'isActive': true })||[];
+    userProfiles=_.map(userProfiles,function (profile)
+    {
+      let communityDetails=mlDBController.findOne('MlCommunityDefinition', {code: profile.communityDefCode}, context) || {};
+      if(communityDetails) {profile.communityImage=communityDetails.communityImageLink}
+      return profile;
+    })
     return userProfiles;
   }else {
     let code = 409;

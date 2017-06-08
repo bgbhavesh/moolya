@@ -447,7 +447,7 @@ let BackEndUser = `
     
     type Query{
         fetchUserDetails(userId:String): userDetails
-        fetchUser: BackendUsers
+        fetchUser(userId:String): BackendUsers
         fetchUsersByClusterDepSubDep(clusterId:String, chapterId:String, subChapterId:String, communityId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchUserRoles(userId:String):[contextRoles]

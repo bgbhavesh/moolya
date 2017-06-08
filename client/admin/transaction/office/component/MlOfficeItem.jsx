@@ -280,7 +280,7 @@ export default class MlOfficeItem extends React.Component {
                     <br className="brclear"/>
                     <div className="form-group ">
                       <input type="number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" className="form-control float-label"/>
-                      <div className="email_notify">
+                      <div className="email_notify" style={{right:'20px'}}>
                         <div className="input_types">
                           <input id="checkbox1" onChange={(e)=>this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
                         </div>

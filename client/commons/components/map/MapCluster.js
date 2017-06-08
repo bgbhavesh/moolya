@@ -9,13 +9,57 @@ import GoogleMap from 'google-map-react';
 import ClusterMarker from './ClusterMarker';
 import MapMarkers from './mapMarkers'
 import supercluster from 'points-cluster';
-
+import {client} from '../../../admin/core/apolloConnection';
+import gql from 'graphql-tag'
 export const gMap = ({
   style, hoverDistance, options,
-  mapProps: { center, zoom },clusterRadius,
+  mapProps: { center, zoom, bounds},clusterRadius, // bounds contains the corner cordinates of the visible map on screen
   onChange, onChildMouseEnter, onChildMouseLeave,
   clusters,mapContext,module
 }) => {
+  // The center object will have lat and longitude of the center coodinates.
+  let lat= center.lat;
+  let lng = center.lng;
+  if (bounds) {
+    let ne = bounds.ne;
+    let nw = bounds.nw;
+    let se = bounds.se;
+    let sw = bounds.sw;
+    // A async function to get the values of the active chapters in the visible map.
+    async function newFun(){
+      result = await client.query({
+        query: gql`
+          query ($latitude: Float, $longitude: Float, $zoom: Int, $ne: latlngObject, $nw: latlngObject, $se: latlngObject, $sw: latlngObject) {
+            data: fetchClustersForMap(latitude: $latitude, longitude: $longitude, zoom: $zoom, ne: $ne, nw: $nw, se: $se, sw: $sw) 
+            {
+                clusterName
+                chapterName
+                cityName
+                latitude
+                longitude 
+            }
+          }
+        `,
+        variables: {
+          latitude: lat,
+          longitude:lng,
+          zoom: zoom,
+          ne: ne,
+          nw: nw,
+          se: se,
+          sw: sw
+        }
+      })
+
+      if (result) {
+        data = result;
+        console.log('The result is ::', result);
+      }
+    }
+    // The function call for the grapgql query
+    newFun();
+  }
+
   return (
     <GoogleMap
       options={options}

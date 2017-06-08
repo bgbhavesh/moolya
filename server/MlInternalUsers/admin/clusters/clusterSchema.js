@@ -20,6 +20,18 @@ let clusterSchema = `
         longitude:Float
         status:status
     }
+    
+    type mapObject{ 
+      _id: String,
+      clusterName: String,
+      chapterName: String,
+      stateName: String,
+      cityName: String,
+      email: String,
+      latitude: Float,
+      longitude: Float 
+    }
+    
     type status{
       code: String
       description: String
@@ -33,6 +45,11 @@ let clusterSchema = `
         email:String, 
         showOnMap:Boolean, 
         isActive:Boolean
+    }
+    
+    input latlngObject{
+        lat: Float,
+        lng: Float
     }
     
     input clusterObject{
@@ -54,7 +71,7 @@ let clusterSchema = `
     
     type Query{ 
         fetchCluster(clusterId: String!, moduleName:String!, actionName:String!):Cluster
-        fetchClustersForMap:[Cluster]
+        fetchClustersForMap(latitude: Float, longitude: Float, zoom: Int, ne: latlngObject, nw: latlngObject, se: latlngObject , sw: latlngObject):[mapObject]
         fetchActiveClusters:[Cluster]
     }
    
@@ -69,11 +86,11 @@ let clusterSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], clusterSchema]);
 let supportedApi = [
-    {api:'fetchCluster', actionName:'READ', moduleName:"CLUSTER"},
-    {api:'fetchClustersForMap', actionName:'READ', moduleName:"CLUSTER", isWhiteList:true},
-    {api:'fetchActiveClusters', actionName:'READ', moduleName:"CLUSTER"},
-    {api:'createCluster', actionName:'CREATE', moduleName:"CLUSTER"},
-    {api:'upsertCluster', actionName:'UPDATE', moduleName:"CLUSTER"},
-    {api:'updateCluster', actionName:'UPDATE', moduleName:"CLUSTER"}
+  {api:'fetchCluster', actionName:'READ', moduleName:"CLUSTER"},
+  {api:'fetchClustersForMap', actionName:'READ', moduleName:"CLUSTER", isWhiteList:true},
+  {api:'fetchActiveClusters', actionName:'READ', moduleName:"CLUSTER"},
+  {api:'createCluster', actionName:'CREATE', moduleName:"CLUSTER"},
+  {api:'upsertCluster', actionName:'UPDATE', moduleName:"CLUSTER"},
+  {api:'updateCluster', actionName:'UPDATE', moduleName:"CLUSTER"}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

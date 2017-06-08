@@ -118,9 +118,20 @@ MlResolver.MlMutationResolver['updateCluster'] = (obj, args, context, info) => {
 
 
 MlResolver.MlQueryResolver['fetchClustersForMap'] = (obj, args, context, info) => {
-      // let result=MlClusters.find({isActive:true}).fetch()||[];
-      let result = mlDBController.find('MlClusters', {isActive:true}, context).fetch()||[];
-      return result;
+  let results = [];
+  if (args.ne) {
+    let topLat = args.ne.lat;
+    let bottomLat = args.sw.lat;
+    let rightLng = args.ne.lng;
+    let leftLng = args.sw.lng;
+    // query the db for the active chapters with the coordinates in the visible range
+    results = mlDBController.find('MlChapters', {$and: [{isActive: true}, {longitude: {$lte: rightLng}}, {longitude: {$gte: leftLng}}, {latitude: {$lte: topLat}}, {latitude: {$gte: bottomLat}}]}, context).fetch() || [];
+    console.log('The chapters are:::');
+    _.forEach(results, function(value) {
+      console.log(value);
+    });
+  }
+  return results;
 }
 
 MlResolver.MlQueryResolver['fetchActiveClusters'] = (obj, args, context, info) => {

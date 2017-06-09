@@ -24,7 +24,7 @@ export default class MlAppAddOfficeMember extends React.Component{
       options : props.availableCommunities ? props.availableCommunities.map(function (item) {
         return { value: item.communityId, label: item.communityName }
       }) : [{ value: 'principle', label: 'Principle' }],
-      userType:"isFreeUser"
+      userType: props.availableCommunities ? "isFreeUser" :  "isAdminUser"
     }
   }
 
@@ -155,7 +155,6 @@ export default class MlAppAddOfficeMember extends React.Component{
                   <input type="number" ref="phoneNumber" placeholder="Phone Number" className="form-control float-label" id=""/>
 
                 </div>
-
                 <div className="form-group">
                   <Select
                     name="form-field-name"
@@ -166,15 +165,15 @@ export default class MlAppAddOfficeMember extends React.Component{
                 </div>
                 <div className="form-group invitation">
                   <div className="input_types">
-                    <input defaultChecked={true} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isFreeUser" />
+                    <input disabled={this.state.userType == "isAdminUser" ? true : false} defaultChecked={this.state.userType == "isFreeUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isFreeUser" />
                     <label htmlFor="checkbox1"><span></span>Free User</label>
                   </div>
                   <div className="input_types">
-                    <input onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isPaidUser" />
+                    <input disabled={this.state.userType == "isAdminUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isPaidUser" />
                     <label htmlFor="checkbox1"><span></span>Paid User</label>
                   </div>
                   <div className="input_types">
-                    <input onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isAdminUser" />
+                    <input disabled={this.state.userType == "isAdminUser" ? false : true} checked={this.state.userType == "isAdminUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isAdminUser" />
                     <label htmlFor="checkbox1"><span></span>Admin User</label>
                   </div>
                   <br className="brclear"/>

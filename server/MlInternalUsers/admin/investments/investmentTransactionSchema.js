@@ -167,6 +167,8 @@ let investments = `
         chapterName     : String,
         subChapterName  : String,
         communityName   : String
+        username:String,
+        name:String
     }
     
     

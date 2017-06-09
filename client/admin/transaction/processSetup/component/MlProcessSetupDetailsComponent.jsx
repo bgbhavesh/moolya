@@ -93,7 +93,9 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     let id = this.props.data._id
     const response = await fetchProcessSetupHandler(id);
     if(response){
+      if(response.processSteps && response.processSteps.length>0){
         this.setState({stages:response.processSteps})
+      }
     }
   }
   updateCost(e){
@@ -157,7 +159,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
 
   render() {
     let that = this;
-    let stages = this.state.stages || [];
+    let stages = that.state.stages;
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
@@ -190,10 +192,10 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" value={that.state.data.userId} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Name" value={that.state.data.name} className="form-control float-label" id="" readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email" value={that.state.data.userId} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Email" value={that.state.data.username} className="form-control float-label" id="" readOnly="true"/>
                 </div>
               </div>
               <div className="col-md-6">
@@ -220,7 +222,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
             <div className="panel panel-default">
               <div className="panel-heading">Add Stages<img src="../images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
               <div className="panel-body">
-                {stages.map(function (stage, sIdx) {
+                {that.state.stages.map(function (stage, sIdx) {
                   let stageQuery = gql`query{data:fetchStageOfCompany {value:_id, label:stageOfCompanyName}}`;
                    return(
                      <div className="row" key={sIdx}>
@@ -278,7 +280,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={`paymentDetails${this.props.data._id}`}>
+          <div className="tab-pane" id={`paymentDetails${that.props.data._id}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="panel panel-default">
@@ -338,7 +340,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={`deviceDetails${this.props.data._id}`}>
+          <div className="tab-pane" id={`deviceDetails${that.props.data._id}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">

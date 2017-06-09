@@ -44,10 +44,6 @@ class MlOfficeValidations{
 
         return {success:true}
     }
-
-  // This Method Validates process expiry date
-    processValidations(processId){
-    }
 }
 
 

@@ -186,11 +186,11 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
     }
     args.officeMember.joiningDate = new Date();
     var ret = new MlOfficeValidations().officeMemeberValidations(args.myOfficeId, args.officeMember);
-   /* if(!ret.success){
+    if(!ret.success){
         let code = 400;
         let response = new MlRespPayload().successPayload(ret.msg, code);
         return response;
-    }*/
+    }
 
     try{
 

@@ -8,6 +8,11 @@ MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, in
 }
 
 MlResolver.MlQueryResolver['fetchProcessStages'] = (obj, args, context, info) =>{
+    let processStage = mlDBController.find('MlProcessStages', {isActive:true}, context).fetch()
+    if(processStage){
+      return processStage
+    }
+  return {};
 }
 
 MlResolver.MlQueryResolver['fetchProcessActions'] = (obj, args, context, info) =>{
@@ -59,6 +64,11 @@ MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info)
         }
     }else{
         try{
+          var process = mlDBController.findOne('MlProcessTransactions', {_id:args.processTransactionId}, context)
+          var users = mlDBController.findOne('users', {_id:process.userId}, context)
+          if(users)
+          args.processSetup.username = users.username;
+
           ret = mlDBController.insert('MlProcessSetup', args.processSetup, context)
         }catch(e){
           let code = 409;
@@ -82,6 +92,11 @@ MlResolver.MlMutationResolver['updateProcessTransaction'] = (obj, args, context,
       let response = new MlRespPayload().successPayload("Invalid Request", code);
       return response;
     }
+    let deviceDetails = {
+      ipAddress : context.ip,
+      deviceName : context.browser
+    }
+    args.processTransactions.deviceDetails = deviceDetails;
     ret = mlDBController.update('MlProcessTransactions', {_id:args.processTransactionId}, args.processTransactions, {$set:true}, context)
     if(!ret) {
       let code = 200;

@@ -63,6 +63,7 @@ let officeTransaction = `
       status         : String
       action         : String
       userName       : String
+      transactionType :String
       orderSubscriptionDetails : OrderSubscriptionDetail
     }
     

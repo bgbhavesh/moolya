@@ -6,6 +6,7 @@ import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
 import MlUserContext from "../../MlExternalUsers/mlUserContext";
 import MlOfficeValidations from "../userSubscriptions/officeValidations";
+import passwordUtil from "../../commons/passwordUtil";
 
 import _ from "lodash";
 
@@ -78,31 +79,12 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       } else {
         let officeDetails = {
           officeId: ret,
-          // userId: userId,
-          // clusterId: profile.clusterId,
-          // clusterName: profile.clusterName,
-          // chapterId: profile.chapterId,
-          // chapterName: profile.chapterName,
-          // subChapterId: profile.subChapterId,
-          // subChapterName: profile.subChapterName,
-          // communityId: profile.communityId,
-          // communityName: profile.communityName,
-          //dateTime: new Date(),
-          // transactionId: 'TransId',
+          transactionType:'office setup',
           status: 'Pending'
         }
         let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
         let officeTransaction = _.extend(officeDetails, extendObj)
         MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
-        // let officeTransResponse = mlDBController.insert('MlOfficeTransaction', officeTrans, context);
-        // if(!officeTransResponse){
-        //   let code = 400;
-        //   let response = new MlRespPayload().errorPayload("error in transaction creation", code);
-        //   return response;
-        // }
-        // let code = 200;
-        // let response = new MlRespPayload().successPayload("Office transaction created", code);
-        // return response;
       }
     }
   }
@@ -196,6 +178,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
         var officeMember = args.officeMember;
         officeMember.officeId = args.myOfficeId;
+        officeMember.name = officeMember.firstName +' ' + officeMember.lastName;
         let ret = MlOfficeMembers.insert({...officeMember});
 
         let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})
@@ -210,11 +193,18 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
           {
             args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
           }
-          args.registration.firstName = args.officeMember.name;
+          args.registration.firstName = args.officeMember.firstName;
+          args.registration.lastName = args.officeMember.lastName;
           args.registration.email = args.officeMember.emailId;
           args.registration.contactNumber = args.officeMember.mobileNumber;
+          let randomPassword = orderNumberGenService.generateRandomPassword()
+          args.registration.password = randomPassword
+          args.registration.registrationDate =  new Date()
           let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails}, context)
-          if(id){
+          if (id) { //for generating verfication token
+             MlAccounts.sendVerificationEmail(id,{emailContentType:"html",subject:"Email Verification",context:context});
+          }
+          if(id){ //for creating new user
             var userProfile = {
               registrationId: id,
               mobileNumber: args.officeMember.mobileNumber,
@@ -230,9 +220,9 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
               email: args.officeMember.emailId,
               mobileNumber:args.officeMember.mobileNumber,
               isActive   : false,
-              firstName  :args.officeMember.name,
-              lastName   : args.officeMember.name,
-              displayName :args.officeMember.name+' '+ args.officeMember.name,
+              firstName  :args.officeMember.firstName,
+              lastName   : args.officeMember.lastName,
+              displayName :args.officeMember.firstName+' '+ args.officeMember.lastName,
               externalUserProfiles: [userProfile]
             }
             let userObject = {
@@ -246,12 +236,16 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
             console.log(userId);
            /* orderNumberGenService .createUserProfileId(userProfile);*/
             //let userId = mlDBController.insert('users', {userObject}, context)
-            /*if(userId){
+            if(userId){
               //Email & MobileNumber verification updates to user
+              let registerDetails= mlDBController.findOne('MlRegistration', id, context) || {};
               mlDBController.update('users', {username: userObject.username},
                 {$set: {'services.email':registerDetails&&registerDetails.services?registerDetails.services.email:{},
                   'emails':userObject.emails}},{'blackbox': true}, context);
-            }*/
+              let salted = passwordUtil.hashPassword(registerDetails.registrationInfo.password);
+              let res = mlDBController.update('users', {username: userObject.username}, { 'services.password.bcrypt': salted}, {$set:true}, context);
+
+            }
           }
         }
 
@@ -282,6 +276,4 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
     let response = new MlRespPayload().successPayload(e.message, code);
     return response;
   }
-
-
 }

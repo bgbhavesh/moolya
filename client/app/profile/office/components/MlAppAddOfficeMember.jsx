@@ -72,7 +72,8 @@ export default class MlAppAddOfficeMember extends React.Component{
       isFreeUser:false,
       isPaidUser: false,
       isAdminUser: false,
-      name: this.refs.name.value,
+      firstName: this.refs.fname.value,
+      lastName: this.refs.lname.value,
       emailId: this.refs.email.value,
       isPrincipal: (this.state.selected == 'principle' ? true : false),
       communityType: (this.state.selected == 'principle' ? '' : this.state.selected)
@@ -141,8 +142,10 @@ export default class MlAppAddOfficeMember extends React.Component{
             <div className="medium-popover"><div className="row">
               <div className="col-md-12">
                 <div className="form-group">
-                  <input type="text" ref="name" placeholder="Name" className="form-control float-label" id=""/>
-
+                  <input type="text" ref="fname" placeholder="First Name" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="lname" placeholder="Last Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="email" placeholder="Email Id" className="form-control float-label" id=""/>
